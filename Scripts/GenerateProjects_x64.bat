@@ -1,0 +1,1 @@
+cmake -A x64 ..\Source
