@@ -1,5 +1,12 @@
-## 必須
+﻿## 必須
+
+- .netframework 4.8 (Windows only)
+
+[Download](https://dotnet.microsoft.com/download/visual-studio-sdks)
+
 - .NET SDK 3.0.100
+
+[Download](https://dotnet.microsoft.com/download/dotnet-core/3.0)
 
 - その他: [Coreのdocument](Core/documents/development/HowToBuild_Ja.md)を参照
 
