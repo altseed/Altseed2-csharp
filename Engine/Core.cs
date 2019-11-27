@@ -153,6 +153,76 @@ namespace asd {
     public enum DeviceType : int {
     }
     
+    public class Core {
+        private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
+        
+        public static Core TryGetFromCache(IntPtr native)
+        {
+            if(cacheRepo.ContainsKey(native))
+            {
+                Core cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Core_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Core(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Core>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, ref CoreOption option);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Core_DoEvent(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Core_Terminate();
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Core_Release(IntPtr selfPtr);
+        
+        
+        internal Core(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public bool Initialize(string title, int width, int height, ref CoreOption option) {
+            var ret = cbg_Core_Initialize(title, width, height, ref option);
+            return ret;
+        }
+        
+        public bool DoEvent() {
+            var ret = cbg_Core_DoEvent(selfPtr);
+            return ret;
+        }
+        
+        public void Terminate() {
+            cbg_Core_Terminate();
+        }
+        
+        ~Core() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Core_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
     public class Window {
         private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
         
@@ -226,7 +296,7 @@ namespace asd {
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr,IntPtr array,int size);
+        private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
@@ -237,7 +307,7 @@ namespace asd {
         }
         
         public void CopyTo(Int8Array array, int size) {
-            cbg_Int8Array_CopyTo(selfPtr,array != null ? array.selfPtr : IntPtr.Zero,size);
+            cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
         }
         
         ~Int8Array() {
@@ -281,7 +351,7 @@ namespace asd {
         private static extern void cbg_Resources_GetInstance();
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Resources_GetResourcesCount(IntPtr selfPtr,int type);
+        private static extern void cbg_Resources_GetResourcesCount(IntPtr selfPtr, int type);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Resources_Clear(IntPtr selfPtr);
@@ -302,7 +372,7 @@ namespace asd {
         }
         
         public void GetResourcesCount(ResourceType type) {
-            cbg_Resources_GetResourcesCount(selfPtr,(int)type);
+            cbg_Resources_GetResourcesCount(selfPtr, (int)type);
         }
         
         public void Clear() {
@@ -351,7 +421,7 @@ namespace asd {
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_Initialize(IntPtr selfPtr,IntPtr window);
+        private static extern void cbg_Keyboard_Initialize(IntPtr selfPtr, IntPtr window);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_Terminate(IntPtr selfPtr);
@@ -363,7 +433,7 @@ namespace asd {
         private static extern void cbg_Keyboard_RefleshKeyStates(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_GetKeyState(IntPtr selfPtr,int key);
+        private static extern void cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
@@ -374,7 +444,7 @@ namespace asd {
         }
         
         public void Initialize(Window window) {
-            cbg_Keyboard_Initialize(selfPtr,window != null ? window.selfPtr : IntPtr.Zero);
+            cbg_Keyboard_Initialize(selfPtr, window != null ? window.selfPtr : IntPtr.Zero);
         }
         
         public void Terminate() {
@@ -390,7 +460,7 @@ namespace asd {
         }
         
         public void GetKeyState(Keys key) {
-            cbg_Keyboard_GetKeyState(selfPtr,(int)key);
+            cbg_Keyboard_GetKeyState(selfPtr, (int)key);
         }
         
         ~Keyboard() {
@@ -434,6 +504,9 @@ namespace asd {
         private static extern void cbg_Graphics_GetInstance();
         
         [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Graphics_Update(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         
@@ -443,6 +516,10 @@ namespace asd {
         
         public void GetInstance() {
             cbg_Graphics_GetInstance();
+        }
+        
+        public void Update() {
+            cbg_Graphics_Update(selfPtr);
         }
         
         ~Graphics() {
