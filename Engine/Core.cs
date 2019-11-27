@@ -10,6 +10,13 @@ namespace asd {
         }
     }
     
+    public enum ResourceType : int {
+        StaticFile,
+        StreamFile,
+        Texture2D,
+        MAX,
+    }
+    
     public enum Keys : int {
         Unknown,
         Space,
@@ -136,7 +143,264 @@ namespace asd {
         MAX,
     }
     
+    public enum ButtonState : int {
+        Free = 0,
+        Push = 1,
+        Hold = 3,
+        Release = 2,
+    }
+    
     public enum DeviceType : int {
+    }
+    
+    public class Window {
+        private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
+        
+        public static Window TryGetFromCache(IntPtr native)
+        {
+            if(cacheRepo.ContainsKey(native))
+            {
+                Window cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Window_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Window(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Window>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Window_Release(IntPtr selfPtr);
+        
+        
+        internal Window(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        ~Window() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Window_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class Int8Array {
+        private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
+        
+        public static Int8Array TryGetFromCache(IntPtr native)
+        {
+            if(cacheRepo.ContainsKey(native))
+            {
+                Int8Array cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Int8Array_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Int8Array(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Int8Array>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr,IntPtr array,int size);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
+        
+        
+        internal Int8Array(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public void CopyTo(Int8Array array, int size) {
+            cbg_Int8Array_CopyTo(selfPtr,array != null ? array.selfPtr : IntPtr.Zero,size);
+        }
+        
+        ~Int8Array() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Int8Array_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class Resources {
+        private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
+        
+        public static Resources TryGetFromCache(IntPtr native)
+        {
+            if(cacheRepo.ContainsKey(native))
+            {
+                Resources cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Resources_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Resources(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Resources>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Resources_GetInstance();
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Resources_GetResourcesCount(IntPtr selfPtr,int type);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Resources_Clear(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Resources_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Resources_Release(IntPtr selfPtr);
+        
+        
+        internal Resources(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public void GetInstance() {
+            cbg_Resources_GetInstance();
+        }
+        
+        public void GetResourcesCount(ResourceType type) {
+            cbg_Resources_GetResourcesCount(selfPtr,(int)type);
+        }
+        
+        public void Clear() {
+            cbg_Resources_Clear(selfPtr);
+        }
+        
+        public void Reload() {
+            cbg_Resources_Reload(selfPtr);
+        }
+        
+        ~Resources() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Resources_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class Keyboard {
+        private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
+        
+        public static Keyboard TryGetFromCache(IntPtr native)
+        {
+            if(cacheRepo.ContainsKey(native))
+            {
+                Keyboard cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Keyboard_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Keyboard(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Keyboard>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Keyboard_Initialize(IntPtr selfPtr,IntPtr window);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Keyboard_Terminate(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Keyboard_GetInstance(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Keyboard_RefleshKeyStates(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Keyboard_GetKeyState(IntPtr selfPtr,int key);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
+        
+        
+        internal Keyboard(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public void Initialize(Window window) {
+            cbg_Keyboard_Initialize(selfPtr,window != null ? window.selfPtr : IntPtr.Zero);
+        }
+        
+        public void Terminate() {
+            cbg_Keyboard_Terminate(selfPtr);
+        }
+        
+        public void GetInstance() {
+            cbg_Keyboard_GetInstance(selfPtr);
+        }
+        
+        public void RefleshKeyStates() {
+            cbg_Keyboard_RefleshKeyStates(selfPtr);
+        }
+        
+        public void GetKeyState(Keys key) {
+            cbg_Keyboard_GetKeyState(selfPtr,(int)key);
+        }
+        
+        ~Keyboard() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Keyboard_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
     }
     
     public class Graphics {
@@ -146,7 +410,7 @@ namespace asd {
         {
             if(cacheRepo.ContainsKey(native))
             {
-                Subject cacheRet;
+                Graphics cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
@@ -198,7 +462,7 @@ namespace asd {
         {
             if(cacheRepo.ContainsKey(native))
             {
-                Subject cacheRet;
+                Texture2D cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
