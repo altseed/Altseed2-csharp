@@ -14,7 +14,7 @@ namespace Altseed2_Test
 
 			asd.Core.Initialize("Altseed2 C# Engine", 800, 600, ref coreOption);
 
-            //while (core.DoEvent()) ;
+            while (asd.Core.GetInstance().DoEvent()) ;
 
 			asd.Core.Terminate();
         }

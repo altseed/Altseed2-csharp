@@ -194,6 +194,9 @@ namespace asd {
         private static extern void cbg_Core_Terminate();
         
         [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_Core_GetInstance();
+        
+        [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Core_Release(IntPtr selfPtr);
         
         
@@ -213,6 +216,11 @@ namespace asd {
         
         public static void Terminate() {
             cbg_Core_Terminate();
+        }
+        
+        public static Core GetInstance() {
+            var ret = cbg_Core_GetInstance();
+            return Core.TryGetFromCache(ret);
         }
         
         ~Core() {
