@@ -12,12 +12,11 @@ namespace Altseed2_Test
                 IsResizable = false,
             };
 
-            var core = asd.Core.TryGetFromCache(IntPtr.Zero);
-            core.Initialize("Altseed2 C# Engine", 800, 600, ref coreOption);
+			asd.Core.Initialize("Altseed2 C# Engine", 800, 600, ref coreOption);
 
-            while (core.DoEvent()) ;
+            //while (core.DoEvent()) ;
 
-            core.Terminate();
+			asd.Core.Terminate();
         }
     }
 }

@@ -156,8 +156,10 @@ namespace asd {
     public class Core {
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
         
-        public static Core TryGetFromCache(IntPtr native)
+        internal static Core TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Core cacheRet;
@@ -199,7 +201,7 @@ namespace asd {
             this.selfPtr = handle.selfPtr;
         }
         
-        public bool Initialize(string title, int width, int height, ref CoreOption option) {
+        public static bool Initialize(string title, int width, int height, ref CoreOption option) {
             var ret = cbg_Core_Initialize(title, width, height, ref option);
             return ret;
         }
@@ -209,7 +211,7 @@ namespace asd {
             return ret;
         }
         
-        public void Terminate() {
+        public static void Terminate() {
             cbg_Core_Terminate();
         }
         
@@ -226,8 +228,10 @@ namespace asd {
     public class Window {
         private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
         
-        public static Window TryGetFromCache(IntPtr native)
+        internal static Window TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Window cacheRet;
@@ -271,8 +275,10 @@ namespace asd {
     public class Int8Array {
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
-        public static Int8Array TryGetFromCache(IntPtr native)
+        internal static Int8Array TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Int8Array cacheRet;
@@ -323,8 +329,10 @@ namespace asd {
     public class Resources {
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
         
-        public static Resources TryGetFromCache(IntPtr native)
+        internal static Resources TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Resources cacheRet;
@@ -348,10 +356,10 @@ namespace asd {
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Resources_GetInstance();
+        private static extern IntPtr cbg_Resources_GetInstance();
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Resources_GetResourcesCount(IntPtr selfPtr, int type);
+        private static extern int cbg_Resources_GetResourcesCount(IntPtr selfPtr, int type);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Resources_Clear(IntPtr selfPtr);
@@ -367,12 +375,14 @@ namespace asd {
             this.selfPtr = handle.selfPtr;
         }
         
-        public void GetInstance() {
-            cbg_Resources_GetInstance();
+        public static Resources GetInstance() {
+            var ret = cbg_Resources_GetInstance();
+            return Resources.TryGetFromCache(ret);
         }
         
-        public void GetResourcesCount(ResourceType type) {
-            cbg_Resources_GetResourcesCount(selfPtr, (int)type);
+        public int GetResourcesCount(ResourceType type) {
+            var ret = cbg_Resources_GetResourcesCount(selfPtr, (int)type);
+            return ret;
         }
         
         public void Clear() {
@@ -396,8 +406,10 @@ namespace asd {
     public class Keyboard {
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
         
-        public static Keyboard TryGetFromCache(IntPtr native)
+        internal static Keyboard TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Keyboard cacheRet;
@@ -421,19 +433,20 @@ namespace asd {
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_Initialize(IntPtr selfPtr, IntPtr window);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Keyboard_Initialize(IntPtr selfPtr, IntPtr window);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_Terminate(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_GetInstance(IntPtr selfPtr);
+        private static extern IntPtr cbg_Keyboard_GetInstance(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_RefleshKeyStates(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
+        private static extern int cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
@@ -443,24 +456,27 @@ namespace asd {
             this.selfPtr = handle.selfPtr;
         }
         
-        public void Initialize(Window window) {
-            cbg_Keyboard_Initialize(selfPtr, window != null ? window.selfPtr : IntPtr.Zero);
+        public bool Initialize(Window window) {
+            var ret = cbg_Keyboard_Initialize(selfPtr, window != null ? window.selfPtr : IntPtr.Zero);
+            return ret;
         }
         
         public void Terminate() {
             cbg_Keyboard_Terminate(selfPtr);
         }
         
-        public void GetInstance() {
-            cbg_Keyboard_GetInstance(selfPtr);
+        public Keyboard GetInstance() {
+            var ret = cbg_Keyboard_GetInstance(selfPtr);
+            return Keyboard.TryGetFromCache(ret);
         }
         
         public void RefleshKeyStates() {
             cbg_Keyboard_RefleshKeyStates(selfPtr);
         }
         
-        public void GetKeyState(Keys key) {
-            cbg_Keyboard_GetKeyState(selfPtr, (int)key);
+        public ButtonState GetKeyState(Keys key) {
+            var ret = cbg_Keyboard_GetKeyState(selfPtr, (int)key);
+            return (ButtonState)ret;
         }
         
         ~Keyboard() {
@@ -476,8 +492,10 @@ namespace asd {
     public class Graphics {
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
         
-        public static Graphics TryGetFromCache(IntPtr native)
+        internal static Graphics TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Graphics cacheRet;
@@ -501,10 +519,11 @@ namespace asd {
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Graphics_GetInstance();
+        private static extern IntPtr cbg_Graphics_GetInstance();
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Graphics_Update(IntPtr selfPtr);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Graphics_Update(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
@@ -514,12 +533,14 @@ namespace asd {
             this.selfPtr = handle.selfPtr;
         }
         
-        public void GetInstance() {
-            cbg_Graphics_GetInstance();
+        public static Graphics GetInstance() {
+            var ret = cbg_Graphics_GetInstance();
+            return Graphics.TryGetFromCache(ret);
         }
         
-        public void Update() {
-            cbg_Graphics_Update(selfPtr);
+        public bool Update() {
+            var ret = cbg_Graphics_Update(selfPtr);
+            return ret;
         }
         
         ~Graphics() {
@@ -535,8 +556,10 @@ namespace asd {
     public class Texture2D {
         private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
         
-        public static Texture2D TryGetFromCache(IntPtr native)
+        internal static Texture2D TryGetFromCache(IntPtr native)
         {
+            if(native == null) return null;
+        
             if(cacheRepo.ContainsKey(native))
             {
                 Texture2D cacheRet;
@@ -560,10 +583,11 @@ namespace asd {
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Texture2D_Reload(IntPtr selfPtr);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Texture2D_GetSize(IntPtr selfPtr);
+        private static extern Vector2DI cbg_Texture2D_GetSize(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
@@ -573,12 +597,14 @@ namespace asd {
             this.selfPtr = handle.selfPtr;
         }
         
-        public void Reload() {
-            cbg_Texture2D_Reload(selfPtr);
+        public bool Reload() {
+            var ret = cbg_Texture2D_Reload(selfPtr);
+            return ret;
         }
         
-        public void GetSize() {
-            cbg_Texture2D_GetSize(selfPtr);
+        public Vector2DI GetSize() {
+            var ret = cbg_Texture2D_GetSize(selfPtr);
+            return ret;
         }
         
         ~Texture2D() {

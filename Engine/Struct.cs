@@ -16,4 +16,11 @@ namespace asd
         [MarshalAs(UnmanagedType.U1)]
         public bool IsResizable;
     }
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct Vector2DI
+	{
+		public int X;
+		public int Y;
+	}
 }
