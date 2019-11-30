@@ -14,7 +14,10 @@ namespace Altseed2_Test
 
 			asd.Core.Initialize("Altseed2 C# Engine", 800, 600, ref coreOption);
 
-            while (asd.Core.GetInstance().DoEvent()) ;
+            while (asd.Core.GetInstance().DoEvent())
+            {
+                Console.WriteLine(asd.Keyboard.GetInstance().GetKeyState(asd.Keys.Space));
+            }
 
 			asd.Core.Terminate();
         }

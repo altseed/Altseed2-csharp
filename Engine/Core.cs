@@ -445,16 +445,13 @@ namespace asd {
         private static extern bool cbg_Keyboard_Initialize(IntPtr selfPtr, IntPtr window);
         
         [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_Terminate(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core.dll")]
-        private static extern IntPtr cbg_Keyboard_GetInstance(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_RefleshKeyStates(IntPtr selfPtr);
         
         [DllImport("Altseed_Core.dll")]
         private static extern int cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_Keyboard_GetInstance();
         
         [DllImport("Altseed_Core.dll")]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
@@ -469,15 +466,6 @@ namespace asd {
             return ret;
         }
         
-        public void Terminate() {
-            cbg_Keyboard_Terminate(selfPtr);
-        }
-        
-        public Keyboard GetInstance() {
-            var ret = cbg_Keyboard_GetInstance(selfPtr);
-            return Keyboard.TryGetFromCache(ret);
-        }
-        
         public void RefleshKeyStates() {
             cbg_Keyboard_RefleshKeyStates(selfPtr);
         }
@@ -485,6 +473,11 @@ namespace asd {
         public ButtonState GetKeyState(Keys key) {
             var ret = cbg_Keyboard_GetKeyState(selfPtr, (int)key);
             return (ButtonState)ret;
+        }
+        
+        public static Keyboard GetInstance() {
+            var ret = cbg_Keyboard_GetInstance();
+            return Keyboard.TryGetFromCache(ret);
         }
         
         ~Keyboard() {
