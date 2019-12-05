@@ -14,6 +14,7 @@ namespace asd {
         StaticFile,
         StreamFile,
         Texture2D,
+        Font,
         MAX,
     }
     
@@ -612,6 +613,332 @@ namespace asd {
             lock (this)  {
                 if (selfPtr != IntPtr.Zero) {
                     cbg_Texture2D_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class StreamFile {
+        private static Dictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StreamFile>>();
+        
+        internal static StreamFile TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                StreamFile cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_StreamFile_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new StreamFile(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<StreamFile>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern int cbg_StreamFile_GetTempBufferSize(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
+        
+        
+        internal StreamFile(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public int GetSize() {
+            var ret = cbg_StreamFile_GetSize(selfPtr);
+            return ret;
+        }
+        
+        public int GetCurrentPosition() {
+            var ret = cbg_StreamFile_GetCurrentPosition(selfPtr);
+            return ret;
+        }
+        
+        public int Read(int size) {
+            var ret = cbg_StreamFile_Read(selfPtr, size);
+            return ret;
+        }
+        
+        public Int8Array GetTempBuffer() {
+            var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
+            return Int8Array.TryGetFromCache(ret);
+        }
+        
+        public int GetTempBufferSize() {
+            var ret = cbg_StreamFile_GetTempBufferSize(selfPtr);
+            return ret;
+        }
+        
+        public bool GetIsInPackage() {
+            var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
+            return ret;
+        }
+        
+        public bool Reload() {
+            var ret = cbg_StreamFile_Reload(selfPtr);
+            return ret;
+        }
+        
+        ~StreamFile() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_StreamFile_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class StaticFile {
+        private static Dictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StaticFile>>();
+        
+        internal static StaticFile TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                StaticFile cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_StaticFile_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new StaticFile(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<StaticFile>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_StaticFile_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern int cbg_StaticFile_GetSize(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_StaticFile_GetIsInPackage(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
+        
+        
+        internal StaticFile(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public Int8Array GetBuffer() {
+            var ret = cbg_StaticFile_GetBuffer(selfPtr);
+            return Int8Array.TryGetFromCache(ret);
+        }
+        
+        public string GetPath() {
+            var ret = cbg_StaticFile_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        public int GetSize() {
+            var ret = cbg_StaticFile_GetSize(selfPtr);
+            return ret;
+        }
+        
+        public bool GetIsInPackage() {
+            var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
+            return ret;
+        }
+        
+        public bool Reload() {
+            var ret = cbg_StaticFile_Reload(selfPtr);
+            return ret;
+        }
+        
+        ~StaticFile() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_StaticFile_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class File {
+        private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
+        
+        internal static File TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                File cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_File_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new File(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<File>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_File_GetInstance();
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_File_CreateStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern IntPtr cbg_File_CreateStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_File_AddRootDirectory(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_File_AddRootPackageWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] string password);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_File_AddRootPackage(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_File_ClearRootDirectories(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_File_Exists(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_File_Pack(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath);
+        
+        [DllImport("Altseed_Core.dll")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_File_PackWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath, [MarshalAs(UnmanagedType.LPWStr)] string password);
+        
+        [DllImport("Altseed_Core.dll")]
+        private static extern void cbg_File_Release(IntPtr selfPtr);
+        
+        
+        internal File(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public static File GetInstance() {
+            var ret = cbg_File_GetInstance();
+            return File.TryGetFromCache(ret);
+        }
+        
+        public StaticFile CreateStaticFile(string path) {
+            var ret = cbg_File_CreateStaticFile(selfPtr, path);
+            return StaticFile.TryGetFromCache(ret);
+        }
+        
+        public StreamFile CreateStreamFile(string path) {
+            var ret = cbg_File_CreateStreamFile(selfPtr, path);
+            return StreamFile.TryGetFromCache(ret);
+        }
+        
+        public bool AddRootDirectory(string path) {
+            var ret = cbg_File_AddRootDirectory(selfPtr, path);
+            return ret;
+        }
+        
+        public bool AddRootPackageWithPassword(string path, string password) {
+            var ret = cbg_File_AddRootPackageWithPassword(selfPtr, path, password);
+            return ret;
+        }
+        
+        public bool AddRootPackage(string path) {
+            var ret = cbg_File_AddRootPackage(selfPtr, path);
+            return ret;
+        }
+        
+        public void ClearRootDirectories() {
+            cbg_File_ClearRootDirectories(selfPtr);
+        }
+        
+        public bool Exists(string path) {
+            var ret = cbg_File_Exists(selfPtr, path);
+            return ret;
+        }
+        
+        public bool Pack(string srcPath, string dstPath) {
+            var ret = cbg_File_Pack(selfPtr, srcPath, dstPath);
+            return ret;
+        }
+        
+        public bool PackWithPassword(string srcPath, string dstPath, string password) {
+            var ret = cbg_File_PackWithPassword(selfPtr, srcPath, dstPath, password);
+            return ret;
+        }
+        
+        ~File() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_File_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
