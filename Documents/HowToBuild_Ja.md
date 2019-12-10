@@ -16,11 +16,11 @@
 
 いまのところ。Core周りのビルドとかも自動化したいよね。
 
-1. `git submodule update --init --recursive` を実行
-1. `Scripts/generate_bindings.py` を実行
-1. `Core/scripts/GenerateProjects(_x64_).bat もしくは .sh`を実行
-1. `Core/build/Altseed.sln` を開き Core をビルド
-1. `Alseed2.sln` を開き Engine をビルド
+1. `git submodule update --init --recursive` を実行して、サブモジュールを更新します。
+1. `Core/scripts/GenerateProjects(_x64_).bat もしくは .sh`を実行して Core のソリューション/プロジェクトファイルを生成しま。。
+1. `Core/build/Altseed.sln` を開き Core をビルドします。
+1. `Scripts/generate_bindings.py` を実行して Core に含まれるメソッドの DllImport を作成します。
+1. `Alseed2.sln` を開き Engine をビルドします。
 
 
 ### Mac?
