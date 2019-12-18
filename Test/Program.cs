@@ -7,14 +7,15 @@ namespace Altseed2_Test
     {
         static void Main(string[] args)
         {
-            var coreOption = new asd.CoreOption()
+            var coreOption = new Altseed.CoreOption()
             {
                 IsFullscreenMode = false,
                 IsResizable = false,
             };
 
-            asd.Core.Initialize("Altseed2 C# Engine", 800, 600, ref coreOption);
+            Altseed.Engine.Initialize("Altseed2 C# Engine", 800, 600, coreOption);
 
+            /*
             Console.WriteLine(asd.File.GetInstance().AddRootDirectory("../../Core/TestData"));
 
             var staticFile = asd.File.GetInstance().CreateStaticFile("IO/test.txt");
@@ -28,12 +29,14 @@ namespace Altseed2_Test
             Console.WriteLine(staticFile.GetSize() == str.Length);
 
             Console.WriteLine(staticFile.GetSize());
-            while (asd.Core.GetInstance().DoEvent())
+            */
+
+            while (Altseed.Engine.DoEvents())
             {
-                //Console.WriteLine(asd.Keyboard.GetInstance().GetKeyState(asd.Keys.Space));
+                Console.WriteLine(Altseed.Engine.Keyboard.GetKeyState(asd.Keys.Space));
             }
 
-            asd.Core.Terminate();
+            Altseed.Engine.Terminate();
         }
     }
 }
