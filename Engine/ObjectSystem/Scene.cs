@@ -57,10 +57,8 @@ namespace Altseed
         {
             foreach (var o in _objects)
                 if (o.Status == ObjectStatus.Registered)
-                {
                     o.Status = ObjectStatus.WaitRemoved;
-                    removeObjects.Add(o);
-                }
+            removeObjects.AddRange(_objects);
         }
         /// <summary>
         /// 指定したオブジェクトを削除する
