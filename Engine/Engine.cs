@@ -13,11 +13,6 @@ namespace Altseed
         /// 現在処理している<see cref="Scene"/>を取得する
         /// </summary>
         public static Scene CurrentScene { get; private set; }
-        internal static Queue<Action> Actions { get; private set; }
-        static Engine()
-        {
-            Actions = new Queue<Action>();
-        }
         public static bool Initialize(string title, int width, int height, CoreOption option)
         {
             var o = option.toAsd();
@@ -44,7 +39,6 @@ namespace Altseed
         public static void Update()
         {
             CurrentScene.Update();
-            while (Actions.Count > 0) Actions.Dequeue().Invoke();
         }
 
         public static Keyboard Keyboard { get; private set; }

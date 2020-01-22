@@ -12,7 +12,11 @@ namespace Altseed
     public class Scene : IComponentRegisterable<SceneComponent>
     {
         private readonly List<Alject> _objects;
+        private readonly List<Alject> addObjects;
+        private readonly List<Alject> removeObjects;
         private readonly List<SceneComponent> components;
+        private readonly List<SceneComponent> addComponents;
+        private readonly List<SceneComponent> removeComponents;
         /// <summary>
         /// 登録されているオブジェクトを取得する
         /// </summary>
@@ -27,7 +31,11 @@ namespace Altseed
         public Scene()
         {
             _objects = new List<Alject>();
+            addObjects = new List<Alject>();
+            removeObjects = new List<Alject>();
             components = new List<SceneComponent>();
+            addComponents = new List<SceneComponent>();
+            removeComponents = new List<SceneComponent>();
         }
         /// <summary>
         /// 指定したオブジェクトを登録する
@@ -40,7 +48,7 @@ namespace Altseed
             if (obj == null) throw new ArgumentNullException("追加しようとしたオブジェクトがnullです", nameof(obj));
             if (obj.Status != ObjectStatus.Free) throw new ArgumentException("オブジェクトの状態が無効です", nameof(obj));
             obj.Status = ObjectStatus.WaitAdded;
-            Engine.Actions.Enqueue(() => __AddObject(obj));
+            addObjects.Add(obj);
         }
         /// <summary>
         /// 登録されているオブジェクトをすべて削除する
@@ -49,8 +57,10 @@ namespace Altseed
         {
             foreach (var o in _objects)
                 if (o.Status == ObjectStatus.Registered)
+                {
                     o.Status = ObjectStatus.WaitRemoved;
-            Engine.Actions.Enqueue(() => __Clear());
+                    removeObjects.Add(o);
+                }
         }
         /// <summary>
         /// 指定したオブジェクトを削除する
@@ -63,7 +73,7 @@ namespace Altseed
             if (obj == null) throw new ArgumentNullException("追加しようとしたオブジェクトがnullです", nameof(obj));
             if (obj.Status != ObjectStatus.Registered) throw new ArgumentException("オブジェクトの状態が無効です", nameof(obj));
             obj.Status = ObjectStatus.WaitRemoved;
-            Engine.Actions.Enqueue(() => __RemoveObject(obj, true));
+            removeObjects.Add(obj);
         }
         /// <summary>
         /// 指定した<see cref="SceneComponent"/>を登録する
@@ -76,7 +86,7 @@ namespace Altseed
             if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
             if (component.Status != ObjectStatus.Free) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
             component.Status = ObjectStatus.WaitAdded;
-            Engine.Actions.Enqueue(() => __AddComponent(component));
+            addComponents.Add(component);
         }
         /// <summary>
         /// 指定した<see cref="SceneComponent"/>を登録する
@@ -89,7 +99,7 @@ namespace Altseed
             if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));
             if (component.Status != ObjectStatus.Registered) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
             component.Status = ObjectStatus.WaitRemoved;
-            Engine.Actions.Enqueue(() => __RemoveComponent(component));
+            removeComponents.Add(component);
         }
         /// <summary>
         /// オブジェクトの更新が行われる前に実行
@@ -105,17 +115,6 @@ namespace Altseed
             obj.Status = ObjectStatus.Registered;
             obj.Scene = this;
             obj.RaiseOnAdded();
-        }
-        private void __Clear()
-        {
-            foreach (var o in _objects)
-                if (o.Status == ObjectStatus.WaitRemoved)
-                {
-                    o.Status = ObjectStatus.Free;
-                    o.RiaseOnRemoved(true);
-                    o.Scene = null;
-                }
-            _objects.Clear();
         }
         private void __RemoveObject(Alject obj, bool raiseEvent)
         {
@@ -137,6 +136,14 @@ namespace Altseed
             foreach (var c in components)
                 if (c.Status == ObjectStatus.Registered)
                     c.RaiseOnUpdated();
+            foreach (var a in addObjects) __AddObject(a);
+            foreach (var r in removeObjects) __RemoveObject(r, true);
+            foreach (var a in addComponents) __AddComponent(a);
+            foreach (var r in removeComponents) __RemoveComponent(r);
+            addObjects.Clear();
+            removeObjects.Clear();
+            addComponents.Clear();
+            removeComponents.Clear();
         }
         private void __AddComponent(SceneComponent component)
         {

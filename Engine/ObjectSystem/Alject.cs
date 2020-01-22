@@ -13,6 +13,8 @@ namespace Altseed
     public class Alject : IComponentRegisterable<AljectComponent>
     {
         private readonly List<AljectComponent> components;
+        private readonly List<AljectComponent> addComponents;
+        private readonly List<AljectComponent> removeComponents;
         /// <summary>
         /// 更新をするかどうかを取得または設定する
         /// </summary>
@@ -29,6 +31,8 @@ namespace Altseed
         {
             IsUpdated = true;
             components = new List<AljectComponent>();
+            addComponents = new List<AljectComponent>();
+            removeComponents = new List<AljectComponent>();
             Status = ObjectStatus.Free;
         }
         /// <summary>
@@ -42,7 +46,7 @@ namespace Altseed
             if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
             if (component.Status != ObjectStatus.Free) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
             component.Status = ObjectStatus.WaitAdded;
-            Engine.Actions.Enqueue(() => __AddComponent(component));
+            addComponents.Add(component);
         }
         /// <summary>
         /// 指定した<see cref="AljectComponent"/>を登録する
@@ -55,7 +59,7 @@ namespace Altseed
             if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));
             if (component.Status != ObjectStatus.Registered) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
             component.Status = ObjectStatus.WaitRemoved;
-            Engine.Actions.Enqueue(() => __RemoveComponent(component));
+            removeComponents.Add(component);
         }
         internal void RaiseOnAdded()
         {
@@ -82,6 +86,10 @@ namespace Altseed
                 foreach (var c in components)
                     if (c.Status == ObjectStatus.Registered)
                         c.RaiseOnUpdate();
+                foreach (var a in addComponents) __AddComponent(a);
+                foreach (var r in removeComponents) __RemoveComponent(r);
+                addComponents.Clear();
+                removeComponents.Clear();
             }
         }
         /// <summary>
