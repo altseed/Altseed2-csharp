@@ -41,6 +41,7 @@ namespace Altseed
         /// <param name="component">登録するコンポーネント</param>
         /// <exception cref="ArgumentException"><paramref name="component"/>が既に登録されている又は登録/削除処理待ち，若しくは破棄されている</exception>
         /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
+        /// <remarks>追加されるのはそのフレームの更新処理が終了した後</remarks>
         public void AddComponent(AljectComponent component)
         {
             if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
@@ -49,11 +50,18 @@ namespace Altseed
             addComponents.Add(component);
         }
         /// <summary>
+        /// 指定した<see cref="AljectComponent"/>が登録されているかどうかを返す
+        /// </summary>
+        /// <param name="component">検索する<see cref="AljectComponent"/></param>
+        /// <returns><paramref name="component"/>が登録されていたらtrue，それ以外でfalse</returns>
+        public bool ContainsComponent(AljectComponent component) => component == null ? false : components.Contains(component);
+        /// <summary>
         /// 指定した<see cref="AljectComponent"/>を登録する
         /// </summary>
         /// <param name="component">登録するコンポーネント</param>
         /// <exception cref="ArgumentException"><paramref name="component"/>が既に削除されている又は登録/削除処理待ち，若しくは破棄されている</exception>
         /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
+        /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
         public void RemoveComponent(AljectComponent component)
         {
             if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));

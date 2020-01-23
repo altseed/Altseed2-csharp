@@ -43,6 +43,7 @@ namespace Altseed
         /// <param name="obj">登録されるオブジェクト</param>
         /// <exception cref="ArgumentException"><paramref name="obj"/>が既に登録されている又は登録/削除処理待ち，若しくは破棄されている</exception>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>がnull</exception>
+        /// <remarks>追加されるのはそのフレームの更新処理が終了した後</remarks>
         public void AddObject(Alject obj)
         {
             if (obj == null) throw new ArgumentNullException("追加しようとしたオブジェクトがnullです", nameof(obj));
@@ -53,6 +54,7 @@ namespace Altseed
         /// <summary>
         /// 登録されているオブジェクトをすべて削除する
         /// </summary>
+        /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
         public void Clear()
         {
             foreach (var o in _objects)
@@ -66,6 +68,7 @@ namespace Altseed
         /// <param name="obj">削除されるオブジェクト</param>
         /// <exception cref="ArgumentException"><paramref name="obj"/>が既に削除されている又は登録/削除処理待ち，若しくは破棄されている</exception>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>がnull</exception>
+        /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
         public void RemoveObject(Alject obj)
         {
             if (obj == null) throw new ArgumentNullException("追加しようとしたオブジェクトがnullです", nameof(obj));
@@ -79,6 +82,7 @@ namespace Altseed
         /// <param name="component">登録するコンポーネント</param>
         /// <exception cref="ArgumentException"><paramref name="component"/>が既に登録されている又は登録/削除処理待ち，若しくは破棄されている</exception>
         /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
+        /// <remarks>追加されるのはそのフレームの更新処理が終了した後</remarks>
         public void AddComponent(SceneComponent component)
         {
             if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
@@ -87,11 +91,18 @@ namespace Altseed
             addComponents.Add(component);
         }
         /// <summary>
+        /// 指定した<see cref="SceneComponent"/>が登録されているかどうかを返す
+        /// </summary>
+        /// <param name="component">検索する<see cref="SceneComponent"/></param>
+        /// <returns><paramref name="component"/>が登録されていたらtrue，それ以外でfalse</returns>
+        public bool ContainsComponent(SceneComponent component) => component == null ? false : components.Contains(component);
+        /// <summary>
         /// 指定した<see cref="SceneComponent"/>を登録する
         /// </summary>
         /// <param name="component">登録するコンポーネント</param>
         /// <exception cref="ArgumentException"><paramref name="component"/>が既に削除されている又は登録/削除処理待ち，若しくは破棄されている</exception>
         /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
+        /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
         public void RemoveComponent(SceneComponent component)
         {
             if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));

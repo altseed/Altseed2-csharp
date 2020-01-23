@@ -19,6 +19,7 @@ namespace Altseed
             if (Core.Initialize(title, width, height, ref o))
             {
                 Keyboard = Keyboard.GetInstance();
+                CurrentScene = new Scene();
                 return true;
             }
             return false;
@@ -39,6 +40,15 @@ namespace Altseed
         public static void Update()
         {
             CurrentScene.Update();
+        }
+        /// <summary>
+        /// シーンを即変更する
+        /// </summary>
+        /// <param name="scene">変更先のシーン</param>
+        /// <exception cref="ArgumentNullException"><paramref name="scene"/>がnull</exception>
+        internal static void ChangeScene(Scene scene)
+        {
+            CurrentScene = scene ?? throw new ArgumentNullException("次のシーンがnullです", nameof(scene));
         }
 
         public static Keyboard Keyboard { get; private set; }

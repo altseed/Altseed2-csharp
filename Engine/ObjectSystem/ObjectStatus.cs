@@ -1,5 +1,8 @@
-﻿namespace Altseed
+﻿using System;
+
+namespace Altseed
 {
+    [Serializable]
     internal enum ObjectStatus : int
     {
         /// <summary>
