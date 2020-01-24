@@ -34,6 +34,7 @@ namespace Altseed2_Test
             while (Altseed.Engine.DoEvents())
             {
                 Console.WriteLine(Altseed.Engine.Keyboard.GetKeyState(asd.Keys.Space));
+                Altseed.Engine.Update();
             }
 
             Altseed.Engine.Terminate();
