@@ -151,6 +151,69 @@ namespace Altseed {
         Release = 2,
     }
     
+    public enum MouseButtons : int {
+        ButtonLeft = 0,
+        ButtonRight = 1,
+        ButtonMiddle = 2,
+        SubButton1 = 3,
+        SubButton2 = 4,
+        SubButton3 = 5,
+        SubButton4 = 6,
+        SubButton5 = 7,
+    }
+    
+    public enum CursorMode : int {
+        Normal = 212993,
+        Hidden = 212994,
+        Disable = 212995,
+    }
+    
+    public enum JoystickType : int {
+        Other = 0,
+        PS4 = 8200,
+        XBOX360 = 8199,
+        JoyconL = 8198,
+        JoyconR = 8197,
+    }
+    
+    public enum JoystickButtonType : int {
+        Start,
+        Select,
+        Home,
+        Release,
+        Capture,
+        LeftUp,
+        LeftDown,
+        LeftLeft,
+        LeftRight,
+        LeftPush,
+        RightUp,
+        RightRight,
+        RightLeft,
+        RightDown,
+        RightPush,
+        L1,
+        R1,
+        L2,
+        R2,
+        L3,
+        R3,
+        LeftStart,
+        RightStart,
+        Max,
+    }
+    
+    public enum JoystickAxisType : int {
+        Start,
+        LeftH,
+        LeftV,
+        RightH,
+        RightV,
+        L2,
+        R2,
+        Max,
+    }
+    
     public enum DeviceType : int {
     }
     
@@ -183,21 +246,21 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, ref CoreOption option);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_DoEvent(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Core_Terminate();
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Core_GetInstance();
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Core_Release(IntPtr selfPtr);
         
         
@@ -234,53 +297,6 @@ namespace Altseed {
         }
     }
     
-    public class Window {
-        private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
-        
-        internal static Window TryGetFromCache(IntPtr native)
-        {
-            if(native == null) return null;
-        
-            if(cacheRepo.ContainsKey(native))
-            {
-                Window cacheRet;
-                cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
-                {
-                    cbg_Window_Release(native);
-                    return cacheRet;
-                }
-                else
-                {
-                    cacheRepo.Remove(native);
-                }
-            }
-        
-            var newObject = new Window(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Window>(newObject);
-            return newObject;
-        }
-        
-        internal IntPtr selfPtr = IntPtr.Zero;
-        
-        [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Window_Release(IntPtr selfPtr);
-        
-        
-        internal Window(MemoryHandle handle) {
-            this.selfPtr = handle.selfPtr;
-        }
-        
-        ~Window() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
-                    cbg_Window_Release(selfPtr);
-                    selfPtr = IntPtr.Zero;
-                }
-            }
-        }
-    }
-    
     public class Int8Array {
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
@@ -310,10 +326,10 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         
@@ -364,19 +380,19 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Resources_GetInstance();
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_Resources_GetResourcesCount(IntPtr selfPtr, int type);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Resources_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Resources_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Resources_Release(IntPtr selfPtr);
         
         
@@ -441,34 +457,18 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Keyboard_Initialize(IntPtr selfPtr, IntPtr window);
-        
-        [DllImport("Altseed_Core.dll")]
-        private static extern void cbg_Keyboard_RefleshKeyStates(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Keyboard_GetInstance();
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
         
         
         internal Keyboard(MemoryHandle handle) {
             this.selfPtr = handle.selfPtr;
-        }
-        
-        public bool Initialize(Window window) {
-            var ret = cbg_Keyboard_Initialize(selfPtr, window != null ? window.selfPtr : IntPtr.Zero);
-            return ret;
-        }
-        
-        public void RefleshKeyStates() {
-            cbg_Keyboard_RefleshKeyStates(selfPtr);
         }
         
         public ButtonState GetKeyState(Keys key) {
@@ -485,6 +485,249 @@ namespace Altseed {
             lock (this)  {
                 if (selfPtr != IntPtr.Zero) {
                     cbg_Keyboard_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class Mouse {
+        private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
+        
+        internal static Mouse TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Mouse cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Mouse_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Mouse(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Mouse>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Mouse_GetInstance(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_RefreshInputState(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2DF vec);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2DF cbg_Mouse_GetPosition(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Mouse_GetCursorMode(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_SetCursorMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_Release(IntPtr selfPtr);
+        
+        
+        internal Mouse(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public CursorMode CursorMode {
+            get {
+                if (_CursorMode != null) {
+                    return _CursorMode.Value;
+                }
+                var ret = cbg_Mouse_GetCursorMode(selfPtr);
+                return (CursorMode)ret;
+            }
+            set {
+                _CursorMode = value;
+                cbg_Mouse_SetCursorMode(selfPtr, (int)value);
+            }
+        }
+        private CursorMode? _CursorMode;
+        
+        public Mouse GetInstance() {
+            var ret = cbg_Mouse_GetInstance(selfPtr);
+            return Mouse.TryGetFromCache(ret);
+        }
+        
+        public void RefreshInputState() {
+            cbg_Mouse_RefreshInputState(selfPtr);
+        }
+        
+        public void SetPosition(ref Vector2DF vec) {
+            cbg_Mouse_SetPosition(selfPtr, ref vec);
+        }
+        
+        public Vector2DF GetPosition() {
+            var ret = cbg_Mouse_GetPosition(selfPtr);
+            return ret;
+        }
+        
+        public float GetWheel() {
+            var ret = cbg_Mouse_GetWheel(selfPtr);
+            return ret;
+        }
+        
+        public void GetMouseButtonState(MouseButtons button) {
+            cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
+        }
+        
+        ~Mouse() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Mouse_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public class Joystick {
+        private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
+        
+        internal static Joystick TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Joystick cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Joystick_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Joystick(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Joystick>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Joystick_RefreshInputState(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Joystick_RefreshConnectedState(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Joystick_GetButtonStateByIndex(IntPtr selfPtr, int joystickIndex, int buttonIndex);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Joystick_GetButtonStateByType(IntPtr selfPtr, int joystickIndex, int type);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Joystick_GetJoystickType(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Joystick_GetAxisStateByIndex(IntPtr selfPtr, int joystickIndex, int axisIndex);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Joystick_GetAxisStateByType(IntPtr selfPtr, int joystickIndex, int type);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Joystick_GetJoystickName(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Joystick_RefreshVibrateState(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Joystick_SetVibration(IntPtr selfPtr, int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Joystick_Release(IntPtr selfPtr);
+        
+        
+        internal Joystick(MemoryHandle handle) {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public void IsPresent(int joystickIndex) {
+            cbg_Joystick_IsPresent(selfPtr, joystickIndex);
+        }
+        
+        public void RefreshInputState() {
+            cbg_Joystick_RefreshInputState(selfPtr);
+        }
+        
+        public void RefreshConnectedState() {
+            cbg_Joystick_RefreshConnectedState(selfPtr);
+        }
+        
+        public ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex) {
+            var ret = cbg_Joystick_GetButtonStateByIndex(selfPtr, joystickIndex, buttonIndex);
+            return (ButtonState)ret;
+        }
+        
+        public ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type) {
+            var ret = cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
+            return (ButtonState)ret;
+        }
+        
+        public JoystickType GetJoystickType(int index) {
+            var ret = cbg_Joystick_GetJoystickType(selfPtr, index);
+            return (JoystickType)ret;
+        }
+        
+        public float GetAxisStateByIndex(int joystickIndex, int axisIndex) {
+            var ret = cbg_Joystick_GetAxisStateByIndex(selfPtr, joystickIndex, axisIndex);
+            return ret;
+        }
+        
+        public float GetAxisStateByType(int joystickIndex, JoystickAxisType type) {
+            var ret = cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
+            return ret;
+        }
+        
+        public string GetJoystickName(int index) {
+            var ret = cbg_Joystick_GetJoystickName(selfPtr, index);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        public void RefreshVibrateState() {
+            cbg_Joystick_RefreshVibrateState(selfPtr);
+        }
+        
+        public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time) {
+            cbg_Joystick_SetVibration(selfPtr, index, high_freq, low_freq, high_amp, low_amp, life_time);
+        }
+        
+        ~Joystick() {
+            lock (this)  {
+                if (selfPtr != IntPtr.Zero) {
+                    cbg_Joystick_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
@@ -520,14 +763,14 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetInstance();
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_Update(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         
@@ -584,14 +827,14 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern Vector2DI cbg_Texture2D_GetSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
         
         
@@ -648,30 +891,30 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_GetTempBufferSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
         
         
@@ -753,24 +996,24 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StaticFile_GetPath(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern int cbg_StaticFile_GetSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_GetIsInPackage(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
         
         
@@ -842,43 +1085,43 @@ namespace Altseed {
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_File_GetInstance();
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_File_CreateStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_File_CreateStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootDirectory(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootPackageWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] string password);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootPackage(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_File_ClearRootDirectories(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_Exists(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_Pack(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_PackWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath, [MarshalAs(UnmanagedType.LPWStr)] string password);
         
-        [DllImport("Altseed_Core.dll")]
+        [DllImport("Altseed_Core")]
         private static extern void cbg_File_Release(IntPtr selfPtr);
         
         

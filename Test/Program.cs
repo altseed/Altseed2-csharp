@@ -33,7 +33,7 @@ namespace Altseed2_Test
 
             while (Altseed.Engine.DoEvents())
             {
-                Console.WriteLine(Altseed.Engine.Keyboard.GetKeyState(asd.Keys.Space));
+                Console.WriteLine(Altseed.Engine.Keyboard.GetKeyState(Altseed.Keys.Space));
                 Altseed.Engine.Update();
             }
 
