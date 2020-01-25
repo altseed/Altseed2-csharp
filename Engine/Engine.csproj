@@ -26,15 +26,9 @@
       </PropertyGroup>
     </Otherwise>
   </Choose>
-  
-  <ItemGroup>
-    <Content Include="..\Core\build\DEBUG\Altseed_Core.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
   <Choose>
-    <When Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <When Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
         <Content Include="..\Core\build\DEBUG\Altseed_Core.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -42,7 +36,7 @@
       </ItemGroup>
     </When>
 
-    <When Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <When Condition="'$(Configuration)|$(Platform)'=='Release|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
         <Content Include="..\Core\build\RELEASE\Altseed_Core.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
