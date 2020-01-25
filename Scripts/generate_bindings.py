@@ -30,6 +30,6 @@ if len(args) >= 3 and args[1] == '-lang':
 
 bindingGenerator = BindingGeneratorCSharp(define, lang)
 bindingGenerator.output_path = '../Engine/Core.cs'
-bindingGenerator.dll_name = 'Altseed_Core.dll'
-bindingGenerator.namespace = 'asd'
+bindingGenerator.dll_name = 'Altseed_Core'
+bindingGenerator.namespace = 'Altseed'
 bindingGenerator.generate()

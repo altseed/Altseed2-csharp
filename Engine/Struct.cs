@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace asd
+namespace Altseed
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct CoreOption
@@ -22,5 +22,12 @@ namespace asd
     {
         public int X;
         public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vector2DF
+    {
+        public float X;
+        public float Y;
     }
 }

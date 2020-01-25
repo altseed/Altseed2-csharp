@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace asd {
+namespace Altseed {
     struct MemoryHandle {
         public IntPtr selfPtr;
         public MemoryHandle(IntPtr p) {
