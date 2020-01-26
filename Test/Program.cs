@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using Xunit;
 
-namespace Altseed2_Test
+namespace Altseed.Test
 {
-    class Program
+    public class Engine
     {
-        static void Main(string[] args)
+        [Fact]
+        public void Initialize()
         {
             var coreOption = new Altseed.CoreOption()
             {
@@ -38,6 +40,8 @@ namespace Altseed2_Test
             }
 
             Altseed.Engine.Terminate();
+
+            Assert.True(true);
         }
     }
 }
