@@ -768,7 +768,11 @@ namespace Altseed {
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Graphics_Update(IntPtr selfPtr);
+        private static extern bool cbg_Graphics_BeginFrame(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Graphics_EndFrame(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
@@ -783,8 +787,13 @@ namespace Altseed {
             return Graphics.TryGetFromCache(ret);
         }
         
-        public bool Update() {
-            var ret = cbg_Graphics_Update(selfPtr);
+        public bool BeginFrame() {
+            var ret = cbg_Graphics_BeginFrame(selfPtr);
+            return ret;
+        }
+        
+        public bool EndFrame() {
+            var ret = cbg_Graphics_EndFrame(selfPtr);
             return ret;
         }
         
