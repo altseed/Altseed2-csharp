@@ -32,3 +32,7 @@
 
 既存のテストをマネしながら書く。
 実行は `テストエクスプローラ` か `dotnet Test` で
+
+c.f.: 
+- [テスト エクスプローラーを使用した単体テストの実行とデバッグ - Visual Studio](https://docs.microsoft.com/ja-jp/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2019)
+- [Exploring and Managing Unit Tests Using Test Explorer in Visual Studio - Daily .NET Tips](https://dailydotnettips.com/exploring-and-managing-unit-tests-using-test-explorer-in-visual-studio/)
