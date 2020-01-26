@@ -12,14 +12,13 @@
 
 ## Build
 
-### Windows
+### Windows, Mac (VisualStudio)
 
 1. `git submodule update --init --recursive` を実行して、サブモジュールを更新します。
-1. `Scripts/BuildCore.batt もしくは .sh`を実行して Core を生成します。
+1. `Scripts/BuildCore.bat` もしくは `Scripts/BuildCore_Mac.sh`を実行して Core を生成します。
 1. `Alseed2.sln` を開き Engine をビルドします。
 
-
-### Mac?
+### Mac(CLI)
 
 Debug
 ```shell
