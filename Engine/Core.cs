@@ -2,15 +2,19 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace Altseed {
-    struct MemoryHandle {
+namespace Altseed
+{
+    struct MemoryHandle
+    {
         public IntPtr selfPtr;
-        public MemoryHandle(IntPtr p) {
+        public MemoryHandle(IntPtr p)
+        {
             this.selfPtr = p;
         }
     }
     
-    public enum ResourceType : int {
+    public enum ResourceType : int
+    {
         StaticFile,
         StreamFile,
         Texture2D,
@@ -18,7 +22,8 @@ namespace Altseed {
         MAX,
     }
     
-    public enum Keys : int {
+    public enum Keys : int
+    {
         Unknown,
         Space,
         Apostrophe,
@@ -144,14 +149,16 @@ namespace Altseed {
         MAX,
     }
     
-    public enum ButtonState : int {
+    public enum ButtonState : int
+    {
         Free = 0,
         Push = 1,
         Hold = 3,
         Release = 2,
     }
     
-    public enum MouseButtons : int {
+    public enum MouseButtons : int
+    {
         ButtonLeft = 0,
         ButtonRight = 1,
         ButtonMiddle = 2,
@@ -162,13 +169,15 @@ namespace Altseed {
         SubButton5 = 7,
     }
     
-    public enum CursorMode : int {
+    public enum CursorMode : int
+    {
         Normal = 212993,
         Hidden = 212994,
         Disable = 212995,
     }
     
-    public enum JoystickType : int {
+    public enum JoystickType : int
+    {
         Other = 0,
         PS4 = 8200,
         XBOX360 = 8199,
@@ -176,7 +185,8 @@ namespace Altseed {
         JoyconR = 8197,
     }
     
-    public enum JoystickButtonType : int {
+    public enum JoystickButtonType : int
+    {
         Start,
         Select,
         Home,
@@ -203,7 +213,8 @@ namespace Altseed {
         Max,
     }
     
-    public enum JoystickAxisType : int {
+    public enum JoystickAxisType : int
+    {
         Start,
         LeftH,
         LeftV,
@@ -214,10 +225,47 @@ namespace Altseed {
         Max,
     }
     
-    public enum DeviceType : int {
+    public enum DeviceType : int
+    {
     }
     
-    public class Core {
+    public enum EasingType : int
+    {
+        Linear,
+        InSine,
+        OutSine,
+        InOutSine,
+        InQuad,
+        OutQuad,
+        InOutQuad,
+        InCubic,
+        OutCubic,
+        InOutCubic,
+        InQuart,
+        OutQuart,
+        InOutQuart,
+        InQuint,
+        OutQuint,
+        InOutQuint,
+        InExpo,
+        OutExpo,
+        InOutExpo,
+        InCirc,
+        OutCirc,
+        InOutCirc,
+        InBack,
+        OutBack,
+        InOutBack,
+        InElastic,
+        OutElastic,
+        InOutElastic,
+        InBounce,
+        OutBounce,
+        InOutBounce,
+    }
+    
+    public partial class Core
+    {
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
         
         internal static Core TryGetFromCache(IntPtr native)
@@ -264,32 +312,40 @@ namespace Altseed {
         private static extern void cbg_Core_Release(IntPtr selfPtr);
         
         
-        internal Core(MemoryHandle handle) {
+        internal Core(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public static bool Initialize(string title, int width, int height, ref CoreOption option) {
+        public static bool Initialize(string title, int width, int height, ref CoreOption option)
+        {
             var ret = cbg_Core_Initialize(title, width, height, ref option);
             return ret;
         }
         
-        public bool DoEvent() {
+        public bool DoEvent()
+        {
             var ret = cbg_Core_DoEvent(selfPtr);
             return ret;
         }
         
-        public static void Terminate() {
+        public static void Terminate()
+        {
             cbg_Core_Terminate();
         }
         
-        public static Core GetInstance() {
+        public static Core GetInstance()
+        {
             var ret = cbg_Core_GetInstance();
             return Core.TryGetFromCache(ret);
         }
         
-        ~Core() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Core()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Core_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -297,7 +353,8 @@ namespace Altseed {
         }
     }
     
-    public class Int8Array {
+    public partial class Int8Array
+    {
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
         internal static Int8Array TryGetFromCache(IntPtr native)
@@ -333,17 +390,22 @@ namespace Altseed {
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         
-        internal Int8Array(MemoryHandle handle) {
+        internal Int8Array(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public void CopyTo(Int8Array array, int size) {
+        public void CopyTo(Int8Array array, int size)
+        {
             cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
         }
         
-        ~Int8Array() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Int8Array()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Int8Array_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -351,7 +413,8 @@ namespace Altseed {
         }
     }
     
-    public class Resources {
+    public partial class Resources
+    {
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
         
         internal static Resources TryGetFromCache(IntPtr native)
@@ -396,31 +459,39 @@ namespace Altseed {
         private static extern void cbg_Resources_Release(IntPtr selfPtr);
         
         
-        internal Resources(MemoryHandle handle) {
+        internal Resources(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public static Resources GetInstance() {
+        public static Resources GetInstance()
+        {
             var ret = cbg_Resources_GetInstance();
             return Resources.TryGetFromCache(ret);
         }
         
-        public int GetResourcesCount(ResourceType type) {
+        public int GetResourcesCount(ResourceType type)
+        {
             var ret = cbg_Resources_GetResourcesCount(selfPtr, (int)type);
             return ret;
         }
         
-        public void Clear() {
+        public void Clear()
+        {
             cbg_Resources_Clear(selfPtr);
         }
         
-        public void Reload() {
+        public void Reload()
+        {
             cbg_Resources_Reload(selfPtr);
         }
         
-        ~Resources() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Resources()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Resources_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -428,7 +499,8 @@ namespace Altseed {
         }
     }
     
-    public class Keyboard {
+    public partial class Keyboard
+    {
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
         
         internal static Keyboard TryGetFromCache(IntPtr native)
@@ -467,23 +539,29 @@ namespace Altseed {
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
         
         
-        internal Keyboard(MemoryHandle handle) {
+        internal Keyboard(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public ButtonState GetKeyState(Keys key) {
+        public ButtonState GetKeyState(Keys key)
+        {
             var ret = cbg_Keyboard_GetKeyState(selfPtr, (int)key);
             return (ButtonState)ret;
         }
         
-        public static Keyboard GetInstance() {
+        public static Keyboard GetInstance()
+        {
             var ret = cbg_Keyboard_GetInstance();
             return Keyboard.TryGetFromCache(ret);
         }
         
-        ~Keyboard() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Keyboard()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Keyboard_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -491,7 +569,8 @@ namespace Altseed {
         }
     }
     
-    public class Mouse {
+    public partial class Mouse
+    {
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
         
         internal static Mouse TryGetFromCache(IntPtr native)
@@ -548,55 +627,69 @@ namespace Altseed {
         private static extern void cbg_Mouse_Release(IntPtr selfPtr);
         
         
-        internal Mouse(MemoryHandle handle) {
+        internal Mouse(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public CursorMode CursorMode {
-            get {
-                if (_CursorMode != null) {
+        public CursorMode CursorMode
+        {
+            get
+            {
+                if (_CursorMode != null)
+                {
                     return _CursorMode.Value;
                 }
                 var ret = cbg_Mouse_GetCursorMode(selfPtr);
                 return (CursorMode)ret;
             }
-            set {
+            set
+            {
                 _CursorMode = value;
                 cbg_Mouse_SetCursorMode(selfPtr, (int)value);
             }
         }
         private CursorMode? _CursorMode;
         
-        public Mouse GetInstance() {
+        public Mouse GetInstance()
+        {
             var ret = cbg_Mouse_GetInstance(selfPtr);
             return Mouse.TryGetFromCache(ret);
         }
         
-        public void RefreshInputState() {
+        public void RefreshInputState()
+        {
             cbg_Mouse_RefreshInputState(selfPtr);
         }
         
-        public void SetPosition(ref Vector2DF vec) {
+        public void SetPosition(ref Vector2DF vec)
+        {
             cbg_Mouse_SetPosition(selfPtr, ref vec);
         }
         
-        public Vector2DF GetPosition() {
+        public Vector2DF GetPosition()
+        {
             var ret = cbg_Mouse_GetPosition(selfPtr);
             return ret;
         }
         
-        public float GetWheel() {
+        public float GetWheel()
+        {
             var ret = cbg_Mouse_GetWheel(selfPtr);
             return ret;
         }
         
-        public void GetMouseButtonState(MouseButtons button) {
+        public void GetMouseButtonState(MouseButtons button)
+        {
             cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
         }
         
-        ~Mouse() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Mouse()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Mouse_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -604,7 +697,8 @@ namespace Altseed {
         }
     }
     
-    public class Joystick {
+    public partial class Joystick
+    {
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
         
         internal static Joystick TryGetFromCache(IntPtr native)
@@ -670,63 +764,78 @@ namespace Altseed {
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
         
         
-        internal Joystick(MemoryHandle handle) {
+        internal Joystick(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public void IsPresent(int joystickIndex) {
+        public void IsPresent(int joystickIndex)
+        {
             cbg_Joystick_IsPresent(selfPtr, joystickIndex);
         }
         
-        public void RefreshInputState() {
+        public void RefreshInputState()
+        {
             cbg_Joystick_RefreshInputState(selfPtr);
         }
         
-        public void RefreshConnectedState() {
+        public void RefreshConnectedState()
+        {
             cbg_Joystick_RefreshConnectedState(selfPtr);
         }
         
-        public ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex) {
+        public ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex)
+        {
             var ret = cbg_Joystick_GetButtonStateByIndex(selfPtr, joystickIndex, buttonIndex);
             return (ButtonState)ret;
         }
         
-        public ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type) {
+        public ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type)
+        {
             var ret = cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
             return (ButtonState)ret;
         }
         
-        public JoystickType GetJoystickType(int index) {
+        public JoystickType GetJoystickType(int index)
+        {
             var ret = cbg_Joystick_GetJoystickType(selfPtr, index);
             return (JoystickType)ret;
         }
         
-        public float GetAxisStateByIndex(int joystickIndex, int axisIndex) {
+        public float GetAxisStateByIndex(int joystickIndex, int axisIndex)
+        {
             var ret = cbg_Joystick_GetAxisStateByIndex(selfPtr, joystickIndex, axisIndex);
             return ret;
         }
         
-        public float GetAxisStateByType(int joystickIndex, JoystickAxisType type) {
+        public float GetAxisStateByType(int joystickIndex, JoystickAxisType type)
+        {
             var ret = cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
             return ret;
         }
         
-        public string GetJoystickName(int index) {
+        public string GetJoystickName(int index)
+        {
             var ret = cbg_Joystick_GetJoystickName(selfPtr, index);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
-        public void RefreshVibrateState() {
+        public void RefreshVibrateState()
+        {
             cbg_Joystick_RefreshVibrateState(selfPtr);
         }
         
-        public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time) {
+        public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time)
+        {
             cbg_Joystick_SetVibration(selfPtr, index, high_freq, low_freq, high_amp, low_amp, life_time);
         }
         
-        ~Joystick() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Joystick()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Joystick_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -734,7 +843,8 @@ namespace Altseed {
         }
     }
     
-    public class Graphics {
+    public partial class Graphics
+    {
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
         
         internal static Graphics TryGetFromCache(IntPtr native)
@@ -778,28 +888,35 @@ namespace Altseed {
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         
-        internal Graphics(MemoryHandle handle) {
+        internal Graphics(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public static Graphics GetInstance() {
+        public static Graphics GetInstance()
+        {
             var ret = cbg_Graphics_GetInstance();
             return Graphics.TryGetFromCache(ret);
         }
         
-        public bool BeginFrame() {
+        public bool BeginFrame()
+        {
             var ret = cbg_Graphics_BeginFrame(selfPtr);
             return ret;
         }
         
-        public bool EndFrame() {
+        public bool EndFrame()
+        {
             var ret = cbg_Graphics_EndFrame(selfPtr);
             return ret;
         }
         
-        ~Graphics() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Graphics()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Graphics_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -807,7 +924,8 @@ namespace Altseed {
         }
     }
     
-    public class Texture2D {
+    public partial class Texture2D
+    {
         private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
         
         internal static Texture2D TryGetFromCache(IntPtr native)
@@ -847,23 +965,29 @@ namespace Altseed {
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
         
         
-        internal Texture2D(MemoryHandle handle) {
+        internal Texture2D(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public bool Reload() {
+        public bool Reload()
+        {
             var ret = cbg_Texture2D_Reload(selfPtr);
             return ret;
         }
         
-        public Vector2DI GetSize() {
+        public Vector2DI GetSize()
+        {
             var ret = cbg_Texture2D_GetSize(selfPtr);
             return ret;
         }
         
-        ~Texture2D() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~Texture2D()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_Texture2D_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -871,7 +995,8 @@ namespace Altseed {
         }
     }
     
-    public class StreamFile {
+    public partial class StreamFile
+    {
         private static Dictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StreamFile>>();
         
         internal static StreamFile TryGetFromCache(IntPtr native)
@@ -927,48 +1052,59 @@ namespace Altseed {
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
         
         
-        internal StreamFile(MemoryHandle handle) {
+        internal StreamFile(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public int GetSize() {
+        public int GetSize()
+        {
             var ret = cbg_StreamFile_GetSize(selfPtr);
             return ret;
         }
         
-        public int GetCurrentPosition() {
+        public int GetCurrentPosition()
+        {
             var ret = cbg_StreamFile_GetCurrentPosition(selfPtr);
             return ret;
         }
         
-        public int Read(int size) {
+        public int Read(int size)
+        {
             var ret = cbg_StreamFile_Read(selfPtr, size);
             return ret;
         }
         
-        public Int8Array GetTempBuffer() {
+        public Int8Array GetTempBuffer()
+        {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
         }
         
-        public int GetTempBufferSize() {
+        public int GetTempBufferSize()
+        {
             var ret = cbg_StreamFile_GetTempBufferSize(selfPtr);
             return ret;
         }
         
-        public bool GetIsInPackage() {
+        public bool GetIsInPackage()
+        {
             var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
             return ret;
         }
         
-        public bool Reload() {
+        public bool Reload()
+        {
             var ret = cbg_StreamFile_Reload(selfPtr);
             return ret;
         }
         
-        ~StreamFile() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~StreamFile()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_StreamFile_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -976,7 +1112,8 @@ namespace Altseed {
         }
     }
     
-    public class StaticFile {
+    public partial class StaticFile
+    {
         private static Dictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StaticFile>>();
         
         internal static StaticFile TryGetFromCache(IntPtr native)
@@ -1026,38 +1163,47 @@ namespace Altseed {
         private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
         
         
-        internal StaticFile(MemoryHandle handle) {
+        internal StaticFile(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public Int8Array GetBuffer() {
+        public Int8Array GetBuffer()
+        {
             var ret = cbg_StaticFile_GetBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
         }
         
-        public string GetPath() {
+        public string GetPath()
+        {
             var ret = cbg_StaticFile_GetPath(selfPtr);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
-        public int GetSize() {
+        public int GetSize()
+        {
             var ret = cbg_StaticFile_GetSize(selfPtr);
             return ret;
         }
         
-        public bool GetIsInPackage() {
+        public bool GetIsInPackage()
+        {
             var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
             return ret;
         }
         
-        public bool Reload() {
+        public bool Reload()
+        {
             var ret = cbg_StaticFile_Reload(selfPtr);
             return ret;
         }
         
-        ~StaticFile() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~StaticFile()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_StaticFile_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
@@ -1065,7 +1211,8 @@ namespace Altseed {
         }
     }
     
-    public class File {
+    public partial class File
+    {
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
         
         internal static File TryGetFromCache(IntPtr native)
@@ -1134,63 +1281,137 @@ namespace Altseed {
         private static extern void cbg_File_Release(IntPtr selfPtr);
         
         
-        internal File(MemoryHandle handle) {
+        internal File(MemoryHandle handle)
+        {
             this.selfPtr = handle.selfPtr;
         }
         
-        public static File GetInstance() {
+        public static File GetInstance()
+        {
             var ret = cbg_File_GetInstance();
             return File.TryGetFromCache(ret);
         }
         
-        public StaticFile CreateStaticFile(string path) {
+        public StaticFile CreateStaticFile(string path)
+        {
             var ret = cbg_File_CreateStaticFile(selfPtr, path);
             return StaticFile.TryGetFromCache(ret);
         }
         
-        public StreamFile CreateStreamFile(string path) {
+        public StreamFile CreateStreamFile(string path)
+        {
             var ret = cbg_File_CreateStreamFile(selfPtr, path);
             return StreamFile.TryGetFromCache(ret);
         }
         
-        public bool AddRootDirectory(string path) {
+        public bool AddRootDirectory(string path)
+        {
             var ret = cbg_File_AddRootDirectory(selfPtr, path);
             return ret;
         }
         
-        public bool AddRootPackageWithPassword(string path, string password) {
+        public bool AddRootPackageWithPassword(string path, string password)
+        {
             var ret = cbg_File_AddRootPackageWithPassword(selfPtr, path, password);
             return ret;
         }
         
-        public bool AddRootPackage(string path) {
+        public bool AddRootPackage(string path)
+        {
             var ret = cbg_File_AddRootPackage(selfPtr, path);
             return ret;
         }
         
-        public void ClearRootDirectories() {
+        public void ClearRootDirectories()
+        {
             cbg_File_ClearRootDirectories(selfPtr);
         }
         
-        public bool Exists(string path) {
+        public bool Exists(string path)
+        {
             var ret = cbg_File_Exists(selfPtr, path);
             return ret;
         }
         
-        public bool Pack(string srcPath, string dstPath) {
+        public bool Pack(string srcPath, string dstPath)
+        {
             var ret = cbg_File_Pack(selfPtr, srcPath, dstPath);
             return ret;
         }
         
-        public bool PackWithPassword(string srcPath, string dstPath, string password) {
+        public bool PackWithPassword(string srcPath, string dstPath, string password)
+        {
             var ret = cbg_File_PackWithPassword(selfPtr, srcPath, dstPath, password);
             return ret;
         }
         
-        ~File() {
-            lock (this)  {
-                if (selfPtr != IntPtr.Zero) {
+        ~File()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
                     cbg_File_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public partial class Easing
+    {
+        private static Dictionary<IntPtr, WeakReference<Easing>> cacheRepo = new Dictionary<IntPtr, WeakReference<Easing>>();
+        
+        internal static Easing TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Easing cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Easing_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Easing(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Easing>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Easing_GetEasing(int easing, float t);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Easing_Release(IntPtr selfPtr);
+        
+        
+        internal Easing(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        public static void GetEasing(EasingType easing, float t)
+        {
+            cbg_Easing_GetEasing((int)easing, t);
+        }
+        
+        ~Easing()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Easing_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
