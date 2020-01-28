@@ -9,6 +9,7 @@ namespace Altseed
     /// <summary>
     /// オブジェクトを統括するシーンのクラス
     /// </summary>
+    [Serializable]
     public class Scene : IComponentRegisterable<SceneComponent>
     {
         private readonly List<Alject> _objects;

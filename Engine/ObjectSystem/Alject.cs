@@ -10,6 +10,7 @@ namespace Altseed
     /// Altseedで管理されるオブジェクト
     /// 名前適当なのでいい感じに直して
     /// </summary>
+    [Serializable]
     public class Alject : IComponentRegisterable<AljectComponent>
     {
         private readonly List<AljectComponent> components;

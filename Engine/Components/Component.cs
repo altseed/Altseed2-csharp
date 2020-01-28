@@ -9,6 +9,7 @@ namespace Altseed
     /// <summary>
     /// コンポーネントのクラス
     /// </summary>
+    [Serializable]
     public abstract class Component
     {
         internal ObjectStatus Status { get; set; }
