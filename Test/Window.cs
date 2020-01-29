@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
-using Xunit;
+using NUnit.Framework;
 
 namespace Altseed.Test
 {
+    [TestFixture]
     public class Window
     {
-        [Fact]
+        [Test]
         public void Base()
         {
             var coreOption = new CoreOption()
