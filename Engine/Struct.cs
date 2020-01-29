@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Altseed
 {
-    [StructLayout(LayoutKind.Sequential), Serializable]
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct CoreOption
     {
         [MarshalAs(UnmanagedType.U1)]
@@ -19,7 +20,8 @@ namespace Altseed
     /// <summary>
     /// <see cref="int"/>型の二次元ベクトルを表す構造体
     /// </summary>
-    [StructLayout(LayoutKind.Sequential), Serializable]
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vector2DI : IEquatable<Vector2DI>
     {
         /// <summary>
@@ -81,48 +83,6 @@ namespace Altseed
         /// <returns>このインスタンスと等価な<see cref="Vector2DF"/>の新しいインスタンス</returns>
         public Vector2DF To2DF() => new Vector2DF(X, Y);
         /// <summary>
-        /// 2つのベクトルを加算する
-        /// </summary>
-        /// <param name="v1">加算するベクトル1</param>
-        /// <param name="v2">加算するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
-        public static Vector2DI Add(Vector2DI v1, Vector2DI v2) => new Vector2DI(v1.X + v2.X, v1.Y + v2.Y);
-        /// <summary>
-        /// 2つのベクトルを減算する
-        /// </summary>
-        /// <param name="left">減算されるベクトル</param>
-        /// <param name="right">減算するベクトル</param>
-        /// <returns>減算結果</returns>
-        public static Vector2DI Substract(Vector2DI left, Vector2DI right) => new Vector2DI(left.X - right.X, left.Y - right.Y);
-        /// <summary>
-        /// 2つのベクトルを積算する
-        /// </summary>
-        /// <param name="v1">積算するベクトル1</param>
-        /// <param name="v2">積算するベクトル2</param>
-        /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
-        public static Vector2DI Multiple(Vector2DI v1, Vector2DI v2) => new Vector2DI(v1.X * v2.X, v1.Y * v2.Y);
-        /// <summary>
-        /// ベクトルと値を積算する
-        /// </summary>
-        /// <param name="vector">積算するベクトル</param>
-        /// <param name="scalar">積算する値</param>
-        /// <returns>積算結果</returns>
-        public static Vector2DI Multiple(Vector2DI vector, int scalar) => new Vector2DI(vector.X + scalar, vector.Y * scalar);
-        /// <summary>
-        /// 2つのベクトルを除算する
-        /// </summary>
-        /// <param name="left">除算されるベクトル</param>
-        /// <param name="right">除算するベクトル</param>
-        /// <returns>除算結果(left.X / right.X, left.Y / right.Y)</returns>
-        public static Vector2DI Divide(Vector2DI left, Vector2DI right) => new Vector2DI(left.X / right.X, left.Y / right.Y);
-        /// <summary>
-        /// ベクトルを値で除算する
-        /// </summary>
-        /// <param name="vector">除算されるベクトル</param>
-        /// <param name="scalar">除算する値</param>
-        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
-        public static Vector2DI Divide(Vector2DI vector, int scalar) => new Vector2DI(vector.X / scalar, vector.Y / scalar);
-        /// <summary>
         /// 2つのベクトルの外積を求める
         /// </summary>
         /// <param name="left">使用するベクトル1</param>
@@ -138,18 +98,60 @@ namespace Altseed
         public static int Dot(Vector2DI v1, Vector2DI v2) => v1.X * v2.X + v1.Y + v2.Y;
         public static bool operator ==(Vector2DI v1, Vector2DI v2) => Equals(v1, v2);
         public static bool operator !=(Vector2DI v1, Vector2DI v2) => !Equals(v1, v2);
-        public static Vector2DI operator +(Vector2DI v1, Vector2DI v2) => Add(v1, v2);
-        public static Vector2DI operator -(Vector2DI v1, Vector2DI v2) => Substract(v1, v2);
-        public static Vector2DI operator *(Vector2DI v1, Vector2DI v2) => Multiple(v1, v2);
-        public static Vector2DI operator *(Vector2DI vector, int scalar) => Multiple(vector, scalar);
-        public static Vector2DI operator *(int scalar, Vector2DI vector) => Multiple(vector, scalar);
-        public static Vector2DI operator /(Vector2DI v1, Vector2DI v2) => Divide(v1, v2);
-        public static Vector2DI operator /(Vector2DI v, int s) => Divide(v, s);
+        /// <summary>
+        /// 2つのベクトルを加算する
+        /// </summary>
+        /// <param name="v1">加算するベクトル1</param>
+        /// <param name="v2">加算するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
+        public static Vector2DI operator +(Vector2DI v1, Vector2DI v2) => new Vector2DI(v1.X + v2.X, v1.Y + v2.Y);
+        /// <summary>
+        /// ベクトルの符号を反転する
+        /// </summary>
+        /// <param name="vector">符合を反転するベクトル</param>
+        /// <returns><paramref name="vector"/>の逆符合版</returns>
+        public static Vector2DI operator -(Vector2DI vector) => new Vector2DI(-vector.X, -vector.Y);
+        /// <summary>
+        /// 2つのベクトルを減算する
+        /// </summary>
+        /// <param name="left">減算されるベクトル</param>
+        /// <param name="right">減算するベクトル</param>
+        /// <returns>減算結果</returns>
+        public static Vector2DI operator -(Vector2DI left, Vector2DI right) => new Vector2DI(left.X - right.X, left.Y - right.Y);
+        /// <summary>
+        /// 2つのベクトルを積算する
+        /// </summary>
+        /// <param name="v1">積算するベクトル1</param>
+        /// <param name="v2">積算するベクトル2</param>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
+        public static Vector2DI operator *(Vector2DI v1, Vector2DI v2) => new Vector2DI(v1.X * v2.X, v1.Y * v2.Y);
+        /// <summary>
+        /// ベクトルと値を積算する
+        /// </summary>
+        /// <param name="vector">積算するベクトル</param>
+        /// <param name="scalar">積算する値</param>
+        /// <returns>積算結果</returns>
+        public static Vector2DI operator *(Vector2DI vector, int scalar) => new Vector2DI(vector.X + scalar, vector.Y * scalar);
+        /// <summary>
+        /// 2つのベクトルを除算する
+        /// </summary>
+        /// <param name="left">除算されるベクトル</param>
+        /// <param name="right">除算するベクトル</param>
+        /// <returns>除算結果(left.X / right.X, left.Y / right.Y)</returns>
+        public static Vector2DI operator /(Vector2DI left, Vector2DI right) => new Vector2DI(left.X / right.X, left.Y / right.Y);
+        /// <summary>
+        /// ベクトルを値で除算する
+        /// </summary>
+        /// <param name="vector">除算されるベクトル</param>
+        /// <param name="scalar">除算する値</param>
+        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
+        public static Vector2DI operator /(Vector2DI vector, int scalar) => new Vector2DI(vector.X / scalar, vector.Y / scalar);
     }
     /// <summary>
     /// <see cref="float"/>型の二次元ベクトルを表す構造体
     /// </summary>
-    [StructLayout(LayoutKind.Sequential), Serializable]
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vector2DF : IEquatable<Vector2DF>
     {
         /// <summary>
@@ -262,48 +264,6 @@ namespace Altseed
         /// <returns>このインスタンスと等価な<see cref="Vector2DI"/>の新しいインスタンス</returns>
         public Vector2DI To2DI() => new Vector2DI((int)X, (int)Y);
         /// <summary>
-        /// 2つのベクトルを加算する
-        /// </summary>
-        /// <param name="v1">加算するベクトル1</param>
-        /// <param name="v2">加算するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
-        public static Vector2DF Add(Vector2DF v1, Vector2DF v2) => new Vector2DF(v1.X + v2.X, v1.Y + v2.Y);
-        /// <summary>
-        /// 2つのベクトルを減算する
-        /// </summary>
-        /// <param name="left">減算されるベクトル</param>
-        /// <param name="right">減算するベクトル</param>
-        /// <returns>減算結果</returns>
-        public static Vector2DF Substract(Vector2DF left, Vector2DF right) => new Vector2DF(left.X - right.X, left.Y - right.Y);
-        /// <summary>
-        /// 2つのベクトルを積算する
-        /// </summary>
-        /// <param name="v1">積算するベクトル1</param>
-        /// <param name="v2">積算するベクトル2</param>
-        /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
-        public static Vector2DF Multiple(Vector2DF v1, Vector2DF v2) => new Vector2DF(v1.X * v2.X, v1.Y * v2.Y);
-        /// <summary>
-        /// ベクトルと値を積算する
-        /// </summary>
-        /// <param name="vector">積算するベクトル</param>
-        /// <param name="scalar">積算する値</param>
-        /// <returns>積算結果</returns>
-        public static Vector2DF Multiple(Vector2DF vector, float scalar) => new Vector2DF(vector.X + scalar, vector.Y * scalar);
-        /// <summary>
-        /// 2つのベクトルを除算する
-        /// </summary>
-        /// <param name="left">除算されるベクトル</param>
-        /// <param name="right">除算するベクトル</param>
-        /// <returns>除算結果(left.X / right.X, left.Y / right.Y)</returns>
-        public static Vector2DF Divide(Vector2DF left, Vector2DF right) => new Vector2DF(left.X / right.X, left.Y / right.Y);
-        /// <summary>
-        /// ベクトルを値で除算する
-        /// </summary>
-        /// <param name="vector">除算されるベクトル</param>
-        /// <param name="scalar">除算する値</param>
-        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
-        public static Vector2DF Divide(Vector2DF vector, float scalar) => new Vector2DF(vector.X / scalar, vector.Y / scalar);
-        /// <summary>
         /// 2つのベクトルの外積を求める
         /// </summary>
         /// <param name="left">使用するベクトル1</param>
@@ -331,13 +291,54 @@ namespace Altseed
         }
         public static bool operator ==(Vector2DF v1, Vector2DF v2) => Equals(v1, v2);
         public static bool operator !=(Vector2DF v1, Vector2DF v2) => !Equals(v1, v2);
-        public static Vector2DF operator +(Vector2DF v1, Vector2DF v2) => Add(v1, v2);
-        public static Vector2DF operator -(Vector2DF v1, Vector2DF v2) => Substract(v1, v2);
-        public static Vector2DF operator *(Vector2DF v1, Vector2DF v2) => Multiple(v1, v2);
-        public static Vector2DF operator *(Vector2DF vector, float scalar) => Multiple(vector, scalar);
-        public static Vector2DF operator *(float scalar, Vector2DF vector) => Multiple(vector, scalar);
-        public static Vector2DF operator /(Vector2DF v1, Vector2DF v2) => Divide(v1, v2);
-        public static Vector2DF operator /(Vector2DF v, float s) => Divide(v, s);
+        /// <summary>
+        /// 2つのベクトルを加算する
+        /// </summary>
+        /// <param name="v1">加算するベクトル1</param>
+        /// <param name="v2">加算するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
+        public static Vector2DF operator +(Vector2DF v1, Vector2DF v2) => new Vector2DF(v1.X + v2.X, v1.Y + v2.Y);
+        /// <summary>
+        /// ベクトルの符号を反転する
+        /// </summary>
+        /// <param name="vector">符合を反転するベクトル</param>
+        /// <returns><paramref name="vector"/>の逆符合版</returns>
+        public static Vector2DF operator -(Vector2DF vector) => new Vector2DF(-vector.X, -vector.Y);
+        /// <summary>
+        /// 2つのベクトルを減算する
+        /// </summary>
+        /// <param name="left">減算されるベクトル</param>
+        /// <param name="right">減算するベクトル</param>
+        /// <returns>減算結果</returns>
+        public static Vector2DF operator -(Vector2DF left, Vector2DF right) => new Vector2DF(left.X - right.X, left.Y - right.Y);
+        /// <summary>
+        /// 2つのベクトルを積算する
+        /// </summary>
+        /// <param name="v1">積算するベクトル1</param>
+        /// <param name="v2">積算するベクトル2</param>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
+        public static Vector2DF operator *(Vector2DF v1, Vector2DF v2) => new Vector2DF(v1.X * v2.X, v1.Y * v2.Y);
+        /// <summary>
+        /// ベクトルと値を積算する
+        /// </summary>
+        /// <param name="vector">積算するベクトル</param>
+        /// <param name="scalar">積算する値</param>
+        /// <returns>積算結果</returns>
+        public static Vector2DF operator *(Vector2DF vector, float scalar) => new Vector2DF(vector.X + scalar, vector.Y * scalar);
+        /// <summary>
+        /// 2つのベクトルを除算する
+        /// </summary>
+        /// <param name="left">除算されるベクトル</param>
+        /// <param name="right">除算するベクトル</param>
+        /// <returns>除算結果(left.X / right.X, left.Y / right.Y)</returns>
+        public static Vector2DF operator /(Vector2DF left, Vector2DF right) => new Vector2DF(left.X / right.X, left.Y / right.Y);
+        /// <summary>
+        /// ベクトルを値で除算する
+        /// </summary>
+        /// <param name="vector">除算されるベクトル</param>
+        /// <param name="scalar">除算する値</param>
+        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
+        public static Vector2DF operator /(Vector2DF vector, float scalar) => new Vector2DF(vector.X / scalar, vector.Y / scalar);
         public static explicit operator Vector2DI(Vector2DF f) => f.To2DI();
         public static implicit operator Vector2DF(Vector2DI i) => i.To2DF();
     }
