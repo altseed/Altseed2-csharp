@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.IO;
 using NUnit.Framework;
 
@@ -7,7 +8,7 @@ namespace Altseed.Test
     [TestFixture]
     public class Window
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Base()
         {
             var coreOption = new CoreOption()
