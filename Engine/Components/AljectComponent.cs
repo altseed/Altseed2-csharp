@@ -1,8 +1,11 @@
-﻿namespace Altseed
+﻿using System;
+
+namespace Altseed
 {
     /// <summary>
     /// <see cref="Alject"/>に登録できるコンポーネントのクラス
     /// </summary>
+    [Serializable]
     public abstract class AljectComponent : Component
     {
         /// <summary>

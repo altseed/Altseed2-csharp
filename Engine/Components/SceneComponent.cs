@@ -1,8 +1,11 @@
-﻿namespace Altseed
+﻿using System;
+
+namespace Altseed
 {
     /// <summary>
     /// <see cref="Scene"/>に登録できるコンポーネントのクラス
     /// </summary>
+    [Serializable]
     public abstract class SceneComponent : Component
     {
         /// <summary>
