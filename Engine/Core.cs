@@ -13,6 +13,7 @@ namespace Altseed
         }
     }
     
+    [System.Serializable]
     public enum ResourceType : int
     {
         StaticFile,
@@ -22,6 +23,7 @@ namespace Altseed
         MAX,
     }
     
+    [System.Serializable]
     public enum Keys : int
     {
         Unknown,
@@ -149,6 +151,7 @@ namespace Altseed
         MAX,
     }
     
+    [System.Serializable]
     public enum ButtonState : int
     {
         Free = 0,
@@ -157,6 +160,7 @@ namespace Altseed
         Release = 2,
     }
     
+    [System.Serializable]
     public enum MouseButtons : int
     {
         ButtonLeft = 0,
@@ -169,6 +173,7 @@ namespace Altseed
         SubButton5 = 7,
     }
     
+    [System.Serializable]
     public enum CursorMode : int
     {
         Normal = 212993,
@@ -176,6 +181,7 @@ namespace Altseed
         Disable = 212995,
     }
     
+    [System.Serializable]
     public enum JoystickType : int
     {
         Other = 0,
@@ -185,6 +191,7 @@ namespace Altseed
         JoyconR = 8197,
     }
     
+    [System.Serializable]
     public enum JoystickButtonType : int
     {
         Start,
@@ -213,6 +220,7 @@ namespace Altseed
         Max,
     }
     
+    [System.Serializable]
     public enum JoystickAxisType : int
     {
         Start,
@@ -225,10 +233,12 @@ namespace Altseed
         Max,
     }
     
+    [System.Serializable]
     public enum DeviceType : int
     {
     }
     
+    [System.Serializable]
     public enum EasingType : int
     {
         Linear,
@@ -264,6 +274,9 @@ namespace Altseed
         InOutBounce,
     }
     
+    /// <summary>
+    /// C++のAltseedCoreとの仲介クラス
+    /// </summary>
     public partial class Core
     {
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
@@ -317,23 +330,39 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 初期化を行う
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="option"></param>
         public static bool Initialize(string title, int width, int height, ref CoreOption option)
         {
             var ret = cbg_Core_Initialize(title, width, height, ref option);
             return ret;
         }
         
+        /// <summary>
+        /// イベントを実行し成否を返す
+        /// </summary>
         public bool DoEvent()
         {
             var ret = cbg_Core_DoEvent(selfPtr);
             return ret;
         }
         
+        /// <summary>
+        /// 終了処理を行う
+        /// </summary>
         public static void Terminate()
         {
             cbg_Core_Terminate();
         }
         
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
         public static Core GetInstance()
         {
             var ret = cbg_Core_GetInstance();
@@ -353,6 +382,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// 8ビット整数の配列のクラス
+    /// </summary>
     public partial class Int8Array
     {
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
@@ -395,6 +427,11 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 指定したインスタンスにデータをコピーする
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="size"></param>
         public void CopyTo(Int8Array array, int size)
         {
             cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
@@ -413,6 +450,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// リソースのクラス
+    /// </summary>
     public partial class Resources
     {
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
@@ -464,23 +504,36 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
         public static Resources GetInstance()
         {
             var ret = cbg_Resources_GetInstance();
             return Resources.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// リソースの個数を返す
+        /// </summary>
+        /// <param name="type"></param>
         public int GetResourcesCount(ResourceType type)
         {
             var ret = cbg_Resources_GetResourcesCount(selfPtr, (int)type);
             return ret;
         }
         
+        /// <summary>
+        /// 登録されているリソースをすべて削除する
+        /// </summary>
         public void Clear()
         {
             cbg_Resources_Clear(selfPtr);
         }
         
+        /// <summary>
+        /// 再読み込みを行う
+        /// </summary>
         public void Reload()
         {
             cbg_Resources_Reload(selfPtr);
@@ -557,6 +610,9 @@ namespace Altseed
             return (ButtonState)ret;
         }
         
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
         internal static Keyboard GetInstance()
         {
             var ret = cbg_Keyboard_GetInstance();
@@ -721,6 +777,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// ジョイスティックのクラス
+    /// </summary>
     public partial class Joystick
     {
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
@@ -867,6 +926,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// グラフィックの処理を行うクラス
+    /// </summary>
     public partial class Graphics
     {
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
@@ -917,6 +979,9 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
         public static Graphics GetInstance()
         {
             var ret = cbg_Graphics_GetInstance();
@@ -948,21 +1013,24 @@ namespace Altseed
         }
     }
     
-    public partial class Texture2D
+    /// <summary>
+    /// 2D画像を表すクラス
+    /// </summary>
+    public partial class CoreTexture2D
     {
-        private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
+        private static Dictionary<IntPtr, WeakReference<CoreTexture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<CoreTexture2D>>();
         
-        internal static Texture2D TryGetFromCache(IntPtr native)
+        internal static CoreTexture2D TryGetFromCache(IntPtr native)
         {
             if(native == null) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
-                Texture2D cacheRet;
+                CoreTexture2D cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
-                    cbg_Texture2D_Release(native);
+                    cbg_CoreTexture2D_Release(native);
                     return cacheRet;
                 }
                 else
@@ -971,8 +1039,8 @@ namespace Altseed
                 }
             }
         
-            var newObject = new Texture2D(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Texture2D>(newObject);
+            var newObject = new CoreTexture2D(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<CoreTexture2D>(newObject);
             return newObject;
         }
         
@@ -980,60 +1048,69 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
+        private static extern bool cbg_CoreTexture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern Vector2DI cbg_Texture2D_GetSize(IntPtr selfPtr);
+        private static extern Vector2DI cbg_CoreTexture2D_GetSize(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
+        private static extern void cbg_CoreTexture2D_Release(IntPtr selfPtr);
         
         
-        internal Texture2D(MemoryHandle handle)
+        internal CoreTexture2D(MemoryHandle handle)
         {
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 再読み込みを行う
+        /// </summary>
         public bool Reload()
         {
-            var ret = cbg_Texture2D_Reload(selfPtr);
+            var ret = cbg_CoreTexture2D_Reload(selfPtr);
             return ret;
         }
         
+        /// <summary>
+        /// テクスチャのサイズ(ピクセル)を返す
+        /// </summary>
         public Vector2DI GetSize()
         {
-            var ret = cbg_Texture2D_GetSize(selfPtr);
+            var ret = cbg_CoreTexture2D_GetSize(selfPtr);
             return ret;
         }
         
-        ~Texture2D()
+        ~CoreTexture2D()
         {
             lock (this) 
             {
                 if (selfPtr != IntPtr.Zero)
                 {
-                    cbg_Texture2D_Release(selfPtr);
+                    cbg_CoreTexture2D_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
         }
     }
     
-    public partial class StreamFile
+    /// <summary>
+    /// 段階的に読み込むファイルのクラス
+    /// </summary>
+    public partial class CoreStreamFile
     {
-        private static Dictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StreamFile>>();
+        private static Dictionary<IntPtr, WeakReference<CoreStreamFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<CoreStreamFile>>();
         
-        internal static StreamFile TryGetFromCache(IntPtr native)
+        internal static CoreStreamFile TryGetFromCache(IntPtr native)
         {
             if(native == null) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
-                StreamFile cacheRet;
+                CoreStreamFile cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
-                    cbg_StreamFile_Release(native);
+                    cbg_CoreStreamFile_Release(native);
                     return cacheRet;
                 }
                 else
@@ -1042,115 +1119,140 @@ namespace Altseed
                 }
             }
         
-            var newObject = new StreamFile(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<StreamFile>(newObject);
+            var newObject = new CoreStreamFile(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<CoreStreamFile>(newObject);
             return newObject;
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
+        private static extern int cbg_CoreStreamFile_GetSize(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
+        private static extern int cbg_CoreStreamFile_GetCurrentPosition(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
+        private static extern int cbg_CoreStreamFile_Read(IntPtr selfPtr, int size);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
+        private static extern IntPtr cbg_CoreStreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_StreamFile_GetTempBufferSize(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
+        private static extern int cbg_CoreStreamFile_GetTempBufferSize(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
+        private static extern bool cbg_CoreStreamFile_GetIsInPackage(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_CoreStreamFile_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CoreStreamFile_Release(IntPtr selfPtr);
         
         
-        internal StreamFile(MemoryHandle handle)
+        internal CoreStreamFile(MemoryHandle handle)
         {
             this.selfPtr = handle.selfPtr;
         }
         
-        public int GetSize()
+        /// <summary>
+        /// ファイルのサイズを返す
+        /// </summary>
+        internal int GetSize()
         {
-            var ret = cbg_StreamFile_GetSize(selfPtr);
+            var ret = cbg_CoreStreamFile_GetSize(selfPtr);
             return ret;
         }
         
-        public int GetCurrentPosition()
+        /// <summary>
+        /// 現在の読み取り位置を返す
+        /// </summary>
+        internal int GetCurrentPosition()
         {
-            var ret = cbg_StreamFile_GetCurrentPosition(selfPtr);
+            var ret = cbg_CoreStreamFile_GetCurrentPosition(selfPtr);
             return ret;
         }
         
-        public int Read(int size)
+        /// <summary>
+        /// 読み込みを行う
+        /// </summary>
+        /// <param name="size"></param>
+        internal int Read(int size)
         {
-            var ret = cbg_StreamFile_Read(selfPtr, size);
+            var ret = cbg_CoreStreamFile_Read(selfPtr, size);
             return ret;
         }
         
-        public Int8Array GetTempBuffer()
+        /// <summary>
+        /// 読み込まれたデータを返す
+        /// </summary>
+        internal Int8Array GetTempBuffer()
         {
-            var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
+            var ret = cbg_CoreStreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
         }
         
-        public int GetTempBufferSize()
+        /// <summary>
+        /// 現在読み込まれたデータのサイズを返す
+        /// </summary>
+        internal int GetTempBufferSize()
         {
-            var ret = cbg_StreamFile_GetTempBufferSize(selfPtr);
+            var ret = cbg_CoreStreamFile_GetTempBufferSize(selfPtr);
             return ret;
         }
         
-        public bool GetIsInPackage()
+        /// <summary>
+        /// ファイルパッケージ内にあるかどうかを返す
+        /// </summary>
+        internal bool GetIsInPackage()
         {
-            var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
+            var ret = cbg_CoreStreamFile_GetIsInPackage(selfPtr);
             return ret;
         }
         
-        public bool Reload()
+        /// <summary>
+        /// 再読み込みを行う
+        /// </summary>
+        internal bool Reload()
         {
-            var ret = cbg_StreamFile_Reload(selfPtr);
+            var ret = cbg_CoreStreamFile_Reload(selfPtr);
             return ret;
         }
         
-        ~StreamFile()
+        ~CoreStreamFile()
         {
             lock (this) 
             {
                 if (selfPtr != IntPtr.Zero)
                 {
-                    cbg_StreamFile_Release(selfPtr);
+                    cbg_CoreStreamFile_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
         }
     }
     
-    public partial class StaticFile
+    /// <summary>
+    /// 一度に読み込まれるファイルのクラス
+    /// </summary>
+    public partial class CoreStaticFile
     {
-        private static Dictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StaticFile>>();
+        private static Dictionary<IntPtr, WeakReference<CoreStaticFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<CoreStaticFile>>();
         
-        internal static StaticFile TryGetFromCache(IntPtr native)
+        internal static CoreStaticFile TryGetFromCache(IntPtr native)
         {
             if(native == null) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
-                StaticFile cacheRet;
+                CoreStaticFile cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
-                    cbg_StaticFile_Release(native);
+                    cbg_CoreStaticFile_Release(native);
                     return cacheRet;
                 }
                 else
@@ -1159,82 +1261,100 @@ namespace Altseed
                 }
             }
         
-            var newObject = new StaticFile(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<StaticFile>(newObject);
+            var newObject = new CoreStaticFile(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<CoreStaticFile>(newObject);
             return newObject;
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
+        private static extern IntPtr cbg_CoreStaticFile_GetBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_StaticFile_GetPath(IntPtr selfPtr);
+        private static extern IntPtr cbg_CoreStaticFile_GetPath(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_StaticFile_GetSize(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_StaticFile_GetIsInPackage(IntPtr selfPtr);
+        private static extern int cbg_CoreStaticFile_GetSize(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
+        private static extern bool cbg_CoreStaticFile_GetIsInPackage(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_CoreStaticFile_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CoreStaticFile_Release(IntPtr selfPtr);
         
         
-        internal StaticFile(MemoryHandle handle)
+        internal CoreStaticFile(MemoryHandle handle)
         {
             this.selfPtr = handle.selfPtr;
         }
         
-        public Int8Array GetBuffer()
+        /// <summary>
+        /// データをInt8Arrayの形式で返す
+        /// </summary>
+        internal Int8Array GetBuffer()
         {
-            var ret = cbg_StaticFile_GetBuffer(selfPtr);
+            var ret = cbg_CoreStaticFile_GetBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
         }
         
-        public string GetPath()
+        /// <summary>
+        /// ファイルのパスを返す
+        /// </summary>
+        internal string GetPath()
         {
-            var ret = cbg_StaticFile_GetPath(selfPtr);
+            var ret = cbg_CoreStaticFile_GetPath(selfPtr);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
-        public int GetSize()
+        /// <summary>
+        /// データの大きさを返す
+        /// </summary>
+        internal int GetSize()
         {
-            var ret = cbg_StaticFile_GetSize(selfPtr);
+            var ret = cbg_CoreStaticFile_GetSize(selfPtr);
             return ret;
         }
         
-        public bool GetIsInPackage()
+        /// <summary>
+        /// ファイルパッケージ内かどうかを返す
+        /// </summary>
+        internal bool GetIsInPackage()
         {
-            var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
+            var ret = cbg_CoreStaticFile_GetIsInPackage(selfPtr);
             return ret;
         }
         
-        public bool Reload()
+        /// <summary>
+        /// ファイルの再読み込みを実行する
+        /// </summary>
+        internal bool Reload()
         {
-            var ret = cbg_StaticFile_Reload(selfPtr);
+            var ret = cbg_CoreStaticFile_Reload(selfPtr);
             return ret;
         }
         
-        ~StaticFile()
+        ~CoreStaticFile()
         {
             lock (this) 
             {
                 if (selfPtr != IntPtr.Zero)
                 {
-                    cbg_StaticFile_Release(selfPtr);
+                    cbg_CoreStaticFile_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
         }
     }
     
+    /// <summary>
+    /// ファイルの読み込みなどの操作を扱うクラス
+    /// </summary>
     public partial class File
     {
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
@@ -1269,10 +1389,10 @@ namespace Altseed
         private static extern IntPtr cbg_File_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_File_CreateStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        private static extern IntPtr cbg_File_CreateCoreStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_File_CreateStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        private static extern IntPtr cbg_File_CreateCoreStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -1310,47 +1430,78 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
         public static File GetInstance()
         {
             var ret = cbg_File_GetInstance();
             return File.TryGetFromCache(ret);
         }
         
-        public StaticFile CreateStaticFile(string path)
+        /// <summary>
+        /// CoreStaticFileのインスタンスを生成する
+        /// </summary>
+        /// <param name="path"></param>
+        internal CoreStaticFile CreateCoreStaticFile(string path)
         {
-            var ret = cbg_File_CreateStaticFile(selfPtr, path);
-            return StaticFile.TryGetFromCache(ret);
+            var ret = cbg_File_CreateCoreStaticFile(selfPtr, path);
+            return CoreStaticFile.TryGetFromCache(ret);
         }
         
-        public StreamFile CreateStreamFile(string path)
+        /// <summary>
+        /// CoreStreamFileのインスタンスを生成する
+        /// </summary>
+        /// <param name="path"></param>
+        internal CoreStreamFile CreateCoreStreamFile(string path)
         {
-            var ret = cbg_File_CreateStreamFile(selfPtr, path);
-            return StreamFile.TryGetFromCache(ret);
+            var ret = cbg_File_CreateCoreStreamFile(selfPtr, path);
+            return CoreStreamFile.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// ファイルパスの先頭に自動補完するディレクトリを追加する
+        /// </summary>
+        /// <param name="path"></param>
         public bool AddRootDirectory(string path)
         {
             var ret = cbg_File_AddRootDirectory(selfPtr, path);
             return ret;
         }
         
+        /// <summary>
+        /// 使用するファイルパッケージを追加する
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="password"></param>
         public bool AddRootPackageWithPassword(string path, string password)
         {
             var ret = cbg_File_AddRootPackageWithPassword(selfPtr, path, password);
             return ret;
         }
         
+        /// <summary>
+        /// 使用するパスワード付きファイルパッケージを追加する
+        /// </summary>
+        /// <param name="path"></param>
         public bool AddRootPackage(string path)
         {
             var ret = cbg_File_AddRootPackage(selfPtr, path);
             return ret;
         }
         
+        /// <summary>
+        /// ファイルパッケージの登録をすべて削除する
+        /// </summary>
         public void ClearRootDirectories()
         {
             cbg_File_ClearRootDirectories(selfPtr);
         }
         
+        /// <summary>
+        /// 指定したパスのファイルの存在の有無を返す
+        /// </summary>
+        /// <param name="path"></param>
         public bool Exists(string path)
         {
             var ret = cbg_File_Exists(selfPtr, path);
