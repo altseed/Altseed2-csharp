@@ -2,17 +2,18 @@
 using System.IO;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
-using Xunit;
+using NUnit.Framework;
 
 namespace Altseed.Test
 {
+    [TestFixture]
     public class Vector
     {
         public static DefaultTraceListener Listener = new DefaultTraceListener()
         {
             LogFileName = "debug.txt"
         };
-        [Fact]
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
         public void Base()
         {
             Serialize();
