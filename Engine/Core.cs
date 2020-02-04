@@ -149,6 +149,9 @@ namespace Altseed
         MAX,
     }
     
+    /// <summary>
+    /// ボタンの押下状態を表します。
+    /// </summary>
     public enum ButtonState : int
     {
         Free = 0,
@@ -550,7 +553,8 @@ namespace Altseed
         /// <summary>
         /// キーの状態を取得します。
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">キー</param>
+        /// <returns>ボタンの押下状態</returns>
         public ButtonState GetKeyState(Keys key)
         {
             var ret = cbg_Keyboard_GetKeyState(selfPtr, (int)key);
@@ -675,7 +679,6 @@ namespace Altseed
         /// <summary>
         /// マウスカーソルの座標を設定します。
         /// </summary>
-        /// <param name="vec"></param>
         public void SetPosition(ref Vector2DF vec)
         {
             cbg_Mouse_SetPosition(selfPtr, ref vec);
@@ -702,7 +705,6 @@ namespace Altseed
         /// <summary>
         /// マウスボタンの状態を取得します。
         /// </summary>
-        /// <param name="button"></param>
         public void GetMouseButtonState(MouseButtons button)
         {
             cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
