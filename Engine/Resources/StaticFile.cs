@@ -48,7 +48,7 @@ namespace Altseed
         {
             try
             {
-                core = Engine.File.CreateCoreStaticFileStrict(info.GetString(Path));
+                core = Engine.File.CreateCoreStaticFileStrict(info.GetString(S_Path));
             }
             catch (Exception e)
             {

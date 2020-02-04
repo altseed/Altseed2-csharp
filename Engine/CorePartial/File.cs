@@ -95,5 +95,28 @@ namespace Altseed
             file = suc ? new StaticFile(result) : null;
             return suc;
         }
+        /// <summary>
+        /// 指定したパスからファイルを読み取り<see cref="StreamFile"/>を返す
+        /// </summary>
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は不正な文字が含まれていた</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定されたファイルが見つからない</exception>
+        /// <exception cref="PathTooLongException"><paramref name="path"/>の長さが260字以上またはファイル名が248字以上</exception>
+        /// <exception cref="SystemException">ファイルの読み込みに失敗したまたはファイルが破損していた</exception>
+        /// <returns><paramref name="path"/>で指定されたファイルのデータを持つ<see cref="StreamFile"/>のインスタンス</returns>
+        public StreamFile CreateStreamFileStrict(string path) => new StreamFile(CreateCoreStreamFileStrict(path), path);
+        /// <summary>
+        /// 指定したパスからファイルを読み取り<see cref="StreamFile"/>を返す
+        /// </summary>
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <param name="file">読み込んだファイルの結果</param>
+        /// <returns><paramref name="file"/>を読み込めたらtrue，それ以外でfalse</returns>
+        public bool TryCreateStreamFile(string path, out StreamFile file)
+        {
+            var suc = TryCreateCoreStreamFile(path, out var result);
+            file = suc ? new StreamFile(result, path) : null;
+            return suc;
+        }
     }
 }
