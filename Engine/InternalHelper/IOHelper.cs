@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Altseed
 {
@@ -29,9 +30,8 @@ namespace Altseed
         {
             if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             for (int i = 0; i < path.Length; i++)
-                for (int j = 0; j < InvalidChars.Length; i++)
-                    if (path[i] == InvalidChars[j])
-                        return true;
+                if (InvalidChars.Contains(path[i]))
+                    return true;
             return false;
         }
         internal static bool IsTooLongPath(string path)
