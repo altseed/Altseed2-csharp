@@ -1389,10 +1389,10 @@ namespace Altseed
         private static extern IntPtr cbg_File_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_File_CreateCoreStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        private static extern IntPtr cbg_File_CreateStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_File_CreateCoreStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        private static extern IntPtr cbg_File_CreateStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -1443,9 +1443,9 @@ namespace Altseed
         /// CoreStaticFileのインスタンスを生成する
         /// </summary>
         /// <param name="path"></param>
-        internal CoreStaticFile CreateCoreStaticFile(string path)
+        internal CoreStaticFile CreateStaticFile(string path)
         {
-            var ret = cbg_File_CreateCoreStaticFile(selfPtr, path);
+            var ret = cbg_File_CreateStaticFile(selfPtr, path);
             return CoreStaticFile.TryGetFromCache(ret);
         }
         
@@ -1453,9 +1453,9 @@ namespace Altseed
         /// CoreStreamFileのインスタンスを生成する
         /// </summary>
         /// <param name="path"></param>
-        internal CoreStreamFile CreateCoreStreamFile(string path)
+        internal CoreStreamFile CreateStreamFile(string path)
         {
-            var ret = cbg_File_CreateCoreStreamFile(selfPtr, path);
+            var ret = cbg_File_CreateStreamFile(selfPtr, path);
             return CoreStreamFile.TryGetFromCache(ret);
         }
         

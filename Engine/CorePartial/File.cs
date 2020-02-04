@@ -22,7 +22,7 @@ namespace Altseed
         {
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            return CreateCoreStaticFile(path) ?? throw new SystemException("ファイルの読み込みに失敗またはファイルが破損していました\nログ参照");
+            return CreateStaticFile(path) ?? throw new SystemException("ファイルの読み込みに失敗またはファイルが破損していました\nログ参照");
         }
         /// <summary>
         /// 指定したパスからファイルを読み取り<see cref="CoreStaticFile"/>を返す
@@ -37,7 +37,7 @@ namespace Altseed
                 file = null;
                 return false;
             }
-            file = CreateCoreStaticFile(path);
+            file = CreateStaticFile(path);
             return file != null;
         }
         /// <summary>
@@ -54,7 +54,7 @@ namespace Altseed
         {
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            return CreateCoreStreamFile(path) ?? throw new SystemException("ファイルの読み込みに失敗またはファイルが破損していました\nログ参照");
+            return CreateStreamFile(path) ?? throw new SystemException("ファイルの読み込みに失敗またはファイルが破損していました\nログ参照");
         }
         /// <summary>
         /// 指定したパスからファイルを読み取り<see cref="CoreStreamFile"/>を返す
@@ -69,7 +69,7 @@ namespace Altseed
                 file = null;
                 return false;
             }
-            file = CreateCoreStreamFile(path);
+            file = CreateStreamFile(path);
             return file != null;
         }
         /// <summary>
