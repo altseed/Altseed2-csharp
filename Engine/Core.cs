@@ -499,6 +499,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// キーボードを表します。
+    /// </summary>
     public partial class Keyboard
     {
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
@@ -544,13 +547,17 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// キーの状態を取得します。
+        /// </summary>
+        /// <param name="key"></param>
         public ButtonState GetKeyState(Keys key)
         {
             var ret = cbg_Keyboard_GetKeyState(selfPtr, (int)key);
             return (ButtonState)ret;
         }
         
-        public static Keyboard GetInstance()
+        internal static Keyboard GetInstance()
         {
             var ret = cbg_Keyboard_GetInstance();
             return Keyboard.TryGetFromCache(ret);
@@ -569,6 +576,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// マウスを表します。
+    /// </summary>
     public partial class Mouse
     {
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
@@ -651,34 +661,48 @@ namespace Altseed
         }
         private CursorMode? _CursorMode;
         
-        public Mouse GetInstance()
+        internal Mouse GetInstance()
         {
             var ret = cbg_Mouse_GetInstance(selfPtr);
             return Mouse.TryGetFromCache(ret);
         }
         
-        public void RefreshInputState()
+        internal void RefreshInputState()
         {
             cbg_Mouse_RefreshInputState(selfPtr);
         }
         
+        /// <summary>
+        /// マウスカーソルの座標を設定します。
+        /// </summary>
+        /// <param name="vec"></param>
         public void SetPosition(ref Vector2DF vec)
         {
             cbg_Mouse_SetPosition(selfPtr, ref vec);
         }
         
+        /// <summary>
+        /// マウスカーソルの座標を取得します。
+        /// </summary>
         public Vector2DF GetPosition()
         {
             var ret = cbg_Mouse_GetPosition(selfPtr);
             return ret;
         }
         
+        /// <summary>
+        /// マウスホイールの回転量を取得します。
+        /// </summary>
         public float GetWheel()
         {
             var ret = cbg_Mouse_GetWheel(selfPtr);
             return ret;
         }
         
+        /// <summary>
+        /// マウスボタンの状態を取得します。
+        /// </summary>
+        /// <param name="button"></param>
         public void GetMouseButtonState(MouseButtons button)
         {
             cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);

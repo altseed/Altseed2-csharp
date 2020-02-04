@@ -21,7 +21,7 @@ from Bindings.CppBindingGenerator import BindingGeneratorCSharp
 
 # generate C# binding
 args = sys.argv
-lang = 'en'
+lang = 'ja'
 if len(args) >= 3 and args[1] == '-lang':
     if args[2] in ['ja', 'en']:
         lang = args[2]
