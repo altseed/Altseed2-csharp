@@ -14,6 +14,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// リソースの種類を表す
+    /// </summary>
     public enum ResourceType : int
     {
         StaticFile,
@@ -24,6 +27,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// キーボードのボタンを表す
+    /// </summary>
     public enum Keys : int
     {
         Unknown,
@@ -151,6 +157,7 @@ namespace Altseed
         MAX,
     }
     
+    [System.Serializable]
     /// <summary>
     /// ボタンの押下状態を表します。
     /// </summary>
@@ -163,6 +170,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// マウスのボタンを表す
+    /// </summary>
     public enum MouseButtons : int
     {
         ButtonLeft = 0,
@@ -176,6 +186,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// カーソルの状態を表す
+    /// </summary>
     public enum CursorMode : int
     {
         Normal = 212993,
@@ -184,6 +197,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// ジョイスティックの種類を表す
+    /// </summary>
     public enum JoystickType : int
     {
         Other = 0,
@@ -194,6 +210,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// ジョイスティックのボタンを表す
+    /// </summary>
     public enum JoystickButtonType : int
     {
         Start,
@@ -223,6 +242,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// ジョイスティックの軸の状態を表す
+    /// </summary>
     public enum JoystickAxisType : int
     {
         Start,
@@ -241,6 +263,9 @@ namespace Altseed
     }
     
     [System.Serializable]
+    /// <summary>
+    /// イージングのタイプを表す
+    /// </summary>
     public enum EasingType : int
     {
         Linear,
@@ -335,10 +360,11 @@ namespace Altseed
         /// <summary>
         /// 初期化を行う
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="option"></param>
+        /// <param name="title">ウィンドウ左上に表示されるウィンドウ名</param>
+        /// <param name="width">横幅</param>
+        /// <param name="height">縦幅</param>
+        /// <param name="option">CoreOptionのインスタンス</param>
+        /// <returns>初期化がうまく行ったらtrue，それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, ref CoreOption option)
         {
             var ret = cbg_Core_Initialize(title, width, height, ref option);
@@ -348,6 +374,7 @@ namespace Altseed
         /// <summary>
         /// イベントを実行し成否を返す
         /// </summary>
+        /// <returns>処理がうまく行ったらtrue，それ以外でfalse</returns>
         public bool DoEvent()
         {
             var ret = cbg_Core_DoEvent(selfPtr);
@@ -365,7 +392,8 @@ namespace Altseed
         /// <summary>
         /// インスタンスを取得する
         /// </summary>
-        public static Core GetInstance()
+        /// <returns>使用されるインスタンス</returns>
+        internal static Core GetInstance()
         {
             var ret = cbg_Core_GetInstance();
             return Core.TryGetFromCache(ret);
@@ -432,8 +460,8 @@ namespace Altseed
         /// <summary>
         /// 指定したインスタンスにデータをコピーする
         /// </summary>
-        /// <param name="array"></param>
-        /// <param name="size"></param>
+        /// <param name="array">コピー先の配列</param>
+        /// <param name="size">コピーする要素の個数</param>
         public void CopyTo(Int8Array array, int size)
         {
             cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
@@ -509,7 +537,7 @@ namespace Altseed
         /// <summary>
         /// インスタンスを取得する
         /// </summary>
-        public static Resources GetInstance()
+        internal static Resources GetInstance()
         {
             var ret = cbg_Resources_GetInstance();
             return Resources.TryGetFromCache(ret);
@@ -518,7 +546,8 @@ namespace Altseed
         /// <summary>
         /// リソースの個数を返す
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">個数を検索するリソースの種類</param>
+        /// <returns>指定した種類のリソースの個数</returns>
         public int GetResourcesCount(ResourceType type)
         {
             var ret = cbg_Resources_GetResourcesCount(selfPtr, (int)type);
@@ -616,6 +645,7 @@ namespace Altseed
         /// <summary>
         /// インスタンスを取得する
         /// </summary>
+        /// <returns>使用されるインスタンス</returns>
         internal static Keyboard GetInstance()
         {
             var ret = cbg_Keyboard_GetInstance();
@@ -684,7 +714,7 @@ namespace Altseed
         private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
+        private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Mouse_GetCursorMode(IntPtr selfPtr);
@@ -701,6 +731,9 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// マウスカーソルの状態を取得または設定する
+        /// </summary>
         public CursorMode CursorMode
         {
             get
@@ -720,12 +753,19 @@ namespace Altseed
         }
         private CursorMode? _CursorMode;
         
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
+        /// <returns>使用するインスタンス</returns>
         internal Mouse GetInstance()
         {
             var ret = cbg_Mouse_GetInstance(selfPtr);
             return Mouse.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// インプットの状態をリセットする
+        /// </summary>
         internal void RefreshInputState()
         {
             cbg_Mouse_RefreshInputState(selfPtr);
@@ -742,6 +782,7 @@ namespace Altseed
         /// <summary>
         /// マウスカーソルの座標を取得します。
         /// </summary>
+        /// <returns>マウスカーソルの座標</returns>
         public Vector2DF GetPosition()
         {
             var ret = cbg_Mouse_GetPosition(selfPtr);
@@ -751,6 +792,7 @@ namespace Altseed
         /// <summary>
         /// マウスホイールの回転量を取得します。
         /// </summary>
+        /// <returns>マウスホイールの回転数</returns>
         public float GetWheel()
         {
             var ret = cbg_Mouse_GetWheel(selfPtr);
@@ -760,9 +802,12 @@ namespace Altseed
         /// <summary>
         /// マウスボタンの状態を取得します。
         /// </summary>
-        public void GetMouseButtonState(MouseButtons button)
+        /// <param name="button">状態を検索するマウスのボタン</param>
+        /// <returns>マウスのボタンの状態</returns>
+        public ButtonState GetMouseButtonState(MouseButtons button)
         {
-            cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
+            var ret = cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
+            return (ButtonState)ret;
         }
         
         ~Mouse()
@@ -812,7 +857,8 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_RefreshInputState(IntPtr selfPtr);
@@ -853,62 +899,120 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
-        public void IsPresent(int joystickIndex)
+        /// <summary>
+        /// 指定したインデックスのジョイスティックが親かどうかを返す
+        /// </summary>
+        /// <param name="joystickIndex">判定するジョイスティックのインデックス</param>
+        /// <returns>親だったらtrue，それ以外でfalse</returns>
+        public bool IsPresent(int joystickIndex)
         {
-            cbg_Joystick_IsPresent(selfPtr, joystickIndex);
+            var ret = cbg_Joystick_IsPresent(selfPtr, joystickIndex);
+            return ret;
         }
         
+        /// <summary>
+        /// インプット状態をリセットする
+        /// </summary>
         public void RefreshInputState()
         {
             cbg_Joystick_RefreshInputState(selfPtr);
         }
         
+        /// <summary>
+        /// 接続状態をリセットする
+        /// </summary>
         public void RefreshConnectedState()
         {
             cbg_Joystick_RefreshConnectedState(selfPtr);
         }
         
+        /// <summary>
+        /// インデックスからジョイスティックのボタンの状態を検索する
+        /// </summary>
+        /// <param name="joystickIndex">ボタン状態を検索するジョイスティックのインデックス</param>
+        /// <param name="buttonIndex">状態を検索するボタンのインデックス</param>
+        /// <returns>ボタンの状態</returns>
         public ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex)
         {
             var ret = cbg_Joystick_GetButtonStateByIndex(selfPtr, joystickIndex, buttonIndex);
             return (ButtonState)ret;
         }
         
+        /// <summary>
+        /// ジョイスティックのボタンタイプからそのボタンの状態を取得する
+        /// </summary>
+        /// <param name="joystickIndex">ボタン状態を検索するジョイスティックのインデックス</param>
+        /// <param name="type">状態を状態を検索するボタンの種類</param>
+        /// <returns>ボタンの状態</returns>
         public ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type)
         {
             var ret = cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
             return (ButtonState)ret;
         }
         
+        /// <summary>
+        /// ジョイスティックのタイプを取得する
+        /// </summary>
+        /// <param name="index">タイプを検索するジョイスティックのインデックス</param>
+        /// <returns>ジョイスティックの種類</returns>
         public JoystickType GetJoystickType(int index)
         {
             var ret = cbg_Joystick_GetJoystickType(selfPtr, index);
             return (JoystickType)ret;
         }
         
+        /// <summary>
+        /// インデックスから軸を取得する
+        /// </summary>
+        /// <param name="joystickIndex">軸の状態を検索するジョイスティックのインデックス</param>
+        /// <param name="axisIndex">状態を検索する軸のインデックス</param>
+        /// <returns>軸の状態</returns>
         public float GetAxisStateByIndex(int joystickIndex, int axisIndex)
         {
             var ret = cbg_Joystick_GetAxisStateByIndex(selfPtr, joystickIndex, axisIndex);
             return ret;
         }
         
+        /// <summary>
+        /// 軸のタイプから状態を取得する
+        /// </summary>
+        /// <param name="joystickIndex">軸の状態を検索するジョイスティックのインデックス</param>
+        /// <param name="type">状態を検索する軸のタイプ</param>
+        /// <returns>軸の状態</returns>
         public float GetAxisStateByType(int joystickIndex, JoystickAxisType type)
         {
             var ret = cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
             return ret;
         }
         
+        /// <summary>
+        /// ジョイスティックの名前を検索する
+        /// </summary>
+        /// <param name="index">名前を検索するジョイスティックのインデックス</param>
+        /// <returns>ジョイスティックの名前</returns>
         public string GetJoystickName(int index)
         {
             var ret = cbg_Joystick_GetJoystickName(selfPtr, index);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
+        /// <summary>
+        /// 振動の状態を戻す
+        /// </summary>
         public void RefreshVibrateState()
         {
             cbg_Joystick_RefreshVibrateState(selfPtr);
         }
         
+        /// <summary>
+        /// 振動の状態を設定する
+        /// </summary>
+        /// <param name="index">振動情報を設定するジョイスティックのインデックス</param>
+        /// <param name="high_freq"></param>
+        /// <param name="low_freq"></param>
+        /// <param name="high_amp"></param>
+        /// <param name="low_amp"></param>
+        /// <param name="life_time"></param>
         public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time)
         {
             cbg_Joystick_SetVibration(selfPtr, index, high_freq, low_freq, high_amp, low_amp, life_time);
@@ -983,6 +1087,7 @@ namespace Altseed
         /// <summary>
         /// インスタンスを取得する
         /// </summary>
+        /// <returns>使用されるインスタンス</returns>
         public static Graphics GetInstance()
         {
             var ret = cbg_Graphics_GetInstance();
@@ -1066,6 +1171,7 @@ namespace Altseed
         /// <summary>
         /// 再読み込みを行う
         /// </summary>
+        /// <returns>読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool Reload()
         {
             var ret = cbg_Texture2D_Reload(selfPtr);
@@ -1075,7 +1181,8 @@ namespace Altseed
         /// <summary>
         /// テクスチャのサイズ(ピクセル)を返す
         /// </summary>
-        public Vector2DI GetSize()
+        /// <returns>テクスチャの大きさ(ピクセル)</returns>
+        internal Vector2DI GetSize()
         {
             var ret = cbg_Texture2D_GetSize(selfPtr);
             return ret;
@@ -1162,6 +1269,7 @@ namespace Altseed
         /// <summary>
         /// ファイルのサイズを返す
         /// </summary>
+        /// <returns>読み込まれるファイルのサイズ</returns>
         internal int GetSize()
         {
             var ret = cbg_StreamFile_GetSize(selfPtr);
@@ -1171,6 +1279,7 @@ namespace Altseed
         /// <summary>
         /// 現在の読み取り位置を返す
         /// </summary>
+        /// <returns>現在読み込まれているファイル上の位置</returns>
         internal int GetCurrentPosition()
         {
             var ret = cbg_StreamFile_GetCurrentPosition(selfPtr);
@@ -1180,7 +1289,8 @@ namespace Altseed
         /// <summary>
         /// 読み込みを行う
         /// </summary>
-        /// <param name="size"></param>
+        /// <param name="size">読み取るデータ量</param>
+        /// <returns>読み込まれたデータ量</returns>
         internal int Read(int size)
         {
             var ret = cbg_StreamFile_Read(selfPtr, size);
@@ -1190,6 +1300,7 @@ namespace Altseed
         /// <summary>
         /// 読み込まれたデータを返す
         /// </summary>
+        /// <returns>現在読み込まれたファイルのデータ</returns>
         internal Int8Array GetTempBuffer()
         {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
@@ -1199,6 +1310,7 @@ namespace Altseed
         /// <summary>
         /// 現在読み込まれたデータのサイズを返す
         /// </summary>
+        /// <returns>現在読み込まれたファイルのデータ量</returns>
         internal int GetTempBufferSize()
         {
             var ret = cbg_StreamFile_GetTempBufferSize(selfPtr);
@@ -1208,6 +1320,7 @@ namespace Altseed
         /// <summary>
         /// ファイルパッケージ内にあるかどうかを返す
         /// </summary>
+        /// <returns>読み込まれたファイルがファイルパッケージ内に格納されていたらtrueそれ以外で，false</returns>
         internal bool GetIsInPackage()
         {
             var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
@@ -1217,6 +1330,7 @@ namespace Altseed
         /// <summary>
         /// 再読み込みを行う
         /// </summary>
+        /// <returns>再読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         internal bool Reload()
         {
             var ret = cbg_StreamFile_Reload(selfPtr);
@@ -1298,6 +1412,7 @@ namespace Altseed
         /// <summary>
         /// データをInt8Arrayの形式で返す
         /// </summary>
+        /// <returns>読み込まれたファイルのデータ</returns>
         internal Int8Array GetBuffer()
         {
             var ret = cbg_StaticFile_GetBuffer(selfPtr);
@@ -1307,6 +1422,7 @@ namespace Altseed
         /// <summary>
         /// ファイルのパスを返す
         /// </summary>
+        /// <returns>読み込まれたファイルのパス</returns>
         internal string GetPath()
         {
             var ret = cbg_StaticFile_GetPath(selfPtr);
@@ -1316,6 +1432,7 @@ namespace Altseed
         /// <summary>
         /// データの大きさを返す
         /// </summary>
+        /// <returns>読み込まれたファイルのサイズ</returns>
         internal int GetSize()
         {
             var ret = cbg_StaticFile_GetSize(selfPtr);
@@ -1325,6 +1442,7 @@ namespace Altseed
         /// <summary>
         /// ファイルパッケージ内かどうかを返す
         /// </summary>
+        /// <returns>読み込まれたファイルがファイルパッケージ内に格納されていたらtrue，それ以外でfalse</returns>
         internal bool GetIsInPackage()
         {
             var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
@@ -1334,6 +1452,7 @@ namespace Altseed
         /// <summary>
         /// ファイルの再読み込みを実行する
         /// </summary>
+        /// <returns>再読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         internal bool Reload()
         {
             var ret = cbg_StaticFile_Reload(selfPtr);
@@ -1434,7 +1553,8 @@ namespace Altseed
         /// <summary>
         /// インスタンスを取得する
         /// </summary>
-        public static File GetInstance()
+        /// <returns>使用されるインスタンス</returns>
+        internal static File GetInstance()
         {
             var ret = cbg_File_GetInstance();
             return File.TryGetFromCache(ret);
@@ -1443,7 +1563,8 @@ namespace Altseed
         /// <summary>
         /// CoreStaticFileのインスタンスを生成する
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <returns>指定したファイルを読み取ったStaticFileクラスのインスタンス</returns>
         internal StaticFile CreateStaticFile(string path)
         {
             var ret = cbg_File_CreateStaticFile(selfPtr, path);
@@ -1453,7 +1574,8 @@ namespace Altseed
         /// <summary>
         /// CoreStreamFileのインスタンスを生成する
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <returns>指定したファイルを読み取るStreamFileクラスのインスタンス</returns>
         internal StreamFile CreateStreamFile(string path)
         {
             var ret = cbg_File_CreateStreamFile(selfPtr, path);
@@ -1463,7 +1585,8 @@ namespace Altseed
         /// <summary>
         /// ファイルパスの先頭に自動補完するディレクトリを追加する
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">使用するディレクトリ</param>
+        /// <returns>追加処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootDirectory(string path)
         {
             var ret = cbg_File_AddRootDirectory(selfPtr, path);
@@ -1473,8 +1596,9 @@ namespace Altseed
         /// <summary>
         /// 使用するファイルパッケージを追加する
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="password"></param>
+        /// <param name="path">読み込むファイルパッケージのファイルパス</param>
+        /// <param name="password">読み込むファイルパッケージのパスワード</param>
+        /// <returns>追加処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootPackageWithPassword(string path, string password)
         {
             var ret = cbg_File_AddRootPackageWithPassword(selfPtr, path, password);
@@ -1484,7 +1608,8 @@ namespace Altseed
         /// <summary>
         /// 使用するパスワード付きファイルパッケージを追加する
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">読み込むファイルパッケージのファイルパス</param>
+        /// <returns>追加処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootPackage(string path)
         {
             var ret = cbg_File_AddRootPackage(selfPtr, path);
@@ -1502,7 +1627,8 @@ namespace Altseed
         /// <summary>
         /// 指定したパスのファイルの存在の有無を返す
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">存在の有無を検索するファイルパス</param>
+        /// <returns>pathの示すファイルが存在したらtrue，それ以外でfalse</returns>
         public bool Exists(string path)
         {
             var ret = cbg_File_Exists(selfPtr, path);
@@ -1576,6 +1702,11 @@ namespace Altseed
             this.selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="easing"></param>
+        /// <param name="t"></param>
         public static void GetEasing(EasingType easing, float t)
         {
             cbg_Easing_GetEasing((int)easing, t);
