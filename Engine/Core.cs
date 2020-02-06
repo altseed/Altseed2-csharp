@@ -1323,7 +1323,7 @@ namespace Altseed
         /// </summary>
         /// <param name="size">読み取るデータ量</param>
         /// <returns>読み込まれたデータ量</returns>
-        internal int Read(int size)
+        public int Read(int size)
         {
             var ret = cbg_StreamFile_Read(selfPtr, size);
             return ret;
