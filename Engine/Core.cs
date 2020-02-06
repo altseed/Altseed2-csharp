@@ -1245,27 +1245,31 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_GetTempBufferSize(IntPtr selfPtr);
+        
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
@@ -1279,21 +1283,49 @@ namespace Altseed
         /// <summary>
         /// 読み込むファイルのデータサイズを取得する
         /// </summary>
-        /// <returns>読み込むファイルのデータサイズ</returns>
-        public int GetSize()
+        public int Size
         {
-            var ret = cbg_StreamFile_GetSize(selfPtr);
-            return ret;
+            get
+            {
+                var ret = cbg_StreamFile_GetSize(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
         /// 現在読み込んでいるファイル上の位置を取得する
         /// </summary>
-        /// <returns>現在読み込んでいるファイル上の位置</returns>
-        public int GetCurrentPosition()
+        public int CurrentPosition
         {
-            var ret = cbg_StreamFile_GetCurrentPosition(selfPtr);
-            return ret;
+            get
+            {
+                var ret = cbg_StreamFile_GetCurrentPosition(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 現在読み込んでいるファイルのデータサイズを取得する
+        /// </summary>
+        public int TempBufferSize
+        {
+            get
+            {
+                var ret = cbg_StreamFile_GetTempBufferSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 読み込むファイルがファイルパッケージ内に格納されているかどうかを取得する
+        /// </summary>
+        public bool IsInPackage
+        {
+            get
+            {
+                var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
@@ -1315,26 +1347,6 @@ namespace Altseed
         {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// 現在読み込んでいるファイルのデータサイズを取得する
-        /// </summary>
-        /// <returns>現在読み込んでいるファイルのデータサイズ</returns>
-        public int GetTempBufferSize()
-        {
-            var ret = cbg_StreamFile_GetTempBufferSize(selfPtr);
-            return ret;
-        }
-        
-        /// <summary>
-        /// 読み込むファイルがファイルパッケージ内に格納されているかどうかを取得する
-        /// </summary>
-        /// <returns>読み込むファイルがファイルパッケージ内に格納されていたらtrue，それ以外でfalse</returns>
-        public bool GetIsInPackage()
-        {
-            var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
-            return ret;
         }
         
         /// <summary>
@@ -1397,18 +1409,21 @@ namespace Altseed
         private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StaticFile_GetPath(IntPtr selfPtr);
+        
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_StaticFile_GetSize(IntPtr selfPtr);
+        
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_GetIsInPackage(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
@@ -1420,6 +1435,42 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得する
+        /// </summary>
+        public string Path
+        {
+            get
+            {
+                var ret = cbg_StaticFile_GetPath(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのデータサイズを取得する
+        /// </summary>
+        public int Size
+        {
+            get
+            {
+                var ret = cbg_StaticFile_GetSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルがファイルパッケージ内に格納されているかどうかを取得する
+        /// </summary>
+        public bool IsInPackage
+        {
+            get
+            {
+                var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// 読み込んだファイルのデータを取得する
         /// </summary>
         /// <returns>読み込んだファイルのデータ</returns>
@@ -1427,36 +1478,6 @@ namespace Altseed
         {
             var ret = cbg_StaticFile_GetBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// 読み込んだファイルのパスを取得する
-        /// </summary>
-        /// <returns>読み込んだファイルのパス</returns>
-        public string GetPath()
-        {
-            var ret = cbg_StaticFile_GetPath(selfPtr);
-            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-        }
-        
-        /// <summary>
-        /// 読み込んだファイルのデータサイズを取得する
-        /// </summary>
-        /// <returns>読み込んだファイルのデータサイズ</returns>
-        public int GetSize()
-        {
-            var ret = cbg_StaticFile_GetSize(selfPtr);
-            return ret;
-        }
-        
-        /// <summary>
-        /// 読み込んだファイルがファイルパッケージ内に格納されているかどうかを取得する
-        /// </summary>
-        /// <returns>読み込んだファイルがファイルパッケージ内に格納されていたらtrue，それ以外でfalse</returns>
-        public bool GetIsInPackage()
-        {
-            var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
-            return ret;
         }
         
         /// <summary>
