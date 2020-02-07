@@ -14,7 +14,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// リソースのタイプを表す
+    /// リソースの種類を表す
     /// </summary>
     [System.Serializable]
     public enum ResourceType : int
@@ -197,7 +197,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ジョイスティックのタイプを表す
+    /// ジョイスティックの種類を表す
     /// </summary>
     [System.Serializable]
     public enum JoystickType : int
@@ -210,7 +210,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ジョイスティックのボタンのタイプを表す
+    /// ジョイスティックのボタンの種類を表す
     /// </summary>
     [System.Serializable]
     public enum JoystickButtonType : int
@@ -242,7 +242,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ジョイスティックの軸のタイプを表す
+    /// ジョイスティックの軸の種類を表す
     /// </summary>
     [System.Serializable]
     public enum JoystickAxisType : int
@@ -941,11 +941,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ボタンの状態をタイプから取得する
+        /// ボタンの状態を種類から取得する
         /// </summary>
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
-        /// <param name="type">状態を検索するボタンのタイプ</param>
-        /// <returns>指定タイプのボタンの状態</returns>
+        /// <param name="type">状態を検索するボタンの種類</param>
+        /// <returns>指定種類のボタンの状態</returns>
         public ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type)
         {
             var ret = cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
@@ -953,10 +953,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定インデックスのジョイスティックのタイプを取得する
+        /// 指定インデックスのジョイスティックの種類を取得する
         /// </summary>
-        /// <param name="index">タイプを取得するジョイスティックのインデックス</param>
-        /// <returns>指定インデックスのジョイスティックのタイプ</returns>
+        /// <param name="index">種類を取得するジョイスティックのインデックス</param>
+        /// <returns>指定インデックスのジョイスティックの種類</returns>
         public JoystickType GetJoystickType(int index)
         {
             var ret = cbg_Joystick_GetJoystickType(selfPtr, index);
@@ -976,11 +976,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 軸の状態を軸のタイプで取得する
+        /// 軸の状態を軸の種類で取得する
         /// </summary>
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
-        /// <param name="type">状態を検索する軸のタイプ</param>
-        /// <returns>指定タイプの軸の状態</returns>
+        /// <param name="type">状態を検索する軸の種類</param>
+        /// <returns>指定種類の軸の状態</returns>
         public float GetAxisStateByType(int joystickIndex, JoystickAxisType type)
         {
             var ret = cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
