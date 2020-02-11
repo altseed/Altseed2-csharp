@@ -14,6 +14,7 @@ namespace Altseed
         /// 現在処理している<see cref="Scene"/>を取得する
         /// </summary>
         public static Scene CurrentScene { get; private set; }
+
         /// <summary>
         /// エンジンを初期化する
         /// </summary>
@@ -28,19 +29,24 @@ namespace Altseed
             {
                 Keyboard = Keyboard.GetInstance();
                 File = File.GetInstance();
+                Graphics = Graphics.GetInstance();
+                Renderer = Renderer.GetInstance();
                 CurrentScene = new Scene();
                 return true;
             }
             return false;
         }
+
         /// <summary>
         /// イベントを実行する
         /// </summary>
         /// <returns>イベントの実行が出来たらtrue，それ以外でfalse</returns>
         public static bool DoEvents()
         {
+            Graphics.DoEvents();
             return Core.GetInstance().DoEvent();
         }
+
         /// <summary>
         /// エンジンの終了処理を行う
         /// </summary>
@@ -48,6 +54,7 @@ namespace Altseed
         {
             Core.Terminate();
         }
+
         /// <summary>
         /// 更新処理を実行する
         /// </summary>
@@ -55,6 +62,7 @@ namespace Altseed
         {
             CurrentScene.Update();
         }
+
         /// <summary>
         /// シーンを即変更する
         /// </summary>
@@ -64,13 +72,25 @@ namespace Altseed
         {
             CurrentScene = scene ?? throw new ArgumentNullException("次のシーンがnullです", nameof(scene));
         }
+
         /// <summary>
         /// ファイルを管理するクラスを取得する
         /// </summary>
         public static File File { get; private set; }
+
         /// <summary>
         /// キーボードを管理するクラスを取得する
         /// </summary>
         public static Keyboard Keyboard { get; private set; }
+
+        /// <summary>
+        /// グラフィックのクラスを取得する
+        /// </summary>
+        public static Graphics Graphics { get; private set; }
+
+        /// <summary>
+        /// レンダラのクラスを取得する
+        /// </summary>
+        public static Renderer Renderer { get; private set; }
     }
 }
