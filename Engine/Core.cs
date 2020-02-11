@@ -14,6 +14,44 @@ namespace Altseed
     }
     
     /// <summary>
+    /// イージングの種類を表す
+    /// </summary>
+    public enum EasingType : int
+    {
+        Linear,
+        InSine,
+        OutSine,
+        InOutSine,
+        InQuad,
+        OutQuad,
+        InOutQuad,
+        InCubic,
+        OutCubic,
+        InOutCubic,
+        InQuart,
+        OutQuart,
+        InOutQuart,
+        InQuint,
+        OutQuint,
+        InOutQuint,
+        InExpo,
+        OutExpo,
+        InOutExpo,
+        InCirc,
+        OutCirc,
+        InOutCirc,
+        InBack,
+        OutBack,
+        InOutBack,
+        InElastic,
+        OutElastic,
+        InOutElastic,
+        InBounce,
+        OutBounce,
+        InOutBounce,
+    }
+    
+    /// <summary>
     /// リソースの種類を表す
     /// </summary>
     public enum ResourceType : int
@@ -254,41 +292,71 @@ namespace Altseed
     }
     
     /// <summary>
-    /// イージングの種類を表す
+    /// イージングのクラス
     /// </summary>
-    public enum EasingType : int
+    public partial class Easing
     {
-        Linear,
-        InSine,
-        OutSine,
-        InOutSine,
-        InQuad,
-        OutQuad,
-        InOutQuad,
-        InCubic,
-        OutCubic,
-        InOutCubic,
-        InQuart,
-        OutQuart,
-        InOutQuart,
-        InQuint,
-        OutQuint,
-        InOutQuint,
-        InExpo,
-        OutExpo,
-        InOutExpo,
-        InCirc,
-        OutCirc,
-        InOutCirc,
-        InBack,
-        OutBack,
-        InOutBack,
-        InElastic,
-        OutElastic,
-        InOutElastic,
-        InBounce,
-        OutBounce,
-        InOutBounce,
+        private static Dictionary<IntPtr, WeakReference<Easing>> cacheRepo = new Dictionary<IntPtr, WeakReference<Easing>>();
+        
+        internal static Easing TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Easing cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Easing_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Easing(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Easing>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Easing_GetEasing(int easing, float t);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Easing_Release(IntPtr selfPtr);
+        
+        
+        internal Easing(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="easing"></param>
+        /// <param name="t"></param>
+        public static void GetEasing(EasingType easing, float t)
+        {
+            cbg_Easing_GetEasing((int)easing, t);
+        }
+        
+        ~Easing()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Easing_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
     }
     
     /// <summary>
@@ -300,7 +368,7 @@ namespace Altseed
         
         internal static Core TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -411,7 +479,7 @@ namespace Altseed
         
         internal static Int8Array TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -471,6 +539,74 @@ namespace Altseed
     }
     
     /// <summary>
+    /// 32ビット整数の配列のクラス
+    /// </summary>
+    public partial class Int32Array
+    {
+        private static Dictionary<IntPtr, WeakReference<Int32Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int32Array>>();
+        
+        internal static Int32Array TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Int32Array cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Int32Array_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Int32Array(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Int32Array>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
+        
+        
+        internal Int32Array(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 指定したインスタンスにデータをコピーする
+        /// </summary>
+        /// <param name="array">コピー先のインスタンス</param>
+        /// <param name="size">コピーするデータ量</param>
+        public void CopyTo(Int32Array array, int size)
+        {
+            cbg_Int32Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
+        }
+        
+        ~Int32Array()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Int32Array_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// リソースのクラス
     /// </summary>
     public partial class Resources
@@ -479,7 +615,7 @@ namespace Altseed
         
         internal static Resources TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -583,7 +719,7 @@ namespace Altseed
         
         internal static Keyboard TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -665,7 +801,7 @@ namespace Altseed
         
         internal static Mouse TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -813,7 +949,7 @@ namespace Altseed
         
         internal static Joystick TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1021,7 +1157,7 @@ namespace Altseed
         
         internal static Graphics TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1057,6 +1193,12 @@ namespace Altseed
         private static extern bool cbg_Graphics_EndFrame(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Graphics_DoEvents(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         
@@ -1076,9 +1218,9 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 描画を開始します。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>正常に開始した場合は　true 。それ以外の場合は false。</returns>
         public bool BeginFrame()
         {
             var ret = cbg_Graphics_BeginFrame(selfPtr);
@@ -1086,13 +1228,31 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 描画を終了します。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>正常に終了した場合は　true 。それ以外の場合は false。</returns>
         public bool EndFrame()
         {
             var ret = cbg_Graphics_EndFrame(selfPtr);
             return ret;
+        }
+        
+        /// <summary>
+        /// コマンドリストを取得する
+        /// </summary>
+        /// <returns>コマンドリスト</returns>
+        public CommandList GetCommandList()
+        {
+            var ret = cbg_Graphics_GetCommandList(selfPtr);
+            return CommandList.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// イベントを処理します。
+        /// </summary>
+        public void DoEvents()
+        {
+            cbg_Graphics_DoEvents(selfPtr);
         }
         
         ~Graphics()
@@ -1117,7 +1277,7 @@ namespace Altseed
         
         internal static Texture2D TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1142,11 +1302,15 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Texture2D_Load([MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern Vector2DI cbg_Texture2D_GetSize(IntPtr selfPtr);
+        
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
@@ -1158,22 +1322,35 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 再読み込みを行う
+        /// テクスチャの大きさ(ピクセル)を取得する
         /// </summary>
-        /// <returns>再読み込みに成功したらtrue，外枠false</returns>
-        public bool Reload()
+        public Vector2DI Size
         {
-            var ret = cbg_Texture2D_Reload(selfPtr);
-            return ret;
+            get
+            {
+                var ret = cbg_Texture2D_GetSize(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
-        /// テクスチャの大きさ(ピクセル)を取得する
+        /// 指定したファイルからテクスチャを読み込みます。
         /// </summary>
-        /// <returns>テクスチャの大きさ(ピクセル)</returns>
-        public Vector2DI GetSize()
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <returns>テクスチャ</returns>
+        public static Texture2D Load(string path)
         {
-            var ret = cbg_Texture2D_GetSize(selfPtr);
+            var ret = cbg_Texture2D_Load(path);
+            return Texture2D.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 再読み込みを行う
+        /// </summary>
+        /// <returns>再読み込みに成功したら true。それ以外の場合は false</returns>
+        public bool Reload()
+        {
+            var ret = cbg_Texture2D_Reload(selfPtr);
             return ret;
         }
         
@@ -1191,6 +1368,287 @@ namespace Altseed
     }
     
     /// <summary>
+    /// レンダラのクラス
+    /// </summary>
+    public partial class Renderer
+    {
+        private static Dictionary<IntPtr, WeakReference<Renderer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Renderer>>();
+        
+        internal static Renderer TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Renderer cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Renderer_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Renderer(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Renderer>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Renderer_GetInstance();
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_Reset(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Renderer_CreateSprite(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_Release(IntPtr selfPtr);
+        
+        
+        internal Renderer(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
+        /// <returns>使用するインスタンス</returns>
+        internal static Renderer GetInstance()
+        {
+            var ret = cbg_Renderer_GetInstance();
+            return Renderer.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// レンダラをリセットします。
+        /// </summary>
+        public void Reset()
+        {
+            cbg_Renderer_Reset(selfPtr);
+        }
+        
+        /// <summary>
+        /// コマンドリストを描画します。
+        /// </summary>
+        /// <param name="commandList">コマンドリスト</param>
+        public void Render(CommandList commandList)
+        {
+            cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// スプライトを作成します。
+        /// </summary>
+        /// <returns>スプライト</returns>
+        public RenderedSprite CreateSprite()
+        {
+            var ret = cbg_Renderer_CreateSprite(selfPtr);
+            return RenderedSprite.TryGetFromCache(ret);
+        }
+        
+        ~Renderer()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Renderer_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// コマンドリストのクラス
+    /// </summary>
+    public partial class CommandList
+    {
+        private static Dictionary<IntPtr, WeakReference<CommandList>> cacheRepo = new Dictionary<IntPtr, WeakReference<CommandList>>();
+        
+        internal static CommandList TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                CommandList cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_CommandList_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new CommandList(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<CommandList>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_SetRenderTargetWithScreen(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_Release(IntPtr selfPtr);
+        
+        
+        internal CommandList(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// ？
+        /// </summary>
+        public void SetRenderTargetWithScreen()
+        {
+            cbg_CommandList_SetRenderTargetWithScreen(selfPtr);
+        }
+        
+        ~CommandList()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_CommandList_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// スプライトのクラス
+    /// </summary>
+    public partial class RenderedSprite
+    {
+        private static Dictionary<IntPtr, WeakReference<RenderedSprite>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedSprite>>();
+        
+        internal static RenderedSprite TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderedSprite cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderedSprite_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderedSprite(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderedSprite>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedSprite_GetTexture(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetTexture(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern RectF cbg_RenderedSprite_GetSrc(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetSrc(IntPtr selfPtr, ref RectF value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
+        
+        
+        internal RenderedSprite(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// テクスチャを取得または設定する
+        /// </summary>
+        public Texture2D Texture
+        {
+            get
+            {
+                if (_Texture != null)
+                {
+                    return _Texture;
+                }
+                var ret = cbg_RenderedSprite_GetTexture(selfPtr);
+                return Texture2D.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Texture = value;
+                cbg_RenderedSprite_SetTexture(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Texture2D _Texture;
+        
+        /// <summary>
+        /// 描画範囲を取得または設定する
+        /// </summary>
+        public RectF Src
+        {
+            get
+            {
+                if (_Src != null)
+                {
+                    return _Src.Value;
+                }
+                var ret = cbg_RenderedSprite_GetSrc(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Src = value;
+                cbg_RenderedSprite_SetSrc(selfPtr, ref value);
+            }
+        }
+        private RectF? _Src;
+        
+        ~RenderedSprite()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderedSprite_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// 段階的にファイルを読み取るクラス
     /// </summary>
     public partial class StreamFile
@@ -1199,7 +1657,7 @@ namespace Altseed
         
         internal static StreamFile TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1360,7 +1818,7 @@ namespace Altseed
         
         internal static StaticFile TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1491,7 +1949,7 @@ namespace Altseed
         
         internal static File TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1692,7 +2150,7 @@ namespace Altseed
         
         internal static Sound TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -1845,7 +2303,7 @@ namespace Altseed
         
         internal static SoundMixer TryGetFromCache(IntPtr native)
         {
-            if(native == null) return null;
+            if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
@@ -2055,74 +2513,6 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_SoundMixer_Release(selfPtr);
-                    selfPtr = IntPtr.Zero;
-                }
-            }
-        }
-    }
-    
-    /// <summary>
-    /// イージングのクラス
-    /// </summary>
-    public partial class Easing
-    {
-        private static Dictionary<IntPtr, WeakReference<Easing>> cacheRepo = new Dictionary<IntPtr, WeakReference<Easing>>();
-        
-        internal static Easing TryGetFromCache(IntPtr native)
-        {
-            if(native == null) return null;
-        
-            if(cacheRepo.ContainsKey(native))
-            {
-                Easing cacheRet;
-                cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
-                {
-                    cbg_Easing_Release(native);
-                    return cacheRet;
-                }
-                else
-                {
-                    cacheRepo.Remove(native);
-                }
-            }
-        
-            var newObject = new Easing(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Easing>(newObject);
-            return newObject;
-        }
-        
-        internal IntPtr selfPtr = IntPtr.Zero;
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Easing_GetEasing(int easing, float t);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Easing_Release(IntPtr selfPtr);
-        
-        
-        internal Easing(MemoryHandle handle)
-        {
-            this.selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="easing"></param>
-        /// <param name="t"></param>
-        public static void GetEasing(EasingType easing, float t)
-        {
-            cbg_Easing_GetEasing((int)easing, t);
-        }
-        
-        ~Easing()
-        {
-            lock (this) 
-            {
-                if (selfPtr != IntPtr.Zero)
-                {
-                    cbg_Easing_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
