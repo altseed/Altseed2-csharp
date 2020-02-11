@@ -44,7 +44,7 @@ namespace Altseed.Test
                 Assert.True(Engine.Graphics.BeginFrame());
 
                 Engine.Renderer.Reset();
-                var cmdList = Engine.Graphics.GetCommandList();
+                var cmdList = Engine.Graphics.CommandList;
                 cmdList.SetRenderTargetWithScreen();
 
                 Engine.Renderer.Render(cmdList);

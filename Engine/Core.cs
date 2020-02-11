@@ -829,16 +829,16 @@ namespace Altseed
         private static extern IntPtr cbg_Mouse_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2DF vec);
-        
-        [DllImport("Altseed_Core")]
-        private static extern Vector2DF cbg_Mouse_GetPosition(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2DF cbg_Mouse_GetPosition(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2DF value);
+        
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Mouse_GetCursorMode(IntPtr selfPtr);
@@ -854,6 +854,28 @@ namespace Altseed
         {
             this.selfPtr = handle.selfPtr;
         }
+        
+        /// <summary>
+        /// マウスカーソルの座標を取得または設定します。
+        /// </summary>
+        public Vector2DF Position
+        {
+            get
+            {
+                if (_Position != null)
+                {
+                    return _Position.Value;
+                }
+                var ret = cbg_Mouse_GetPosition(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Position = value;
+                cbg_Mouse_SetPosition(selfPtr, ref value);
+            }
+        }
+        private Vector2DF? _Position;
         
         /// <summary>
         /// カーソルのモードを取得または設定する
@@ -885,25 +907,6 @@ namespace Altseed
         {
             var ret = cbg_Mouse_GetInstance();
             return Mouse.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// マウスカーソルの座標を設定します。
-        /// </summary>
-        /// <param name="vec">設定する座標</param>
-        public void SetPosition(ref Vector2DF vec)
-        {
-            cbg_Mouse_SetPosition(selfPtr, ref vec);
-        }
-        
-        /// <summary>
-        /// マウスカーソルの座標を取得します。
-        /// </summary>
-        /// <returns>マウスカーソルの座標</returns>
-        public Vector2DF GetPosition()
-        {
-            var ret = cbg_Mouse_GetPosition(selfPtr);
-            return ret;
         }
         
         /// <summary>
@@ -1193,10 +1196,12 @@ namespace Altseed
         private static extern bool cbg_Graphics_EndFrame(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Graphics_DoEvents(IntPtr selfPtr);
+        private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
+        
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
@@ -1205,6 +1210,18 @@ namespace Altseed
         internal Graphics(MemoryHandle handle)
         {
             this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// コマンドリストを取得する
+        /// </summary>
+        public CommandList CommandList
+        {
+            get
+            {
+                var ret = cbg_Graphics_GetCommandList(selfPtr);
+                return CommandList.TryGetFromCache(ret);
+            }
         }
         
         /// <summary>
@@ -1238,21 +1255,13 @@ namespace Altseed
         }
         
         /// <summary>
-        /// コマンドリストを取得する
-        /// </summary>
-        /// <returns>コマンドリスト</returns>
-        public CommandList GetCommandList()
-        {
-            var ret = cbg_Graphics_GetCommandList(selfPtr);
-            return CommandList.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
         /// イベントを処理します。
         /// </summary>
-        public void DoEvents()
+        /// <returns>正常に処理した場合は　true 。それ以外の場合は false。</returns>
+        public bool DoEvents()
         {
-            cbg_Graphics_DoEvents(selfPtr);
+            var ret = cbg_Graphics_DoEvents(selfPtr);
+            return ret;
         }
         
         ~Graphics()
