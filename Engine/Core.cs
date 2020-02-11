@@ -16,7 +16,6 @@ namespace Altseed
     /// <summary>
     /// リソースの種類を表す
     /// </summary>
-    [System.Serializable]
     public enum ResourceType : int
     {
         StaticFile,
@@ -29,7 +28,6 @@ namespace Altseed
     /// <summary>
     /// キーボードのキーの種類を表す
     /// </summary>
-    [System.Serializable]
     public enum Keys : int
     {
         Unknown,
@@ -160,7 +158,6 @@ namespace Altseed
     /// <summary>
     /// ボタンの押下状態を表します。
     /// </summary>
-    [System.Serializable]
     public enum ButtonState : int
     {
         Free = 0,
@@ -172,7 +169,6 @@ namespace Altseed
     /// <summary>
     /// マウスのボタンの種類を表す
     /// </summary>
-    [System.Serializable]
     public enum MouseButtons : int
     {
         ButtonLeft = 0,
@@ -188,7 +184,6 @@ namespace Altseed
     /// <summary>
     /// カーソルの状態を表す
     /// </summary>
-    [System.Serializable]
     public enum CursorMode : int
     {
         Normal = 212993,
@@ -199,7 +194,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの種類を表す
     /// </summary>
-    [System.Serializable]
     public enum JoystickType : int
     {
         Other = 0,
@@ -212,7 +206,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックのボタンの種類を表す
     /// </summary>
-    [System.Serializable]
     public enum JoystickButtonType : int
     {
         Start,
@@ -244,7 +237,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの軸の種類を表す
     /// </summary>
-    [System.Serializable]
     public enum JoystickAxisType : int
     {
         Start,
@@ -257,7 +249,6 @@ namespace Altseed
         Max,
     }
     
-    [System.Serializable]
     public enum DeviceType : int
     {
     }
@@ -265,7 +256,6 @@ namespace Altseed
     /// <summary>
     /// イージングの種類を表す
     /// </summary>
-    [System.Serializable]
     public enum EasingType : int
     {
         Linear,
@@ -700,10 +690,7 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Mouse_GetInstance(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Mouse_RefreshInputState(IntPtr selfPtr);
+        private static extern IntPtr cbg_Mouse_GetInstance();
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2DF vec);
@@ -758,18 +745,10 @@ namespace Altseed
         /// インスタンスを取得する
         /// </summary>
         /// <returns>使用するインスタンス</returns>
-        internal Mouse GetInstance()
+        internal static Mouse GetInstance()
         {
-            var ret = cbg_Mouse_GetInstance(selfPtr);
+            var ret = cbg_Mouse_GetInstance();
             return Mouse.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// インプットの状態をリセットする
-        /// </summary>
-        internal void RefreshInputState()
-        {
-            cbg_Mouse_RefreshInputState(selfPtr);
         }
         
         /// <summary>
@@ -1698,6 +1677,384 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_File_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 音源のクラス
+    /// </summary>
+    public partial class Sound
+    {
+        private static Dictionary<IntPtr, WeakReference<Sound>> cacheRepo = new Dictionary<IntPtr, WeakReference<Sound>>();
+        
+        internal static Sound TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Sound cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Sound_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Sound(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Sound>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Sound_GetLoopEndPoint(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Sound_SetLoopEndPoint(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Sound_GetIsLoopingMode(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Sound_SetIsLoopingMode(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Sound_GetLength(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Sound_Release(IntPtr selfPtr);
+        
+        
+        internal Sound(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// ループ開始地点(秒)を取得または設定する
+        /// </summary>
+        public float LoopStartingPoint
+        {
+            get
+            {
+                if (_LoopStartingPoint != null)
+                {
+                    return _LoopStartingPoint.Value;
+                }
+                var ret = cbg_Sound_GetLoopStartingPoint(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _LoopStartingPoint = value;
+                cbg_Sound_SetLoopStartingPoint(selfPtr, value);
+            }
+        }
+        private float? _LoopStartingPoint;
+        
+        /// <summary>
+        /// ループ終了地点(秒)を取得または設定する
+        /// </summary>
+        public float LoopEndPoint
+        {
+            get
+            {
+                if (_LoopEndPoint != null)
+                {
+                    return _LoopEndPoint.Value;
+                }
+                var ret = cbg_Sound_GetLoopEndPoint(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _LoopEndPoint = value;
+                cbg_Sound_SetLoopEndPoint(selfPtr, value);
+            }
+        }
+        private float? _LoopEndPoint;
+        
+        /// <summary>
+        /// ループするかどうかを取得または設定する
+        /// </summary>
+        public bool IsLoopingMode
+        {
+            get
+            {
+                if (_IsLoopingMode != null)
+                {
+                    return _IsLoopingMode.Value;
+                }
+                var ret = cbg_Sound_GetIsLoopingMode(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _IsLoopingMode = value;
+                cbg_Sound_SetIsLoopingMode(selfPtr, value);
+            }
+        }
+        private bool? _IsLoopingMode;
+        
+        /// <summary>
+        /// 音源の長さ(秒)を取得する
+        /// </summary>
+        public float Length
+        {
+            get
+            {
+                var ret = cbg_Sound_GetLength(selfPtr);
+                return ret;
+            }
+        }
+        
+        ~Sound()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Sound_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public partial class SoundMixer
+    {
+        private static Dictionary<IntPtr, WeakReference<SoundMixer>> cacheRepo = new Dictionary<IntPtr, WeakReference<SoundMixer>>();
+        
+        internal static SoundMixer TryGetFromCache(IntPtr native)
+        {
+            if(native == null) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                SoundMixer cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_SoundMixer_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new SoundMixer(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<SoundMixer>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_SoundMixer_GetInstance();
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_SoundMixer_CreateSound(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_SoundMixer_Play(IntPtr selfPtr, IntPtr sound);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_SoundMixer_GetIsPlaying(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_StopAll(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_Stop(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_Pause(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_Resume(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_Seek(IntPtr selfPtr, int id, float position);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_SetVolume(IntPtr selfPtr, int id, float volume);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_FadeIn(IntPtr selfPtr, int id, float second);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_FadeOut(IntPtr selfPtr, int id, float second);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_Fade(IntPtr selfPtr, int id, float second, float targetedVolume);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_SoundMixer_GetIsPlaybackSpeedEnabled(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_SetIsPlaybackSpeedEnabled(IntPtr selfPtr, int id, [MarshalAs(UnmanagedType.Bool)] bool isPlaybackSpeedEnabled);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_SoundMixer_GetPlaybackSpeed(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_SetPlaybackSpeed(IntPtr selfPtr, int id, float playbackSpeed);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_SoundMixer_GetPanningPosition(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_SetPanningPosition(IntPtr selfPtr, int id, float panningPosition);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_SoundMixer_GetPlaybackPercent(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
+        
+        
+        internal SoundMixer(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        internal static SoundMixer GetInstance()
+        {
+            var ret = cbg_SoundMixer_GetInstance();
+            return SoundMixer.TryGetFromCache(ret);
+        }
+        
+        public Sound CreateSound(string path, bool isDecompressed)
+        {
+            var ret = cbg_SoundMixer_CreateSound(selfPtr, path, isDecompressed);
+            return Sound.TryGetFromCache(ret);
+        }
+        
+        public int Play(Sound sound)
+        {
+            var ret = cbg_SoundMixer_Play(selfPtr, sound != null ? sound.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        public bool GetIsPlaying(int id)
+        {
+            var ret = cbg_SoundMixer_GetIsPlaying(selfPtr, id);
+            return ret;
+        }
+        
+        public void StopAll()
+        {
+            cbg_SoundMixer_StopAll(selfPtr);
+        }
+        
+        public void Stop(int id)
+        {
+            cbg_SoundMixer_Stop(selfPtr, id);
+        }
+        
+        public void Pause(int id)
+        {
+            cbg_SoundMixer_Pause(selfPtr, id);
+        }
+        
+        public void Resume(int id)
+        {
+            cbg_SoundMixer_Resume(selfPtr, id);
+        }
+        
+        public void Seek(int id, float position)
+        {
+            cbg_SoundMixer_Seek(selfPtr, id, position);
+        }
+        
+        public void SetVolume(int id, float volume)
+        {
+            cbg_SoundMixer_SetVolume(selfPtr, id, volume);
+        }
+        
+        public void FadeIn(int id, float second)
+        {
+            cbg_SoundMixer_FadeIn(selfPtr, id, second);
+        }
+        
+        public void FadeOut(int id, float second)
+        {
+            cbg_SoundMixer_FadeOut(selfPtr, id, second);
+        }
+        
+        public void Fade(int id, float second, float targetedVolume)
+        {
+            cbg_SoundMixer_Fade(selfPtr, id, second, targetedVolume);
+        }
+        
+        public bool GetIsPlaybackSpeedEnabled(int id)
+        {
+            var ret = cbg_SoundMixer_GetIsPlaybackSpeedEnabled(selfPtr, id);
+            return ret;
+        }
+        
+        public void SetIsPlaybackSpeedEnabled(int id, bool isPlaybackSpeedEnabled)
+        {
+            cbg_SoundMixer_SetIsPlaybackSpeedEnabled(selfPtr, id, isPlaybackSpeedEnabled);
+        }
+        
+        public float GetPlaybackSpeed(int id)
+        {
+            var ret = cbg_SoundMixer_GetPlaybackSpeed(selfPtr, id);
+            return ret;
+        }
+        
+        public void SetPlaybackSpeed(int id, float playbackSpeed)
+        {
+            cbg_SoundMixer_SetPlaybackSpeed(selfPtr, id, playbackSpeed);
+        }
+        
+        public float GetPanningPosition(int id)
+        {
+            var ret = cbg_SoundMixer_GetPanningPosition(selfPtr, id);
+            return ret;
+        }
+        
+        public void SetPanningPosition(int id, float panningPosition)
+        {
+            cbg_SoundMixer_SetPanningPosition(selfPtr, id, panningPosition);
+        }
+        
+        public float GetPlaybackPercent(int id)
+        {
+            var ret = cbg_SoundMixer_GetPlaybackPercent(selfPtr, id);
+            return ret;
+        }
+        
+        ~SoundMixer()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_SoundMixer_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
