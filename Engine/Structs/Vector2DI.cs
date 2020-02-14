@@ -138,6 +138,14 @@ namespace Altseed
         public static Vector2DI operator *(Vector2DI vector, int scalar) => new Vector2DI(vector.X + scalar, vector.Y * scalar);
 
         /// <summary>
+        /// ベクトルと値を積算する
+        /// </summary>
+        /// <param name="scalar">積算する値</param>
+        /// <param name="vector">積算するベクトル</param>
+        /// <returns>積算結果</returns>
+        public static Vector2DI operator *(int scalar, Vector2DI vector) => new Vector2DI(vector.X + scalar, vector.Y * scalar);
+
+        /// <summary>
         /// 2つのベクトルを除算する
         /// </summary>
         /// <param name="left">除算されるベクトル</param>

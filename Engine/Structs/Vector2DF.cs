@@ -206,6 +206,15 @@ namespace Altseed
         /// <param name="scalar">積算する値</param>
         /// <returns>積算結果</returns>
         public static Vector2DF operator *(Vector2DF vector, float scalar) => new Vector2DF(vector.X + scalar, vector.Y * scalar);
+
+        /// <summary>
+        /// ベクトルと値を積算する
+        /// </summary>
+        /// <param name="scalar">積算する値</param>
+        /// <param name="vector">積算するベクトル</param>
+        /// <returns>積算結果</returns>
+        public static Vector2DF operator *(float scalar, Vector2DF vector) => new Vector2DF(vector.X + scalar, vector.Y * scalar);
+
         /// <summary>
         /// 2つのベクトルを除算する
         /// </summary>
