@@ -9,7 +9,7 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2DF : IEquatable<Vector2DF>
+    public struct Vector2F : IEquatable<Vector2F>
     {
         /// <summary>
         /// X座標
@@ -33,7 +33,7 @@ namespace Altseed
         /// <summary>
         /// このベクトルの単位ベクトルを取得する
         /// </summary>
-        public Vector2DF Normal => this / Length;
+        public Vector2F Normal => this / Length;
 
         /// <summary>
         /// ベクトルの長さを取得または設定する
@@ -73,33 +73,33 @@ namespace Altseed
         /// </summary>
         /// <param name="x">X座標</param>
         /// <param name="y">Y座標</param>
-        public Vector2DF(float x, float y)
+        public Vector2F(float x, float y)
         {
             X = x;
             Y = y;
         }
 
         /// <summary>
-        /// 2つの<see cref="Vector2DF"/>間の等価性を判定する
+        /// 2つの<see cref="Vector2F"/>間の等価性を判定する
         /// </summary>
         /// <param name="v1">等価性を判定するベクトル1</param>
         /// <param name="v2">等価性を判定するベクトル2</param>
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue，それ以外でfalse</returns>
-        public static bool Equals(Vector2DF v1, Vector2DF v2) => v1.Equals(v2);
+        public static bool Equals(Vector2F v1, Vector2F v2) => v1.Equals(v2);
 
         /// <summary>
-        /// もう1つの<see cref="Vector2DF"/>との等価性を判定する
+        /// もう1つの<see cref="Vector2F"/>との等価性を判定する
         /// </summary>
-        /// <param name="other">比較する<see cref="Vector2DF"/>のインスタンス</param>
+        /// <param name="other">比較する<see cref="Vector2F"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性をが認められたらtrue，それ以外でfalse</returns>
-        public bool Equals(Vector2DF other) => X == other.X && Y == other.Y;
+        public bool Equals(Vector2F other) => X == other.X && Y == other.Y;
 
         /// <summary>
         /// 指定したオブジェクトとの等価性を判定する
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector2DF v ? Equals(v) : false;
+        public override bool Equals(object obj) => obj is Vector2F v ? Equals(v) : false;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返す
@@ -130,10 +130,10 @@ namespace Altseed
         public override string ToString() => $"({X}, {Y})";
 
         /// <summary>
-        /// <see cref="Vector2DI"/>に型変換する
+        /// <see cref="Vector2I"/>に型変換する
         /// </summary>
-        /// <returns>このインスタンスと等価な<see cref="Vector2DI"/>の新しいインスタンス</returns>
-        public Vector2DI To2DI() => new Vector2DI((int)X, (int)Y);
+        /// <returns>このインスタンスと等価な<see cref="Vector2I"/>の新しいインスタンス</returns>
+        public Vector2I To2DI() => new Vector2I((int)X, (int)Y);
 
         /// <summary>
         /// 2つのベクトルの外積を求める
@@ -141,7 +141,7 @@ namespace Altseed
         /// <param name="left">使用するベクトル1</param>
         /// <param name="right">使用するベクトル2</param>
         /// <returns><paramref name="left"/>と<paramref name="right"/>の外積</returns>
-        public static float Cross(Vector2DF left, Vector2DF right) => left.X * right.Y - right.X * left.Y;
+        public static float Cross(Vector2F left, Vector2F right) => left.X * right.Y - right.X * left.Y;
 
         /// <summary>
         /// 2つのベクトルの内積を求める
@@ -149,7 +149,7 @@ namespace Altseed
         /// <param name="v1">使用するベクトル1</param>
         /// <param name="v2">使用するベクトル2</param>
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の内積</returns>
-        public static float Dot(Vector2DF v1, Vector2DF v2) => v1.X * v2.X + v1.Y + v2.Y;
+        public static float Dot(Vector2F v1, Vector2F v2) => v1.X * v2.X + v1.Y + v2.Y;
 
         /// <summary>
         /// 2つのベクトル間の距離を求める
@@ -157,16 +157,16 @@ namespace Altseed
         /// <param name="v1">距離を求めるベクトル1</param>
         /// <param name="v2">距離を求めるベクトル2</param>
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間の距離</returns>
-        public static float Distance(Vector2DF v1, Vector2DF v2)
+        public static float Distance(Vector2F v1, Vector2F v2)
         {
             var x = v1.X - v2.X;
             var y = v1.Y - v2.Y;
             return (float)Math.Sqrt(x * x + y + y);
         }
 
-        public static bool operator ==(Vector2DF v1, Vector2DF v2) => Equals(v1, v2);
+        public static bool operator ==(Vector2F v1, Vector2F v2) => Equals(v1, v2);
 
-        public static bool operator !=(Vector2DF v1, Vector2DF v2) => !Equals(v1, v2);
+        public static bool operator !=(Vector2F v1, Vector2F v2) => !Equals(v1, v2);
 
         /// <summary>
         /// 2つのベクトルを加算する
@@ -174,14 +174,14 @@ namespace Altseed
         /// <param name="v1">加算するベクトル1</param>
         /// <param name="v2">加算するベクトル2</param>
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
-        public static Vector2DF operator +(Vector2DF v1, Vector2DF v2) => new Vector2DF(v1.X + v2.X, v1.Y + v2.Y);
+        public static Vector2F operator +(Vector2F v1, Vector2F v2) => new Vector2F(v1.X + v2.X, v1.Y + v2.Y);
 
         /// <summary>
         /// ベクトルの符号を反転する
         /// </summary>
         /// <param name="vector">符合を反転するベクトル</param>
         /// <returns><paramref name="vector"/>の逆符合版</returns>
-        public static Vector2DF operator -(Vector2DF vector) => new Vector2DF(-vector.X, -vector.Y);
+        public static Vector2F operator -(Vector2F vector) => new Vector2F(-vector.X, -vector.Y);
 
         /// <summary>
         /// 2つのベクトルを減算する
@@ -189,7 +189,7 @@ namespace Altseed
         /// <param name="left">減算されるベクトル</param>
         /// <param name="right">減算するベクトル</param>
         /// <returns>減算結果</returns>
-        public static Vector2DF operator -(Vector2DF left, Vector2DF right) => new Vector2DF(left.X - right.X, left.Y - right.Y);
+        public static Vector2F operator -(Vector2F left, Vector2F right) => new Vector2F(left.X - right.X, left.Y - right.Y);
 
         /// <summary>
         /// 2つのベクトルを積算する
@@ -197,7 +197,7 @@ namespace Altseed
         /// <param name="v1">積算するベクトル1</param>
         /// <param name="v2">積算するベクトル2</param>
         /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
-        public static Vector2DF operator *(Vector2DF v1, Vector2DF v2) => new Vector2DF(v1.X * v2.X, v1.Y * v2.Y);
+        public static Vector2F operator *(Vector2F v1, Vector2F v2) => new Vector2F(v1.X * v2.X, v1.Y * v2.Y);
 
         /// <summary>
         /// ベクトルと値を積算する
@@ -205,7 +205,7 @@ namespace Altseed
         /// <param name="vector">積算するベクトル</param>
         /// <param name="scalar">積算する値</param>
         /// <returns>積算結果</returns>
-        public static Vector2DF operator *(Vector2DF vector, float scalar) => new Vector2DF(vector.X * scalar, vector.Y * scalar);
+        public static Vector2F operator *(Vector2F vector, float scalar) => new Vector2F(vector.X * scalar, vector.Y * scalar);
 
         /// <summary>
         /// ベクトルと値を積算する
@@ -213,7 +213,7 @@ namespace Altseed
         /// <param name="scalar">積算する値</param>
         /// <param name="vector">積算するベクトル</param>
         /// <returns>積算結果</returns>
-        public static Vector2DF operator *(float scalar, Vector2DF vector) => new Vector2DF(vector.X * scalar, vector.Y * scalar);
+        public static Vector2F operator *(float scalar, Vector2F vector) => new Vector2F(vector.X * scalar, vector.Y * scalar);
 
         /// <summary>
         /// 2つのベクトルを除算する
@@ -221,7 +221,7 @@ namespace Altseed
         /// <param name="left">除算されるベクトル</param>
         /// <param name="right">除算するベクトル</param>
         /// <returns>除算結果(left.X / right.X, left.Y / right.Y)</returns>
-        public static Vector2DF operator /(Vector2DF left, Vector2DF right) => new Vector2DF(left.X / right.X, left.Y / right.Y);
+        public static Vector2F operator /(Vector2F left, Vector2F right) => new Vector2F(left.X / right.X, left.Y / right.Y);
 
         /// <summary>
         /// ベクトルを値で除算する
@@ -229,10 +229,10 @@ namespace Altseed
         /// <param name="vector">除算されるベクトル</param>
         /// <param name="scalar">除算する値</param>
         /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
-        public static Vector2DF operator /(Vector2DF vector, float scalar) => new Vector2DF(vector.X / scalar, vector.Y / scalar);
+        public static Vector2F operator /(Vector2F vector, float scalar) => new Vector2F(vector.X / scalar, vector.Y / scalar);
 
-        public static explicit operator Vector2DI(Vector2DF f) => f.To2DI();
+        public static explicit operator Vector2I(Vector2F f) => f.To2DI();
 
-        public static implicit operator Vector2DF(Vector2DI i) => i.To2DF();
+        public static implicit operator Vector2F(Vector2I i) => i.To2DF();
     }
 }

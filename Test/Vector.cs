@@ -22,8 +22,8 @@ namespace Altseed.Test
         private void Serialize()
         {
             var formatter = new BinaryFormatter();
-            var vectorF = new Vector2DF(0.1f, 0.1f);
-            var vectorI = new Vector2DI(1, 1);
+            var vectorF = new Vector2F(0.1f, 0.1f);
+            var vectorI = new Vector2I(1, 1);
             Listener.WriteLine($"F:{vectorF}");
             Listener.WriteLine($"I:{vectorI}");
             using var fsF_c = new FileStream("Test_VectorF.dat", FileMode.Create);
@@ -36,8 +36,8 @@ namespace Altseed.Test
             var formatter = new BinaryFormatter();
             using var fsF_o = new FileStream("Test_VectorF.dat", FileMode.Open);
             using var fsI_o = new FileStream("Test_VectorI.dat", FileMode.Open);
-            var vectorF = (Vector2DF)formatter.Deserialize(fsF_o);
-            var vectorI = (Vector2DI)formatter.Deserialize(fsI_o);
+            var vectorF = (Vector2F)formatter.Deserialize(fsF_o);
+            var vectorI = (Vector2I)formatter.Deserialize(fsI_o);
             Listener.WriteLine($"F:{vectorF}");
             Listener.WriteLine($"I:{vectorI}");
         }
