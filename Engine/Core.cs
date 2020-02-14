@@ -835,9 +835,9 @@ namespace Altseed
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
         
         [DllImport("Altseed_Core")]
-        private static extern Vector2DF cbg_Mouse_GetPosition(IntPtr selfPtr);
+        private static extern Vector2F cbg_Mouse_GetPosition(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2DF value);
+        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2F value);
         
         
         [DllImport("Altseed_Core")]
@@ -858,7 +858,7 @@ namespace Altseed
         /// <summary>
         /// マウスカーソルの座標を取得または設定します。
         /// </summary>
-        public Vector2DF Position
+        public Vector2F Position
         {
             get
             {
@@ -875,7 +875,7 @@ namespace Altseed
                 cbg_Mouse_SetPosition(selfPtr, ref value);
             }
         }
-        private Vector2DF? _Position;
+        private Vector2F? _Position;
         
         /// <summary>
         /// カーソルのモードを取得または設定する
@@ -1318,7 +1318,7 @@ namespace Altseed
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern Vector2DI cbg_Texture2D_GetSize(IntPtr selfPtr);
+        private static extern Vector2I cbg_Texture2D_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -1333,7 +1333,7 @@ namespace Altseed
         /// <summary>
         /// テクスチャの大きさ(ピクセル)を取得する
         /// </summary>
-        public Vector2DI Size
+        public Vector2I Size
         {
             get
             {
