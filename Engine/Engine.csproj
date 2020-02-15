@@ -8,13 +8,7 @@
   </PropertyGroup>
 
   <Choose>
-    <When Condition=" '$(OS)' == 'Windows_NT'">
-      <PropertyGroup>
-        <TargetFrameworks>net48;netstandard2.1</TargetFrameworks>
-      </PropertyGroup>
-    </When>
-
-    <When Condition="'$(OS)' == 'Windows'">
+    <When Condition=" '$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT'">
       <PropertyGroup>
         <TargetFrameworks>net48;netstandard2.1</TargetFrameworks>
       </PropertyGroup>

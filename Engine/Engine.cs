@@ -28,9 +28,11 @@ namespace Altseed
             if (Core.Initialize(title, width, height, ref option))
             {
                 Keyboard = Keyboard.GetInstance();
+                Mouse = Mouse.GetInstance();
                 File = File.GetInstance();
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
+                Sound = SoundMixer.GetInstance();
                 CurrentScene = new Scene();
                 return true;
             }
@@ -84,6 +86,16 @@ namespace Altseed
         public static Keyboard Keyboard { get; private set; }
 
         /// <summary>
+        /// マウスを管理するクラスを取得する
+        /// </summary>
+        public static Mouse Mouse { get; private set; }
+
+        ///// <summary>
+        ///// ジョイスティックを管理するクラスを取得する
+        ///// </summary>
+        //public static Joystick Joystick { get; private set; }
+
+        /// <summary>
         /// グラフィックのクラスを取得する
         /// </summary>
         public static Graphics Graphics { get; private set; }
@@ -92,5 +104,10 @@ namespace Altseed
         /// レンダラのクラスを取得する
         /// </summary>
         public static Renderer Renderer { get; private set; }
+
+        /// <summary>
+        /// 音を管理するクラスを取得する
+        /// </summary>
+        public static SoundMixer Sound { get; private set; }
     }
 }
