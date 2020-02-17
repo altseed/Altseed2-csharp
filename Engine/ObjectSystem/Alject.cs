@@ -17,6 +17,10 @@ namespace Altseed
         private readonly List<AljectComponent> addComponents;
         private readonly List<AljectComponent> removeComponents;
         /// <summary>
+        /// 描画を実行するかどうかを取得または設定する
+        /// </summary>
+        public bool IsDrawn { get; set; }
+        /// <summary>
         /// 更新をするかどうかを取得または設定する
         /// </summary>
         public bool IsUpdated { get; set; }
@@ -26,10 +30,25 @@ namespace Altseed
         public Scene Scene { get; internal set; }
         internal ObjectStatus Status { get; set; }
         /// <summary>
+        /// 更新優先度を取得または設定する
+        /// </summary>
+        /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
+        public int UpdatePriority 
+        {
+            get => _updatePriority;
+            set
+            {
+                _updatePriority = value;
+                Scene.NeededSort = true;
+            }
+        }
+        private int _updatePriority = 0;
+        /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
         public Alject()
         {
+            IsDrawn = true;
             IsUpdated = true;
             components = new List<AljectComponent>();
             addComponents = new List<AljectComponent>();
@@ -127,5 +146,11 @@ namespace Altseed
             components.Remove(component);
         }
         void IComponentRegisterable<AljectComponent>.__RemoveComponent(AljectComponent component) => __RemoveComponent(component);
+        internal void DoDrawing()
+        {
+            foreach (var c in components)
+                if (c is IDrawComponent d)
+                    d.Draw();
+        }
     }
 }

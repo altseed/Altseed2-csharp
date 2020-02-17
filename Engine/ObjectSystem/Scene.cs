@@ -12,6 +12,24 @@ namespace Altseed
     [Serializable]
     public class Scene : IComponentRegisterable<SceneComponent>
     {
+        [Serializable]
+        private sealed class AljectUpdatePriorityComparer : IComparer<Alject>
+        {
+            /// <summary>
+            /// 指定した2つの<see cref="Alject"/>の<see cref="Alject.UpdatePriority"/>を比較する
+            /// </summary>
+            /// <param name="x">更新優先度を比較する<see cref="Alject"/></param>
+            /// <param name="y">更新優先度を比較する<see cref="Alject"/></param>
+            /// <returns><paramref name="x"/>と<paramref name="y"/>を比較した結果</returns>
+            public int Compare(Alject x, Alject y)
+            {
+                if (x == null) throw new ArgumentNullException("比較するオブジェクトがnullです", nameof(x));
+                if (y == null) throw new ArgumentNullException("比較するオブジェクトがnullです", nameof(y));
+                return x.UpdatePriority.CompareTo(y.UpdatePriority);
+            }
+        }
+        private readonly static AljectUpdatePriorityComparer priorityComparer;
+        internal bool NeededSort { get; set; } = false;
         private readonly List<Alject> _objects;
         private readonly List<Alject> addObjects;
         private readonly List<Alject> removeObjects;
@@ -26,6 +44,10 @@ namespace Altseed
         /// 登録されているオブジェクトの個数を取得する
         /// </summary>
         public int ObjectCount => _objects.Count;
+        static Scene()
+        {
+            priorityComparer = new AljectUpdatePriorityComparer();
+        }
         /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
@@ -125,6 +147,7 @@ namespace Altseed
             obj.Status = ObjectStatus.Registered;
             obj.Scene = this;
             obj.RaiseOnAdded();
+            NeededSort = true;
         }
         private void __RemoveObject(Alject obj, bool raiseEvent)
         {
@@ -132,6 +155,7 @@ namespace Altseed
             obj.Status = ObjectStatus.Free;
             obj.Scene = null;
             obj.RiaseOnRemoved(raiseEvent);
+            NeededSort = true;
         }
         internal void Update()
         {
@@ -146,6 +170,7 @@ namespace Altseed
             foreach (var c in components)
                 if (c.Status == ObjectStatus.Registered)
                     c.RaiseOnUpdated();
+            DoDrawing();
             foreach (var a in addObjects) __AddObject(a);
             foreach (var r in removeObjects) __RemoveObject(r, true);
             foreach (var a in addComponents) __AddComponent(a);
@@ -154,6 +179,11 @@ namespace Altseed
             removeObjects.Clear();
             addComponents.Clear();
             removeComponents.Clear();
+            if (NeededSort)
+            {
+                _objects.Sort(priorityComparer);
+                NeededSort = false;
+            }
         }
         private void __AddComponent(SceneComponent component)
         {
@@ -167,5 +197,9 @@ namespace Altseed
             component.Status = ObjectStatus.Free;
         }
         void IComponentRegisterable<SceneComponent>.__RemoveComponent(SceneComponent component) => __RemoveComponent(component);
+        internal void DoDrawing()
+        {
+            foreach (var c in _objects) c.DoDrawing();
+        }
     }
 }
