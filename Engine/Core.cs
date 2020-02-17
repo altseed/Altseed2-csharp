@@ -292,6 +292,29 @@ namespace Altseed
     }
     
     /// <summary>
+    /// ログレベルを表す
+    /// </summary>
+    public enum LogLevel : int
+    {
+        Trace = 0,
+        Debug = 1,
+        Information = 2,
+        Warning = 3,
+        Error = 4,
+        Critical = 5,
+        Off = 6,
+    }
+    
+    /// <summary>
+    /// ログの範囲を表す
+    /// </summary>
+    public enum LogCategory : int
+    {
+        Engine = 1,
+        User = 2,
+    }
+    
+    /// <summary>
     /// イージングのクラス
     /// </summary>
     public partial class Easing
@@ -1413,13 +1436,10 @@ namespace Altseed
         private static extern IntPtr cbg_Renderer_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_Reset(IntPtr selfPtr);
+        private static extern void cbg_Renderer_DrawSprite(IntPtr selfPtr, IntPtr sprite);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Renderer_CreateSprite(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
@@ -1441,11 +1461,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// レンダラをリセットします。
+        /// スプライトを描画します。
         /// </summary>
-        public void Reset()
+        public void DrawSprite(RenderedSprite sprite)
         {
-            cbg_Renderer_Reset(selfPtr);
+            cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -1455,16 +1475,6 @@ namespace Altseed
         public void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
-        }
-        
-        /// <summary>
-        /// スプライトを作成します。
-        /// </summary>
-        /// <returns>スプライト</returns>
-        public RenderedSprite CreateSprite()
-        {
-            var ret = cbg_Renderer_CreateSprite(selfPtr);
-            return RenderedSprite.TryGetFromCache(ret);
         }
         
         ~Renderer()
@@ -1580,6 +1590,9 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedSprite_Create();
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_RenderedSprite_GetTexture(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedSprite_SetTexture(IntPtr selfPtr, IntPtr value);
@@ -1644,6 +1657,15 @@ namespace Altseed
         }
         private RectF? _Src;
         
+        /// <summary>
+        /// スプライトを作成します。
+        /// </summary>
+        public static RenderedSprite Create()
+        {
+            var ret = cbg_RenderedSprite_Create();
+            return RenderedSprite.TryGetFromCache(ret);
+        }
+        
         ~RenderedSprite()
         {
             lock (this) 
@@ -1689,6 +1711,9 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StreamFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
@@ -1775,6 +1800,17 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 指定ファイルを読み込むStreamFileの新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <returns>pathで読み込むファイルを格納するStreamFileの新しいインスタンスを生成する</returns>
+        public static StreamFile Create(string path)
+        {
+            var ret = cbg_StreamFile_Create(path);
+            return StreamFile.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
         /// 指定した分ファイルを読み込む
         /// </summary>
         /// <param name="size">この処理で読み込むデータサイズ</param>
@@ -1852,6 +1888,9 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StaticFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
@@ -1914,6 +1953,17 @@ namespace Altseed
                 var ret = cbg_StaticFile_GetIsInPackage(selfPtr);
                 return ret;
             }
+        }
+        
+        /// <summary>
+        /// 指定ファイルを読み込んだStaticFileの新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="path">読み込むファイルのパス</param>
+        /// <returns>pathで読み込んだファイルを格納するStaticFileの新しいインスタンスを生成する</returns>
+        public static StaticFile Create(string path)
+        {
+            var ret = cbg_StaticFile_Create(path);
+            return StaticFile.TryGetFromCache(ret);
         }
         
         /// <summary>
@@ -1986,12 +2036,6 @@ namespace Altseed
         private static extern IntPtr cbg_File_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_File_CreateStaticFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_File_CreateStreamFile(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
-        
-        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootDirectory(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
@@ -2035,28 +2079,6 @@ namespace Altseed
         {
             var ret = cbg_File_GetInstance();
             return File.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// 指定ファイルを読み込んだStaticFileの新しいインスタンスを生成する
-        /// </summary>
-        /// <param name="path">読み込むファイルのパス</param>
-        /// <returns>pathで読み込んだファイルを格納するStaticFileの新しいインスタンスを生成する</returns>
-        internal StaticFile CreateStaticFile(string path)
-        {
-            var ret = cbg_File_CreateStaticFile(selfPtr, path);
-            return StaticFile.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// 指定ファイルを読み込むStreamFileの新しいインスタンスを生成する
-        /// </summary>
-        /// <param name="path">読み込むファイルのパス</param>
-        /// <returns>pathで読み込むファイルを格納するStreamFileの新しいインスタンスを生成する</returns>
-        internal StreamFile CreateStreamFile(string path)
-        {
-            var ret = cbg_File_CreateStreamFile(selfPtr, path);
-            return StreamFile.TryGetFromCache(ret);
         }
         
         /// <summary>
@@ -2522,6 +2544,95 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_SoundMixer_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// ログを出力するクラス
+    /// </summary>
+    public partial class Log
+    {
+        private static Dictionary<IntPtr, WeakReference<Log>> cacheRepo = new Dictionary<IntPtr, WeakReference<Log>>();
+        
+        internal static Log TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Log cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Log_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Log(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Log>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Log_GetInstance();
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Write(IntPtr selfPtr, int category, int level, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_SetLevel(IntPtr selfPtr, int category, int level);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Release(IntPtr selfPtr);
+        
+        
+        internal Log(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// インスタンスを取得する
+        /// </summary>
+        internal static Log GetInstance()
+        {
+            var ret = cbg_Log_GetInstance();
+            return Log.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// ログを出力する
+        /// </summary>
+        public void Write(LogCategory category, LogLevel level, string message)
+        {
+            cbg_Log_Write(selfPtr, (int)category, (int)level, message);
+        }
+        
+        /// <summary>
+        /// ログレベルを設定する
+        /// </summary>
+        public void SetLevel(LogCategory category, LogLevel level)
+        {
+            cbg_Log_SetLevel(selfPtr, (int)category, (int)level);
+        }
+        
+        ~Log()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Log_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }

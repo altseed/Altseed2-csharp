@@ -23,7 +23,7 @@ namespace Altseed.Test
 
             Assert.NotNull(t1);
 
-            var s1 = Engine.Renderer.CreateSprite();
+            var s1 = RenderedSprite.Create();
 
             s1.Texture = t1;
             s1.Src = new RectF(0, 0, 128, 128);
@@ -32,7 +32,7 @@ namespace Altseed.Test
             {
                 Assert.True(Engine.Graphics.BeginFrame());
 
-                Engine.Renderer.Reset();
+                Engine.Renderer.DrawSprite(s1);
                 var cmdList = Engine.Graphics.CommandList;
                 cmdList.SetRenderTargetWithScreen();
 
