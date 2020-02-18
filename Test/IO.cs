@@ -13,7 +13,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void FileRoot()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/pack/", "pack.pack"));
             Assert.True(Engine.File.PackWithPassword("../../Core/TestData/IO/pack/", "password.pack", "altseed"));
@@ -64,7 +64,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFileBase()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -106,7 +106,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void StreamFileBase()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -167,7 +167,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Zenkaku()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -201,7 +201,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFileAsync()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));

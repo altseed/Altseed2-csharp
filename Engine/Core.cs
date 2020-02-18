@@ -418,7 +418,7 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Configuration_Create();
+        private static extern IntPtr cbg_Configuration_Constructor_0();
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -573,10 +573,9 @@ namespace Altseed
         }
         private string _LogFilename;
         
-        public static Configuration Create()
+        public Configuration()
         {
-            var ret = cbg_Configuration_Create();
-            return Configuration.TryGetFromCache(ret);
+            selfPtr = cbg_Configuration_Constructor_0();
         }
         
         ~Configuration()

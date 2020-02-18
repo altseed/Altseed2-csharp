@@ -11,7 +11,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Play()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             var s1 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/bgm1.ogg", false);
             var s2 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/se1.wav", true);
@@ -35,7 +35,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Loop()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             var s1 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(s1);

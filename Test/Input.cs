@@ -11,7 +11,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Mouse()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
 
@@ -44,7 +44,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Keyboard()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             while (Engine.DoEvents() && Engine.Keyboard.GetKeyState(Keys.Space) == ButtonState.Free)
             {

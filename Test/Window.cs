@@ -11,7 +11,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Base()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
             while (Engine.DoEvents())
             {
