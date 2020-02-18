@@ -23,9 +23,9 @@ namespace Altseed
         /// <param name="height">ウィンドウの縦幅</param>
         /// <param name="option">オプションのインスタンス</param>
         /// <returns>初期化に成功したらtrue，それ以外でfalse</returns>
-        public static bool Initialize(string title, int width, int height, CoreOption option)
+        public static bool Initialize(string title, int width, int height, Configuration option)
         {
-            if (Core.Initialize(title, width, height, ref option))
+            if (Core.Initialize(title, width, height, option))
             {
                 Keyboard = Keyboard.GetInstance();
                 Mouse = Mouse.GetInstance();
@@ -33,6 +33,7 @@ namespace Altseed
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
                 Sound = SoundMixer.GetInstance();
+                Resources = Resources.GetInstance();
                 CurrentScene = new Scene();
                 return true;
             }
@@ -109,5 +110,10 @@ namespace Altseed
         /// 音を管理するクラスを取得する
         /// </summary>
         public static SoundMixer Sound { get; private set; }
+
+        /// <summary>
+        /// リソースを管理するクラスを取得する
+        /// </summary>
+        public static Resources Resources { get; private set; }
     }
 }

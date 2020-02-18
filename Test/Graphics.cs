@@ -11,13 +11,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void BasicSpriteTexture()
         {
-            var coreOption = new CoreOption()
-            {
-                IsFullscreenMode = false,
-                IsResizable = false,
-            };
-
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, coreOption));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
 
             var count = 0;
 

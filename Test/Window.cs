@@ -17,7 +17,7 @@ namespace Altseed.Test
                 IsResizable = false,
             };
 
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, coreOption));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
 
             while (Engine.DoEvents())
             {
