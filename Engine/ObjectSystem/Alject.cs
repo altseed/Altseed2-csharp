@@ -14,6 +14,20 @@ namespace Altseed
     public class Alject : IComponentRegisterable<AljectComponent>
     {
         /// <summary>
+        /// 描画優先度を取得または設定する
+        /// </summary>
+        /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
+        public int DrawingPriority 
+        {
+            get => _drawingPriority;
+            set
+            {
+                _drawingPriority = value;
+                if (Scene != null) Scene.NeededSort = true;
+            }
+        }
+        private int _drawingPriority = 0;
+        /// <summary>
         /// 描画を実行するかどうかを取得または設定する
         /// </summary>
         public bool IsDrawn { get; set; }
@@ -27,20 +41,6 @@ namespace Altseed
         public Scene Scene { get; internal set; }
         internal ObjectStatus Status { get; set; }
         /// <summary>
-        /// 更新優先度を取得または設定する
-        /// </summary>
-        /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
-        public int UpdatePriority 
-        {
-            get => _updatePriority;
-            set
-            {
-                _updatePriority = value;
-                Scene.NeededSort = true;
-            }
-        }
-        private int _updatePriority = 0;
-        /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
         public Alject()
@@ -51,6 +51,15 @@ namespace Altseed
             addComponents = new List<AljectComponent>();
             removeComponents = new List<AljectComponent>();
             Status = ObjectStatus.Free;
+        }
+        /// <summary>
+        /// コンポーネントを予め登録して新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="components">登録するコンポーネントのコレクション</param>
+        /// <exception cref="ArgumentNullException"><paramref name="components"/>がnull</exception>
+        internal Alject(IEnumerable<AljectComponent> components) : this()
+        {
+            this.components.AddRange(components.Distinct() ?? throw new ArgumentNullException("引数がnullです", nameof(components)));
         }
         #region ComponentRegister
         private readonly List<AljectComponent> components;
@@ -153,6 +162,11 @@ namespace Altseed
             foreach (var c in components)
                 if (c is IDrawComponent d)
                     d.Draw();
+            OnDrawn();
         }
+        /// <summary>
+        /// 描画時に実行
+        /// </summary>
+        protected virtual void OnDrawn() { }
     }
 }

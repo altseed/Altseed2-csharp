@@ -13,10 +13,10 @@ namespace Altseed
     public class Scene : IComponentRegisterable<SceneComponent>
     {
         [Serializable]
-        private sealed class AljectUpdatePriorityComparer : IComparer<Alject>
+        private sealed class AljectDrawingPriorityComparer : IComparer<Alject>
         {
             /// <summary>
-            /// 指定した2つの<see cref="Alject"/>の<see cref="Alject.UpdatePriority"/>を比較する
+            /// 指定した2つの<see cref="Alject"/>の<see cref="Alject.DrawingPriority"/>を比較する
             /// </summary>
             /// <param name="x">更新優先度を比較する<see cref="Alject"/></param>
             /// <param name="y">更新優先度を比較する<see cref="Alject"/></param>
@@ -25,10 +25,10 @@ namespace Altseed
             {
                 if (x == null) throw new ArgumentNullException("比較するオブジェクトがnullです", nameof(x));
                 if (y == null) throw new ArgumentNullException("比較するオブジェクトがnullです", nameof(y));
-                return x.UpdatePriority.CompareTo(y.UpdatePriority);
+                return x.DrawingPriority.CompareTo(y.DrawingPriority);
             }
         }
-        private readonly static AljectUpdatePriorityComparer priorityComparer;
+        private readonly static AljectDrawingPriorityComparer priorityComparer;
         internal bool NeededSort { get; set; } = false;
         /// <summary>
         /// 登録されているオブジェクトを取得する
@@ -40,7 +40,7 @@ namespace Altseed
         public int ObjectCount => _objects.Count;
         static Scene()
         {
-            priorityComparer = new AljectUpdatePriorityComparer();
+            priorityComparer = new AljectDrawingPriorityComparer();
         }
         /// <summary>
         /// 新しいインスタンスを生成する
@@ -203,7 +203,7 @@ namespace Altseed
         }
         internal void DoDrawing()
         {
-            foreach (var c in _objects) c.DoDrawing();
+            foreach (var o in _objects) o.DoDrawing();
         }
     }
 }

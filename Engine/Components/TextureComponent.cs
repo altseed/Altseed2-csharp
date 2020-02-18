@@ -22,6 +22,13 @@ namespace Altseed
         /// </summary>
         public Texture2D Texture { get => sprite.Texture; set => sprite.Texture = value; }
         /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
+        public TextureComponent()
+        {
+            sprite = RenderedSprite.Create();
+        }
+        /// <summary>
         /// 描画を実行する
         /// </summary>
         public void Draw()
