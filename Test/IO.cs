@@ -201,12 +201,6 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFileAsync()
         {
-            var coreOption = new CoreOption()
-            {
-                IsFullscreenMode = false,
-                IsResizable = false,
-            };
-
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
 
             // pack files

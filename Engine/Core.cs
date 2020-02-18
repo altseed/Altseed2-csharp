@@ -300,8 +300,8 @@ namespace Altseed
     {
         Trace = 0,
         Debug = 1,
-        Information = 2,
-        Warning = 3,
+        Info = 2,
+        Warn = 3,
         Error = 4,
         Critical = 5,
         Off = 6,
@@ -435,6 +435,26 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetEnabledConsoleLogging(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetEnabledConsoleLogging(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetEnabledFileLogging(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetEnabledFileLogging(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Configuration_GetLogFilename(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetLogFilename(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Configuration_Release(IntPtr selfPtr);
         
         
@@ -486,6 +506,72 @@ namespace Altseed
             }
         }
         private bool? _IsResizable;
+        
+        /// <summary>
+        /// ログをコンソールに出力するかどうかを取得または設定する
+        /// </summary>
+        public bool EnabledConsoleLogging
+        {
+            get
+            {
+                if (_EnabledConsoleLogging != null)
+                {
+                    return _EnabledConsoleLogging.Value;
+                }
+                var ret = cbg_Configuration_GetEnabledConsoleLogging(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _EnabledConsoleLogging = value;
+                cbg_Configuration_SetEnabledConsoleLogging(selfPtr, value);
+            }
+        }
+        private bool? _EnabledConsoleLogging;
+        
+        /// <summary>
+        /// ログをファイルに出力するかどうかを取得または設定する
+        /// </summary>
+        public bool EnabledFileLogging
+        {
+            get
+            {
+                if (_EnabledFileLogging != null)
+                {
+                    return _EnabledFileLogging.Value;
+                }
+                var ret = cbg_Configuration_GetEnabledFileLogging(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _EnabledFileLogging = value;
+                cbg_Configuration_SetEnabledFileLogging(selfPtr, value);
+            }
+        }
+        private bool? _EnabledFileLogging;
+        
+        /// <summary>
+        /// ログファイル名を取得または設定する
+        /// </summary>
+        public string LogFilename
+        {
+            get
+            {
+                if (_LogFilename != null)
+                {
+                    return _LogFilename;
+                }
+                var ret = cbg_Configuration_GetLogFilename(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+            set
+            {
+                _LogFilename = value;
+                cbg_Configuration_SetLogFilename(selfPtr, value);
+            }
+        }
+        private string _LogFilename;
         
         public static Configuration Create()
         {
@@ -2714,6 +2800,24 @@ namespace Altseed
         private static extern void cbg_Log_Write(IntPtr selfPtr, int category, int level, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Trace(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Debug(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Info(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Warn(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Error(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Log_Critical(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Log_SetLevel(IntPtr selfPtr, int category, int level);
         
         [DllImport("Altseed_Core")]
@@ -2740,6 +2844,54 @@ namespace Altseed
         public void Write(LogCategory category, LogLevel level, string message)
         {
             cbg_Log_Write(selfPtr, (int)category, (int)level, message);
+        }
+        
+        /// <summary>
+        /// ログレベルTraceでログを出力する
+        /// </summary>
+        public void Trace(LogCategory category, string message)
+        {
+            cbg_Log_Trace(selfPtr, (int)category, message);
+        }
+        
+        /// <summary>
+        /// ログレベルDebugでログを出力する
+        /// </summary>
+        public void Debug(LogCategory category, string message)
+        {
+            cbg_Log_Debug(selfPtr, (int)category, message);
+        }
+        
+        /// <summary>
+        /// ログレベルInfoでログを出力する
+        /// </summary>
+        public void Info(LogCategory category, string message)
+        {
+            cbg_Log_Info(selfPtr, (int)category, message);
+        }
+        
+        /// <summary>
+        /// ログレベルWarningでログを出力する
+        /// </summary>
+        public void Warn(LogCategory category, string message)
+        {
+            cbg_Log_Warn(selfPtr, (int)category, message);
+        }
+        
+        /// <summary>
+        /// ログレベルErrorでログを出力する
+        /// </summary>
+        public void Error(LogCategory category, string message)
+        {
+            cbg_Log_Error(selfPtr, (int)category, message);
+        }
+        
+        /// <summary>
+        /// ログレベルCriticalでログを出力する
+        /// </summary>
+        public void Critical(LogCategory category, string message)
+        {
+            cbg_Log_Critical(selfPtr, (int)category, message);
         }
         
         /// <summary>

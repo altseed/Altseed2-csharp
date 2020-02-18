@@ -11,12 +11,6 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Mouse()
         {
-            var coreOption = new CoreOption()
-            {
-                IsFullscreenMode = false,
-                IsResizable = false,
-            };
-
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
 
             var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
@@ -50,12 +44,6 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Keyboard()
         {
-            var coreOption = new CoreOption()
-            {
-                IsFullscreenMode = false,
-                IsResizable = false,
-            };
-
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
 
             while (Engine.DoEvents() && Engine.Keyboard.GetKeyState(Keys.Space) == ButtonState.Free)

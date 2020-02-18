@@ -23,9 +23,9 @@ namespace Altseed
         /// <param name="height">ウィンドウの縦幅</param>
         /// <param name="option">オプションのインスタンス</param>
         /// <returns>初期化に成功したらtrue，それ以外でfalse</returns>
-        public static bool Initialize(string title, int width, int height, Configuration option)
+        public static bool Initialize(string title, int width, int height, Configuration config)
         {
-            if (Core.Initialize(title, width, height, option))
+            if (Core.Initialize(title, width, height, config))
             {
                 Keyboard = Keyboard.GetInstance();
                 Mouse = Mouse.GetInstance();

@@ -35,12 +35,6 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Loop()
         {
-            var coreOption = new CoreOption()
-            {
-                IsFullscreenMode = false,
-                IsResizable = false,
-            };
-
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, Configuration.Create()));
 
             var s1 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/bgm1.ogg", false);
