@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Altseed
 {
@@ -60,6 +61,7 @@ namespace Altseed
         StreamFile,
         Texture2D,
         Font,
+        Sound,
         MAX,
     }
     
@@ -383,6 +385,128 @@ namespace Altseed
     }
     
     /// <summary>
+    /// Coreを初期化する際の設定を保持すクラス
+    /// </summary>
+    public partial class Configuration
+    {
+        private static Dictionary<IntPtr, WeakReference<Configuration>> cacheRepo = new Dictionary<IntPtr, WeakReference<Configuration>>();
+        
+        internal static Configuration TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Configuration cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Configuration_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Configuration(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Configuration>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Configuration_Create();
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetIsFullscreenMode(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetIsFullscreenMode(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetIsResizable(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetIsResizable(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_Release(IntPtr selfPtr);
+        
+        
+        internal Configuration(MemoryHandle handle)
+        {
+            this.selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 全画面モードかどうかを取得または設定する
+        /// </summary>
+        public bool IsFullscreenMode
+        {
+            get
+            {
+                if (_IsFullscreenMode != null)
+                {
+                    return _IsFullscreenMode.Value;
+                }
+                var ret = cbg_Configuration_GetIsFullscreenMode(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _IsFullscreenMode = value;
+                cbg_Configuration_SetIsFullscreenMode(selfPtr, value);
+            }
+        }
+        private bool? _IsFullscreenMode;
+        
+        /// <summary>
+        /// 画面サイズ可変かどうかを取得または設定する
+        /// </summary>
+        public bool IsResizable
+        {
+            get
+            {
+                if (_IsResizable != null)
+                {
+                    return _IsResizable.Value;
+                }
+                var ret = cbg_Configuration_GetIsResizable(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _IsResizable = value;
+                cbg_Configuration_SetIsResizable(selfPtr, value);
+            }
+        }
+        private bool? _IsResizable;
+        
+        public static Configuration Create()
+        {
+            var ret = cbg_Configuration_Create();
+            return Configuration.TryGetFromCache(ret);
+        }
+        
+        ~Configuration()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Configuration_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// C++のCoreとの仲介を担うクラス
     /// </summary>
     public partial class Core
@@ -417,7 +541,7 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, ref CoreOption option);
+        private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, IntPtr config);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -444,11 +568,11 @@ namespace Altseed
         /// <param name="title">ウィンドウの左上に表示されるウィンドウん名</param>
         /// <param name="width">ウィンドウの横幅</param>
         /// <param name="height">ウィンドウの縦幅</param>
-        /// <param name="option">使用するコアのオプション</param>
+        /// <param name="config">初期化時の設定</param>
         /// <returns>初期化処理がうまくいったらtrue，それ以外でfalse</returns>
-        public static bool Initialize(string title, int width, int height, ref CoreOption option)
+        public static bool Initialize(string title, int width, int height, Configuration config)
         {
-            var ret = cbg_Core_Initialize(title, width, height, ref option);
+            var ret = cbg_Core_Initialize(title, width, height, config != null ? config.selfPtr : IntPtr.Zero);
             return ret;
         }
         
@@ -1684,7 +1808,7 @@ namespace Altseed
     /// </summary>
     public partial class StreamFile
     {
-        private static Dictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StreamFile>>();
+        private static ConcurrentDictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StreamFile>>();
         
         internal static StreamFile TryGetFromCache(IntPtr native)
         {
@@ -1701,12 +1825,12 @@ namespace Altseed
                 }
                 else
                 {
-                    cacheRepo.Remove(native);
+                    cacheRepo.TryRemove(native, out _);
                 }
             }
         
             var newObject = new StreamFile(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<StreamFile>(newObject);
+            cacheRepo.TryAdd(native, new WeakReference<StreamFile>(newObject));
             return newObject;
         }
         
@@ -1859,7 +1983,7 @@ namespace Altseed
     /// </summary>
     public partial class StaticFile
     {
-        private static Dictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new Dictionary<IntPtr, WeakReference<StaticFile>>();
+        private static ConcurrentDictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StaticFile>>();
         
         internal static StaticFile TryGetFromCache(IntPtr native)
         {
@@ -1876,12 +2000,12 @@ namespace Altseed
                 }
                 else
                 {
-                    cacheRepo.Remove(native);
+                    cacheRepo.TryRemove(native, out _);
                 }
             }
         
             var newObject = new StaticFile(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<StaticFile>(newObject);
+            cacheRepo.TryAdd(native, new WeakReference<StaticFile>(newObject));
             return newObject;
         }
         
