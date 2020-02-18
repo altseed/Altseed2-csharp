@@ -30,12 +30,6 @@ namespace Altseed
         }
         private readonly static AljectUpdatePriorityComparer priorityComparer;
         internal bool NeededSort { get; set; } = false;
-        private readonly List<Alject> _objects;
-        private readonly List<Alject> addObjects;
-        private readonly List<Alject> removeObjects;
-        private readonly List<SceneComponent> components;
-        private readonly List<SceneComponent> addComponents;
-        private readonly List<SceneComponent> removeComponents;
         /// <summary>
         /// 登録されているオブジェクトを取得する
         /// </summary>
@@ -60,6 +54,61 @@ namespace Altseed
             addComponents = new List<SceneComponent>();
             removeComponents = new List<SceneComponent>();
         }
+        #region ComponentRegister
+        private readonly List<SceneComponent> components;
+        private readonly List<SceneComponent> addComponents;
+        private readonly List<SceneComponent> removeComponents;
+        /// <summary>
+        /// 指定した<see cref="SceneComponent"/>を登録する
+        /// </summary>
+        /// <param name="component">登録するコンポーネント</param>
+        /// <exception cref="ArgumentException"><paramref name="component"/>が既に登録されている又は登録/削除処理待ち，若しくは破棄されている</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
+        /// <remarks>追加されるのはそのフレームの更新処理が終了した後</remarks>
+        public void AddComponent(SceneComponent component)
+        {
+            if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
+            if (component.Status != ObjectStatus.Free) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
+            component.Status = ObjectStatus.WaitAdded;
+            addComponents.Add(component);
+        }
+        /// <summary>
+        /// 指定した<see cref="SceneComponent"/>が登録されているかどうかを返す
+        /// </summary>
+        /// <param name="component">検索する<see cref="SceneComponent"/></param>
+        /// <returns><paramref name="component"/>が登録されていたらtrue，それ以外でfalse</returns>
+        public bool ContainsComponent(SceneComponent component) => component == null ? false : components.Contains(component);
+        /// <summary>
+        /// 指定した<see cref="SceneComponent"/>を登録する
+        /// </summary>
+        /// <param name="component">登録するコンポーネント</param>
+        /// <exception cref="ArgumentException"><paramref name="component"/>が既に削除されている又は登録/削除処理待ち，若しくは破棄されている</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
+        /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
+        public void RemoveComponent(SceneComponent component)
+        {
+            if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));
+            if (component.Status != ObjectStatus.Registered) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
+            component.Status = ObjectStatus.WaitRemoved;
+            removeComponents.Add(component);
+        }
+        private void __AddComponent(SceneComponent component)
+        {
+            component.Owner = this;
+            component.Status = ObjectStatus.Registered;
+        }
+        void IComponentRegisterable<SceneComponent>.__AddComponent(SceneComponent component) => __AddComponent(component);
+        private void __RemoveComponent(SceneComponent component)
+        {
+            component.Owner = null;
+            component.Status = ObjectStatus.Free;
+        }
+        void IComponentRegisterable<SceneComponent>.__RemoveComponent(SceneComponent component) => __RemoveComponent(component);
+        #endregion
+        #region AljectRegister
+        private readonly List<Alject> _objects;
+        private readonly List<Alject> addObjects;
+        private readonly List<Alject> removeObjects;
         /// <summary>
         /// 指定したオブジェクトを登録する
         /// </summary>
@@ -99,48 +148,6 @@ namespace Altseed
             obj.Status = ObjectStatus.WaitRemoved;
             removeObjects.Add(obj);
         }
-        /// <summary>
-        /// 指定した<see cref="SceneComponent"/>を登録する
-        /// </summary>
-        /// <param name="component">登録するコンポーネント</param>
-        /// <exception cref="ArgumentException"><paramref name="component"/>が既に登録されている又は登録/削除処理待ち，若しくは破棄されている</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
-        /// <remarks>追加されるのはそのフレームの更新処理が終了した後</remarks>
-        public void AddComponent(SceneComponent component)
-        {
-            if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
-            if (component.Status != ObjectStatus.Free) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
-            component.Status = ObjectStatus.WaitAdded;
-            addComponents.Add(component);
-        }
-        /// <summary>
-        /// 指定した<see cref="SceneComponent"/>が登録されているかどうかを返す
-        /// </summary>
-        /// <param name="component">検索する<see cref="SceneComponent"/></param>
-        /// <returns><paramref name="component"/>が登録されていたらtrue，それ以外でfalse</returns>
-        public bool ContainsComponent(SceneComponent component) => component == null ? false : components.Contains(component);
-        /// <summary>
-        /// 指定した<see cref="SceneComponent"/>を登録する
-        /// </summary>
-        /// <param name="component">登録するコンポーネント</param>
-        /// <exception cref="ArgumentException"><paramref name="component"/>が既に削除されている又は登録/削除処理待ち，若しくは破棄されている</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
-        /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
-        public void RemoveComponent(SceneComponent component)
-        {
-            if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));
-            if (component.Status != ObjectStatus.Registered) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
-            component.Status = ObjectStatus.WaitRemoved;
-            removeComponents.Add(component);
-        }
-        /// <summary>
-        /// オブジェクトの更新が行われる前に実行
-        /// </summary>
-        protected virtual void OnUpdating() { }
-        /// <summary>
-        /// オブジェクトの更新が行われた後に実行
-        /// </summary>
-        protected virtual void OnUpdated() { }
         private void __AddObject(Alject obj)
         {
             _objects.Add(obj);
@@ -157,6 +164,15 @@ namespace Altseed
             obj.RiaseOnRemoved(raiseEvent);
             NeededSort = true;
         }
+        #endregion
+        /// <summary>
+        /// オブジェクトの更新が行われる前に実行
+        /// </summary>
+        protected virtual void OnUpdating() { }
+        /// <summary>
+        /// オブジェクトの更新が行われた後に実行
+        /// </summary>
+        protected virtual void OnUpdated() { }
         internal void Update()
         {
             foreach (var c in components)
@@ -185,18 +201,6 @@ namespace Altseed
                 NeededSort = false;
             }
         }
-        private void __AddComponent(SceneComponent component)
-        {
-            component.Owner = this;
-            component.Status = ObjectStatus.Registered;
-        }
-        void IComponentRegisterable<SceneComponent>.__AddComponent(SceneComponent component) => __AddComponent(component);
-        private void __RemoveComponent(SceneComponent component)
-        {
-            component.Owner = null;
-            component.Status = ObjectStatus.Free;
-        }
-        void IComponentRegisterable<SceneComponent>.__RemoveComponent(SceneComponent component) => __RemoveComponent(component);
         internal void DoDrawing()
         {
             foreach (var c in _objects) c.DoDrawing();
