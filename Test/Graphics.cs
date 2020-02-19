@@ -19,7 +19,7 @@ namespace Altseed.Test
             var t2 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.jpg");
 
             Assert.NotNull(t1);
-            //Assert.NotNull(t2);
+            Assert.NotNull(t2);
 
             var s1 = RenderedSprite.Create();
             var s2 = RenderedSprite.Create();
@@ -27,8 +27,11 @@ namespace Altseed.Test
             s1.Texture = t1;
             s1.Src = new RectF(0, 0, 128, 128);
 
+            var trans = new Matrix44F();
+            trans.SetTranslation(200, 200, 0);
             s2.Texture = t2;
-            s2.Src = new RectF(0, 0, 64, 64);
+            s2.Transform = trans;
+            s2.Src = new RectF(128, 128, 256, 256);
 
             while (Engine.DoEvents() && count++ < 300)
             {
