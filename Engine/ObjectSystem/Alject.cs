@@ -17,7 +17,7 @@ namespace Altseed
         /// 描画優先度を取得または設定する
         /// </summary>
         /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
-        public int DrawingPriority 
+        public int DrawingPriority
         {
             get => _drawingPriority;
             set
@@ -27,19 +27,23 @@ namespace Altseed
             }
         }
         private int _drawingPriority = 0;
+
         /// <summary>
         /// 描画を実行するかどうかを取得または設定する
         /// </summary>
         public bool IsDrawn { get; set; }
+
         /// <summary>
         /// 更新をするかどうかを取得または設定する
         /// </summary>
         public bool IsUpdated { get; set; }
+
         /// <summary>
         /// 現在所属している<see cref="Altseed.Scene"/>を取得する
         /// </summary>
         public Scene Scene { get; internal set; }
         internal ObjectStatus Status { get; set; }
+
         /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
@@ -52,6 +56,7 @@ namespace Altseed
             removeComponents = new List<AljectComponent>();
             Status = ObjectStatus.Free;
         }
+
         /// <summary>
         /// コンポーネントを予め登録して新しいインスタンスを生成する
         /// </summary>
@@ -61,6 +66,7 @@ namespace Altseed
         {
             this.components.AddRange(components.Distinct() ?? throw new ArgumentNullException("引数がnullです", nameof(components)));
         }
+
         #region ComponentRegister
         private readonly List<AljectComponent> components;
         private readonly List<AljectComponent> addComponents;
@@ -145,18 +151,22 @@ namespace Altseed
                 removeComponents.Clear();
             }
         }
+
         /// <summary>
         /// <see cref="Altseed.Scene"/>に登録されたときの実装
         /// </summary>
         protected virtual void OnAdded() { }
+
         /// <summary>
         /// 更新時に実行される処理
         /// </summary>
         protected virtual void OnUpdate() { }
+
         /// <summary>
         /// <see cref="Altseed.Scene"/>の登録を解除されるときに実行される処理
         /// </summary>
         protected virtual void OnRemoved() { }
+
         internal void DoDrawing()
         {
             foreach (var c in components)
@@ -164,6 +174,7 @@ namespace Altseed
                     d.Draw();
             OnDrawn();
         }
+
         /// <summary>
         /// 描画時に実行
         /// </summary>
