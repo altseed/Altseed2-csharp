@@ -13,9 +13,24 @@ namespace Altseed
     [Serializable]
     public class Alject : IComponentRegisterable<AljectComponent>
     {
-        private readonly List<AljectComponent> components;
-        private readonly List<AljectComponent> addComponents;
-        private readonly List<AljectComponent> removeComponents;
+        /// <summary>
+        /// 描画優先度を取得または設定する
+        /// </summary>
+        /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
+        public int DrawingPriority 
+        {
+            get => _drawingPriority;
+            set
+            {
+                _drawingPriority = value;
+                if (Scene != null) Scene.NeededSort = true;
+            }
+        }
+        private int _drawingPriority = 0;
+        /// <summary>
+        /// 描画を実行するかどうかを取得または設定する
+        /// </summary>
+        public bool IsDrawn { get; set; }
         /// <summary>
         /// 更新をするかどうかを取得または設定する
         /// </summary>
@@ -30,12 +45,26 @@ namespace Altseed
         /// </summary>
         public Alject()
         {
+            IsDrawn = true;
             IsUpdated = true;
             components = new List<AljectComponent>();
             addComponents = new List<AljectComponent>();
             removeComponents = new List<AljectComponent>();
             Status = ObjectStatus.Free;
         }
+        /// <summary>
+        /// コンポーネントを予め登録して新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="components">登録するコンポーネントのコレクション</param>
+        /// <exception cref="ArgumentNullException"><paramref name="components"/>がnull</exception>
+        internal Alject(IEnumerable<AljectComponent> components) : this()
+        {
+            this.components.AddRange(components.Distinct() ?? throw new ArgumentNullException("引数がnullです", nameof(components)));
+        }
+        #region ComponentRegister
+        private readonly List<AljectComponent> components;
+        private readonly List<AljectComponent> addComponents;
+        private readonly List<AljectComponent> removeComponents;
         /// <summary>
         /// 指定した<see cref="AljectComponent"/>を登録する
         /// </summary>
@@ -70,6 +99,21 @@ namespace Altseed
             component.Status = ObjectStatus.WaitRemoved;
             removeComponents.Add(component);
         }
+        private void __AddComponent(AljectComponent component)
+        {
+            component.Owner = this;
+            component.Status = ObjectStatus.Registered;
+            components.Add(component);
+        }
+        void IComponentRegisterable<AljectComponent>.__AddComponent(AljectComponent component) => __AddComponent(component);
+        private void __RemoveComponent(AljectComponent component)
+        {
+            component.Owner = null;
+            component.Status = ObjectStatus.Free;
+            components.Remove(component);
+        }
+        void IComponentRegisterable<AljectComponent>.__RemoveComponent(AljectComponent component) => __RemoveComponent(component);
+        #endregion
         internal void RaiseOnAdded()
         {
             OnAdded();
@@ -113,19 +157,16 @@ namespace Altseed
         /// <see cref="Altseed.Scene"/>の登録を解除されるときに実行される処理
         /// </summary>
         protected virtual void OnRemoved() { }
-        private void __AddComponent(AljectComponent component)
+        internal void DoDrawing()
         {
-            component.Owner = this;
-            component.Status = ObjectStatus.Registered;
-            components.Add(component);
+            foreach (var c in components)
+                if (c is IDrawComponent d)
+                    d.Draw();
+            OnDrawn();
         }
-        void IComponentRegisterable<AljectComponent>.__AddComponent(AljectComponent component) => __AddComponent(component);
-        private void __RemoveComponent(AljectComponent component)
-        {
-            component.Owner = null;
-            component.Status = ObjectStatus.Free;
-            components.Remove(component);
-        }
-        void IComponentRegisterable<AljectComponent>.__RemoveComponent(AljectComponent component) => __RemoveComponent(component);
+        /// <summary>
+        /// 描画時に実行
+        /// </summary>
+        protected virtual void OnDrawn() { }
     }
 }
