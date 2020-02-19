@@ -321,6 +321,8 @@ namespace Altseed
     /// </summary>
     public partial class Easing
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Easing>> cacheRepo = new Dictionary<IntPtr, WeakReference<Easing>>();
         
         internal static Easing TryGetFromCache(IntPtr native)
@@ -348,17 +350,17 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern void cbg_Easing_GetEasing(int easing, float t);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Easing_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Easing(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -389,6 +391,8 @@ namespace Altseed
     /// </summary>
     public partial class Configuration
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Configuration>> cacheRepo = new Dictionary<IntPtr, WeakReference<Configuration>>();
         
         internal static Configuration TryGetFromCache(IntPtr native)
@@ -416,7 +420,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Configuration_Constructor_0();
         
@@ -457,10 +460,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Configuration_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Configuration(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -596,6 +600,8 @@ namespace Altseed
     /// </summary>
     public partial class Core
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
         
         internal static Core TryGetFromCache(IntPtr native)
@@ -623,7 +629,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, IntPtr config);
@@ -641,10 +646,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Core_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Core(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -707,6 +713,8 @@ namespace Altseed
     /// </summary>
     public partial class Int8Array
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
         internal static Int8Array TryGetFromCache(IntPtr native)
@@ -734,17 +742,17 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Int8Array(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -775,6 +783,8 @@ namespace Altseed
     /// </summary>
     public partial class Int32Array
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Int32Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int32Array>>();
         
         internal static Int32Array TryGetFromCache(IntPtr native)
@@ -802,17 +812,17 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Int32Array(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -843,6 +853,8 @@ namespace Altseed
     /// </summary>
     public partial class Resources
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
         
         internal static Resources TryGetFromCache(IntPtr native)
@@ -870,7 +882,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Resources_GetInstance();
         
@@ -886,10 +897,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Resources_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Resources(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -947,6 +959,8 @@ namespace Altseed
     /// </summary>
     public partial class Keyboard
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
         
         internal static Keyboard TryGetFromCache(IntPtr native)
@@ -974,7 +988,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern int cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
         
@@ -984,10 +997,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Keyboard(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1029,6 +1043,8 @@ namespace Altseed
     /// </summary>
     public partial class Mouse
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
         
         internal static Mouse TryGetFromCache(IntPtr native)
@@ -1056,7 +1072,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Mouse_GetInstance();
         
@@ -1081,10 +1096,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Mouse_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Mouse(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1180,6 +1196,8 @@ namespace Altseed
     /// </summary>
     public partial class Joystick
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
         
         internal static Joystick TryGetFromCache(IntPtr native)
@@ -1207,7 +1225,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
@@ -1245,10 +1262,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Joystick(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1388,6 +1406,8 @@ namespace Altseed
     /// </summary>
     public partial class Graphics
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
         
         internal static Graphics TryGetFromCache(IntPtr native)
@@ -1415,7 +1435,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetInstance();
         
@@ -1438,10 +1457,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Graphics(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1514,6 +1534,8 @@ namespace Altseed
     /// </summary>
     public partial class Texture2D
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
         
         internal static Texture2D TryGetFromCache(IntPtr native)
@@ -1541,7 +1563,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Texture2D_Load([MarshalAs(UnmanagedType.LPWStr)] string path);
         
@@ -1556,10 +1577,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Texture2D(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1613,6 +1635,8 @@ namespace Altseed
     /// </summary>
     public partial class Renderer
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Renderer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Renderer>>();
         
         internal static Renderer TryGetFromCache(IntPtr native)
@@ -1640,7 +1664,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Renderer_GetInstance();
         
@@ -1653,10 +1676,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Renderer(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1704,6 +1728,8 @@ namespace Altseed
     /// </summary>
     public partial class CommandList
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<CommandList>> cacheRepo = new Dictionary<IntPtr, WeakReference<CommandList>>();
         
         internal static CommandList TryGetFromCache(IntPtr native)
@@ -1731,17 +1757,17 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_SetRenderTargetWithScreen(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal CommandList(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1765,11 +1791,67 @@ namespace Altseed
         }
     }
     
+    public partial class Rendered
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Rendered>> cacheRepo = new Dictionary<IntPtr, WeakReference<Rendered>>();
+        
+        internal static Rendered TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Rendered cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Rendered_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Rendered(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Rendered>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Rendered_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Rendered(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        ~Rendered()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Rendered_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// スプライトのクラス
     /// </summary>
-    public partial class RenderedSprite
+    public partial class RenderedSprite : Rendered
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<RenderedSprite>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedSprite>>();
         
         internal static RenderedSprite TryGetFromCache(IntPtr native)
@@ -1796,8 +1878,6 @@ namespace Altseed
             return newObject;
         }
         
-        internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_RenderedSprite_Create();
         
@@ -1814,12 +1894,19 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_RenderedSprite_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
+        #endregion
         
-        internal RenderedSprite(MemoryHandle handle)
+        internal RenderedSprite(MemoryHandle handle) : base(handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -1867,6 +1954,28 @@ namespace Altseed
         private RectF? _Src;
         
         /// <summary>
+        /// 変換行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get
+            {
+                if (_Transform != null)
+                {
+                    return _Transform.Value;
+                }
+                var ret = cbg_RenderedSprite_GetTransform(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Transform = value;
+                cbg_RenderedSprite_SetTransform(selfPtr, ref value);
+            }
+        }
+        private Matrix44F? _Transform;
+        
+        /// <summary>
         /// スプライトを作成します。
         /// </summary>
         public static RenderedSprite Create()
@@ -1889,10 +1998,68 @@ namespace Altseed
     }
     
     /// <summary>
+    /// カメラのクラス
+    /// </summary>
+    public partial class RenderedCamera : Rendered
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
+        
+        internal static RenderedCamera TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderedCamera cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderedCamera_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderedCamera(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderedCamera>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedCamera_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal RenderedCamera(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        ~RenderedCamera()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderedCamera_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// 段階的にファイルを読み取るクラス
     /// </summary>
     public partial class StreamFile
     {
+        #region unmanaged
+        
         private static ConcurrentDictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StreamFile>>();
         
         internal static StreamFile TryGetFromCache(IntPtr native)
@@ -1920,7 +2087,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StreamFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
@@ -1954,10 +2120,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal StreamFile(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -2068,6 +2235,8 @@ namespace Altseed
     /// </summary>
     public partial class StaticFile
     {
+        #region unmanaged
+        
         private static ConcurrentDictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StaticFile>>();
         
         internal static StaticFile TryGetFromCache(IntPtr native)
@@ -2095,7 +2264,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_StaticFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
@@ -2122,10 +2290,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal StaticFile(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -2213,6 +2382,8 @@ namespace Altseed
     /// </summary>
     public partial class File
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
         
         internal static File TryGetFromCache(IntPtr native)
@@ -2240,7 +2411,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_File_GetInstance();
         
@@ -2274,10 +2444,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_File_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal File(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -2386,6 +2557,8 @@ namespace Altseed
     /// </summary>
     public partial class Sound
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Sound>> cacheRepo = new Dictionary<IntPtr, WeakReference<Sound>>();
         
         internal static Sound TryGetFromCache(IntPtr native)
@@ -2413,7 +2586,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
@@ -2440,10 +2612,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Sound_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Sound(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
@@ -2539,6 +2712,8 @@ namespace Altseed
     
     public partial class SoundMixer
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<SoundMixer>> cacheRepo = new Dictionary<IntPtr, WeakReference<SoundMixer>>();
         
         internal static SoundMixer TryGetFromCache(IntPtr native)
@@ -2566,7 +2741,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_SoundMixer_GetInstance();
         
@@ -2632,10 +2806,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal SoundMixer(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         internal static SoundMixer GetInstance()
@@ -2764,6 +2939,8 @@ namespace Altseed
     /// </summary>
     public partial class Log
     {
+        #region unmanaged
+        
         private static Dictionary<IntPtr, WeakReference<Log>> cacheRepo = new Dictionary<IntPtr, WeakReference<Log>>();
         
         internal static Log TryGetFromCache(IntPtr native)
@@ -2791,7 +2968,6 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Log_GetInstance();
         
@@ -2822,10 +2998,11 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern void cbg_Log_Release(IntPtr selfPtr);
         
+        #endregion
         
         internal Log(MemoryHandle handle)
         {
-            this.selfPtr = handle.selfPtr;
+            selfPtr = handle.selfPtr;
         }
         
         /// <summary>
