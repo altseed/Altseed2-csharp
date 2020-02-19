@@ -2571,7 +2571,7 @@ namespace Altseed
         private static extern IntPtr cbg_SoundMixer_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_SoundMixer_CreateSound(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
+        private static extern IntPtr cbg_SoundMixer_Load(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_SoundMixer_Play(IntPtr selfPtr, IntPtr sound);
@@ -2644,9 +2644,9 @@ namespace Altseed
             return SoundMixer.TryGetFromCache(ret);
         }
         
-        public Sound CreateSound(string path, bool isDecompressed)
+        public Sound Load(string path, bool isDecompressed)
         {
-            var ret = cbg_SoundMixer_CreateSound(selfPtr, path, isDecompressed);
+            var ret = cbg_SoundMixer_Load(selfPtr, path, isDecompressed);
             return Sound.TryGetFromCache(ret);
         }
         

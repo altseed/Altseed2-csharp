@@ -13,8 +13,8 @@ namespace Altseed.Test
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
-            var s1 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/bgm1.ogg", false);
-            var s2 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/se1.wav", true);
+            var s1 = Engine.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
+            var s2 = Engine.Sound.Load(@"../../Core/TestData/Sound/se1.wav", true);
 
             Assert.NotNull(s1);
             Assert.NotNull(s2);
@@ -37,7 +37,7 @@ namespace Altseed.Test
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
-            var s1 = Engine.Sound.CreateSound(@"../../Core/TestData/Sound/bgm1.ogg", false);
+            var s1 = Engine.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(s1);
 
             s1.IsLoopingMode = true;
