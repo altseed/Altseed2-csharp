@@ -16,13 +16,9 @@
 
 ### コアの取得
 
-`git submodule update --init --recursive` を実行して、サブモジュールを更新します。
+- Windows の場合： `Scripts/Pull.bat` を実行します。
 
-もしくは
-
-`TortoiseGit` -> `Submodule Update...` -> `OK`
-このとき、
-`Core` が選択されており、 `Initialize submodules` `Recursive` にだけチェックが入っていることを確認する。
+- macOS の場合： `git submodule update --init` を実行して、サブモジュールを更新します。
 
 ### コアをビルド
 
