@@ -3,7 +3,7 @@ using System;
 namespace Altseed
 {
     [Serializable]
-    internal enum SceneStatus : byte
+    internal enum SceneStatus : int
     {
         /// <summary>
         /// –¢“o˜^
