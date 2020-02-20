@@ -57,6 +57,7 @@ namespace Altseed
         {
             IsDrawn = true;
             IsUpdated = true;
+            IsInherited = false;
             components = new List<AljectComponent>();
             addComponents = new List<AljectComponent>();
             removeComponents = new List<AljectComponent>();

@@ -160,12 +160,14 @@ namespace Altseed.Test
             Assert.True(Engine.Initialize("ObjectSystem Test", 800, 600, new Configuration()));
 
             var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture2 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.jpg");
 
             var scene = Engine.CurrentScene;
 
             var obj1 = new Alject()
             {
-                IsInherited = true
+                IsInherited = true,
+                DrawingPriority = 1
             };
 
             var tr = new Matrix44F();
@@ -179,12 +181,15 @@ namespace Altseed.Test
             obj1.AddComponent(comp1);
             scene.AddObject(obj1);
 
-            var obj2 = new Alject();
+            var obj2 = new Alject()
+            {
+                DrawingPriority = 2
+            };
             tr = new Matrix44F();
             tr.SetTranslation(200, 200, 0);
             var comp2 = new TextureComponent()
             {
-                Texture = texture,
+                Texture = texture2,
                 Src = new RectF(100, 100, 200, 200),
                 Transform = tr,
             };
@@ -203,13 +208,13 @@ namespace Altseed.Test
                 cmdList.SetRenderTargetWithScreen();
                 Engine.Renderer.Render(cmdList);
 
-                Assert.True(Engine.Graphics.EndFrame());
-
                 if (count == 400)
                 {
                     Listener.WriteLine("Changed");
                     Engine.ChangeScene(new Scene());
                 }
+
+                Assert.True(Engine.Graphics.EndFrame());
 
                 if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
 
