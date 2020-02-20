@@ -97,7 +97,7 @@ namespace Altseed.Test
 
             Engine.Terminate();
         }
-        public sealed class TaggedObject : Alject
+        private sealed class TaggedObject : Alject
         {
             public string Tag
             {
@@ -109,6 +109,46 @@ namespace Altseed.Test
             {
                 Listener.WriteLine(Tag);
             }
+        }
+        [Test, Apartment(ApartmentState.STA)]
+        public void SceneChange()
+        {
+            Assert.True(Engine.Initialize("ObjectSystem Test", 800, 600, new Configuration()));
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var count = 0;
+
+            while (Engine.DoEvents())
+            {
+
+                Engine.Update();
+
+                if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Push) Engine.ChangeScene(new TaggedScene(count.ToString()));
+
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
+
+                count++;
+            }
+
+            Engine.Terminate();
+        }
+        private sealed class TaggedScene : Scene
+        {
+            public string Tag { get => _tag; set => _tag = value ?? throw new ArgumentNullException(); }
+            private string _tag;
+            public TaggedScene(string tag)
+            {
+                Tag = tag;
+            }
+            protected override void OnRegistered() => Listener.WriteLine($"{Tag}-Registered-3");
+            protected override void OnStartUpdating() => Listener.WriteLine($"{Tag}-StartUpdate-2");
+            protected override void OnStopUpdating() => Listener.WriteLine($"{Tag}-StopUpdate-6");
+            protected override void OnTransitionBegin() => Listener.WriteLine($"{Tag}-TransitionBegin-1");
+            protected override void OnTransitionFinished() => Listener.WriteLine($"{Tag}-TransitionFinish-7");
+            protected override void OnUnRegistered() => Listener.WriteLine($"{Tag}-UnRegistered-5");
+            protected override void OnUpdated() => Listener.WriteLine($"{Tag}-Update-4");
         }
     }
 }

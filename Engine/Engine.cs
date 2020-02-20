@@ -38,6 +38,7 @@ namespace Altseed
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
                 Sound = SoundMixer.GetInstance();
+                Log = Log.GetInstance();
                 Resources = Resources.GetInstance();
                 CurrentScene = new Scene();
                 return true;
@@ -78,7 +79,7 @@ namespace Altseed
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        internal static void ChangeScene(Scene nextScene)
+        public static void ChangeScene(Scene nextScene)
         {
             StartSceneChange(nextScene);
             OnFadeOutFinished();
@@ -173,6 +174,11 @@ namespace Altseed
         /// グラフィックのクラスを取得する
         /// </summary>
         public static Graphics Graphics { get; private set; }
+
+        /// <summary>
+        /// ログを管理するクラスを取得する
+        /// </summary>
+        public static Log Log { get; private set; }
 
         /// <summary>
         /// レンダラのクラスを取得する
