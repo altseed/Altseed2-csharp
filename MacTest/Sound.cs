@@ -8,8 +8,8 @@ namespace MacTest
         {
             Engine.Initialize("SoundTest Play", 640, 480);
 
-            Sound bgm = Engine.Sound.Load("./TestData/Sound/bgm1.ogg", false);
-            Sound se = Engine.Sound.Load("./TestData/Sound/se1.wav", true);
+            Sound bgm = Engine.Sound.Load(@"../Core/TestData/Sound/bgm1.ogg", false);
+            Sound se = Engine.Sound.Load(@"../Core/TestData/Sound/se1.wav", true);
 
             int bgm_id = Engine.Sound.Play(bgm);
             int se_id = Engine.Sound.Play(se);
