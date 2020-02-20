@@ -30,6 +30,7 @@ namespace Altseed
         }
         private readonly static AljectDrawingPriorityComparer priorityComparer;
         internal bool NeededSort { get; set; } = false;
+        internal SceneStatus Status { get; set; }
         /// <summary>
         /// 登録されているオブジェクトを取得する
         /// </summary>
@@ -54,6 +55,7 @@ namespace Altseed
             addComponents = new List<SceneComponent>();
             removeComponents = new List<SceneComponent>();
         }
+
         #region ComponentRegister
         private readonly List<SceneComponent> components;
         private readonly List<SceneComponent> addComponents;
@@ -105,6 +107,7 @@ namespace Altseed
         }
         void IComponentRegisterable<SceneComponent>.__RemoveComponent(SceneComponent component) => __RemoveComponent(component);
         #endregion
+
         #region AljectRegister
         private readonly List<Alject> _objects;
         private readonly List<Alject> addObjects;
@@ -165,6 +168,20 @@ namespace Altseed
             NeededSort = true;
         }
         #endregion
+
+        /// <summary>
+        /// シーンが登録されたときに実行
+        /// </summary>
+        protected virtual void OnRegistered() { }
+        /// <summary>
+        /// 更新対象になったときに1度だけ実行
+        /// </summary>
+        protected virtual void OnStartUpdating() { }
+        /// <summary>
+        /// シーン推移完了時に実行
+        /// </summary>
+        protected virtual void OnTransitionFinished() { }
+
         /// <summary>
         /// オブジェクトの更新が行われる前に実行
         /// </summary>
@@ -173,6 +190,56 @@ namespace Altseed
         /// オブジェクトの更新が行われた後に実行
         /// </summary>
         protected virtual void OnUpdated() { }
+
+        /// <summary>
+        /// シーン推移開始時に実行
+        /// </summary>
+        protected virtual void OnTransitionBegin() { }
+        /// <summary>
+        /// 更新対象から外れた時に1度だけ実行
+        /// </summary>
+        protected virtual void OnStopUpdating() { }
+        /// <summary>
+        /// シーンの登録が解除されるときに実行
+        /// </summary>
+        protected virtual void OnUnRegistered() { }
+
+        internal void RaiseOnRegistered()
+        {
+            Status = SceneStatus.FadingIn;
+            OnRegistered();
+        }
+
+        internal void RaiseOnStartUpdating()
+        {
+            Status = SceneStatus.StartUpdating;
+            OnStartUpdating();
+        }
+
+        internal void RaiseOnStopUpdating()
+        {
+            Status = SceneStatus.StopUpdating;
+            OnStopUpdating();
+        }
+
+        internal void RaiseOnTransitionBegin()
+        {
+            Status = SceneStatus.FadingOut;
+            OnTransitionBegin();
+        }
+
+        internal void RaiseOnTransitionFinished()
+        {
+            Status = SceneStatus.Updated;
+            OnTransitionFinished();
+        }
+
+        internal void RaiseOnUnRegistered()
+        {
+            Status = SceneStatus.Free;
+            OnUnRegistered();
+        }
+
         internal void Update()
         {
             foreach (var c in components)
@@ -201,9 +268,19 @@ namespace Altseed
                 NeededSort = false;
             }
         }
+
         internal void DoDrawing()
         {
             foreach (var o in _objects) o.DoDrawing();
+        }
+
+        internal static void InheritObjects(Scene oldScene, Scene nextScene)
+        {
+            if (oldScene == null || nextScene == null) throw new ArgumentNullException("シーンがnullです");
+
+            var objects = oldScene._objects.FindAll(x => x.IsInherited);
+            oldScene._objects.Clear();
+            nextScene._objects.AddRange(objects);
         }
     }
 }
