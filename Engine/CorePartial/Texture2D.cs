@@ -52,10 +52,10 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 指定パスからファイルを読み込む
+        /// 指定パスからテクスチャを読み込む
         /// </summary>
-        /// <param name="path">読み込むファイルのパス</param>
-        /// <param name="result"><paramref name="path"/>をパスに持つファイルのデータを格納した<see cref="Texture2D"/>の新しいインスタンス 読み込めなかったらnull</param>
+        /// <param name="path">読み込むテクスチャのパス</param>
+        /// <param name="result"><paramref name="path"/>をパスに持つテクスチャのデータを格納した<see cref="Texture2D"/>の新しいインスタンス 読み込めなかったらnull</param>
         /// <returns><paramref name="result"/>を正常に読み込めたらtrue，それ以外でfalse</returns>
         public static bool TryLoad(string path, out Texture2D result)
         {
