@@ -40,7 +40,10 @@ namespace Altseed
                 Sound = SoundMixer.GetInstance();
                 Log = Log.GetInstance();
                 Resources = Resources.GetInstance();
-                CurrentScene = new Scene();
+                CurrentScene = new Scene()
+                {
+                    Status = SceneStatus.Updated
+                };
                 return true;
             }
             return false;
@@ -79,6 +82,7 @@ namespace Altseed
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
         public static void ChangeScene(Scene nextScene)
         {
             StartSceneChange(nextScene);
@@ -91,9 +95,15 @@ namespace Altseed
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
         public static void ChangeSceneWithTransition(Scene nextScene)
         {
             StartSceneChange(nextScene);
+            // 
+            // 未実装
+            // ToDo:描画処理のトリガー引き
+            //
+            throw new NotImplementedException("このメソッドは未だ実装中です");
         }
 
         /*
@@ -113,9 +123,11 @@ namespace Altseed
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
         internal static void StartSceneChange(Scene nextScene)
         {
             if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
+            if (!(CurrentScene.Status == SceneStatus.Updated || CurrentScene.Status == SceneStatus.WaitDisposed || CurrentScene.Status == SceneStatus.Disposed)) throw new InvalidOleVariantTypeException("シーン変更処理中です");
             CurrentScene.RaiseOnTransitionBegin();
             nextScene.RaiseOnRegistered();
             NextScene = nextScene;

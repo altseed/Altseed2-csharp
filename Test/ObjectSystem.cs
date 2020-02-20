@@ -115,15 +115,19 @@ namespace Altseed.Test
         {
             Assert.True(Engine.Initialize("ObjectSystem Test", 800, 600, new Configuration()));
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
-            Assert.NotNull(texture);
-
             var count = 0;
 
             while (Engine.DoEvents())
             {
+                Assert.True(Engine.Graphics.BeginFrame());
 
                 Engine.Update();
+
+                var cmdList = Engine.Graphics.CommandList;
+                cmdList.SetRenderTargetWithScreen();
+                Engine.Renderer.Render(cmdList);
+
+                Assert.True(Engine.Graphics.EndFrame());
 
                 if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Push) Engine.ChangeScene(new TaggedScene(count.ToString()));
 
@@ -142,12 +146,12 @@ namespace Altseed.Test
             {
                 Tag = tag;
             }
-            protected override void OnRegistered() => Listener.WriteLine($"{Tag}-Registered-3");
+            protected override void OnRegistered() => Listener.WriteLine($"{Tag}-Registered-1");
             protected override void OnStartUpdating() => Listener.WriteLine($"{Tag}-StartUpdate-2");
             protected override void OnStopUpdating() => Listener.WriteLine($"{Tag}-StopUpdate-6");
-            protected override void OnTransitionBegin() => Listener.WriteLine($"{Tag}-TransitionBegin-1");
-            protected override void OnTransitionFinished() => Listener.WriteLine($"{Tag}-TransitionFinish-7");
-            protected override void OnUnRegistered() => Listener.WriteLine($"{Tag}-UnRegistered-5");
+            protected override void OnTransitionBegin() => Listener.WriteLine($"{Tag}-TransitionBegin-5");
+            protected override void OnTransitionFinished() => Listener.WriteLine($"{Tag}-TransitionFinish-3");
+            protected override void OnUnRegistered() => Listener.WriteLine($"{Tag}-UnRegistered-7");
             protected override void OnUpdated() => Listener.WriteLine($"{Tag}-Update-4");
         }
     }

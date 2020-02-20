@@ -30,7 +30,7 @@ namespace Altseed
         }
         private readonly static AljectDrawingPriorityComparer priorityComparer;
         internal bool NeededSort { get; set; } = false;
-        internal SceneStatus Status { get; private set; }
+        internal SceneStatus Status { get; set; }
         /// <summary>
         /// 登録されているオブジェクトを取得する
         /// </summary>
