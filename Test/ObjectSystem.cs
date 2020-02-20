@@ -97,6 +97,7 @@ namespace Altseed.Test
 
             Engine.Terminate();
         }
+
         private sealed class TaggedObject : Alject
         {
             public string Tag
@@ -110,6 +111,7 @@ namespace Altseed.Test
                 Listener.WriteLine(Tag);
             }
         }
+
         [Test, Apartment(ApartmentState.STA)]
         public void SceneChange()
         {
@@ -138,6 +140,7 @@ namespace Altseed.Test
 
             Engine.Terminate();
         }
+
         private sealed class TaggedScene : Scene
         {
             public string Tag { get => _tag; set => _tag = value ?? throw new ArgumentNullException(); }
@@ -154,6 +157,7 @@ namespace Altseed.Test
             protected override void OnUnRegistered() => Listener.WriteLine($"{Tag}-UnRegistered-7");
             protected override void OnUpdated() => Listener.WriteLine($"{Tag}-Update-4");
         }
+
         [Test, Apartment(ApartmentState.STA)]
         public void ObjectInherit()
         {
