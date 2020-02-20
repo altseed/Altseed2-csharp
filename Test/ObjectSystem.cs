@@ -154,5 +154,69 @@ namespace Altseed.Test
             protected override void OnUnRegistered() => Listener.WriteLine($"{Tag}-UnRegistered-7");
             protected override void OnUpdated() => Listener.WriteLine($"{Tag}-Update-4");
         }
+        [Test, Apartment(ApartmentState.STA)]
+        public void ObjectInherit()
+        {
+            Assert.True(Engine.Initialize("ObjectSystem Test", 800, 600, new Configuration()));
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+
+            var scene = Engine.CurrentScene;
+
+            var obj1 = new Alject()
+            {
+                IsInherited = true
+            };
+
+            var tr = new Matrix44F();
+            tr.SetTranslation(0, 0, 0);
+            var comp1 = new TextureComponent()
+            {
+                Texture = texture,
+                Src = new RectF(200, 0, 200, 200),
+                Transform = tr,
+            };
+            obj1.AddComponent(comp1);
+            scene.AddObject(obj1);
+
+            var obj2 = new Alject();
+            tr = new Matrix44F();
+            tr.SetTranslation(200, 200, 0);
+            var comp2 = new TextureComponent()
+            {
+                Texture = texture,
+                Src = new RectF(100, 100, 200, 200),
+                Transform = tr,
+            };
+            obj2.AddComponent(comp2);
+            scene.AddObject(obj2);
+
+            var count = 0;
+
+            while (Engine.DoEvents())
+            {
+                Assert.True(Engine.Graphics.BeginFrame());
+
+                Engine.Update();
+
+                var cmdList = Engine.Graphics.CommandList;
+                cmdList.SetRenderTargetWithScreen();
+                Engine.Renderer.Render(cmdList);
+
+                Assert.True(Engine.Graphics.EndFrame());
+
+                if (count == 400)
+                {
+                    Listener.WriteLine("Changed");
+                    Engine.ChangeScene(new Scene());
+                }
+
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
+
+                count++;
+            }
+
+            Engine.Terminate();
+        }
     }
 }
