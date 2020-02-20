@@ -51,6 +51,8 @@ namespace Altseed
 
 		public override string ToString() => $"({X}, {Y}, {Z})";
 
+		public Vector3I To3I() => new Vector3I((int)X, (int)Y, (int)Z);
+
 		/// <summary>
 		/// ベクトルの長さの二乗を取得する。
 		/// </summary>
