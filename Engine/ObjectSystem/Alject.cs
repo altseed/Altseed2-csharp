@@ -34,6 +34,11 @@ namespace Altseed
         public bool IsDrawn { get; set; }
 
         /// <summary>
+        /// シーンが変更されても次のシーンへ引き継がれるかどうかを取得または設定する
+        /// </summary>
+        public bool IsInherited { get; set; }
+
+        /// <summary>
         /// 更新をするかどうかを取得または設定する
         /// </summary>
         public bool IsUpdated { get; set; }
@@ -42,6 +47,7 @@ namespace Altseed
         /// 現在所属している<see cref="Altseed.Scene"/>を取得する
         /// </summary>
         public Scene Scene { get; internal set; }
+
         internal ObjectStatus Status { get; set; }
 
         /// <summary>
