@@ -183,10 +183,10 @@ namespace Altseed
             {
                 for (int j = 0; j < 3; ++j)
                 {
-                    result.Values[i,j] = 0;
+                    result.Values[i, j] = 0;
                     for (int k = 0; k < 3; ++k)
                     {
-                        result.Values[i,j] += left.Values[i,k] * right.Values[k,j];
+                        result.Values[i, j] += left.Values[i, k] * right.Values[k, j];
                     }
                 }
             }
