@@ -80,17 +80,9 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
         internal static void ChangeScene(Scene nextScene)
         {
-            if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
-            CurrentScene.RaiseOnTransitionBegin();
-            nextScene.RaiseOnRegistered();
-
-            CurrentScene.RaiseOnStopUpdating();
-            Scene.InheritObjects(CurrentScene, nextScene);
-            nextScene.RaiseOnStartUpdating();
-
-            CurrentScene.RaiseOnUnRegistered();
-            nextScene.RaiseOnTransitionFinished();
-            CurrentScene = nextScene;
+            StartSceneChange(nextScene);
+            OnFadeOutFinished();
+            OnFadeInFinished();
         }
 
         /// <summary>
@@ -100,10 +92,7 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
         public static void ChangeSceneWithTransition(Scene nextScene)
         {
-            if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
-            CurrentScene.RaiseOnTransitionBegin();
-            nextScene.RaiseOnRegistered();
-            NextScene = nextScene;
+            StartSceneChange(nextScene);
         }
 
         /*
@@ -113,7 +102,23 @@ namespace Altseed
          * の順で呼び出されるのを想定
          * 
          * SceneのOn〇〇メソッドの呼び出しは初代の物を参考に
+         * 
+         * シーン遷移処理(描画)は主にChangeSceneWithTransition - OnFadeOutfinishedの間でやる想定
          */
+
+        //ここでNextSceneを設定
+        /// <summary>
+        /// シーンチェンジを開始する
+        /// </summary>
+        /// <param name="nextScene">変更先のシーン</param>
+        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        internal static void StartSceneChange(Scene nextScene)
+        {
+            if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
+            CurrentScene.RaiseOnTransitionBegin();
+            nextScene.RaiseOnRegistered();
+            NextScene = nextScene;
+        }
 
         //ここで {Alject.IsInherited = true} のオブジェクトの引継ぎが発生
         /// <summary>
