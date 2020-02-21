@@ -22,9 +22,9 @@ namespace Altseed
         {
             var path = info.GetString(S_Path);
 
-            var ptr = Engine.Sound.CreateSound(path, isDecompressed);
+            var ptr = cbg_Sound_Load(path, isDecompressed);
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-            
+
             selfPtr = ptr;
             if (cacheRepo.ContainsKey(selfPtr)) cacheRepo.Add(selfPtr, new WeakReference<Sound>(this));
 
@@ -50,7 +50,7 @@ namespace Altseed
         {
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            var result = Engine.Sound.Load(path, isDecompressed) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
+            var result = Sound.Load(path, isDecompressed) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
             result.path = path;
             result.isDecompressed = isDecompressed;
             return result;
@@ -66,7 +66,7 @@ namespace Altseed
         public static bool TryLoad(string path, bool isDecompressed, out Sound result)
         {
             var ex = IOHelper.CheckLoadPath(path);
-            if (ex == null && (result = Engine.Sound.Load(path, isDecompressed)) != null)
+            if (ex == null && (result = Sound.Load(path, isDecompressed)) != null)
             {
                 result.path = path;
                 result.isDecompressed = isDecompressed;
@@ -86,9 +86,5 @@ namespace Altseed
             info.AddValue(S_LoopEndPoint, LoopEndPoint);
             info.AddValue(S_IsLoopingMode, IsLoopingMode);
         }
-    }
-    public partial class SoundMixer
-    {
-        internal IntPtr CreateSound(string path, bool isDecompressed) => cbg_SoundMixer_Load(selfPtr, path, isDecompressed);
     }
 }
