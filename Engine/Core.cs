@@ -746,6 +746,10 @@ namespace Altseed
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -753,6 +757,18 @@ namespace Altseed
         internal Int8Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 配列の大きさを取得する
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Int8Array_GetCount(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
@@ -816,6 +832,10 @@ namespace Altseed
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Int32Array_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -823,6 +843,18 @@ namespace Altseed
         internal Int32Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 配列の大きさを取得する
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Int32Array_GetCount(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
