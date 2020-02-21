@@ -28,7 +28,8 @@ namespace Altseed
         {
             if (array == null) throw new ArgumentNullException("引数がnullです", nameof(array));
 
-            var result = new Int32Array(new MemoryHandle(IntPtr.Zero));
+            var size = Marshal.SizeOf(default(int)) * array.Length;
+            var result = new Int32Array(new MemoryHandle(new IntPtr(size)));
 
             Marshal.Copy(array, 0, result.selfPtr, array.Length);
 
