@@ -14,8 +14,6 @@ namespace Altseed
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector3F : IEquatable<Vector3F>
     {
-        private static Vector3F zero = new Vector3F();
-
         /// <summary>
         /// X成分
         /// </summary>
@@ -252,7 +250,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector3F f && Equals(f);
+        public override bool Equals(object obj) => obj is Vector3F v ? Equals(v) : false;
 
         /// <summary>
         /// 2つの<see cref="Vector3F"/>間の等価性を判定する
@@ -276,7 +274,7 @@ namespace Altseed
         /// <returns>このオブジェクトのハッシュコード</returns>
         public override int GetHashCode()
         {
-            var hashCode = -1843799377;
+            var hashCode = 1861411795;
             hashCode = hashCode * -1521134295 + X.GetHashCode();
             hashCode = hashCode * -1521134295 + Y.GetHashCode();
             hashCode = hashCode * -1521134295 + Z.GetHashCode();

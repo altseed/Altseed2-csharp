@@ -14,8 +14,6 @@ namespace Altseed
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Vector3I : IEquatable<Vector3I>
 	{
-		private static Vector3I zero = new Vector3I();
-
 		/// <summary>
 		/// X成分
 		/// </summary>
