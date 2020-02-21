@@ -229,7 +229,7 @@ namespace Altseed
             {
                 for (int k = 0; k < 3; ++k)
                 {
-                    elements[i] += left.Values[i,k] * rop[k];
+                    elements[i] += left.Values[i, k] * rop[k];
                 }
             }
 
