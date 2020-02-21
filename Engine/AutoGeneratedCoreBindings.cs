@@ -317,76 +317,6 @@ namespace Altseed
     }
     
     /// <summary>
-    /// イージングのクラス
-    /// </summary>
-    public partial class Easing
-    {
-        #region unmanaged
-        
-        private static Dictionary<IntPtr, WeakReference<Easing>> cacheRepo = new Dictionary<IntPtr, WeakReference<Easing>>();
-        
-        internal static Easing TryGetFromCache(IntPtr native)
-        {
-            if(native == IntPtr.Zero) return null;
-        
-            if(cacheRepo.ContainsKey(native))
-            {
-                Easing cacheRet;
-                cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
-                {
-                    cbg_Easing_Release(native);
-                    return cacheRet;
-                }
-                else
-                {
-                    cacheRepo.Remove(native);
-                }
-            }
-        
-            var newObject = new Easing(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Easing>(newObject);
-            return newObject;
-        }
-        
-        internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Easing_GetEasing(int easing, float t);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Easing_Release(IntPtr selfPtr);
-        
-        #endregion
-        
-        internal Easing(MemoryHandle handle)
-        {
-            selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="easing"></param>
-        /// <param name="t"></param>
-        public static void GetEasing(EasingType easing, float t)
-        {
-            cbg_Easing_GetEasing((int)easing, t);
-        }
-        
-        ~Easing()
-        {
-            lock (this) 
-            {
-                if (selfPtr != IntPtr.Zero)
-                {
-                    cbg_Easing_Release(selfPtr);
-                    selfPtr = IntPtr.Zero;
-                }
-            }
-        }
-    }
-    
-    /// <summary>
     /// Coreを初期化する際の設定を保持すクラス
     /// </summary>
     public partial class Configuration
@@ -746,6 +676,10 @@ namespace Altseed
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -753,6 +687,18 @@ namespace Altseed
         internal Int8Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Int8Array_GetCount(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
@@ -816,6 +762,10 @@ namespace Altseed
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Int32Array_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -823,6 +773,18 @@ namespace Altseed
         internal Int32Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Int32Array_GetCount(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
