@@ -193,5 +193,22 @@ namespace Altseed
 
             return result;
         }
+
+
+        public static Vector3F operator *(Matrix33F left, Vector3F right)
+        {
+            float[] elements = { 0, 0, 0 };
+            float[] rop = { right.X, right.Y, right.Z };
+
+            for (int i = 0; i < 3; ++i)
+            {
+                for (int k = 0; k < 3; ++k)
+                {
+                    elements[i] += left.Values[i,k] * rop[k];
+                }
+            }
+
+            return new Vector3F(elements[0], elements[1], elements[2]);
+        }
     }
 }
