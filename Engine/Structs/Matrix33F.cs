@@ -175,6 +175,31 @@ namespace Altseed
             o.Y = values[1];
             return o;
         }
+
+        /// <summary>
+        /// 行列でベクトルを変形させる。
+        /// </summary>
+        /// <param name="in_">変形前ベクトル</param>
+        /// <returns>変形後ベクトル</returns>
+        Vector3F Transform3D(Vector3F in_)
+        {
+            float[] values = new float[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                values[i] = 0;
+                values[i] += in_.X * Values[i, 0];
+                values[i] += in_.Y * Values[i, 1];
+                values[i] += in_.Z * Values[i, 2];
+            }
+
+            Vector3F o;
+            o.X = values[0];
+            o.Y = values[1];
+            o.Z = values[2];
+            return o;
+        }
+
         public static Matrix33F operator *(Matrix33F left, Matrix33F right)
         {
             Matrix33F result = new Matrix33F();

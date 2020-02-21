@@ -27,11 +27,11 @@ namespace Altseed
 
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
-                    Values[i, j] = 0.0f;
+                    Values[i, j] = 0;
 
-            Values[0, 0] = 1.0f;
-            Values[1, 1] = 1.0f;
-            Values[2, 2] = 1.0f;
+            Values[0, 0] = 1;
+            Values[1, 1] = 1;
+            Values[2, 2] = 1;
         }
 
         /// <summary>
@@ -97,6 +97,33 @@ namespace Altseed
             o.Y = values[1];
             return o;
         }
+
+        /// <summary>
+        /// 行列でベクトルを変形させる。
+        /// </summary>
+        /// <param name="in_">変形前ベクトル</param>
+        /// <returns>変形後ベクトル</returns>
+        Vector3I Transform3D(Vector3I in_)
+        {
+            int[] values = new int[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                values[i] = 0;
+                values[i] += in_.X * Values[i, 0];
+                values[i] += in_.Y * Values[i, 1];
+                values[i] += in_.Z * Values[i, 2];
+            }
+
+            Vector3I o;
+            o.X = values[0];
+            o.Y = values[1];
+            o.Z = values[2];
+            return o;
+        }
+
+
+
         public static Matrix33I operator *(Matrix33I left, Matrix33I right)
         {
             Matrix33I result = new Matrix33I();
