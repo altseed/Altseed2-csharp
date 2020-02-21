@@ -75,19 +75,19 @@ namespace Altseed
             int wy = w * y;
             int wz = w * z;
 
-            Values[0, 0] = 1- 2* (yy + zz);
-            Values[0, 1] = 2* (xy - wz);
-            Values[0, 2] = 2* (xz + wy);
+            Values[0, 0] = 1 - 2 * (yy + zz);
+            Values[0, 1] = 2 * (xy - wz);
+            Values[0, 2] = 2 * (xz + wy);
             Values[0, 3] = 0;
 
-            Values[1, 0] = 2* (xy + wz);
-            Values[1, 1] = 1- 2* (xx + zz);
-            Values[1, 2] = 2* (yz - wx);
+            Values[1, 0] = 2 * (xy + wz);
+            Values[1, 1] = 1 - 2 * (xx + zz);
+            Values[1, 2] = 2 * (yz - wx);
             Values[1, 3] = 0;
 
-            Values[2, 0] = 2* (xz - wy);
-            Values[2, 1] = 2* (yz + wx);
-            Values[2, 2] = 1- 2* (xx + yy);
+            Values[2, 0] = 2 * (xz - wy);
+            Values[2, 1] = 2 * (yz + wx);
+            Values[2, 2] = 1 - 2 * (xx + yy);
             Values[2, 3] = 0;
 
             Values[3, 0] = 0;
@@ -137,6 +137,34 @@ namespace Altseed
             o.Z = values[2] / values[3];
             return o;
         }
+
+        /// <summary>
+        /// 行列でベクトルを変形させる。
+        /// </summary>
+        /// <param name="in_">変形前ベクトル</param>
+        /// <returns>変形後ベクトル</returns>
+        public Vector4I Transform4D(Vector4I in_)
+        {
+            int[] values = new int[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                values[i] = 0;
+                values[i] += in_.X * Values[i, 0];
+                values[i] += in_.Y * Values[i, 1];
+                values[i] += in_.Z * Values[i, 2];
+                values[i] += in_.W * Values[i, 3];
+            }
+
+            Vector4I o;
+            o.X = values[0];
+            o.Y = values[1];
+            o.Z = values[2];
+            o.W = values[3];
+
+            return o;
+        }
+
 
         public static Matrix44I operator *(Matrix44I left, Matrix44I right)
         {

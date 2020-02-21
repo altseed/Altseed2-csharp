@@ -574,6 +574,35 @@ namespace Altseed
             return o;
         }
 
+        /// <summary>
+        /// 行列でベクトルを変形させる。
+        /// </summary>
+        /// <param name="in_">変形前ベクトル</param>
+        /// <returns>変形後ベクトル</returns>
+        public Vector4F Transform4D(Vector4F in_)
+        {
+            float[] values = new float[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                values[i] = 0;
+                values[i] += in_.X * Values[i, 0];
+                values[i] += in_.Y * Values[i, 1];
+                values[i] += in_.Z * Values[i, 2];
+                values[i] += in_.W * Values[i, 3];
+            }
+
+            Vector4F o;
+            o.X = values[0];
+            o.Y = values[1];
+            o.Z = values[2];
+            o.W = values[3];
+
+            return o;
+        }
+
+
+
         public static Matrix44F operator *(Matrix44F left, Matrix44F right)
         {
             Matrix44F o_ = new Matrix44F();
