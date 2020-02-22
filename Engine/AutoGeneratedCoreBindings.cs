@@ -21,44 +21,6 @@ namespace Altseed
     }
     
     /// <summary>
-    /// イージングの種類を表す
-    /// </summary>
-    public enum EasingType : int
-    {
-        Linear,
-        InSine,
-        OutSine,
-        InOutSine,
-        InQuad,
-        OutQuad,
-        InOutQuad,
-        InCubic,
-        OutCubic,
-        InOutCubic,
-        InQuart,
-        OutQuart,
-        InOutQuart,
-        InQuint,
-        OutQuint,
-        InOutQuint,
-        InExpo,
-        OutExpo,
-        InOutExpo,
-        InCirc,
-        OutCirc,
-        InOutCirc,
-        InBack,
-        OutBack,
-        InOutBack,
-        InElastic,
-        OutElastic,
-        InOutElastic,
-        InBounce,
-        OutBounce,
-        InOutBounce,
-    }
-    
-    /// <summary>
     /// リソースの種類を表す
     /// </summary>
     public enum ResourceType : int
@@ -2521,7 +2483,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 音源のクラス
+    /// 音声ファイルを読み込む
     /// </summary>
     public partial class Sound
     {
@@ -2668,6 +2630,12 @@ namespace Altseed
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="isDecompressed"></param>
+        /// <returns>読み込んだ音源データ</returns>
         public static Sound Load(string path, bool isDecompressed)
         {
             var ret = cbg_Sound_Load(path, isDecompressed);
@@ -2793,96 +2761,182 @@ namespace Altseed
             return SoundMixer.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// 音を再生する
+        /// </summary>
+        /// <param name="sound">音源データ</param>
+        /// <returns>再生中の音のID</returns>
         public int Play(Sound sound)
         {
             var ret = cbg_SoundMixer_Play(selfPtr, sound != null ? sound.selfPtr : IntPtr.Zero);
             return ret;
         }
         
+        /// <summary>
+        /// 指定した音が再生中であるかを取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>IDに対応する音が再生中であるか?</returns>
         public bool GetIsPlaying(int id)
         {
             var ret = cbg_SoundMixer_GetIsPlaying(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// 再生中の音を全て停止する
+        /// </summary>
         public void StopAll()
         {
             cbg_SoundMixer_StopAll(selfPtr);
         }
         
+        /// <summary>
+        /// 指定した音の再生を停止する
+        /// </summary>
+        /// <param name="id">音のID</param>
         public void Stop(int id)
         {
             cbg_SoundMixer_Stop(selfPtr, id);
         }
         
+        /// <summary>
+        /// 指定した音の再生を一時停止する
+        /// </summary>
+        /// <param name="id">音のID</param>
         public void Pause(int id)
         {
             cbg_SoundMixer_Pause(selfPtr, id);
         }
         
+        /// <summary>
+        /// 指定した音の再生を再開する
+        /// </summary>
+        /// <param name="id">音のID</param>
         public void Resume(int id)
         {
             cbg_SoundMixer_Resume(selfPtr, id);
         }
         
+        /// <summary>
+        /// 指定した音の再生位置を変更する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="position">再生位置(秒)</param>
         public void Seek(int id, float position)
         {
             cbg_SoundMixer_Seek(selfPtr, id, position);
         }
         
+        /// <summary>
+        /// 指定した音の音量を変更する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="volume">音量(0.0~1.0</param>
         public void SetVolume(int id, float volume)
         {
             cbg_SoundMixer_SetVolume(selfPtr, id, volume);
         }
         
+        /// <summary>
+        /// 指定した音をフェードインさせる
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="second">フェードインに使用する時間(秒)</param>
         public void FadeIn(int id, float second)
         {
             cbg_SoundMixer_FadeIn(selfPtr, id, second);
         }
         
+        /// <summary>
+        /// 指定した音をフェードアウトさせる
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="second">フェードアウトに使用する時間(秒)</param>
         public void FadeOut(int id, float second)
         {
             cbg_SoundMixer_FadeOut(selfPtr, id, second);
         }
         
+        /// <summary>
+        /// 指定した音の音量を一定時間かけて変更する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="second">フェードに使用する時間(秒)</param>
+        /// <param name="targetedVolume">変更後の音量(0.0~1.0)</param>
         public void Fade(int id, float second, float targetedVolume)
         {
             cbg_SoundMixer_Fade(selfPtr, id, second, targetedVolume);
         }
         
+        /// <summary>
+        /// 再生速度を変更するかを取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>再生速度を変更するか?</returns>
         public bool GetIsPlaybackSpeedEnabled(int id)
         {
             var ret = cbg_SoundMixer_GetIsPlaybackSpeedEnabled(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// 再生速度を変更するかを設定する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="isPlaybackSpeedEnabled">再生速度を変更するか?</param>
         public void SetIsPlaybackSpeedEnabled(int id, bool isPlaybackSpeedEnabled)
         {
             cbg_SoundMixer_SetIsPlaybackSpeedEnabled(selfPtr, id, isPlaybackSpeedEnabled);
         }
         
+        /// <summary>
+        /// 再生速度を取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>本来の速度の何倍で再生されているか?</returns>
         public float GetPlaybackSpeed(int id)
         {
             var ret = cbg_SoundMixer_GetPlaybackSpeed(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// 再生速度を設定する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="playbackSpeed">変更後の再生速度</param>
         public void SetPlaybackSpeed(int id, float playbackSpeed)
         {
             cbg_SoundMixer_SetPlaybackSpeed(selfPtr, id, playbackSpeed);
         }
         
+        /// <summary>
+        /// パン位置を取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>パン位置 : 0.0で中央, -1.0で左, 1.0で右</returns>
         public float GetPanningPosition(int id)
         {
             var ret = cbg_SoundMixer_GetPanningPosition(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// パン位置を設定する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="panningPosition">パン位置 : 0.0で中央, -1.0で左, 1.0で右</param>
         public void SetPanningPosition(int id, float panningPosition)
         {
             cbg_SoundMixer_SetPanningPosition(selfPtr, id, panningPosition);
         }
         
+        /// <summary>
+        /// 指定した音の再生位置を0~1で取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>現在の再生位置</returns>
         public float GetPlaybackPercent(int id)
         {
             var ret = cbg_SoundMixer_GetPlaybackPercent(selfPtr, id);

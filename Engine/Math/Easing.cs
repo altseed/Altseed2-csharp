@@ -1,3 +1,26 @@
+Ôªø// Original Code License:
+// --Easing Functions(Equations)--
+
+// MIT License
+
+// Copyright √Ç¬© 2001 Robert Penner
+
+// Permission is hereby granted,
+// free of charge, to any person obtaining a copy of this software and associated documentation files(the "Software"),
+// to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and / or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions :
+
+// The above copyright notice and this permission notice shall be included in all copies
+// or
+// substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS",
+// WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +30,48 @@ using System.Threading.Tasks;
 
 namespace Altseed
 {
+    /// <summary>
+    /// „Ç§„Éº„Ç∏„É≥„Ç∞„ÅÆÁ®ÆÈ°û„ÇíË°®„Åô
+    /// </summary>
+    public enum EasingType : int
+    {
+        Linear,
+        InSine,
+        OutSine,
+        InOutSine,
+        InQuad,
+        OutQuad,
+        InOutQuad,
+        InCubic,
+        OutCubic,
+        InOutCubic,
+        InQuart,
+        OutQuart,
+        InOutQuart,
+        InQuint,
+        OutQuint,
+        InOutQuint,
+        InExpo,
+        OutExpo,
+        InOutExpo,
+        InCirc,
+        OutCirc,
+        InOutCirc,
+        InBack,
+        OutBack,
+        InOutBack,
+        InElastic,
+        OutElastic,
+        InOutElastic,
+        InBounce,
+        OutBounce,
+        InOutBounce,
+    }
+
     public partial class Easing
     {
-        /// <param name="easing">ÉCÅ[ÉWÉìÉOÇÃéÌóﬁ</param>
-        /// <param name="t">ÉCÅ[ÉWÉìÉOâﬂíˆÇÃïœêî</param>
+        /// <param name="easing">„Ç§„Éº„Ç∏„É≥„Ç∞„ÅÆÁ®ÆÈ°û</param>
+        /// <param name="t">„Ç§„Éº„Ç∏„É≥„Ç∞ÈÅéÁ®ã„ÅÆÂ§âÊï∞</param>
         /// <returns></returns>
         public static float GetEasing(EasingType easing, float t)
         {
