@@ -11,6 +11,9 @@ namespace Altseed
         /// <returns>このインスタンスのデータと等しい<see cref="byte"/>配列のインスタンス</returns>
         public byte[] ToByteArray()
         {
+            //未実装
+            throw new NotImplementedException();
+
             var array = new byte[Count];
             Marshal.Copy(selfPtr, array, 0, Count);
             return array;
@@ -25,10 +28,13 @@ namespace Altseed
         /// <returns><paramref name="array"/>と同じデータを格納する<see cref="Int8Array"/>のインスタンス</returns>
         public static Int8Array FromByteArray(byte[] array)
         {
+            //未実装
+            throw new NotImplementedException();
+
             if (array == null) throw new ArgumentNullException("引数がnullです", nameof(array));
 
             var size = Marshal.SizeOf(default(byte)) * array.Length;
-            var result = new Int8Array(new MemoryHandle(new IntPtr(size)));
+            var result = new Int8Array(new MemoryHandle(Marshal.AllocCoTaskMem(size)));
 
             Marshal.Copy(array, 0, result.selfPtr, array.Length);
 

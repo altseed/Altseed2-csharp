@@ -11,6 +11,9 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Int8()
         {
+            //未実装
+            throw new NotImplementedException();
+
             Assert.True(Engine.Initialize("Test : Int8Array", 640, 480));
 
             var b = new byte[] { 0, 1, 2, 3 };
