@@ -293,7 +293,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Configuration>> cacheRepo = new Dictionary<IntPtr, WeakReference<Configuration>>();
         
-        internal static Configuration TryGetFromCache(IntPtr native)
+        internal static  Configuration TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -502,7 +502,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
         
-        internal static Core TryGetFromCache(IntPtr native)
+        internal static  Core TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -615,7 +615,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
-        internal static Int8Array TryGetFromCache(IntPtr native)
+        internal static  Int8Array TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -642,6 +642,12 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Int8Array_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_SetData(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
@@ -679,6 +685,17 @@ namespace Altseed
             cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
         }
         
+        public IntPtr GetData()
+        {
+            var ret = cbg_Int8Array_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void SetData(IntPtr ptr, int size)
+        {
+            cbg_Int8Array_SetData(selfPtr, ptr, size);
+        }
+        
         ~Int8Array()
         {
             lock (this) 
@@ -701,7 +718,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Int32Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int32Array>>();
         
-        internal static Int32Array TryGetFromCache(IntPtr native)
+        internal static  Int32Array TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -787,7 +804,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
         
-        internal static Resources TryGetFromCache(IntPtr native)
+        internal static  Resources TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -893,7 +910,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
         
-        internal static Keyboard TryGetFromCache(IntPtr native)
+        internal static  Keyboard TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -977,7 +994,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
         
-        internal static Mouse TryGetFromCache(IntPtr native)
+        internal static  Mouse TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1130,7 +1147,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
         
-        internal static Joystick TryGetFromCache(IntPtr native)
+        internal static  Joystick TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1340,7 +1357,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
         
-        internal static Graphics TryGetFromCache(IntPtr native)
+        internal static  Graphics TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1468,7 +1485,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
         
-        internal static Texture2D TryGetFromCache(IntPtr native)
+        internal static  Texture2D TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1569,7 +1586,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Renderer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Renderer>>();
         
-        internal static Renderer TryGetFromCache(IntPtr native)
+        internal static  Renderer TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1662,7 +1679,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<CommandList>> cacheRepo = new Dictionary<IntPtr, WeakReference<CommandList>>();
         
-        internal static CommandList TryGetFromCache(IntPtr native)
+        internal static  CommandList TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1727,7 +1744,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Rendered>> cacheRepo = new Dictionary<IntPtr, WeakReference<Rendered>>();
         
-        internal static Rendered TryGetFromCache(IntPtr native)
+        internal static  Rendered TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1784,7 +1801,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<RenderedSprite>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedSprite>>();
         
-        internal static RenderedSprite TryGetFromCache(IntPtr native)
+        internal static new RenderedSprite TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1936,7 +1953,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
         
-        internal static RenderedCamera TryGetFromCache(IntPtr native)
+        internal static new RenderedCamera TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1992,7 +2009,7 @@ namespace Altseed
         
         private static ConcurrentDictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StreamFile>>();
         
-        internal static StreamFile TryGetFromCache(IntPtr native)
+        internal static  StreamFile TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2169,7 +2186,7 @@ namespace Altseed
         
         private static ConcurrentDictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StaticFile>>();
         
-        internal static StaticFile TryGetFromCache(IntPtr native)
+        internal static  StaticFile TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2316,7 +2333,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
         
-        internal static File TryGetFromCache(IntPtr native)
+        internal static  File TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2491,7 +2508,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Sound>> cacheRepo = new Dictionary<IntPtr, WeakReference<Sound>>();
         
-        internal static Sound TryGetFromCache(IntPtr native)
+        internal static  Sound TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2661,7 +2678,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<SoundMixer>> cacheRepo = new Dictionary<IntPtr, WeakReference<SoundMixer>>();
         
-        internal static SoundMixer TryGetFromCache(IntPtr native)
+        internal static  SoundMixer TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2965,7 +2982,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Log>> cacheRepo = new Dictionary<IntPtr, WeakReference<Log>>();
         
-        internal static Log TryGetFromCache(IntPtr native)
+        internal static  Log TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
