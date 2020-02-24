@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ namespace Altseed
     /// 名前適当なのでいい感じに直して
     /// </summary>
     [Serializable]
-    public class Alject : IComponentRegisterable<AljectComponent>
+    public class Alject : Registerable<Scene>
     {
         /// <summary>
-        /// 描画優先度を取得または設定する
+        /// 描画優先度を取得または設定します。
         /// </summary>
         /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
         public int DrawingPriority
@@ -29,32 +30,29 @@ namespace Altseed
         private int _drawingPriority = 0;
 
         /// <summary>
-        /// 描画を実行するかどうかを取得または設定する
+        /// 描画を実行するかどうかを取得または設定します。
         /// </summary>
-        public bool IsDrawn { get; set; }
+        public bool IsDrawn { get; set; } = true;
 
         /// <summary>
-        /// 更新をするかどうかを取得または設定する
+        /// シーンが変更されても次のシーンへ引き継がれるかどうかを取得または設定します。
         /// </summary>
-        public bool IsUpdated { get; set; }
+        public bool IsInherited { get; set; } = true;
 
         /// <summary>
-        /// 現在所属している<see cref="Altseed.Scene"/>を取得する
+        /// 更新をするかどうかを取得または設定します。
+        /// </summary>
+        public bool IsUpdated { get; set; } = true;
+
+        /// <summary>
+        /// 現在所属している<see cref="Altseed.Scene"/>取得します。
         /// </summary>
         public Scene Scene { get; internal set; }
-        internal ObjectStatus Status { get; set; }
 
-        /// <summary>
-        /// 新しいインスタンスを生成する
-        /// </summary>
         public Alject()
         {
-            IsDrawn = true;
-            IsUpdated = true;
-            components = new List<AljectComponent>();
-            addComponents = new List<AljectComponent>();
-            removeComponents = new List<AljectComponent>();
-            Status = ObjectStatus.Free;
+            _Components = new RegisterableCollection<AljectComponent, Alject>(this);
+            Components = _Components.AsReadOnly();
         }
 
         /// <summary>
@@ -64,91 +62,67 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="components"/>がnull</exception>
         internal Alject(IEnumerable<AljectComponent> components) : this()
         {
-            this.components.AddRange(components.Distinct() ?? throw new ArgumentNullException("引数がnullです", nameof(components)));
+            _Components.AddImmediately(components);
         }
 
         #region ComponentRegister
-        private readonly List<AljectComponent> components;
-        private readonly List<AljectComponent> addComponents;
-        private readonly List<AljectComponent> removeComponents;
+
+        public readonly ReadOnlyCollection<AljectComponent> Components;
+        private readonly RegisterableCollection<AljectComponent, Alject> _Components;
+
         /// <summary>
         /// 指定した<see cref="AljectComponent"/>を登録する
         /// </summary>
         /// <param name="component">登録するコンポーネント</param>
-        /// <exception cref="ArgumentException"><paramref name="component"/>が既に登録されている又は登録/削除処理待ち，若しくは破棄されている</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
         /// <remarks>追加されるのはそのフレームの更新処理が終了した後</remarks>
         public void AddComponent(AljectComponent component)
         {
-            if (component == null) throw new ArgumentNullException("追加しようとしたコンポーネントがnullです", nameof(component));
-            if (component.Status != ObjectStatus.Free) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
-            component.Status = ObjectStatus.WaitAdded;
-            addComponents.Add(component);
+            _Components.Add(component);
         }
-        /// <summary>
-        /// 指定した<see cref="AljectComponent"/>が登録されているかどうかを返す
-        /// </summary>
-        /// <param name="component">検索する<see cref="AljectComponent"/></param>
-        /// <returns><paramref name="component"/>が登録されていたらtrue，それ以外でfalse</returns>
-        public bool ContainsComponent(AljectComponent component) => component == null ? false : components.Contains(component);
+
         /// <summary>
         /// 指定した<see cref="AljectComponent"/>を登録する
         /// </summary>
         /// <param name="component">登録するコンポーネント</param>
-        /// <exception cref="ArgumentException"><paramref name="component"/>が既に削除されている又は登録/削除処理待ち，若しくは破棄されている</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="component"/>がnull</exception>
         /// <remarks>削除されるのはそのフレームの更新処理が終了した後</remarks>
         public void RemoveComponent(AljectComponent component)
         {
-            if (component == null) throw new ArgumentNullException("削除しようとしたコンポーネントがnullです", nameof(component));
-            if (component.Status != ObjectStatus.Registered) throw new ArgumentException("コンポーネントの状態が無効です", nameof(component));
-            component.Status = ObjectStatus.WaitRemoved;
-            removeComponents.Add(component);
+            _Components.Remove(component);
         }
-        private void __AddComponent(AljectComponent component)
-        {
-            component.Owner = this;
-            component.Status = ObjectStatus.Registered;
-            components.Add(component);
-        }
-        void IComponentRegisterable<AljectComponent>.__AddComponent(AljectComponent component) => __AddComponent(component);
-        private void __RemoveComponent(AljectComponent component)
-        {
-            component.Owner = null;
-            component.Status = ObjectStatus.Free;
-            components.Remove(component);
-        }
-        void IComponentRegisterable<AljectComponent>.__RemoveComponent(AljectComponent component) => __RemoveComponent(component);
+
         #endregion
+
         internal void RaiseOnAdded()
         {
             OnAdded();
-            foreach (var c in components)
-                if (c.Status == ObjectStatus.Registered)
+            foreach (var c in Components)
+                if (c.Status == RegisterStatus.Registered)
                     c.RaiseOnObjectAdded();
         }
+
         internal void RiaseOnRemoved(bool raiseEvent)
         {
             if (raiseEvent)
             {
                 OnRemoved();
-                foreach (var c in components)
-                    if (c.Status == ObjectStatus.Registered)
+                foreach (var c in Components)
+                    if (c.Status == RegisterStatus.Registered)
                         c.RaiseObjectRemoved();
             }
         }
+
         internal void Update()
         {
             if (IsUpdated)
             {
                 OnUpdate();
-                foreach (var c in components)
-                    if (c.Status == ObjectStatus.Registered)
+                foreach (var c in Components)
+                {
+                    if (c.Status == RegisterStatus.Registered)
                         c.RaiseOnUpdate();
-                foreach (var a in addComponents) __AddComponent(a);
-                foreach (var r in removeComponents) __RemoveComponent(r);
-                addComponents.Clear();
-                removeComponents.Clear();
+                }
+
+                _Components.Update();
             }
         }
 
@@ -167,11 +141,14 @@ namespace Altseed
         /// </summary>
         protected virtual void OnRemoved() { }
 
-        internal void DoDrawing()
+        internal void Draw()
         {
-            foreach (var c in components)
-                if (c is IDrawComponent d)
+            foreach (var c in Components)
+            {
+                if (c is DrawnComponent d)
                     d.Draw();
+            }
+
             OnDrawn();
         }
 
@@ -179,5 +156,17 @@ namespace Altseed
         /// 描画時に実行
         /// </summary>
         protected virtual void OnDrawn() { }
+
+        internal override void Added(Scene owner)
+        {
+            Scene = owner;
+            OnAdded();
+        }
+
+        internal override void Removed()
+        {
+            Scene = null;
+            OnRemoved();
+        }
     }
 }

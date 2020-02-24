@@ -1,3 +1,9 @@
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!                                          !!
+// !!  THIS FILE IS AUTO GENERATED.            !!
+// !!  YOUR COMMIT ON THI FILE WILL BE WIPED.  !!
+// !!                                          !!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -12,44 +18,6 @@ namespace Altseed
         {
             this.selfPtr = p;
         }
-    }
-    
-    /// <summary>
-    /// イージングの種類を表す
-    /// </summary>
-    public enum EasingType : int
-    {
-        Linear,
-        InSine,
-        OutSine,
-        InOutSine,
-        InQuad,
-        OutQuad,
-        InOutQuad,
-        InCubic,
-        OutCubic,
-        InOutCubic,
-        InQuart,
-        OutQuart,
-        InOutQuart,
-        InQuint,
-        OutQuint,
-        InOutQuint,
-        InExpo,
-        OutExpo,
-        InOutExpo,
-        InCirc,
-        OutCirc,
-        InOutCirc,
-        InBack,
-        OutBack,
-        InOutBack,
-        InElastic,
-        OutElastic,
-        InOutElastic,
-        InBounce,
-        OutBounce,
-        InOutBounce,
     }
     
     /// <summary>
@@ -317,76 +285,6 @@ namespace Altseed
     }
     
     /// <summary>
-    /// イージングのクラス
-    /// </summary>
-    public partial class Easing
-    {
-        #region unmanaged
-        
-        private static Dictionary<IntPtr, WeakReference<Easing>> cacheRepo = new Dictionary<IntPtr, WeakReference<Easing>>();
-        
-        internal static Easing TryGetFromCache(IntPtr native)
-        {
-            if(native == IntPtr.Zero) return null;
-        
-            if(cacheRepo.ContainsKey(native))
-            {
-                Easing cacheRet;
-                cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
-                {
-                    cbg_Easing_Release(native);
-                    return cacheRet;
-                }
-                else
-                {
-                    cacheRepo.Remove(native);
-                }
-            }
-        
-            var newObject = new Easing(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Easing>(newObject);
-            return newObject;
-        }
-        
-        internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Easing_GetEasing(int easing, float t);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Easing_Release(IntPtr selfPtr);
-        
-        #endregion
-        
-        internal Easing(MemoryHandle handle)
-        {
-            selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="easing"></param>
-        /// <param name="t"></param>
-        public static void GetEasing(EasingType easing, float t)
-        {
-            cbg_Easing_GetEasing((int)easing, t);
-        }
-        
-        ~Easing()
-        {
-            lock (this) 
-            {
-                if (selfPtr != IntPtr.Zero)
-                {
-                    cbg_Easing_Release(selfPtr);
-                    selfPtr = IntPtr.Zero;
-                }
-            }
-        }
-    }
-    
-    /// <summary>
     /// Coreを初期化する際の設定を保持すクラス
     /// </summary>
     public partial class Configuration
@@ -395,7 +293,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Configuration>> cacheRepo = new Dictionary<IntPtr, WeakReference<Configuration>>();
         
-        internal static Configuration TryGetFromCache(IntPtr native)
+        internal static  Configuration TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -604,7 +502,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
         
-        internal static Core TryGetFromCache(IntPtr native)
+        internal static  Core TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -717,7 +615,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
-        internal static Int8Array TryGetFromCache(IntPtr native)
+        internal static  Int8Array TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -746,6 +644,16 @@ namespace Altseed
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Int8Array_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -756,6 +664,18 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Int8Array_GetCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// 指定したインスタンスにデータをコピーする
         /// </summary>
         /// <param name="array">コピー先のインスタンス</param>
@@ -763,6 +683,17 @@ namespace Altseed
         public void CopyTo(Int8Array array, int size)
         {
             cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
+        }
+        
+        public IntPtr GetData()
+        {
+            var ret = cbg_Int8Array_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void SetData(IntPtr ptr, int size)
+        {
+            cbg_Int8Array_SetData(selfPtr, ptr, size);
         }
         
         ~Int8Array()
@@ -787,7 +718,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Int32Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int32Array>>();
         
-        internal static Int32Array TryGetFromCache(IntPtr native)
+        internal static  Int32Array TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -816,6 +747,10 @@ namespace Altseed
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Int32Array_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -823,6 +758,18 @@ namespace Altseed
         internal Int32Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Int32Array_GetCount(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
@@ -857,7 +804,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
         
-        internal static Resources TryGetFromCache(IntPtr native)
+        internal static  Resources TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -963,7 +910,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
         
-        internal static Keyboard TryGetFromCache(IntPtr native)
+        internal static  Keyboard TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1047,7 +994,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
         
-        internal static Mouse TryGetFromCache(IntPtr native)
+        internal static  Mouse TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1200,7 +1147,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
         
-        internal static Joystick TryGetFromCache(IntPtr native)
+        internal static  Joystick TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1410,7 +1357,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
         
-        internal static Graphics TryGetFromCache(IntPtr native)
+        internal static  Graphics TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1538,7 +1485,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
         
-        internal static Texture2D TryGetFromCache(IntPtr native)
+        internal static  Texture2D TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1639,7 +1586,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Renderer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Renderer>>();
         
-        internal static Renderer TryGetFromCache(IntPtr native)
+        internal static  Renderer TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1732,7 +1679,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<CommandList>> cacheRepo = new Dictionary<IntPtr, WeakReference<CommandList>>();
         
-        internal static CommandList TryGetFromCache(IntPtr native)
+        internal static  CommandList TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1797,7 +1744,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Rendered>> cacheRepo = new Dictionary<IntPtr, WeakReference<Rendered>>();
         
-        internal static Rendered TryGetFromCache(IntPtr native)
+        internal static  Rendered TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1854,7 +1801,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<RenderedSprite>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedSprite>>();
         
-        internal static RenderedSprite TryGetFromCache(IntPtr native)
+        internal static new RenderedSprite TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2006,7 +1953,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
         
-        internal static RenderedCamera TryGetFromCache(IntPtr native)
+        internal static new RenderedCamera TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2062,7 +2009,7 @@ namespace Altseed
         
         private static ConcurrentDictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StreamFile>>();
         
-        internal static StreamFile TryGetFromCache(IntPtr native)
+        internal static  StreamFile TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2239,7 +2186,7 @@ namespace Altseed
         
         private static ConcurrentDictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StaticFile>>();
         
-        internal static StaticFile TryGetFromCache(IntPtr native)
+        internal static  StaticFile TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2386,7 +2333,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
         
-        internal static File TryGetFromCache(IntPtr native)
+        internal static  File TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2553,7 +2500,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 音源のクラス
+    /// 音声ファイルを読み込む
     /// </summary>
     public partial class Sound
     {
@@ -2561,7 +2508,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Sound>> cacheRepo = new Dictionary<IntPtr, WeakReference<Sound>>();
         
-        internal static Sound TryGetFromCache(IntPtr native)
+        internal static  Sound TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2586,6 +2533,9 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
+        
         [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
@@ -2697,6 +2647,18 @@ namespace Altseed
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="isDecompressed"></param>
+        /// <returns>読み込んだ音源データ</returns>
+        public static Sound Load(string path, bool isDecompressed)
+        {
+            var ret = cbg_Sound_Load(path, isDecompressed);
+            return Sound.TryGetFromCache(ret);
+        }
+        
         ~Sound()
         {
             lock (this) 
@@ -2716,7 +2678,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<SoundMixer>> cacheRepo = new Dictionary<IntPtr, WeakReference<SoundMixer>>();
         
-        internal static SoundMixer TryGetFromCache(IntPtr native)
+        internal static  SoundMixer TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2743,9 +2705,6 @@ namespace Altseed
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_SoundMixer_GetInstance();
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_SoundMixer_Load(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_SoundMixer_Play(IntPtr selfPtr, IntPtr sound);
@@ -2819,102 +2778,182 @@ namespace Altseed
             return SoundMixer.TryGetFromCache(ret);
         }
         
-        public Sound Load(string path, bool isDecompressed)
-        {
-            var ret = cbg_SoundMixer_Load(selfPtr, path, isDecompressed);
-            return Sound.TryGetFromCache(ret);
-        }
-        
+        /// <summary>
+        /// 音を再生する
+        /// </summary>
+        /// <param name="sound">音源データ</param>
+        /// <returns>再生中の音のID</returns>
         public int Play(Sound sound)
         {
             var ret = cbg_SoundMixer_Play(selfPtr, sound != null ? sound.selfPtr : IntPtr.Zero);
             return ret;
         }
         
+        /// <summary>
+        /// 指定した音が再生中であるかを取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>IDに対応する音が再生中であるか?</returns>
         public bool GetIsPlaying(int id)
         {
             var ret = cbg_SoundMixer_GetIsPlaying(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// 再生中の音を全て停止する
+        /// </summary>
         public void StopAll()
         {
             cbg_SoundMixer_StopAll(selfPtr);
         }
         
+        /// <summary>
+        /// 指定した音の再生を停止する
+        /// </summary>
+        /// <param name="id">音のID</param>
         public void Stop(int id)
         {
             cbg_SoundMixer_Stop(selfPtr, id);
         }
         
+        /// <summary>
+        /// 指定した音の再生を一時停止する
+        /// </summary>
+        /// <param name="id">音のID</param>
         public void Pause(int id)
         {
             cbg_SoundMixer_Pause(selfPtr, id);
         }
         
+        /// <summary>
+        /// 指定した音の再生を再開する
+        /// </summary>
+        /// <param name="id">音のID</param>
         public void Resume(int id)
         {
             cbg_SoundMixer_Resume(selfPtr, id);
         }
         
+        /// <summary>
+        /// 指定した音の再生位置を変更する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="position">再生位置(秒)</param>
         public void Seek(int id, float position)
         {
             cbg_SoundMixer_Seek(selfPtr, id, position);
         }
         
+        /// <summary>
+        /// 指定した音の音量を変更する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="volume">音量(0.0~1.0</param>
         public void SetVolume(int id, float volume)
         {
             cbg_SoundMixer_SetVolume(selfPtr, id, volume);
         }
         
+        /// <summary>
+        /// 指定した音をフェードインさせる
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="second">フェードインに使用する時間(秒)</param>
         public void FadeIn(int id, float second)
         {
             cbg_SoundMixer_FadeIn(selfPtr, id, second);
         }
         
+        /// <summary>
+        /// 指定した音をフェードアウトさせる
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="second">フェードアウトに使用する時間(秒)</param>
         public void FadeOut(int id, float second)
         {
             cbg_SoundMixer_FadeOut(selfPtr, id, second);
         }
         
+        /// <summary>
+        /// 指定した音の音量を一定時間かけて変更する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="second">フェードに使用する時間(秒)</param>
+        /// <param name="targetedVolume">変更後の音量(0.0~1.0)</param>
         public void Fade(int id, float second, float targetedVolume)
         {
             cbg_SoundMixer_Fade(selfPtr, id, second, targetedVolume);
         }
         
+        /// <summary>
+        /// 再生速度を変更するかを取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>再生速度を変更するか?</returns>
         public bool GetIsPlaybackSpeedEnabled(int id)
         {
             var ret = cbg_SoundMixer_GetIsPlaybackSpeedEnabled(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// 再生速度を変更するかを設定する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="isPlaybackSpeedEnabled">再生速度を変更するか?</param>
         public void SetIsPlaybackSpeedEnabled(int id, bool isPlaybackSpeedEnabled)
         {
             cbg_SoundMixer_SetIsPlaybackSpeedEnabled(selfPtr, id, isPlaybackSpeedEnabled);
         }
         
+        /// <summary>
+        /// 再生速度を取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>本来の速度の何倍で再生されているか?</returns>
         public float GetPlaybackSpeed(int id)
         {
             var ret = cbg_SoundMixer_GetPlaybackSpeed(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// 再生速度を設定する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="playbackSpeed">変更後の再生速度</param>
         public void SetPlaybackSpeed(int id, float playbackSpeed)
         {
             cbg_SoundMixer_SetPlaybackSpeed(selfPtr, id, playbackSpeed);
         }
         
+        /// <summary>
+        /// パン位置を取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>パン位置 : 0.0で中央, -1.0で左, 1.0で右</returns>
         public float GetPanningPosition(int id)
         {
             var ret = cbg_SoundMixer_GetPanningPosition(selfPtr, id);
             return ret;
         }
         
+        /// <summary>
+        /// パン位置を設定する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="panningPosition">パン位置 : 0.0で中央, -1.0で左, 1.0で右</param>
         public void SetPanningPosition(int id, float panningPosition)
         {
             cbg_SoundMixer_SetPanningPosition(selfPtr, id, panningPosition);
         }
         
+        /// <summary>
+        /// 指定した音の再生位置を0~1で取得する
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <returns>現在の再生位置</returns>
         public float GetPlaybackPercent(int id)
         {
             var ret = cbg_SoundMixer_GetPlaybackPercent(selfPtr, id);
@@ -2943,7 +2982,7 @@ namespace Altseed
         
         private static Dictionary<IntPtr, WeakReference<Log>> cacheRepo = new Dictionary<IntPtr, WeakReference<Log>>();
         
-        internal static Log TryGetFromCache(IntPtr native)
+        internal static  Log TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         

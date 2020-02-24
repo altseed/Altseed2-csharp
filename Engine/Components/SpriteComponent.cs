@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Altseed
 {
     /// <summary>
-    /// テクスチャを描画するコンポーネント
+    /// スプライトを描画するコンポーネントを表します。
     /// </summary>
     [Serializable]
-    public sealed class TextureComponent : AljectComponent, IDrawComponent
+    public sealed class SpriteComponent : DrawnComponent
     {
         public readonly RenderedSprite sprite;
 
         /// <summary>
-        /// 描画範囲を取得または設定する
+        /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
@@ -24,7 +24,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 描画するテクスチャを取得または設定する
+        /// 描画するテクスチャを取得または設定します。
         /// </summary>
         public Texture2D Texture
         {
@@ -33,7 +33,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 変換行列を取得または設定する
+        /// 変換行列を取得または設定します。
         /// </summary>
         public Matrix44F Transform
         {
@@ -42,21 +42,19 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// 新しいインスタンスを生成します。
         /// </summary>
-        public TextureComponent()
+        public SpriteComponent()
         {
             sprite = RenderedSprite.Create();
         }
 
         /// <summary>
-        /// 描画を実行する
+        /// 描画を実行します。
         /// </summary>
-        public void Draw()
+        internal override void Draw()
         {
             Engine.Renderer.DrawSprite(sprite);
         }
-
-        Component IDrawComponent.AsComponent() => this;
     }
 }

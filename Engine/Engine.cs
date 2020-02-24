@@ -11,9 +11,14 @@ namespace Altseed
     public static class Engine
     {
         /// <summary>
-        /// 現在処理している<see cref="Scene"/>を取得する
+        /// 現在処理している<see cref="Scene"/>取得します。
         /// </summary>
         public static Scene CurrentScene { get; private set; }
+
+        /// <summary>
+        /// 次に控えているシーン取得します。
+        /// </summary>
+        internal static Scene NextScene { get; private set; }
 
         /// <summary>
         /// エンジンを初期化する
@@ -21,8 +26,8 @@ namespace Altseed
         /// <param name="title">ウィンドウ左上に表示される文字列</param>
         /// <param name="width">ウィンドウの横幅</param>
         /// <param name="height">ウィンドウの縦幅</param>
-        /// <param name="option">オプションのインスタンス</param>
-        /// <returns>初期化に成功したらtrue，それ以外でfalse</returns>
+        /// <param name="config">設定</param>
+        /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
             if (Core.Initialize(title, width, height, config ?? new Configuration()))
@@ -33,8 +38,13 @@ namespace Altseed
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
                 Sound = SoundMixer.GetInstance();
+                Log = Log.GetInstance();
                 Resources = Resources.GetInstance();
-                CurrentScene = new Scene();
+
+                CurrentScene = new Scene()
+                {
+                    Status = SceneStatus.Updated
+                };
                 return true;
             }
             return false;
@@ -43,7 +53,7 @@ namespace Altseed
         /// <summary>
         /// イベントを実行する
         /// </summary>
-        /// <returns>イベントの実行が出来たらtrue，それ以外でfalse</returns>
+        /// <returns>イベントの実行が出来たらtrue、それ以外でfalse</returns>
         public static bool DoEvents()
         {
             Graphics.DoEvents();
@@ -66,53 +76,135 @@ namespace Altseed
             CurrentScene.Update();
         }
 
+        #region ChangeScene
+
         /// <summary>
         /// シーンを即変更する
         /// </summary>
-        /// <param name="scene">変更先のシーン</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scene"/>がnull</exception>
-        internal static void ChangeScene(Scene scene)
+        /// <param name="nextScene">変更先のシーン</param>
+        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
+        public static void ChangeScene(Scene nextScene)
         {
-            CurrentScene = scene ?? throw new ArgumentNullException("次のシーンがnullです", nameof(scene));
+            StartSceneChange(nextScene);
+            OnFadeOutFinished();
+            OnFadeInFinished();
         }
 
         /// <summary>
-        /// ファイルを管理するクラスを取得する
+        /// シーンを変更する
+        /// </summary>
+        /// <param name="nextScene">変更先のシーン</param>
+        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
+        public static void ChangeSceneWithTransition(Scene nextScene)
+        {
+            StartSceneChange(nextScene);
+            // 
+            // 未実装
+            // ToDo:描画処理のトリガー引き
+            //
+            throw new NotImplementedException("このメソッドは未だ実装中です");
+        }
+
+        /*
+         * ChangeSceneWithTransition
+         * →OnFadeOutFinished
+         * →OnFadeInFinished
+         * の順で呼び出されるのを想定
+         * 
+         * SceneのOn〇〇メソッドの呼び出しは初代の物を参考に
+         * 
+         * シーン遷移処理(描画)は主にChangeSceneWithTransition - OnFadeOutfinishedの間でやる想定
+         */
+
+        //ここでNextSceneを設定
+        /// <summary>
+        /// シーンチェンジを開始する
+        /// </summary>
+        /// <param name="nextScene">変更先のシーン</param>
+        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
+        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
+        internal static void StartSceneChange(Scene nextScene)
+        {
+            if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
+            if (!(CurrentScene.Status == SceneStatus.Updated || CurrentScene.Status == SceneStatus.WaitDisposed || CurrentScene.Status == SceneStatus.Disposed)) throw new InvalidOleVariantTypeException("シーン変更処理中です");
+            CurrentScene.RaiseOnTransitionBegin();
+            nextScene.RaiseOnRegistered();
+            NextScene = nextScene;
+        }
+
+        //ここで {Alject.IsInherited = true} のオブジェクトの引継ぎが発生
+        /// <summary>
+        /// フェードアウト終了時に実行
+        /// </summary>
+        /// <exception cref="InvalidOperationException"><paramref name="NextScene"/>がnull</exception>
+        internal static void OnFadeOutFinished()
+        {
+            if (NextScene == null) throw new InvalidOperationException("次のシーンがnullです");
+            CurrentScene.RaiseOnStopUpdating();
+            Scene.InheritObjects(CurrentScene, NextScene);
+            NextScene.RaiseOnStartUpdating();
+        }
+
+        //ここでCurrentSceneの変更
+        /// <summary>
+        /// フェードイン終了時に実行
+        /// </summary>
+        /// <param name="NextScene">変更先のシーン</param>
+        /// <exception cref="InvalidOperationException"><paramref name="NextScene"/>がnull</exception>
+        internal static void OnFadeInFinished()
+        {
+            if (NextScene == null) throw new InvalidOperationException("次のシーンがnullです");
+            CurrentScene.RaiseOnUnRegistered();
+            NextScene.RaiseOnTransitionFinished();
+            CurrentScene = NextScene;
+            NextScene = null;
+        }
+        #endregion
+
+        /// <summary>
+        /// ファイルを管理するクラス取得します。
         /// </summary>
         public static File File { get; private set; }
 
         /// <summary>
-        /// キーボードを管理するクラスを取得する
+        /// キーボードを管理するクラス取得します。
         /// </summary>
         public static Keyboard Keyboard { get; private set; }
 
         /// <summary>
-        /// マウスを管理するクラスを取得する
+        /// マウスを管理するクラス取得します。
         /// </summary>
         public static Mouse Mouse { get; private set; }
 
         ///// <summary>
-        ///// ジョイスティックを管理するクラスを取得する
+        ///// ジョイスティックを管理するクラス取得します。
         ///// </summary>
         //public static Joystick Joystick { get; private set; }
 
         /// <summary>
-        /// グラフィックのクラスを取得する
+        /// グラフィックのクラス取得します。
         /// </summary>
         public static Graphics Graphics { get; private set; }
 
         /// <summary>
-        /// レンダラのクラスを取得する
+        /// ログを管理するクラス取得します。
+        /// </summary>
+        public static Log Log { get; private set; }
+
+        /// <summary>
+        /// レンダラのクラス取得します。
         /// </summary>
         public static Renderer Renderer { get; private set; }
 
         /// <summary>
-        /// 音を管理するクラスを取得する
+        /// 音を管理するクラス取得します。
         /// </summary>
         public static SoundMixer Sound { get; private set; }
 
         /// <summary>
-        /// リソースを管理するクラスを取得する
+        /// リソースを管理するクラス取得します。
         /// </summary>
         public static Resources Resources { get; private set; }
     }

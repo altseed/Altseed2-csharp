@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Altseed
 {
-    [Serializable]
-    internal enum ObjectStatus : int
+    /// <summary>
+    /// 登録状況を表します。
+    /// </summary>
+    public enum RegisterStatus
     {
         /// <summary>
         /// 所属なし
