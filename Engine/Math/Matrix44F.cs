@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Altseed
 {
     /// <summary>
-    /// <see cref="float"/>型の4x4行列表す構造体
+    /// <see cref="float"/>型の4x4行列を表す構造体
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
@@ -41,7 +41,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 転置行列を設定する。
+        /// 転置行列を設定します。
         /// </summary>
         public void SetTransposed()
         {
@@ -126,7 +126,7 @@ namespace Altseed
         }
 
         /// <summary>
-		/// 逆行列を取得する。
+		/// 逆行列取得します。
 		/// </summary>
 		/// <returns></returns>
 		public Matrix44F GetInverted()
@@ -137,7 +137,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// カメラ行列(右手系)を設定する。
+        /// カメラ行列(右手系)を設定します。
         /// </summary>
         /// <param name="eye">カメラの位置</param>
         /// <param name="at">カメラの注視点</param>
@@ -171,7 +171,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// カメラ行列(左手系)を設定する。
+        /// カメラ行列(左手系)を設定します。
         /// </summary>
         /// <param name="eye">カメラの位置</param>
         /// <param name="at">カメラの注視点</param>
@@ -205,7 +205,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 射影行列(右手系)を設定する。
+        /// 射影行列(右手系)を設定します。
         /// </summary>
         /// <param name="ovY">Y方向への視野角(ラジアン)</param>
         /// <param name="aspect">画面のアスペクト比</param>
@@ -240,7 +240,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// OpenGL用射影行列(右手系)を設定する。
+        /// OpenGL用射影行列(右手系)を設定します。
         /// </summary>
         /// <param name="ovY">Y方向への視野角(ラジアン)</param>
         /// <param name="aspect">画面のアスペクト比</param>
@@ -275,7 +275,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 射影行列(左手系)を設定する。
+        /// 射影行列(左手系)を設定します。
         /// </summary>
         /// <param name="ovY">Y方向への視野角(ラジアン)</param>
         /// <param name="aspect">画面のアスペクト比</param>
@@ -309,7 +309,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 正射影行列(右手系)を設定する。
+        /// 正射影行列(右手系)を設定します。
         /// </summary>
         /// <param name="width">横幅</param>
         /// <param name="height">縦幅</param>
@@ -340,7 +340,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 正射影行列(左手系)を設定する。
+        /// 正射影行列(左手系)を設定します。
         /// </summary>
         /// <param name="width">横幅</param>
         /// <param name="height">縦幅</param>
@@ -371,7 +371,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// X軸回転行列(右手)を設定する。
+        /// X軸回転行列(右手)を設定します。
         /// </summary>
         /// <param name="angle">X軸回転量(ラジアン)</param>
         public void SetRotationX(float angle)
@@ -402,7 +402,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// Y軸回転行列(右手)を設定する。
+        /// Y軸回転行列(右手)を設定します。
         /// </summary>
         /// <param name="angle">Y軸回転量(ラジアン)</param>
         public void SetRotationY(float angle)
@@ -433,7 +433,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// Z軸回転行列(右手)を設定する。
+        /// Z軸回転行列(右手)を設定します。
         /// </summary>
         /// <param name="angle">Z軸回転量(ラジアン)</param>
         public void SetRotationZ(float angle)
@@ -464,7 +464,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 任意軸の反時計回転行列(右手)を設定する。
+        /// 任意軸の反時計回転行列(右手)を設定します。
         /// </summary>
         /// <param name="axis">軸</param>
         /// <param name="angle">回転量(ラジアン)</param>
@@ -493,7 +493,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// クオータニオンを元に回転行列(右手)を設定する。
+        /// クオータニオンを元に回転行列(右手)を設定します。
         /// </summary>
         /// <param name="x">クオータニオン</param>
         /// <param name="y">クオータニオン</param>
@@ -534,7 +534,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 拡大行列を設定する。
+        /// 拡大行列を設定します。
         /// </summary>
         /// <param name="x">X方向拡大率</param>
         /// <param name="y">Y方向拡大率</param>

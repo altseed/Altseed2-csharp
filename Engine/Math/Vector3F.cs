@@ -52,7 +52,7 @@ namespace Altseed
         public Vector3I To3I() => new Vector3I((int)X, (int)Y, (int)Z);
 
         /// <summary>
-        /// ベクトルの長さの二乗を取得する。
+        /// ベクトルの長さの二乗を取得します。
         /// </summary>
         public float SquaredLength
         {
@@ -60,7 +60,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// ベクトルの長さを取得または設定する。
+        /// ベクトルの長さを取得または設定します。
         /// </summary>
         public float Length
         {
@@ -76,7 +76,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// このベクトルを単位ベクトル化する。
+        /// このベクトルを単位ベクトル化します。
         /// </summary>
         public void Normalize()
         {
@@ -87,7 +87,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// このベクトルの単位ベクトルを取得する。
+        /// このベクトルの単位ベクトルを取得します。
         /// </summary>
         public Vector3F Normal
         {
@@ -140,7 +140,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 内積を取得する。
+        /// 内積を取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
@@ -151,13 +151,13 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 外積を取得する。
+        /// 外積を取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
         /// <returns>外積v1×v2</returns>
         /// <remarks>
-        /// 右手の親指がv1、人差し指がv2としたとき、中指の方向を返す。
+        /// 右手の親指がv1、人差し指がv2としたとき、中指の方向を返します。。
         /// </remarks>
         public static Vector3F Cross(Vector3F v1, Vector3F v2)
         {
@@ -172,7 +172,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 加算する。
+        /// 加算します。
         /// </summary>
         /// <param name="v1"></param>
         /// <param name="v2"></param>
@@ -187,7 +187,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 減算する。
+        /// 減算します。
         /// </summary>
         /// <param name="v1"></param>
         /// <param name="v2"></param>
@@ -202,7 +202,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 除算する。
+        /// 除算します。
         /// </summary>
         /// <param name="v1">値1</param>
         /// <param name="v2">値2</param>
@@ -217,7 +217,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// スカラーで除算する。
+        /// スカラーで除算します。
         /// </summary>
         /// <param name="v1">値1</param>
         /// <param name="v2">値2</param>
@@ -232,7 +232,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 2点間の距離を取得する。
+        /// 2点間の距離を取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
@@ -246,30 +246,30 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
-        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
         public override bool Equals(object obj) => obj is Vector3F v ? Equals(v) : false;
 
         /// <summary>
-        /// 2つの<see cref="Vector3F"/>間の等価性を判定する
+        /// 2つの<see cref="Vector3F"/>間の等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定するベクトル1</param>
         /// <param name="v2">等価性を判定するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(Vector3F v1, Vector3F v2) => v1.Equals(v2);
 
 
         /// <summary>
-        /// もう1つの<see cref="Vector3F"/>との等価性を判定する
+        /// もう1つの<see cref="Vector3F"/>との等価性を判定します。
         /// </summary>
         /// <param name="other">比較する<see cref="Vector3F"/>のインスタンス</param>
-        /// <returns><paramref name="other"/>等価性をが認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
         public bool Equals(Vector3F other) => X == other.X && Y == other.Y && Z == other.Z;
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public override int GetHashCode()

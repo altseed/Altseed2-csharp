@@ -31,7 +31,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// シリアライズするデータを設定する
+        /// シリアライズするデータを設定します。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先のデータ</param>

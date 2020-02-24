@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Altseed
 {
     /// <summary>
-    /// <see cref="int"/>型の3x3行列表す構造体
+    /// <see cref="int"/>型の3x3行列を表す構造体
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
@@ -18,7 +18,7 @@ namespace Altseed
         public int[,] Values;
 
         /// <summary>
-        /// 単位行列を設定する
+        /// 単位行列を設定します。
         /// </summary>
         public void SetIdentity()
         {
@@ -35,7 +35,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 平行移動の行列を設定する
+        /// 平行移動の行列を設定します。
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -47,7 +47,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 転置行列を設定する。
+        /// 転置行列を設定します。
         /// </summary>
         public void SetTransposed()
         {
@@ -64,7 +64,7 @@ namespace Altseed
 
 
         /// <summary>
-        /// 拡大・縮小行列を設定する。
+        /// 拡大・縮小行列を設定します。
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>

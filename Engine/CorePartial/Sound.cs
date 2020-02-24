@@ -40,7 +40,7 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込む音源のパス</param>
         /// <param name="isDecompressed">一気に解凍するかどうか</param>
-        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる，または使用出来ない文字を含んでいる</exception>
+        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる、または使用出来ない文字を含んでいる</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定された音源が見つからない</exception>
         /// <exception cref="PathTooLongException"><paramref name="path"/>が指定するパスが見つからない</exception>
@@ -62,7 +62,7 @@ namespace Altseed
         /// <param name="path">読み込む音源のパス</param>
         /// <param name="isDecompressed">一気に解凍するかどうか</param>
         /// <param name="result"><paramref name="path"/>をパスに持つ音源のデータを格納した<see cref="Sound"/>の新しいインスタンス 読み込めなかったらnull</param>
-        /// <returns><paramref name="result"/>を正常に読み込めたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
         public static bool TryLoad(string path, bool isDecompressed, out Sound result)
         {
             var ex = IOHelper.CheckLoadPath(path);

@@ -50,7 +50,7 @@ namespace Altseed
         public override string ToString() => $"({X}, {Y}, {Z})";
 
         /// <summary>
-        /// <see cref="Vector3F"/>に型変換する
+        /// <see cref="Vector3F"/>に型変換します。
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector3F"/>の新しいインスタンス</returns>
         public Vector2F To3F() => new Vector2F(X, Y);
@@ -98,7 +98,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 内積を取得する。
+        /// 内積取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
@@ -109,13 +109,13 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 外積を取得する。
+        /// 外積取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
         /// <returns>外積v1×v2</returns>
         /// <remarks>
-        /// 右手の親指がv1、人差し指がv2としたとき、中指の方向を返す。
+        /// 右手の親指がv1、人差し指がv2としたとき、中指の方向を返します。。
         /// </remarks>
         public static Vector3I Cross(Vector3I v1, Vector3I v2)
         {
@@ -130,7 +130,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 加算する。
+        /// 加算します。
         /// </summary>
         /// <param name="v1"></param>
         /// <param name="v2"></param>
@@ -145,7 +145,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 減算する。
+        /// 減算します。
         /// </summary>
         /// <param name="v1"></param>
         /// <param name="v2"></param>
@@ -160,7 +160,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 除算する。
+        /// 除算します。
         /// </summary>
         /// <param name="v1">値1</param>
         /// <param name="v2">値2</param>
@@ -175,7 +175,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// スカラーで除算する。
+        /// スカラーで除算します。
         /// </summary>
         /// <param name="v1">値1</param>
         /// <param name="v2">値2</param>
@@ -190,7 +190,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 2点間の距離を取得する。
+        /// 2点間の距離取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
@@ -204,30 +204,30 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
-        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
         public override bool Equals(object obj) => obj is Vector3I f && Equals(f);
 
         /// <summary>
-        /// 2つの<see cref="Vector3I"/>間の等価性を判定する
+        /// 2つの<see cref="Vector3I"/>間の等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定するベクトル1</param>
         /// <param name="v2">等価性を判定するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(Vector3I v1, Vector3I v2) => v1.Equals(v2);
 
 
         /// <summary>
-        /// もう1つの<see cref="Vector3I"/>との等価性を判定する
+        /// もう1つの<see cref="Vector3I"/>との等価性を判定します。
         /// </summary>
         /// <param name="other">比較する<see cref="Vector3I"/>のインスタンス</param>
-        /// <returns><paramref name="other"/>等価性をが認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
         public bool Equals(Vector3I other) => X == other.X && Y == other.Y && Z == other.Z;
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public override int GetHashCode()

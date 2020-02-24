@@ -11,12 +11,12 @@ namespace Altseed
     public static class Engine
     {
         /// <summary>
-        /// 現在処理している<see cref="Scene"/>を取得する
+        /// 現在処理している<see cref="Scene"/>取得します。
         /// </summary>
-        public static Scene CurrentScene { get => _currentScene; private set => _currentScene = value ?? throw new ArgumentNullException("設定するシーンがnullです", nameof(value)); }
-        private static Scene _currentScene;
+        public static Scene CurrentScene { get; private set; }
+
         /// <summary>
-        /// 次に控えているシーンを取得する
+        /// 次に控えているシーン取得します。
         /// </summary>
         internal static Scene NextScene { get; private set; }
 
@@ -26,8 +26,8 @@ namespace Altseed
         /// <param name="title">ウィンドウ左上に表示される文字列</param>
         /// <param name="width">ウィンドウの横幅</param>
         /// <param name="height">ウィンドウの縦幅</param>
-        /// <param name="option">オプションのインスタンス</param>
-        /// <returns>初期化に成功したらtrue，それ以外でfalse</returns>
+        /// <param name="config">設定</param>
+        /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
             if (Core.Initialize(title, width, height, config ?? new Configuration()))
@@ -40,6 +40,7 @@ namespace Altseed
                 Sound = SoundMixer.GetInstance();
                 Log = Log.GetInstance();
                 Resources = Resources.GetInstance();
+
                 CurrentScene = new Scene()
                 {
                     Status = SceneStatus.Updated
@@ -52,7 +53,7 @@ namespace Altseed
         /// <summary>
         /// イベントを実行する
         /// </summary>
-        /// <returns>イベントの実行が出来たらtrue，それ以外でfalse</returns>
+        /// <returns>イベントの実行が出来たらtrue、それ以外でfalse</returns>
         public static bool DoEvents()
         {
             Graphics.DoEvents();
@@ -163,47 +164,47 @@ namespace Altseed
         #endregion
 
         /// <summary>
-        /// ファイルを管理するクラスを取得する
+        /// ファイルを管理するクラス取得します。
         /// </summary>
         public static File File { get; private set; }
 
         /// <summary>
-        /// キーボードを管理するクラスを取得する
+        /// キーボードを管理するクラス取得します。
         /// </summary>
         public static Keyboard Keyboard { get; private set; }
 
         /// <summary>
-        /// マウスを管理するクラスを取得する
+        /// マウスを管理するクラス取得します。
         /// </summary>
         public static Mouse Mouse { get; private set; }
 
         ///// <summary>
-        ///// ジョイスティックを管理するクラスを取得する
+        ///// ジョイスティックを管理するクラス取得します。
         ///// </summary>
         //public static Joystick Joystick { get; private set; }
 
         /// <summary>
-        /// グラフィックのクラスを取得する
+        /// グラフィックのクラス取得します。
         /// </summary>
         public static Graphics Graphics { get; private set; }
 
         /// <summary>
-        /// ログを管理するクラスを取得する
+        /// ログを管理するクラス取得します。
         /// </summary>
         public static Log Log { get; private set; }
 
         /// <summary>
-        /// レンダラのクラスを取得する
+        /// レンダラのクラス取得します。
         /// </summary>
         public static Renderer Renderer { get; private set; }
 
         /// <summary>
-        /// 音を管理するクラスを取得する
+        /// 音を管理するクラス取得します。
         /// </summary>
         public static SoundMixer Sound { get; private set; }
 
         /// <summary>
-        /// リソースを管理するクラスを取得する
+        /// リソースを管理するクラス取得します。
         /// </summary>
         public static Resources Resources { get; private set; }
     }

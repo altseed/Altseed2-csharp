@@ -105,7 +105,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 外積を取得する。
+        /// 外積取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
@@ -116,7 +116,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 2点間の距離を取得する。
+        /// 2点間の距離取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
         /// <param name="v2">v2ベクトル</param>
@@ -131,29 +131,29 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 2つの<see cref="Vector4I"/>間の等価性を判定する
+        /// 2つの<see cref="Vector4I"/>間の等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定するベクトル1</param>
         /// <param name="v2">等価性を判定するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(Vector4I v1, Vector4I v2) => v1.Equals(v2);
 
         /// <summary>
-        /// もう1つの<see cref="Vector4I"/>との等価性を判定する
+        /// もう1つの<see cref="Vector4I"/>との等価性を判定します。
         /// </summary>
         /// <param name="other">比較する<see cref="Vector4I"/>のインスタンス</param>
-        /// <returns><paramref name="other"/>等価性をが認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
         public bool Equals(Vector4I other) => X == other.X && Y == other.Y && Z == other.Z && W == other.W;
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
-        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
         public override bool Equals(object obj) => obj is Vector4I v ? Equals(v) : false;
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public override int GetHashCode()

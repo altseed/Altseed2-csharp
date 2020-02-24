@@ -31,7 +31,7 @@ using System.Threading.Tasks;
 namespace Altseed
 {
     /// <summary>
-    /// イージングの種類を表す
+    /// イージングの種類を表します。
     /// </summary>
     public enum EasingType : int
     {

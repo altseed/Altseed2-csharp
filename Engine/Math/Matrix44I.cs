@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Altseed
 {
     /// <summary>
-    /// <see cref="int"/>型の4x4行列表す構造体
+    /// <see cref="int"/>型の4x4行列を表す構造体
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
@@ -41,7 +41,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 転置行列を設定する。
+        /// 転置行列を設定します。
         /// </summary>
         public void SetTransposed()
         {
@@ -57,7 +57,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// クオータニオンを元に回転行列(右手)を設定する。
+        /// クオータニオンを元に回転行列(右手)を設定します。
         /// </summary>
         /// <param name="x">クオータニオン</param>
         /// <param name="y">クオータニオン</param>
@@ -98,7 +98,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 拡大行列を設定する。
+        /// 拡大行列を設定します。
         /// </summary>
         /// <param name="x">X方向拡大率</param>
         /// <param name="y">Y方向拡大率</param>

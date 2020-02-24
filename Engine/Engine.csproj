@@ -7,19 +7,9 @@
     <OutputPath>../Build</OutputPath>
   </PropertyGroup>
 
-  <Choose>
-    <When Condition=" '$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT'">
-      <PropertyGroup>
-        <TargetFrameworks>net48;netstandard2.1</TargetFrameworks>
-      </PropertyGroup>
-    </When>
-
-    <Otherwise>
-      <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
 
   <Choose>
     <When Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">

@@ -29,7 +29,7 @@ namespace Altseed
         /// 指定パスからファイルを読み込む
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
-        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる，または使用出来ない文字を含んでいる</exception>
+        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる、または使用出来ない文字を含んでいる</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定されたファイルが見つからない</exception>
         /// <exception cref="PathTooLongException"><paramref name="path"/>が指定するパスが見つからない</exception>
@@ -51,7 +51,7 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
         /// <param name="result"><paramref name="path"/>をパスに持つファイルのデータを格納した<see cref="StreamFile"/>の新しいインスタンス 読み込めなかったらnull</param>
-        /// <returns><paramref name="result"/>を正常に読み込めたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
         public static bool TryCreate(string path, out StreamFile result)
         {
             if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null)

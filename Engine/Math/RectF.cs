@@ -47,29 +47,29 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 2つの<see cref="RectF"/>間の等価性を判定する
+        /// 2つの<see cref="RectF"/>間の等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定する矩形1</param>
         /// <param name="v2">等価性を判定する矩形2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(RectF v1, RectF v2) => v1.Equals(v2);
 
         /// <summary>
-        /// もう1つの<see cref="RectF"/>との等価性を判定する
+        /// もう1つの<see cref="RectF"/>との等価性を判定します。
         /// </summary>
         /// <param name="other">比較する<see cref="RectF"/>のインスタンス</param>
-        /// <returns><paramref name="other"/>等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="other"/>等価性が認められたらtrue、それ以外でfalse</returns>
         public bool Equals(RectF other) => X == other.X && Y == other.Y && Width == other.Width && Height == other.Height;
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
-        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
         public override bool Equals(object obj) => obj is RectF r ? Equals(r) : false;
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public override int GetHashCode()

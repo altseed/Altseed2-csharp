@@ -30,7 +30,7 @@ namespace Altseed.Test
 
             var tr = new Matrix44F();
             tr.SetTranslation(0, 0, 0);
-            var comp1 = new TextureComponent()
+            var comp1 = new SpriteComponent()
             {
                 Texture = texture,
                 Src = new RectF(200, 0, 200, 200),
@@ -46,7 +46,7 @@ namespace Altseed.Test
             };
             tr = new Matrix44F();
             tr.SetTranslation(200, 200, 0);
-            var comp2 = new TextureComponent()
+            var comp2 = new SpriteComponent()
             {
                 Texture = texture2,
                 Src = new RectF(100, 100, 200, 200),
@@ -62,7 +62,7 @@ namespace Altseed.Test
             };
             tr = new Matrix44F();
             tr.SetTranslation(400, 400, 0);
-            var comp3 = new TextureComponent()
+            var comp3 = new SpriteComponent()
             {
                 Texture = texture,
                 Src = new RectF(0, 200, 200, 200),
@@ -176,7 +176,7 @@ namespace Altseed.Test
 
             var tr = new Matrix44F();
             tr.SetTranslation(0, 0, 0);
-            var comp1 = new TextureComponent()
+            var comp1 = new SpriteComponent()
             {
                 Texture = texture,
                 Src = new RectF(200, 0, 200, 200),
@@ -191,7 +191,7 @@ namespace Altseed.Test
             };
             tr = new Matrix44F();
             tr.SetTranslation(200, 200, 0);
-            var comp2 = new TextureComponent()
+            var comp2 = new SpriteComponent()
             {
                 Texture = texture2,
                 Src = new RectF(100, 100, 200, 200),
