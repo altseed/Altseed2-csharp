@@ -12,10 +12,17 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Matrix33I
+    public struct Matrix33I : ICloneable, IEquatable<Matrix33I>
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 3 * 3)]
         public int[,] Values;
+
+        internal static Matrix33I GetIdentity()
+        {
+            var result = new Matrix33I();
+            result.SetIdentity();
+            return result;
+        }
 
         /// <summary>
         /// 単位行列を設定します。
@@ -126,7 +133,7 @@ namespace Altseed
 
         public static Matrix33I operator *(Matrix33I left, Matrix33I right)
         {
-            Matrix33I result = new Matrix33I();
+            Matrix33I result = new Matrix33I() { Values = new int[3, 3] };
 
             for (int i = 0; i < 3; ++i)
             {
@@ -159,5 +166,64 @@ namespace Altseed
 
             return new Vector3I(elements[0], elements[1], elements[2]);
         }
+
+        #region IEquatable
+        /// <summary>
+        /// 2つの<see cref="Matrix33I"/>間の等価性を判定する
+        /// </summary>
+        /// <param name="other">等価性を判定する<see cref="Matrix33I"/>のインスタンス</param>
+        /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly bool Equals(Matrix33I other)
+        {
+            if (Values == null || other.Values == null) return false;
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    if (Values[i, j] != other.Values[i, j])
+                        return false;
+            return true;
+        }
+
+        /// <summary>
+        /// 指定したオブジェクトとの等価性を判定する
+        /// </summary>
+        /// <param name="obj">等価性を判定するオブジェクト</param>
+        /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly override bool Equals(object obj) => obj is Matrix33I m ? Equals(m) : false;
+
+        /// <summary>
+        /// このオブジェクトのハッシュコードを返す
+        /// </summary>
+        /// <returns>このオブジェクトのハッシュコード</returns>
+        public readonly override int GetHashCode()
+        {
+            var hash = new HashCode();
+            if (Values == null) return 0;
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    hash.Add(Values[i, j]);
+            return hash.ToHashCode();
+        }
+
+        public static bool operator ==(Matrix33I m1, Matrix33I m2) => m1.Equals(m2);
+        public static bool operator !=(Matrix33I m1, Matrix33I m2) => !m1.Equals(m2);
+        #endregion
+
+        /// <summary>
+        /// このインスタンスの複製を作成する
+        /// </summary>
+        /// <returns>このインスタンスの複製</returns>
+        public readonly Matrix33I Clone()
+        {
+            if (Values == null) return default;
+            var clone = new Matrix33I
+            {
+                Values = new int[4, 4]
+            };
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    clone.Values[i, j] = Values[i, j];
+            return clone;
+        }
+        object ICloneable.Clone() => Clone();
     }
 }
