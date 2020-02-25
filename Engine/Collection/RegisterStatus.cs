@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Altseed
 {
     /// <summary>
     /// 登録状況を表します。
     /// </summary>
-    public enum RegisterStatus
+    [Serializable]
+    public enum RegisterStatus : int
     {
         /// <summary>
         /// 所属なし
