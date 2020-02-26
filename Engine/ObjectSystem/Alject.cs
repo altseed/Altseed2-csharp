@@ -66,8 +66,10 @@ namespace Altseed
         }
 
         #region ComponentRegister
-
-        public readonly ReadOnlyCollection<AljectComponent> Components;
+        /// <summary>
+        /// 登録されているコンポーネントを取得する
+        /// </summary>
+        public ReadOnlyCollection<AljectComponent> Components { get; }
         private readonly RegisterableCollection<AljectComponent, Alject> _Components;
 
         /// <summary>
