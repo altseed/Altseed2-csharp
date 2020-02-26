@@ -17,7 +17,7 @@ namespace Altseed
         internal abstract void Removed();
 
         /// <summary>
-        /// 登録状況を取得または設定します。
+        /// 登録状況を取得します。
         /// </summary>
         public RegisterStatus Status { get; internal set; } = RegisterStatus.Free;
     }
