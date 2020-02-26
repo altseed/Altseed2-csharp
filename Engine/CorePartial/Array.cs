@@ -14,9 +14,9 @@ namespace Altseed
 
         void Resize(int size);
 
-        void WriteDataTo(IntPtr ptr);
+        void CopyTo(IntPtr ptr);
 
-        void SetData(IntPtr ptr, int size);
+        void Assign(IntPtr ptr, int size);
     }
 
     internal partial class Int8Array : IArray<byte> { }
@@ -33,7 +33,7 @@ namespace Altseed
 
             fixed (TElement* ptr = array)
             {
-                obj.WriteDataTo(new IntPtr(ptr));
+                obj.CopyTo(new IntPtr(ptr));
             }
 
             return array;
@@ -46,7 +46,7 @@ namespace Altseed
 
             fixed (TElement* ptr = array)
             {
-                obj.SetData(new IntPtr(ptr), array.Length);
+                obj.Assign(new IntPtr(ptr), array.Length);
             }
         }
     }

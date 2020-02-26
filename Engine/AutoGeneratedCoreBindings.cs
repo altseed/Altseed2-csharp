@@ -654,19 +654,19 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Int8Array_GetData(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Int8Array_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        private static extern void cbg_Int8Array_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Int8Array_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        private static extern IntPtr cbg_Int8Array_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_Assign(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Int8Array_Create(int size);
@@ -698,24 +698,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したインスタンスにデータをコピーします。
+        /// データをクリアします。
         /// </summary>
-        /// <param name="array">コピー先のインスタンス</param>
-        /// <param name="size">コピーするデータ量</param>
-        public void CopyTo(Int8Array array, int size)
+        public void Clear()
         {
-            cbg_Int8Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
-        }
-        
-        public IntPtr GetData()
-        {
-            var ret = cbg_Int8Array_GetData(selfPtr);
-            return ret;
-        }
-        
-        public void SetData(IntPtr ptr, int size)
-        {
-            cbg_Int8Array_SetData(selfPtr, ptr, size);
+            cbg_Int8Array_Clear(selfPtr);
         }
         
         /// <summary>
@@ -727,13 +714,24 @@ namespace Altseed
             cbg_Int8Array_Resize(selfPtr, size);
         }
         
+        public IntPtr GetData()
+        {
+            var ret = cbg_Int8Array_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void Assign(IntPtr ptr, int size)
+        {
+            cbg_Int8Array_Assign(selfPtr, ptr, size);
+        }
+        
         /// <summary>
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void WriteDataTo(IntPtr ptr)
+        public void CopyTo(IntPtr ptr)
         {
-            cbg_Int8Array_WriteDataTo(selfPtr, ptr);
+            cbg_Int8Array_CopyTo(selfPtr, ptr);
         }
         
         /// <summary>
@@ -794,19 +792,19 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Int32Array_GetData(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Int32Array_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        private static extern void cbg_Int32Array_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Int32Array_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        private static extern IntPtr cbg_Int32Array_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_Assign(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Int32Array_Create(int size);
@@ -838,24 +836,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したインスタンスにデータをコピーします。
+        /// データをクリアします。
         /// </summary>
-        /// <param name="array">コピー先のインスタンス</param>
-        /// <param name="size">コピーするデータ量</param>
-        public void CopyTo(Int32Array array, int size)
+        public void Clear()
         {
-            cbg_Int32Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
-        }
-        
-        public IntPtr GetData()
-        {
-            var ret = cbg_Int32Array_GetData(selfPtr);
-            return ret;
-        }
-        
-        public void SetData(IntPtr ptr, int size)
-        {
-            cbg_Int32Array_SetData(selfPtr, ptr, size);
+            cbg_Int32Array_Clear(selfPtr);
         }
         
         /// <summary>
@@ -867,13 +852,24 @@ namespace Altseed
             cbg_Int32Array_Resize(selfPtr, size);
         }
         
+        public IntPtr GetData()
+        {
+            var ret = cbg_Int32Array_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void Assign(IntPtr ptr, int size)
+        {
+            cbg_Int32Array_Assign(selfPtr, ptr, size);
+        }
+        
         /// <summary>
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void WriteDataTo(IntPtr ptr)
+        public void CopyTo(IntPtr ptr)
         {
-            cbg_Int32Array_WriteDataTo(selfPtr, ptr);
+            cbg_Int32Array_CopyTo(selfPtr, ptr);
         }
         
         /// <summary>
@@ -934,19 +930,19 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern void cbg_VertexArray_CopyTo(IntPtr selfPtr, IntPtr array, int size);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_VertexArray_GetData(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_VertexArray_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        private static extern void cbg_VertexArray_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_VertexArray_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_VertexArray_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        private static extern IntPtr cbg_VertexArray_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_VertexArray_Create(int size);
@@ -978,24 +974,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したインスタンスにデータをコピーします。
+        /// データをクリアします。
         /// </summary>
-        /// <param name="array">コピー先のインスタンス</param>
-        /// <param name="size">コピーするデータ量</param>
-        public void CopyTo(VertexArray array, int size)
+        public void Clear()
         {
-            cbg_VertexArray_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
-        }
-        
-        public IntPtr GetData()
-        {
-            var ret = cbg_VertexArray_GetData(selfPtr);
-            return ret;
-        }
-        
-        public void SetData(IntPtr ptr, int size)
-        {
-            cbg_VertexArray_SetData(selfPtr, ptr, size);
+            cbg_VertexArray_Clear(selfPtr);
         }
         
         /// <summary>
@@ -1007,13 +990,24 @@ namespace Altseed
             cbg_VertexArray_Resize(selfPtr, size);
         }
         
+        public IntPtr GetData()
+        {
+            var ret = cbg_VertexArray_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void Assign(IntPtr ptr, int size)
+        {
+            cbg_VertexArray_Assign(selfPtr, ptr, size);
+        }
+        
         /// <summary>
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void WriteDataTo(IntPtr ptr)
+        public void CopyTo(IntPtr ptr)
         {
-            cbg_VertexArray_WriteDataTo(selfPtr, ptr);
+            cbg_VertexArray_CopyTo(selfPtr, ptr);
         }
         
         /// <summary>
@@ -1074,19 +1068,19 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern void cbg_FloatArray_CopyTo(IntPtr selfPtr, IntPtr array, int size);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_FloatArray_GetData(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_FloatArray_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        private static extern void cbg_FloatArray_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_FloatArray_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_FloatArray_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        private static extern IntPtr cbg_FloatArray_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_FloatArray_Create(int size);
@@ -1118,24 +1112,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したインスタンスにデータをコピーします。
+        /// データをクリアします。
         /// </summary>
-        /// <param name="array">コピー先のインスタンス</param>
-        /// <param name="size">コピーするデータ量</param>
-        public void CopyTo(FloatArray array, int size)
+        public void Clear()
         {
-            cbg_FloatArray_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
-        }
-        
-        public IntPtr GetData()
-        {
-            var ret = cbg_FloatArray_GetData(selfPtr);
-            return ret;
-        }
-        
-        public void SetData(IntPtr ptr, int size)
-        {
-            cbg_FloatArray_SetData(selfPtr, ptr, size);
+            cbg_FloatArray_Clear(selfPtr);
         }
         
         /// <summary>
@@ -1147,13 +1128,24 @@ namespace Altseed
             cbg_FloatArray_Resize(selfPtr, size);
         }
         
+        public IntPtr GetData()
+        {
+            var ret = cbg_FloatArray_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void Assign(IntPtr ptr, int size)
+        {
+            cbg_FloatArray_Assign(selfPtr, ptr, size);
+        }
+        
         /// <summary>
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void WriteDataTo(IntPtr ptr)
+        public void CopyTo(IntPtr ptr)
         {
-            cbg_FloatArray_WriteDataTo(selfPtr, ptr);
+            cbg_FloatArray_CopyTo(selfPtr, ptr);
         }
         
         /// <summary>
