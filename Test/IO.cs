@@ -131,7 +131,7 @@ namespace Altseed.Test
                 Assert.AreEqual(testPack.Read(1), 1);
                 Assert.AreEqual(test.TempBufferSize, i + 1);
                 Assert.AreEqual(testPack.TempBufferSize, i + 1);
-                Assert.AreEqual(test.GetTempBuffer(), test.GetTempBuffer());
+                Assert.AreEqual(test.TempBuffer, test.TempBuffer);
             }
 
             // add package

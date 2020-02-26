@@ -7,21 +7,47 @@ using System.Threading.Tasks;
 
 namespace Altseed
 {
-    public partial class Int8Array
+    internal interface IArray<T>
+        where T : unmanaged
     {
-        public byte[] ToArray()
+        int Count { get; }
+
+        void Resize(int size);
+
+        void WriteDataTo(IntPtr ptr);
+
+        void SetData(IntPtr ptr, int size);
+    }
+
+    internal partial class Int8Array : IArray<byte> { }
+    internal partial class Int32Array : IArray<int> { }
+    internal partial class VertexArray : IArray<Vertex> { }
+    internal partial class FloatArray : IArray<float> { }
+
+    internal static class ArrayExtension
+    {
+        internal static unsafe TElement[] ToArray<TElement>(this IArray<TElement> obj)
+            where TElement : unmanaged
         {
-            var array = new byte[Count];
-            Marshal.Copy(GetData(), array, 0, Count);
+            var array = new TElement[obj.Count];
+
+            fixed (TElement* ptr = array)
+            {
+                obj.WriteDataTo(new IntPtr(ptr));
+            }
+
             return array;
         }
 
-        public void FromArray(byte[] array)
+        internal static unsafe void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
+            where TElement : unmanaged
         {
-            var ptr = Marshal.AllocCoTaskMem(sizeof(byte) * array.Length);
-            Marshal.Copy(array, 0, ptr, array.Length);
-            SetData(ptr, array.Length);
-            Marshal.FreeCoTaskMem(ptr);
+            if (obj.Count < array.Length) obj.Resize(array.Length);
+
+            fixed (TElement* ptr = array)
+            {
+                obj.SetData(new IntPtr(ptr), array.Length);
+            }
         }
     }
 }

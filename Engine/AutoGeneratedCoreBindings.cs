@@ -21,7 +21,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// リソースの種類を表す
+    /// リソースの種類を表します。
     /// </summary>
     public enum ResourceType : int
     {
@@ -34,7 +34,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// キーボードのキーの種類を表す
+    /// キーボードのキーの種類を表します。
     /// </summary>
     public enum Keys : int
     {
@@ -175,7 +175,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// マウスのボタンの種類を表す
+    /// マウスのボタンの種類を表します。
     /// </summary>
     public enum MouseButtons : int
     {
@@ -190,7 +190,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// カーソルの状態を表す
+    /// カーソルの状態を表します。
     /// </summary>
     public enum CursorMode : int
     {
@@ -200,7 +200,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ジョイスティックの種類を表す
+    /// ジョイスティックの種類を表します。
     /// </summary>
     public enum JoystickType : int
     {
@@ -212,7 +212,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ジョイスティックのボタンの種類を表す
+    /// ジョイスティックのボタンの種類を表します。
     /// </summary>
     public enum JoystickButtonType : int
     {
@@ -243,7 +243,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ジョイスティックの軸の種類を表す
+    /// ジョイスティックの軸の種類を表します。
     /// </summary>
     public enum JoystickAxisType : int
     {
@@ -262,7 +262,20 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ログレベルを表す
+    /// 音のスペクトル解析に使用する窓関数
+    /// </summary>
+    public enum FFTWindow : int
+    {
+        Rectangular,
+        Triangle,
+        Hamming,
+        Hanning,
+        Blackman,
+        BlackmanHarris,
+    }
+    
+    /// <summary>
+    /// ログレベルを表します。
     /// </summary>
     public enum LogLevel : int
     {
@@ -276,7 +289,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ログの範囲を表す
+    /// ログの範囲を表します。
     /// </summary>
     public enum LogCategory : int
     {
@@ -366,7 +379,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 全画面モードかどうかを取得または設定する
+        /// 全画面モードかどうかを取得または設定します。
         /// </summary>
         public bool IsFullscreenMode
         {
@@ -388,7 +401,7 @@ namespace Altseed
         private bool? _IsFullscreenMode;
         
         /// <summary>
-        /// 画面サイズ可変かどうかを取得または設定する
+        /// 画面サイズ可変かどうかを取得または設定します。
         /// </summary>
         public bool IsResizable
         {
@@ -410,7 +423,7 @@ namespace Altseed
         private bool? _IsResizable;
         
         /// <summary>
-        /// ログをコンソールに出力するかどうかを取得または設定する
+        /// ログをコンソールに出力するかどうかを取得または設定します。
         /// </summary>
         public bool EnabledConsoleLogging
         {
@@ -432,7 +445,7 @@ namespace Altseed
         private bool? _EnabledConsoleLogging;
         
         /// <summary>
-        /// ログをファイルに出力するかどうかを取得または設定する
+        /// ログをファイルに出力するかどうかを取得または設定します。
         /// </summary>
         public bool EnabledFileLogging
         {
@@ -454,7 +467,7 @@ namespace Altseed
         private bool? _EnabledFileLogging;
         
         /// <summary>
-        /// ログファイル名を取得または設定する
+        /// ログファイル名を取得または設定します。
         /// </summary>
         public string LogFilename
         {
@@ -552,7 +565,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 初期化処理を行う
+        /// 初期化処理を行います。
         /// </summary>
         /// <param name="title">ウィンドウの左上に表示されるウィンドウん名</param>
         /// <param name="width">ウィンドウの横幅</param>
@@ -566,7 +579,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// イベントを実行する
+        /// イベントを実行します。
         /// </summary>
         /// <returns>イベントが進行出来たらtrue，それ以外でfalse</returns>
         public bool DoEvent()
@@ -576,7 +589,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 終了処理を行う
+        /// 終了処理を行います。
         /// </summary>
         public static void Terminate()
         {
@@ -584,7 +597,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static Core GetInstance()
@@ -607,9 +620,9 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 8ビット整数の配列のクラス
+    /// 8ビット整数の配列のクラスを表します。
     /// </summary>
-    public partial class Int8Array
+    internal partial class Int8Array
     {
         #region unmanaged
         
@@ -650,6 +663,15 @@ namespace Altseed
         private static extern void cbg_Int8Array_SetData(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_Resize(IntPtr selfPtr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Int8Array_Create(int size);
+        
+        [DllImport("Altseed_Core")]
         private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
         
         
@@ -676,7 +698,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したインスタンスにデータをコピーする
+        /// 指定したインスタンスにデータをコピーします。
         /// </summary>
         /// <param name="array">コピー先のインスタンス</param>
         /// <param name="size">コピーするデータ量</param>
@@ -696,6 +718,34 @@ namespace Altseed
             cbg_Int8Array_SetData(selfPtr, ptr, size);
         }
         
+        /// <summary>
+        /// サイズを変更します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public void Resize(int size)
+        {
+            cbg_Int8Array_Resize(selfPtr, size);
+        }
+        
+        /// <summary>
+        /// データを指定したポインタにコピーします。
+        /// </summary>
+        /// <param name="ptr">ポインタ</param>
+        public void WriteDataTo(IntPtr ptr)
+        {
+            cbg_Int8Array_WriteDataTo(selfPtr, ptr);
+        }
+        
+        /// <summary>
+        /// インスタンスを作成します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public static Int8Array Create(int size)
+        {
+            var ret = cbg_Int8Array_Create(size);
+            return Int8Array.TryGetFromCache(ret);
+        }
+        
         ~Int8Array()
         {
             lock (this) 
@@ -710,9 +760,9 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 32ビット整数の配列のクラス
+    /// 32ビット整数の配列のクラスを表します。
     /// </summary>
-    public partial class Int32Array
+    internal partial class Int32Array
     {
         #region unmanaged
         
@@ -747,6 +797,21 @@ namespace Altseed
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr array, int size);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Int32Array_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_Resize(IntPtr selfPtr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Int32Array_Create(int size);
+        
+        [DllImport("Altseed_Core")]
         private static extern int cbg_Int32Array_GetCount(IntPtr selfPtr);
         
         
@@ -773,13 +838,52 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したインスタンスにデータをコピーする
+        /// 指定したインスタンスにデータをコピーします。
         /// </summary>
         /// <param name="array">コピー先のインスタンス</param>
         /// <param name="size">コピーするデータ量</param>
         public void CopyTo(Int32Array array, int size)
         {
             cbg_Int32Array_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
+        }
+        
+        public IntPtr GetData()
+        {
+            var ret = cbg_Int32Array_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void SetData(IntPtr ptr, int size)
+        {
+            cbg_Int32Array_SetData(selfPtr, ptr, size);
+        }
+        
+        /// <summary>
+        /// サイズを変更します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public void Resize(int size)
+        {
+            cbg_Int32Array_Resize(selfPtr, size);
+        }
+        
+        /// <summary>
+        /// データを指定したポインタにコピーします。
+        /// </summary>
+        /// <param name="ptr">ポインタ</param>
+        public void WriteDataTo(IntPtr ptr)
+        {
+            cbg_Int32Array_WriteDataTo(selfPtr, ptr);
+        }
+        
+        /// <summary>
+        /// インスタンスを作成します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public static Int32Array Create(int size)
+        {
+            var ret = cbg_Int32Array_Create(size);
+            return Int32Array.TryGetFromCache(ret);
         }
         
         ~Int32Array()
@@ -796,7 +900,287 @@ namespace Altseed
     }
     
     /// <summary>
-    /// リソースのクラス
+    /// 頂点データの配列のクラスを表します。
+    /// </summary>
+    internal partial class VertexArray
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<VertexArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<VertexArray>>();
+        
+        internal static  VertexArray TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                VertexArray cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_VertexArray_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new VertexArray(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<VertexArray>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_CopyTo(IntPtr selfPtr, IntPtr array, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_VertexArray_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_Resize(IntPtr selfPtr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_VertexArray_Create(int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_VertexArray_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal VertexArray(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_VertexArray_GetCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 指定したインスタンスにデータをコピーします。
+        /// </summary>
+        /// <param name="array">コピー先のインスタンス</param>
+        /// <param name="size">コピーするデータ量</param>
+        public void CopyTo(VertexArray array, int size)
+        {
+            cbg_VertexArray_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
+        }
+        
+        public IntPtr GetData()
+        {
+            var ret = cbg_VertexArray_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void SetData(IntPtr ptr, int size)
+        {
+            cbg_VertexArray_SetData(selfPtr, ptr, size);
+        }
+        
+        /// <summary>
+        /// サイズを変更します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public void Resize(int size)
+        {
+            cbg_VertexArray_Resize(selfPtr, size);
+        }
+        
+        /// <summary>
+        /// データを指定したポインタにコピーします。
+        /// </summary>
+        /// <param name="ptr">ポインタ</param>
+        public void WriteDataTo(IntPtr ptr)
+        {
+            cbg_VertexArray_WriteDataTo(selfPtr, ptr);
+        }
+        
+        /// <summary>
+        /// インスタンスを作成します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public static VertexArray Create(int size)
+        {
+            var ret = cbg_VertexArray_Create(size);
+            return VertexArray.TryGetFromCache(ret);
+        }
+        
+        ~VertexArray()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_VertexArray_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 浮動小数点数の配列のクラスを表します。
+    /// </summary>
+    internal partial class FloatArray
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<FloatArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<FloatArray>>();
+        
+        internal static  FloatArray TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                FloatArray cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_FloatArray_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new FloatArray(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<FloatArray>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_CopyTo(IntPtr selfPtr, IntPtr array, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_FloatArray_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_SetData(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_Resize(IntPtr selfPtr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_WriteDataTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_FloatArray_Create(int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_FloatArray_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal FloatArray(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_FloatArray_GetCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 指定したインスタンスにデータをコピーします。
+        /// </summary>
+        /// <param name="array">コピー先のインスタンス</param>
+        /// <param name="size">コピーするデータ量</param>
+        public void CopyTo(FloatArray array, int size)
+        {
+            cbg_FloatArray_CopyTo(selfPtr, array != null ? array.selfPtr : IntPtr.Zero, size);
+        }
+        
+        public IntPtr GetData()
+        {
+            var ret = cbg_FloatArray_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void SetData(IntPtr ptr, int size)
+        {
+            cbg_FloatArray_SetData(selfPtr, ptr, size);
+        }
+        
+        /// <summary>
+        /// サイズを変更します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public void Resize(int size)
+        {
+            cbg_FloatArray_Resize(selfPtr, size);
+        }
+        
+        /// <summary>
+        /// データを指定したポインタにコピーします。
+        /// </summary>
+        /// <param name="ptr">ポインタ</param>
+        public void WriteDataTo(IntPtr ptr)
+        {
+            cbg_FloatArray_WriteDataTo(selfPtr, ptr);
+        }
+        
+        /// <summary>
+        /// インスタンスを作成します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public static FloatArray Create(int size)
+        {
+            var ret = cbg_FloatArray_Create(size);
+            return FloatArray.TryGetFromCache(ret);
+        }
+        
+        ~FloatArray()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_FloatArray_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// リソースのクラスを表します。
     /// </summary>
     public partial class Resources
     {
@@ -852,7 +1236,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static Resources GetInstance()
@@ -862,7 +1246,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した種類のリソースの個数を返す
+        /// 指定した種類のリソースの個数を返します。
         /// </summary>
         /// <param name="type">個数を検索するリソースの種類</param>
         /// <returns>指定した種類のリソースの個数</returns>
@@ -873,7 +1257,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 登録されたリソースをすべて削除する
+        /// 登録されたリソースをすべて削除します。
         /// </summary>
         public void Clear()
         {
@@ -881,7 +1265,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// リソースの再読み込みを行う
+        /// リソースの再読み込みを行います。
         /// </summary>
         public void Reload()
         {
@@ -963,7 +1347,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static Keyboard GetInstance()
@@ -1073,7 +1457,7 @@ namespace Altseed
         private Vector2F? _Position;
         
         /// <summary>
-        /// カーソルのモードを取得または設定する
+        /// カーソルのモードを取得または設定します。
         /// </summary>
         public CursorMode CursorMode
         {
@@ -1095,7 +1479,7 @@ namespace Altseed
         private CursorMode? _CursorMode;
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static Mouse GetInstance()
@@ -1173,6 +1557,9 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Joystick_GetInstance();
+        
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
@@ -1217,7 +1604,17 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したジョイスティックが親であるかどうかを取得する
+        /// インスタンスを取得します。
+        /// </summary>
+        /// <returns>使用するインスタンス</returns>
+        internal static Joystick GetInstance()
+        {
+            var ret = cbg_Joystick_GetInstance();
+            return Joystick.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 指定したジョイスティックが親であるかどうかを取得します。
         /// </summary>
         /// <param name="joystickIndex">ジョイスティックのインデックス</param>
         /// <returns>指定したジョイスティックが親であったらtrue，それ以外でfalse</returns>
@@ -1228,7 +1625,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インプットの状態をリセットする
+        /// インプットの状態をリセットします。
         /// </summary>
         public void RefreshInputState()
         {
@@ -1236,7 +1633,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 接続の状態をリセットする
+        /// 接続の状態をリセットします。
         /// </summary>
         public void RefreshConnectedState()
         {
@@ -1244,7 +1641,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ボタンの状態をインデックスで取得する
+        /// ボタンの状態をインデックスで取得します。
         /// </summary>
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="buttonIndex">状態を検索するボタンのインデックス</param>
@@ -1256,7 +1653,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ボタンの状態を種類から取得する
+        /// ボタンの状態を種類から取得します。
         /// </summary>
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索するボタンの種類</param>
@@ -1268,7 +1665,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定インデックスのジョイスティックの種類を取得する
+        /// 指定インデックスのジョイスティックの種類を取得します。
         /// </summary>
         /// <param name="index">種類を取得するジョイスティックのインデックス</param>
         /// <returns>指定インデックスのジョイスティックの種類</returns>
@@ -1279,7 +1676,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 軸の状態をインデックスで取得する
+        /// 軸の状態をインデックスで取得します。
         /// </summary>
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="axisIndex">状態を検索する軸のインデックス</param>
@@ -1291,7 +1688,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 軸の状態を軸の種類で取得する
+        /// 軸の状態を軸の種類で取得します。
         /// </summary>
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索する軸の種類</param>
@@ -1303,7 +1700,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ジョイスティックの名前を取得する
+        /// ジョイスティックの名前を取得します。
         /// </summary>
         /// <param name="index">名前を検索するジョイスティックのインデックス</param>
         /// <returns>指定したインデックスのジョイスティックの名前</returns>
@@ -1314,7 +1711,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 振動の状態をリセットする
+        /// 振動の状態をリセットします。
         /// </summary>
         public void RefreshVibrateState()
         {
@@ -1322,7 +1719,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 振動を設定する
+        /// 振動を設定します。
         /// </summary>
         /// <param name="index">ジョイスティックのインデックス</param>
         /// <param name="high_freq"></param>
@@ -1412,7 +1809,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// コマンドリストを取得する
+        /// コマンドリストを取得します。
         /// </summary>
         public CommandList CommandList
         {
@@ -1424,7 +1821,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static Graphics GetInstance()
@@ -1532,7 +1929,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// テクスチャの大きさ(ピクセル)を取得する
+        /// テクスチャの大きさ(ピクセル)を取得します。
         /// </summary>
         public Vector2I Size
         {
@@ -1555,7 +1952,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 再読み込みを行う
+        /// 再読み込みを行います。
         /// </summary>
         /// <returns>再読み込みに成功したら true。それ以外の場合は false</returns>
         public bool Reload()
@@ -1571,6 +1968,60 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_Texture2D_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public partial class Material
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Material>> cacheRepo = new Dictionary<IntPtr, WeakReference<Material>>();
+        
+        internal static  Material TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Material cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Material_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Material(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Material>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Material(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        ~Material()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Material_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
@@ -1621,6 +2072,9 @@ namespace Altseed
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr vertexBuffer, IntPtr indexBuffer, IntPtr texture, IntPtr material);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
         
         #endregion
@@ -1631,7 +2085,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static Renderer GetInstance()
@@ -1655,6 +2109,18 @@ namespace Altseed
         public void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// ポリゴンを描画します
+        /// </summary>
+        /// <param name="vertexBuffer">頂点バッファ</param>
+        /// <param name="indexBuffer"></param>
+        /// <param name="texture">テクスチャ</param>
+        /// <param name="material">マテリアル</param>
+        internal void DrawPolygon(VertexArray vertexBuffer, Int32Array indexBuffer, Texture2D texture, Material material)
+        {
+            cbg_Renderer_DrawPolygon(selfPtr, vertexBuffer != null ? vertexBuffer.selfPtr : IntPtr.Zero, indexBuffer != null ? indexBuffer.selfPtr : IntPtr.Zero, texture != null ? texture.selfPtr : IntPtr.Zero, material != null ? material.selfPtr : IntPtr.Zero);
         }
         
         ~Renderer()
@@ -1857,7 +2323,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// テクスチャを取得または設定する
+        /// テクスチャを取得または設定します。
         /// </summary>
         public Texture2D Texture
         {
@@ -1879,7 +2345,7 @@ namespace Altseed
         private Texture2D _Texture;
         
         /// <summary>
-        /// 描画範囲を取得または設定する
+        /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
@@ -2075,7 +2541,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込むファイルのデータサイズを取得する
+        /// 読み込むファイルのデータサイズを取得します。
         /// </summary>
         public int Size
         {
@@ -2087,7 +2553,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 現在読み込んでいるファイル上の位置を取得する
+        /// 現在読み込んでいるファイル上の位置を取得します。
         /// </summary>
         public int CurrentPosition
         {
@@ -2099,7 +2565,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 現在読み込んでいるファイルのデータサイズを取得する
+        /// 現在読み込んでいるファイルのデータサイズを取得します。
         /// </summary>
         public int TempBufferSize
         {
@@ -2111,7 +2577,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込むファイルがファイルパッケージ内に格納されているかどうかを取得する
+        /// 読み込むファイルがファイルパッケージ内に格納されているかどうかを取得します。
         /// </summary>
         public bool IsInPackage
         {
@@ -2123,10 +2589,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定ファイルを読み込むStreamFileの新しいインスタンスを生成する
+        /// 指定ファイルを読み込むStreamFileの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
-        /// <returns>pathで読み込むファイルを格納するStreamFileの新しいインスタンスを生成する</returns>
+        /// <returns>pathで読み込むファイルを格納するStreamFileの新しいインスタンスを生成します。</returns>
         public static StreamFile Create(string path)
         {
             var ret = cbg_StreamFile_Create(path);
@@ -2145,17 +2611,17 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 現在読み込んでいるファイルのデータを取得する
+        /// 現在読み込んでいるファイルのデータを取得します。
         /// </summary>
         /// <returns>現在読み込んでいるファイルのデータ</returns>
-        public Int8Array GetTempBuffer()
+        internal Int8Array GetTempBuffer()
         {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
         }
         
         /// <summary>
-        /// 再読み込みを行う
+        /// 再読み込みを行います。
         /// </summary>
         /// <returns>再読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool Reload()
@@ -2245,7 +2711,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのパスを取得する
+        /// 読み込んだファイルのパスを取得します。
         /// </summary>
         public string Path
         {
@@ -2257,7 +2723,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのデータサイズを取得する
+        /// 読み込んだファイルのデータサイズを取得します。
         /// </summary>
         public int Size
         {
@@ -2269,7 +2735,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルがファイルパッケージ内に格納されているかどうかを取得する
+        /// 読み込んだファイルがファイルパッケージ内に格納されているかどうかを取得します。
         /// </summary>
         public bool IsInPackage
         {
@@ -2281,10 +2747,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定ファイルを読み込んだStaticFileの新しいインスタンスを生成する
+        /// 指定ファイルを読み込んだStaticFileの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
-        /// <returns>pathで読み込んだファイルを格納するStaticFileの新しいインスタンスを生成する</returns>
+        /// <returns>pathで読み込んだファイルを格納するStaticFileの新しいインスタンスを生成します。</returns>
         public static StaticFile Create(string path)
         {
             var ret = cbg_StaticFile_Create(path);
@@ -2292,17 +2758,17 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのデータを取得する
+        /// 読み込んだファイルのデータを取得します。
         /// </summary>
         /// <returns>読み込んだファイルのデータ</returns>
-        public Int8Array GetBuffer()
+        internal Int8Array GetBuffer()
         {
             var ret = cbg_StaticFile_GetBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
         }
         
         /// <summary>
-        /// 再読み込みを行う
+        /// 再読み込みを行います。
         /// </summary>
         /// <returns>再読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool Reload()
@@ -2399,7 +2865,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
         internal static File GetInstance()
@@ -2409,7 +2875,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ファイル読み込み時に自動的に保管されるディレクトリを追加する
+        /// ファイル読み込み時に自動的に保管されるディレクトリを追加します。
         /// </summary>
         /// <param name="path">追加するディレクトリ</param>
         /// <returns>追加処理がうまくいったらtrue，それ以外でfalse</returns>
@@ -2443,7 +2909,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 追加されたディレクトリやファイルパッケージをすべて削除する
+        /// 追加されたディレクトリやファイルパッケージをすべて削除します。
         /// </summary>
         public void ClearRootDirectories()
         {
@@ -2451,7 +2917,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したファイルが存在するかどうかを検索する
+        /// 指定したファイルが存在するかどうかを検索します。
         /// </summary>
         /// <param name="path">存在を確認するファイルのパス</param>
         /// <returns>pathの示すファイルが存在していたらtrue，それ以外でfalse</returns>
@@ -2500,7 +2966,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 音声ファイルを読み込む
+    /// 音声ファイルを読み込みます。
     /// </summary>
     public partial class Sound
     {
@@ -2570,7 +3036,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ループ開始地点(秒)を取得または設定する
+        /// ループ開始地点(秒)を取得または設定します。
         /// </summary>
         public float LoopStartingPoint
         {
@@ -2592,7 +3058,7 @@ namespace Altseed
         private float? _LoopStartingPoint;
         
         /// <summary>
-        /// ループ終了地点(秒)を取得または設定する
+        /// ループ終了地点(秒)を取得または設定します。
         /// </summary>
         public float LoopEndPoint
         {
@@ -2614,7 +3080,7 @@ namespace Altseed
         private float? _LoopEndPoint;
         
         /// <summary>
-        /// ループするかどうかを取得または設定する
+        /// ループするかどうかを取得または設定します。
         /// </summary>
         public bool IsLoopingMode
         {
@@ -2636,7 +3102,7 @@ namespace Altseed
         private bool? _IsLoopingMode;
         
         /// <summary>
-        /// 音源の長さ(秒)を取得する
+        /// 音源の長さ(秒)を取得します。
         /// </summary>
         public float Length
         {
@@ -2726,9 +3192,6 @@ namespace Altseed
         private static extern void cbg_SoundMixer_Resume(IntPtr selfPtr, int id);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_SoundMixer_Seek(IntPtr selfPtr, int id, float position);
-        
-        [DllImport("Altseed_Core")]
         private static extern void cbg_SoundMixer_SetVolume(IntPtr selfPtr, int id, float volume);
         
         [DllImport("Altseed_Core")]
@@ -2760,7 +3223,13 @@ namespace Altseed
         private static extern void cbg_SoundMixer_SetPanningPosition(IntPtr selfPtr, int id, float panningPosition);
         
         [DllImport("Altseed_Core")]
-        private static extern float cbg_SoundMixer_GetPlaybackPercent(IntPtr selfPtr, int id);
+        private static extern float cbg_SoundMixer_GetPlaybackPosition(IntPtr selfPtr, int id);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_SetPlaybackPosition(IntPtr selfPtr, int id, float position);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_SoundMixer_GetSpectrumData(IntPtr selfPtr, int id, IntPtr spectrums, int window);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
@@ -2779,7 +3248,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 音を再生する
+        /// 音を再生します。
         /// </summary>
         /// <param name="sound">音源データ</param>
         /// <returns>再生中の音のID</returns>
@@ -2790,7 +3259,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音が再生中であるかを取得する
+        /// 指定した音が再生中であるかを取得します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <returns>IDに対応する音が再生中であるか?</returns>
@@ -2801,7 +3270,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 再生中の音を全て停止する
+        /// 再生中の音を全て停止します。
         /// </summary>
         public void StopAll()
         {
@@ -2809,7 +3278,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音の再生を停止する
+        /// 指定した音の再生を停止します。
         /// </summary>
         /// <param name="id">音のID</param>
         public void Stop(int id)
@@ -2818,7 +3287,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音の再生を一時停止する
+        /// 指定した音の再生を一時停止します。
         /// </summary>
         /// <param name="id">音のID</param>
         public void Pause(int id)
@@ -2827,7 +3296,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音の再生を再開する
+        /// 指定した音の再生を再開します。
         /// </summary>
         /// <param name="id">音のID</param>
         public void Resume(int id)
@@ -2836,20 +3305,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音の再生位置を変更する
+        /// 指定した音の音量を変更します。
         /// </summary>
         /// <param name="id">音のID</param>
-        /// <param name="position">再生位置(秒)</param>
-        public void Seek(int id, float position)
-        {
-            cbg_SoundMixer_Seek(selfPtr, id, position);
-        }
-        
-        /// <summary>
-        /// 指定した音の音量を変更する
-        /// </summary>
-        /// <param name="id">音のID</param>
-        /// <param name="volume">音量(0.0~1.0</param>
+        /// <param name="volume">音量(0.0〜1.0</param>
         public void SetVolume(int id, float volume)
         {
             cbg_SoundMixer_SetVolume(selfPtr, id, volume);
@@ -2876,18 +3335,18 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音の音量を一定時間かけて変更する
+        /// 指定した音の音量を一定時間かけて変更します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <param name="second">フェードに使用する時間(秒)</param>
-        /// <param name="targetedVolume">変更後の音量(0.0~1.0)</param>
+        /// <param name="targetedVolume">変更後の音量(0.0〜1.0)</param>
         public void Fade(int id, float second, float targetedVolume)
         {
             cbg_SoundMixer_Fade(selfPtr, id, second, targetedVolume);
         }
         
         /// <summary>
-        /// 再生速度を変更するかを取得する
+        /// 再生速度を変更するかを取得します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <returns>再生速度を変更するか?</returns>
@@ -2898,7 +3357,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 再生速度を変更するかを設定する
+        /// 再生速度を変更するかを設定します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <param name="isPlaybackSpeedEnabled">再生速度を変更するか?</param>
@@ -2908,7 +3367,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 再生速度を取得する
+        /// 再生速度を取得します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <returns>本来の速度の何倍で再生されているか?</returns>
@@ -2919,7 +3378,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 再生速度を設定する
+        /// 再生速度を設定します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <param name="playbackSpeed">変更後の再生速度</param>
@@ -2929,7 +3388,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// パン位置を取得する
+        /// パン位置を取得します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <returns>パン位置 : 0.0で中央, -1.0で左, 1.0で右</returns>
@@ -2940,7 +3399,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// パン位置を設定する
+        /// パン位置を設定します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <param name="panningPosition">パン位置 : 0.0で中央, -1.0で左, 1.0で右</param>
@@ -2950,14 +3409,35 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した音の再生位置を0~1で取得する
+        /// 指定した音の再生位置を取得します。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <returns>現在の再生位置</returns>
-        public float GetPlaybackPercent(int id)
+        public float GetPlaybackPosition(int id)
         {
-            var ret = cbg_SoundMixer_GetPlaybackPercent(selfPtr, id);
+            var ret = cbg_SoundMixer_GetPlaybackPosition(selfPtr, id);
             return ret;
+        }
+        
+        /// <summary>
+        /// 指定した音の再生位置を変更します。
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="position">再生位置(秒)</param>
+        public void SetPlaybackPosition(int id, float position)
+        {
+            cbg_SoundMixer_SetPlaybackPosition(selfPtr, id, position);
+        }
+        
+        /// <summary>
+        /// 再生中の音のスペクトル情報を取得します。
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="spectrums">音のスペクトル情報を格納するための配列</param>
+        /// <param name="window">フーリエ変換に用いる窓関数</param>
+        internal void GetSpectrumData(int id, FloatArray spectrums, FFTWindow window)
+        {
+            cbg_SoundMixer_GetSpectrumData(selfPtr, id, spectrums != null ? spectrums.selfPtr : IntPtr.Zero, (int)window);
         }
         
         ~SoundMixer()
@@ -3045,7 +3525,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// インスタンスを取得する
+        /// インスタンスを取得します。
         /// </summary>
         internal static Log GetInstance()
         {
@@ -3054,7 +3534,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログを出力する
+        /// ログを出力します。
         /// </summary>
         public void Write(LogCategory category, LogLevel level, string message)
         {
@@ -3062,7 +3542,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルTraceでログを出力する
+        /// ログレベルTraceでログを出力します。
         /// </summary>
         public void Trace(LogCategory category, string message)
         {
@@ -3070,7 +3550,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルDebugでログを出力する
+        /// ログレベルDebugでログを出力します。
         /// </summary>
         public void Debug(LogCategory category, string message)
         {
@@ -3078,7 +3558,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルInfoでログを出力する
+        /// ログレベルInfoでログを出力します。
         /// </summary>
         public void Info(LogCategory category, string message)
         {
@@ -3086,7 +3566,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルWarningでログを出力する
+        /// ログレベルWarningでログを出力します。
         /// </summary>
         public void Warn(LogCategory category, string message)
         {
@@ -3094,7 +3574,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルErrorでログを出力する
+        /// ログレベルErrorでログを出力します。
         /// </summary>
         public void Error(LogCategory category, string message)
         {
@@ -3102,7 +3582,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルCriticalでログを出力する
+        /// ログレベルCriticalでログを出力します。
         /// </summary>
         public void Critical(LogCategory category, string message)
         {
@@ -3110,7 +3590,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルを設定する
+        /// ログレベルを設定します。
         /// </summary>
         public void SetLevel(LogCategory category, LogLevel level)
         {

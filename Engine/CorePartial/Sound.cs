@@ -87,4 +87,14 @@ namespace Altseed
             info.AddValue(S_IsLoopingMode, IsLoopingMode);
         }
     }
+
+    public partial class SoundMixer
+    {
+        public float[] GetSpectrumData(int id, FFTWindow window)
+        {
+            var fa = FloatArray.Create(0);
+            GetSpectrumData(id, fa, window);
+            return fa.ToArray();
+        }
+    }
 }

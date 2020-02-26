@@ -65,5 +65,42 @@ namespace Altseed.Test
 
             Engine.Terminate();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Polygon()
+        {
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+
+            var count = 0;
+
+            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+
+            Assert.NotNull(t1);
+
+            var vb = new Vertex[]{
+                new Vertex{ Position = new Vector3F( 10,  10, 0.5f), Color = new Color(  0, 255, 255, 255), UV1 = new Vector2F(0.0f, 0.0f) },
+                new Vertex{ Position = new Vector3F(110,  10, 0.5f), Color = new Color(255,   0, 255, 255), UV1 = new Vector2F(1.0f, 0.0f) },
+                new Vertex{ Position = new Vector3F(110, 110, 0.5f), Color = new Color(255, 255,   0, 255), UV1 = new Vector2F(1.0f, 1.0f) },
+                new Vertex{ Position = new Vector3F( 10, 110, 0.5f), Color = new Color(255, 255, 255, 255), UV1 = new Vector2F(0.0f, 1.0f) },
+            };
+
+            var ib = new int[] { 0, 1, 2, 2, 3, 0 };
+
+            while (Engine.DoEvents() && count++ < 300)
+            {
+                Assert.True(Engine.Graphics.BeginFrame());
+
+                Engine.Renderer.DrawPolygon(vb, ib, t1, null);
+                Engine.Update();
+
+                var cmdList = Engine.Graphics.CommandList;
+                cmdList.SetRenderTargetWithScreen();
+
+                Engine.Renderer.Render(cmdList);
+                Assert.True(Engine.Graphics.EndFrame());
+            }
+
+            Engine.Terminate();
+        }
     }
 }
