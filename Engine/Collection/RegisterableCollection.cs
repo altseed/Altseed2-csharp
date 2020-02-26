@@ -6,6 +6,7 @@ namespace Altseed
     /// <summary>
     /// 追加および削除を予約できるコレクションを表します。
     /// </summary>
+    [Serializable]
     internal class RegisterableCollection<TElement, TOwner>
         where TElement : Registerable<TOwner>
     {
