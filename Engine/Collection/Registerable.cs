@@ -9,6 +9,7 @@ namespace Altseed
     /// <summary>
     /// <see cref="RegisterableCollection{TElement, TOwner}"/>に登録や削除が可能な要素であることを表します。
     /// </summary>
+    [Serializable]
     public abstract class Registerable<TOwner>
     {
         internal abstract void Added(TOwner owner);
@@ -16,7 +17,7 @@ namespace Altseed
         internal abstract void Removed();
 
         /// <summary>
-        /// 登録状況を取得または設定します。
+        /// 登録状況を取得します。
         /// </summary>
         public RegisterStatus Status { get; internal set; } = RegisterStatus.Free;
     }

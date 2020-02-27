@@ -12,10 +12,17 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Matrix44F
+    public struct Matrix44F : ICloneable, IEquatable<Matrix44F>
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 4 * 4)]
         public float[,] Values;
+
+        internal static Matrix44F GetIdentity()
+        {
+            var result = new Matrix44F();
+            result.SetIdentity();
+            return result;
+        }
 
         public void SetIdentity()
         {
@@ -453,7 +460,7 @@ namespace Altseed
 
             Values[0, 2] = 0.0f;
             Values[1, 2] = 0.0f;
-            Values[2, 2] = 1;
+            Values[2, 2] = 1.0f;
             Values[3, 2] = 0.0f;
 
             Values[0, 3] = 0.0f;
@@ -601,11 +608,9 @@ namespace Altseed
             return o;
         }
 
-
-
         public static Matrix44F operator *(Matrix44F left, Matrix44F right)
         {
-            Matrix44F o_ = new Matrix44F();
+            Matrix44F o_ = new Matrix44F() { Values = new float[4, 4] };
             Mul(ref o_, ref left, ref right);
             return o_;
         }
@@ -639,5 +644,64 @@ namespace Altseed
                 }
             }
         }
+
+        #region IEquatable
+        /// <summary>
+        /// 2つの<see cref="Matrix44F"/>間の等価性を判定する
+        /// </summary>
+        /// <param name="other">等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
+        /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly bool Equals(Matrix44F other)
+        {
+            if (Values == null || other.Values == null) return false;
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    if (Values[i, j] != other.Values[i, j])
+                        return false;
+            return true;
+        }
+
+        /// <summary>
+        /// 指定したオブジェクトとの等価性を判定する
+        /// </summary>
+        /// <param name="obj">等価性を判定するオブジェクト</param>
+        /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly override bool Equals(object obj) => obj is Matrix44F m ? Equals(m) : false;
+
+        /// <summary>
+        /// このオブジェクトのハッシュコードを返す
+        /// </summary>
+        /// <returns>このオブジェクトのハッシュコード</returns>
+        public readonly override int GetHashCode()
+        {
+            var hash = new HashCode();
+            if (Values == null) return 0;
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    hash.Add(Values[i, j]);
+            return hash.ToHashCode();
+        }
+
+        public static bool operator ==(Matrix44F m1, Matrix44F m2) => m1.Equals(m2);
+        public static bool operator !=(Matrix44F m1, Matrix44F m2) => !m1.Equals(m2);
+        #endregion
+
+        /// <summary>
+        /// このインスタンスの複製を作成する
+        /// </summary>
+        /// <returns>このインスタンスの複製</returns>
+        public readonly Matrix44F Clone()
+        {
+            if (Values == null) return default;
+            var clone = new Matrix44F
+            {
+                Values = new float[4, 4]
+            };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    clone.Values[i, j] = Values[i, j];
+            return clone;
+        }
+        object ICloneable.Clone() => Clone();
     }
 }

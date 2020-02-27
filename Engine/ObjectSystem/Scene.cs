@@ -55,8 +55,10 @@ namespace Altseed
         }
 
         #region ComponentRegister
-
-        public ReadOnlyCollection<SceneComponent> Components;
+        /// <summary>
+        /// 登録されているコンポーネントを取得する
+        /// </summary>
+        public ReadOnlyCollection<SceneComponent> Components { get; }
         private readonly RegisterableCollection<SceneComponent, Scene> _Components;
 
         /// <summary>
@@ -84,7 +86,10 @@ namespace Altseed
         #region AljectRegister
 
         private readonly RegisterableCollection<Alject, Scene> _Objects;
-        public readonly ReadOnlyCollection<Alject> Objects;
+        /// <summary>
+        /// 登録されているオブジェクトを取得する
+        /// </summary>
+        public ReadOnlyCollection<Alject> Objects { get; }
 
         /// <summary>
         /// 指定したオブジェクトを登録する
