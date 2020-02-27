@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Altseed
@@ -47,20 +46,20 @@ namespace Altseed
         /// </summary>
         /// <param name="other">比較する<see cref="Vector2I"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性が認められたらtrue、それ以外でfalse</returns>
-        public bool Equals(Vector2I other) => X == other.X && Y == other.Y;
+        public readonly bool Equals(Vector2I other) => X == other.X && Y == other.Y;
 
         /// <summary>
         /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector2I v ? Equals(v) : false;
+        public readonly override bool Equals(object obj) => obj is Vector2I v ? Equals(v) : false;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hashCode = 1861411795;
             hashCode = hashCode * -1521134295 + X.GetHashCode();
@@ -72,13 +71,13 @@ namespace Altseed
         /// このベクトルを表す文字列取得します。
         /// </summary>
         /// <returns>このベクトルを表す文字列取得します。</returns>
-        public override string ToString() => $"({X}, {Y})";
+        public readonly override string ToString() => $"({X}, {Y})";
 
         /// <summary>
         /// <see cref="Vector2F"/>に型変換します。
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector2F"/>の新しいインスタンス</returns>
-        public Vector2F To2DF() => new Vector2F(X, Y);
+        public readonly Vector2F To2DF() => new Vector2F(X, Y);
 
         /// <summary>
         /// 2つのベクトルの外積を求めます。

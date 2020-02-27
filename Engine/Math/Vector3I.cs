@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace Altseed
@@ -53,7 +49,7 @@ namespace Altseed
         /// <see cref="Vector3F"/>に型変換します。
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector3F"/>の新しいインスタンス</returns>
-        public Vector2F To3F() => new Vector2F(X, Y);
+        public readonly Vector2F To3F() => new Vector2F(X, Y);
 
 
         public static bool operator ==(Vector3I left, Vector3I right)
@@ -208,7 +204,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector3I f && Equals(f);
+        public readonly override bool Equals(object obj) => obj is Vector3I f && Equals(f);
 
         /// <summary>
         /// 2つの<see cref="Vector3I"/>間の等価性を判定します。
@@ -224,13 +220,13 @@ namespace Altseed
         /// </summary>
         /// <param name="other">比較する<see cref="Vector3I"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
-        public bool Equals(Vector3I other) => X == other.X && Y == other.Y && Z == other.Z;
+        public readonly bool Equals(Vector3I other) => X == other.X && Y == other.Y && Z == other.Z;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hashCode = -1843799377;
             hashCode = hashCode * -1521134295 + X.GetHashCode();

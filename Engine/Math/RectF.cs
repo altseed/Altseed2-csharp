@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Altseed
@@ -59,20 +58,20 @@ namespace Altseed
         /// </summary>
         /// <param name="other">比較する<see cref="RectF"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性が認められたらtrue、それ以外でfalse</returns>
-        public bool Equals(RectF other) => X == other.X && Y == other.Y && Width == other.Width && Height == other.Height;
+        public readonly bool Equals(RectF other) => X == other.X && Y == other.Y && Width == other.Width && Height == other.Height;
 
         /// <summary>
         /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is RectF r ? Equals(r) : false;
+        public readonly override bool Equals(object obj) => obj is RectF r ? Equals(r) : false;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hashCode = 1861411795;
             hashCode = hashCode * -1521134295 + X.GetHashCode();
