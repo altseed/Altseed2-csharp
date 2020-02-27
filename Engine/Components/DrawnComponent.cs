@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Altseed
 {
     /// <summary>
     /// 描画コンポーネントを表します。
     /// </summary>
+    [Serializable]
     public abstract class DrawnComponent : AljectComponent
     {
         /// <summary>
