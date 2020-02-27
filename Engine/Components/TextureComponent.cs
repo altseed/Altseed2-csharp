@@ -19,9 +19,12 @@ namespace Altseed
             get => _angle;
             set
             {
-                _angle = value;
-                M_angle.SetRotationZ((float)(value * Math.PI / 180d));
-                UpdateTransport();
+                if (_angle != value)
+                {
+                    _angle = value;
+                    M_angle.SetRotationZ((float)(value * Math.PI / 180d));
+                    UpdateTransport();
+                }
             }
         }
         [NonSerialized]
@@ -44,9 +47,12 @@ namespace Altseed
             get => _position;
             set
             {
-                _position = value;
-                M_position.SetTranslation(value.X, value.Y, 0.0f);
-                UpdateTransport();
+                if (_position != value)
+                {
+                    _position = value;
+                    M_position.SetTranslation(value.X, value.Y, 0.0f);
+                    UpdateTransport();
+                }
             }
         }
         [NonSerialized]
@@ -62,9 +68,12 @@ namespace Altseed
             get => _scale;
             set
             {
-                _scale = value;
-                M_scale.SetScale(value.X, value.Y, 1.0f);
-                UpdateTransport();
+                if (_scale != value)
+                {
+                    _scale = value;
+                    M_scale.SetScale(value.X, value.Y, 1.0f);
+                    UpdateTransport();
+                }
             }
         }
         [NonSerialized]
@@ -80,8 +89,11 @@ namespace Altseed
             get => sprite.Src;
             set
             {
-                sprite.Src = value;
-                _src = value;
+                if (_src != value)
+                {
+                    sprite.Src = value;
+                    _src = value;
+                }
             }
         }
         [NonSerialized]
@@ -95,9 +107,12 @@ namespace Altseed
             get => sprite.Texture;
             set
             {
-                sprite.Texture = value;
-                if (value == null) _src = null;
-                else if (_src == null) Src = new RectF(0, 0, Texture.Size.X, Texture.Size.Y);
+                if (value != sprite.Texture)
+                {
+                    sprite.Texture = value;
+                    if (value == null) _src = null;
+                    else if (_src == null) Src = new RectF(0, 0, Texture.Size.X, Texture.Size.Y);
+                }
             }
         }
 
