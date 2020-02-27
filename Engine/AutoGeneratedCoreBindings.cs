@@ -261,6 +261,19 @@ namespace Altseed
     {
     }
     
+    public enum BuildinShaderType : int
+    {
+        SpriteUnlitVS,
+        SpriteUnlitPS,
+        FontUnlitPS,
+    }
+    
+    public enum WritingDirection : int
+    {
+        Vertical,
+        Horizontal,
+    }
+    
     /// <summary>
     /// 音のスペクトル解析に使用する窓関数
     /// </summary>
@@ -1791,6 +1804,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Graphics_GetBuildinShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         #endregion
@@ -1809,6 +1826,18 @@ namespace Altseed
             {
                 var ret = cbg_Graphics_GetCommandList(selfPtr);
                 return CommandList.TryGetFromCache(ret);
+            }
+        }
+        
+        /// <summary>
+        /// ビルド済みシェーダを取得します。
+        /// </summary>
+        public BuildinShader BuildinShader
+        {
+            get
+            {
+                var ret = cbg_Graphics_GetBuildinShader(selfPtr);
+                return BuildinShader.TryGetFromCache(ret);
             }
         }
         
@@ -1966,6 +1995,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// マテリアル
+    /// </summary>
     public partial class Material
     {
         #region unmanaged
@@ -1998,6 +2030,33 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Material_Constructor_0();
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector4F cbg_Material_GetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, ref Vector4F value);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_Material_GetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, ref Matrix44F value);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Material_GetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr value);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
         
         #endregion
@@ -2005,6 +2064,96 @@ namespace Altseed
         internal Material(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Shader Shader
+        {
+            get
+            {
+                if (_Shader != null)
+                {
+                    return _Shader;
+                }
+                var ret = cbg_Material_GetShader(selfPtr);
+                return Shader.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Shader = value;
+                cbg_Material_SetShader(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Shader _Shader;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Material()
+        {
+            selfPtr = cbg_Material_Constructor_0();
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        public Vector4F GetVector4F(string key)
+        {
+            var ret = cbg_Material_GetVector4F(selfPtr, key);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetVector4F(string key, ref Vector4F value)
+        {
+            cbg_Material_SetVector4F(selfPtr, key, ref value);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        public Matrix44F GetMatrix44F(string key)
+        {
+            var ret = cbg_Material_GetMatrix44F(selfPtr, key);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetMatrix44F(string key, ref Matrix44F value)
+        {
+            cbg_Material_SetMatrix44F(selfPtr, key, ref value);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        public Texture2D GetTexture(string key)
+        {
+            var ret = cbg_Material_GetTexture(selfPtr, key);
+            return Texture2D.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetTexture(string key, Texture2D value)
+        {
+            cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
         }
         
         ~Material()
@@ -2305,6 +2454,12 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedSprite_GetMaterial(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetMaterial(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
@@ -2381,6 +2536,28 @@ namespace Altseed
         private Matrix44F? _Transform;
         
         /// <summary>
+        /// マテリアルを取得または設定します。
+        /// </summary>
+        public Material Material
+        {
+            get
+            {
+                if (_Material != null)
+                {
+                    return _Material;
+                }
+                var ret = cbg_RenderedSprite_GetMaterial(selfPtr);
+                return Material.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Material = value;
+                cbg_RenderedSprite_SetMaterial(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Material _Material;
+        
+        /// <summary>
         /// スプライトを作成します。
         /// </summary>
         public static RenderedSprite Create()
@@ -2452,6 +2629,510 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_RenderedCamera_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// ビルド済みシェーダの取得を行うクラス
+    /// </summary>
+    public partial class BuildinShader
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<BuildinShader>> cacheRepo = new Dictionary<IntPtr, WeakReference<BuildinShader>>();
+        
+        internal static  BuildinShader TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                BuildinShader cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_BuildinShader_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new BuildinShader(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<BuildinShader>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuildinShader_Create(IntPtr selfPtr, int type);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_BuildinShader_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal BuildinShader(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// シェーダを取得します。
+        /// </summary>
+        /// <param name="type">シェーダの種類</param>
+        /// <returns>シェーダ</returns>
+        public Shader Create(BuildinShaderType type)
+        {
+            var ret = cbg_BuildinShader_Create(selfPtr, (int)type);
+            return Shader.TryGetFromCache(ret);
+        }
+        
+        ~BuildinShader()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_BuildinShader_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    public partial class Shader
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Shader>> cacheRepo = new Dictionary<IntPtr, WeakReference<Shader>>();
+        
+        internal static  Shader TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Shader cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Shader_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Shader(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Shader>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Shader_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Shader(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        ~Shader()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Shader_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 文字情報
+    /// </summary>
+    public partial class Glyph
+    {
+        #region unmanaged
+        
+        private static ConcurrentDictionary<IntPtr, WeakReference<Glyph>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Glyph>>();
+        
+        internal static  Glyph TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Glyph cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Glyph_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.TryRemove(native, out _);
+                }
+            }
+        
+            var newObject = new Glyph(new MemoryHandle(native));
+            cacheRepo.TryAdd(native, new WeakReference<Glyph>(newObject));
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_Glyph_GetTextureSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Glyph_GetTextureIndex(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_Glyph_GetPosition(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_Glyph_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_Glyph_GetOffset(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Glyph_GetGlyphWidth(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Glyph_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Glyph(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 文字テクスチャのサイズを取得する
+        /// </summary>
+        public Vector2I TextureSize
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetTextureSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 文字テクスチャのインデックスを取得する
+        /// </summary>
+        public int TextureIndex
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetTextureIndex(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 文字の座標を取得する
+        /// </summary>
+        public Vector2I Position
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetPosition(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 文字のサイズを取得する
+        /// </summary>
+        public Vector2I Size
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 文字のオフセットを取得する
+        /// </summary>
+        public Vector2I Offset
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetOffset(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 文字の幅を取得する
+        /// </summary>
+        public int GlyphWidth
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetGlyphWidth(selfPtr);
+                return ret;
+            }
+        }
+        
+        ~Glyph()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Glyph_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// フォント
+    /// </summary>
+    public partial class Font
+    {
+        #region unmanaged
+        
+        private static ConcurrentDictionary<IntPtr, WeakReference<Font>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Font>>();
+        
+        internal static  Font TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Font cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Font_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.TryRemove(native, out _);
+                }
+            }
+        
+            var newObject = new Font(new MemoryHandle(native));
+            cacheRepo.TryAdd(native, new WeakReference<Font>(newObject));
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int size, ref Color color);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_LoadStaticFont([MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetGlyph(IntPtr selfPtr, int character);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetFontTexture(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Color cbg_Font_GetColor(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Font_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Font_GetAscent(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Font_GetDescent(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Font_GetLineGap(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Font_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Font(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// フォントの色を取得する
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                var ret = cbg_Font_GetColor(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// フォントのサイズを取得する
+        /// </summary>
+        public int Size
+        {
+            get
+            {
+                var ret = cbg_Font_GetSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// フォントのベースラインからトップラインまでの距離を取得する
+        /// </summary>
+        public int Ascent
+        {
+            get
+            {
+                var ret = cbg_Font_GetAscent(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// フォントのベースラインからボトムラインまでの距離を取得する
+        /// </summary>
+        public int Descent
+        {
+            get
+            {
+                var ret = cbg_Font_GetDescent(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// フォントの行間の距離を取得する
+        /// </summary>
+        public int LineGap
+        {
+            get
+            {
+                var ret = cbg_Font_GetLineGap(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 動的にフォントを生成します
+        /// </summary>
+        /// <param name="path">読み込むフォントのパス</param>
+        /// <param name="size">フォントのサイズ</param>
+        /// <param name="color">フォントの色</param>
+        /// <returns>フォント</returns>
+        public static Font LoadDynamicFont(string path, int size, ref Color color)
+        {
+            var ret = cbg_Font_LoadDynamicFont(path, size, ref color);
+            return Font.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 静的にフォントを生成します
+        /// </summary>
+        /// <param name="path">読み込むフォントのパス</param>
+        /// <returns>フォント</returns>
+        public static Font LoadStaticFont(string path)
+        {
+            var ret = cbg_Font_LoadStaticFont(path);
+            return Font.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 文字情報を取得する
+        /// </summary>
+        /// <param name="character">文字</param>
+        /// <returns>文字</returns>
+        public Glyph GetGlyph(int character)
+        {
+            var ret = cbg_Font_GetGlyph(selfPtr, character);
+            return Glyph.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 文字列テクスチャを得る
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        /// <returns>テクスチャ</returns>
+        public Texture2D GetFontTexture(int index)
+        {
+            var ret = cbg_Font_GetFontTexture(selfPtr, index);
+            return Texture2D.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// カーニングを得る
+        /// </summary>
+        /// <param name="c1">文字1</param>
+        /// <param name="c2">文字2</param>
+        /// <returns>カーニング</returns>
+        public int GetKerning(int c1, int c2)
+        {
+            var ret = cbg_Font_GetKerning(selfPtr, c1, c2);
+            return ret;
+        }
+        
+        /// <summary>
+        /// テキストを描画したときのサイズを取得します
+        /// </summary>
+        /// <param name="text">テキスト</param>
+        /// <param name="direction">文字列の方向</param>
+        /// <param name="isEnableKerning">カーニングの有無</param>
+        /// <returns>サイズ</returns>
+        public Vector2I CalcTextureSize(string text, WritingDirection direction, bool isEnableKerning)
+        {
+            var ret = cbg_Font_CalcTextureSize(selfPtr, text, (int)direction, isEnableKerning);
+            return ret;
+        }
+        
+        ~Font()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Font_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
