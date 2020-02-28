@@ -39,15 +39,12 @@ namespace Altseed
                 if (_absolutePosition != value)
                 {
                     _absolutePosition = value;
-                    M_absolutePosition.SetTranslation(value.X, value.Y, 0.0f);
                     ChanegeTransform();
                 }
             }
         }
         [NonSerialized]
         private Vector2F _absolutePosition;
-        [NonSerialized]
-        private Matrix44F M_absolutePosition = Matrix44F.GetIdentity();
 
         /// <summary>
         /// 回転の中心となる座標を取得または設定する
@@ -179,7 +176,6 @@ namespace Altseed
         protected virtual void OnDeserialization(object sender)
         {
             _absolutePosition = _position + _centerPosition;
-            M_absolutePosition.SetTranslation(_absolutePosition.X, _absolutePosition.Y, 0.0f);
             M_angle.SetRotationZ(_angle);
             M_centerPosition.SetTranslation(_centerPosition.X, _centerPosition.Y, 0.0f);
             M_scale.SetScale(_scale.X, _scale.Y, 1.0f);
@@ -198,7 +194,7 @@ namespace Altseed
                 var glyph = _font?.GetGlyph(_text[i]);
                 if (glyph == null) continue;
 
-                var tempPosition = position + glyph.Offset + new Vector2F(0, _font.Ascent);
+                var tempPosition = position + glyph.Offset * _scale + new Vector2F(0, _font.Ascent) * _scale;
                 var sprite = clear ? RenderedSprite.Create() : sprites[i];
                 sprite.Material = _material;
                 sprite.Texture = _font.GetFontTexture(glyph.TextureIndex);
@@ -210,29 +206,34 @@ namespace Altseed
                 if (clear) sprites.Add(sprite);
                 else sprites[i] = sprite;
 
-                position += new Vector2F(glyph.GlyphWidth, 0);
+                position += new Vector2F(glyph.GlyphWidth, 0) * _scale;
 
-                if (i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]), 0);
+                if (i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]), 0) * _scale;
             }
         }
 
         internal void ChanegeTransform()
         {
-            var position = _position;
+            var position = _absolutePosition;
             for (int i = 0; i < _text.Length; i++)
             {
                 var glyph = _font?.GetGlyph(_text[i]);
                 if (glyph == null) continue;
 
-                var tempPosition = position + glyph.Offset + new Vector2F(0, _font.Ascent);
+                var tempPosition = position + glyph.Offset * _scale + new Vector2F(0, _font.Ascent) * _scale;
 
                 sprites[i].Transform = GetTransform(tempPosition);
 
-                position += new Vector2F(glyph.GlyphWidth, 0);
+                position += new Vector2F(glyph.GlyphWidth, 0) * _scale;
 
-                if (i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]), 0);
+                if (i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]), 0) * _scale;
             }
         }
-        private Matrix44F GetTransform(Vector2F position) => Matrix44F.GetIdentity() * M_absolutePosition * M_angle * M_scale * M_centerPosition;
+        private Matrix44F GetTransform(Vector2F position)
+        {
+            var M_absolutePosition = new Matrix44F();
+            M_absolutePosition.SetTranslation(position.X, position.Y, 0.0f);
+            return Matrix44F.GetIdentity() * M_absolutePosition * M_angle * M_scale * M_centerPosition;
+        }
     }
 }

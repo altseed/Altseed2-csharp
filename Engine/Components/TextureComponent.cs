@@ -70,6 +70,15 @@ namespace Altseed
         private Matrix44F M_centerPosition = Matrix44F.GetIdentity();
 
         /// <summary>
+        /// 使用するマテリアルを取得または設定する
+        /// </summary>
+        public Material Material
+        {
+            get => sprite.Material;
+            set { sprite.Material = value; }
+        }
+
+        /// <summary>
         /// 座標を取得または設定する
         /// </summary>
         public override Vector2F Position

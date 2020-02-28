@@ -20,6 +20,15 @@ namespace Altseed
         }
 
         /// <summary>
+        /// 回転の中心となる座標を取得または設定する
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get => textComponent.CenterPosition;
+            set { textComponent.CenterPosition = value; }
+        }
+
+        /// <summary>
         /// 描画するフォントを取得または設定する
         /// </summary>
         public Font Font

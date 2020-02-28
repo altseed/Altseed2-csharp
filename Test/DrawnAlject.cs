@@ -87,7 +87,9 @@ namespace Altseed.Test
                 if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) obj.Angle += 3;
                 if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) obj.Angle -= 3;
                 if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Push) obj.Text += "A";
-                if (Engine.Keyboard.GetKeyState(Keys.Backspace) == ButtonState.Push && obj.Text.Length > 0) obj.Text = obj.Text.Substring(0, obj.Text.Length - 1);
+                if (Engine.Keyboard.GetKeyState(Keys.Backspace) == ButtonState.Push && obj.Text.Length > 0) obj.Text = obj.Text[0..^1];
+
+                obj.CenterPosition = obj.Font.CalcTextureSize(obj.Text, WritingDirection.Horizontal, true) / 2;
 
                 Assert.True(Engine.Graphics.EndFrame());
 

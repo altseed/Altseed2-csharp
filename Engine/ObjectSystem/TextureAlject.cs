@@ -29,6 +29,15 @@ namespace Altseed
         }
 
         /// <summary>
+        /// 使用するマテリアルを取得または設定する
+        /// </summary>
+        public Material Material
+        {
+            get => textureComponent.Material;
+            set { textureComponent.Material = value; }
+        }
+
+        /// <summary>
         /// 座標を取得または設定する
         /// </summary>
         public override Vector2F Position
