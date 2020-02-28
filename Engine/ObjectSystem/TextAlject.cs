@@ -72,7 +72,5 @@ namespace Altseed
             textComponent = new TextComponent();
             AddComponent(textComponent);
         }
-
-
     }
 }

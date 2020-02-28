@@ -12,6 +12,24 @@ namespace Altseed
         public readonly RenderedSprite sprite;
 
         /// <summary>
+        /// <see cref="Transform"/>に使用される座標の値を取得または設定する
+        /// </summary>
+        internal Vector2F AbsolutePosition
+        {
+            get => _absolutePosition;
+            set
+            {
+                _absolutePosition = value;
+                M_absolutePosition.SetTranslation(value.X, value.Y, 0.0f);
+                UpdateTransport();
+            }
+        }
+        [NonSerialized]
+        private Vector2F _absolutePosition;
+        [NonSerialized]
+        private Matrix44F M_absolutePosition = Matrix44F.GetIdentity();
+
+        /// <summary>
         /// 回転角度(度数法)を取得または設定する
         /// </summary>
         public override float Angle
@@ -42,32 +60,14 @@ namespace Altseed
                 if (_centerPosition != value)
                 {
                     _centerPosition = value;
-                    M_centerPosition.SetTranslation(value.X, value.Y, 0.0f);
-                    UpdateAbsolutePosiion();
+                    M_centerPosition.SetTranslation(-value.X, -value.Y, 0.0f);
+                    AbsolutePosition = _position + _centerPosition;
                 }
             }
         }
         private Vector2F _centerPosition;
         [NonSerialized]
         private Matrix44F M_centerPosition = Matrix44F.GetIdentity();
-
-        /// <summary>
-        /// <see cref="Transform"/>に使用される座標の値を取得または設定する
-        /// </summary>
-        internal Vector2F AbsolutePosition
-        {
-            get => _absolutePosition;
-            set
-            {
-                _absolutePosition = value;
-                M_absolutePosition.SetTranslation(value.X, value.Y, 0.0f);
-                UpdateTransport();
-            }
-        }
-        [NonSerialized]
-        private Vector2F _absolutePosition;
-        [NonSerialized]
-        private Matrix44F M_absolutePosition = Matrix44F.GetIdentity();
 
         /// <summary>
         /// 座標を取得または設定する
@@ -80,14 +80,11 @@ namespace Altseed
                 if (_position != value)
                 {
                     _position = value;
-                    M_position.SetTranslation(value.X, value.Y, 0.0f);
-                    UpdateAbsolutePosiion();
+                    AbsolutePosition = _position + _centerPosition;
                 }
             }
         }
         private Vector2F _position;
-        [NonSerialized]
-        private Matrix44F M_position = Matrix44F.GetIdentity();
 
         /// <summary>
         /// 拡大率を取得または設定する
@@ -178,25 +175,14 @@ namespace Altseed
         /// <param name="sender">現在サポートされていない 常にnullを返す</param>
         protected virtual void OnDeserialization(object sender)
         {
-            var values = Transform.Values;
             if (Texture != null) _src = sprite.Src;
-            _absolutePosition = _position - _centerPosition;
+            _absolutePosition = _position + _centerPosition;
             M_absolutePosition.SetTranslation(_absolutePosition.X, _absolutePosition.Y, 0.0f);
             M_angle.SetRotationZ(_angle);
+            M_centerPosition.SetTranslation(_centerPosition.X, _centerPosition.Y, 0.0f);
             M_scale.SetScale(_scale.X, _scale.Y, 1.0f);
         }
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
-        private void UpdateAbsolutePosiion() => AbsolutePosition = _position - _centerPosition;
-        private void UpdateTransport()
-        {
-            Transform = Matrix44F.GetIdentity()
-                        * M_centerPosition
-                        * M_angle
-                        * M_scale
-                        * Matrix44F.FromPosition(-_centerPosition)
-                        * M_position
-                        //* M_absolutePosition
-                        ;
-        }
+        private void UpdateTransport() => Transform = M_absolutePosition * M_angle * M_scale * M_centerPosition;
     }
 }
