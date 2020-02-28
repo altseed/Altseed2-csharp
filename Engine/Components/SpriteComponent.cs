@@ -10,7 +10,7 @@ namespace Altseed
     /// スプライトを描画するコンポーネントを表します。
     /// </summary>
     [Serializable]
-    public sealed class SpriteComponent : DrawnComponent
+    public sealed class SpriteComponent : AljectComponent
     {
         public readonly RenderedSprite sprite;
 
@@ -52,7 +52,7 @@ namespace Altseed
         /// <summary>
         /// 描画を実行します。
         /// </summary>
-        internal override void Draw()
+        internal void Draw()
         {
             Engine.Renderer.DrawSprite(sprite);
         }

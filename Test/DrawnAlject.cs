@@ -56,13 +56,14 @@ namespace Altseed.Test
         {
             Assert.True(Engine.Initialize("TextureAlject", 960, 720));
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
-            Assert.NotNull(texture);
+            var color = new Color(255, 255, 255);
+            var font = Altseed.Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100, ref color);
+            Assert.NotNull(font);
 
-            var obj = new TextureAlject()
+            var obj = new TextAlject()
             {
-                Texture = texture,
-                CenterPosition = texture.Size / 2
+                Font = font,
+                Text = "Test"
             };
 
             Engine.CurrentScene.AddObject(obj);
@@ -85,8 +86,6 @@ namespace Altseed.Test
                 if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) obj.Scale -= new Vector2F(0.01f, 0.01f);
                 if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) obj.Angle += 3;
                 if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) obj.Angle -= 3;
-                if (Engine.Keyboard.GetKeyState(Keys.X) == ButtonState.Hold) obj.Src = new RectF(obj.Src.X, obj.Src.Y, obj.Src.Width - 2.0f, obj.Src.Height - 2.0f);
-                if (Engine.Keyboard.GetKeyState(Keys.Z) == ButtonState.Hold) obj.Src = new RectF(obj.Src.X, obj.Src.Y, obj.Src.Width + 2.0f, obj.Src.Height + 2.0f);
 
                 Assert.True(Engine.Graphics.EndFrame());
 
