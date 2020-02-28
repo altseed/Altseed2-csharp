@@ -33,9 +33,9 @@ namespace Altseed.Test
                 Engine.Renderer.Render(cmdList);
 
                 if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) obj.Position += new Vector2F(1.5f, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) obj.Position -= new Vector2F(1, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) obj.Position += new Vector2F(0, 1);
-                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) obj.Position -= new Vector2F(0, 1);
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) obj.Position -= new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) obj.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) obj.Position -= new Vector2F(0, 1.5f);
                 if (Engine.Keyboard.GetKeyState(Keys.B) == ButtonState.Hold) obj.Scale += new Vector2F(0.01f, 0.01f);
                 if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) obj.Scale -= new Vector2F(0.01f, 0.01f);
                 if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) obj.Angle += 3;
@@ -54,7 +54,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void TextAlject()
         {
-            Assert.True(Engine.Initialize("TextureAlject", 960, 720));
+            Assert.True(Engine.Initialize("TextAlject", 960, 720));
 
             var color = new Color(255, 255, 255);
             var font = Altseed.Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100, ref color);
@@ -63,7 +63,7 @@ namespace Altseed.Test
             var obj = new TextAlject()
             {
                 Font = font,
-                Text = "Test"
+                Text = "AAAA"
             };
 
             Engine.CurrentScene.AddObject(obj);
@@ -79,13 +79,15 @@ namespace Altseed.Test
                 Engine.Renderer.Render(cmdList);
 
                 if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) obj.Position += new Vector2F(1.5f, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) obj.Position -= new Vector2F(1, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) obj.Position += new Vector2F(0, 1);
-                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) obj.Position -= new Vector2F(0, 1);
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) obj.Position -= new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) obj.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) obj.Position -= new Vector2F(0, 1.5f);
                 if (Engine.Keyboard.GetKeyState(Keys.B) == ButtonState.Hold) obj.Scale += new Vector2F(0.01f, 0.01f);
                 if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) obj.Scale -= new Vector2F(0.01f, 0.01f);
                 if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) obj.Angle += 3;
                 if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) obj.Angle -= 3;
+                if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Push) obj.Text += "A";
+                if (Engine.Keyboard.GetKeyState(Keys.Backspace) == ButtonState.Push && obj.Text.Length > 0) obj.Text = obj.Text.Substring(0, obj.Text.Length - 1);
 
                 Assert.True(Engine.Graphics.EndFrame());
 
