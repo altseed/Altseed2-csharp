@@ -74,6 +74,15 @@ namespace Altseed
         }
 
         /// <summary>
+        /// カーニングを使用するかどうかを取得または設定する
+        /// </summary>
+        public bool UseKerning
+        {
+            get => textComponent.UseKerning;
+            set { textComponent.UseKerning = value; }
+        }
+
+        /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
         public TextAlject()
