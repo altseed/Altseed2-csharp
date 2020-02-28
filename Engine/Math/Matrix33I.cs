@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Altseed
 {
@@ -129,7 +125,49 @@ namespace Altseed
             return o;
         }
 
+        public static Matrix33I operator +(Matrix33I left, Matrix33I right)
+        {
+            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
+            var result = new Matrix33I() { Values = new int[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = left.Values[i, j] + right.Values[i, j];
+            return result;
+        }
 
+        public static Matrix33I operator -(Matrix33I matrix) => -1 * matrix;
+
+        public static Matrix33I operator -(Matrix33I left, Matrix33I right)
+        {
+            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
+            var result = new Matrix33I() { Values = new int[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = left.Values[i, j] - right.Values[i, j];
+            return result;
+        }
+
+        public static Matrix33I operator *(Matrix33I matrix, int scalar)
+        {
+            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
+            var result = new Matrix33I() { Values = new int[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = matrix.Values[i, j] * scalar;
+            return result;
+        }
+
+        public static Matrix33I operator *(int scalar, Matrix33I matrix) => matrix * scalar;
+
+        public static Matrix33I operator /(Matrix33I matrix, int scalar)
+        {
+            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
+            var result = new Matrix33I() { Values = new int[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = matrix.Values[i, j] / scalar;
+            return result;
+        }
 
         public static Matrix33I operator *(Matrix33I left, Matrix33I right)
         {
@@ -149,7 +187,6 @@ namespace Altseed
 
             return result;
         }
-
 
         public static Vector3I operator *(Matrix33I left, Vector3I right)
         {
