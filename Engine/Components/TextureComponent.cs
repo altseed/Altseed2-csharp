@@ -14,7 +14,7 @@ namespace Altseed
         /// <summary>
         /// 回転角度(度数法)を取得または設定する
         /// </summary>
-        public float Angle
+        public override float Angle
         {
             get => _angle;
             set
@@ -27,7 +27,6 @@ namespace Altseed
                 }
             }
         }
-        [NonSerialized]
         private float _angle;
         [NonSerialized]
         private Matrix44F M_angle = Matrix44F.GetIdentity();
@@ -73,7 +72,7 @@ namespace Altseed
         /// <summary>
         /// 座標を取得または設定する
         /// </summary>
-        public Vector2F Position
+        public override Vector2F Position
         {
             get => _position;
             set
@@ -86,7 +85,6 @@ namespace Altseed
                 }
             }
         }
-        [NonSerialized]
         private Vector2F _position;
         [NonSerialized]
         private Matrix44F M_position = Matrix44F.GetIdentity();
@@ -94,7 +92,7 @@ namespace Altseed
         /// <summary>
         /// 拡大率を取得または設定する
         /// </summary>
-        public Vector2F Scale
+        public override Vector2F Scale
         {
             get => _scale;
             set
@@ -107,7 +105,6 @@ namespace Altseed
                 }
             }
         }
-        [NonSerialized]
         private Vector2F _scale = new Vector2F(1.0f, 1.0f);
         [NonSerialized]
         private Matrix44F M_scale = Matrix44F.GetIdentity();
@@ -183,9 +180,6 @@ namespace Altseed
         {
             var values = Transform.Values;
             if (Texture != null) _src = sprite.Src;
-            _angle = (float)(Math.Acos(values[0, 0]) * 180 / Math.PI);
-            _position = new Vector2F(values[0, 3], values[1, 3]);
-            _scale = new Vector2F(values[0, 0], values[1, 1]);
             _absolutePosition = _position - _centerPosition;
             M_absolutePosition.SetTranslation(_absolutePosition.X, _absolutePosition.Y, 0.0f);
             M_angle.SetRotationZ(_angle);

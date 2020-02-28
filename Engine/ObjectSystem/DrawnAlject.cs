@@ -3,21 +3,19 @@
 namespace Altseed
 {
     /// <summary>
-    /// 描画コンポーネントを表します。
+    /// 描画を実行する<see cref="Alject"/>のクラス
     /// </summary>
     [Serializable]
-    public abstract class DrawnComponent : AljectComponent
+    public abstract class DrawnAlject : Alject
     {
         /// <summary>
         /// 角度を取得または設定する
         /// </summary>
         public abstract float Angle { get; set; }
-
         /// <summary>
         /// 座標を取得または設定する
         /// </summary>
         public abstract Vector2F Position { get; set; }
-
         /// <summary>
         /// 拡大率を取得または設定する
         /// </summary>
@@ -26,11 +24,6 @@ namespace Altseed
         /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
-        protected DrawnComponent() { }
-
-        /// <summary>
-        /// 描画を実行する
-        /// </summary>
-        internal abstract void Draw();
+        protected DrawnAlject() { }
     }
 }
