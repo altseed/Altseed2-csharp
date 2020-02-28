@@ -24,6 +24,24 @@ namespace Altseed
             return result;
         }
 
+        internal static Matrix44F FromPosition(Vector2F position)
+        {
+            var result = new Matrix44F() { Values = new float[4, 4] };
+            for (int i = 0; i < 4; i++) result.Values[i, i] = 1;
+            result.Values[0, 3] = position.X;
+            result.Values[1, 3] = position.Y;
+            return result;
+        }
+
+        internal readonly Matrix44F GetMinus()
+        {
+            var result = new Matrix44F() { Values = new float[4, 4] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = -Values[i, j];
+            return result;
+        }
+
         public void SetIdentity()
         {
             if (Values == null)

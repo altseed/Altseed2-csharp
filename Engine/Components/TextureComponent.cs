@@ -32,12 +32,43 @@ namespace Altseed
         [NonSerialized]
         private Matrix44F M_angle = Matrix44F.GetIdentity();
 
-        /*/// <summary>
+        /// <summary>
+        /// 回転の中心となる座標を取得または設定する
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get => _centerPosition;
+            set
+            {
+                if (_centerPosition != value)
+                {
+                    _centerPosition = value;
+                    M_centerPosition.SetTranslation(value.X, value.Y, 0.0f);
+                    UpdateAbsolutePosiion();
+                }
+            }
+        }
+        private Vector2F _centerPosition;
+        [NonSerialized]
+        private Matrix44F M_centerPosition = Matrix44F.GetIdentity();
+
+        /// <summary>
         /// <see cref="Transform"/>に使用される座標の値を取得または設定する
         /// </summary>
-        internal Vector2F AbsolutePosition { get => _absolutePosition; set => _absolutePosition = value; }
+        internal Vector2F AbsolutePosition
+        {
+            get => _absolutePosition;
+            set
+            {
+                _absolutePosition = value;
+                M_absolutePosition.SetTranslation(value.X, value.Y, 0.0f);
+                UpdateTransport();
+            }
+        }
         [NonSerialized]
-        private Vector2F _absolutePosition;*/
+        private Vector2F _absolutePosition;
+        [NonSerialized]
+        private Matrix44F M_absolutePosition = Matrix44F.GetIdentity();
 
         /// <summary>
         /// 座標を取得または設定する
@@ -51,7 +82,7 @@ namespace Altseed
                 {
                     _position = value;
                     M_position.SetTranslation(value.X, value.Y, 0.0f);
-                    UpdateTransport();
+                    UpdateAbsolutePosiion();
                 }
             }
         }
@@ -155,14 +186,23 @@ namespace Altseed
             _angle = (float)(Math.Acos(values[0, 0]) * 180 / Math.PI);
             _position = new Vector2F(values[0, 3], values[1, 3]);
             _scale = new Vector2F(values[0, 0], values[1, 1]);
-            M_position.SetTranslation(_position.X, _position.Y, 0.0f);
+            _absolutePosition = _position - _centerPosition;
+            M_absolutePosition.SetTranslation(_absolutePosition.X, _absolutePosition.Y, 0.0f);
             M_angle.SetRotationZ(_angle);
             M_scale.SetScale(_scale.X, _scale.Y, 1.0f);
         }
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
+        private void UpdateAbsolutePosiion() => AbsolutePosition = _position - _centerPosition;
         private void UpdateTransport()
         {
-            Transform = Matrix44F.GetIdentity() * M_position * M_angle * M_scale;
+            Transform = Matrix44F.GetIdentity()
+                        * M_centerPosition
+                        * M_angle
+                        * M_scale
+                        * Matrix44F.FromPosition(-_centerPosition)
+                        * M_position
+                        //* M_absolutePosition
+                        ;
         }
     }
 }

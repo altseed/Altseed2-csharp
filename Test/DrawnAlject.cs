@@ -16,7 +16,8 @@ namespace Altseed.Test
 
             var obj = new TextureAlject()
             {
-                Texture = texture
+                Texture = texture,
+                CenterPosition = texture.Size / 2
             };
 
             Engine.CurrentScene.AddObject(obj);

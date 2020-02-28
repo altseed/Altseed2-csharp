@@ -20,6 +20,15 @@ namespace Altseed
         }
 
         /// <summary>
+        /// 回転の中心となる座標を取得または設定する
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get => textureComponent.CenterPosition;
+            set { textureComponent.CenterPosition = value; }
+        }
+
+        /// <summary>
         /// 座標を取得または設定する
         /// </summary>
         public Vector2F Position
