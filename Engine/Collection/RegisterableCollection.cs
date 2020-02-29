@@ -150,9 +150,11 @@ namespace Altseed
         /// <summary>
         /// 直ちに要素を追加します。
         /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="objs"/>がnull</exception>
         /// <remarks>列挙中に呼び出さないこと</remarks>
         internal void AddImmediately(IEnumerable<TElement> objs)
         {
+            if (objs == null) throw new ArgumentNullException("引数がnullです", nameof(objs));
             foreach (var o in objs)
             {
                 AddImmediately(o);
