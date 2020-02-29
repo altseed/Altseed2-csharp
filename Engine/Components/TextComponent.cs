@@ -171,12 +171,18 @@ namespace Altseed
             foreach (var s in sprites) Engine.Renderer.DrawSprite(s);
         }
 
+        //保留中
+        /// <summary>
+        /// 行列計算する
+        /// </summary>
+        /// <param name="position">P(n)</param>
+        /// <returns>設定する<see cref="RenderedSprite.Transform"/>の値</returns>
         private Matrix44F GetTransform(Vector2F position)
         {
             var M_absolutePosition = new Matrix44F();
             M_absolutePosition.SetTranslation(_absolutePosition.X + position.X, _absolutePosition.Y + position.Y, 0.0f);
             var M_centerPosition = new Matrix44F();
-            M_centerPosition.SetTranslation(-_centerPosition.X - position.X, -_centerPosition.Y - position.Y, 0.0f);
+            M_centerPosition.SetTranslation(position.X - _centerPosition.X, position.Y - _centerPosition.Y, 0.0f);
             return M_absolutePosition * M_angle * M_scale * M_centerPosition;
         }
 
@@ -204,12 +210,11 @@ namespace Altseed
                 var glyph = _font?.GetGlyph(_text[i]);
                 if (glyph == null) continue;
 
-                var tempPosition = position + (glyph.Offset + new Vector2F(0, _font.Ascent)) * _scale;
                 var sprite = clear ? RenderedSprite.Create() : sprites[i];
                 sprite.Material = _material;
                 sprite.Texture = _font.GetFontTexture(glyph.TextureIndex);
 
-                sprite.Transform = GetTransform(tempPosition);
+                sprite.Transform = GetTransform(position + (glyph.Offset + new Vector2F(0, _font.Ascent)) * _scale);
 
                 sprite.Src = new RectF(glyph.Position.X, glyph.Position.Y, glyph.Size.X, glyph.Size.Y);
 
@@ -222,6 +227,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// <see cref="RenderedSprite.Transform"/>のみ変更
+        /// </summary>
         private void UpdateTransform()
         {
             var position = new Vector2F();
@@ -230,9 +238,7 @@ namespace Altseed
                 var glyph = _font?.GetGlyph(_text[i]);
                 if (glyph == null) continue;
 
-                var tempPosition = position + (glyph.Offset + new Vector2F(0, _font.Ascent)) * _scale;
-
-                sprites[i].Transform = GetTransform(tempPosition);
+                sprites[i].Transform = GetTransform(position + (glyph.Offset + new Vector2F(0, _font.Ascent)) * _scale);
 
                 position += new Vector2F(glyph.GlyphWidth * _scale.X, 0);
 
