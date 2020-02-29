@@ -33,6 +33,7 @@ namespace Altseed
     /// <summary>
     /// イージングの種類を表します。
     /// </summary>
+    [Serializable]
     public enum EasingType : int
     {
         Linear,
