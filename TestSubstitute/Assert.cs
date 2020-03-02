@@ -7,43 +7,43 @@ namespace Altseed.Test
         public static void True(bool condition)
         {
             if (!condition)
-                Console.WriteLine("Not True！");
+                Console.WriteLine("Not True繝ｻI");
         }
 
         public static void False(bool condition)
         {
             if (condition)
-                Console.WriteLine("Not False！");
+                Console.WriteLine("Not False繝ｻI");
         }
 
         public static void NotNull(object obj)
         {
             if (obj == null)
-                Console.WriteLine("Null！");
+                Console.WriteLine("Null繝ｻI");
         }
 
         public static void AreEqual(double expected, double actual, double delta)
         {
             if (Math.Abs(expected - actual) > delta)
-                Console.WriteLine("Not Equal！");
+                Console.WriteLine("Not Equal繝ｻI");
         }
 
         public static void AreEqual(object expected, object actual)
         {
             if (expected != actual)
-                Console.WriteLine("Not Equal！");
+                Console.WriteLine("Not Equal繝ｻI");
         }
 
         public static void AreNotEqual(double expected, double actual, double delta)
         {
             if (Math.Abs(expected - actual) < delta)
-                Console.WriteLine("Equal！");
+                Console.WriteLine("Equal繝ｻI");
         }
 
         public static void AreNotEqual(object expected, object actual)
         {
             if (expected == actual)
-                Console.WriteLine("Equal！");
+                Console.WriteLine("Equal繝ｻI");
         }
     }
 }

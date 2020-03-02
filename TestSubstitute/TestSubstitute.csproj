@@ -5,6 +5,7 @@
     <RootNamespace>Altseed.Test</RootNamespace>
     <OutputPath>../Build</OutputPath>
     <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="../Test/**/*.cs" Exclude="../Test/obj/**/*.cs"/>
+    <Compile Include="../Test/**/*.cs" Exclude="../Test/obj/**/*.cs" />
   </ItemGroup>
 
 </Project>

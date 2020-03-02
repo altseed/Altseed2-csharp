@@ -9,6 +9,8 @@ namespace Altseed.Test
         {
             var sound = new Test.Sound();
             sound.Play();
+            sound.Loop();
+            sound.GetPosition();
 
             Console.ReadLine();
         }
