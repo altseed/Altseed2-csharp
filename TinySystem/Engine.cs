@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Altseed
+namespace Altseed.TinySystem
 {
 
     /// <summary>
@@ -10,6 +10,16 @@ namespace Altseed
     /// </summary>
     public static class Engine
     {
+        /// <summary>
+        /// 現在処理している<see cref="Scene"/>取得します。
+        /// </summary>
+        public static Scene CurrentScene { get; private set; }
+
+        /// <summary>
+        /// 次に控えているシーン取得します。
+        /// </summary>
+        internal static Scene NextScene { get; private set; }
+
 
         /// <summary>
         /// エンジンを初期化します。
@@ -23,10 +33,10 @@ namespace Altseed
         {
             if (EngineCore.Initialize(title, width, height, config ?? new Configuration()))
             {
-                //CurrentScene = new Scene()
-                //{
-                //    Status = SceneStatus.Updated
-                //};
+                CurrentScene = new Scene()
+                {
+                    Status = SceneStatus.Updated
+                };
                 return true;
             }
             return false;
@@ -43,9 +53,18 @@ namespace Altseed
         /// <summary>
         /// エンジンを更新します。
         /// </summary>
-        public static void Update()
+        public static bool Update()
         {
-            //CurrentScene.Update();
+            if (!Graphics.BeginFrame()) return false;
+
+            CurrentScene.Update();
+
+            var cmdList = Graphics.CommandList;
+            cmdList.SetRenderTargetWithScreen();
+
+            Renderer.Render(cmdList);
+            if (!Graphics.EndFrame()) return false;
+            return true;
         }
 
         /// <summary>
@@ -91,7 +110,7 @@ namespace Altseed
         /// <summary>
         /// レンダラのクラス取得します。
         /// </summary>
-        public static Renderer Renderer => Altseed.EngineCore.Renderer;
+        internal static Renderer Renderer => Altseed.EngineCore.Renderer;
 
         /// <summary>
         /// 音を管理するクラス取得します。
@@ -101,9 +120,46 @@ namespace Altseed
         /// <summary>
         /// リソースを管理するクラス取得します。
         /// </summary>
-        public static Resources Resources => Altseed.EngineCore.Resources;
+        internal static Resources Resources => Altseed.EngineCore.Resources;
 
         #endregion
+
+        /// <summary>
+        /// ウインドウのタイトルを取得または設定します。
+        /// </summary>
+        public static string WindowTitle
+        {
+            get => EngineCore.Window.Title;
+            set { EngineCore.Window.Title = value; }
+        }
+
+        /// <summary>
+        /// フレームレートの制御方法を取得または設定します。
+        /// </summary>
+        public static FramerateMode FramerateMode
+        {
+            get => EngineCore.Core.FramerateMode;
+            set { EngineCore.Core.FramerateMode = value; }
+        }
+
+        /// <summary>
+        /// 目標フレームレートを取得または設定します。
+        /// </summary>
+        public static float TargetFPS
+        {
+            get => EngineCore.Core.TargetFPS;
+            set { EngineCore.Core.TargetFPS = value; }
+        }
+
+        /// <summary>
+        /// 現在のFPSを取得します。
+        /// </summary>
+        public static float CurrentFPS => EngineCore.Core.CurrentFPS;
+
+        /// <summary>
+        /// 前のフレームからの経過時間(秒)を取得します。
+        /// </summary>
+        public static float DeltaSecond => EngineCore.Core.DeltaSecond;
 
     }
 }
