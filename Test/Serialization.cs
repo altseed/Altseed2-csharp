@@ -182,6 +182,7 @@ namespace Altseed.Test
             Assert.True(System.IO.File.Exists(path));
 
             var file2 = Deserialize<StreamFile>(path);
+            file2.Save("Serialization/StreamFile.txt");
 
             Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
             Assert.AreEqual(file1.CurrentPosition, file2.CurrentPosition);
