@@ -62,5 +62,22 @@ namespace Altseed
 
             info.AddValue(S_Path, Path);
         }
+
+        /// <summary>
+        /// 指定したパスに保存する
+        /// </summary>
+        /// <param name="path">保存するパス</param>
+        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は使用できない文字を使用している</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="path"/>で指定したディレクトリが存在しない</exception>
+        /// <exception cref="IOException">I/Oに失敗した</exception>
+        /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
+        /// <exception cref="System.Security.SecurityException">アクセスが拒否された</exception>
+        public void Save(string path)
+        {
+            using var stream = new FileStream(path, FileMode.Create);
+            var buffer = Buffer;
+            stream.Write(buffer, 0, buffer.Length);
+        }
     }
 }
