@@ -1,19 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Altseed
 {
+    /// <summary>
+    /// Coreとの接続に使用する配列のインターフェイス
+    /// </summary>
+    /// <typeparam name="T">配列に格納される要素の型</typeparam>
     public interface IArray<T>
         where T : unmanaged
     {
+        /// <summary>
+        /// 格納されている要素数を取得する
+        /// </summary>
         int Count { get; }
 
+        T this[int index] { get;set; }
+
+        /// <summary>
+        /// サイズを変更する
+        /// </summary>
+        /// <param name="size">変更先のサイズ</param>
         void Resize(int size);
 
+        /// <summary>
+        /// データを指定したポインターにコピーする
+        /// </summary>
+        /// <param name="ptr">コピー先のポインター</param>
         void CopyTo(IntPtr ptr);
 
         void Assign(IntPtr ptr, int size);
