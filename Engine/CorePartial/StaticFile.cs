@@ -60,7 +60,8 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
-            info.AddValue(S_Path, Path);
+            // インスタンス生成時に./が頭についているのでstring.Substring(int startIndex)で削る
+            info.AddValue(S_Path, Path.Substring(2));
         }
 
         /// <summary>
