@@ -13,25 +13,25 @@ namespace Altseed
         /// <summary>
         /// X成分
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
+        [MarshalAs(UnmanagedType.R4)]
         public float X;
 
         /// <summary>
         /// Y成分
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
+        [MarshalAs(UnmanagedType.R4)]
         public float Y;
 
         /// <summary>
         /// Z成分
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
+        [MarshalAs(UnmanagedType.R4)]
         public float Z;
 
         /// <summary>
         /// W成分
         /// </summary>
-        [MarshalAs(UnmanagedType.I4)]
+        [MarshalAs(UnmanagedType.R4)]
         public float W;
 
         /// <summary>

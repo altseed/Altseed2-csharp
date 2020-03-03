@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Altseed
 {
-    internal interface IArray<T>
+    public interface IArray<T>
         where T : unmanaged
     {
         int Count { get; }
@@ -19,14 +19,61 @@ namespace Altseed
         void Assign(IntPtr ptr, int size);
     }
 
-    internal partial class Int8Array : IArray<byte> { }
-    internal partial class Int32Array : IArray<int> { }
-    internal partial class VertexArray : IArray<Vertex> { }
-    internal partial class FloatArray : IArray<float> { }
-
-    internal static class ArrayExtension
+    public partial class Int8Array : IArray<byte>
     {
-        internal static unsafe TElement[] ToArray<TElement>(this IArray<TElement> obj)
+        public byte this[int index]
+        {
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException(); }
+            set
+            {
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException();
+                SetAt(index, value);
+            }
+        }
+    }
+
+    public partial class Int32Array : IArray<int>
+    {
+        public int this[int index]
+        {
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException(); }
+            set
+            {
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException();
+                SetAt(index, value);
+            }
+        }
+    }
+
+    public partial class VertexArray : IArray<Vertex>
+    {
+        public Vertex this[int index]
+        {
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException(); }
+            set
+            {
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException();
+                SetAt(index, ref value);
+            }
+        }
+    }
+
+    public partial class FloatArray : IArray<float>
+    {
+        public float this[int index]
+        {
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException(); }
+            set
+            {
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException();
+                SetAt(index, value);
+            }
+        }
+    }
+
+    public static class ArrayExtension
+    {
+        public static unsafe TElement[] ToArray<TElement>(this IArray<TElement> obj)
             where TElement : unmanaged
         {
             var array = new TElement[obj.Count];
@@ -39,7 +86,7 @@ namespace Altseed
             return array;
         }
 
-        internal static unsafe void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
+        public static unsafe void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
             where TElement : unmanaged
         {
             if (obj.Count < array.Length) obj.Resize(array.Length);

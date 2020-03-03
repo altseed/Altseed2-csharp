@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Altseed
 {
@@ -6,6 +7,7 @@ namespace Altseed
     /// 頂点の情報を格納する構造体
     /// </summary>
     [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vertex : IEquatable<Vertex>
     {
         /// <summary>
@@ -68,23 +70,28 @@ namespace Altseed
     /// 色を表す構造体
     /// </summary>
     [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct Color : IEquatable<Color>
     {
         /// <summary>
         /// R値
         /// </summary>
+        [MarshalAs(UnmanagedType.U1)]
         public byte R;
         /// <summary>
         /// G値
         /// </summary>
+        [MarshalAs(UnmanagedType.U1)]
         public byte G;
         /// <summary>
         /// B値
         /// </summary>
+        [MarshalAs(UnmanagedType.U1)]
         public byte B;
         /// <summary>
         /// A値
         /// </summary>
+        [MarshalAs(UnmanagedType.U1)]
         public byte A;
 
         /// <summary>

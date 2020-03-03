@@ -13,21 +13,25 @@ namespace Altseed
         /// <summary>
         /// X座標
         /// </summary>
+        [MarshalAs(UnmanagedType.R4)]
         public float X;
 
         /// <summary>
         /// Y座標
         /// </summary>
+        [MarshalAs(UnmanagedType.R4)]
         public float Y;
 
         /// <summary>
         /// 幅
         /// </summary>
+        [MarshalAs(UnmanagedType.R4)]
         public float Width;
 
         /// <summary>
         /// 高さ
         /// </summary>
+        [MarshalAs(UnmanagedType.R4)]
         public float Height;
 
         /// <summary>

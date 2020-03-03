@@ -10,7 +10,7 @@ namespace Altseed
     [StructLayout(LayoutKind.Sequential)]
     public struct Matrix33I : ICloneable, IEquatable<Matrix33I>
     {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 3 * 3)]
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 3 * 3)]
         public int[,] Values;
 
         internal static Matrix33I GetIdentity()

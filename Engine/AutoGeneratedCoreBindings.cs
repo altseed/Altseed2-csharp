@@ -797,7 +797,7 @@ namespace Altseed
     /// <summary>
     /// 8ビット整数の配列のクラスを表します。
     /// </summary>
-    internal partial class Int8Array
+    public partial class Int8Array
     {
         #region unmanaged
         
@@ -842,6 +842,12 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern byte cbg_Int8Array_GetAt(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int8Array_SetAt(IntPtr selfPtr, int index, byte value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Int8Array_Create(int size);
@@ -910,6 +916,26 @@ namespace Altseed
         }
         
         /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        public byte GetAt(int index)
+        {
+            var ret = cbg_Int8Array_GetAt(selfPtr, index);
+            return ret;
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        /// <param name="value">値</param>
+        public void SetAt(int index, byte value)
+        {
+            cbg_Int8Array_SetAt(selfPtr, index, value);
+        }
+        
+        /// <summary>
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
@@ -935,7 +961,7 @@ namespace Altseed
     /// <summary>
     /// 32ビット整数の配列のクラスを表します。
     /// </summary>
-    internal partial class Int32Array
+    public partial class Int32Array
     {
         #region unmanaged
         
@@ -980,6 +1006,12 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Int32Array_GetAt(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Int32Array_SetAt(IntPtr selfPtr, int index, int value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Int32Array_Create(int size);
@@ -1048,6 +1080,26 @@ namespace Altseed
         }
         
         /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        public int GetAt(int index)
+        {
+            var ret = cbg_Int32Array_GetAt(selfPtr, index);
+            return ret;
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        /// <param name="value">値</param>
+        public void SetAt(int index, int value)
+        {
+            cbg_Int32Array_SetAt(selfPtr, index, value);
+        }
+        
+        /// <summary>
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
@@ -1073,7 +1125,7 @@ namespace Altseed
     /// <summary>
     /// 頂点データの配列のクラスを表します。
     /// </summary>
-    internal partial class VertexArray
+    public partial class VertexArray
     {
         #region unmanaged
         
@@ -1118,6 +1170,12 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_VertexArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vertex cbg_VertexArray_GetAt(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_VertexArray_SetAt(IntPtr selfPtr, int index, ref Vertex value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_VertexArray_Create(int size);
@@ -1186,6 +1244,26 @@ namespace Altseed
         }
         
         /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        public Vertex GetAt(int index)
+        {
+            var ret = cbg_VertexArray_GetAt(selfPtr, index);
+            return ret;
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        /// <param name="value">値</param>
+        public void SetAt(int index, ref Vertex value)
+        {
+            cbg_VertexArray_SetAt(selfPtr, index, ref value);
+        }
+        
+        /// <summary>
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
@@ -1211,7 +1289,7 @@ namespace Altseed
     /// <summary>
     /// 浮動小数点数の配列のクラスを表します。
     /// </summary>
-    internal partial class FloatArray
+    public partial class FloatArray
     {
         #region unmanaged
         
@@ -1256,6 +1334,12 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_FloatArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_FloatArray_GetAt(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_FloatArray_SetAt(IntPtr selfPtr, int index, float value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_FloatArray_Create(int size);
@@ -1321,6 +1405,26 @@ namespace Altseed
         public void CopyTo(IntPtr ptr)
         {
             cbg_FloatArray_CopyTo(selfPtr, ptr);
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        public float GetAt(int index)
+        {
+            var ret = cbg_FloatArray_GetAt(selfPtr, index);
+            return ret;
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        /// <param name="value">値</param>
+        public void SetAt(int index, float value)
+        {
+            cbg_FloatArray_SetAt(selfPtr, index, value);
         }
         
         /// <summary>
@@ -2421,7 +2525,7 @@ namespace Altseed
         /// <param name="indexBuffer"></param>
         /// <param name="texture">テクスチャ</param>
         /// <param name="material">マテリアル</param>
-        internal void DrawPolygon(VertexArray vertexBuffer, Int32Array indexBuffer, Texture2D texture, Material material)
+        public void DrawPolygon(VertexArray vertexBuffer, Int32Array indexBuffer, Texture2D texture, Material material)
         {
             cbg_Renderer_DrawPolygon(selfPtr, vertexBuffer != null ? vertexBuffer.selfPtr : IntPtr.Zero, indexBuffer != null ? indexBuffer.selfPtr : IntPtr.Zero, texture != null ? texture.selfPtr : IntPtr.Zero, material != null ? material.selfPtr : IntPtr.Zero);
         }
