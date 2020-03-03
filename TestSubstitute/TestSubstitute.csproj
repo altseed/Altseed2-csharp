@@ -5,7 +5,6 @@
     <RootNamespace>Altseed.Test</RootNamespace>
     <OutputPath>../Build</OutputPath>
     <OutputType>Exe</OutputType>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
