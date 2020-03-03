@@ -1,103 +1,109 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Altseed
 {
+
     /// <summary>
-    /// Altseed2の中枢を担うクラス
+    /// Altseed2 のエンジンを表します。
     /// </summary>
-    internal static class EngineCore
+    public static class Engine
     {
+
         /// <summary>
-        /// エンジンを初期化する
+        /// エンジンを初期化します。
         /// </summary>
-        /// <param name="title">ウィンドウ左上に表示される文字列</param>
+        /// <param name="title">ウィンドウタイトル</param>
         /// <param name="width">ウィンドウの横幅</param>
         /// <param name="height">ウィンドウの縦幅</param>
         /// <param name="config">設定</param>
         /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
-            if (Core.Initialize(title, width, height, config ?? new Configuration()))
+            if (EngineCore.Initialize(title, width, height, config ?? new Configuration()))
             {
-                Keyboard = Keyboard.GetInstance();
-                Mouse = Mouse.GetInstance();
-                Joystick = Joystick.GetInstance();
-                File = File.GetInstance();
-                Graphics = Graphics.GetInstance();
-                Renderer = Renderer.GetInstance();
-                Sound = SoundMixer.GetInstance();
-                Log = Log.GetInstance();
-                Resources = Resources.GetInstance();
-
+                //CurrentScene = new Scene()
+                //{
+                //    Status = SceneStatus.Updated
+                //};
                 return true;
             }
             return false;
         }
 
         /// <summary>
-        /// イベントを実行する
+        /// システムイベントを処理します。
         /// </summary>
-        /// <returns>イベントの実行が出来たらtrue、それ以外でfalse</returns>
         public static bool DoEvents()
         {
-            Graphics.DoEvents();
-            return Core.GetInstance().DoEvent();
+            return EngineCore.DoEvents();
         }
 
         /// <summary>
-        /// エンジンの終了処理を行う
+        /// エンジンを更新します。
+        /// </summary>
+        public static void Update()
+        {
+            //CurrentScene.Update();
+        }
+
+        /// <summary>
+        /// エンジンを終了します。
         /// </summary>
         public static void Terminate()
         {
-            Core.Terminate();
+            EngineCore.Terminate();
         }
+
+        #region Modules
 
         /// <summary>
         /// ファイルを管理するクラス取得します。
         /// </summary>
-        public static File File { get; private set; }
+        public static File File => Altseed.EngineCore.File;
 
         /// <summary>
         /// キーボードを管理するクラス取得します。
         /// </summary>
-        public static Keyboard Keyboard { get; private set; }
+        public static Keyboard Keyboard => Altseed.EngineCore.Keyboard;
 
         /// <summary>
         /// マウスを管理するクラス取得します。
         /// </summary>
-        public static Mouse Mouse { get; private set; }
+        public static Mouse Mouse => Altseed.EngineCore.Mouse;
 
         ///// <summary>
         ///// ジョイスティックを管理するクラス取得します。
         ///// </summary>
-        public static Joystick Joystick { get; private set; }
+        public static Joystick Joystick => Altseed.EngineCore.Joystick;
 
         /// <summary>
         /// グラフィックのクラス取得します。
         /// </summary>
-        public static Graphics Graphics { get; private set; }
+        public static Graphics Graphics => Altseed.EngineCore.Graphics;
 
         /// <summary>
         /// ログを管理するクラス取得します。
         /// </summary>
-        public static Log Log { get; private set; }
+        public static Log Log => Altseed.EngineCore.Log;
 
         /// <summary>
         /// レンダラのクラス取得します。
         /// </summary>
-        public static Renderer Renderer { get; private set; }
+        public static Renderer Renderer => Altseed.EngineCore.Renderer;
 
         /// <summary>
         /// 音を管理するクラス取得します。
         /// </summary>
-        public static SoundMixer Sound { get; private set; }
+        public static SoundMixer Sound => Altseed.EngineCore.Sound;
 
         /// <summary>
         /// リソースを管理するクラス取得します。
         /// </summary>
-        public static Resources Resources { get; private set; }
+        public static Resources Resources => Altseed.EngineCore.Resources;
+
+        #endregion
+
     }
 }
