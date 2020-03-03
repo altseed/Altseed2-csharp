@@ -34,6 +34,7 @@ namespace Altseed
             {
                 Keyboard = Keyboard.GetInstance();
                 Mouse = Mouse.GetInstance();
+                Joystick = Joystick.GetInstance();
                 File = File.GetInstance();
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
@@ -181,7 +182,7 @@ namespace Altseed
         ///// <summary>
         ///// ジョイスティックを管理するクラス取得します。
         ///// </summary>
-        //public static Joystick Joystick { get; private set; }
+        public static Joystick Joystick { get; private set; }
 
         /// <summary>
         /// グラフィックのクラス取得します。

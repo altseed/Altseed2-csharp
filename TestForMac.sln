@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{222E571D-A955-4025-9DAB-75528D7EDAE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSubstitute", "TestSubstitute\TestSubstitute.csproj", "{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Debug|x64.ActiveCfg = Debug|x64
+		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Debug|x64.Build.0 = Debug|x64
+		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Release|x64.ActiveCfg = Release|x64
+		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Release|x64.Build.0 = Release|x64
+		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Debug|x64.ActiveCfg = Debug|x64
+		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Debug|x64.Build.0 = Debug|x64
+		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Release|x64.ActiveCfg = Release|x64
+		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6FA63A05-B09B-41FA-A5E2-13BF921E490A}
+	EndGlobalSection
+EndGlobal
