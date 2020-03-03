@@ -192,5 +192,40 @@ namespace Altseed.Test
 
             EngineCore.Terminate();
         }
+        [Test, Apartment(ApartmentState.STA)]
+        public void Configuration()
+        {
+            Assert.True(EngineCore.Initialize("Configuration", 50, 50));
+
+            var config1 = new Configuration()
+            {
+                EnabledConsoleLogging = true,
+                EnabledFileLogging = false,
+                IsFullscreenMode = false,
+                IsResizable = true,
+                LogFilename = "Log.txt"
+            };
+
+            const string path = "Serialization/Configuration.bin";
+
+            Serialize(path, config1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var config2 = Deserialize<Configuration>(path);
+
+            Assert.AreEqual(config1.EnabledConsoleLogging, true);
+            Assert.AreEqual(config1.EnabledConsoleLogging, config2.EnabledConsoleLogging);
+            Assert.AreEqual(config1.EnabledFileLogging, false);
+            Assert.AreEqual(config1.EnabledFileLogging, config2.EnabledFileLogging);
+            Assert.AreEqual(config1.IsFullscreenMode, false);
+            Assert.AreEqual(config1.IsFullscreenMode, config2.IsFullscreenMode);
+            Assert.AreEqual(config1.IsResizable, true);
+            Assert.AreEqual(config1.IsResizable, config2.IsResizable);
+            Assert.AreEqual(config1.LogFilename, "Log.txt");
+            Assert.AreEqual(config1.LogFilename, config2.LogFilename);
+
+            EngineCore.Terminate();
+        }
     }
 }
