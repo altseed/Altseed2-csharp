@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Altseed.Test
@@ -65,6 +66,47 @@ namespace Altseed.Test
             {
                 Engine.Update();
             }
+
+            Engine.Terminate();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Joystick()
+        {
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            Engine.Joystick.RefreshConnectedState();
+            Engine.Joystick.RefreshInputState();
+
+            foreach (int i in Enumerable.Range(0, 16))
+            {
+                if (Engine.Joystick.IsPresent(i))
+                {
+                    string name = Engine.Joystick.GetJoystickName(i);
+                    ButtonState leftup = Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp);
+                }
+
+                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Free)
+                {
+                    Engine.Update();
+                }
+
+                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Push)
+                {
+                    Engine.Update();
+                }
+
+                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Hold)
+                {
+                    Engine.Update();
+                }
+
+                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Release)
+                {
+                    Engine.Update();
+                }
+            }
+
+
 
             Engine.Terminate();
         }
