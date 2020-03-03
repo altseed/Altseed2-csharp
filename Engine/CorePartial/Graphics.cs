@@ -60,7 +60,7 @@ namespace Altseed
         /// このインスタンスのハッシュコードを返す
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
-        public override int GetHashCode() => HashCode.Combine(Position, Color, UV1, UV2);
+        public readonly override int GetHashCode() => HashCode.Combine(Position, Color, UV1, UV2);
 
         public static bool operator ==(Vertex v1, Vertex v2) => v1.Equals(v2);
         public static bool operator !=(Vertex v1, Vertex v2) => !v1.Equals(v2);
@@ -155,7 +155,7 @@ namespace Altseed
         /// このインスタンスのハッシュコードを返す
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
-        public override int GetHashCode() => HashCode.Combine(R, G, B, A);
+        public readonly override int GetHashCode() => HashCode.Combine(R, G, B, A);
 
         /// <summary>
         /// このインスタンスを表す文字列を取得する
