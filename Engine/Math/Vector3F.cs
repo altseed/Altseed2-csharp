@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace Altseed
@@ -47,14 +43,14 @@ namespace Altseed
             Z = z;
         }
 
-        public override string ToString() => $"({X}, {Y}, {Z})";
+        public readonly override string ToString() => $"({X}, {Y}, {Z})";
 
-        public Vector3I To3I() => new Vector3I((int)X, (int)Y, (int)Z);
+        public readonly Vector3I To3I() => new Vector3I((int)X, (int)Y, (int)Z);
 
         /// <summary>
         /// ベクトルの長さの二乗を取得します。
         /// </summary>
-        public float SquaredLength
+        public readonly float SquaredLength
         {
             get { return X * X + Y * Y + Z * Z; }
         }
@@ -64,7 +60,7 @@ namespace Altseed
         /// </summary>
         public float Length
         {
-            get { return (float)Math.Sqrt(SquaredLength); }
+            readonly get { return (float)Math.Sqrt(SquaredLength); }
             set
             {
                 var len = Length;
@@ -89,7 +85,7 @@ namespace Altseed
         /// <summary>
         /// このベクトルの単位ベクトルを取得します。
         /// </summary>
-        public Vector3F Normal
+        public readonly Vector3F Normal
         {
             get
             {
@@ -250,7 +246,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector3F v ? Equals(v) : false;
+        public readonly override bool Equals(object obj) => obj is Vector3F v ? Equals(v) : false;
 
         /// <summary>
         /// 2つの<see cref="Vector3F"/>間の等価性を判定します。
@@ -266,13 +262,13 @@ namespace Altseed
         /// </summary>
         /// <param name="other">比較する<see cref="Vector3F"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
-        public bool Equals(Vector3F other) => X == other.X && Y == other.Y && Z == other.Z;
+        public readonly bool Equals(Vector3F other) => X == other.X && Y == other.Y && Z == other.Z;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hashCode = 1861411795;
             hashCode = hashCode * -1521134295 + X.GetHashCode();

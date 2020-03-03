@@ -12,62 +12,105 @@ namespace Altseed
         public readonly RenderedSprite sprite;
 
         /// <summary>
+        /// <see cref="Transform"/>に使用される座標の値を取得または設定する
+        /// </summary>
+        internal Vector2F AbsolutePosition
+        {
+            get => _absolutePosition;
+            set
+            {
+                _absolutePosition = value;
+                M_absolutePosition.SetTranslation(value.X, value.Y, 0.0f);
+                UpdateTransport();
+            }
+        }
+        [NonSerialized]
+        private Vector2F _absolutePosition;
+        [NonSerialized]
+        private Matrix44F M_absolutePosition = Matrix44F.GetIdentity();
+
+        /// <summary>
         /// 回転角度(度数法)を取得または設定する
         /// </summary>
-        public float Angle
+        public override float Angle
         {
             get => _angle;
             set
             {
-                _angle = value;
-                M_angle.SetRotationZ((float)(value * Math.PI / 180d));
-                UpdateTransport();
+                if (_angle != value)
+                {
+                    _angle = value;
+                    M_angle.SetRotationZ((float)(value * Math.PI / 180d));
+                    UpdateTransport();
+                }
             }
         }
-        [NonSerialized]
         private float _angle;
         [NonSerialized]
         private Matrix44F M_angle = Matrix44F.GetIdentity();
 
-        /*/// <summary>
-        /// <see cref="Transform"/>に使用される座標の値を取得または設定する
+        /// <summary>
+        /// 回転の中心となる座標を取得または設定する
         /// </summary>
-        internal Vector2F AbsolutePosition { get => _absolutePosition; set => _absolutePosition = value; }
+        public Vector2F CenterPosition
+        {
+            get => _centerPosition;
+            set
+            {
+                if (_centerPosition != value)
+                {
+                    _centerPosition = value;
+                    M_centerPosition.SetTranslation(-value.X, -value.Y, 0.0f);
+                    AbsolutePosition = _position + _centerPosition;
+                }
+            }
+        }
+        private Vector2F _centerPosition;
         [NonSerialized]
-        private Vector2F _absolutePosition;*/
+        private Matrix44F M_centerPosition = Matrix44F.GetIdentity();
+
+        /// <summary>
+        /// 使用するマテリアルを取得または設定する
+        /// </summary>
+        public Material Material
+        {
+            get => sprite.Material;
+            set { sprite.Material = value; }
+        }
 
         /// <summary>
         /// 座標を取得または設定する
         /// </summary>
-        public Vector2F Position
+        public override Vector2F Position
         {
             get => _position;
             set
             {
-                _position = value;
-                M_position.SetTranslation(value.X, value.Y, 0.0f);
-                UpdateTransport();
+                if (_position != value)
+                {
+                    _position = value;
+                    AbsolutePosition = _position + _centerPosition;
+                }
             }
         }
-        [NonSerialized]
         private Vector2F _position;
-        [NonSerialized]
-        private Matrix44F M_position = Matrix44F.GetIdentity();
 
         /// <summary>
         /// 拡大率を取得または設定する
         /// </summary>
-        public Vector2F Scale
+        public override Vector2F Scale
         {
             get => _scale;
             set
             {
-                _scale = value;
-                M_scale.SetScale(value.X, value.Y, 1.0f);
-                UpdateTransport();
+                if (_scale != value)
+                {
+                    _scale = value;
+                    M_scale.SetScale(value.X, value.Y, 1.0f);
+                    UpdateTransport();
+                }
             }
         }
-        [NonSerialized]
         private Vector2F _scale = new Vector2F(1.0f, 1.0f);
         [NonSerialized]
         private Matrix44F M_scale = Matrix44F.GetIdentity();
@@ -80,8 +123,11 @@ namespace Altseed
             get => sprite.Src;
             set
             {
-                sprite.Src = value;
-                _src = value;
+                if (_src != value)
+                {
+                    sprite.Src = value;
+                    _src = value;
+                }
             }
         }
         [NonSerialized]
@@ -95,9 +141,12 @@ namespace Altseed
             get => sprite.Texture;
             set
             {
-                sprite.Texture = value;
-                if (value == null) _src = null;
-                else if (_src == null) Src = new RectF(0, 0, Texture.Size.X, Texture.Size.Y);
+                if (value != sprite.Texture)
+                {
+                    sprite.Texture = value;
+                    if (value == null) _src = null;
+                    else if (_src == null) Src = new RectF(0, 0, Texture.Size.X, Texture.Size.Y);
+                }
             }
         }
 
@@ -135,19 +184,14 @@ namespace Altseed
         /// <param name="sender">現在サポートされていない 常にnullを返す</param>
         protected virtual void OnDeserialization(object sender)
         {
-            var values = Transform.Values;
             if (Texture != null) _src = sprite.Src;
-            _angle = (float)(Math.Acos(values[0, 0]) * 180 / Math.PI);
-            _position = new Vector2F(values[0, 3], values[1, 3]);
-            _scale = new Vector2F(values[0, 0], values[1, 1]);
-            M_position.SetTranslation(_position.X, _position.Y, 0.0f);
+            _absolutePosition = _position + _centerPosition;
+            M_absolutePosition.SetTranslation(_absolutePosition.X, _absolutePosition.Y, 0.0f);
             M_angle.SetRotationZ(_angle);
+            M_centerPosition.SetTranslation(_centerPosition.X, _centerPosition.Y, 0.0f);
             M_scale.SetScale(_scale.X, _scale.Y, 1.0f);
         }
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
-        private void UpdateTransport()
-        {
-            Transform = Matrix44F.GetIdentity() * M_position * M_angle * M_scale;
-        }
+        private void UpdateTransport() => Transform = M_absolutePosition * M_angle * M_scale * M_centerPosition;
     }
 }

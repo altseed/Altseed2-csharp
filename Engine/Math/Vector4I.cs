@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace Altseed
@@ -53,13 +49,13 @@ namespace Altseed
             W = w;
         }
 
-        public override string ToString() => $"({X}, {Y}, {Z}, {W})";
+        public readonly override string ToString() => $"({X}, {Y}, {Z}, {W})";
 
         /// <summary>
         /// <see cref="Vector4F"/>に型変換する
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector4F"/>の新しいインスタンス</returns>
-        public Vector4F To4F() => new Vector4F(X, Y, Z, W);
+        public readonly Vector4F To4F() => new Vector4F(X, Y, Z, W);
 
 
 
@@ -143,20 +139,20 @@ namespace Altseed
         /// </summary>
         /// <param name="other">比較する<see cref="Vector4I"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
-        public bool Equals(Vector4I other) => X == other.X && Y == other.Y && Z == other.Z && W == other.W;
+        public readonly bool Equals(Vector4I other) => X == other.X && Y == other.Y && Z == other.Z && W == other.W;
 
         /// <summary>
         /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector4I v ? Equals(v) : false;
+        public readonly override bool Equals(object obj) => obj is Vector4I v ? Equals(v) : false;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hashCode = 1861411795;
             hashCode = hashCode * -1521134295 + X.GetHashCode();

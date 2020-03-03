@@ -18,6 +18,11 @@ namespace Altseed
         /// </summary>
         public Alject Owner { get; internal set; }
 
+        /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
+        protected AljectComponent() { }
+
         internal void RaiseOnObjectAdded()
         {
             OnObjectAdded();

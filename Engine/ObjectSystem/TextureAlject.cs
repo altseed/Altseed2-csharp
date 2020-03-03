@@ -3,26 +3,44 @@
 namespace Altseed
 {
     /// <summary>
-    /// テクスチャを描画する<see cref="Alject"/>のクラス
+    /// テクスチャを描画する<see cref="DrawnAlject"/>のクラス
     /// </summary>
     [Serializable]
-    public class TextureAlject : Alject
+    public class TextureAlject : DrawnAlject
     {
         private readonly TextureComponent textureComponent;
 
         /// <summary>
         /// 回転角度(度数法)を取得または設定する
         /// </summary>
-        public float Angle
+        public override float Angle
         {
             get => textureComponent.Angle;
             set { textureComponent.Angle = value; }
         }
 
         /// <summary>
+        /// 回転の中心となる座標を取得または設定する
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get => textureComponent.CenterPosition;
+            set { textureComponent.CenterPosition = value; }
+        }
+
+        /// <summary>
+        /// 使用するマテリアルを取得または設定する
+        /// </summary>
+        public Material Material
+        {
+            get => textureComponent.Material;
+            set { textureComponent.Material = value; }
+        }
+
+        /// <summary>
         /// 座標を取得または設定する
         /// </summary>
-        public Vector2F Position
+        public override Vector2F Position
         {
             get => textureComponent.Position;
             set { textureComponent.Position = value; }
@@ -31,7 +49,7 @@ namespace Altseed
         /// <summary>
         /// 拡大率を取得または設定する
         /// </summary>
-        public Vector2F Scale
+        public override Vector2F Scale
         {
             get => textureComponent.Scale;
             set { textureComponent.Scale = value; }

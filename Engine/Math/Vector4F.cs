@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace Altseed
@@ -53,13 +49,13 @@ namespace Altseed
             W = w;
         }
 
-        public override string ToString() => $"({X}, {Y}, {Z}, {W})";
+        public readonly override string ToString() => $"({X}, {Y}, {Z}, {W})";
 
         /// <summary>
         /// <see cref="Vector4I"/>に型変換する
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector4I"/>の新しいインスタンス</returns>
-        public Vector4I To4I() => new Vector4I((int)X, (int)Y, (int)Z, (int)W);
+        public readonly Vector4I To4I() => new Vector4I((int)X, (int)Y, (int)Z, (int)W);
 
 
         /// <summary>
@@ -67,7 +63,7 @@ namespace Altseed
         /// </summary>
         public float Length
         {
-            get { return (float)Math.Sqrt(SquaredLength); }
+            readonly get { return (float)Math.Sqrt(SquaredLength); }
             set
             {
                 var len = Length;
@@ -80,7 +76,7 @@ namespace Altseed
         /// <summary>
         /// ベクトルの長さの二乗取得します。
         /// </summary>
-        public float SquaredLength
+        public readonly float SquaredLength
         {
             get { return X * X + Y * Y + Z * Z + W * W + Z * Z; }
         }
@@ -88,7 +84,7 @@ namespace Altseed
         /// <summary>
         /// このベクトルの単位ベクトル取得します。
         /// </summary>
-        public Vector4F Normal => this / Length;
+        public readonly Vector4F Normal => this / Length;
 
         /// <summary>
         /// このベクトルを単位ベクトル化します。
@@ -182,20 +178,20 @@ namespace Altseed
         /// </summary>
         /// <param name="other">比較する<see cref="Vector4F"/>のインスタンス</param>
         /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
-        public bool Equals(Vector4F other) => X == other.X && Y == other.Y && Z == other.Z && W == other.W;
+        public readonly bool Equals(Vector4F other) => X == other.X && Y == other.Y && Z == other.Z && W == other.W;
 
         /// <summary>
         /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public override bool Equals(object obj) => obj is Vector4F v ? Equals(v) : false;
+        public readonly override bool Equals(object obj) => obj is Vector4F v ? Equals(v) : false;
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public override int GetHashCode()
+        public readonly override int GetHashCode()
         {
             var hashCode = 1861411795;
             hashCode = hashCode * -1521134295 + X.GetHashCode();

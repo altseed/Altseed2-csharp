@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Altseed
 {
@@ -205,6 +201,50 @@ namespace Altseed
             o.Y = values[1];
             o.Z = values[2];
             return o;
+        }
+
+        public static Matrix33F operator +(Matrix33F left, Matrix33F right)
+        {
+            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
+            var result = new Matrix33F() { Values = new float[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = left.Values[i, j] + right.Values[i, j];
+            return result;
+        }
+
+        public static Matrix33F operator -(Matrix33F matrix) => -1 * matrix;
+
+        public static Matrix33F operator -(Matrix33F left, Matrix33F right)
+        {
+            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
+            var result = new Matrix33F() { Values = new float[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = left.Values[i, j] - right.Values[i, j];
+            return result;
+        }
+
+        public static Matrix33F operator *(Matrix33F matrix, float scalar)
+        {
+            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
+            var result = new Matrix33F() { Values = new float[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = matrix.Values[i, j] * scalar;
+            return result;
+        }
+
+        public static Matrix33F operator *(float scalar, Matrix33F matrix) => matrix * scalar;
+
+        public static Matrix33F operator /(Matrix33F matrix, float scalar)
+        {
+            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
+            var result = new Matrix33F() { Values = new float[3, 3] };
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    result.Values[i, j] = matrix.Values[i, j] / scalar;
+            return result;
         }
 
         public static Matrix33F operator *(Matrix33F left, Matrix33F right)
