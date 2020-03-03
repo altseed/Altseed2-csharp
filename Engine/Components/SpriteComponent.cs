@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Altseed
 {
@@ -10,9 +7,42 @@ namespace Altseed
     /// スプライトを描画するコンポーネントを表します。
     /// </summary>
     [Serializable]
-    public sealed class SpriteComponent : AljectComponent
+    public sealed class SpriteComponent : DrawnComponent
     {
         public readonly RenderedSprite sprite;
+
+        /// <summary>
+        /// 常に0.0fを返し，設定は不可能
+        /// </summary>
+        /// <exception cref="NotSupportedException">設定操作は保証されていない</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override float Angle
+        {
+            get => 0.0f;
+            set => throw new NotSupportedException("その操作は保証されていません");
+        }
+
+        /// <summary>
+        /// 常に既定値を返し，設定は不可能
+        /// </summary>
+        /// <exception cref="NotSupportedException">設定操作は保証されていない</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override Vector2F Position
+        {
+            get => default;
+            set => throw new NotSupportedException("その操作は保証されていません");
+        }
+
+        /// <summary>
+        /// 常に(1.0f, 1.0f)を返す，設定は不可能
+        /// </summary>
+        /// <exception cref="NotSupportedException">設定操作は保証されていない</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override Vector2F Scale
+        {
+            get => new Vector2F(1.0f, 1.0f);
+            set => throw new NotSupportedException("その操作は保証されていません");
+        }
 
         /// <summary>
         /// 描画範囲を取得または設定します。
@@ -52,7 +82,7 @@ namespace Altseed
         /// <summary>
         /// 描画を実行します。
         /// </summary>
-        internal void Draw()
+        internal override void Draw()
         {
             Engine.Renderer.DrawSprite(sprite);
         }

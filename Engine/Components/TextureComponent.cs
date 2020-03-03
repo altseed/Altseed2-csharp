@@ -37,12 +37,10 @@ namespace Altseed
             get => _angle;
             set
             {
-                if (_angle != value)
-                {
-                    _angle = value;
-                    M_angle.SetRotationZ((float)(value * Math.PI / 180d));
-                    UpdateTransport();
-                }
+                if (_angle == value) return;
+                _angle = value;
+                M_angle.SetRotationZ((float)(value * Math.PI / 180d));
+                UpdateTransport();
             }
         }
         private float _angle;
@@ -57,12 +55,10 @@ namespace Altseed
             get => _centerPosition;
             set
             {
-                if (_centerPosition != value)
-                {
-                    _centerPosition = value;
-                    M_centerPosition.SetTranslation(-value.X, -value.Y, 0.0f);
-                    AbsolutePosition = _position + _centerPosition;
-                }
+                if (_centerPosition == value) return;
+                _centerPosition = value;
+                M_centerPosition.SetTranslation(-value.X, -value.Y, 0.0f);
+                AbsolutePosition = _position + _centerPosition;
             }
         }
         private Vector2F _centerPosition;
@@ -86,11 +82,9 @@ namespace Altseed
             get => _position;
             set
             {
-                if (_position != value)
-                {
-                    _position = value;
-                    AbsolutePosition = _position + _centerPosition;
-                }
+                if (_position == value) return;
+                _position = value;
+                AbsolutePosition = _position + _centerPosition;
             }
         }
         private Vector2F _position;
@@ -103,12 +97,10 @@ namespace Altseed
             get => _scale;
             set
             {
-                if (_scale != value)
-                {
-                    _scale = value;
-                    M_scale.SetScale(value.X, value.Y, 1.0f);
-                    UpdateTransport();
-                }
+                if (_scale == value) return;
+                _scale = value;
+                M_scale.SetScale(value.X, value.Y, 1.0f);
+                UpdateTransport();
             }
         }
         private Vector2F _scale = new Vector2F(1.0f, 1.0f);
@@ -120,18 +112,16 @@ namespace Altseed
         /// </summary>
         public RectF Src
         {
-            get => sprite.Src;
+            get => _src;
             set
             {
-                if (_src != value)
-                {
-                    sprite.Src = value;
-                    _src = value;
-                }
+                if (_src == value) return;
+                sprite.Src = value;
+                _src = value;
             }
         }
         [NonSerialized]
-        private RectF? _src;
+        private RectF _src;
 
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
@@ -141,12 +131,9 @@ namespace Altseed
             get => sprite.Texture;
             set
             {
-                if (value != sprite.Texture)
-                {
-                    sprite.Texture = value;
-                    if (value == null) _src = null;
-                    else if (_src == null) Src = new RectF(0, 0, Texture.Size.X, Texture.Size.Y);
-                }
+                if (value == sprite.Texture) return;
+                sprite.Texture = value;
+                _src = new RectF(default, value?.Size ?? default);
             }
         }
 

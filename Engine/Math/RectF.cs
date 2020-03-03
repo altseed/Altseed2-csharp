@@ -31,7 +31,7 @@ namespace Altseed
         public float Height;
 
         /// <summary>
-        /// コンストラクタ
+        /// 新しいインスタンスを生成する
         /// </summary>
         /// <param name="x">X座標</param>
         /// <param name="y">Y座標</param>
@@ -44,6 +44,13 @@ namespace Altseed
             Width = width;
             Height = height;
         }
+
+        /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="position">左上の座標</param>
+        /// <param name="size">サイズ</param>
+        public RectF(Vector2F position, Vector2F size) : this(position.X, position.Y, size.X, size.Y) { }
 
         /// <summary>
         /// 2つの<see cref="RectF"/>間の等価性を判定します。
