@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// テクスチャを描画する<see cref="DrawnAlject"/>のクラス

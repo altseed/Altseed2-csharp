@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// テキストの描画を行うコンポーネント

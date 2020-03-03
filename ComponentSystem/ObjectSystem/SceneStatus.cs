@@ -1,6 +1,6 @@
 using System;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     [Serializable]
     internal enum SceneStatus : int

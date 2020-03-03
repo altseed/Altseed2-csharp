@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// <see cref="Alject"/>に登録できるコンポーネントを表します。

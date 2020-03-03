@@ -14,7 +14,7 @@ namespace Altseed
             if (string.IsNullOrWhiteSpace(path)) return new ArgumentException("パスが空白文字のみからなります", nameof(path));
             if (ContainsInvalidChar(path)) return new ArgumentException("パスに不正な文字が含まれています", nameof(path));
             if (IsTooLongPath(path)) return new PathTooLongException("パスが長すぎます");
-            if (!Engine.File.Exists(path)) return new FileNotFoundException("指定したパスのファイルが見つかりませんでした", path);
+            if (!EngineCore.File.Exists(path)) return new FileNotFoundException("指定したパスのファイルが見つかりませんでした", path);
             return null;
         } 
         internal static Exception CheckSavePath(string path)

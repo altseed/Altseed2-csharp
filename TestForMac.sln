@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{222E571D-A955-4025-9DAB-75528D7EDAE5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentSystem", "ComponentSystem\ComponentSystem.csproj", "{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8CEDD97-833B-429D-8DAC-CD39F846789D} = {E8CEDD97-833B-429D-8DAC-CD39F846789D}
+	EndProjectSection
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSubstitute", "TestSubstitute\TestSubstitute.csproj", "{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}"
 EndProject
 Global
@@ -17,6 +22,10 @@ Global
 		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Debug|x64.Build.0 = Debug|x64
 		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Release|x64.ActiveCfg = Release|x64
 		{222E571D-A955-4025-9DAB-75528D7EDAE5}.Release|x64.Build.0 = Release|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Debug|x64.ActiveCfg = Debug|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Debug|x64.Build.0 = Debug|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Release|x64.ActiveCfg = Release|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Release|x64.Build.0 = Release|x64
 		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Debug|x64.ActiveCfg = Debug|x64
 		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Debug|x64.Build.0 = Debug|x64
 		{DDDEE94A-6429-43B1-AFBD-9DF1641E45AC}.Release|x64.ActiveCfg = Release|x64

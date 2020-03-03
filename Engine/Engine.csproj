@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Platforms>x64</Platforms>
     <RootNamespace>Altseed</RootNamespace>
     <AssemblyName>Altseed2</AssemblyName>
     <OutputPath>../Build</OutputPath>

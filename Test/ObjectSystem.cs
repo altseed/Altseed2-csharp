@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 
+using Altseed.ComponentSystem;
+
 namespace Altseed.Test
 {
     [TestFixture]
@@ -21,7 +23,7 @@ namespace Altseed.Test
             var texture2 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.jpg");
             Assert.NotNull(texture);
 
-            var scene = Engine.CurrentScene;
+            var scene = ComponentSystem.Engine.CurrentScene;
             var obj1 = new TaggedObject()
             {
                 DrawingPriority = 1,
@@ -83,7 +85,7 @@ namespace Altseed.Test
                 Assert.True(Engine.Graphics.BeginFrame());
 
                 Engine.Update();
-                
+
                 var cmdList = Engine.Graphics.CommandList;
                 cmdList.SetRenderTargetWithScreen();
                 Engine.Renderer.Render(cmdList);

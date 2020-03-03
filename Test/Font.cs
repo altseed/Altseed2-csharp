@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Linq;
 
+using Altseed.ComponentSystem;
+
 namespace Altseed.Test
 {
     [TestFixture]

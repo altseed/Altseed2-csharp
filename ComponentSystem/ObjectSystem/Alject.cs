@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// Altseedで管理されるオブジェクト

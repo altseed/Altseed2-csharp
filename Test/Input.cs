@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
+using Altseed.ComponentSystem;
+
 namespace Altseed.Test
 {
     [TestFixture]

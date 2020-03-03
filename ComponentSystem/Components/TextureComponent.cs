@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// テクスチャの描画を扱うコンポーネント

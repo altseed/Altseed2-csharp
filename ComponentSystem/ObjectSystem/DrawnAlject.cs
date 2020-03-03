@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// 描画を実行する<see cref="Alject"/>のクラス

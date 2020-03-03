@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
-    /// <summary>
-    /// Altseed2の中枢を担うクラス
-    /// </summary>
-    public static class Engine
+    public sealed class Engine
     {
         /// <summary>
         /// 現在処理している<see cref="Scene"/>取得します。
@@ -30,18 +27,8 @@ namespace Altseed
         /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
-            if (Core.Initialize(title, width, height, config ?? new Configuration()))
+            if (Altseed.EngineCore.Initialize(title, width, height, config ?? new Configuration()))
             {
-                Keyboard = Keyboard.GetInstance();
-                Mouse = Mouse.GetInstance();
-                Joystick = Joystick.GetInstance();
-                File = File.GetInstance();
-                Graphics = Graphics.GetInstance();
-                Renderer = Renderer.GetInstance();
-                Sound = SoundMixer.GetInstance();
-                Log = Log.GetInstance();
-                Resources = Resources.GetInstance();
-
                 CurrentScene = new Scene()
                 {
                     Status = SceneStatus.Updated
@@ -57,8 +44,12 @@ namespace Altseed
         /// <returns>イベントの実行が出来たらtrue、それ以外でfalse</returns>
         public static bool DoEvents()
         {
-            Graphics.DoEvents();
-            return Core.GetInstance().DoEvent();
+            return Altseed.EngineCore.DoEvents();
+        }
+
+        public static void Update()
+        {
+            CurrentScene.Update();
         }
 
         /// <summary>
@@ -66,15 +57,7 @@ namespace Altseed
         /// </summary>
         public static void Terminate()
         {
-            Core.Terminate();
-        }
-
-        /// <summary>
-        /// 更新処理を実行する
-        /// </summary>
-        public static void Update()
-        {
-            CurrentScene.Update();
+            Altseed.EngineCore.Terminate();
         }
 
         #region ChangeScene
@@ -129,7 +112,9 @@ namespace Altseed
         internal static void StartSceneChange(Scene nextScene)
         {
             if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
-            if (!(CurrentScene.Status == SceneStatus.Updated || CurrentScene.Status == SceneStatus.WaitDisposed || CurrentScene.Status == SceneStatus.Disposed)) throw new InvalidOleVariantTypeException("シーン変更処理中です");
+            if (!(CurrentScene.Status == SceneStatus.Updated || CurrentScene.Status == SceneStatus.WaitDisposed || CurrentScene.Status == SceneStatus.Disposed))
+                throw new InvalidOperationException("シーン変更処理中です");
+
             CurrentScene.RaiseOnTransitionBegin();
             nextScene.RaiseOnRegistered();
             NextScene = nextScene;
@@ -164,49 +149,54 @@ namespace Altseed
         }
         #endregion
 
+        #region Modules
+
         /// <summary>
         /// ファイルを管理するクラス取得します。
         /// </summary>
-        public static File File { get; private set; }
+        public static File File => Altseed.EngineCore.File;
 
         /// <summary>
         /// キーボードを管理するクラス取得します。
         /// </summary>
-        public static Keyboard Keyboard { get; private set; }
+        public static Keyboard Keyboard => Altseed.EngineCore.Keyboard;
 
         /// <summary>
         /// マウスを管理するクラス取得します。
         /// </summary>
-        public static Mouse Mouse { get; private set; }
+        public static Mouse Mouse => Altseed.EngineCore.Mouse;
 
         ///// <summary>
         ///// ジョイスティックを管理するクラス取得します。
         ///// </summary>
-        public static Joystick Joystick { get; private set; }
+        public static Joystick Joystick => Altseed.EngineCore.Joystick;
 
         /// <summary>
         /// グラフィックのクラス取得します。
         /// </summary>
-        public static Graphics Graphics { get; private set; }
+        public static Graphics Graphics => Altseed.EngineCore.Graphics;
 
         /// <summary>
         /// ログを管理するクラス取得します。
         /// </summary>
-        public static Log Log { get; private set; }
+        public static Log Log => Altseed.EngineCore.Log;
 
         /// <summary>
         /// レンダラのクラス取得します。
         /// </summary>
-        public static Renderer Renderer { get; private set; }
+        public static Renderer Renderer => Altseed.EngineCore.Renderer;
 
         /// <summary>
         /// 音を管理するクラス取得します。
         /// </summary>
-        public static SoundMixer Sound { get; private set; }
+        public static SoundMixer Sound => Altseed.EngineCore.Sound;
 
         /// <summary>
         /// リソースを管理するクラス取得します。
         /// </summary>
-        public static Resources Resources { get; private set; }
+        public static Resources Resources => Altseed.EngineCore.Resources;
+
+        #endregion
+
     }
 }

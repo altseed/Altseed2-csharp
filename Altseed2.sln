@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{9AF33505-4A30-480D-92FE-12AFBFCFE01C}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04} = {E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}
+		{E8CEDD97-833B-429D-8DAC-CD39F846789D} = {E8CEDD97-833B-429D-8DAC-CD39F846789D}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentSystem", "ComponentSystem\ComponentSystem.csproj", "{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}"
+	ProjectSection(ProjectDependencies) = postProject
 		{E8CEDD97-833B-429D-8DAC-CD39F846789D} = {E8CEDD97-833B-429D-8DAC-CD39F846789D}
 	EndProjectSection
 EndProject
@@ -24,6 +30,10 @@ Global
 		{9AF33505-4A30-480D-92FE-12AFBFCFE01C}.Debug|x64.Build.0 = Debug|x64
 		{9AF33505-4A30-480D-92FE-12AFBFCFE01C}.Release|x64.ActiveCfg = Release|x64
 		{9AF33505-4A30-480D-92FE-12AFBFCFE01C}.Release|x64.Build.0 = Release|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Debug|x64.ActiveCfg = Debug|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Debug|x64.Build.0 = Debug|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Release|x64.ActiveCfg = Release|x64
+		{E8C0710E-EDF5-4622-8E3B-8BE1A0F59B04}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

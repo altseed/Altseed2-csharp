@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// <see cref="Scene"/>に登録できるコンポーネントを表します。

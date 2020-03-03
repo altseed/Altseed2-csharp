@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// スプライトを描画するコンポーネントを表します。

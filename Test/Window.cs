@@ -3,6 +3,8 @@ using System.Threading;
 using System.IO;
 using NUnit.Framework;
 
+using Altseed.ComponentSystem;
+
 namespace Altseed.Test
 {
     [TestFixture]

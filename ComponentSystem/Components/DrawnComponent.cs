@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed.ComponentSystem
 {
     /// <summary>
     /// 描画コンポーネントを表します。
@@ -32,5 +32,7 @@ namespace Altseed
         /// 描画を実行する
         /// </summary>
         internal abstract void Draw();
+
+
     }
 }
