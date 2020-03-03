@@ -47,9 +47,32 @@ namespace Altseed.Test
             Debug.WriteLine(file1.Path);
             Debug.WriteLine(file2.Path);
 
-            //Assert.AreEqual(file1.Path, file2.Path);
             Assert.AreEqual(file1.Size, file2.Size);
             Assert.True(Enumerable.SequenceEqual(file1.Buffer, file2.Buffer));
+
+            EngineCore.Terminate();
+        }
+        [Test, Apartment(ApartmentState.STA)]
+        public void StreamFile()
+        {
+            Assert.True(EngineCore.Initialize("StreamFile", 50, 50));
+
+            var file1 = Altseed.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
+
+            const string path = "Serialization/StreamFile.bin";
+            file1.Read(3);
+
+            Serialize(path, file1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var file2 = Deserialize<StreamFile>(path);
+
+            Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
+            Assert.AreEqual(file1.CurrentPosition, file2.CurrentPosition);
+            Assert.AreEqual(file1.TempBufferSize, file2.TempBufferSize);
+            Assert.AreEqual(file1.Size, file2.Size);
+            Assert.True(Enumerable.SequenceEqual(file1.TempBuffer, file2.TempBuffer));
 
             EngineCore.Terminate();
         }
