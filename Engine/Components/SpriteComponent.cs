@@ -34,7 +34,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 常に(1.0f, 1.0f)を返す，設定は不可能
+        /// 常に(1.0f, 1.0f)を返し，設定は不可能
         /// </summary>
         /// <exception cref="NotSupportedException">設定操作は保証されていない</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
