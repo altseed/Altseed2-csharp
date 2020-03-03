@@ -73,27 +73,33 @@ namespace Altseed
 
     public static class ArrayExtension
     {
-        public static unsafe TElement[] ToArray<TElement>(this IArray<TElement> obj)
+        public static TElement[] ToArray<TElement>(this IArray<TElement> obj)
             where TElement : unmanaged
         {
             var array = new TElement[obj.Count];
 
-            fixed (TElement* ptr = array)
+            unsafe
             {
-                obj.CopyTo(new IntPtr(ptr));
+                fixed (TElement* ptr = array)
+                {
+                    obj.CopyTo(new IntPtr(ptr));
+                }
             }
 
             return array;
         }
 
-        public static unsafe void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
+        public static void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
             where TElement : unmanaged
         {
             if (obj.Count < array.Length) obj.Resize(array.Length);
 
-            fixed (TElement* ptr = array)
+            unsafe
             {
-                obj.Assign(new IntPtr(ptr), array.Length);
+                fixed (TElement* ptr = array)
+                {
+                    obj.Assign(new IntPtr(ptr), array.Length);
+                }
             }
         }
     }

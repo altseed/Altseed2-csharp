@@ -4,9 +4,14 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Altseed.Test</RootNamespace>
     <OutputPath>../Build</OutputPath>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
