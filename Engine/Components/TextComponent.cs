@@ -20,12 +20,10 @@ namespace Altseed
             get => _angle;
             set
             {
-                if (_angle != value)
-                {
-                    _angle = value;
-                    M_angle.SetRotationZ((float)(value * Math.PI / 180d));
-                    UpdateTransform();
-                }
+                if (_angle == value) return;
+                _angle = value;
+                M_angle.SetRotationZ((float)(value * Math.PI / 180d));
+                UpdateTransform();
             }
         }
         private float _angle;
@@ -36,11 +34,9 @@ namespace Altseed
             get => _absolutePosition;
             set
             {
-                if (_absolutePosition != value)
-                {
-                    _absolutePosition = value;
-                    UpdateTransform();
-                }
+                if (_absolutePosition == value) return;
+                _absolutePosition = value;
+                UpdateTransform();
             }
         }
         [NonSerialized]
@@ -54,11 +50,9 @@ namespace Altseed
             get => _centerPosition;
             set
             {
-                if (_centerPosition != value)
-                {
-                    _centerPosition = value;
-                    AbsolutePosition = _position + _centerPosition;
-                }
+                if (_centerPosition == value) return;
+                _centerPosition = value;
+                AbsolutePosition = _position + _centerPosition;
             }
         }
         private Vector2F _centerPosition;
@@ -71,11 +65,9 @@ namespace Altseed
             get => _font;
             set
             {
-                if (_font != value)
-                {
-                    _font = value;
-                    UpdateImages();
-                }
+                if (_font == value) return;
+                _font = value;
+                UpdateImages();
             }
         }
         private Font _font;
@@ -88,11 +80,9 @@ namespace Altseed
             get => _material;
             set
             {
-                if (_material != value)
-                {
-                    _material = value;
-                    UpdateImages();
-                }
+                if (_material == value) return;
+                _material = value;
+                UpdateImages();
             }
         }
         private Material _material = new Material();
@@ -105,11 +95,9 @@ namespace Altseed
             get => _position;
             set
             {
-                if (value != _position)
-                {
-                    _position = value;
-                    AbsolutePosition = _position + _centerPosition;
-                }
+                if (value == _position) return;
+                _position = value;
+                AbsolutePosition = _position + _centerPosition;
             }
         }
         [NonSerialized]
@@ -123,12 +111,10 @@ namespace Altseed
             get => _scale;
             set
             {
-                if (value != _scale)
-                {
-                    _scale = value;
-                    M_scale.SetScale(value.X, value.Y, 1.0f);
-                    UpdateTransform();
-                }
+                if (value == _scale) return;
+                _scale = value;
+                M_scale.SetScale(value.X, value.Y, 1.0f);
+                UpdateTransform();
             }
         }
         private Vector2F _scale = new Vector2F(1.0f, 1.0f);
@@ -143,11 +129,9 @@ namespace Altseed
             get => _text;
             set
             {
-                if (_text != value)
-                {
-                    _text = value ?? string.Empty;
-                    UpdateImages(true);
-                }
+                if (_text == value) return;
+                _text = value ?? string.Empty;
+                UpdateImages(true);
             }
         }
         private string _text = string.Empty;
