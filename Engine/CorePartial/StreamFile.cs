@@ -5,13 +5,15 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public sealed partial class StreamFile : ISerializable
+    public sealed partial class StreamFile : ISerializable, IDeserializationCallback
     {
         #region SerializeName
+        private const string S_CurrentPosition = "S_CurrentPosition";
         private const string S_Path = "S_Path";
         #endregion
 
         private string path;
+        private SerializationInfo seInfo;
 
         private StreamFile(SerializationInfo info, StreamingContext context)
         {
@@ -23,6 +25,7 @@ namespace Altseed
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<StreamFile>(this));
             this.path = path;
+            seInfo = info;
         }
 
         /// <summary>
@@ -71,6 +74,17 @@ namespace Altseed
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
             info.AddValue(S_Path, path);
+            info.AddValue(S_CurrentPosition, CurrentPosition);
+        }
+
+        void IDeserializationCallback.OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+
+            var position = seInfo.GetInt32(S_CurrentPosition);
+            if (position > 0) Read(position);
+
+            seInfo = null;
         }
     }
 }
