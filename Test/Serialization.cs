@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using NUnit.Framework;
+using Altseed.ComponentSystem;
 
 namespace Altseed.Test
 {
@@ -167,6 +168,7 @@ namespace Altseed.Test
 
             tc.End();
         }
+
         [Test, Apartment(ApartmentState.STA)]
         public void StreamFile()
         {
@@ -193,6 +195,7 @@ namespace Altseed.Test
             EngineCore.Terminate();
         }
         [Test, Apartment(ApartmentState.STA)]
+
         public void Configuration()
         {
             Assert.True(EngineCore.Initialize("Configuration", 50, 50));
@@ -224,6 +227,65 @@ namespace Altseed.Test
             Assert.AreEqual(config1.IsResizable, config2.IsResizable);
             Assert.AreEqual(config1.LogFilename, "Log.txt");
             Assert.AreEqual(config1.LogFilename, config2.LogFilename);
+
+            EngineCore.Terminate();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void DynamicFont()
+        {
+            Assert.True(Engine.Initialize("DynamicFont", 960, 720));
+
+            var font1 = Altseed.Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50, new Color(255, 255, 255));
+
+            Assert.NotNull(font1);
+
+            const string path = "Serialization/DynamicFont.bin";
+
+            Serialize(path, font1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var font2 = Deserialize<Altseed.Font>(path);
+
+            Assert.NotNull(font2);
+
+            Assert.AreEqual(font1.Ascent, font2.Ascent);
+            Assert.AreEqual(font1.Color, font2.Color);
+            Assert.AreEqual(font1.Descent, font2.Descent);
+            Assert.AreEqual(font1.LineGap, font2.LineGap);
+            Assert.AreEqual(font1.Size, font2.Size);
+
+            var obj1 = new TextAlject()
+            {
+                Position = new Vector2F(100, 100),
+                Font = font1,
+                Text = "Font1"
+            };
+            var obj2 = new TextAlject()
+            {
+                Position = new Vector2F(100, 500),
+                Font = font2,
+                Text = "Font2"
+            };
+
+            Engine.CurrentScene.AddObject(obj1);
+            Engine.CurrentScene.AddObject(obj2);
+
+            while (EngineCore.DoEvents())
+            {
+                Assert.True(EngineCore.Graphics.BeginFrame());
+
+                Engine.Update();
+
+                var cmdList = EngineCore.Graphics.CommandList;
+                cmdList.SetRenderTargetWithScreen();
+                Engine.Renderer.Render(cmdList);
+
+                Assert.True(EngineCore.Graphics.EndFrame());
+
+                if (EngineCore.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
+            }
 
             EngineCore.Terminate();
         }
