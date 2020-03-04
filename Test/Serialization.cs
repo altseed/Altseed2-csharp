@@ -194,8 +194,8 @@ namespace Altseed.Test
 
             EngineCore.Terminate();
         }
-        [Test, Apartment(ApartmentState.STA)]
 
+        [Test, Apartment(ApartmentState.STA)]
         public void Configuration()
         {
             Assert.True(EngineCore.Initialize("Configuration", 50, 50));
@@ -267,6 +267,59 @@ namespace Altseed.Test
                 Position = new Vector2F(100, 500),
                 Font = font2,
                 Text = "Font2"
+            };
+
+            Engine.CurrentScene.AddObject(obj1);
+            Engine.CurrentScene.AddObject(obj2);
+
+            while (EngineCore.DoEvents())
+            {
+                Assert.True(EngineCore.Graphics.BeginFrame());
+
+                Engine.Update();
+
+                var cmdList = EngineCore.Graphics.CommandList;
+                cmdList.SetRenderTargetWithScreen();
+                Engine.Renderer.Render(cmdList);
+
+                Assert.True(EngineCore.Graphics.EndFrame());
+
+                if (EngineCore.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
+            }
+
+            EngineCore.Terminate();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Texture2D()
+        {
+            Assert.True(Engine.Initialize("Texture2D", 960, 720));
+
+            var texture1 = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+
+            Assert.NotNull(texture1);
+
+            const string path = "Serialization/Texture2D.bin";
+
+            Serialize(path, texture1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var texture2 = Deserialize<Texture2D>(path);
+
+            Assert.NotNull(texture2);
+
+            Assert.AreEqual(texture1.Size, texture2.Size);
+
+            var obj1 = new TextureAlject()
+            {
+                Position = new Vector2F(100, 100),
+                Texture = texture1
+            };
+            var obj2 = new TextureAlject()
+            {
+                Position = new Vector2F(100, 500),
+                Texture = texture2
             };
 
             Engine.CurrentScene.AddObject(obj1);
