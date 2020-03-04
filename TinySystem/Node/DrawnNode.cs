@@ -7,6 +7,8 @@ namespace Altseed.TinySystem
     [Serializable]
     public abstract class DrawnNode : Node
     {
+        protected internal Matrix44F Transform { get; set; } = Matrix44F.GetIdentity();
+
         internal abstract void Draw();
         // NOTE: 実際はここでRendererを叩くよりも、
         //       描画対象をどこかに積み、後で
@@ -66,7 +68,8 @@ namespace Altseed.TinySystem
             set
             {
                 if (_CenterPosition == value) return;
-                _MatPosition.SetTranslation(value.X, value.Y, 0.0f);
+                _MatCenterPosition.SetTranslation(value.X, value.Y, 0.0f);
+                _MatCenterPositionInv.SetTranslation(-value.X, -value.Y, 0.0f);
 
                 _CenterPosition = value;
             }
@@ -75,6 +78,8 @@ namespace Altseed.TinySystem
         private Vector2F _CenterPosition = new Vector2F();
         [NonSerialized]
         protected internal Matrix44F _MatCenterPosition = Matrix44F.GetIdentity();
+        protected internal Matrix44F _MatCenterPositionInv = Matrix44F.GetIdentity();
+
 
         /// <summary>
         /// 拡大率を取得または設定する

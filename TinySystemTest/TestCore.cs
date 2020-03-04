@@ -14,7 +14,7 @@ namespace Altseed.TinySystem.Test
             _TestName = testName;
             Assert.True(Engine.Initialize($"Altseed2 C# TinySystem Test:{testName}", 800, 600, new Configuration()));
             Engine.FramerateMode = FramerateMode.Variable;
-            //Engine.TargetFPS = 45;
+            Engine.TargetFPS = 60;
         }
 
         public void LoopBody(Action<int> beforeUpdateAction, Action<int> afterUpdateAction)

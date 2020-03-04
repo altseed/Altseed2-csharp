@@ -101,12 +101,12 @@ namespace Altseed.TinySystem
         private RegisterableCollection<Node, Node> _Children;
         public ReadOnlyCollection<Node> Children { get; }
 
-        public void AddChildNode(Node node)
+        public virtual void AddChildNode(Node node)
         {
             _Children.Add(node);
         }
 
-        public void RemoveChildNode(Node node)
+        public virtual void RemoveChildNode(Node node)
         {
             _Children.Remove(node);
         }

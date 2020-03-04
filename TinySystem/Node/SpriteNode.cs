@@ -40,7 +40,17 @@ namespace Altseed.TinySystem
             }
         }
 
-        // TODO: Matrial
+        public Material Material
+        {
+            get => _Sprite.Material;
+            set
+            {
+                if (_Sprite.Material == value) return;
+
+                _Sprite.Material = value;
+                //TODO: Src
+            }
+        }
 
         /// <summary>
         /// 新しいインスタンスを生成します。
@@ -55,16 +65,24 @@ namespace Altseed.TinySystem
         /// </summary>
         internal override void Draw()
         {
+            UpdateTransform(); // TODO:変更時のみにする（親ノードでの変更に注意）
             Engine.Renderer.DrawSprite(_Sprite);
         }
 
         protected internal override void UpdateTransform()
         {
-            var mat = _MatPosition * _MatAngle * _MatScale;
-            // TODO: CenterPosition
-            // TODO: Parent Transform
+            var matAncestor = Matrix44F.GetIdentity();
+            foreach (var n in EnumerateAncestor())
+            {
+                if (n is DrawnNode d)
+                {
+                    matAncestor = d.Transform * matAncestor;
+                }
+            }
+            var mat = _MatCenterPosition * _MatPosition * _MatAngle * _MatScale * _MatCenterPositionInv;
 
-            _Sprite.Transform = mat;
+            _Sprite.Transform = matAncestor * mat;
+            Transform = mat;
         }
 
         #region Serialization
