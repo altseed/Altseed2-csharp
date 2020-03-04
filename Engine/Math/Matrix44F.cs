@@ -651,7 +651,7 @@ namespace Altseed
         public static Matrix44F operator *(Matrix44F left, Matrix44F right)
         {
             Matrix44F o_ = new Matrix44F() { Values = new float[4, 4] };
-            Mul(ref o_, ref left, ref right);
+            Mul(ref o_, left, right);
             return o_;
         }
 
@@ -666,7 +666,7 @@ namespace Altseed
         /// <param name="o">出力先</param>
         /// <param name="in1">行列1</param>
         /// <param name="in2">行列2</param>
-        public static void Mul(ref Matrix44F o, ref Matrix44F in1, ref Matrix44F in2)
+        public static void Mul(ref Matrix44F o, in Matrix44F in1, in Matrix44F in2)
         {
             Matrix44F _in1 = in1;
             Matrix44F _in2 = in2;
@@ -743,5 +743,27 @@ namespace Altseed
             return clone;
         }
         object ICloneable.Clone() => Clone();
+
+        public static Matrix44F GetRotationZ(float angle)
+        {
+            var m = GetIdentity();
+            m.SetRotationZ(angle);
+            return m;
+        }
+
+        public static Matrix44F GetTransition(float x, float y, float z)
+        {
+            var m = GetIdentity();
+            m.SetTranslation(x, y, z);
+            return m;
+        }
+
+        public static Matrix44F GetScale(float x, float y, float z)
+
+        {
+            var m = GetIdentity();
+            m.SetScale(x, y, z);
+            return m;
+        }
     }
 }
