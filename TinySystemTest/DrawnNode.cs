@@ -29,7 +29,7 @@ namespace Altseed.TinySystem.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-        public void Angle()
+        public void Rotate()
         {
             var tc = new TestCore();
             tc.Init();
@@ -40,6 +40,7 @@ namespace Altseed.TinySystem.Test
             var s = new SpriteNode();
             s.Texture = t1;
             s.Position = new Vector2F(100, 100);
+            s.CenterPosition = s.Texture.Size / 2;
             Engine.CurrentScene.AddNode(s);
 
             tc.LoopBody(c =>

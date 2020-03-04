@@ -32,7 +32,10 @@ namespace Altseed.TinySystem
         }
         private Font _Font;
 
-        public Vector2F Rect { get; private set; }
+        /// <summary>
+        /// 描画領域の大きさを取得します。
+        /// </summary>
+        public Vector2F Size { get; private set; }
 
         /// <summary>
         /// カーニングを使用するかどうかを取得または設定する
@@ -72,6 +75,7 @@ namespace Altseed.TinySystem
             var offset = new Vector2F();
             var charArray = _Text.ToCharArray();
             //TODO: 4byte?
+            var maxHeight = 0.0f;
             for (int i = 0; i < charArray.Length; i++)
             {
                 var c = charArray[i];
@@ -90,10 +94,13 @@ namespace Altseed.TinySystem
                 _Sprites.Add(sprite);
 
                 offset += new Altseed.Vector2F(glyph.GlyphWidth, 0);
+                maxHeight = (maxHeight < glyph.Size.Y) ? glyph.Size.Y : maxHeight;
 
                 if (UseKerning && i < charArray.Length - 1)
                     offset += new Vector2F(Font.GetKerning(charArray[i], charArray[i + 1]), 0);
             }
+
+            Size = new Vector2F(offset.X, maxHeight);
         }
 
         protected internal override void UpdateTransform()

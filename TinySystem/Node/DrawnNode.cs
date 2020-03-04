@@ -57,6 +57,7 @@ namespace Altseed.TinySystem
         [NonSerialized]
         protected internal Matrix44F _MatPosition = Matrix44F.GetIdentity();
 
+
         /// <summary>
         /// 回転の中心となる座標を取得または設定する
         /// </summary>
@@ -66,7 +67,8 @@ namespace Altseed.TinySystem
             set
             {
                 if (_CenterPosition == value) return;
-                _MatPosition.SetTranslation(value.X, value.Y, 0.0f);
+                _MatCenterPosition.SetTranslation(value.X, value.Y, 0.0f);
+                _MatCenterPositionInv.SetTranslation(-value.X, -value.Y, 0.0f);
 
                 _CenterPosition = value;
             }
@@ -75,6 +77,8 @@ namespace Altseed.TinySystem
         private Vector2F _CenterPosition = new Vector2F();
         [NonSerialized]
         protected internal Matrix44F _MatCenterPosition = Matrix44F.GetIdentity();
+        protected internal Matrix44F _MatCenterPositionInv = Matrix44F.GetIdentity();
+
 
         /// <summary>
         /// 拡大率を取得または設定する

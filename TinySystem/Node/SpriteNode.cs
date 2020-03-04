@@ -40,7 +40,17 @@ namespace Altseed.TinySystem
             }
         }
 
-        // TODO: Matrial
+        public Material Material
+        {
+            get => _Sprite.Material;
+            set
+            {
+                if (_Sprite.Material == value) return;
+
+                _Sprite.Material = value;
+                //TODO: Src
+            }
+        }
 
         /// <summary>
         /// 新しいインスタンスを生成します。
@@ -60,7 +70,7 @@ namespace Altseed.TinySystem
 
         protected internal override void UpdateTransform()
         {
-            var mat = _MatPosition * _MatAngle * _MatScale;
+            var mat = _MatCenterPosition * _MatPosition * _MatAngle * _MatScale * _MatCenterPositionInv;
             // TODO: CenterPosition
             // TODO: Parent Transform
 
