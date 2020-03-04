@@ -8,7 +8,7 @@ namespace Altseed
     /// <summary>
     /// Altseed2の中枢を担うクラス
     /// </summary>
-    public static class EngineCore
+    internal static class EngineCore
     {
         /// <summary>
         /// エンジンを初期化する
@@ -22,15 +22,21 @@ namespace Altseed
         {
             if (Core.Initialize(title, width, height, config ?? new Configuration()))
             {
+                Core = Core.GetInstance();
+                Log = Log.GetInstance();
+
                 Keyboard = Keyboard.GetInstance();
                 Mouse = Mouse.GetInstance();
                 Joystick = Joystick.GetInstance();
+                
                 File = File.GetInstance();
+                Resources = Resources.GetInstance();
+
+                Window = Window.GetInstance();
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
+
                 Sound = SoundMixer.GetInstance();
-                Log = Log.GetInstance();
-                Resources = Resources.GetInstance();
 
                 return true;
             }
@@ -55,49 +61,56 @@ namespace Altseed
             Core.Terminate();
         }
 
+        public static Core Core { get; private set; }
+
         /// <summary>
-        /// ファイルを管理するクラス取得します。
+        /// ファイルを管理するクラスを取得します。
         /// </summary>
         public static File File { get; private set; }
 
         /// <summary>
-        /// キーボードを管理するクラス取得します。
+        /// キーボードを管理するクラスを取得します。
         /// </summary>
         public static Keyboard Keyboard { get; private set; }
 
         /// <summary>
-        /// マウスを管理するクラス取得します。
+        /// マウスを管理するクラスを取得します。
         /// </summary>
         public static Mouse Mouse { get; private set; }
 
         ///// <summary>
-        ///// ジョイスティックを管理するクラス取得します。
+        ///// ジョイスティックを管理するクラスを取得します。
         ///// </summary>
         public static Joystick Joystick { get; private set; }
 
         /// <summary>
-        /// グラフィックのクラス取得します。
+        /// グラフィックのクラスを取得します。
         /// </summary>
-        public static Graphics Graphics { get; private set; }
+        internal static Graphics Graphics { get; private set; }
 
         /// <summary>
-        /// ログを管理するクラス取得します。
+        /// ログを管理するクラスを取得します。
         /// </summary>
         public static Log Log { get; private set; }
 
         /// <summary>
-        /// レンダラのクラス取得します。
+        /// レンダラのクラスを取得します。
         /// </summary>
-        public static Renderer Renderer { get; private set; }
+        internal static Renderer Renderer { get; private set; }
 
         /// <summary>
-        /// 音を管理するクラス取得します。
+        /// 音を管理するクラスを取得します。
         /// </summary>
         public static SoundMixer Sound { get; private set; }
 
         /// <summary>
-        /// リソースを管理するクラス取得します。
+        /// リソースを管理するクラスを取得します。
         /// </summary>
-        public static Resources Resources { get; private set; }
+        internal static Resources Resources { get; private set; }
+
+        /// <summary>
+        /// ウインドウを表すクラスを取得します。
+        /// </summary>
+        internal static Window Window { get; private set; }
     }
 }

@@ -1,0 +1,84 @@
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace Altseed.TinySystem
+{
+    /// <summary>
+    /// テクスチャを描画するノードを表します。
+    /// </summary>
+    [Serializable]
+    public class SpriteNode : DrawnNode, IDeserializationCallback
+    {
+        public readonly RenderedSprite _Sprite;
+
+        /// <summary>
+        /// 描画範囲を取得または設定します。
+        /// </summary>
+        public RectF Src
+        {
+            get => _Sprite.Src;
+            set
+            {
+                if (_Sprite.Src == value) return;
+                _Sprite.Src = value;
+            }
+        }
+
+        /// <summary>
+        /// 描画するテクスチャを取得または設定します。
+        /// </summary>
+        public Texture2D Texture
+        {
+            get => _Sprite.Texture;
+            set
+            {
+                if (_Sprite.Texture == value) return;
+                _Sprite.Texture = value;
+
+                if (value != null)
+                    Src = new RectF(0, 0, value.Size.X, value.Size.Y);
+            }
+        }
+
+        // TODO: Matrial
+
+        /// <summary>
+        /// 新しいインスタンスを生成します。
+        /// </summary>
+        public SpriteNode()
+        {
+            _Sprite = RenderedSprite.Create();
+        }
+
+        /// <summary>
+        /// 描画を実行します。
+        /// </summary>
+        internal override void Draw()
+        {
+            Engine.Renderer.DrawSprite(_Sprite);
+        }
+
+        protected internal override void UpdateTransform()
+        {
+            var mat = _MatPosition * _MatAngle * _MatScale;
+            // TODO: CenterPosition
+            // TODO: Parent Transform
+
+            _Sprite.Transform = mat;
+        }
+
+        #region Serialization
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            throw new NotImplementedException();
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
+
+        #endregion
+    }
+}

@@ -5571,4 +5571,96 @@ namespace Altseed
         }
     }
     
+    public partial class Window
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
+        
+        internal static  Window TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Window cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Window_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Window(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Window>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Window_GetInstance();
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Window_GetTitle(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Window_SetTitle(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Window_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Window(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        public string Title
+        {
+            get
+            {
+                if (_Title != null)
+                {
+                    return _Title;
+                }
+                var ret = cbg_Window_GetTitle(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+            set
+            {
+                _Title = value;
+                cbg_Window_SetTitle(selfPtr, value);
+            }
+        }
+        private string _Title;
+        
+        /// <summary>
+        /// インスタンスを取得します。
+        /// </summary>
+        /// <returns>使用するインスタンス</returns>
+        internal static Window GetInstance()
+        {
+            var ret = cbg_Window_GetInstance();
+            return Window.TryGetFromCache(ret);
+        }
+        
+        ~Window()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Window_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
 }
