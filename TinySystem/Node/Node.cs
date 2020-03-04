@@ -123,23 +123,20 @@ namespace Altseed.TinySystem
 
 
         #endregion
-    }
 
-    [Serializable]
-    public abstract class DrawnNode : Node
-    {
-        internal abstract void Draw();
-        // NOTE: 実際はここでRendererを叩くよりも、
-        //       描画対象をどこかに積み、後で
-        //       まとめて描画するほうが良いかも
-
-        internal override void Update()
+        /// <summary>
+        /// 先祖ノードを列挙します。
+        /// </summary>
+        public IEnumerable<Node> EnumerateAncestor()
         {
-            Draw();
+            var current = Parent;
+            for (var n = Parent; current != null && !(current is RootNode); current = current.Parent)
+                yield return current;
 
-            base.Update();
+            yield break;
         }
     }
+
 
     [Serializable]
     internal sealed class RootNode : Node

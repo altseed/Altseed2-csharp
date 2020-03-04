@@ -6,7 +6,7 @@ namespace Altseed.TinySystem.Test
 {
     class TestCore
     {
-        public int Duration { get; set; } = 300;
+        public int Duration { get; set; } = 200;
         private string _TestName;
 
         public void Init([CallerMemberName]string testName = "")

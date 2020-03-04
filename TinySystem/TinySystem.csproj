@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Altseed</RootNamespace>
+    <RootNamespace>Altseed.TinySystem</RootNamespace>
     <AssemblyName>Altseed.TinySystem</AssemblyName>
     <OutputPath>../Build</OutputPath>
     <Platforms>x64</Platforms>

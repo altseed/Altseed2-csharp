@@ -1,26 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Altseed.TinySystem
 {
     /// <summary>
-    /// スプライトを描画するノードを表します。
+    /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class SpriteNode : DrawnNode
+    public class SpriteNode : DrawnNode, IDeserializationCallback
     {
-        public readonly RenderedSprite _Sprite;
+        public readonly RenderedSprite sprite;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => _Sprite.Src;
-            set { _Sprite.Src = value; }
+            get => sprite.Src;
+            set
+            {
+                if (sprite.Src == value) return;
+                sprite.Src = value;
+            }
         }
 
         /// <summary>
@@ -28,25 +29,25 @@ namespace Altseed.TinySystem
         /// </summary>
         public Texture2D Texture
         {
-            get => _Sprite.Texture;
-            set { _Sprite.Texture = value; }
+            get => sprite.Texture;
+            set
+            {
+                if (sprite.Texture == value) return;
+                sprite.Texture = value;
+
+                if (value != null)
+                    Src = new RectF(0, 0, value.Size.X, value.Size.Y);
+            }
         }
 
-        /// <summary>
-        /// 変換行列を取得または設定します。
-        /// </summary>
-        public Matrix44F Transform
-        {
-            get => _Sprite.Transform;
-            set { _Sprite.Transform = value; }
-        }
+        // TODO: Matrial
 
         /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public SpriteNode()
         {
-            _Sprite = RenderedSprite.Create();
+            sprite = RenderedSprite.Create();
         }
 
         /// <summary>
@@ -54,7 +55,30 @@ namespace Altseed.TinySystem
         /// </summary>
         internal override void Draw()
         {
-            Engine.Renderer.DrawSprite(_Sprite);
+            Engine.Renderer.DrawSprite(sprite);
         }
+
+        protected internal override void UpdateTransform()
+        {
+            var mat = _MatPosition * _MatAngle * _MatScale;
+            // TODO: CenterPosition
+            // TODO: Parent Transform
+
+            sprite.Transform = mat;
+        }
+
+        #region Serialization
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            throw new NotImplementedException();
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
+
+        #endregion
     }
 }

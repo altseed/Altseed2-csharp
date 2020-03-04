@@ -29,7 +29,7 @@ namespace Altseed.TinySystem.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-        public void TextureNode()
+        public void Angle()
         {
             var tc = new TestCore();
             tc.Init();
@@ -37,12 +37,16 @@ namespace Altseed.TinySystem.Test
             var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(t1);
 
-            var s = new TextureNode();
+            var s = new SpriteNode();
             s.Texture = t1;
             s.Position = new Vector2F(100, 100);
             Engine.CurrentScene.AddNode(s);
 
-            tc.LoopBody(null, null);
+            tc.LoopBody(c =>
+            {
+                s.Angle++;
+            }
+            , null);
 
             tc.End();
         }
