@@ -7,6 +7,8 @@ namespace Altseed.TinySystem
     [Serializable]
     public abstract class DrawnNode : Node
     {
+        protected internal Matrix44F Transform { get; set; } = Matrix44F.GetIdentity();
+
         internal abstract void Draw();
         // NOTE: 実際はここでRendererを叩くよりも、
         //       描画対象をどこかに積み、後で
@@ -56,7 +58,6 @@ namespace Altseed.TinySystem
         private Vector2F _Position = new Vector2F();
         [NonSerialized]
         protected internal Matrix44F _MatPosition = Matrix44F.GetIdentity();
-
 
         /// <summary>
         /// 回転の中心となる座標を取得または設定する

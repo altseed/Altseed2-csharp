@@ -87,21 +87,22 @@ namespace Altseed.TinySystem.Test
             var s2 = new SpriteNode();
             s2.Src = new RectF(new Vector2F(200, 200), new Vector2F(100, 100));
             s2.Texture = t1;
-            s2.Position = new Vector2F(200, 200);
+            s2.Position = new Vector2F(200, 0);
 
             s.AddChildNode(s2);
 
             Engine.CurrentScene.AddNode(s);
 
-            tc.LoopBody(null, c =>
-            {
-                if (c == 1)
-                {
-                    var e = s2.EnumerateAncestor().ToArray();
-                    Assert.AreEqual(1, e.Length);
-                    Assert.AreSame(e[0], s);
-                }
-            });
+            tc.LoopBody(c =>
+           {
+               if (c == 2)
+               {
+                   var e = s2.EnumerateAncestor().ToArray();
+                   Assert.AreEqual(1, e.Length);
+                   Assert.AreSame(e[0], s);
+               }
+               s.Angle++;
+           }, null);
 
             tc.End();
         }

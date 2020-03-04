@@ -68,10 +68,7 @@ namespace Altseed.TinySystem.Test
 
             Engine.CurrentScene.AddNode(t);
 
-            tc.LoopBody(c =>
-            {
-            }
-            , null);
+            tc.LoopBody(null, null);
 
             tc.End();
         }

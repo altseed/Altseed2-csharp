@@ -76,6 +76,8 @@ namespace Altseed.TinySystem
             var charArray = _Text.ToCharArray();
             //TODO: 4byte?
             var maxHeight = 0.0f;
+
+            _Sprites.Clear();
             for (int i = 0; i < charArray.Length; i++)
             {
                 var c = charArray[i];
