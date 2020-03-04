@@ -11,7 +11,31 @@ namespace Altseed
     public struct Matrix44F : ICloneable, IEquatable<Matrix44F>
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 4 * 4)]
-        public float[,] Values;
+        private float[,] Values;
+
+        /// <summary>
+        /// 指定した位置の値を取得または設定する
+        /// </summary>
+        /// <param name="x">取得する要素の位置</param>
+        /// <param name="y">取得する要素の位置</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または4以上</exception>
+        /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
+        public float this[int x, int y]
+        {
+            readonly get
+            {
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                return Values?[x, y] ?? 0;
+            }
+            set
+            {
+                Values ??= new float[4, 4];
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                Values[x, y] = value;
+            }
+        }
 
         internal static Matrix44F GetIdentity()
         {
@@ -20,10 +44,12 @@ namespace Altseed
             return result;
         }
 
+        /// <summary>
+        /// 単位行列に設定する
+        /// </summary>
         public void SetIdentity()
         {
-            if (Values == null)
-                Values = new float[4, 4];
+            Values ??= new float[4, 4];
 
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
@@ -35,6 +61,12 @@ namespace Altseed
             Values[3, 3] = 1.0f;
         }
 
+        /// <summary>
+        /// 行列を平行移動させる
+        /// </summary>
+        /// <param name="x">平行移動するX座標</param>
+        /// <param name="y">平行移動するY座標</param>
+        /// <param name="z">平行移動するZ座標</param>
         public void SetTranslation(float x, float y, float z)
         {
             SetIdentity();
@@ -48,19 +80,22 @@ namespace Altseed
         /// </summary>
         public void SetTransposed()
         {
+            SetIdentity();
             for (int c = 0; c < 4; c++)
-            {
                 for (int r = c; r < 4; r++)
                 {
                     float v = Values[r, c];
                     Values[r, c] = Values[c, r];
                     Values[c, r] = v;
                 }
-            }
         }
 
+        /// <summary>
+        /// 逆行列に設定する
+        /// </summary>
         public void SetInverted()
         {
+            Values ??= new float[4, 4];
             float e = 0.00001f;
 
             float a11 = Values[0, 0];
@@ -129,12 +164,12 @@ namespace Altseed
         }
 
         /// <summary>
-		/// 逆行列取得します。
+		/// 逆行列を取得します。
 		/// </summary>
 		/// <returns></returns>
-		public Matrix44F GetInverted()
+		public static Matrix44F GetInverted()
         {
-            Matrix44F o = this;
+            var o = new Matrix44F();
             o.SetInverted();
             return o;
         }
@@ -147,6 +182,7 @@ namespace Altseed
         /// <param name="up">カメラの上方向</param>
         public void SetLookAtRH(Vector3F eye, Vector3F at, Vector3F up)
         {
+            SetIdentity();
             // F=正面、R=右方向、U=上方向
             Vector3F F = Vector3F.Subtract(eye, at).Normal;
             Vector3F R = Vector3F.Cross(up, F).Normal;
@@ -181,6 +217,7 @@ namespace Altseed
         /// <param name="up">カメラの上方向</param>
         public void SetLookAtLH(Vector3F eye, Vector3F at, Vector3F up)
         {
+            SetIdentity();
             // F=正面、R=右方向、U=上方向
             Vector3F F = Vector3F.Subtract(at, eye).Normal;
             Vector3F R = Vector3F.Cross(up, F).Normal;
@@ -216,6 +253,7 @@ namespace Altseed
         /// <param name="zf">最遠距離</param>
         public void SetPerspectiveFovRH(float ovY, float aspect, float zn, float zf)
         {
+            SetIdentity();
             float yScale = 1 / (float)Math.Tan(ovY / 2);
             float xScale = yScale / aspect;
 
@@ -251,6 +289,7 @@ namespace Altseed
         /// <param name="zf">最遠距離</param>
         public void SetPerspectiveFovRH_OpenGL(float ovY, float aspect, float zn, float zf)
         {
+            SetIdentity();
             float yScale = 1 / (float)Math.Tan(ovY / 2);
             float xScale = yScale / aspect;
             float dz = zf - zn;
@@ -286,6 +325,7 @@ namespace Altseed
         /// <param name="zf">最遠距離</param>
         public void SetPerspectiveFovLH(float ovY, float aspect, float zn, float zf)
         {
+            SetIdentity();
             float yScale = 1 / (float)Math.Tan(ovY / 2);
             float xScale = yScale / aspect;
 
@@ -320,6 +360,7 @@ namespace Altseed
         /// <param name="zf">最遠距離</param>
         public void SetOrthographicRH(float width, float height, float zn, float zf)
         {
+            SetIdentity();
             Values[0, 0] = 2 / width;
             Values[1, 0] = 0;
             Values[2, 0] = 0;
@@ -351,6 +392,7 @@ namespace Altseed
         /// <param name="zf">最遠距離</param>
         public void SetOrthographicLH(float width, float height, float zn, float zf)
         {
+            SetIdentity();
             Values[0, 0] = 2 / width;
             Values[1, 0] = 0;
             Values[2, 0] = 0;
@@ -379,6 +421,7 @@ namespace Altseed
         /// <param name="angle">X軸回転量(ラジアン)</param>
         public void SetRotationX(float angle)
         {
+            SetIdentity();
             float s = (float)Math.Sin(angle);
             float c = (float)Math.Cos(angle);
 
@@ -410,6 +453,7 @@ namespace Altseed
         /// <param name="angle">Y軸回転量(ラジアン)</param>
         public void SetRotationY(float angle)
         {
+            SetIdentity();
             float s = (float)Math.Sin(angle);
             float c = (float)Math.Cos(angle);
 
@@ -441,6 +485,7 @@ namespace Altseed
         /// <param name="angle">Z軸回転量(ラジアン)</param>
         public void SetRotationZ(float angle)
         {
+            SetIdentity();
             float s = (float)Math.Sin(angle);
             float c = (float)Math.Cos(angle);
 
@@ -473,6 +518,7 @@ namespace Altseed
         /// <param name="angle">回転量(ラジアン)</param>
         public void SetRotationAxis(ref Vector3F axis, float angle)
         {
+            SetIdentity();
             float c = (float)Math.Cos(angle);
             float s = (float)Math.Sin(angle);
             float cc = 1.0f - c;
@@ -504,6 +550,7 @@ namespace Altseed
         /// <param name="w">クオータニオン</param>
         public void SetQuaternion(float x, float y, float z, float w)
         {
+            SetIdentity();
             float xx = x * x;
             float yy = y * y;
             float zz = z * z;
@@ -557,17 +604,17 @@ namespace Altseed
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public Vector3F Transform3D(Vector3F in_)
+        public readonly Vector3F Transform3D(Vector3F in_)
         {
             float[] values = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
                 values[i] = 0;
-                values[i] += in_.X * Values[i, 0];
-                values[i] += in_.Y * Values[i, 1];
-                values[i] += in_.Z * Values[i, 2];
-                values[i] += Values[i, 3];
+                values[i] += in_.X * this[i, 0];
+                values[i] += in_.Y * this[i, 1];
+                values[i] += in_.Z * this[i, 2];
+                values[i] += this[i, 3];
             }
 
             Vector3F o;
@@ -582,17 +629,17 @@ namespace Altseed
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public Vector4F Transform4D(Vector4F in_)
+        public readonly Vector4F Transform4D(Vector4F in_)
         {
             float[] values = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
                 values[i] = 0;
-                values[i] += in_.X * Values[i, 0];
-                values[i] += in_.Y * Values[i, 1];
-                values[i] += in_.Z * Values[i, 2];
-                values[i] += in_.W * Values[i, 3];
+                values[i] += in_.X * this[i, 0];
+                values[i] += in_.Y * this[i, 1];
+                values[i] += in_.Z * this[i, 2];
+                values[i] += in_.W * this[i, 3];
             }
 
             Vector4F o;
@@ -606,11 +653,10 @@ namespace Altseed
 
         public static Matrix44F operator +(Matrix44F left, Matrix44F right)
         {
-            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = left.Values[i, j] + right.Values[i, j];
+                    result[i, j] = left[i, j] + right[i, j];
             return result;
         }
 
@@ -618,21 +664,19 @@ namespace Altseed
 
         public static Matrix44F operator -(Matrix44F left, Matrix44F right)
         {
-            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = left.Values[i, j] - right.Values[i, j];
+                    result[i, j] = left[i, j] - right[i, j];
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F matrix, float scalar)
         {
-            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = matrix.Values[i, j] * scalar;
+                    result[i, j] = matrix[i, j] * scalar;
             return result;
         }
 
@@ -640,17 +684,16 @@ namespace Altseed
 
         public static Matrix44F operator /(Matrix44F matrix, float scalar)
         {
-            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = matrix.Values[i, j] / scalar;
+                    result[i, j] = matrix[i, j] / scalar;
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F left, Matrix44F right)
         {
-            Matrix44F o_ = new Matrix44F() { Values = new float[4, 4] };
+            var o_ = new Matrix44F();
             Mul(ref o_, left, right);
             return o_;
         }
@@ -678,9 +721,9 @@ namespace Altseed
                     float v = 0.0f;
                     for (int k = 0; k < 4; k++)
                     {
-                        v += _in1.Values[i, k] * _in2.Values[k, j];
+                        v += _in1[i, k] * _in2[k, j];
                     }
-                    o.Values[i, j] = v;
+                    o[i, j] = v;
                 }
             }
         }
@@ -693,10 +736,10 @@ namespace Altseed
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Matrix44F other)
         {
-            if (Values == null || other.Values == null) return false;
+            if (Values == null && other.Values == null) return true;
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    if (Values[i, j] != other.Values[i, j])
+                    if (this[i, j] != other[i, j])
                         return false;
             return true;
         }
@@ -715,10 +758,9 @@ namespace Altseed
         public readonly override int GetHashCode()
         {
             var hash = new HashCode();
-            if (Values == null) return 0;
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    hash.Add(Values[i, j]);
+                    hash.Add(this[i, j]);
             return hash.ToHashCode();
         }
 
@@ -733,17 +775,19 @@ namespace Altseed
         public readonly Matrix44F Clone()
         {
             if (Values == null) return default;
-            var clone = new Matrix44F
-            {
-                Values = new float[4, 4]
-            };
+            var clone = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    clone.Values[i, j] = Values[i, j];
+                    clone[i, j] = this[i, j];
             return clone;
         }
-        object ICloneable.Clone() => Clone();
+        readonly object ICloneable.Clone() => Clone();
 
+        /// <summary>
+        /// Z軸回転した行列を返す
+        /// </summary>
+        /// <param name="angle">回転させる角度(弧度法)</param>
+        /// <returns><paramref name="angle"/>分回転させた行列</returns>
         public static Matrix44F GetRotationZ(float angle)
         {
             var m = GetIdentity();

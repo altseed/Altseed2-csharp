@@ -11,7 +11,31 @@ namespace Altseed
     public struct Matrix33I : ICloneable, IEquatable<Matrix33I>
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 3 * 3)]
-        public int[,] Values;
+        private int[,] Values;
+
+        /// <summary>
+        /// 指定した位置の値を取得または設定する
+        /// </summary>
+        /// <param name="x">取得する要素の位置</param>
+        /// <param name="y">取得する要素の位置</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または3以上</exception>
+        /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
+        public int this[int x, int y]
+        {
+            readonly get
+            {
+                if (x < 0 || x >= 3) throw new ArgumentOutOfRangeException("引数の値は0-2に収めてください", nameof(x));
+                if (y < 0 || y >= 3) throw new ArgumentOutOfRangeException("引数の値は0-2に収めてください", nameof(y));
+                return Values?[x, y] ?? 0;
+            }
+            set
+            {
+                Values ??= new int[3, 3];
+                if (x < 0 || x >= 3) throw new ArgumentOutOfRangeException("引数の値は0-2に収めてください", nameof(x));
+                if (y < 0 || y >= 3) throw new ArgumentOutOfRangeException("引数の値は0-2に収めてください", nameof(y));
+                Values[x, y] = value;
+            }
+        }
 
         internal static Matrix33I GetIdentity()
         {
@@ -54,17 +78,15 @@ namespace Altseed
         /// </summary>
         public void SetTransposed()
         {
+            SetIdentity();
             for (int c = 0; c < 3; c++)
-            {
                 for (int r = c; r < 3; r++)
                 {
                     int v = Values[r, c];
                     Values[r, c] = Values[c, r];
                     Values[c, r] = v;
                 }
-            }
         }
-
 
         /// <summary>
         /// 拡大・縮小行列を設定します。
@@ -83,16 +105,16 @@ namespace Altseed
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public Vector2I Transform2D(Vector2I in_)
+        public readonly Vector2I Transform2D(Vector2I in_)
         {
             int[] values = new int[3];
 
             for (int i = 0; i < 2; i++)
             {
                 values[i] = 0;
-                values[i] += in_.X * Values[i, 0];
-                values[i] += in_.Y * Values[i, 1];
-                values[i] += 1 * Values[i, 2];
+                values[i] += in_.X * this[i, 0];
+                values[i] += in_.Y * this[i, 1];
+                values[i] += 1 * this[i, 2];
             }
 
             Vector2I o;
@@ -106,16 +128,16 @@ namespace Altseed
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        Vector3I Transform3D(Vector3I in_)
+        public readonly Vector3I Transform3D(Vector3I in_)
         {
             int[] values = new int[3];
 
             for (int i = 0; i < 3; i++)
             {
                 values[i] = 0;
-                values[i] += in_.X * Values[i, 0];
-                values[i] += in_.Y * Values[i, 1];
-                values[i] += in_.Z * Values[i, 2];
+                values[i] += in_.X * this[i, 0];
+                values[i] += in_.Y * this[i, 1];
+                values[i] += in_.Z * this[i, 2];
             }
 
             Vector3I o;
@@ -127,11 +149,10 @@ namespace Altseed
 
         public static Matrix33I operator +(Matrix33I left, Matrix33I right)
         {
-            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
-            var result = new Matrix33I() { Values = new int[3, 3] };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = left.Values[i, j] + right.Values[i, j];
+            var result = new Matrix33I();
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    result[i, j] = left[i, j] + right[i, j];
             return result;
         }
 
@@ -139,21 +160,19 @@ namespace Altseed
 
         public static Matrix33I operator -(Matrix33I left, Matrix33I right)
         {
-            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
-            var result = new Matrix33I() { Values = new int[3, 3] };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = left.Values[i, j] - right.Values[i, j];
+            var result = new Matrix33I();
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    result[i, j] = left[i, j] - right[i, j];
             return result;
         }
 
         public static Matrix33I operator *(Matrix33I matrix, int scalar)
         {
-            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
-            var result = new Matrix33I() { Values = new int[3, 3] };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = matrix.Values[i, j] * scalar;
+            var result = new Matrix33I();
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    result[i, j] = matrix[i, j] * scalar;
             return result;
         }
 
@@ -161,29 +180,26 @@ namespace Altseed
 
         public static Matrix33I operator /(Matrix33I matrix, int scalar)
         {
-            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
-            var result = new Matrix33I() { Values = new int[3, 3] };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = matrix.Values[i, j] / scalar;
+            var result = new Matrix33I();
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    result[i, j] = matrix[i, j] / scalar;
             return result;
         }
 
         public static Matrix33I operator *(Matrix33I left, Matrix33I right)
         {
-            Matrix33I result = new Matrix33I() { Values = new int[3, 3] };
+            var result = new Matrix33I();
 
             for (int i = 0; i < 3; ++i)
-            {
                 for (int j = 0; j < 3; ++j)
                 {
-                    result.Values[i, j] = 0;
+                    result[i, j] = 0;
                     for (int k = 0; k < 3; ++k)
                     {
-                        result.Values[i, j] += left.Values[i, k] * right.Values[k, j];
+                        result[i, j] += left[i, k] * right[k, j];
                     }
                 }
-            }
 
             return result;
         }
@@ -197,7 +213,7 @@ namespace Altseed
             {
                 for (int k = 0; k < 3; ++k)
                 {
-                    elements[i] += left.Values[i, k] * rop[k];
+                    elements[i] += left[i, k] * rop[k];
                 }
             }
 
@@ -212,10 +228,10 @@ namespace Altseed
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Matrix33I other)
         {
-            if (Values == null || other.Values == null) return false;
+            if (Values == null && other.Values == null) return true;
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
-                    if (Values[i, j] != other.Values[i, j])
+                    if (this[i, j] != other[i, j])
                         return false;
             return true;
         }
@@ -234,10 +250,9 @@ namespace Altseed
         public readonly override int GetHashCode()
         {
             var hash = new HashCode();
-            if (Values == null) return 0;
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
-                    hash.Add(Values[i, j]);
+                    hash.Add(this[i, j]);
             return hash.ToHashCode();
         }
 
@@ -252,15 +267,12 @@ namespace Altseed
         public readonly Matrix33I Clone()
         {
             if (Values == null) return default;
-            var clone = new Matrix33I
-            {
-                Values = new int[4, 4]
-            };
+            var clone = new Matrix33I();
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
-                    clone.Values[i, j] = Values[i, j];
+                    clone[i, j] = this[i, j];
             return clone;
         }
-        object ICloneable.Clone() => Clone();
+        readonly object ICloneable.Clone() => Clone();
     }
 }
