@@ -9,18 +9,18 @@ namespace Altseed.TinySystem
     [Serializable]
     public class SpriteNode : DrawnNode, IDeserializationCallback
     {
-        public readonly RenderedSprite sprite;
+        public readonly RenderedSprite _Sprite;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => sprite.Src;
+            get => _Sprite.Src;
             set
             {
-                if (sprite.Src == value) return;
-                sprite.Src = value;
+                if (_Sprite.Src == value) return;
+                _Sprite.Src = value;
             }
         }
 
@@ -29,11 +29,11 @@ namespace Altseed.TinySystem
         /// </summary>
         public Texture2D Texture
         {
-            get => sprite.Texture;
+            get => _Sprite.Texture;
             set
             {
-                if (sprite.Texture == value) return;
-                sprite.Texture = value;
+                if (_Sprite.Texture == value) return;
+                _Sprite.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -47,7 +47,7 @@ namespace Altseed.TinySystem
         /// </summary>
         public SpriteNode()
         {
-            sprite = RenderedSprite.Create();
+            _Sprite = RenderedSprite.Create();
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Altseed.TinySystem
         /// </summary>
         internal override void Draw()
         {
-            Engine.Renderer.DrawSprite(sprite);
+            Engine.Renderer.DrawSprite(_Sprite);
         }
 
         protected internal override void UpdateTransform()
@@ -64,7 +64,7 @@ namespace Altseed.TinySystem
             // TODO: CenterPosition
             // TODO: Parent Transform
 
-            sprite.Transform = mat;
+            _Sprite.Transform = mat;
         }
 
         #region Serialization

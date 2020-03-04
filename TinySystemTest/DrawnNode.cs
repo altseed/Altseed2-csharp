@@ -50,5 +50,29 @@ namespace Altseed.TinySystem.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void TextNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var color = new Color(255, 0, 0, 255);
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100, ref color);
+            Assert.NotNull(font);
+
+            var t = new TextNode();
+            t.Font = font;
+            t.Text = "TextNodeのテスト！";
+
+            Engine.CurrentScene.AddNode(t);
+
+            tc.LoopBody(c =>
+            {
+            }
+            , null);
+
+            tc.End();
+        }
     }
 }
