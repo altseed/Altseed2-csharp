@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Altseed.TinySystem
+namespace Altseed
 {
     /// <summary>
     /// ゲームシーンを構成するノードを表します。

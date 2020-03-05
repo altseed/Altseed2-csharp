@@ -31,17 +31,17 @@ namespace Altseed
         {
             if (obj == null)
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"null を追加しようとしました。");
+                Engine.Log.Info(LogCategory.Engine, $"null を追加しようとしました。");
                 return;
             }
             if (CurrentCollection.Contains(obj))
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
+                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
                 return;
             }
             if (obj.Status != RegisterStatus.Free)
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
+                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
                 return;
             }
 
@@ -57,17 +57,17 @@ namespace Altseed
         {
             if (obj == null)
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"null を削除しようとしました。");
+                Engine.Log.Info(LogCategory.Engine, $"null を削除しようとしました。");
                 return;
             }
             if (!CurrentCollection.Contains(obj))
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
+                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
                 return;
             }
             if (obj.Status != RegisterStatus.Registered)
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素の状態が無効です。");
+                Engine.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素の状態が無効です。");
                 return;
             }
 
@@ -128,17 +128,17 @@ namespace Altseed
         {
             if (obj == null)
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"null を追加しようとしました。");
+                Engine.Log.Info(LogCategory.Engine, $"null を追加しようとしました。");
                 return;
             }
             if (CurrentCollection.Contains(obj))
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
+                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
                 return;
             }
             if (obj.Status != RegisterStatus.Free)
             {
-                EngineCore.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
+                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
                 return;
             }
 

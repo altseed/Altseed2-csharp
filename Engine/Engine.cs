@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Altseed
 {
+
     /// <summary>
-    /// Altseed2の中枢を担うクラス
+    /// Altseed2 のエンジンを表します。
     /// </summary>
-    internal static class EngineCore
+    public static class Engine
     {
         /// <summary>
-        /// エンジンを初期化する
+        /// 現在処理している<see cref="Scene"/>取得します。
         /// </summary>
-        /// <param name="title">ウィンドウ左上に表示される文字列</param>
+        public static Scene CurrentScene { get; private set; }
+
+        /// <summary>
+        /// 次に控えているシーン取得します。
+        /// </summary>
+        internal static Scene NextScene { get; private set; }
+
+        /// <summary>
+        /// エンジンを初期化します。
+        /// </summary>
+        /// <param name="title">ウィンドウタイトル</param>
         /// <param name="width">ウィンドウの横幅</param>
         /// <param name="height">ウィンドウの縦幅</param>
         /// <param name="config">設定</param>
@@ -28,7 +38,7 @@ namespace Altseed
                 Keyboard = Keyboard.GetInstance();
                 Mouse = Mouse.GetInstance();
                 Joystick = Joystick.GetInstance();
-                
+
                 File = File.GetInstance();
                 Resources = Resources.GetInstance();
 
@@ -38,15 +48,19 @@ namespace Altseed
 
                 Sound = SoundMixer.GetInstance();
 
+                CurrentScene = new Scene()
+                {
+                    Status = SceneStatus.Updated
+                };
+
                 return true;
             }
             return false;
         }
 
         /// <summary>
-        /// イベントを実行する
+        /// システムイベントを処理します。
         /// </summary>
-        /// <returns>イベントの実行が出来たらtrue、それ以外でfalse</returns>
         public static bool DoEvents()
         {
             Graphics.DoEvents();
@@ -54,14 +68,33 @@ namespace Altseed
         }
 
         /// <summary>
-        /// エンジンの終了処理を行う
+        /// エンジンを更新します。
+        /// </summary>
+        public static bool Update()
+        {
+            if (!Graphics.BeginFrame()) return false;
+
+            CurrentScene.Update();
+
+            var cmdList = Graphics.CommandList;
+            cmdList.SetRenderTargetWithScreen();
+
+            Renderer.Render(cmdList);
+            if (!Graphics.EndFrame()) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// エンジンを終了します。
         /// </summary>
         public static void Terminate()
         {
             Core.Terminate();
         }
 
-        public static Core Core { get; private set; }
+        #region Modules
+
+        internal static Core Core { get; private set; }
 
         /// <summary>
         /// ファイルを管理するクラスを取得します。
@@ -112,5 +145,48 @@ namespace Altseed
         /// ウインドウを表すクラスを取得します。
         /// </summary>
         internal static Window Window { get; private set; }
+
+        #endregion
+
+        /// <summary>
+        /// ウインドウのタイトルを取得または設定します。
+        /// </summary>
+        public static string WindowTitle
+        {
+            get => Window.Title;
+            set { Window.Title = value; }
+        }
+
+        #region FPS制御
+
+        /// <summary>
+        /// フレームレートの制御方法を取得または設定します。
+        /// </summary>
+        public static FramerateMode FramerateMode
+        {
+            get => Core.FramerateMode;
+            set { Core.FramerateMode = value; }
+        }
+
+        /// <summary>
+        /// 目標フレームレートを取得または設定します。
+        /// </summary>
+        public static float TargetFPS
+        {
+            get => Core.TargetFPS;
+            set { Core.TargetFPS = value; }
+        }
+
+        /// <summary>
+        /// 現在のFPSを取得します。
+        /// </summary>
+        public static float CurrentFPS => Core.CurrentFPS;
+
+        /// <summary>
+        /// 前のフレームからの経過時間(秒)を取得します。
+        /// </summary>
+        public static float DeltaSecond => Core.DeltaSecond;
+
+        #endregion
     }
 }

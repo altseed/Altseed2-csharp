@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Altseed.TinySystem
+namespace Altseed
 {
     /// <summary>
     /// テクスチャを描画するノードを表します。

@@ -16,6 +16,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DrawnAlject.cs" />
+    <Compile Remove="Font.cs" />
+    <Compile Remove="Graphics.cs" />
+    <Compile Remove="Input.cs" />
+    <Compile Remove="IO.cs" />
+    <Compile Remove="ObjectSystem.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DrawnAlject.cs" />
+    <None Include="Font.cs" />
+    <None Include="Graphics.cs" />
+    <None Include="Input.cs" />
+    <None Include="IO.cs" />
+    <None Include="ObjectSystem.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />

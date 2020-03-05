@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.TinySystem.Test
+namespace Altseed.Test
 {
     [TestFixture]
     class DrawnNode

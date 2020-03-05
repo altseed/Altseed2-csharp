@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.TinySystem.Test
+namespace Altseed.Test
 {
     [TestFixture]
     class Node

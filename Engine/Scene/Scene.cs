@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Altseed.TinySystem
+namespace Altseed
 {
     /// <summary>
     /// オブジェクトを統括するシーンのクラス
