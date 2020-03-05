@@ -11,6 +11,9 @@ namespace Altseed
     [Serializable]
     public class Node : Registerable<Node>
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public Node()
         {
             _Children = new RegisterableCollection<Node, Node>(this);
@@ -30,6 +33,7 @@ namespace Altseed
 
         #region プロパティ
 
+        //TODO: DrawnNodeへ移動
         /// <summary>
         /// 描画優先度を取得または設定します。
         /// </summary>
@@ -45,6 +49,7 @@ namespace Altseed
         }
         private int _DrawingPriority = 0;
 
+        //TODO: DrawnNodeへ移動
         /// <summary>
         /// 描画を実行するかどうかを取得または設定します。
         /// </summary>

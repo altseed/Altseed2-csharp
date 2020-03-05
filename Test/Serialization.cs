@@ -32,7 +32,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFile()
         {
-            Assert.True(EngineCore.Initialize("StaticFile", 50, 50));
+            Assert.True(Engine.Initialize("StaticFile", 50, 50));
 
             var file1 = Altseed.StaticFile.CreateStrict("../../Core/TestData/IO/test.txt");
 
@@ -52,13 +52,13 @@ namespace Altseed.Test
             Assert.AreEqual(file1.Size, file2.Size);
             Assert.True(Enumerable.SequenceEqual(file1.Buffer, file2.Buffer));
 
-            EngineCore.Terminate();
+            Engine.Terminate();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void StreamFile()
         {
-            Assert.True(EngineCore.Initialize("StreamFile", 50, 50));
+            Assert.True(Engine.Initialize("StreamFile", 50, 50));
 
             var file1 = Altseed.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
 
@@ -78,13 +78,13 @@ namespace Altseed.Test
             Assert.AreEqual(file1.Size, file2.Size);
             Assert.True(Enumerable.SequenceEqual(file1.TempBuffer, file2.TempBuffer));
 
-            EngineCore.Terminate();
+            Engine.Terminate();
         }
         [Test, Apartment(ApartmentState.STA)]
 
         public void Configuration()
         {
-            Assert.True(EngineCore.Initialize("Configuration", 50, 50));
+            Assert.True(Engine.Initialize("Configuration", 50, 50));
 
             var config1 = new Configuration()
             {
@@ -114,7 +114,7 @@ namespace Altseed.Test
             Assert.AreEqual(config1.LogFilename, "Log.txt");
             Assert.AreEqual(config1.LogFilename, config2.LogFilename);
 
-            EngineCore.Terminate();
+            Engine.Terminate();
         }
 
         [Test, Apartment(ApartmentState.STA)]
@@ -158,22 +158,22 @@ namespace Altseed.Test
             Engine.CurrentScene.AddObject(obj1);
             Engine.CurrentScene.AddObject(obj2);
 
-            while (EngineCore.DoEvents())
+            while (Engine.DoEvents())
             {
-                Assert.True(EngineCore.Graphics.BeginFrame());
+                Assert.True(Engine.Graphics.BeginFrame());
 
                 Engine.Update();
 
-                var cmdList = EngineCore.Graphics.CommandList;
+                var cmdList = Engine.Graphics.CommandList;
                 cmdList.SetRenderTargetWithScreen();
                 Engine.Renderer.Render(cmdList);
 
-                Assert.True(EngineCore.Graphics.EndFrame());
+                Assert.True(Engine.Graphics.EndFrame());
 
-                if (EngineCore.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
             }
 
-            EngineCore.Terminate();
+            Engine.Terminate();
         }
     }
 }

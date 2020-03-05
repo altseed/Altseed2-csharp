@@ -113,5 +113,7 @@ namespace Altseed
             // TODO: Parent Transform
 
         }
+
+        // TODO: Serialization
     }
 }
