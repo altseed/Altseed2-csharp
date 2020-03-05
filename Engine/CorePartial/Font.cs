@@ -14,7 +14,6 @@ namespace Altseed
             Static
         }
         #region SerializeName
-        private const string S_Color = "S_Color";
         private const string S_Path = "S_Path";
         private const string S_Size = "S_Size";
         private const string S_Type = "S_Type";
@@ -64,7 +63,6 @@ namespace Altseed
             if (type == FontType.Dynamic)
             {
                 info.AddValue(S_Size, Size);
-                info.AddValue(S_Color, Color, typeof(Color));
             }
         }
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
@@ -74,7 +72,6 @@ namespace Altseed
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
         /// <param name="size">フォントサイズ</param>
-        /// <param name="color">フォントの色</param>
         /// <returns>動的に生成されるフォント</returns>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は使用できない文字を含む</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
@@ -118,7 +115,6 @@ namespace Altseed
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
         /// <param name="size">フォントサイズ</param>
-        /// <param name="color">フォントの色</param>
         /// <param name="result">動的に生成されるフォント 生成できなかったらnull</param>
         /// <returns><paramref name="result"/>を生成出来たらtrue，それ以外でfalse</returns>
         public static bool TryLoadDynamicFont(string path, int size, out Font result)
