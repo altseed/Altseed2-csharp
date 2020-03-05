@@ -155,19 +155,12 @@ namespace Altseed.ComponentSystem
             foreach (var s in sprites) Engine.Renderer.DrawSprite(s);
         }
 
-        //保留中
-        /// <summary>
-        /// 行列計算する
-        /// </summary>
-        /// <param name="position">P(n)</param>
-        /// <returns>設定する<see cref="RenderedSprite.Transform"/>の値</returns>
-        private Matrix44F GetTransform(Vector2F position)
+        private Matrix44F GetTransform()
         {
-            var M_absolutePosition = new Matrix44F();
-            M_absolutePosition.SetTranslation(_absolutePosition.X + position.X, _absolutePosition.Y + position.Y, 0.0f);
-            var M_centerPosition = new Matrix44F();
-            M_centerPosition.SetTranslation(position.X - _centerPosition.X, position.Y - _centerPosition.Y, 0.0f);
-            return M_absolutePosition * M_angle * M_scale * M_centerPosition;
+            var transitionMat = Matrix44F.GetTransition(_position.X + _centerPosition.X, _position.Y + _centerPosition.Y, 0.0f);
+            var centerMat = Matrix44F.GetTransition(-_centerPosition.X, -_centerPosition.Y, 0.0f);
+
+            return (transitionMat * M_angle * M_scale * centerMat);
         }
 
         /// <summary>
@@ -188,7 +181,6 @@ namespace Altseed.ComponentSystem
         private void UpdateImages(bool clear = false)
         {
             if (clear) sprites.Clear();
-            var position = new Vector2F();
             for (int i = 0; i < _text.Length; i++)
             {
                 var glyph = _font?.GetGlyph(_text[i]);
@@ -197,18 +189,13 @@ namespace Altseed.ComponentSystem
                 var sprite = clear ? RenderedSprite.Create() : sprites[i];
                 sprite.Material = _material;
                 sprite.Texture = _font.GetFontTexture(glyph.TextureIndex);
-
-                sprite.Transform = GetTransform(position + (glyph.Offset + new Vector2F(0, _font.Ascent)) * _scale);
-
                 sprite.Src = new RectF(glyph.Position.X, glyph.Position.Y, glyph.Size.X, glyph.Size.Y);
 
                 if (clear) sprites.Add(sprite);
                 else sprites[i] = sprite;
-
-                position += new Vector2F(glyph.GlyphWidth * _scale.X, 0);
-
-                if (UseKerning && i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]) * _scale.X, 0);
             }
+
+            UpdateTransform();
         }
 
         /// <summary>
@@ -216,17 +203,21 @@ namespace Altseed.ComponentSystem
         /// </summary>
         private void UpdateTransform()
         {
+            var transform = GetTransform();
+
             var position = new Vector2F();
             for (int i = 0; i < _text.Length; i++)
             {
                 var glyph = _font?.GetGlyph(_text[i]);
                 if (glyph == null) continue;
 
-                sprites[i].Transform = GetTransform(position + (glyph.Offset + new Vector2F(0, _font.Ascent)) * _scale);
+                var offset = glyph.Offset;
 
-                position += new Vector2F(glyph.GlyphWidth * _scale.X, 0);
+                sprites[i].Transform = transform * Matrix44F.GetTransition(position.X + offset.X, position.Y + offset.Y + _font.Ascent, 0.0f);
 
-                if (UseKerning && i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]) * _scale.X, 0);
+                position += new Vector2F(glyph.GlyphWidth, 0);
+
+                if (UseKerning && i < _text.Length - 1) position += new Vector2F(_font.GetKerning(_text[i], _text[i + 1]), 0);
             }
         }
     }
