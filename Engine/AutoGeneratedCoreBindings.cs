@@ -2476,6 +2476,9 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawSprite(IntPtr selfPtr, IntPtr sprite);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_DrawText(IntPtr selfPtr, IntPtr text);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
@@ -2507,6 +2510,14 @@ namespace Altseed
         public void DrawSprite(RenderedSprite sprite)
         {
             cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// テキストを描画します。
+        /// </summary>
+        public void DrawText(RenderedText text)
+        {
+            cbg_Renderer_DrawText(selfPtr, text != null ? text.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -2839,6 +2850,242 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_RenderedSprite_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// テキストのクラス
+    /// </summary>
+    public partial class RenderedText : Rendered
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<RenderedText>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedText>>();
+        
+        internal static new RenderedText TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderedText cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderedText_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderedText(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderedText>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_Create();
+        
+        [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_RenderedText_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_GetMaterial(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetMaterial(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_GetText(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_GetFont(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetFont(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_RenderedText_GetWeight(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetWeight(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, ref Color value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal RenderedText(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 変換行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get
+            {
+                if (_Transform != null)
+                {
+                    return _Transform.Value;
+                }
+                var ret = cbg_RenderedText_GetTransform(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Transform = value;
+                cbg_RenderedText_SetTransform(selfPtr, ref value);
+            }
+        }
+        private Matrix44F? _Transform;
+        
+        /// <summary>
+        /// マテリアルを取得または設定します。
+        /// </summary>
+        public Material Material
+        {
+            get
+            {
+                if (_Material != null)
+                {
+                    return _Material;
+                }
+                var ret = cbg_RenderedText_GetMaterial(selfPtr);
+                return Material.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Material = value;
+                cbg_RenderedText_SetMaterial(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Material _Material;
+        
+        /// <summary>
+        /// テキストを取得または設定します。
+        /// </summary>
+        public string Text
+        {
+            get
+            {
+                if (_Text != null)
+                {
+                    return _Text;
+                }
+                var ret = cbg_RenderedText_GetText(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+            set
+            {
+                _Text = value;
+                cbg_RenderedText_SetText(selfPtr, value);
+            }
+        }
+        private string _Text;
+        
+        /// <summary>
+        /// フォントを取得または設定します。
+        /// </summary>
+        public Font Font
+        {
+            get
+            {
+                if (_Font != null)
+                {
+                    return _Font;
+                }
+                var ret = cbg_RenderedText_GetFont(selfPtr);
+                return Font.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Font = value;
+                cbg_RenderedText_SetFont(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Font _Font;
+        
+        /// <summary>
+        /// 文字の太さを取得または設定します。(0 ~ 255)
+        /// </summary>
+        public float Weight
+        {
+            get
+            {
+                if (_Weight != null)
+                {
+                    return _Weight.Value;
+                }
+                var ret = cbg_RenderedText_GetWeight(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Weight = value;
+                cbg_RenderedText_SetWeight(selfPtr, value);
+            }
+        }
+        private float? _Weight;
+        
+        /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                if (_Color != null)
+                {
+                    return _Color.Value;
+                }
+                var ret = cbg_RenderedText_GetColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Color = value;
+                cbg_RenderedText_SetColor(selfPtr, ref value);
+            }
+        }
+        private Color? _Color;
+        
+        /// <summary>
+        /// テキストを作成します。
+        /// </summary>
+        public static RenderedText Create()
+        {
+            var ret = cbg_RenderedText_Create();
+            return RenderedText.TryGetFromCache(ret);
+        }
+        
+        ~RenderedText()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderedText_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
@@ -3232,19 +3479,7 @@ namespace Altseed
         private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
         
         [DllImport("Altseed_Core")]
-        private static extern Color cbg_Font_GetColor(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Font_SetColor(IntPtr selfPtr, ref Color value);
-        
-        
-        [DllImport("Altseed_Core")]
         private static extern int cbg_Font_GetSize(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
-        private static extern int cbg_Font_GetWeight(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Font_SetWeight(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed_Core")]
@@ -3270,28 +3505,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// フォントの色を取得・設定する
-        /// </summary>
-        public Color Color
-        {
-            get
-            {
-                if (_Color != null)
-                {
-                    return _Color.Value;
-                }
-                var ret = cbg_Font_GetColor(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _Color = value;
-                cbg_Font_SetColor(selfPtr, ref value);
-            }
-        }
-        private Color? _Color;
-        
-        /// <summary>
         /// フォントのサイズを取得する
         /// </summary>
         public int Size
@@ -3302,28 +3515,6 @@ namespace Altseed
                 return ret;
             }
         }
-        
-        /// <summary>
-        /// フォントの太さを取得・設定する
-        /// </summary>
-        public int Weight
-        {
-            get
-            {
-                if (_Weight != null)
-                {
-                    return _Weight.Value;
-                }
-                var ret = cbg_Font_GetWeight(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _Weight = value;
-                cbg_Font_SetWeight(selfPtr, value);
-            }
-        }
-        private int? _Weight;
         
         /// <summary>
         /// フォントのベースラインからトップラインまでの距離を取得する
