@@ -33,7 +33,7 @@ namespace Altseed.Test
 
             tc.LoopBody(c =>
             {
-                if (c == 100) Engine.CurrentScene.AddNode(s);
+                if (c == 100) Engine.AddNode(s);
             }, null);
 
             tc.End();
@@ -60,11 +60,11 @@ namespace Altseed.Test
 
             s.AddChildNode(s2);
 
-            Engine.CurrentScene.AddNode(s);
+            Engine.AddNode(s);
 
             tc.LoopBody(c =>
             {
-                if (c == 100) Engine.CurrentScene.RemoveNode(s);
+                if (c == 100) Engine.RemoveNode(s);
             }, null);
 
             tc.End();
@@ -91,7 +91,7 @@ namespace Altseed.Test
 
             s.AddChildNode(s2);
 
-            Engine.CurrentScene.AddNode(s);
+            Engine.AddNode(s);
 
             tc.LoopBody(c =>
            {

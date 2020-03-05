@@ -46,13 +46,13 @@ namespace Altseed
             set;
         }
 
-
         private Material __Material;
+
         public TextNode()
         {
             _Sprites = new List<RenderedSprite>();
 
-            var shader = Engine.Graphics.BuildinShader.Create(Altseed.BuildinShaderType.FontUnlitPS);
+            var shader = Engine.Graphics.BuiltinShader.Create(BuiltinShaderType.FontUnlitPS);
             __Material = new Material();
             __Material.Shader = shader;
 
@@ -92,10 +92,10 @@ namespace Altseed
                 trans.SetTranslation(pos.X, pos.Y, 0);
                 sprite.Transform = trans;
 
-                sprite.Src = new Altseed.RectF(glyph.Position.X, glyph.Position.Y, glyph.Size.X, glyph.Size.Y);
+                sprite.Src = new RectF(glyph.Position.X, glyph.Position.Y, glyph.Size.X, glyph.Size.Y);
                 _Sprites.Add(sprite);
 
-                offset += new Altseed.Vector2F(glyph.GlyphWidth, 0);
+                offset += new Vector2F(glyph.GlyphWidth, 0);
                 maxHeight = (maxHeight < glyph.Size.Y) ? glyph.Size.Y : maxHeight;
 
                 if (UseKerning && i < charArray.Length - 1)

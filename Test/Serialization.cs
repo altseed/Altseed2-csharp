@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using NUnit.Framework;
-using Altseed.ComponentSystem;
 
 namespace Altseed.Test
 {
@@ -22,6 +21,7 @@ namespace Altseed.Test
             using var stream = new FileStream(path, FileMode.Create);
             formatter.Serialize(stream, item);
         }
+
         private static T Deserialize<T>(string path)
         {
             var formatter = new BinaryFormatter();
@@ -32,7 +32,8 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFile()
         {
-            Assert.True(Engine.Initialize("StaticFile", 50, 50));
+            var tc = new TestCore();
+            tc.Init();
 
             var file1 = Altseed.StaticFile.CreateStrict("../../Core/TestData/IO/test.txt");
 
@@ -52,13 +53,14 @@ namespace Altseed.Test
             Assert.AreEqual(file1.Size, file2.Size);
             Assert.True(Enumerable.SequenceEqual(file1.Buffer, file2.Buffer));
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void StreamFile()
         {
-            Assert.True(Engine.Initialize("StreamFile", 50, 50));
+            var tc = new TestCore();
+            tc.Init();
 
             var file1 = Altseed.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
 
@@ -78,13 +80,16 @@ namespace Altseed.Test
             Assert.AreEqual(file1.Size, file2.Size);
             Assert.True(Enumerable.SequenceEqual(file1.TempBuffer, file2.TempBuffer));
 
-            Engine.Terminate();
+            tc.End();
+
         }
+
         [Test, Apartment(ApartmentState.STA)]
 
         public void Configuration()
         {
-            Assert.True(Engine.Initialize("Configuration", 50, 50));
+            var tc = new TestCore();
+            tc.Init();
 
             var config1 = new Configuration()
             {
@@ -114,15 +119,16 @@ namespace Altseed.Test
             Assert.AreEqual(config1.LogFilename, "Log.txt");
             Assert.AreEqual(config1.LogFilename, config2.LogFilename);
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void DynamicFont()
         {
-            Assert.True(Engine.Initialize("DynamicFont", 960, 720));
+            var tc = new TestCore();
+            tc.Init();
 
-            var font1 = Altseed.Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50, new Color(255, 255, 255));
+            var font1 = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50);
 
             Assert.NotNull(font1);
 
@@ -142,38 +148,25 @@ namespace Altseed.Test
             Assert.AreEqual(font1.LineGap, font2.LineGap);
             Assert.AreEqual(font1.Size, font2.Size);
 
-            var obj1 = new TextAlject()
+            var obj1 = new TextNode()
             {
                 Position = new Vector2F(100, 100),
                 Font = font1,
                 Text = "Font1"
             };
-            var obj2 = new TextAlject()
+            var obj2 = new TextNode()
             {
                 Position = new Vector2F(100, 500),
                 Font = font2,
                 Text = "Font2"
             };
 
-            Engine.CurrentScene.AddObject(obj1);
-            Engine.CurrentScene.AddObject(obj2);
+            Engine.AddNode(obj1);
+            Engine.AddNode(obj2);
 
-            while (Engine.DoEvents())
-            {
-                Assert.True(Engine.Graphics.BeginFrame());
+            tc.LoopBody(null, null);
 
-                Engine.Update();
-
-                var cmdList = Engine.Graphics.CommandList;
-                cmdList.SetRenderTargetWithScreen();
-                Engine.Renderer.Render(cmdList);
-
-                Assert.True(Engine.Graphics.EndFrame());
-
-                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
-            }
-
-            Engine.Terminate();
+            tc.End();
         }
     }
 }

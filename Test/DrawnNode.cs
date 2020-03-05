@@ -15,37 +15,27 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
-            Assert.NotNull(t1);
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
 
-            var s = new SpriteNode();
-            s.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
-            s.Texture = t1;
-            Engine.CurrentScene.AddNode(s);
-
-            tc.LoopBody(null, null);
-
-            tc.End();
-        }
-
-        [Test, Apartment(ApartmentState.STA)]
-        public void Rotate()
-        {
-            var tc = new TestCore();
-            tc.Init();
-
-            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
-            Assert.NotNull(t1);
-
-            var s = new SpriteNode();
-            s.Texture = t1;
-            s.Position = new Vector2F(100, 100);
-            s.CenterPosition = s.Texture.Size / 2;
-            Engine.CurrentScene.AddNode(s);
+            var node = new SpriteNode();
+            node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
+            node.Texture = texture;
+            node.CenterPosition = texture.Size / 2;
+            Engine.AddNode(node);
 
             tc.LoopBody(c =>
             {
-                s.Angle++;
+                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) node.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) node.Position -= new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) node.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) node.Position -= new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.B) == ButtonState.Hold) node.Scale += new Vector2F(0.01f, 0.01f);
+                if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) node.Scale -= new Vector2F(0.01f, 0.01f);
+                if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) node.Angle += 3;
+                if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) node.Angle -= 3;
+                if (Engine.Keyboard.GetKeyState(Keys.X) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width - 2.0f, node.Src.Height - 2.0f);
+                if (Engine.Keyboard.GetKeyState(Keys.Z) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width + 2.0f, node.Src.Height + 2.0f);
             }
             , null);
 
@@ -58,17 +48,28 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var color = new Color(255, 0, 0, 255);
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100, ref color);
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            font.Color = new Color(255, 255, 255, 255);
             Assert.NotNull(font);
 
-            var t = new TextNode();
-            t.Font = font;
-            t.Text = "TextNodeのテスト！";
+            var node = new TextNode();
+            node.Font = font;
+            node.Text = "TextNodeのテスト！";
 
-            Engine.CurrentScene.AddNode(t);
+            Engine.AddNode(node);
 
-            tc.LoopBody(null, null);
+            tc.LoopBody(c =>
+            {
+                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) node.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) node.Position -= new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) node.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) node.Position -= new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.B) == ButtonState.Hold) node.Scale += new Vector2F(0.01f, 0.01f);
+                if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) node.Scale -= new Vector2F(0.01f, 0.01f);
+                if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) node.Angle += 3;
+                if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) node.Angle -= 3;
+            }
+            , null);
 
             tc.End();
         }
