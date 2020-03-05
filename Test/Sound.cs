@@ -69,6 +69,8 @@ namespace Altseed.Test
             var textNode = new TextNode();
             textNode.Font = font;
 
+            Engine.AddNode(textNode);
+
             tc.LoopBody(c =>
             {
                 textNode.Text = $"{Engine.Sound.GetPlaybackPosition(bgm_id)}";

@@ -26,7 +26,7 @@ namespace Altseed.Test
             tc.LoopBody(c =>
             {
                 var mp = Engine.Mouse.Position;
-                node.Text = $"{mp.X:D3},{mp.Y:D3}";
+                node.Text = $"{mp.X},{mp.Y}";
             }
             , null);
 

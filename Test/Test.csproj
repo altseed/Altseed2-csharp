@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ComponentSystem\ComponentSystem.csproj" />
     <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>
 
