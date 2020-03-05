@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Altseed.TinySystem
+namespace Altseed
 {
     /// <summary>
     /// ゲームシーンを構成するノードを表します。
@@ -11,6 +11,9 @@ namespace Altseed.TinySystem
     [Serializable]
     public class Node : Registerable<Node>
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public Node()
         {
             _Children = new RegisterableCollection<Node, Node>(this);
@@ -30,6 +33,7 @@ namespace Altseed.TinySystem
 
         #region プロパティ
 
+        //TODO: DrawnNodeへ移動
         /// <summary>
         /// 描画優先度を取得または設定します。
         /// </summary>
@@ -45,6 +49,7 @@ namespace Altseed.TinySystem
         }
         private int _DrawingPriority = 0;
 
+        //TODO: DrawnNodeへ移動
         /// <summary>
         /// 描画を実行するかどうかを取得または設定します。
         /// </summary>
@@ -69,29 +74,13 @@ namespace Altseed.TinySystem
         internal override void Added(Node owner)
         {
             Parent = owner;
-            SetScenePropRecursively(Parent.Scene);
             OnAdded();
         }
 
         internal override void Removed()
         {
             Parent = null;
-            SetScenePropRecursively(null);
             OnRemoved();
-        }
-
-        #endregion
-
-        #region Scene
-
-        public Scene Scene { get; internal set; }
-        internal void SetScenePropRecursively(Scene scene)
-        {
-            Scene = scene;
-            foreach (var c in Children)
-            {
-                c.SetScenePropRecursively(scene);
-            }
         }
 
         #endregion
@@ -134,24 +123,6 @@ namespace Altseed.TinySystem
                 yield return current;
 
             yield break;
-        }
-    }
-
-
-    [Serializable]
-    internal sealed class RootNode : Node
-    {
-        internal ReadOnlyCollection<Node> Nodes { get; }
-
-        internal RootNode(Scene scene)
-        {
-            Nodes = Children;
-            Scene = scene;
-        }
-
-        internal void Inherit(Scene scene)
-        {
-            SetScenePropRecursively(scene);
         }
     }
 }

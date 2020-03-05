@@ -4,113 +4,114 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
-using Altseed.ComponentSystem;
-
 namespace Altseed.Test
 {
     [TestFixture]
     public class Input
     {
         [Test, Apartment(ApartmentState.STA)]
-        public void Mouse()
+        public void MousePosition()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
-            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            Assert.NotNull(font);
 
-            Assert.NotNull(t1);
+            var node = new TextNode();
+            node.Font = font;
 
-            var s1 = RenderedSprite.Create();
+            Engine.AddNode(node);
 
-            s1.Texture = t1;
-            s1.Src = new RectF(0, 0, 128, 128);
-
-            while (Engine.DoEvents())
+            tc.LoopBody(c =>
             {
-                Assert.True(Engine.Graphics.BeginFrame());
-
-                Engine.Renderer.DrawSprite(s1);
-                var cmdList = Engine.Graphics.CommandList;
-                cmdList.SetRenderTargetWithScreen();
-
-                Engine.Renderer.Render(cmdList);
-
-                Engine.Update();
-                Assert.True(Engine.Graphics.EndFrame());
-
-                s1.Src = new RectF(0, 0, (int)Engine.Mouse.Position.X, (int)Engine.Mouse.Position.Y);
+                var mp = Engine.Mouse.Position;
+                node.Text = $"{mp.X:D3},{mp.Y:D3}";
             }
+            , null);
 
-            Engine.Terminate();
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void MouseButton()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            Assert.NotNull(font);
+
+            var node = new TextNode();
+            node.Font = font;
+
+            Engine.AddNode(node);
+
+            tc.LoopBody(c =>
+            {
+                var left = Engine.Mouse.GetMouseButtonState(MouseButtons.ButtonLeft);
+                var right = Engine.Mouse.GetMouseButtonState(MouseButtons.ButtonRight);
+                node.Text = $"左:{left}\n右{right}";
+            }
+            , null);
+
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void Keyboard()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
-            while (Engine.DoEvents() && Engine.Keyboard.GetKeyState(Keys.Space) == ButtonState.Free)
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            Assert.NotNull(font);
+
+            var node = new TextNode();
+            node.Font = font;
+
+            Engine.AddNode(node);
+
+            tc.LoopBody(c =>
             {
-                Engine.Update();
+                var sp = Engine.Keyboard.GetKeyState(Keys.Space);
+                node.Text = $"Spaceキー：{sp}";
             }
+            , null);
 
-            while (Engine.DoEvents() && Engine.Keyboard.GetKeyState(Keys.Space) == ButtonState.Push)
-            {
-                Engine.Update();
-            }
-
-            while (Engine.DoEvents() && Engine.Keyboard.GetKeyState(Keys.Space) == ButtonState.Hold)
-            {
-                Engine.Update();
-            }
-
-            while (Engine.DoEvents() && Engine.Keyboard.GetKeyState(Keys.Space) == ButtonState.Release)
-            {
-                Engine.Update();
-            }
-
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void Joystick()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
+
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            Assert.NotNull(font);
+
+            var node = new TextNode();
+            node.Font = font;
+
+            Engine.AddNode(node);
+
             Engine.Joystick.RefreshConnectedState();
             Engine.Joystick.RefreshInputState();
 
-            foreach (int i in Enumerable.Range(0, 16))
+            for (int i = 0; i < Engine.Joystick.MaxCount; i++)
             {
-                if (Engine.Joystick.IsPresent(i))
-                {
-                    string name = Engine.Joystick.GetJoystickName(i);
-                    ButtonState leftup = Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp);
-                }
+                if (!Engine.Joystick.IsPresent(i)) continue;
 
-                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Free)
+                var name = Engine.Joystick.GetJoystickName(i);
+                tc.LoopBody(c =>
                 {
-                    Engine.Update();
+                    var leftup = Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp);
+                    node.Text = $"{name}：LeftUp = {leftup}";
                 }
-
-                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Push)
-                {
-                    Engine.Update();
-                }
-
-                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Hold)
-                {
-                    Engine.Update();
-                }
-
-                while (Engine.DoEvents() && Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp) == ButtonState.Release)
-                {
-                    Engine.Update();
-                }
+                , null);
             }
-
-
-
-            Engine.Terminate();
+            tc.End();
         }
     }
 }

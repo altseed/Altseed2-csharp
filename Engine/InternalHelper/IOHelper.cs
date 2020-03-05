@@ -8,15 +8,27 @@ namespace Altseed
     {
         private static char[] InvalidChars => _invalidChars ?? (_invalidChars = Path.GetInvalidPathChars());
         private static char[] _invalidChars;
+        /// <summary>
+        /// <see cref="ArgumentException"/>
+        /// <see cref="ArgumentNullException"/>
+        /// <see cref="PathTooLongException"/>
+        /// <see cref="FileNotFoundException"/>
+        /// </summary>
         internal static Exception CheckLoadPath(string path)
         {
             if (path == null) return new ArgumentNullException("引数がnullです", nameof(path));
             if (string.IsNullOrWhiteSpace(path)) return new ArgumentException("パスが空白文字のみからなります", nameof(path));
             if (ContainsInvalidChar(path)) return new ArgumentException("パスに不正な文字が含まれています", nameof(path));
             if (IsTooLongPath(path)) return new PathTooLongException("パスが長すぎます");
-            if (!EngineCore.File.Exists(path)) return new FileNotFoundException("指定したパスのファイルが見つかりませんでした", path);
+            if (!Engine.File.Exists(path)) return new FileNotFoundException("指定したパスのファイルが見つかりませんでした", path);
             return null;
         } 
+        /// <summary>
+        /// <see cref="ArgumentException"/>
+        /// <see cref="ArgumentNullException"/>
+        /// <see cref="PathTooLongException"/>
+        /// <see cref="DirectoryNotFoundException"/>
+        /// </summary>
         internal static Exception CheckSavePath(string path)
         {
             if (path == null) return new ArgumentNullException("引数がnullです", nameof(path));

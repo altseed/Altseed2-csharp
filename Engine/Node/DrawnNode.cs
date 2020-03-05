@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Altseed.TinySystem
+namespace Altseed
 {
     [Serializable]
     public abstract class DrawnNode : Node

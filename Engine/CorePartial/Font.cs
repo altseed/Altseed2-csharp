@@ -38,8 +38,7 @@ namespace Altseed
             {
                 case FontType.Dynamic:
                     var size = info.GetInt32(S_Size);
-                    var color = info.GetValue<Color>(S_Color);
-                    ptr = cbg_Font_LoadDynamicFont(path, size, ref color);
+                    ptr = cbg_Font_LoadDynamicFont(path, size);
                     break;
                 case FontType.Static:
                     ptr = cbg_Font_LoadStaticFont(path);
@@ -83,12 +82,12 @@ namespace Altseed
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定したファイルが見つからない</exception>
         /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
-        public static Font LoadDynamicFontStrict(string path, int size, Color color)
+        public static Font LoadDynamicFontStrict(string path, int size)
         {
             if (size <= 0) throw new ArgumentOutOfRangeException("サイズは正の値にしてください", nameof(size));
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            var result = LoadDynamicFont(path, size, ref color) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
+            var result = LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
             result.path = path;
             result.type = FontType.Dynamic;
             return result;
@@ -122,9 +121,9 @@ namespace Altseed
         /// <param name="color">フォントの色</param>
         /// <param name="result">動的に生成されるフォント 生成できなかったらnull</param>
         /// <returns><paramref name="result"/>を生成出来たらtrue，それ以外でfalse</returns>
-        public static bool TryLoadDynamicFont(string path, int size, Color color, out Font result)
+        public static bool TryLoadDynamicFont(string path, int size, out Font result)
         {
-            if (size > 0 && IOHelper.CheckLoadPath(path) == null && (result = LoadDynamicFont(path, size, ref color)) != null)
+            if (size > 0 && IOHelper.CheckLoadPath(path) == null && (result = LoadDynamicFont(path, size)) != null)
             {
                 result.path = path;
                 result.type = FontType.Dynamic;
