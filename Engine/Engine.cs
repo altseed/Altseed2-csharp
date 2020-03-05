@@ -4,21 +4,15 @@ using System.Text;
 
 namespace Altseed
 {
-
     /// <summary>
     /// Altseed2 のエンジンを表します。
     /// </summary>
     public static class Engine
     {
         /// <summary>
-        /// 現在処理している<see cref="Scene"/>取得します。
+        /// ルートノード
         /// </summary>
-        public static Scene CurrentScene { get; private set; }
-
-        /// <summary>
-        /// 次に控えているシーン取得します。
-        /// </summary>
-        internal static Scene NextScene { get; private set; }
+        private static RootNode _RootNode;
 
         /// <summary>
         /// エンジンを初期化します。
@@ -48,11 +42,7 @@ namespace Altseed
 
                 Sound = SoundMixer.GetInstance();
 
-                CurrentScene = new Scene()
-                {
-                    Status = SceneStatus.Updated
-                };
-
+                _RootNode = new RootNode();
                 return true;
             }
             return false;
@@ -74,7 +64,7 @@ namespace Altseed
         {
             if (!Graphics.BeginFrame()) return false;
 
-            CurrentScene.Update();
+            _RootNode.Update();
 
             var cmdList = Graphics.CommandList;
             cmdList.SetRenderTargetWithScreen();
@@ -145,6 +135,28 @@ namespace Altseed
         /// ウインドウを表すクラスを取得します。
         /// </summary>
         internal static Window Window { get; private set; }
+
+        #endregion
+
+        #region Node
+
+        /// <summary>
+        /// エンジンに登録されているノードの列挙子を返します。
+        /// </summary>
+        public static IEnumerable<Node> GetNodes() => _RootNode.Children;
+
+        /// <summary>
+        /// エンジンにノードを追加します。
+        /// </summary>
+        public static void AddNode(Node node) { _RootNode.AddChildNode(node); }
+
+        /// <summary>
+        /// エンジンからノードを削除します。
+        /// </summary>
+        public static void RemoveNode(Node node)
+        {
+            _RootNode.RemoveChildNode(node);
+        }
 
         #endregion
 

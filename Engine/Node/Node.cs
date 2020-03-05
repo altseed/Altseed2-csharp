@@ -74,29 +74,13 @@ namespace Altseed
         internal override void Added(Node owner)
         {
             Parent = owner;
-            SetScenePropRecursively(Parent.Scene);
             OnAdded();
         }
 
         internal override void Removed()
         {
             Parent = null;
-            SetScenePropRecursively(null);
             OnRemoved();
-        }
-
-        #endregion
-
-        #region Scene
-
-        public Scene Scene { get; internal set; }
-        internal void SetScenePropRecursively(Scene scene)
-        {
-            Scene = scene;
-            foreach (var c in Children)
-            {
-                c.SetScenePropRecursively(scene);
-            }
         }
 
         #endregion
@@ -139,24 +123,6 @@ namespace Altseed
                 yield return current;
 
             yield break;
-        }
-    }
-
-
-    [Serializable]
-    internal sealed class RootNode : Node
-    {
-        internal ReadOnlyCollection<Node> Nodes { get; }
-
-        internal RootNode(Scene scene)
-        {
-            Nodes = Children;
-            Scene = scene;
-        }
-
-        internal void Inherit(Scene scene)
-        {
-            SetScenePropRecursively(scene);
         }
     }
 }
