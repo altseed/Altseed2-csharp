@@ -5,8 +5,11 @@ namespace Altseed
 {
     public class TextNode : DrawnNode, IDeserializationCallback
     {
-        readonly RenderedText renderedText;
+        private readonly RenderedText renderedText;
 
+        /// <summary>
+        /// 描画する文字列を取得または設定します。
+        /// </summary>
         public string Text
         {
             get => renderedText.Text;
@@ -17,6 +20,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// 文字列の描画に使用するフォントを取得または設定します。
+        /// </summary>
         public Font Font
         {
             get => renderedText.Font;
@@ -37,6 +43,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// 文字の太さを取得または設定します。(0 ~ 255)
+        /// </summary>
         public float Weight
         {
             get => renderedText.Weight;
@@ -47,6 +56,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
         public Color Color
         {
             get => renderedText.Color;
