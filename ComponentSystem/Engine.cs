@@ -67,7 +67,7 @@ namespace Altseed.ComponentSystem
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
+        /// <exception cref="InvalidOperationException">既に他のシーンの変更処理を実行中</exception>
         public static void ChangeScene(Scene nextScene)
         {
             StartSceneChange(nextScene);
@@ -80,7 +80,7 @@ namespace Altseed.ComponentSystem
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
+        /// <exception cref="InvalidOperationException">既に他のシーンの変更処理を実行中</exception>
         public static void ChangeSceneWithTransition(Scene nextScene)
         {
             StartSceneChange(nextScene);
@@ -108,7 +108,7 @@ namespace Altseed.ComponentSystem
         /// </summary>
         /// <param name="nextScene">変更先のシーン</param>
         /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
+        /// <exception cref="InvalidOperationException">既に他のシーンの変更処理を実行中</exception>
         internal static void StartSceneChange(Scene nextScene)
         {
             if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
