@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using NUnit.Framework;
-using Altseed.ComponentSystem;
 
 namespace Altseed.Test
 {
@@ -86,7 +85,6 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-
         public void Configuration()
         {
             var tc = new TestCore();
@@ -170,127 +168,6 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-        public void StreamFile()
-        {
-            Assert.True(EngineCore.Initialize("StreamFile", 50, 50));
-
-            var file1 = Altseed.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
-
-            const string path = "Serialization/StreamFile.bin";
-            file1.Read(3);
-
-            Serialize(path, file1);
-
-            Assert.True(System.IO.File.Exists(path));
-
-            var file2 = Deserialize<StreamFile>(path);
-            file2.Save("Serialization/StreamFile.txt");
-
-            Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
-            Assert.AreEqual(file1.CurrentPosition, file2.CurrentPosition);
-            Assert.AreEqual(file1.TempBufferSize, file2.TempBufferSize);
-            Assert.AreEqual(file1.Size, file2.Size);
-            Assert.True(Enumerable.SequenceEqual(file1.TempBuffer, file2.TempBuffer));
-
-            EngineCore.Terminate();
-        }
-
-        [Test, Apartment(ApartmentState.STA)]
-        public void Configuration()
-        {
-            Assert.True(EngineCore.Initialize("Configuration", 50, 50));
-
-            var config1 = new Configuration()
-            {
-                EnabledConsoleLogging = true,
-                EnabledFileLogging = false,
-                IsFullscreenMode = false,
-                IsResizable = true,
-                LogFilename = "Log.txt"
-            };
-
-            const string path = "Serialization/Configuration.bin";
-
-            Serialize(path, config1);
-
-            Assert.True(System.IO.File.Exists(path));
-
-            var config2 = Deserialize<Configuration>(path);
-
-            Assert.AreEqual(config1.EnabledConsoleLogging, true);
-            Assert.AreEqual(config1.EnabledConsoleLogging, config2.EnabledConsoleLogging);
-            Assert.AreEqual(config1.EnabledFileLogging, false);
-            Assert.AreEqual(config1.EnabledFileLogging, config2.EnabledFileLogging);
-            Assert.AreEqual(config1.IsFullscreenMode, false);
-            Assert.AreEqual(config1.IsFullscreenMode, config2.IsFullscreenMode);
-            Assert.AreEqual(config1.IsResizable, true);
-            Assert.AreEqual(config1.IsResizable, config2.IsResizable);
-            Assert.AreEqual(config1.LogFilename, "Log.txt");
-            Assert.AreEqual(config1.LogFilename, config2.LogFilename);
-
-            EngineCore.Terminate();
-        }
-
-        [Test, Apartment(ApartmentState.STA)]
-        public void DynamicFont()
-        {
-            Assert.True(Engine.Initialize("DynamicFont", 960, 720));
-
-            var font1 = Altseed.Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50, new Color(255, 255, 255));
-
-            Assert.NotNull(font1);
-
-            const string path = "Serialization/DynamicFont.bin";
-
-            Serialize(path, font1);
-
-            Assert.True(System.IO.File.Exists(path));
-
-            var font2 = Deserialize<Altseed.Font>(path);
-
-            Assert.NotNull(font2);
-
-            Assert.AreEqual(font1.Ascent, font2.Ascent);
-            Assert.AreEqual(font1.Color, font2.Color);
-            Assert.AreEqual(font1.Descent, font2.Descent);
-            Assert.AreEqual(font1.LineGap, font2.LineGap);
-            Assert.AreEqual(font1.Size, font2.Size);
-
-            var obj1 = new TextAlject()
-            {
-                Position = new Vector2F(100, 100),
-                Font = font1,
-                Text = "Font1"
-            };
-            var obj2 = new TextAlject()
-            {
-                Position = new Vector2F(100, 500),
-                Font = font2,
-                Text = "Font2"
-            };
-
-            Engine.CurrentScene.AddObject(obj1);
-            Engine.CurrentScene.AddObject(obj2);
-
-            while (EngineCore.DoEvents())
-            {
-                Assert.True(EngineCore.Graphics.BeginFrame());
-
-                Engine.Update();
-
-                var cmdList = EngineCore.Graphics.CommandList;
-                cmdList.SetRenderTargetWithScreen();
-                Engine.Renderer.Render(cmdList);
-
-                Assert.True(EngineCore.Graphics.EndFrame());
-
-                if (EngineCore.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
-            }
-
-            EngineCore.Terminate();
-        }
-
-        [Test, Apartment(ApartmentState.STA)]
         public void Texture2D()
         {
             Assert.True(Engine.Initialize("Texture2D", 960, 720));
@@ -311,36 +188,36 @@ namespace Altseed.Test
 
             Assert.AreEqual(texture1.Size, texture2.Size);
 
-            var obj1 = new TextureAlject()
+            var obj1 = new SpriteNode()
             {
                 Position = new Vector2F(100, 100),
                 Texture = texture1
             };
-            var obj2 = new TextureAlject()
+            var obj2 = new SpriteNode()
             {
                 Position = new Vector2F(100, 500),
                 Texture = texture2
             };
 
-            Engine.CurrentScene.AddObject(obj1);
-            Engine.CurrentScene.AddObject(obj2);
+            Engine.AddNode(obj1);
+            Engine.AddNode(obj2);
 
-            while (EngineCore.DoEvents())
+            while (Engine.DoEvents())
             {
-                Assert.True(EngineCore.Graphics.BeginFrame());
+                Assert.True(Engine.Graphics.BeginFrame());
 
                 Engine.Update();
 
-                var cmdList = EngineCore.Graphics.CommandList;
+                var cmdList = Engine.Graphics.CommandList;
                 cmdList.SetRenderTargetWithScreen();
                 Engine.Renderer.Render(cmdList);
 
-                Assert.True(EngineCore.Graphics.EndFrame());
+                Assert.True(Engine.Graphics.EndFrame());
 
-                if (EngineCore.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
             }
 
-            EngineCore.Terminate();
+            Engine.Terminate();
         }
     }
 }
