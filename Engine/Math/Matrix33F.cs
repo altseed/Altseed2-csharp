@@ -83,7 +83,7 @@ namespace Altseed
         /// </summary>
         /// <param name="radian">回転させる角度(弧度法)</param>
         /// <returns><paramref name="radian"/>の回転分を表す行列</returns>
-        public static Matrix33F GetRotationZ(float radian)
+        public static Matrix33F GetRotation(float radian)
         {
             var sin = (float)Math.Sin(radian);
             var cos = (float)Math.Cos(radian);
@@ -102,7 +102,7 @@ namespace Altseed
         /// </summary>
         /// <param name="scale">設定する拡大率</param>
         /// <returns><paramref name="scale"/>分の拡大/縮小を表す行列</returns>
-        public static Matrix33F GetScale2D(Vector2F scale)
+        public static Matrix33F GetScale(Vector2F scale)
         {
             var result = Identity;
             result[0, 0] = scale.X;
@@ -116,7 +116,7 @@ namespace Altseed
         /// </summary>
         /// <param name="position">平行移動する座標</param>
         /// <returns><paramref name="position"/>分の平行移動を表す行列</returns>
-        public static Matrix33F GetTranslation2D(Vector2F position)
+        public static Matrix33F GetTranslation(Vector2F position)
         {
             var result = Identity;
 
