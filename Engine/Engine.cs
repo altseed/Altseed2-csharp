@@ -15,6 +15,12 @@ namespace Altseed
         private static RootNode _RootNode;
 
         /// <summary>
+        /// 実際のUpdate対象のノード
+        /// </summary>
+        /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
+        private static Node _UpdatedNode;
+
+        /// <summary>
         /// エンジンを初期化します。
         /// </summary>
         /// <param name="title">ウィンドウタイトル</param>
@@ -43,6 +49,7 @@ namespace Altseed
                 Sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
+                _UpdatedNode = _RootNode;
                 return true;
             }
             return false;
@@ -64,7 +71,8 @@ namespace Altseed
         {
             if (!Graphics.BeginFrame()) return false;
 
-            _RootNode.Update();
+            _UpdatedNode?.Update();
+            DrawNodeRecursively(_RootNode);
 
             var cmdList = Graphics.CommandList;
             cmdList.SetRenderTargetWithScreen();
@@ -80,6 +88,23 @@ namespace Altseed
         public static void Terminate()
         {
             Core.Terminate();
+        }
+
+        /// <summary>
+        /// ノードの更新を一時停止します。
+        /// </summary>
+        /// <param name="keepUpdated">一時停止の対象から除外するノード</param>
+        public static void Pause(Node keepUpdated = null)
+        {
+            _UpdatedNode = keepUpdated;
+        }
+
+        /// <summary>
+        /// ノードの更新を再開します。
+        /// </summary>
+        public static void Resume()
+        {
+            _UpdatedNode = _RootNode;
         }
 
         #region Modules
@@ -156,6 +181,18 @@ namespace Altseed
         public static void RemoveNode(Node node)
         {
             _RootNode.RemoveChildNode(node);
+        }
+
+        private static void DrawNodeRecursively(Node n)
+        {
+            foreach (var c in n.Children)
+            {
+                if (c is DrawnNode d)
+                {
+                    if (d.IsDrawn) d.Draw();
+                }
+                DrawNodeRecursively(c);
+            }
         }
 
         #endregion
