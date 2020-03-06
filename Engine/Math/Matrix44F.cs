@@ -42,7 +42,7 @@ namespace Altseed
         /// <summary>
         /// 転置行列を取得する
         /// </summary>
-        public readonly Matrix44F TransPortion
+        public readonly Matrix44F TransPosition
         {
             get
             {
