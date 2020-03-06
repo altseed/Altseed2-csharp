@@ -28,8 +28,6 @@ namespace Altseed
         [MarshalAs(UnmanagedType.I4)]
         public int Z;
 
-
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -49,8 +47,7 @@ namespace Altseed
         /// <see cref="Vector3F"/>に型変換します。
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector3F"/>の新しいインスタンス</returns>
-        public readonly Vector2F To3F() => new Vector2F(X, Y);
-
+        public readonly Vector3F To3F() => new Vector3F(X, Y, Z);
 
         public static bool operator ==(Vector3I left, Vector3I right)
         {
@@ -213,7 +210,6 @@ namespace Altseed
         /// <param name="v2">等価性を判定するベクトル2</param>
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(Vector3I v1, Vector3I v2) => v1.Equals(v2);
-
 
         /// <summary>
         /// もう1つの<see cref="Vector3I"/>との等価性を判定します。
