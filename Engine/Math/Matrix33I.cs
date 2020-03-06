@@ -276,10 +276,7 @@ namespace Altseed
         public readonly Matrix33I Clone()
         {
             if (Values == null) return default;
-            var clone = new Matrix33I();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    clone[i, j] = this[i, j];
+            var clone = new Matrix33I() { Values = (int[,])Values.Clone() };
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();
