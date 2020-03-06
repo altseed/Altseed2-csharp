@@ -170,7 +170,12 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Texture2D()
         {
-            Assert.True(Engine.Initialize("Texture2D", 960, 720));
+            var tc = new TestCore()
+            {
+                Duration = int.MaxValue
+            };
+
+            tc.Init();
 
             var texture1 = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
 
@@ -202,22 +207,12 @@ namespace Altseed.Test
             Engine.AddNode(obj1);
             Engine.AddNode(obj2);
 
-            while (Engine.DoEvents())
+            tc.LoopBody(null, c =>
             {
-                Assert.True(Engine.Graphics.BeginFrame());
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+            });
 
-                Engine.Update();
-
-                var cmdList = Engine.Graphics.CommandList;
-                cmdList.SetRenderTargetWithScreen();
-                Engine.Renderer.Render(cmdList);
-
-                Assert.True(Engine.Graphics.EndFrame());
-
-                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) break;
-            }
-
-            Engine.Terminate();
+            tc.End();
         }
     }
 }
