@@ -96,7 +96,6 @@ namespace Altseed
         //TODO: TurnLR
         //TODO: TurnUL
         //TODO: Color
-        //TODO: IsDrawn
 
         protected internal abstract void UpdateTransform();
     }

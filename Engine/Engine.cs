@@ -189,7 +189,7 @@ namespace Altseed
             {
                 if (c is DrawnNode d)
                 {
-                    if (d.IsDrawn) d.Draw();
+                    d.Draw();
                 }
                 DrawNodeRecursively(c);
             }
