@@ -14,6 +14,47 @@ namespace Altseed
         private float[,] Values;
 
         /// <summary>
+        /// 単位行列を取得する
+        /// </summary>
+        public static Matrix33F Identity
+        {
+            get
+            {
+                var result = new Matrix33F();
+                result.SetIdentity();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 逆行列を取得する
+        /// </summary>
+        public readonly Matrix33F Inversion
+        {
+            get
+            {
+                var result = this;
+                result.SetInverted();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 転置行列を取得する
+        /// </summary>
+        public readonly Matrix33F TransPosition
+        {
+            get
+            {
+                var result = new Matrix33F();
+                for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
+                        result[i, j] = this[j, i];
+                return result;
+            }
+        }
+
+        /// <summary>
         /// 指定した位置の値を取得または設定する
         /// </summary>
         /// <param name="x">取得する要素の位置</param>
@@ -26,7 +67,7 @@ namespace Altseed
             {
                 if (x < 0 || x > 3) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
                 if (y < 0 || y > 3) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                return Values?[x, y] ?? 0;
+                return Values?[x, y] ?? 0.0f;
             }
             set
             {
@@ -37,10 +78,50 @@ namespace Altseed
             }
         }
 
-        internal static Matrix33F GetIdentity()
+        /// <summary>
+        /// 指定した角度分の回転を表す行列を取得する
+        /// </summary>
+        /// <param name="radian">回転させる角度(弧度法)</param>
+        /// <returns><paramref name="radian"/>の回転分を表す行列</returns>
+        public static Matrix33F GetRotationZ(float radian)
         {
-            var result = new Matrix33F();
-            result.SetIdentity();
+            var sin = (float)Math.Sin(radian);
+            var cos = (float)Math.Cos(radian);
+
+            var result = Identity;
+            result[0, 0] = cos;
+            result[0, 1] = -sin;
+            result[1, 0] = sin;
+            result[1, 1] = cos;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 2D座標の拡大率を表す行列を取得する
+        /// </summary>
+        /// <param name="scale">設定する拡大率</param>
+        /// <returns><paramref name="scale"/>分の拡大/縮小を表す行列</returns>
+        public static Matrix33F GetScale2D(Vector2F scale)
+        {
+            var result = Identity;
+            result[0, 0] = scale.X;
+            result[1, 1] = scale.Y;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 2D座標の平行移動分を表す行列を取得する
+        /// </summary>
+        /// <param name="position">平行移動する座標</param>
+        /// <returns><paramref name="position"/>分の平行移動を表す行列</returns>
+        public static Matrix33F GetTranslation2D(Vector2F position)
+        {
+            var result = Identity;
+
+            result[0, 2] = position.X;
+            result[1, 2] = position.Y;
             return result;
         }
 
@@ -61,38 +142,11 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 平行移動の行列を設定します。
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void SetTranslation(float x, float y)
-        {
-            SetIdentity();
-            Values[0, 2] = x;
-            Values[1, 2] = y;
-        }
-
-        /// <summary>
-        /// 転置行列を設定します。
-        /// </summary>
-        public void SetTransposed()
-        {
-            SetIdentity();
-            for (int c = 0; c < 3; c++)
-                for (int r = c; r < 3; r++)
-                {
-                    float v = Values[r, c];
-                    Values[r, c] = Values[c, r];
-                    Values[c, r] = v;
-                }
-        }
-
-        /// <summary>
         /// 逆行列を設定します。
         /// </summary>
-        public void SetInverted()
+        private void SetInverted()
         {
-            SetIdentity();
+            Values ??= new float[3, 3];
             float e = 0.00001f;
 
             float a11 = Values[0, 0];
@@ -136,47 +190,6 @@ namespace Altseed
             Values[2, 0] = b31 * InvDet;
             Values[2, 1] = b32 * InvDet;
             Values[2, 2] = b33 * InvDet;
-        }
-
-        /// <summary>
-        /// 逆行列取得します。
-        /// </summary>
-        /// <returns></returns>
-        public readonly Matrix33F GetInverted()
-        {
-            var o = this;
-            o.SetInverted();
-            return o;
-        }
-
-        /// <summary>
-        /// 回転行列を設定します。
-        /// </summary>
-        /// <param name="angle"></param>
-        public void SetRotation(float angle)
-        {
-            SetIdentity();
-
-            float sin = (float)Math.Sin(angle);
-            float cos = (float)Math.Cos(angle);
-
-            Values[0, 0] = cos;
-            Values[0, 1] = -sin;
-            Values[1, 0] = sin;
-            Values[1, 1] = cos;
-
-        }
-
-        /// <summary>
-        /// 拡大・縮小行列を設定します。
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void SetScale(float x, float y)
-        {
-            SetIdentity();
-            Values[0, 0] = x;
-            Values[1, 1] = y;
         }
 
         /// <summary>
@@ -282,7 +295,6 @@ namespace Altseed
 
             return result;
         }
-
 
         public static Vector3F operator *(Matrix33F left, Vector3F right)
         {
