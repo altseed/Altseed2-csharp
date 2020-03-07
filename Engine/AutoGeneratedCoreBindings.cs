@@ -1835,9 +1835,6 @@ namespace Altseed
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_RefreshInputState(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_RefreshConnectedState(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
@@ -1857,9 +1854,6 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Joystick_GetJoystickName(IntPtr selfPtr, int index);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_RefreshVibrateState(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_SetVibration(IntPtr selfPtr, int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time);
@@ -1893,14 +1887,6 @@ namespace Altseed
         {
             var ret = cbg_Joystick_IsPresent(selfPtr, joystickIndex);
             return ret;
-        }
-        
-        /// <summary>
-        /// インプットの状態をリセットします。
-        /// </summary>
-        public void RefreshInputState()
-        {
-            cbg_Joystick_RefreshInputState(selfPtr);
         }
         
         /// <summary>
@@ -1979,14 +1965,6 @@ namespace Altseed
         {
             var ret = cbg_Joystick_GetJoystickName(selfPtr, index);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-        }
-        
-        /// <summary>
-        /// 振動の状態をリセットします。
-        /// </summary>
-        public void RefreshVibrateState()
-        {
-            cbg_Joystick_RefreshVibrateState(selfPtr);
         }
         
         /// <summary>
@@ -3479,6 +3457,15 @@ namespace Altseed
         private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Font_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetImageGlyph(IntPtr selfPtr, int character);
+        
+        [DllImport("Altseed_Core")]
         private static extern int cbg_Font_GetSize(IntPtr selfPtr);
         
         
@@ -3622,80 +3609,15 @@ namespace Altseed
             return ret;
         }
         
-        ~Font()
-        {
-            lock (this) 
-            {
-                if (selfPtr != IntPtr.Zero)
-                {
-                    cbg_Font_Release(selfPtr);
-                    selfPtr = IntPtr.Zero;
-                }
-            }
-        }
-    }
-    
-    /// <summary>
-    /// テクスチャ追加対応フォント
-    /// </summary>
-    public partial class ImageFont : Font
-    {
-        #region unmanaged
-        
-        private static ConcurrentDictionary<IntPtr, WeakReference<ImageFont>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<ImageFont>>();
-        
-        internal static new ImageFont TryGetFromCache(IntPtr native)
-        {
-            if(native == IntPtr.Zero) return null;
-        
-            if(cacheRepo.ContainsKey(native))
-            {
-                ImageFont cacheRet;
-                cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
-                {
-                    cbg_ImageFont_Release(native);
-                    return cacheRet;
-                }
-                else
-                {
-                    cacheRepo.TryRemove(native, out _);
-                }
-            }
-        
-            var newObject = new ImageFont(new MemoryHandle(native));
-            cacheRepo.TryAdd(native, new WeakReference<ImageFont>(newObject));
-            return newObject;
-        }
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_ImageFont_CreateImageFont(IntPtr baseFont);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_ImageFont_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_ImageFont_GetImageGlyph(IntPtr selfPtr, int character);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_ImageFont_Release(IntPtr selfPtr);
-        
-        #endregion
-        
-        internal ImageFont(MemoryHandle handle) : base(handle)
-        {
-            selfPtr = handle.selfPtr;
-        }
-        
         /// <summary>
         /// テクスチャ追加対応フォントを生成します
         /// </summary>
         /// <param name="baseFont">ベースとなるフォント</param>
         /// <returns>テクスチャ追加対応フォント</returns>
-        public static ImageFont CreateImageFont(Font baseFont)
+        public static Font CreateImageFont(Font baseFont)
         {
-            var ret = cbg_ImageFont_CreateImageFont(baseFont != null ? baseFont.selfPtr : IntPtr.Zero);
-            return ImageFont.TryGetFromCache(ret);
+            var ret = cbg_Font_CreateImageFont(baseFont != null ? baseFont.selfPtr : IntPtr.Zero);
+            return Font.TryGetFromCache(ret);
         }
         
         /// <summary>
@@ -3705,7 +3627,7 @@ namespace Altseed
         /// <param name="texture">テクスチャ</param>
         public void AddImageGlyph(int character, Texture2D texture)
         {
-            cbg_ImageFont_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
+            cbg_Font_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -3715,17 +3637,17 @@ namespace Altseed
         /// <returns>テクスチャ文字</returns>
         public Texture2D GetImageGlyph(int character)
         {
-            var ret = cbg_ImageFont_GetImageGlyph(selfPtr, character);
+            var ret = cbg_Font_GetImageGlyph(selfPtr, character);
             return Texture2D.TryGetFromCache(ret);
         }
         
-        ~ImageFont()
+        ~Font()
         {
             lock (this) 
             {
                 if (selfPtr != IntPtr.Zero)
                 {
-                    cbg_ImageFont_Release(selfPtr);
+                    cbg_Font_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
