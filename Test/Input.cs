@@ -97,7 +97,6 @@ namespace Altseed.Test
             Engine.AddNode(node);
 
             Engine.Joystick.RefreshConnectedState();
-            Engine.Joystick.RefreshInputState();
 
             for (int i = 0; i < Engine.Joystick.MaxCount; i++)
             {
