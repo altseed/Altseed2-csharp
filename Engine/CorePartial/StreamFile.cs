@@ -66,7 +66,7 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
-            info.AddValue(S_Path, Path.Substring(2));
+            info.AddValue(S_Path, GetPath().Substring(2));
             info.AddValue(S_CurrentPosition, CurrentPosition);
         }
 

@@ -4717,6 +4717,9 @@ namespace Altseed
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
@@ -4735,10 +4738,6 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -4800,18 +4799,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのパスを取得します。
-        /// </summary>
-        public string Path
-        {
-            get
-            {
-                var ret = cbg_StreamFile_GetPath(selfPtr);
-                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-            }
-        }
-        
-        /// <summary>
         /// 指定ファイルを読み込むStreamFileの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
@@ -4841,6 +4828,16 @@ namespace Altseed
         {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_StreamFile_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
