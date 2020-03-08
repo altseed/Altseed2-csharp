@@ -12,7 +12,6 @@ namespace Altseed
         private const string S_Path = "S_Path";
         #endregion
 
-        private string path;
         private SerializationInfo seInfo;
 
         private StreamFile(SerializationInfo info, StreamingContext context)
@@ -24,7 +23,6 @@ namespace Altseed
 
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<StreamFile>(this));
-            this.path = path;
             seInfo = info;
         }
 
@@ -45,7 +43,6 @@ namespace Altseed
 
             var result = Create(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
 
-            result.path = path;
             return result;
         }
 
@@ -57,11 +54,7 @@ namespace Altseed
         /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
         public static bool TryCreate(string path, out StreamFile result)
         {
-            if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null)
-            {
-                result.path = path;
-                return true;
-            }
+            if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null) return true;
             else
             {
                 result = null;
@@ -73,7 +66,7 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
-            info.AddValue(S_Path, path);
+            info.AddValue(S_Path, Path.Substring(2));
             info.AddValue(S_CurrentPosition, CurrentPosition);
         }
 

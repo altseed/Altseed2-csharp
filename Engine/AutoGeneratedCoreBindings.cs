@@ -290,7 +290,7 @@ namespace Altseed
     {
         None = -1,
         Left = 0,
-        Right = 2,
+        Right = 1,
         Up = 2,
         Down = 3,
     }
@@ -1856,7 +1856,7 @@ namespace Altseed
         private static extern IntPtr cbg_Joystick_GetJoystickName(IntPtr selfPtr, int index);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_SetVibration(IntPtr selfPtr, int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time);
+        private static extern void cbg_Joystick_Vibrate(IntPtr selfPtr, int index, float frequency, float amplitude);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
@@ -1968,17 +1968,14 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 振動を設定します。
+        /// 指定したジョイスティックコントローラーを振動させます
         /// </summary>
         /// <param name="index">ジョイスティックのインデックス</param>
-        /// <param name="high_freq"></param>
-        /// <param name="low_freq"></param>
-        /// <param name="high_amp"></param>
-        /// <param name="low_amp"></param>
-        /// <param name="life_time"></param>
-        public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time)
+        /// <param name="frequency">周波数</param>
+        /// <param name="amplitude">振幅</param>
+        public void Vibrate(int index, float frequency, float amplitude)
         {
-            cbg_Joystick_SetVibration(selfPtr, index, high_freq, low_freq, high_amp, low_amp, life_time);
+            cbg_Joystick_Vibrate(selfPtr, index, frequency, amplitude);
         }
         
         ~Joystick()
@@ -4741,6 +4738,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
         
         #endregion
@@ -4795,6 +4796,18 @@ namespace Altseed
             {
                 var ret = cbg_StreamFile_GetIsInPackage(selfPtr);
                 return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        public string Path
+        {
+            get
+            {
+                var ret = cbg_StreamFile_GetPath(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
             }
         }
         
