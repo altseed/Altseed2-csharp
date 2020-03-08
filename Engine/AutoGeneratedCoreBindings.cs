@@ -5236,6 +5236,13 @@ namespace Altseed
         private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
@@ -5356,6 +5363,26 @@ namespace Altseed
         {
             var ret = cbg_Sound_Load(path, isDecompressed);
             return Sound.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Sound_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 音源を解凍するかどうかを取得する
+        /// </summary>
+        /// <returns>音源を解凍するかどうか</returns>
+        internal bool GetIsDecompressed()
+        {
+            var ret = cbg_Sound_GetIsDecompressed(selfPtr);
+            return ret;
         }
         
         ~Sound()

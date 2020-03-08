@@ -169,5 +169,35 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Sound()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var sound1 = Altseed.Sound.LoadStrict(@"../../Core/TestData/Sound/se1.wav", true);
+
+            Assert.NotNull(sound1);
+
+            const string path = "Serialization/Sound.bin";
+
+            Serialize(path, sound1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var font2 = Deserialize<Altseed.Sound>(path);
+
+            Assert.NotNull(font2);
+
+            Assert.AreEqual(sound1.GetPath(), font2.GetPath());
+            Assert.AreEqual(sound1.GetIsDecompressed(), font2.GetIsDecompressed());
+            Assert.AreEqual(sound1.IsLoopingMode, font2.IsLoopingMode);
+            Assert.AreEqual(sound1.Length, font2.Length);
+            Assert.AreEqual(sound1.LoopEndPoint, font2.LoopEndPoint);
+            Assert.AreEqual(sound1.LoopStartingPoint, font2.LoopStartingPoint);
+
+            tc.End();
+        }
     }
 }
