@@ -74,7 +74,7 @@ namespace Altseed.Test
             var file2 = Deserialize<StreamFile>(path);
             file2.Save("Serialization/StreamFile.txt");
 
-            Assert.AreEqual(file1.Path, file2.Path);
+            Assert.AreEqual(file1.GetPath(), file2.GetPath());
             Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
             Assert.AreEqual(file1.CurrentPosition, file2.CurrentPosition);
             Assert.AreEqual(file1.TempBufferSize, file2.TempBufferSize);
