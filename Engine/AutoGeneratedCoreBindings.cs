@@ -3451,13 +3451,16 @@ namespace Altseed
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Font_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
+        private static extern void cbg_Font_AddImageGlyph_Internal(IntPtr selfPtr, int character, IntPtr texture);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_GetImageGlyph(IntPtr selfPtr, int character);
@@ -3594,6 +3597,16 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Font_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
         /// <param name="text">テキスト</param>
@@ -3622,9 +3635,9 @@ namespace Altseed
         /// </summary>
         /// <param name="character">文字</param>
         /// <param name="texture">テクスチャ</param>
-        public void AddImageGlyph(int character, Texture2D texture)
+        internal void AddImageGlyph_Internal(int character, Texture2D texture)
         {
-            cbg_Font_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
+            cbg_Font_AddImageGlyph_Internal(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>

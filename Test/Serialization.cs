@@ -143,6 +143,7 @@ namespace Altseed.Test
 
             Assert.NotNull(font2);
 
+            Assert.AreEqual(font1.GetPath(), font2.GetPath());
             Assert.AreEqual(font1.Ascent, font2.Ascent);
             Assert.AreEqual(font1.Descent, font2.Descent);
             Assert.AreEqual(font1.LineGap, font2.LineGap);

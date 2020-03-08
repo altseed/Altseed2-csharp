@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public partial class Font : ISerializable
+    public partial class Font : ISerializable, IDeserializationCallback
     {
         [Serializable]
         private enum FontType : int
@@ -16,10 +17,11 @@ namespace Altseed
         #region SerializeName
         private const string S_Path = "S_Path";
         private const string S_Size = "S_Size";
+        private const string S_Textures = "S_Textures";
         private const string S_Type = "S_Type";
         #endregion
 
-        private string path;
+        private readonly Dictionary<int, Texture2D> textures = new Dictionary<int, Texture2D>();
         private FontType type;
 
         /// <summary>
@@ -29,8 +31,9 @@ namespace Altseed
         /// <param name="context">送信元の情報</param>
         protected Font(SerializationInfo info, StreamingContext context)
         {
-            path = info.GetString(S_Path);
+            var path = info.GetString(S_Path);
             type = info.GetValue<FontType>(S_Type);
+            textures = info.GetValue<Dictionary<int, Texture2D>>(S_Textures);
 
             var ptr = IntPtr.Zero;
             switch (type)
@@ -58,12 +61,10 @@ namespace Altseed
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
-            info.AddValue(S_Path, path);
+            info.AddValue(S_Path, GetPath().Substring(2));
             info.AddValue(S_Type, type, typeof(FontType));
-            if (type == FontType.Dynamic)
-            {
-                info.AddValue(S_Size, Size);
-            }
+            info.AddValue(S_Textures, textures);
+            if (type == FontType.Dynamic) info.AddValue(S_Size, Size);
         }
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
 
@@ -85,7 +86,6 @@ namespace Altseed
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
             var result = LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
-            result.path = path;
             result.type = FontType.Dynamic;
             return result;
         }
@@ -105,10 +105,19 @@ namespace Altseed
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
             var result = LoadStaticFont(path) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
-            result.path = path;
             result.type = FontType.Static;
             return result;
         }
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            foreach (var t in textures) AddImageGlyph_Internal(t.Key, t.Value);
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
 
         /// <summary>
         /// 動的にフォントを読み込む
@@ -121,7 +130,6 @@ namespace Altseed
         {
             if (size > 0 && IOHelper.CheckLoadPath(path) == null && (result = LoadDynamicFont(path, size)) != null)
             {
-                result.path = path;
                 result.type = FontType.Dynamic;
                 return true;
             }
@@ -139,12 +147,23 @@ namespace Altseed
         {
             if (IOHelper.CheckLoadPath(path) == null && (result = LoadStaticFont(path)) != null)
             {
-                result.path = path;
                 result.type = FontType.Static;
                 return true;
             }
             result = null;
             return false;
+        }
+
+        /// <summary>
+        /// テクスチャ文字を追加する
+        /// </summary>
+        /// <param name="character">文字</param>
+        /// <param name="texture">テクスチャ</param>
+        public void AddImageGlyph(int character, Texture2D texture)
+        {
+            if (textures.ContainsKey(character)) textures[character] = texture;
+            else textures.Add(character, texture);
+            AddImageGlyph_Internal(character, texture);
         }
     }
 }
