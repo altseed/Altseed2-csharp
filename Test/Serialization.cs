@@ -74,6 +74,7 @@ namespace Altseed.Test
             var file2 = Deserialize<StreamFile>(path);
             file2.Save("Serialization/StreamFile.txt");
 
+            Assert.AreEqual(file1.GetPath(), file2.GetPath());
             Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
             Assert.AreEqual(file1.CurrentPosition, file2.CurrentPosition);
             Assert.AreEqual(file1.TempBufferSize, file2.TempBufferSize);
@@ -142,6 +143,7 @@ namespace Altseed.Test
 
             Assert.NotNull(font2);
 
+            Assert.AreEqual(font1.GetPath(), font2.GetPath());
             Assert.AreEqual(font1.Ascent, font2.Ascent);
             Assert.AreEqual(font1.Descent, font2.Descent);
             Assert.AreEqual(font1.LineGap, font2.LineGap);
@@ -164,6 +166,36 @@ namespace Altseed.Test
             Engine.AddNode(obj2);
 
             tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Sound()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var sound1 = Altseed.Sound.LoadStrict(@"../../Core/TestData/Sound/se1.wav", true);
+
+            Assert.NotNull(sound1);
+
+            const string path = "Serialization/Sound.bin";
+
+            Serialize(path, sound1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var font2 = Deserialize<Altseed.Sound>(path);
+
+            Assert.NotNull(font2);
+
+            Assert.AreEqual(sound1.GetPath(), font2.GetPath());
+            Assert.AreEqual(sound1.GetIsDecompressed(), font2.GetIsDecompressed());
+            Assert.AreEqual(sound1.IsLoopingMode, font2.IsLoopingMode);
+            Assert.AreEqual(sound1.Length, font2.Length);
+            Assert.AreEqual(sound1.LoopEndPoint, font2.LoopEndPoint);
+            Assert.AreEqual(sound1.LoopStartingPoint, font2.LoopStartingPoint);
 
             tc.End();
         }

@@ -290,7 +290,7 @@ namespace Altseed
     {
         None = -1,
         Left = 0,
-        Right = 2,
+        Right = 1,
         Up = 2,
         Down = 3,
     }
@@ -1856,7 +1856,7 @@ namespace Altseed
         private static extern IntPtr cbg_Joystick_GetJoystickName(IntPtr selfPtr, int index);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_SetVibration(IntPtr selfPtr, int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time);
+        private static extern void cbg_Joystick_Vibrate(IntPtr selfPtr, int index, float frequency, float amplitude);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
@@ -1968,17 +1968,14 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 振動を設定します。
+        /// 指定したジョイスティックコントローラーを振動させます
         /// </summary>
         /// <param name="index">ジョイスティックのインデックス</param>
-        /// <param name="high_freq"></param>
-        /// <param name="low_freq"></param>
-        /// <param name="high_amp"></param>
-        /// <param name="low_amp"></param>
-        /// <param name="life_time"></param>
-        public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time)
+        /// <param name="frequency">周波数</param>
+        /// <param name="amplitude">振幅</param>
+        public void Vibrate(int index, float frequency, float amplitude)
         {
-            cbg_Joystick_SetVibration(selfPtr, index, high_freq, low_freq, high_amp, low_amp, life_time);
+            cbg_Joystick_Vibrate(selfPtr, index, frequency, amplitude);
         }
         
         ~Joystick()
@@ -3454,13 +3451,16 @@ namespace Altseed
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Font_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
+        private static extern void cbg_Font_AddImageGlyph_Internal(IntPtr selfPtr, int character, IntPtr texture);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_GetImageGlyph(IntPtr selfPtr, int character);
@@ -3597,6 +3597,16 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Font_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
         /// <param name="text">テキスト</param>
@@ -3625,9 +3635,9 @@ namespace Altseed
         /// </summary>
         /// <param name="character">文字</param>
         /// <param name="texture">テクスチャ</param>
-        public void AddImageGlyph(int character, Texture2D texture)
+        internal void AddImageGlyph_Internal(int character, Texture2D texture)
         {
-            cbg_Font_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
+            cbg_Font_AddImageGlyph_Internal(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -4720,6 +4730,9 @@ namespace Altseed
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
@@ -4828,6 +4841,16 @@ namespace Altseed
         {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_StreamFile_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
@@ -5213,6 +5236,13 @@ namespace Altseed
         private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
@@ -5333,6 +5363,26 @@ namespace Altseed
         {
             var ret = cbg_Sound_Load(path, isDecompressed);
             return Sound.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Sound_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 音源を解凍するかどうかを取得する
+        /// </summary>
+        /// <returns>音源を解凍するかどうか</returns>
+        internal bool GetIsDecompressed()
+        {
+            var ret = cbg_Sound_GetIsDecompressed(selfPtr);
+            return ret;
         }
         
         ~Sound()
