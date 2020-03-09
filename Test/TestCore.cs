@@ -27,7 +27,7 @@ namespace Altseed.Test
 
                 Assert.True(Engine.Update());
 
-                beforeUpdateAction?.Invoke(count);
+                afterUpdateAction?.Invoke(count);
             }
         }
 

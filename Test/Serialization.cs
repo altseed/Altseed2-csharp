@@ -86,7 +86,6 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-
         public void Configuration()
         {
             var tc = new TestCore();
@@ -166,6 +165,54 @@ namespace Altseed.Test
             Engine.AddNode(obj2);
 
             tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Texture2D()
+        {
+            var tc = new TestCore()
+            {
+                Duration = int.MaxValue
+            };
+
+            tc.Init();
+
+            var texture1 = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+
+            Assert.NotNull(texture1);
+
+            const string path = "Serialization/Texture2D.bin";
+
+            Serialize(path, texture1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var texture2 = Deserialize<Texture2D>(path);
+
+            Assert.NotNull(texture2);
+
+            Assert.AreEqual(texture1.Size, texture2.Size);
+
+            var obj1 = new SpriteNode()
+            {
+                Position = new Vector2F(100, 100),
+                Texture = texture1
+            };
+            var obj2 = new SpriteNode()
+            {
+                Position = new Vector2F(100, 500),
+                Texture = texture2
+            };
+
+            Engine.AddNode(obj1);
+            Engine.AddNode(obj2);
+
+            tc.LoopBody(null, c =>
+            {
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+            });
 
             tc.End();
         }
