@@ -15,12 +15,10 @@ namespace Altseed
         private const string S_Path = "S_Path";
         #endregion
 
-        private bool isDecompressed;
-        private string path;
-
         private Sound(SerializationInfo info, StreamingContext context)
         {
             var path = info.GetString(S_Path);
+            var isDecompressed = info.GetBoolean(S_IsDecompressed);
 
             var ptr = cbg_Sound_Load(path, isDecompressed);
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
@@ -28,8 +26,6 @@ namespace Altseed
             selfPtr = ptr;
             if (cacheRepo.ContainsKey(selfPtr)) cacheRepo.Add(selfPtr, new WeakReference<Sound>(this));
 
-            isDecompressed = info.GetBoolean(S_IsDecompressed);
-            this.path = path;
             LoopStartingPoint = info.GetSingle(S_LoopStaringPoint);
             LoopEndPoint = info.GetSingle(S_LoopEndPoint);
             IsLoopingMode = info.GetBoolean(S_IsLoopingMode);
@@ -50,9 +46,7 @@ namespace Altseed
         {
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            var result = Sound.Load(path, isDecompressed) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
-            result.path = path;
-            result.isDecompressed = isDecompressed;
+            var result = Load(path, isDecompressed) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
             return result;
         }
 
@@ -66,12 +60,7 @@ namespace Altseed
         public static bool TryLoad(string path, bool isDecompressed, out Sound result)
         {
             var ex = IOHelper.CheckLoadPath(path);
-            if (ex == null && (result = Sound.Load(path, isDecompressed)) != null)
-            {
-                result.path = path;
-                result.isDecompressed = isDecompressed;
-                return true;
-            }
+            if (ex == null && (result = Load(path, isDecompressed)) != null) return true;
             result = null;
             return false;
         }
@@ -80,8 +69,8 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
-            info.AddValue(S_Path, path);
-            info.AddValue(S_IsDecompressed, isDecompressed);
+            info.AddValue(S_Path, GetPath());
+            info.AddValue(S_IsDecompressed, GetIsDecompressed());
             info.AddValue(S_LoopStaringPoint, LoopStartingPoint);
             info.AddValue(S_LoopEndPoint, LoopEndPoint);
             info.AddValue(S_IsLoopingMode, IsLoopingMode);

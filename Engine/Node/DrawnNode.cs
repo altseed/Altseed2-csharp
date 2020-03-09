@@ -14,13 +14,6 @@ namespace Altseed
         //       描画対象をどこかに積み、後で
         //       まとめて描画するほうが良いかも
 
-        internal override void Update()
-        {
-            Draw();
-
-            base.Update();
-        }
-
         /// <summary>
         /// 角度を取得または設定する
         /// </summary>
@@ -80,7 +73,6 @@ namespace Altseed
         protected internal Matrix44F _MatCenterPosition = Matrix44F.Identity;
         protected internal Matrix44F _MatCenterPositionInv = Matrix44F.Identity;
 
-
         /// <summary>
         /// 拡大率を取得または設定する
         /// </summary>
@@ -103,8 +95,28 @@ namespace Altseed
         //TODO: TurnLR
         //TODO: TurnUL
         //TODO: Color
-        //TODO: IsDrawn
+
+        /// <summary>
+        /// 描画時の重ね順を取得または設定します。
+        /// </summary>
+        public virtual int ZOrder { get; set; }
 
         protected internal abstract void UpdateTransform();
+
+        #region Node
+
+        protected internal override void Registered()
+        {
+            base.Registered();
+            Engine.RegisterDrawnNode(this);
+        }
+
+        protected internal override void Unregistered()
+        {
+            base.Unregistered();
+            Engine.UnregisterDrawnNode(this);
+        }
+
+        #endregion
     }
 }

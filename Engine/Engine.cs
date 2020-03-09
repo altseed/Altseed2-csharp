@@ -15,6 +15,14 @@ namespace Altseed
         private static RootNode _RootNode;
 
         /// <summary>
+        /// 実際のUpdate対象のノード
+        /// </summary>
+        /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
+        private static Node _UpdatedNode;
+
+        private static List<DrawnNode> _DrawnNodes;
+
+        /// <summary>
         /// エンジンを初期化します。
         /// </summary>
         /// <param name="title">ウィンドウタイトル</param>
@@ -43,6 +51,9 @@ namespace Altseed
                 Sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
+                _UpdatedNode = _RootNode;
+
+                _DrawnNodes = new List<DrawnNode>();
                 return true;
             }
             return false;
@@ -64,7 +75,9 @@ namespace Altseed
         {
             if (!Graphics.BeginFrame()) return false;
 
-            _RootNode.Update();
+            _UpdatedNode?.Update();
+
+            foreach (var dn in _DrawnNodes) dn.Draw();
 
             var cmdList = Graphics.CommandList;
             cmdList.SetRenderTargetWithScreen();
@@ -80,6 +93,23 @@ namespace Altseed
         public static void Terminate()
         {
             Core.Terminate();
+        }
+
+        /// <summary>
+        /// ノードの更新を一時停止します。
+        /// </summary>
+        /// <param name="keepUpdated">一時停止の対象から除外するノード</param>
+        public static void Pause(Node keepUpdated = null)
+        {
+            _UpdatedNode = keepUpdated;
+        }
+
+        /// <summary>
+        /// ノードの更新を再開します。
+        /// </summary>
+        public static void Resume()
+        {
+            _UpdatedNode = _RootNode;
         }
 
         #region Modules
@@ -148,7 +178,10 @@ namespace Altseed
         /// <summary>
         /// エンジンにノードを追加します。
         /// </summary>
-        public static void AddNode(Node node) { _RootNode.AddChildNode(node); }
+        public static void AddNode(Node node)
+        {
+            _RootNode.AddChildNode(node);
+        }
 
         /// <summary>
         /// エンジンからノードを削除します。
@@ -156,6 +189,18 @@ namespace Altseed
         public static void RemoveNode(Node node)
         {
             _RootNode.RemoveChildNode(node);
+        }
+
+        internal static void RegisterDrawnNode(DrawnNode node)
+        {
+            _DrawnNodes.Add(node);
+            _DrawnNodes.Sort(new DrawnNodeSorter()); 
+            // TODO: _DrawnNodesを追加時に自動ソートされるようなコレクションにする
+        }
+
+        internal static void UnregisterDrawnNode(DrawnNode node)
+        {
+            _DrawnNodes.Remove(node);
         }
 
         #endregion
@@ -200,5 +245,14 @@ namespace Altseed
         public static float DeltaSecond => Core.DeltaSecond;
 
         #endregion
+
+        private class DrawnNodeSorter : IComparer<DrawnNode>
+        {
+            public int Compare(DrawnNode x, DrawnNode y)
+            {
+                var r = x.ZOrder - y.ZOrder;
+                return r;// r == 0 ? 1 : r;
+            }
+        }
     }
 }

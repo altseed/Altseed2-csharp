@@ -20,6 +20,9 @@ namespace Altseed
             Children = _Children.AsReadOnly();
         }
 
+        /// <summary>
+        /// 更新
+        /// </summary>
         internal virtual void Update()
         {
             OnUpdate();
@@ -31,56 +34,63 @@ namespace Altseed
             }
         }
 
-        #region プロパティ
-
-        //TODO: DrawnNodeへ移動
-        /// <summary>
-        /// 描画優先度を取得または設定します。
-        /// </summary>
-        /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
-        public int DrawingPriority
-        {
-            get => _DrawingPriority;
-            set
-            {
-                _DrawingPriority = value;
-                //if (Scene != null) Scene.NeededSort = true;
-            }
-        }
-        private int _DrawingPriority = 0;
-
-        //TODO: DrawnNodeへ移動
-        /// <summary>
-        /// 描画を実行するかどうかを取得または設定します。
-        /// </summary>
-        public bool IsDrawn { get; set; } = true;
-
-        /// <summary>
-        /// シーンが変更されても次のシーンへ引き継がれるかどうかを取得または設定します。
-        /// </summary>
-        public bool IsInherited { get; set; } = true;
-
-        /// <summary>
-        /// 更新をするかどうかを取得または設定します。
-        /// </summary>
-        public bool IsUpdated { get; set; } = true;
-
-        #endregion
-
         #region Registerable (子として)
 
+        /// <summary>
+        /// 親ノードを取得または設定します。
+        /// </summary>
         public Node Parent { get; private set; }
 
+        /// <summary>
+        /// <paramref name="owner"/> に登録された際の処理
+        /// </summary>
+        /// <param name="owner"></param>
         internal override void Added(Node owner)
         {
             Parent = owner;
             OnAdded();
+
+            for (var n = Parent; ; n = n.Parent)
+            {
+                if (n == null) return;
+                if (n is RootNode) break;
+            }
+            Registered();
         }
 
+        /// <summary>
+        /// 親要素から削除されたときの処理
+        /// </summary>
         internal override void Removed()
         {
             Parent = null;
             OnRemoved();
+            Unregistered();
+        }
+
+        /// <summary>
+        /// エンジンに登録され、木を辿って<see cref="RootNode"/> にたどり着けるようになったとき実行
+        /// </summary>
+        protected internal virtual void Registered()
+        {
+            foreach (var c in Children)
+            {
+                c.Registered();
+            }
+            OnRegistered();
+        }
+
+        /// <summary>
+        /// エンジンから削除され、木を辿って<see cref="RootNode"/> にたどり着けなくなったとき実行
+        /// </summary>
+        protected internal virtual void Unregistered()
+        {
+            foreach (var c in Children)
+            {
+                c.Unregistered();
+            }
+
+            OnUnregistered();
         }
 
         #endregion
@@ -88,14 +98,26 @@ namespace Altseed
         #region Registerable (親として)
 
         private RegisterableCollection<Node, Node> _Children;
+
+        /// <summary>
+        /// 子要素のコレクションを取得します。
+        /// </summary>
         public ReadOnlyCollection<Node> Children { get; }
 
-        public virtual void AddChildNode(Node node)
+        /// <summary>
+        /// 子要素を追加します。
+        /// </summary>
+        /// <param name="node">追加する要素</param>
+        public void AddChildNode(Node node)
         {
             _Children.Add(node);
         }
 
-        public virtual void RemoveChildNode(Node node)
+        /// <summary>
+        /// 子要素を削除します。
+        /// </summary>
+        /// <param name="node">削除する要素</param>
+        public void RemoveChildNode(Node node)
         {
             _Children.Remove(node);
         }
@@ -108,21 +130,37 @@ namespace Altseed
 
         protected virtual void OnRemoved() { }
 
-        protected virtual void OnUpdate() { }
+        protected virtual void OnRegistered() { }
 
+        protected virtual void OnUnregistered() { }
+
+        protected virtual void OnUpdate() { }
 
         #endregion
 
         /// <summary>
         /// 先祖ノードを列挙します。
         /// </summary>
-        public IEnumerable<Node> EnumerateAncestor()
+        public IEnumerable<Node> EnumerateAncestors()
         {
             var current = Parent;
             for (var n = Parent; current != null && !(current is RootNode); current = current.Parent)
                 yield return current;
 
             yield break;
+        }
+
+        /// <summary>
+        /// 子孫ノードを列挙します。
+        /// </summary>
+        public IEnumerable<Node> EnumerateDescendants()
+        {
+            foreach (var c in Children)
+            {
+                yield return c;
+                foreach (var g in c.EnumerateDescendants())
+                    yield return g;
+            }
         }
     }
 }

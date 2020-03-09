@@ -71,7 +71,7 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-        public void EnuemrateAncestor()
+        public void EnuemrateAncestors()
         {
             var tc = new TestCore();
             tc.Init();
@@ -97,7 +97,7 @@ namespace Altseed.Test
            {
                if (c == 2)
                {
-                   var e = s2.EnumerateAncestor().ToArray();
+                   var e = s2.EnumerateAncestors().ToArray();
                    Assert.AreEqual(1, e.Length);
                    Assert.AreSame(e[0], s);
                }

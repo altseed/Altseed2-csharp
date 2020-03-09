@@ -12,8 +12,14 @@ namespace Altseed
     [Serializable]
     public abstract class Registerable<TOwner>
     {
+        /// <summary>
+        /// 要素が<paramref name="owner"/>に登録されたとき実行します。
+        /// </summary>
         internal abstract void Added(TOwner owner);
 
+        /// <summary>
+        /// 要素が親要素から削除されたときに実行します。
+        /// </summary>
         internal abstract void Removed();
 
         /// <summary>
