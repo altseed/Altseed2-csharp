@@ -115,7 +115,7 @@ namespace Altseed
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         protected virtual void OnDeserialization(object sender)
         {
-            foreach (var t in textures) AddImageGlyph_Internal(t.Key, t.Value);
+            foreach (var t in textures) AddImageGlyph(t.Key, t.Value);
         }
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
 
@@ -159,11 +159,11 @@ namespace Altseed
         /// </summary>
         /// <param name="character">文字</param>
         /// <param name="texture">テクスチャ</param>
-        public void AddImageGlyph(int character, Texture2D texture)
+        public void AddImageGlyph(char character, Texture2D texture)
         {
             if (textures.ContainsKey(character)) textures[character] = texture;
             else textures.Add(character, texture);
-            AddImageGlyph_Internal(character, texture);
+            AddImageGlyph(character, texture);
         }
     }
 }

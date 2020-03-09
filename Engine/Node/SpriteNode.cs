@@ -9,7 +9,7 @@ namespace Altseed
     [Serializable]
     public class SpriteNode : DrawnNode, IDeserializationCallback
     {
-        public readonly RenderedSprite _Sprite;
+        internal readonly RenderedSprite _Sprite;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
