@@ -163,7 +163,7 @@ namespace Altseed
         {
             if (textures.ContainsKey(character)) textures[character] = texture;
             else textures.Add(character, texture);
-            AddImageGlyph(character, texture);
+            AddImageGlyph((int)character, texture);
         }
     }
 }
