@@ -89,7 +89,7 @@ namespace Altseed
         protected internal override void UpdateTransform()
         {
             var matAncestor = Matrix44F.GetIdentity();
-            foreach (var n in EnumerateAncestor())
+            foreach (var n in EnumerateAncestors())
             {
                 if (n is DrawnNode d)
                 {
