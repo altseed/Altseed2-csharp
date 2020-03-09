@@ -172,7 +172,7 @@ namespace Altseed
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
     }
 
-    public partial class Renderer
+    internal partial class Renderer
     {
         /// <summary>
         /// ポリゴンを描画する

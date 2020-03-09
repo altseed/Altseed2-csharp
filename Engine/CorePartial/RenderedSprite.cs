@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public partial class RenderedSprite : ISerializable
+    internal partial class RenderedSprite : ISerializable
     {
         #region SerializeName
         private const string S_Src = "S_Src";
