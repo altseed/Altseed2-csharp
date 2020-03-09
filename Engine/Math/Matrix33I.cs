@@ -14,6 +14,34 @@ namespace Altseed
         private int[,] Values;
 
         /// <summary>
+        /// 単位行列を取得する
+        /// </summary>
+        public static Matrix33I Identity
+        {
+            get
+            {
+                var result = new Matrix33I();
+                result.SetIdentity();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 転置行列を取得する
+        /// </summary>
+        public readonly Matrix33I TransPosition
+        {
+            get
+            {
+                var result = new Matrix33I();
+                for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
+                        result[i, j] = this[j, i];
+                return result;
+            }
+        }
+
+        /// <summary>
         /// 指定した位置の値を取得または設定する
         /// </summary>
         /// <param name="x">取得する要素の位置</param>
@@ -37,10 +65,31 @@ namespace Altseed
             }
         }
 
-        internal static Matrix33I GetIdentity()
+        /// <summary>
+        /// 2D座標の拡大率を表す行列を取得する
+        /// </summary>
+        /// <param name="scale">設定する拡大率</param>
+        /// <returns><paramref name="scale"/>分の拡大/縮小を表す行列</returns>
+        public static Matrix33I GetScale(Vector2I scale)
         {
-            var result = new Matrix33I();
-            result.SetIdentity();
+            var result = Identity;
+            result[0, 0] = scale.X;
+            result[1, 1] = scale.Y;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 2D座標の平行移動分を表す行列を取得する
+        /// </summary>
+        /// <param name="position">平行移動する座標</param>
+        /// <returns><paramref name="position"/>分の平行移動を表す行列</returns>
+        public static Matrix33I GetTranslation(Vector2I position)
+        {
+            var result = Identity;
+
+            result[0, 2] = position.X;
+            result[1, 2] = position.Y;
             return result;
         }
 
@@ -49,8 +98,7 @@ namespace Altseed
         /// </summary>
         public void SetIdentity()
         {
-            if (Values == null)
-                Values = new int[3, 3];
+            Values ??= new int[3, 3];
 
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
@@ -59,45 +107,6 @@ namespace Altseed
             Values[0, 0] = 1;
             Values[1, 1] = 1;
             Values[2, 2] = 1;
-        }
-
-        /// <summary>
-        /// 平行移動の行列を設定します。
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void SetTranslation(int x, int y)
-        {
-            SetIdentity();
-            Values[0, 2] = x;
-            Values[1, 2] = y;
-        }
-
-        /// <summary>
-        /// 転置行列を設定します。
-        /// </summary>
-        public void SetTransposed()
-        {
-            SetIdentity();
-            for (int c = 0; c < 3; c++)
-                for (int r = c; r < 3; r++)
-                {
-                    int v = Values[r, c];
-                    Values[r, c] = Values[c, r];
-                    Values[c, r] = v;
-                }
-        }
-
-        /// <summary>
-        /// 拡大・縮小行列を設定します。
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void SetScale(int x, int y)
-        {
-            SetIdentity();
-            Values[0, 0] = x;
-            Values[1, 1] = y;
         }
 
         /// <summary>
@@ -267,10 +276,7 @@ namespace Altseed
         public readonly Matrix33I Clone()
         {
             if (Values == null) return default;
-            var clone = new Matrix33I();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    clone[i, j] = this[i, j];
+            var clone = new Matrix33I() { Values = (int[,])Values.Clone() };
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();

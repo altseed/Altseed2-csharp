@@ -77,7 +77,7 @@ namespace Altseed
         /// <see cref="Vector2F"/>に型変換します。
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector2F"/>の新しいインスタンス</returns>
-        public readonly Vector2F To2DF() => new Vector2F(X, Y);
+        public readonly Vector2F To2F() => new Vector2F(X, Y);
 
         /// <summary>
         /// 2つのベクトルの外積を求めます。

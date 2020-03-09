@@ -134,7 +134,7 @@ namespace Altseed
         /// <see cref="Vector2I"/>に型変換します。
         /// </summary>
         /// <returns>このインスタンスと等価な<see cref="Vector2I"/>の新しいインスタンス</returns>
-        public readonly Vector2I To2DI() => new Vector2I((int)X, (int)Y);
+        public readonly Vector2I To2I() => new Vector2I((int)X, (int)Y);
 
         /// <summary>
         /// 2つのベクトルの外積を求めます。
@@ -232,8 +232,8 @@ namespace Altseed
         /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
         public static Vector2F operator /(Vector2F vector, float scalar) => new Vector2F(vector.X / scalar, vector.Y / scalar);
 
-        public static explicit operator Vector2I(Vector2F f) => f.To2DI();
+        public static explicit operator Vector2I(Vector2F f) => f.To2I();
 
-        public static implicit operator Vector2F(Vector2I i) => i.To2DF();
+        public static implicit operator Vector2F(Vector2I i) => i.To2F();
     }
 }

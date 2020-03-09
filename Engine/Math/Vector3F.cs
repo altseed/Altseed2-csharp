@@ -28,8 +28,6 @@ namespace Altseed
         [MarshalAs(UnmanagedType.R4)]
         public float Z;
 
-
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -256,7 +254,6 @@ namespace Altseed
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(Vector3F v1, Vector3F v2) => v1.Equals(v2);
 
-
         /// <summary>
         /// もう1つの<see cref="Vector3F"/>との等価性を判定します。
         /// </summary>
@@ -276,5 +273,8 @@ namespace Altseed
             hashCode = hashCode * -1521134295 + Z.GetHashCode();
             return hashCode;
         }
+
+        public static implicit operator Vector3F(Vector3I v) => v.To3F();
+        public static explicit operator Vector3I(Vector3F v) => v.To3I();
     }
 }
