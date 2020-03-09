@@ -31,42 +31,6 @@ namespace Altseed
             }
         }
 
-        #region プロパティ
-
-        //TODO: DrawnNodeへ移動
-        /// <summary>
-        /// 描画優先度を取得または設定します。
-        /// </summary>
-        /// <remarks>実際の更新の順序の変更は次フレーム以降</remarks>
-        public int DrawingPriority
-        {
-            get => _DrawingPriority;
-            set
-            {
-                _DrawingPriority = value;
-                //if (Scene != null) Scene.NeededSort = true;
-            }
-        }
-        private int _DrawingPriority = 0;
-
-        //TODO: DrawnNodeへ移動
-        /// <summary>
-        /// 描画を実行するかどうかを取得または設定します。
-        /// </summary>
-        public bool IsDrawn { get; set; } = true;
-
-        /// <summary>
-        /// シーンが変更されても次のシーンへ引き継がれるかどうかを取得または設定します。
-        /// </summary>
-        public bool IsInherited { get; set; } = true;
-
-        /// <summary>
-        /// 更新をするかどうかを取得または設定します。
-        /// </summary>
-        public bool IsUpdated { get; set; } = true;
-
-        #endregion
-
         #region Registerable (子として)
 
         public Node Parent { get; private set; }

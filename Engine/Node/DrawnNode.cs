@@ -14,13 +14,6 @@ namespace Altseed
         //       描画対象をどこかに積み、後で
         //       まとめて描画するほうが良いかも
 
-        internal override void Update()
-        {
-            Draw();
-
-            base.Update();
-        }
-
         /// <summary>
         /// 角度を取得または設定する
         /// </summary>
@@ -103,7 +96,6 @@ namespace Altseed
         //TODO: TurnLR
         //TODO: TurnUL
         //TODO: Color
-        //TODO: IsDrawn
 
         protected internal abstract void UpdateTransform();
     }
