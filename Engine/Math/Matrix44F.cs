@@ -11,19 +11,418 @@ namespace Altseed
     public struct Matrix44F : ICloneable, IEquatable<Matrix44F>
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 4 * 4)]
-        public float[,] Values;
+        private float[,] Values;
 
-        internal static Matrix44F GetIdentity()
+        /// <summary>
+        /// 単位行列を取得する
+        /// </summary>
+        public static Matrix44F Identity
         {
-            var result = new Matrix44F();
-            result.SetIdentity();
+            get
+            {
+                var result = new Matrix44F();
+                result.SetIdentity();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 逆行列を取得する
+        /// </summary>
+        public readonly Matrix44F Inversion
+        {
+            get
+            {
+                var result = this;
+                result.SetInverted();
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 転置行列を取得する
+        /// </summary>
+        public readonly Matrix44F TransPosition
+        {
+            get
+            {
+                var result = new Matrix44F();
+                for (int i = 0; i < 4; i++)
+                    for (int j = 0; j < 4; j++)
+                        result[i, j] = this[j, i];
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 指定した位置の値を取得または設定する
+        /// </summary>
+        /// <param name="x">取得する要素の位置</param>
+        /// <param name="y">取得する要素の位置</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または4以上</exception>
+        /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
+        public float this[int x, int y]
+        {
+            readonly get
+            {
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                return Values?[x, y] ?? 0.0f;
+            }
+            set
+            {
+                Values ??= new float[4, 4];
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                Values[x, y] = value;
+            }
+        }
+
+        /// <summary>
+        /// カメラ行列(右手系)を取得する
+        /// </summary>
+        /// <param name="eye">カメラの位置</param>
+        /// <param name="at">カメラの注視点</param>
+        /// <param name="up">カメラの上方向</param>
+        public static Matrix44F GetLookAtRH(Vector3F eye, Vector3F at, Vector3F up)
+        {
+            var result = Identity;
+
+            // F=正面、R=右方向、U=上方向
+            var F = (eye - at).Normal;
+            var R = Vector3F.Cross(up, F).Normal;
+            var U = Vector3F.Cross(F, R).Normal;
+
+            result[0, 0] = R.X;
+            result[0, 1] = R.Y;
+            result[0, 2] = R.Z;
+
+            result[1, 0] = U.X;
+            result[1, 1] = U.Y;
+            result[1, 2] = U.Z;
+
+            result[2, 0] = F.X;
+            result[2, 1] = F.Y;
+            result[2, 2] = F.Z;
+
+            result[0, 3] = -Vector3F.Dot(R, eye);
+            result[1, 3] = -Vector3F.Dot(U, eye);
+            result[2, 3] = -Vector3F.Dot(F, eye);
+
             return result;
         }
 
+        /// <summary>
+        /// カメラ行列(左手系)を取得する
+        /// </summary>
+        /// <param name="eye">カメラの位置</param>
+        /// <param name="at">カメラの注視点</param>
+        /// <param name="up">カメラの上方向</param>
+        public static Matrix44F GetLookAtLH(Vector3F eye, Vector3F at, Vector3F up)
+        {
+            var result = Identity;
+
+            // F=正面、R=右方向、U=上方向
+            var F = (at - eye).Normal;
+            var R = Vector3F.Cross(up, F).Normal;
+            var U = Vector3F.Cross(F, R).Normal;
+
+            result[0, 0] = R.X;
+            result[0, 1] = R.Y;
+            result[0, 2] = R.Z;
+
+            result[1, 0] = U.X;
+            result[1, 1] = U.Y;
+            result[1, 2] = U.Z;
+
+            result[2, 0] = F.X;
+            result[2, 1] = F.Y;
+            result[2, 2] = F.Z;
+
+            result[0, 3] = -Vector3F.Dot(R, eye);
+            result[1, 3] = -Vector3F.Dot(U, eye);
+            result[2, 3] = -Vector3F.Dot(F, eye);
+            result[3, 3] = 0.0f;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 正射影行列(左手系)を取得する
+        /// </summary>
+        /// <param name="width">横幅</param>
+        /// <param name="height">縦幅</param>
+        /// <param name="zn">最近距離</param>
+        /// <param name="zf">最遠距離</param>
+        public static Matrix44F GetOrthographicLH(float width, float height, float zn, float zf)
+        {
+            var result = Identity;
+
+            result[0, 0] = 2 / width;
+            result[1, 1] = 2 / height;
+            result[2, 2] = 1 / (zf - zn);
+            result[2, 3] = zn / (zn - zf);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 正射影行列(右手系)を取得する
+        /// </summary>
+        /// <param name="width">横幅</param>
+        /// <param name="height">縦幅</param>
+        /// <param name="zn">最近距離</param>
+        /// <param name="zf">最遠距離</param>
+        public static Matrix44F GetOrthographicRH(float width, float height, float zn, float zf)
+        {
+            var result = Identity;
+
+            result[0, 0] = 2 / width;
+            result[1, 1] = 2 / height;
+            result[2, 2] = 1 / (zn - zf);
+            result[2, 3] = zn / (zn - zf);
+            result[3, 3] = 0.0f;
+
+            return result; ;
+        }
+
+        /// <summary>
+        /// 射影行列(左手系)を取得する
+        /// </summary>
+        /// <param name="ovY">Y方向への視野角(度数法)</param>
+        /// <param name="aspect">画面のアスペクト比</param>
+        /// <param name="zn">最近距離</param>
+        /// <param name="zf">最遠距離</param>
+        public static Matrix44F GetPerspectiveFovLH(float ovY, float aspect, float zn, float zf)
+        {
+            var result = Identity;
+
+            var yScale = 1 / (float)Math.Tan(ovY / 2);
+            var xScale = yScale / aspect;
+
+            result[0, 0] = xScale;
+            result[1, 1] = yScale;
+            result[2, 2] = zf / (zf - zn);
+            result[3, 2] = 1.0f;
+            result[2, 3] = -zn * zf / (zf - zn);
+            result[3, 3] = 0.0f;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 射影行列(右手系)を取得する
+        /// </summary>
+        /// <param name="ovY">Y方向への視野角(弧度法)</param>
+        /// <param name="aspect">画面のアスペクト比</param>
+        /// <param name="zn">最近距離</param>
+        /// <param name="zf">最遠距離</param>
+        public static Matrix44F GetPerspectiveFovRH(float ovY, float aspect, float zn, float zf)
+        {
+            var result = Identity;
+
+            var yScale = 1 / (float)Math.Tan(ovY / 2);
+            var xScale = yScale / aspect;
+
+            result[0, 0] = xScale;
+            result[1, 1] = yScale;
+            result[2, 2] = zf / (zn - zf);
+            result[3, 2] = -1.0f;
+            result[2, 3] = zn * zf / (zn - zf);
+
+            return result;
+        }
+
+        /// <summary>
+        /// OpenGL用射影行列(右手系)を取得する
+        /// </summary>
+        /// <param name="ovY">Y方向への視野角(弧度法)</param>
+        /// <param name="aspect">画面のアスペクト比</param>
+        /// <param name="zn">最近距離</param>
+        /// <param name="zf">最遠距離</param>
+        public static Matrix44F GetPerspectiveFovRH_OpenGL(float ovY, float aspect, float zn, float zf)
+        {
+            var result = Identity;
+
+            var yScale = 1 / (float)Math.Tan(ovY / 2);
+            var xScale = yScale / aspect;
+            var dz = zf - zn;
+
+            result[0, 0] = xScale;
+            result[1, 1] = yScale;
+            result[2, 2] = -(zf + zn) / dz;
+            result[3, 2] = -1.0f;
+            result[2, 3] = -2.0f * zn * zf / dz;
+
+            return result;
+        }
+
+        /// <summary>
+        /// クオータニオンを元に回転行列(右手)を取得する
+        /// </summary>
+        /// <param name="quaternion">使用するクオータニオン</param>
+        public static Matrix44F GetQuaternion(Vector4F quaternion)
+        {
+            var result = Identity;
+
+            var xx = quaternion.X * quaternion.X;
+            var yy = quaternion.Y * quaternion.Y;
+            var zz = quaternion.Z * quaternion.Z;
+            var xy = quaternion.X * quaternion.Y;
+            var xz = quaternion.X * quaternion.Z;
+            var yz = quaternion.Y * quaternion.Z;
+            var wx = quaternion.W * quaternion.X;
+            var wy = quaternion.W * quaternion.Y;
+            var wz = quaternion.W * quaternion.Z;
+
+            result[0, 0] = 1.0f - 2.0f * (yy + zz);
+            result[0, 1] = 2.0f * (xy - wz);
+            result[0, 2] = 2.0f * (xz + wy);
+            result[1, 0] = 2.0f * (xy + wz);
+            result[1, 1] = 1.0f - 2.0f * (xx + zz);
+            result[1, 2] = 2.0f * (yz - wx);
+            result[2, 0] = 2.0f * (xz - wy);
+            result[2, 1] = 2.0f * (yz + wx);
+            result[2, 2] = 1.0f - 2.0f * (xx + yy);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 任意軸の反時計回転行列(右手)を取得する
+        /// </summary>
+        /// <param name="axis">軸</param>
+        /// <param name="radian">回転量(弧度法)</param>
+        public static Matrix44F GetRotationAxis(Vector3F axis, float radian)
+        {
+            var result = Identity;
+
+            var cos = (float)Math.Cos(radian);
+            var sin = (float)Math.Sin(radian);
+            var cosM = 1.0f - cos;
+
+            result[0, 0] = cosM * (axis.X * axis.X) + cos;
+            result[1, 0] = cosM * (axis.X * axis.Y) + (axis.Z * sin);
+            result[2, 0] = cosM * (axis.Z * axis.X) - (axis.Y * sin);
+
+            result[0, 1] = cosM * (axis.X * axis.Y) - (axis.Z * sin);
+            result[1, 1] = cosM * (axis.Y * axis.Y) + cos;
+            result[2, 1] = cosM * (axis.Y * axis.Z) + (axis.X * sin);
+
+            result[0, 2] = cosM * (axis.Z * axis.X) + (axis.Y * sin);
+            result[1, 2] = cosM * (axis.Y * axis.Z) - (axis.X * sin);
+            result[2, 2] = cosM * (axis.Z * axis.Z) + cos;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 指定した角度分のX軸回転(右手)を表す行列を取得する
+        /// </summary>
+        /// <param name="radian">X軸回転させる角度(弧度法)</param>
+        /// <returns><paramref name="radian"/>のX軸回転分を表す行列</returns>
+        public static Matrix44F GetRotationX(float radian)
+        {
+            var sin = (float)Math.Sin(radian);
+            var cos = (float)Math.Cos(radian);
+
+            var result = Identity;
+            result[1, 1] = cos;
+            result[2, 1] = sin;
+            result[1, 2] = -sin;
+            result[2, 2] = cos;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 指定した角度分のY軸回転(右手)を表す行列を取得する
+        /// </summary>
+        /// <param name="radian">Y軸回転させる角度(弧度法)</param>
+        /// <returns><paramref name="radian"/>のY軸回転分を表す行列</returns>
+        public static Matrix44F GetRotationY(float radian)
+        {
+            var sin = (float)Math.Sin(radian);
+            var cos = (float)Math.Cos(radian);
+
+            var result = Identity;
+            result[0, 0] = cos;
+            result[2, 0] = -sin;
+            result[0, 2] = sin;
+            result[2, 2] = cos;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 指定した角度分のZ軸回転(右手)を表す行列を取得する
+        /// </summary>
+        /// <param name="radian">Z軸回転させる角度(弧度法)</param>
+        /// <returns><paramref name="radian"/>のZ軸回転分を表す行列</returns>
+        public static Matrix44F GetRotationZ(float radian)
+        {
+            var sin = (float)Math.Sin(radian);
+            var cos = (float)Math.Cos(radian);
+
+            var result = Identity;
+            result[0, 0] = cos;
+            result[0, 1] = -sin;
+            result[1, 0] = sin;
+            result[1, 1] = cos;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 2D座標の拡大率を表す行列を取得する
+        /// </summary>
+        /// <param name="scale2D">設定する拡大率</param>
+        /// <returns><paramref name="scale2D"/>分の拡大/縮小を表す行列</returns>
+        public static Matrix44F GetScale2D(Vector2F scale2D) => GetScale3D(new Vector3F(scale2D.X, scale2D.Y, 1.0f));
+
+        /// <summary>
+        /// 3D座標の拡大率を表す行列を取得する
+        /// </summary>
+        /// <param name="scale3D">設定する拡大率</param>
+        /// <returns><paramref name="scale3D"/>分の拡大/縮小を表す行列</returns>
+        public static Matrix44F GetScale3D(Vector3F scale3D)
+        {
+            var result = Identity;
+            result[0, 0] = scale3D.X;
+            result[1, 1] = scale3D.Y;
+            result[2, 2] = scale3D.Z;
+
+            return result;
+        }
+
+        /// <summary>
+        /// 2D座標の平行移動分を表す行列を取得する
+        /// </summary>
+        /// <param name="position2D">平行移動する座標</param>
+        /// <returns><paramref name="position2D"/>分の平行移動を表す行列</returns>
+        public static Matrix44F GetTranslation2D(Vector2F position2D) => GetTranslation3D(new Vector3F(position2D.X, position2D.Y, 0.0f));
+        
+        /// <summary>
+        /// 3D座標の平行移動分を表す行列を取得する
+        /// </summary>
+        /// <param name="position3D">平行移動する座標</param>
+        /// <returns><paramref name="position3D"/>分の平行移動を表す行列</returns>
+        public static Matrix44F GetTranslation3D(Vector3F position3D)
+        {
+            var result = Identity;
+
+            result[0, 3] = position3D.X;
+            result[1, 3] = position3D.Y;
+            result[2, 3] = position3D.Z;
+            return result;
+        }
+
+        /// <summary>
+        /// 単位行列に設定する
+        /// </summary>
         public void SetIdentity()
         {
-            if (Values == null)
-                Values = new float[4, 4];
+            Values ??= new float[4, 4];
 
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
@@ -35,32 +434,12 @@ namespace Altseed
             Values[3, 3] = 1.0f;
         }
 
-        public void SetTranslation(float x, float y, float z)
-        {
-            SetIdentity();
-            Values[0, 3] = x;
-            Values[1, 3] = y;
-            Values[2, 3] = z;
-        }
-
         /// <summary>
-        /// 転置行列を設定します。
+        /// 逆行列に設定する
         /// </summary>
-        public void SetTransposed()
+        private void SetInverted()
         {
-            for (int c = 0; c < 4; c++)
-            {
-                for (int r = c; r < 4; r++)
-                {
-                    float v = Values[r, c];
-                    Values[r, c] = Values[c, r];
-                    Values[c, r] = v;
-                }
-            }
-        }
-
-        public void SetInverted()
-        {
+            Values ??= new float[4, 4];
             float e = 0.00001f;
 
             float a11 = Values[0, 0];
@@ -129,445 +508,21 @@ namespace Altseed
         }
 
         /// <summary>
-		/// 逆行列取得します。
-		/// </summary>
-		/// <returns></returns>
-		public Matrix44F GetInverted()
-        {
-            Matrix44F o = this;
-            o.SetInverted();
-            return o;
-        }
-
-        /// <summary>
-        /// カメラ行列(右手系)を設定します。
-        /// </summary>
-        /// <param name="eye">カメラの位置</param>
-        /// <param name="at">カメラの注視点</param>
-        /// <param name="up">カメラの上方向</param>
-        public void SetLookAtRH(Vector3F eye, Vector3F at, Vector3F up)
-        {
-            // F=正面、R=右方向、U=上方向
-            Vector3F F = Vector3F.Subtract(eye, at).Normal;
-            Vector3F R = Vector3F.Cross(up, F).Normal;
-            Vector3F U = Vector3F.Cross(F, R).Normal;
-
-            Values[0, 0] = R.X;
-            Values[0, 1] = R.Y;
-            Values[0, 2] = R.Z;
-            Values[0, 3] = 0.0f;
-
-            Values[1, 0] = U.X;
-            Values[1, 1] = U.Y;
-            Values[1, 2] = U.Z;
-            Values[1, 3] = 0.0f;
-
-            Values[2, 0] = F.X;
-            Values[2, 1] = F.Y;
-            Values[2, 2] = F.Z;
-            Values[2, 3] = 0.0f;
-
-            Values[0, 3] = -Vector3F.Dot(R, eye);
-            Values[1, 3] = -Vector3F.Dot(U, eye);
-            Values[2, 3] = -Vector3F.Dot(F, eye);
-            Values[3, 3] = 1.0f;
-        }
-
-        /// <summary>
-        /// カメラ行列(左手系)を設定します。
-        /// </summary>
-        /// <param name="eye">カメラの位置</param>
-        /// <param name="at">カメラの注視点</param>
-        /// <param name="up">カメラの上方向</param>
-        public void SetLookAtLH(Vector3F eye, Vector3F at, Vector3F up)
-        {
-            // F=正面、R=右方向、U=上方向
-            Vector3F F = Vector3F.Subtract(at, eye).Normal;
-            Vector3F R = Vector3F.Cross(up, F).Normal;
-            Vector3F U = Vector3F.Cross(F, R).Normal;
-
-            Values[0, 0] = R.X;
-            Values[0, 1] = R.Y;
-            Values[0, 2] = R.Z;
-            Values[0, 3] = 0.0f;
-
-            Values[1, 0] = U.X;
-            Values[1, 1] = U.Y;
-            Values[1, 2] = U.Z;
-            Values[1, 3] = 0.0f;
-
-            Values[2, 0] = F.X;
-            Values[2, 1] = F.Y;
-            Values[2, 2] = F.Z;
-            Values[2, 3] = 0.0f;
-
-            Values[0, 3] = -Vector3F.Dot(R, eye);
-            Values[1, 3] = -Vector3F.Dot(U, eye);
-            Values[2, 3] = -Vector3F.Dot(F, eye);
-            Values[3, 3] = 1.0f;
-        }
-
-        /// <summary>
-        /// 射影行列(右手系)を設定します。
-        /// </summary>
-        /// <param name="ovY">Y方向への視野角(ラジアン)</param>
-        /// <param name="aspect">画面のアスペクト比</param>
-        /// <param name="zn">最近距離</param>
-        /// <param name="zf">最遠距離</param>
-        public void SetPerspectiveFovRH(float ovY, float aspect, float zn, float zf)
-        {
-            float yScale = 1 / (float)Math.Tan(ovY / 2);
-            float xScale = yScale / aspect;
-
-            Values[0, 0] = xScale;
-            Values[1, 0] = 0;
-            Values[2, 0] = 0;
-            Values[3, 0] = 0;
-
-            Values[0, 1] = 0;
-            Values[1, 1] = yScale;
-            Values[2, 1] = 0;
-            Values[3, 1] = 0;
-
-            Values[0, 2] = 0;
-            Values[1, 2] = 0;
-            Values[2, 2] = zf / (zn - zf);
-            Values[3, 2] = -1;
-
-            Values[0, 3] = 0;
-            Values[1, 3] = 0;
-            Values[2, 3] = zn * zf / (zn - zf);
-            Values[3, 3] = 0;
-
-            return;
-        }
-
-        /// <summary>
-        /// OpenGL用射影行列(右手系)を設定します。
-        /// </summary>
-        /// <param name="ovY">Y方向への視野角(ラジアン)</param>
-        /// <param name="aspect">画面のアスペクト比</param>
-        /// <param name="zn">最近距離</param>
-        /// <param name="zf">最遠距離</param>
-        public void SetPerspectiveFovRH_OpenGL(float ovY, float aspect, float zn, float zf)
-        {
-            float yScale = 1 / (float)Math.Tan(ovY / 2);
-            float xScale = yScale / aspect;
-            float dz = zf - zn;
-
-            Values[0, 0] = xScale;
-            Values[1, 0] = 0;
-            Values[2, 0] = 0;
-            Values[3, 0] = 0;
-
-            Values[0, 1] = 0;
-            Values[1, 1] = yScale;
-            Values[2, 1] = 0;
-            Values[3, 1] = 0;
-
-            Values[0, 2] = 0;
-            Values[1, 2] = 0;
-            Values[2, 2] = -(zf + zn) / dz;
-            Values[3, 2] = -1.0f;
-
-            Values[0, 3] = 0;
-            Values[1, 3] = 0;
-            Values[2, 3] = -2.0f * zn * zf / dz;
-            Values[3, 3] = 0.0f;
-            return;
-        }
-
-        /// <summary>
-        /// 射影行列(左手系)を設定します。
-        /// </summary>
-        /// <param name="ovY">Y方向への視野角(ラジアン)</param>
-        /// <param name="aspect">画面のアスペクト比</param>
-        /// <param name="zn">最近距離</param>
-        /// <param name="zf">最遠距離</param>
-        public void SetPerspectiveFovLH(float ovY, float aspect, float zn, float zf)
-        {
-            float yScale = 1 / (float)Math.Tan(ovY / 2);
-            float xScale = yScale / aspect;
-
-            Values[0, 0] = xScale;
-            Values[1, 0] = 0;
-            Values[2, 0] = 0;
-            Values[3, 0] = 0;
-
-            Values[0, 1] = 0;
-            Values[1, 1] = yScale;
-            Values[2, 1] = 0;
-            Values[3, 1] = 0;
-
-            Values[0, 2] = 0;
-            Values[1, 2] = 0;
-            Values[2, 2] = zf / (zf - zn);
-            Values[3, 2] = 1;
-
-            Values[0, 3] = 0;
-            Values[1, 3] = 0;
-            Values[2, 3] = -zn * zf / (zf - zn);
-            Values[3, 3] = 0;
-            return;
-        }
-
-        /// <summary>
-        /// 正射影行列(右手系)を設定します。
-        /// </summary>
-        /// <param name="width">横幅</param>
-        /// <param name="height">縦幅</param>
-        /// <param name="zn">最近距離</param>
-        /// <param name="zf">最遠距離</param>
-        public void SetOrthographicRH(float width, float height, float zn, float zf)
-        {
-            Values[0, 0] = 2 / width;
-            Values[1, 0] = 0;
-            Values[2, 0] = 0;
-            Values[3, 0] = 0;
-
-            Values[0, 1] = 0;
-            Values[1, 1] = 2 / height;
-            Values[2, 1] = 0;
-            Values[3, 1] = 0;
-
-            Values[0, 2] = 0;
-            Values[1, 2] = 0;
-            Values[2, 2] = 1 / (zn - zf);
-            Values[3, 2] = 0;
-
-            Values[0, 3] = 0;
-            Values[1, 3] = 0;
-            Values[2, 3] = zn / (zn - zf);
-            Values[3, 3] = 1;
-            return;
-        }
-
-        /// <summary>
-        /// 正射影行列(左手系)を設定します。
-        /// </summary>
-        /// <param name="width">横幅</param>
-        /// <param name="height">縦幅</param>
-        /// <param name="zn">最近距離</param>
-        /// <param name="zf">最遠距離</param>
-        public void SetOrthographicLH(float width, float height, float zn, float zf)
-        {
-            Values[0, 0] = 2 / width;
-            Values[1, 0] = 0;
-            Values[2, 0] = 0;
-            Values[3, 0] = 0;
-
-            Values[0, 1] = 0;
-            Values[1, 1] = 2 / height;
-            Values[2, 1] = 0;
-            Values[3, 1] = 0;
-
-            Values[0, 2] = 0;
-            Values[1, 2] = 0;
-            Values[2, 2] = 1 / (zf - zn);
-            Values[3, 2] = 0;
-
-            Values[0, 3] = 0;
-            Values[1, 3] = 0;
-            Values[2, 3] = zn / (zn - zf);
-            Values[3, 3] = 1;
-            return;
-        }
-
-        /// <summary>
-        /// X軸回転行列(右手)を設定します。
-        /// </summary>
-        /// <param name="angle">X軸回転量(ラジアン)</param>
-        public void SetRotationX(float angle)
-        {
-            float s = (float)Math.Sin(angle);
-            float c = (float)Math.Cos(angle);
-
-            Values[0, 0] = 1.0f;
-            Values[1, 0] = 0.0f;
-            Values[2, 0] = 0.0f;
-            Values[3, 0] = 0.0f;
-
-            Values[0, 1] = 0.0f;
-            Values[1, 1] = c;
-            Values[2, 1] = s;
-            Values[3, 1] = 0.0f;
-
-            Values[0, 2] = 0.0f;
-            Values[1, 2] = -s;
-            Values[2, 2] = c;
-            Values[3, 2] = 0.0f;
-
-            Values[0, 3] = 0.0f;
-            Values[1, 3] = 0.0f;
-            Values[2, 3] = 0.0f;
-            Values[3, 3] = 1.0f;
-            return;
-        }
-
-        /// <summary>
-        /// Y軸回転行列(右手)を設定します。
-        /// </summary>
-        /// <param name="angle">Y軸回転量(ラジアン)</param>
-        public void SetRotationY(float angle)
-        {
-            float s = (float)Math.Sin(angle);
-            float c = (float)Math.Cos(angle);
-
-            Values[0, 0] = c;
-            Values[1, 0] = 0.0f;
-            Values[2, 0] = -s;
-            Values[3, 0] = 0.0f;
-
-            Values[0, 1] = 0.0f;
-            Values[1, 1] = 1.0f;
-            Values[2, 1] = 0.0f;
-            Values[3, 1] = 0.0f;
-
-            Values[0, 2] = s;
-            Values[1, 2] = 0.0f;
-            Values[2, 2] = c;
-            Values[3, 2] = 0.0f;
-
-            Values[0, 3] = 0.0f;
-            Values[1, 3] = 0.0f;
-            Values[2, 3] = 0.0f;
-            Values[3, 3] = 1.0f;
-            return;
-        }
-
-        /// <summary>
-        /// Z軸回転行列(右手)を設定します。
-        /// </summary>
-        /// <param name="angle">Z軸回転量(ラジアン)</param>
-        public void SetRotationZ(float angle)
-        {
-            float s = (float)Math.Sin(angle);
-            float c = (float)Math.Cos(angle);
-
-            Values[0, 0] = c;
-            Values[1, 0] = s;
-            Values[2, 0] = 0.0f;
-            Values[3, 0] = 0.0f;
-
-            Values[0, 1] = -s;
-            Values[1, 1] = c;
-            Values[2, 1] = 0.0f;
-            Values[3, 1] = 0.0f;
-
-            Values[0, 2] = 0.0f;
-            Values[1, 2] = 0.0f;
-            Values[2, 2] = 1.0f;
-            Values[3, 2] = 0.0f;
-
-            Values[0, 3] = 0.0f;
-            Values[1, 3] = 0.0f;
-            Values[2, 3] = 0.0f;
-            Values[3, 3] = 1.0f;
-            return;
-        }
-
-        /// <summary>
-        /// 任意軸の反時計回転行列(右手)を設定します。
-        /// </summary>
-        /// <param name="axis">軸</param>
-        /// <param name="angle">回転量(ラジアン)</param>
-        public void SetRotationAxis(ref Vector3F axis, float angle)
-        {
-            float c = (float)Math.Cos(angle);
-            float s = (float)Math.Sin(angle);
-            float cc = 1.0f - c;
-
-            Values[0, 0] = cc * (axis.X * axis.X) + c;
-            Values[1, 0] = cc * (axis.X * axis.Y) + (axis.Z * s);
-            Values[2, 0] = cc * (axis.Z * axis.X) - (axis.Y * s);
-
-            Values[0, 1] = cc * (axis.X * axis.Y) - (axis.Z * s);
-            Values[1, 1] = cc * (axis.Y * axis.Y) + c;
-            Values[2, 1] = cc * (axis.Y * axis.Z) + (axis.X * s);
-
-            Values[0, 2] = cc * (axis.Z * axis.X) + (axis.Y * s);
-            Values[1, 2] = cc * (axis.Y * axis.Z) - (axis.X * s);
-            Values[2, 2] = cc * (axis.Z * axis.Z) + c;
-
-            Values[0, 3] = 0.0f;
-            Values[1, 3] = 0.0f;
-            Values[2, 3] = 0.0f;
-            return;
-        }
-
-        /// <summary>
-        /// クオータニオンを元に回転行列(右手)を設定します。
-        /// </summary>
-        /// <param name="x">クオータニオン</param>
-        /// <param name="y">クオータニオン</param>
-        /// <param name="z">クオータニオン</param>
-        /// <param name="w">クオータニオン</param>
-        public void SetQuaternion(float x, float y, float z, float w)
-        {
-            float xx = x * x;
-            float yy = y * y;
-            float zz = z * z;
-            float xy = x * y;
-            float xz = x * z;
-            float yz = y * z;
-            float wx = w * x;
-            float wy = w * y;
-            float wz = w * z;
-
-            Values[0, 0] = 1.0f - 2.0f * (yy + zz);
-            Values[0, 1] = 2.0f * (xy - wz);
-            Values[0, 2] = 2.0f * (xz + wy);
-            Values[0, 3] = 0.0f;
-
-            Values[1, 0] = 2.0f * (xy + wz);
-            Values[1, 1] = 1.0f - 2.0f * (xx + zz);
-            Values[1, 2] = 2.0f * (yz - wx);
-            Values[1, 3] = 0.0f;
-
-            Values[2, 0] = 2.0f * (xz - wy);
-            Values[2, 1] = 2.0f * (yz + wx);
-            Values[2, 2] = 1.0f - 2.0f * (xx + yy);
-            Values[2, 3] = 0.0f;
-
-            Values[3, 0] = 0.0f;
-            Values[3, 1] = 0.0f;
-            Values[3, 2] = 0.0f;
-            Values[3, 3] = 1.0f;
-            return;
-        }
-
-        /// <summary>
-        /// 拡大行列を設定します。
-        /// </summary>
-        /// <param name="x">X方向拡大率</param>
-        /// <param name="y">Y方向拡大率</param>
-        /// <param name="z">Z方向拡大率</param>
-        public void SetScale(float x, float y, float z)
-        {
-            SetIdentity();
-            Values[0, 0] = x;
-            Values[1, 1] = y;
-            Values[2, 2] = z;
-            Values[3, 3] = 1.0f;
-            return;
-        }
-
-        /// <summary>
         /// 行列でベクトルを変形させる。
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public Vector3F Transform3D(Vector3F in_)
+        public readonly Vector3F Transform3D(Vector3F in_)
         {
             float[] values = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
                 values[i] = 0;
-                values[i] += in_.X * Values[i, 0];
-                values[i] += in_.Y * Values[i, 1];
-                values[i] += in_.Z * Values[i, 2];
-                values[i] += Values[i, 3];
+                values[i] += in_.X * this[i, 0];
+                values[i] += in_.Y * this[i, 1];
+                values[i] += in_.Z * this[i, 2];
+                values[i] += this[i, 3];
             }
 
             Vector3F o;
@@ -582,17 +537,17 @@ namespace Altseed
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public Vector4F Transform4D(Vector4F in_)
+        public readonly Vector4F Transform4D(Vector4F in_)
         {
             float[] values = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
                 values[i] = 0;
-                values[i] += in_.X * Values[i, 0];
-                values[i] += in_.Y * Values[i, 1];
-                values[i] += in_.Z * Values[i, 2];
-                values[i] += in_.W * Values[i, 3];
+                values[i] += in_.X * this[i, 0];
+                values[i] += in_.Y * this[i, 1];
+                values[i] += in_.Z * this[i, 2];
+                values[i] += in_.W * this[i, 3];
             }
 
             Vector4F o;
@@ -606,11 +561,10 @@ namespace Altseed
 
         public static Matrix44F operator +(Matrix44F left, Matrix44F right)
         {
-            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = left.Values[i, j] + right.Values[i, j];
+                    result[i, j] = left[i, j] + right[i, j];
             return result;
         }
 
@@ -618,21 +572,19 @@ namespace Altseed
 
         public static Matrix44F operator -(Matrix44F left, Matrix44F right)
         {
-            if (left.Values == null || right.Values == null) throw new ArgumentException("引数の状態が不正です");
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = left.Values[i, j] - right.Values[i, j];
+                    result[i, j] = left[i, j] - right[i, j];
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F matrix, float scalar)
         {
-            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = matrix.Values[i, j] * scalar;
+                    result[i, j] = matrix[i, j] * scalar;
             return result;
         }
 
@@ -640,18 +592,17 @@ namespace Altseed
 
         public static Matrix44F operator /(Matrix44F matrix, float scalar)
         {
-            if (matrix.Values == null) throw new ArgumentException("引数の状態が不正です", nameof(matrix));
-            var result = new Matrix44F() { Values = new float[4, 4] };
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    result.Values[i, j] = matrix.Values[i, j] / scalar;
+                    result[i, j] = matrix[i, j] / scalar;
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F left, Matrix44F right)
         {
-            Matrix44F o_ = new Matrix44F() { Values = new float[4, 4] };
-            Mul(ref o_, ref left, ref right);
+            var o_ = new Matrix44F();
+            Mul(ref o_, left, right);
             return o_;
         }
 
@@ -666,7 +617,7 @@ namespace Altseed
         /// <param name="o">出力先</param>
         /// <param name="in1">行列1</param>
         /// <param name="in2">行列2</param>
-        public static void Mul(ref Matrix44F o, ref Matrix44F in1, ref Matrix44F in2)
+        public static void Mul(ref Matrix44F o, in Matrix44F in1, in Matrix44F in2)
         {
             Matrix44F _in1 = in1;
             Matrix44F _in2 = in2;
@@ -678,9 +629,9 @@ namespace Altseed
                     float v = 0.0f;
                     for (int k = 0; k < 4; k++)
                     {
-                        v += _in1.Values[i, k] * _in2.Values[k, j];
+                        v += _in1[i, k] * _in2[k, j];
                     }
-                    o.Values[i, j] = v;
+                    o[i, j] = v;
                 }
             }
         }
@@ -693,10 +644,10 @@ namespace Altseed
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Matrix44F other)
         {
-            if (Values == null || other.Values == null) return false;
+            if (Values == null && other.Values == null) return true;
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    if (Values[i, j] != other.Values[i, j])
+                    if (this[i, j] != other[i, j])
                         return false;
             return true;
         }
@@ -715,10 +666,9 @@ namespace Altseed
         public readonly override int GetHashCode()
         {
             var hash = new HashCode();
-            if (Values == null) return 0;
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    hash.Add(Values[i, j]);
+                    hash.Add(this[i, j]);
             return hash.ToHashCode();
         }
 
@@ -733,15 +683,9 @@ namespace Altseed
         public readonly Matrix44F Clone()
         {
             if (Values == null) return default;
-            var clone = new Matrix44F
-            {
-                Values = new float[4, 4]
-            };
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    clone.Values[i, j] = Values[i, j];
+            var clone = new Matrix44F() { Values = (float[,])Values.Clone() };
             return clone;
         }
-        object ICloneable.Clone() => Clone();
+        readonly object ICloneable.Clone() => Clone();
     }
 }

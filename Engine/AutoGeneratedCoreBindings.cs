@@ -1,9 +1,14 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!                                          !!
-// !!  THIS FILE IS AUTO GENERATED.            !!
-// !!  YOUR COMMIT ON THI FILE WILL BE WIPED.  !!
-// !!                                          !!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+//   このファイルは自動生成されました。
+//   このファイルへの変更は消失することがあります。
+//
+//   THIS FILE IS AUTO GENERATED.
+//   YOUR COMMITMENT ON THIS FILE WILL BE WIPED. 
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -23,6 +28,7 @@ namespace Altseed
     /// <summary>
     /// フレームレートモード
     /// </summary>
+    [Serializable]
     public enum FramerateMode : int
     {
         Variable,
@@ -32,6 +38,7 @@ namespace Altseed
     /// <summary>
     /// リソースの種類を表します。
     /// </summary>
+    [Serializable]
     public enum ResourceType : int
     {
         StaticFile,
@@ -45,6 +52,7 @@ namespace Altseed
     /// <summary>
     /// キーボードのキーの種類を表します。
     /// </summary>
+    [Serializable]
     public enum Keys : int
     {
         Unknown,
@@ -175,6 +183,7 @@ namespace Altseed
     /// <summary>
     /// ボタンの押下状態を表します。
     /// </summary>
+    [Serializable]
     public enum ButtonState : int
     {
         Free = 0,
@@ -186,6 +195,7 @@ namespace Altseed
     /// <summary>
     /// マウスのボタンの種類を表します。
     /// </summary>
+    [Serializable]
     public enum MouseButtons : int
     {
         ButtonLeft = 0,
@@ -201,6 +211,7 @@ namespace Altseed
     /// <summary>
     /// カーソルの状態を表します。
     /// </summary>
+    [Serializable]
     public enum CursorMode : int
     {
         Normal = 212993,
@@ -211,6 +222,7 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの種類を表します。
     /// </summary>
+    [Serializable]
     public enum JoystickType : int
     {
         Other = 0,
@@ -223,6 +235,7 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックのボタンの種類を表します。
     /// </summary>
+    [Serializable]
     public enum JoystickButtonType : int
     {
         Start,
@@ -254,6 +267,7 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの軸の種類を表します。
     /// </summary>
+    [Serializable]
     public enum JoystickAxisType : int
     {
         Start,
@@ -270,7 +284,7 @@ namespace Altseed
     {
     }
     
-    public enum BuildinShaderType : int
+    public enum BuiltinShaderType : int
     {
         SpriteUnlitVS,
         SpriteUnlitPS,
@@ -286,11 +300,12 @@ namespace Altseed
     /// <summary>
     /// ImGuiで使用する方向
     /// </summary>
+    [Serializable]
     public enum ToolDir : int
     {
         None = -1,
         Left = 0,
-        Right = 2,
+        Right = 1,
         Up = 2,
         Down = 3,
     }
@@ -298,6 +313,7 @@ namespace Altseed
     /// <summary>
     /// バイナリ演算子を使用して複数の値を結合しないでください
     /// </summary>
+    [Serializable]
     public enum ToolCond : int
     {
         None = 0,
@@ -342,6 +358,7 @@ namespace Altseed
     /// <summary>
     /// Tool機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
     /// </summary>
+    [Serializable]
     public enum ToolGlyphRanges : int
     {
         Default,
@@ -351,6 +368,7 @@ namespace Altseed
     /// <summary>
     /// 音のスペクトル解析に使用する窓関数
     /// </summary>
+    [Serializable]
     public enum FFTWindow : int
     {
         Rectangular,
@@ -364,6 +382,7 @@ namespace Altseed
     /// <summary>
     /// ログレベルを表します。
     /// </summary>
+    [Serializable]
     public enum LogLevel : int
     {
         Trace = 0,
@@ -378,8 +397,10 @@ namespace Altseed
     /// <summary>
     /// ログの範囲を表します。
     /// </summary>
+    [Serializable]
     public enum LogCategory : int
     {
+        Core = 0,
         Engine = 1,
         User = 2,
     }
@@ -596,7 +617,7 @@ namespace Altseed
     /// <summary>
     /// C++のCoreとの仲介を担うクラス
     /// </summary>
-    public partial class Core
+    internal partial class Core
     {
         #region unmanaged
         
@@ -1451,9 +1472,173 @@ namespace Altseed
     }
     
     /// <summary>
+    /// 2次元ベクトルの配列のクラスを表します。
+    /// </summary>
+    public partial class Vector2FArray
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Vector2FArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<Vector2FArray>>();
+        
+        internal static  Vector2FArray TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Vector2FArray cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Vector2FArray_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Vector2FArray(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Vector2FArray>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Vector2FArray_Clear(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Vector2FArray_Resize(IntPtr selfPtr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Vector2FArray_GetData(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Vector2FArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Vector2FArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Vector2FArray_GetAt(IntPtr selfPtr, int index);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Vector2FArray_SetAt(IntPtr selfPtr, int index, ref Vector2F value);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Vector2FArray_Create(int size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Vector2FArray_GetCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Vector2FArray_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Vector2FArray(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 格納されている要素の数を取得します。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                var ret = cbg_Vector2FArray_GetCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// データをクリアします。
+        /// </summary>
+        public void Clear()
+        {
+            cbg_Vector2FArray_Clear(selfPtr);
+        }
+        
+        /// <summary>
+        /// サイズを変更します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public void Resize(int size)
+        {
+            cbg_Vector2FArray_Resize(selfPtr, size);
+        }
+        
+        public IntPtr GetData()
+        {
+            var ret = cbg_Vector2FArray_GetData(selfPtr);
+            return ret;
+        }
+        
+        public void Assign(IntPtr ptr, int size)
+        {
+            cbg_Vector2FArray_Assign(selfPtr, ptr, size);
+        }
+        
+        /// <summary>
+        /// データを指定したポインタにコピーします。
+        /// </summary>
+        /// <param name="ptr">ポインタ</param>
+        public void CopyTo(IntPtr ptr)
+        {
+            cbg_Vector2FArray_CopyTo(selfPtr, ptr);
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        public Vector2F GetAt(int index)
+        {
+            var ret = cbg_Vector2FArray_GetAt(selfPtr, index);
+            return ret;
+        }
+        
+        /// <summary>
+        /// インデックスアクセス
+        /// </summary>
+        /// <param name="index">インデックス</param>
+        /// <param name="value">値</param>
+        public void SetAt(int index, ref Vector2F value)
+        {
+            cbg_Vector2FArray_SetAt(selfPtr, index, ref value);
+        }
+        
+        /// <summary>
+        /// インスタンスを作成します。
+        /// </summary>
+        /// <param name="size">要素数</param>
+        public static Vector2FArray Create(int size)
+        {
+            var ret = cbg_Vector2FArray_Create(size);
+            return Vector2FArray.TryGetFromCache(ret);
+        }
+        
+        ~Vector2FArray()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Vector2FArray_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// リソースのクラスを表します。
     /// </summary>
-    public partial class Resources
+    internal partial class Resources
     {
         #region unmanaged
         
@@ -1835,9 +2020,6 @@ namespace Altseed
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_RefreshInputState(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_RefreshConnectedState(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
@@ -1859,10 +2041,7 @@ namespace Altseed
         private static extern IntPtr cbg_Joystick_GetJoystickName(IntPtr selfPtr, int index);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_RefreshVibrateState(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_SetVibration(IntPtr selfPtr, int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time);
+        private static extern void cbg_Joystick_Vibrate(IntPtr selfPtr, int index, float frequency, float amplitude);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
@@ -1893,14 +2072,6 @@ namespace Altseed
         {
             var ret = cbg_Joystick_IsPresent(selfPtr, joystickIndex);
             return ret;
-        }
-        
-        /// <summary>
-        /// インプットの状態をリセットします。
-        /// </summary>
-        public void RefreshInputState()
-        {
-            cbg_Joystick_RefreshInputState(selfPtr);
         }
         
         /// <summary>
@@ -1982,25 +2153,14 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 振動の状態をリセットします。
-        /// </summary>
-        public void RefreshVibrateState()
-        {
-            cbg_Joystick_RefreshVibrateState(selfPtr);
-        }
-        
-        /// <summary>
-        /// 振動を設定します。
+        /// 指定したジョイスティックコントローラーを振動させます
         /// </summary>
         /// <param name="index">ジョイスティックのインデックス</param>
-        /// <param name="high_freq"></param>
-        /// <param name="low_freq"></param>
-        /// <param name="high_amp"></param>
-        /// <param name="low_amp"></param>
-        /// <param name="life_time"></param>
-        public void SetVibration(int index, float high_freq, float low_freq, float high_amp, float low_amp, int life_time)
+        /// <param name="frequency">周波数</param>
+        /// <param name="amplitude">振幅</param>
+        public void Vibrate(int index, float frequency, float amplitude)
         {
-            cbg_Joystick_SetVibration(selfPtr, index, high_freq, low_freq, high_amp, low_amp, life_time);
+            cbg_Joystick_Vibrate(selfPtr, index, frequency, amplitude);
         }
         
         ~Joystick()
@@ -2019,7 +2179,7 @@ namespace Altseed
     /// <summary>
     /// グラフィックの制御を行うクラス
     /// </summary>
-    public partial class Graphics
+    internal partial class Graphics
     {
         #region unmanaged
         
@@ -2070,7 +2230,7 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Graphics_GetBuildinShader(IntPtr selfPtr);
+        private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -2096,14 +2256,14 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ビルド済みシェーダを取得します。
+        /// 組み込みのシェーダを取得します。
         /// </summary>
-        public BuildinShader BuildinShader
+        public BuiltinShader BuiltinShader
         {
             get
             {
-                var ret = cbg_Graphics_GetBuildinShader(selfPtr);
-                return BuildinShader.TryGetFromCache(ret);
+                var ret = cbg_Graphics_GetBuiltinShader(selfPtr);
+                return BuiltinShader.TryGetFromCache(ret);
             }
         }
         
@@ -2438,7 +2598,7 @@ namespace Altseed
     /// <summary>
     /// レンダラのクラス
     /// </summary>
-    public partial class Renderer
+    internal partial class Renderer
     {
         #region unmanaged
         
@@ -2476,6 +2636,9 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawSprite(IntPtr selfPtr, IntPtr sprite);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_DrawText(IntPtr selfPtr, IntPtr text);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
@@ -2507,6 +2670,14 @@ namespace Altseed
         public void DrawSprite(RenderedSprite sprite)
         {
             cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// テキストを描画します。
+        /// </summary>
+        public void DrawText(RenderedText text)
+        {
+            cbg_Renderer_DrawText(selfPtr, text != null ? text.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -2668,7 +2839,7 @@ namespace Altseed
     /// <summary>
     /// スプライトのクラス
     /// </summary>
-    public partial class RenderedSprite : Rendered
+    internal partial class RenderedSprite : Rendered
     {
         #region unmanaged
         
@@ -2846,9 +3017,459 @@ namespace Altseed
     }
     
     /// <summary>
+    /// テキストのクラス
+    /// </summary>
+    internal partial class RenderedText : Rendered
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<RenderedText>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedText>>();
+        
+        internal static new RenderedText TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderedText cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderedText_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderedText(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderedText>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_Create();
+        
+        [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_RenderedText_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_GetMaterial(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetMaterial(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_GetText(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedText_GetFont(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetFont(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_RenderedText_GetWeight(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetWeight(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, ref Color value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal RenderedText(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 変換行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get
+            {
+                if (_Transform != null)
+                {
+                    return _Transform.Value;
+                }
+                var ret = cbg_RenderedText_GetTransform(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Transform = value;
+                cbg_RenderedText_SetTransform(selfPtr, ref value);
+            }
+        }
+        private Matrix44F? _Transform;
+        
+        /// <summary>
+        /// マテリアルを取得または設定します。
+        /// </summary>
+        public Material Material
+        {
+            get
+            {
+                if (_Material != null)
+                {
+                    return _Material;
+                }
+                var ret = cbg_RenderedText_GetMaterial(selfPtr);
+                return Material.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Material = value;
+                cbg_RenderedText_SetMaterial(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Material _Material;
+        
+        /// <summary>
+        /// テキストを取得または設定します。
+        /// </summary>
+        public string Text
+        {
+            get
+            {
+                if (_Text != null)
+                {
+                    return _Text;
+                }
+                var ret = cbg_RenderedText_GetText(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+            set
+            {
+                _Text = value;
+                cbg_RenderedText_SetText(selfPtr, value);
+            }
+        }
+        private string _Text;
+        
+        /// <summary>
+        /// フォントを取得または設定します。
+        /// </summary>
+        public Font Font
+        {
+            get
+            {
+                if (_Font != null)
+                {
+                    return _Font;
+                }
+                var ret = cbg_RenderedText_GetFont(selfPtr);
+                return Font.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Font = value;
+                cbg_RenderedText_SetFont(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Font _Font;
+        
+        /// <summary>
+        /// 文字の太さを取得または設定します。(0 ~ 255)
+        /// </summary>
+        public float Weight
+        {
+            get
+            {
+                if (_Weight != null)
+                {
+                    return _Weight.Value;
+                }
+                var ret = cbg_RenderedText_GetWeight(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Weight = value;
+                cbg_RenderedText_SetWeight(selfPtr, value);
+            }
+        }
+        private float? _Weight;
+        
+        /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                if (_Color != null)
+                {
+                    return _Color.Value;
+                }
+                var ret = cbg_RenderedText_GetColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Color = value;
+                cbg_RenderedText_SetColor(selfPtr, ref value);
+            }
+        }
+        private Color? _Color;
+        
+        /// <summary>
+        /// テキストを作成します。
+        /// </summary>
+        public static RenderedText Create()
+        {
+            var ret = cbg_RenderedText_Create();
+            return RenderedText.TryGetFromCache(ret);
+        }
+        
+        ~RenderedText()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderedText_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// ポリゴンのクラス
+    /// </summary>
+    internal partial class RenderedPolygon : Rendered
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<RenderedPolygon>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedPolygon>>();
+        
+        internal static new RenderedPolygon TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderedPolygon cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderedPolygon_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderedPolygon(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderedPolygon>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedPolygon_Create();
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedPolygon_GetVertexes(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_SetVertexes(IntPtr selfPtr, IntPtr vertexes);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_SetVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedPolygon_GetTexture(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_SetTexture(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern RectF cbg_RenderedPolygon_GetSrc(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_SetSrc(IntPtr selfPtr, ref RectF value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_RenderedPolygon_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedPolygon_GetMaterial(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_SetMaterial(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal RenderedPolygon(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// テクスチャを取得または設定します。
+        /// </summary>
+        public Texture2D Texture
+        {
+            get
+            {
+                if (_Texture != null)
+                {
+                    return _Texture;
+                }
+                var ret = cbg_RenderedPolygon_GetTexture(selfPtr);
+                return Texture2D.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Texture = value;
+                cbg_RenderedPolygon_SetTexture(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Texture2D _Texture;
+        
+        /// <summary>
+        /// 描画範囲を取得または設定します。
+        /// </summary>
+        public RectF Src
+        {
+            get
+            {
+                if (_Src != null)
+                {
+                    return _Src.Value;
+                }
+                var ret = cbg_RenderedPolygon_GetSrc(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Src = value;
+                cbg_RenderedPolygon_SetSrc(selfPtr, ref value);
+            }
+        }
+        private RectF? _Src;
+        
+        /// <summary>
+        /// 変換行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get
+            {
+                if (_Transform != null)
+                {
+                    return _Transform.Value;
+                }
+                var ret = cbg_RenderedPolygon_GetTransform(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Transform = value;
+                cbg_RenderedPolygon_SetTransform(selfPtr, ref value);
+            }
+        }
+        private Matrix44F? _Transform;
+        
+        /// <summary>
+        /// マテリアルを取得または設定します。
+        /// </summary>
+        public Material Material
+        {
+            get
+            {
+                if (_Material != null)
+                {
+                    return _Material;
+                }
+                var ret = cbg_RenderedPolygon_GetMaterial(selfPtr);
+                return Material.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Material = value;
+                cbg_RenderedPolygon_SetMaterial(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Material _Material;
+        
+        /// <summary>
+        /// ポリゴンを作成します。
+        /// </summary>
+        public static RenderedPolygon Create()
+        {
+            var ret = cbg_RenderedPolygon_Create();
+            return RenderedPolygon.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 頂点情報を取得します。
+        /// </summary>
+        public VertexArray GetVertexes()
+        {
+            var ret = cbg_RenderedPolygon_GetVertexes(selfPtr);
+            return VertexArray.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 頂点情報
+        /// </summary>
+        public void SetVertexes(VertexArray vertexes)
+        {
+            cbg_RenderedPolygon_SetVertexes(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// 頂点情報
+        /// </summary>
+        public void SetVertexesByVector2F(Vector2FArray vertexes)
+        {
+            cbg_RenderedPolygon_SetVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+        }
+        
+        ~RenderedPolygon()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderedPolygon_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// カメラのクラス
     /// </summary>
-    public partial class RenderedCamera : Rendered
+    internal partial class RenderedCamera : Rendered
     {
         #region unmanaged
         
@@ -2904,23 +3525,23 @@ namespace Altseed
     /// <summary>
     /// ビルド済みシェーダの取得を行うクラス
     /// </summary>
-    public partial class BuildinShader
+    public partial class BuiltinShader
     {
         #region unmanaged
         
-        private static Dictionary<IntPtr, WeakReference<BuildinShader>> cacheRepo = new Dictionary<IntPtr, WeakReference<BuildinShader>>();
+        private static Dictionary<IntPtr, WeakReference<BuiltinShader>> cacheRepo = new Dictionary<IntPtr, WeakReference<BuiltinShader>>();
         
-        internal static  BuildinShader TryGetFromCache(IntPtr native)
+        internal static  BuiltinShader TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
-                BuildinShader cacheRet;
+                BuiltinShader cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
-                    cbg_BuildinShader_Release(native);
+                    cbg_BuiltinShader_Release(native);
                     return cacheRet;
                 }
                 else
@@ -2929,21 +3550,21 @@ namespace Altseed
                 }
             }
         
-            var newObject = new BuildinShader(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<BuildinShader>(newObject);
+            var newObject = new BuiltinShader(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<BuiltinShader>(newObject);
             return newObject;
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_BuildinShader_Create(IntPtr selfPtr, int type);
+        private static extern IntPtr cbg_BuiltinShader_Create(IntPtr selfPtr, int type);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_BuildinShader_Release(IntPtr selfPtr);
+        private static extern void cbg_BuiltinShader_Release(IntPtr selfPtr);
         
         #endregion
         
-        internal BuildinShader(MemoryHandle handle)
+        internal BuiltinShader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
         }
@@ -2953,19 +3574,19 @@ namespace Altseed
         /// </summary>
         /// <param name="type">シェーダの種類</param>
         /// <returns>シェーダ</returns>
-        public Shader Create(BuildinShaderType type)
+        public Shader Create(BuiltinShaderType type)
         {
-            var ret = cbg_BuildinShader_Create(selfPtr, (int)type);
+            var ret = cbg_BuiltinShader_Create(selfPtr, (int)type);
             return Shader.TryGetFromCache(ret);
         }
         
-        ~BuildinShader()
+        ~BuiltinShader()
         {
             lock (this) 
             {
                 if (selfPtr != IntPtr.Zero)
                 {
-                    cbg_BuildinShader_Release(selfPtr);
+                    cbg_BuiltinShader_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
@@ -3214,7 +3835,7 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int size, ref Color color);
+        private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int size);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_LoadStaticFont([MarshalAs(UnmanagedType.LPWStr)] string path);
@@ -3229,11 +3850,19 @@ namespace Altseed
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
         
         [DllImport("Altseed_Core")]
-        private static extern Color cbg_Font_GetColor(IntPtr selfPtr);
+        private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Font_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetImageGlyph(IntPtr selfPtr, int character);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Font_GetSize(IntPtr selfPtr);
@@ -3259,18 +3888,6 @@ namespace Altseed
         internal Font(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// フォントの色を取得する
-        /// </summary>
-        public Color Color
-        {
-            get
-            {
-                var ret = cbg_Font_GetColor(selfPtr);
-                return ret;
-            }
         }
         
         /// <summary>
@@ -3326,11 +3943,10 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
-        /// <param name="color">フォントの色</param>
         /// <returns>フォント</returns>
-        public static Font LoadDynamicFont(string path, int size, ref Color color)
+        public static Font LoadDynamicFont(string path, int size)
         {
-            var ret = cbg_Font_LoadDynamicFont(path, size, ref color);
+            var ret = cbg_Font_LoadDynamicFont(path, size);
             return Font.TryGetFromCache(ret);
         }
         
@@ -3380,6 +3996,16 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Font_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
         /// <param name="text">テキスト</param>
@@ -3390,6 +4016,38 @@ namespace Altseed
         {
             var ret = cbg_Font_CalcTextureSize(selfPtr, text, (int)direction, isEnableKerning);
             return ret;
+        }
+        
+        /// <summary>
+        /// テクスチャ追加対応フォントを生成します
+        /// </summary>
+        /// <param name="baseFont">ベースとなるフォント</param>
+        /// <returns>テクスチャ追加対応フォント</returns>
+        public static Font CreateImageFont(Font baseFont)
+        {
+            var ret = cbg_Font_CreateImageFont(baseFont != null ? baseFont.selfPtr : IntPtr.Zero);
+            return Font.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// テクスチャ文字を追加する
+        /// </summary>
+        /// <param name="character">文字</param>
+        /// <param name="texture">テクスチャ</param>
+        internal void AddImageGlyph(int character, Texture2D texture)
+        {
+            cbg_Font_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// テクスチャ文字を取得する
+        /// </summary>
+        /// <param name="character">文字</param>
+        /// <returns>テクスチャ文字</returns>
+        public Texture2D GetImageGlyph(int character)
+        {
+            var ret = cbg_Font_GetImageGlyph(selfPtr, character);
+            return Texture2D.TryGetFromCache(ret);
         }
         
         ~Font()
@@ -4471,6 +5129,9 @@ namespace Altseed
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
@@ -4579,6 +5240,16 @@ namespace Altseed
         {
             var ret = cbg_StreamFile_GetTempBuffer(selfPtr);
             return Int8Array.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_StreamFile_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
@@ -4964,6 +5635,13 @@ namespace Altseed
         private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
@@ -5084,6 +5762,26 @@ namespace Altseed
         {
             var ret = cbg_Sound_Load(path, isDecompressed);
             return Sound.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Sound_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 音源を解凍するかどうかを取得する
+        /// </summary>
+        /// <returns>音源を解凍するかどうか</returns>
+        internal bool GetIsDecompressed()
+        {
+            var ret = cbg_Sound_GetIsDecompressed(selfPtr);
+            return ret;
         }
         
         ~Sound()
@@ -5565,6 +6263,98 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_Log_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    internal partial class Window
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
+        
+        internal static  Window TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Window cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Window_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Window(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Window>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Window_GetInstance();
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Window_GetTitle(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Window_SetTitle(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Window_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Window(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        public string Title
+        {
+            get
+            {
+                if (_Title != null)
+                {
+                    return _Title;
+                }
+                var ret = cbg_Window_GetTitle(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+            set
+            {
+                _Title = value;
+                cbg_Window_SetTitle(selfPtr, value);
+            }
+        }
+        private string _Title;
+        
+        /// <summary>
+        /// インスタンスを取得します。
+        /// </summary>
+        /// <returns>使用するインスタンス</returns>
+        internal static Window GetInstance()
+        {
+            var ret = cbg_Window_GetInstance();
+            return Window.TryGetFromCache(ret);
+        }
+        
+        ~Window()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Window_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }

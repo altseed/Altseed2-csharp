@@ -105,6 +105,9 @@ namespace Altseed
             CurrentCollection.Sort(comparer);
         }
 
+        /// <summary>
+        /// 子要素の登録をすべて削除します。
+        /// </summary>
         internal void Clear()
         {
             CurrentCollection.Clear();

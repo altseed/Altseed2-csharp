@@ -7,10 +7,9 @@ namespace Altseed.Test
         [STAThread]
         static void Main(string[] args)
         {
-            var sound = new Test.Sound();
-            sound.Play();
-            sound.Loop();
-            sound.GetPosition();
+            var dn = new Test.DrawnNode();
+            dn.SpriteNode();
+            dn.TextNode();
 
             Console.ReadLine();
         }

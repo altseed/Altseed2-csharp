@@ -5,13 +5,14 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public sealed partial class StreamFile : ISerializable
+    public sealed partial class StreamFile : ISerializable, IDeserializationCallback
     {
         #region SerializeName
+        private const string S_CurrentPosition = "S_CurrentPosition";
         private const string S_Path = "S_Path";
         #endregion
 
-        private string path;
+        private SerializationInfo seInfo;
 
         private StreamFile(SerializationInfo info, StreamingContext context)
         {
@@ -22,7 +23,7 @@ namespace Altseed
 
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<StreamFile>(this));
-            this.path = path;
+            seInfo = info;
         }
 
         /// <summary>
@@ -42,7 +43,6 @@ namespace Altseed
 
             var result = Create(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
 
-            result.path = path;
             return result;
         }
 
@@ -54,11 +54,7 @@ namespace Altseed
         /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
         public static bool TryCreate(string path, out StreamFile result)
         {
-            if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null)
-            {
-                result.path = path;
-                return true;
-            }
+            if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null) return true;
             else
             {
                 result = null;
@@ -70,7 +66,35 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
-            info.AddValue(S_Path, path);
+            info.AddValue(S_Path, GetPath().Substring(2));
+            info.AddValue(S_CurrentPosition, CurrentPosition);
+        }
+
+        void IDeserializationCallback.OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+
+            var position = seInfo.GetInt32(S_CurrentPosition);
+            if (position > 0) Read(position);
+
+            seInfo = null;
+        }
+
+        /// <summary>
+        /// 指定したパスに保存する
+        /// </summary>
+        /// <param name="path">保存するパス</param>
+        /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は使用できない文字を使用している</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="path"/>で指定したディレクトリが存在しない</exception>
+        /// <exception cref="IOException">I/Oに失敗した</exception>
+        /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
+        /// <exception cref="System.Security.SecurityException">アクセスが拒否された</exception>
+        public void Save(string path)
+        {
+            using var stream = new FileStream(path, FileMode.Create);
+            var buffer = TempBuffer;
+            stream.Write(buffer, 0, buffer.Length);
         }
     }
 }

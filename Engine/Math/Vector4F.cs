@@ -57,7 +57,6 @@ namespace Altseed
         /// <returns>このインスタンスと等価な<see cref="Vector4I"/>の新しいインスタンス</returns>
         public readonly Vector4I To4I() => new Vector4I((int)X, (int)Y, (int)Z, (int)W);
 
-
         /// <summary>
         /// ベクトルの長さを取得または設定します。
         /// </summary>
@@ -201,5 +200,7 @@ namespace Altseed
             return hashCode;
         }
 
+        public static implicit operator Vector4F(Vector4I v) => v.To4F();
+        public static explicit operator Vector4I(Vector4F v) => v.To4I();
     }
 }

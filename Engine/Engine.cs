@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Altseed
 {
     /// <summary>
-    /// Altseed2の中枢を担うクラス
+    /// Altseed2 のエンジンを表します。
     /// </summary>
     public static class Engine
     {
         /// <summary>
-        /// 現在処理している<see cref="Scene"/>取得します。
+        /// ルートノード
         /// </summary>
-        public static Scene CurrentScene { get; private set; }
+        private static RootNode _RootNode;
 
         /// <summary>
-        /// 次に控えているシーン取得します。
+        /// 実際のUpdate対象のノード
         /// </summary>
-        internal static Scene NextScene { get; private set; }
+        /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
+        private static Node _UpdatedNode;
+
+        private static List<DrawnNode> _DrawnNodes;
 
         /// <summary>
-        /// エンジンを初期化する
+        /// エンジンを初期化します。
         /// </summary>
-        /// <param name="title">ウィンドウ左上に表示される文字列</param>
+        /// <param name="title">ウィンドウタイトル</param>
         /// <param name="width">ウィンドウの横幅</param>
         /// <param name="height">ウィンドウの縦幅</param>
         /// <param name="config">設定</param>
@@ -32,29 +34,34 @@ namespace Altseed
         {
             if (Core.Initialize(title, width, height, config ?? new Configuration()))
             {
+                Core = Core.GetInstance();
+                Log = Log.GetInstance();
+
                 Keyboard = Keyboard.GetInstance();
                 Mouse = Mouse.GetInstance();
                 Joystick = Joystick.GetInstance();
+
                 File = File.GetInstance();
-                Graphics = Graphics.GetInstance();
-                Renderer = Renderer.GetInstance();
-                Sound = SoundMixer.GetInstance();
-                Log = Log.GetInstance();
                 Resources = Resources.GetInstance();
 
-                CurrentScene = new Scene()
-                {
-                    Status = SceneStatus.Updated
-                };
+                Window = Window.GetInstance();
+                Graphics = Graphics.GetInstance();
+                Renderer = Renderer.GetInstance();
+
+                Sound = SoundMixer.GetInstance();
+
+                _RootNode = new RootNode();
+                _UpdatedNode = _RootNode;
+
+                _DrawnNodes = new List<DrawnNode>();
                 return true;
             }
             return false;
         }
 
         /// <summary>
-        /// イベントを実行する
+        /// システムイベントを処理します。
         /// </summary>
-        /// <returns>イベントの実行が出来たらtrue、それ以外でfalse</returns>
         public static bool DoEvents()
         {
             Graphics.DoEvents();
@@ -62,7 +69,26 @@ namespace Altseed
         }
 
         /// <summary>
-        /// エンジンの終了処理を行う
+        /// エンジンを更新します。
+        /// </summary>
+        public static bool Update()
+        {
+            if (!Graphics.BeginFrame()) return false;
+
+            _UpdatedNode?.Update();
+
+            foreach (var dn in _DrawnNodes) dn.Draw();
+
+            var cmdList = Graphics.CommandList;
+            cmdList.SetRenderTargetWithScreen();
+
+            Renderer.Render(cmdList);
+            if (!Graphics.EndFrame()) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// エンジンを終了します。
         /// </summary>
         public static void Terminate()
         {
@@ -70,143 +96,163 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 更新処理を実行する
+        /// ノードの更新を一時停止します。
         /// </summary>
-        public static void Update()
+        /// <param name="keepUpdated">一時停止の対象から除外するノード</param>
+        public static void Pause(Node keepUpdated = null)
         {
-            CurrentScene.Update();
-        }
-
-        #region ChangeScene
-
-        /// <summary>
-        /// シーンを即変更する
-        /// </summary>
-        /// <param name="nextScene">変更先のシーン</param>
-        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
-        public static void ChangeScene(Scene nextScene)
-        {
-            StartSceneChange(nextScene);
-            OnFadeOutFinished();
-            OnFadeInFinished();
+            _UpdatedNode = keepUpdated;
         }
 
         /// <summary>
-        /// シーンを変更する
+        /// ノードの更新を再開します。
         /// </summary>
-        /// <param name="nextScene">変更先のシーン</param>
-        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
-        public static void ChangeSceneWithTransition(Scene nextScene)
+        public static void Resume()
         {
-            StartSceneChange(nextScene);
-            // 
-            // 未実装
-            // ToDo:描画処理のトリガー引き
-            //
-            throw new NotImplementedException("このメソッドは未だ実装中です");
+            _UpdatedNode = _RootNode;
         }
 
-        /*
-         * ChangeSceneWithTransition
-         * →OnFadeOutFinished
-         * →OnFadeInFinished
-         * の順で呼び出されるのを想定
-         * 
-         * SceneのOn〇〇メソッドの呼び出しは初代の物を参考に
-         * 
-         * シーン遷移処理(描画)は主にChangeSceneWithTransition - OnFadeOutfinishedの間でやる想定
-         */
+        #region Modules
 
-        //ここでNextSceneを設定
-        /// <summary>
-        /// シーンチェンジを開始する
-        /// </summary>
-        /// <param name="nextScene">変更先のシーン</param>
-        /// <exception cref="ArgumentNullException"><paramref name="nextScene"/>がnull</exception>
-        /// <exception cref="InvalidOleVariantTypeException">既に他のシーンの変更処理を実行中</exception>
-        internal static void StartSceneChange(Scene nextScene)
-        {
-            if (nextScene == null) throw new ArgumentNullException("次のシーンがnullです", nameof(nextScene));
-            if (!(CurrentScene.Status == SceneStatus.Updated || CurrentScene.Status == SceneStatus.WaitDisposed || CurrentScene.Status == SceneStatus.Disposed)) throw new InvalidOleVariantTypeException("シーン変更処理中です");
-            CurrentScene.RaiseOnTransitionBegin();
-            nextScene.RaiseOnRegistered();
-            NextScene = nextScene;
-        }
-
-        //ここで {Alject.IsInherited = true} のオブジェクトの引継ぎが発生
-        /// <summary>
-        /// フェードアウト終了時に実行
-        /// </summary>
-        /// <exception cref="InvalidOperationException"><paramref name="NextScene"/>がnull</exception>
-        internal static void OnFadeOutFinished()
-        {
-            if (NextScene == null) throw new InvalidOperationException("次のシーンがnullです");
-            CurrentScene.RaiseOnStopUpdating();
-            Scene.InheritObjects(CurrentScene, NextScene);
-            NextScene.RaiseOnStartUpdating();
-        }
-
-        //ここでCurrentSceneの変更
-        /// <summary>
-        /// フェードイン終了時に実行
-        /// </summary>
-        /// <param name="NextScene">変更先のシーン</param>
-        /// <exception cref="InvalidOperationException"><paramref name="NextScene"/>がnull</exception>
-        internal static void OnFadeInFinished()
-        {
-            if (NextScene == null) throw new InvalidOperationException("次のシーンがnullです");
-            CurrentScene.RaiseOnUnRegistered();
-            NextScene.RaiseOnTransitionFinished();
-            CurrentScene = NextScene;
-            NextScene = null;
-        }
-        #endregion
+        internal static Core Core { get; private set; }
 
         /// <summary>
-        /// ファイルを管理するクラス取得します。
+        /// ファイルを管理するクラスを取得します。
         /// </summary>
         public static File File { get; private set; }
 
         /// <summary>
-        /// キーボードを管理するクラス取得します。
+        /// キーボードを管理するクラスを取得します。
         /// </summary>
         public static Keyboard Keyboard { get; private set; }
 
         /// <summary>
-        /// マウスを管理するクラス取得します。
+        /// マウスを管理するクラスを取得します。
         /// </summary>
         public static Mouse Mouse { get; private set; }
 
         ///// <summary>
-        ///// ジョイスティックを管理するクラス取得します。
+        ///// ジョイスティックを管理するクラスを取得します。
         ///// </summary>
         public static Joystick Joystick { get; private set; }
 
         /// <summary>
-        /// グラフィックのクラス取得します。
+        /// グラフィックのクラスを取得します。
         /// </summary>
-        public static Graphics Graphics { get; private set; }
+        internal static Graphics Graphics { get; private set; }
 
         /// <summary>
-        /// ログを管理するクラス取得します。
+        /// ログを管理するクラスを取得します。
         /// </summary>
         public static Log Log { get; private set; }
 
         /// <summary>
-        /// レンダラのクラス取得します。
+        /// レンダラのクラスを取得します。
         /// </summary>
-        public static Renderer Renderer { get; private set; }
+        internal static Renderer Renderer { get; private set; }
 
         /// <summary>
-        /// 音を管理するクラス取得します。
+        /// 音を管理するクラスを取得します。
         /// </summary>
         public static SoundMixer Sound { get; private set; }
 
         /// <summary>
-        /// リソースを管理するクラス取得します。
+        /// リソースを管理するクラスを取得します。
         /// </summary>
-        public static Resources Resources { get; private set; }
+        internal static Resources Resources { get; private set; }
+
+        /// <summary>
+        /// ウインドウを表すクラスを取得します。
+        /// </summary>
+        internal static Window Window { get; private set; }
+
+        #endregion
+
+        #region Node
+
+        /// <summary>
+        /// エンジンに登録されているノードの列挙子を返します。
+        /// </summary>
+        public static IEnumerable<Node> GetNodes() => _RootNode.Children;
+
+        /// <summary>
+        /// エンジンにノードを追加します。
+        /// </summary>
+        public static void AddNode(Node node)
+        {
+            _RootNode.AddChildNode(node);
+        }
+
+        /// <summary>
+        /// エンジンからノードを削除します。
+        /// </summary>
+        public static void RemoveNode(Node node)
+        {
+            _RootNode.RemoveChildNode(node);
+        }
+
+        internal static void RegisterDrawnNode(DrawnNode node)
+        {
+            _DrawnNodes.Add(node);
+            _DrawnNodes.Sort(new DrawnNodeSorter()); 
+            // TODO: _DrawnNodesを追加時に自動ソートされるようなコレクションにする
+        }
+
+        internal static void UnregisterDrawnNode(DrawnNode node)
+        {
+            _DrawnNodes.Remove(node);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// ウインドウのタイトルを取得または設定します。
+        /// </summary>
+        public static string WindowTitle
+        {
+            get => Window.Title;
+            set { Window.Title = value; }
+        }
+
+        #region FPS制御
+
+        /// <summary>
+        /// フレームレートの制御方法を取得または設定します。
+        /// </summary>
+        public static FramerateMode FramerateMode
+        {
+            get => Core.FramerateMode;
+            set { Core.FramerateMode = value; }
+        }
+
+        /// <summary>
+        /// 目標フレームレートを取得または設定します。
+        /// </summary>
+        public static float TargetFPS
+        {
+            get => Core.TargetFPS;
+            set { Core.TargetFPS = value; }
+        }
+
+        /// <summary>
+        /// 現在のFPSを取得します。
+        /// </summary>
+        public static float CurrentFPS => Core.CurrentFPS;
+
+        /// <summary>
+        /// 前のフレームからの経過時間(秒)を取得します。
+        /// </summary>
+        public static float DeltaSecond => Core.DeltaSecond;
+
+        #endregion
+
+        private class DrawnNodeSorter : IComparer<DrawnNode>
+        {
+            public int Compare(DrawnNode x, DrawnNode y)
+            {
+                var r = x.ZOrder - y.ZOrder;
+                return r;// r == 0 ? 1 : r;
+            }
+        }
     }
 }

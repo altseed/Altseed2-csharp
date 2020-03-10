@@ -24,4 +24,16 @@
     <Compile Include="../Test/**/*.cs" Exclude="../Test/obj/**/*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="..\Test\Graphics.cs" />
+    <Compile Remove="..\Test\IO.cs" />
+    <Compile Remove="..\Test\Serialization.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Test\Graphics.cs" />
+    <None Include="..\Test\IO.cs" />
+    <None Include="..\Test\Serialization.cs" />
+  </ItemGroup>
+
 </Project>

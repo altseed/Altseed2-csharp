@@ -11,7 +11,8 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Play()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var bgm = Altseed.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
             var se = Altseed.Sound.Load(@"../../Core/TestData/Sound/se1.wav", true);
@@ -19,23 +20,21 @@ namespace Altseed.Test
             Assert.NotNull(bgm);
             Assert.NotNull(se);
 
-            int bgm_id = Engine.Sound.Play(bgm);
-            int se_id = Engine.Sound.Play(se);
+            var bgm_id = Engine.Sound.Play(bgm);
+            var se_id = Engine.Sound.Play(se);
 
-            while (Engine.DoEvents() && (Engine.Sound.GetIsPlaying(bgm_id) || Engine.Sound.GetIsPlaying(se_id)))
-            {
-                Engine.Update();
-            }
+            tc.LoopBody(null, null);
 
             Engine.Sound.StopAll();
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void Loop()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var bgm = Altseed.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(bgm);
@@ -44,44 +43,42 @@ namespace Altseed.Test
             bgm.LoopStartingPoint = 1f;
             bgm.LoopEndPoint = 2.5f;
 
-            int bgm_id = Engine.Sound.Play(bgm);
+            var bgm_id = Engine.Sound.Play(bgm);
 
-            while (Engine.DoEvents() && Engine.Sound.GetIsPlaying(bgm_id))
-            {
-                Engine.Update();
-            }
+            tc.LoopBody(null, null);
+
             Engine.Sound.StopAll();
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void GetPosition()
         {
-            var stopwatch = new System.Diagnostics.Stopwatch();
-
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var bgm = Altseed.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(bgm);
 
             int bgm_id = Engine.Sound.Play(bgm);
 
-            stopwatch.Start();
-            bool isChecked = false;
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            Assert.NotNull(font);
 
-            while (Engine.DoEvents() && Engine.Sound.GetIsPlaying(bgm_id))
+            var textNode = new TextNode();
+            textNode.Font = font;
+
+            Engine.AddNode(textNode);
+
+            tc.LoopBody(c =>
             {
-                Engine.Update();
-                if(stopwatch.ElapsedMilliseconds > 2000 && !isChecked)
-                {
-                    Console.WriteLine("BGM Position : {0}", Engine.Sound.GetPlaybackPosition(bgm_id));
-                    isChecked = true;
-                }
-            }
+                textNode.Text = $"{Engine.Sound.GetPlaybackPosition(bgm_id)}";
+            }, null);
+
             Engine.Sound.StopAll();
 
-            Engine.Terminate();
+            tc.End();
         }
     }
 }
