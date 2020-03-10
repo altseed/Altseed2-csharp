@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -37,8 +38,21 @@ namespace Altseed
         void Assign(IntPtr ptr, int size);
     }
 
-    public partial class Int8Array : IArray<byte>
+    public sealed partial class Int8Array : IArray<byte>, ISerializable
     {
+        #region SerializeName
+        private const string S_Array = "S_Array";
+        #endregion
+
+        private Int8Array(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var ptr = cbg_Int8Array_Create(array.Length);
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            selfPtr = ptr;
+            cacheRepo.TryAdd(ptr, new WeakReference<Int8Array>(this));
+        }
+
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
         /// </summary>
@@ -54,10 +68,29 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            info.AddValue(S_Array, this.ToArray());
+        }
     }
 
-    public partial class Int32Array : IArray<int>
+    public sealed partial class Int32Array : IArray<int>, ISerializable
     {
+        #region SerializeName
+        private const string S_Array = "S_Array";
+        #endregion
+
+        private Int32Array(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var ptr = cbg_Int32Array_Create(array.Length);
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            selfPtr = ptr;
+            cacheRepo.TryAdd(ptr, new WeakReference<Int32Array>(this));
+        }
+
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
         /// </summary>
@@ -73,10 +106,29 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            info.AddValue(S_Array, this.ToArray());
+        }
     }
 
-    public partial class VertexArray : IArray<Vertex>
+    public sealed partial class VertexArray : IArray<Vertex>, ISerializable
     {
+        #region SerializeName
+        private const string S_Array = "S_Array";
+        #endregion
+
+        private VertexArray(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var ptr = cbg_VertexArray_Create(array.Length);
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            selfPtr = ptr;
+            cacheRepo.TryAdd(ptr, new WeakReference<VertexArray>(this));
+        }
+
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
         /// </summary>
@@ -92,10 +144,29 @@ namespace Altseed
                 SetAt(index, ref value);
             }
         }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            info.AddValue(S_Array, this.ToArray());
+        }
     }
 
-    public partial class FloatArray : IArray<float>
+    public sealed partial class FloatArray : IArray<float>, ISerializable
     {
+        #region SerializeName
+        private const string S_Array = "S_Array";
+        #endregion
+
+        private FloatArray(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var ptr = cbg_FloatArray_Create(array.Length);
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            selfPtr = ptr;
+            cacheRepo.TryAdd(ptr, new WeakReference<FloatArray>(this));
+        }
+
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
         /// </summary>
@@ -110,6 +181,12 @@ namespace Altseed
                 if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
                 SetAt(index, value);
             }
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            info.AddValue(S_Array, this.ToArray());
         }
     }
 
