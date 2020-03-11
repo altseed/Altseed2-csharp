@@ -190,6 +190,44 @@ namespace Altseed
         }
     }
 
+    public sealed partial class Vector2FArray : IArray<Vector2F>, ISerializable
+    {
+        #region SerializeName
+        private const string S_Array = "S_Array";
+        #endregion
+
+        private Vector2FArray(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var ptr = cbg_Vector2FArray_Create(array.Length);
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            selfPtr = ptr;
+            cacheRepo.TryAdd(ptr, new WeakReference<Vector2FArray>(this));
+        }
+
+        /// <summary>
+        /// 指定したインデックスの要素を取得または設定する
+        /// </summary>
+        /// <param name="index">検索する要素のインデックス</param>
+        /// <returns><paramref name="index"/>に該当する要素</returns>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        public Vector2F this[int index]
+        {
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            set
+            {
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                SetAt(index, ref value);
+            }
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            info.AddValue(S_Array, this.ToArray());
+        }
+    }
+
     /// <summary>
     /// Coreとの接続に使用する配列の拡張メソッドの定義クラス
     /// </summary>
