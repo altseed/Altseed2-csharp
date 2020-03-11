@@ -1,14 +1,9 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//   このファイルは自動生成されました。
-//   このファイルへの変更は消失することがあります。
-//
-//   THIS FILE IS AUTO GENERATED.
-//   YOUR COMMITMENT ON THIS FILE WILL BE WIPED. 
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!                                          !!
+// !!  THIS FILE IS AUTO GENERATED.            !!
+// !!  YOUR COMMIT ON THI FILE WILL BE WIPED.  !!
+// !!                                          !!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -28,7 +23,6 @@ namespace Altseed
     /// <summary>
     /// フレームレートモード
     /// </summary>
-    [Serializable]
     public enum FramerateMode : int
     {
         Variable,
@@ -38,7 +32,6 @@ namespace Altseed
     /// <summary>
     /// リソースの種類を表します。
     /// </summary>
-    [Serializable]
     public enum ResourceType : int
     {
         StaticFile,
@@ -52,7 +45,6 @@ namespace Altseed
     /// <summary>
     /// キーボードのキーの種類を表します。
     /// </summary>
-    [Serializable]
     public enum Keys : int
     {
         Unknown,
@@ -183,7 +175,6 @@ namespace Altseed
     /// <summary>
     /// ボタンの押下状態を表します。
     /// </summary>
-    [Serializable]
     public enum ButtonState : int
     {
         Free = 0,
@@ -195,7 +186,6 @@ namespace Altseed
     /// <summary>
     /// マウスのボタンの種類を表します。
     /// </summary>
-    [Serializable]
     public enum MouseButtons : int
     {
         ButtonLeft = 0,
@@ -211,7 +201,6 @@ namespace Altseed
     /// <summary>
     /// カーソルの状態を表します。
     /// </summary>
-    [Serializable]
     public enum CursorMode : int
     {
         Normal = 212993,
@@ -222,7 +211,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの種類を表します。
     /// </summary>
-    [Serializable]
     public enum JoystickType : int
     {
         Other = 0,
@@ -235,7 +223,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックのボタンの種類を表します。
     /// </summary>
-    [Serializable]
     public enum JoystickButtonType : int
     {
         Start,
@@ -267,7 +254,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの軸の種類を表します。
     /// </summary>
-    [Serializable]
     public enum JoystickAxisType : int
     {
         Start,
@@ -300,7 +286,6 @@ namespace Altseed
     /// <summary>
     /// ImGuiで使用する方向
     /// </summary>
-    [Serializable]
     public enum ToolDir : int
     {
         None = -1,
@@ -313,7 +298,6 @@ namespace Altseed
     /// <summary>
     /// バイナリ演算子を使用して複数の値を結合しないでください
     /// </summary>
-    [Serializable]
     public enum ToolCond : int
     {
         None = 0,
@@ -358,7 +342,6 @@ namespace Altseed
     /// <summary>
     /// Tool機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
     /// </summary>
-    [Serializable]
     public enum ToolGlyphRanges : int
     {
         Default,
@@ -368,7 +351,6 @@ namespace Altseed
     /// <summary>
     /// 音のスペクトル解析に使用する窓関数
     /// </summary>
-    [Serializable]
     public enum FFTWindow : int
     {
         Rectangular,
@@ -382,7 +364,6 @@ namespace Altseed
     /// <summary>
     /// ログレベルを表します。
     /// </summary>
-    [Serializable]
     public enum LogLevel : int
     {
         Trace = 0,
@@ -397,7 +378,6 @@ namespace Altseed
     /// <summary>
     /// ログの範囲を表します。
     /// </summary>
-    [Serializable]
     public enum LogCategory : int
     {
         Core = 0,
@@ -2639,10 +2619,10 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawText(IntPtr selfPtr, IntPtr text);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
+        private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr vertexBuffer, IntPtr indexBuffer, IntPtr texture, IntPtr material);
+        private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
@@ -2681,24 +2661,20 @@ namespace Altseed
         }
         
         /// <summary>
+        /// ポリゴンを描画します。
+        /// </summary>
+        public void DrawPolygon(RenderedPolygon polygon)
+        {
+            cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
         /// コマンドリストを描画します。
         /// </summary>
         /// <param name="commandList">コマンドリスト</param>
         public void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
-        }
-        
-        /// <summary>
-        /// ポリゴンを描画します
-        /// </summary>
-        /// <param name="vertexBuffer">頂点バッファ</param>
-        /// <param name="indexBuffer"></param>
-        /// <param name="texture">テクスチャ</param>
-        /// <param name="material">マテリアル</param>
-        public void DrawPolygon(VertexArray vertexBuffer, Int32Array indexBuffer, Texture2D texture, Material material)
-        {
-            cbg_Renderer_DrawPolygon(selfPtr, vertexBuffer != null ? vertexBuffer.selfPtr : IntPtr.Zero, indexBuffer != null ? indexBuffer.selfPtr : IntPtr.Zero, texture != null ? texture.selfPtr : IntPtr.Zero, material != null ? material.selfPtr : IntPtr.Zero);
         }
         
         ~Renderer()
@@ -2782,7 +2758,10 @@ namespace Altseed
         }
     }
     
-    public partial class Rendered
+    /// <summary>
+    /// 描画されるオブジェクトの基本クラスを表します
+    /// </summary>
+    internal partial class Rendered
     {
         #region unmanaged
         
@@ -2814,6 +2793,12 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_Rendered_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Rendered_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Rendered_Release(IntPtr selfPtr);
         
         #endregion
@@ -2822,6 +2807,28 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
+        
+        /// <summary>
+        /// 変換行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get
+            {
+                if (_Transform != null)
+                {
+                    return _Transform.Value;
+                }
+                var ret = cbg_Rendered_GetTransform(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Transform = value;
+                cbg_Rendered_SetTransform(selfPtr, ref value);
+            }
+        }
+        private Matrix44F? _Transform;
         
         ~Rendered()
         {
@@ -3593,6 +3600,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// シェーダ
+    /// </summary>
     public partial class Shader
     {
         #region unmanaged

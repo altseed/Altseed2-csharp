@@ -113,6 +113,25 @@ namespace Altseed
         }
     }
 
+    public partial class Vector2FArray : IArray<Vector2F>
+    {
+        /// <summary>
+        /// 指定したインデックスの要素を取得または設定する
+        /// </summary>
+        /// <param name="index">検索する要素のインデックス</param>
+        /// <returns><paramref name="index"/>に該当する要素</returns>
+        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        public Vector2F this[int index]
+        {
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            set
+            {
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                SetAt(index, ref value);
+            }
+        }
+    }
+
     /// <summary>
     /// Coreとの接続に使用する配列の拡張メソッドの定義クラス
     /// </summary>

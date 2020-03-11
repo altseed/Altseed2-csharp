@@ -172,6 +172,7 @@ namespace Altseed
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
     }
 
+    /*
     internal partial class Renderer
     {
         /// <summary>
@@ -191,4 +192,5 @@ namespace Altseed
             DrawPolygon(vb, ib, texture, material);
         }
     }
+    */
 }
