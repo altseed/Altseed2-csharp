@@ -38,6 +38,7 @@ namespace Altseed
         void Assign(IntPtr ptr, int size);
     }
 
+    [Serializable]
     public sealed partial class Int8Array : IArray<byte>, ISerializable
     {
         #region SerializeName
@@ -76,6 +77,7 @@ namespace Altseed
         }
     }
 
+    [Serializable]
     public sealed partial class Int32Array : IArray<int>, ISerializable
     {
         #region SerializeName
@@ -114,6 +116,7 @@ namespace Altseed
         }
     }
 
+    [Serializable]
     public sealed partial class VertexArray : IArray<Vertex>, ISerializable
     {
         #region SerializeName
@@ -152,6 +155,7 @@ namespace Altseed
         }
     }
 
+    [Serializable]
     public sealed partial class FloatArray : IArray<float>, ISerializable
     {
         #region SerializeName
@@ -190,6 +194,7 @@ namespace Altseed
         }
     }
 
+    [Serializable]
     public sealed partial class Vector2FArray : IArray<Vector2F>, ISerializable
     {
         #region SerializeName
