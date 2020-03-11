@@ -52,6 +52,7 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<Int8Array>(this));
+            this.FromArray(array);
         }
 
         /// <summary>
@@ -86,11 +87,12 @@ namespace Altseed
 
         private Int32Array(SerializationInfo info, StreamingContext context)
         {
-            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var array = info.GetValue<int[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_Int32Array_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<Int32Array>(this));
+            this.FromArray(array);
         }
 
         /// <summary>
@@ -125,11 +127,12 @@ namespace Altseed
 
         private VertexArray(SerializationInfo info, StreamingContext context)
         {
-            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var array = info.GetValue<Vertex[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_VertexArray_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<VertexArray>(this));
+            this.FromArray(array);
         }
 
         /// <summary>
@@ -164,11 +167,12 @@ namespace Altseed
 
         private FloatArray(SerializationInfo info, StreamingContext context)
         {
-            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var array = info.GetValue<float[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_FloatArray_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<FloatArray>(this));
+            this.FromArray(array);
         }
 
         /// <summary>
@@ -203,11 +207,12 @@ namespace Altseed
 
         private Vector2FArray(SerializationInfo info, StreamingContext context)
         {
-            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var array = info.GetValue<Vector2F[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_Vector2FArray_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             selfPtr = ptr;
             cacheRepo.TryAdd(ptr, new WeakReference<Vector2FArray>(this));
+            this.FromArray(array);
         }
 
         /// <summary>
