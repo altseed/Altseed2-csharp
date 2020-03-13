@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public abstract class DrawnNode : Node
+    public abstract class DrawnNode : Node, IDeserializationCallback
     {
-        protected internal Matrix44F Transform { get; set; } = Matrix44F.Identity;
+        /// <summary>
+        /// 変形行列を取得または設定します。
+        /// </summary>
+        protected internal Matrix44F Transform { get => _Transform; set { _Transform = value; } }
+        [NonSerialized]
+        private Matrix44F _Transform = Matrix44F.Identity;
 
         internal abstract void Draw();
         // NOTE: 実際はここでRendererを叩くよりも、
@@ -15,7 +19,7 @@ namespace Altseed
         //       まとめて描画するほうが良いかも
 
         /// <summary>
-        /// 角度を取得または設定する
+        /// 角度(度数法)を取得または設定します。
         /// </summary>
         public virtual float Angle
         {
@@ -28,8 +32,10 @@ namespace Altseed
                 UpdateTransform();
             }
         }
-        [NonSerialized]
         private float _Angle = 0.0f;
+        /// <summary>
+        /// <see cref="Angle"/>分の回転を表す行列を取得または設定します。
+        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatAngle = Matrix44F.Identity;
 
@@ -47,13 +53,15 @@ namespace Altseed
                 UpdateTransform();
             }
         }
-        [NonSerialized]
         private Vector2F _Position = new Vector2F();
+        /// <summary>
+        /// <see cref="Position"/>分の平行移動を表す行列を取得または設定します。
+        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatPosition = Matrix44F.Identity;
 
         /// <summary>
-        /// 回転の中心となる座標を取得または設定する
+        /// 回転の中心となる座標を取得または設定します。
         /// </summary>
         public virtual Vector2F CenterPosition
         {
@@ -67,28 +75,36 @@ namespace Altseed
                 _CenterPosition = value;
             }
         }
-        [NonSerialized]
         private Vector2F _CenterPosition = new Vector2F();
+        /// <summary>
+        /// <see cref="CenterPosition"/>分の平行移動を表す行列を取得または設定します。
+        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatCenterPosition = Matrix44F.Identity;
+        /// <summary>
+        /// <see cref="CenterPosition"/>のマイナス分の平行移動を表す行列を取得または設定します。
+        /// </summary>
+        [NonSerialized]
         protected internal Matrix44F _MatCenterPositionInv = Matrix44F.Identity;
 
         /// <summary>
-        /// 拡大率を取得または設定する
+        /// 拡大率を取得または設定します。
         /// </summary>
         public virtual Vector2F Scale
         {
-            get => _scale;
+            get => _Scale;
             set
             {
-                if (value == _scale) return;
-                _scale = value;
+                if (value == _Scale) return;
+                _Scale = value;
                 _MatScale = Matrix44F.GetScale2D(value);
                 UpdateTransform();
             }
         }
-        [NonSerialized]
-        private Vector2F _scale = new Vector2F(1.0f, 1.0f);
+        private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
+        /// <summary>
+        /// <see cref="Scale"/>分の拡大率を表す行列を取得または設定します。
+        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatScale = Matrix44F.Identity;
 
@@ -101,6 +117,9 @@ namespace Altseed
         /// </summary>
         public virtual int ZOrder { get; set; }
 
+        /// <summary>
+        /// <see cref="Transform"/>を更新する
+        /// </summary>
         protected internal abstract void UpdateTransform();
 
         #region Node
@@ -116,6 +135,25 @@ namespace Altseed
             base.Unregistered();
             Engine.UnregisterDrawnNode(this);
         }
+
+        #endregion
+
+        #region Deserialization
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            _MatAngle = Matrix44F.GetRotationZ(_Angle);
+            _MatCenterPosition = Matrix44F.GetTranslation2D(_CenterPosition);
+            _MatCenterPositionInv = Matrix44F.GetTranslation2D(-_CenterPosition);
+            _MatPosition = Matrix44F.GetTranslation2D(_Position);
+            _MatScale = Matrix44F.GetScale2D(_Scale);
+            UpdateTransform();
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
 
         #endregion
     }

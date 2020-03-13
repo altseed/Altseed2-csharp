@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -7,7 +6,7 @@ namespace Altseed
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class SpriteNode : DrawnNode, IDeserializationCallback
+    public class SpriteNode : DrawnNode
     {
         private readonly RenderedSprite _Sprite;
 
@@ -40,6 +39,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// 使用するマテリアルを取得または設定します
+        /// </summary>
         public Material Material
         {
             get => _Sprite.Material;
@@ -84,19 +86,5 @@ namespace Altseed
             _Sprite.Transform = matAncestor * mat;
             Transform = mat;
         }
-
-        #region Serialization
-
-        /// <summary>
-        /// デシリアライズ時に実行
-        /// </summary>
-        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
-        protected virtual void OnDeserialization(object sender)
-        {
-            throw new NotImplementedException();
-        }
-        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
-
-        #endregion
     }
 }
