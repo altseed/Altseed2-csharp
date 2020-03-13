@@ -246,5 +246,155 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Int8Array()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var netArray1 = new byte[] { 1, 2, 3, 4, 5 };
+
+            var array1 = Altseed.Int8Array.Create(netArray1.Length);
+            Assert.NotNull(array1);
+            array1.FromArray(netArray1);
+
+            const string path = "Serialization/Int8Array.bin";
+
+            Serialize(path, array1);
+
+            var array2 = Deserialize<Int8Array>(path);
+
+            Assert.NotNull(array2);
+
+            var netArray2 = array2.ToArray();
+
+            Assert.AreEqual(netArray1.Length, netArray2.Length);
+            Assert.True(Enumerable.SequenceEqual(netArray1, netArray2));
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Int32Array()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var netArray1 = new int[] { 1, 2, 3, 4, 5 };
+
+            var array1 = Altseed.Int32Array.Create(netArray1.Length);
+            Assert.NotNull(array1);
+            array1.FromArray(netArray1);
+
+            const string path = "Serialization/Int32Array.bin";
+
+            Serialize(path, array1);
+
+            var array2 = Deserialize<Int32Array>(path);
+
+            Assert.NotNull(array2);
+
+            var netArray2 = array2.ToArray();
+
+            Assert.AreEqual(netArray1.Length, netArray2.Length);
+            Assert.True(Enumerable.SequenceEqual(netArray1, netArray2));
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void VertexArray()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var netArray1 = new Vertex[]
+            {
+                new Vertex(new Vector3F(10, 10, 10), new Color(10, 10, 10, 10), new Vector2F(10, 10), new Vector2F(10, 10)),
+                new Vertex(new Vector3F(20, 20, 20), new Color(20, 20, 20, 20), new Vector2F(20, 20), new Vector2F(20, 20)),
+                new Vertex(new Vector3F(30, 30, 30), new Color(30, 30, 30, 30), new Vector2F(30, 30), new Vector2F(30, 30))
+            };
+
+            var array1 = Altseed.VertexArray.Create(netArray1.Length);
+            Assert.NotNull(array1);
+            array1.FromArray(netArray1);
+
+            const string path = "Serialization/VertexArray.bin";
+
+            Serialize(path, array1);
+
+            var array2 = Deserialize<VertexArray>(path);
+
+            Assert.NotNull(array2);
+
+            var netArray2 = array2.ToArray();
+
+            Assert.AreEqual(netArray1.Length, netArray2.Length);
+            Assert.True(Enumerable.SequenceEqual(netArray1, netArray2));
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void FloatArray()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var netArray1 = new float[] { 1, 2, 3, 4, 5 };
+
+            var array1 = Altseed.FloatArray.Create(netArray1.Length);
+            Assert.NotNull(array1);
+            array1.FromArray(netArray1);
+
+            const string path = "Serialization/FloatArray.bin";
+
+            Serialize(path, array1);
+
+            var array2 = Deserialize<FloatArray>(path);
+
+            Assert.NotNull(array2);
+
+            var netArray2 = array2.ToArray();
+
+            Assert.AreEqual(netArray1.Length, netArray2.Length);
+            Assert.True(Enumerable.SequenceEqual(netArray1, netArray2));
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Vector2FArray()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var netArray1 = new Vector2F[]
+            {
+                new Vector2F(10, 10),
+                new Vector2F(20, 20),
+                new Vector2F(30, 30)
+            };
+
+            var array1 = Altseed.Vector2FArray.Create(netArray1.Length);
+            Assert.NotNull(array1);
+            array1.FromArray(netArray1);
+
+            const string path = "Serialization/Vector2FArray.bin";
+
+            Serialize(path, array1);
+
+            var array2 = Deserialize<Vector2FArray>(path);
+
+            Assert.NotNull(array2);
+
+            var netArray2 = array2.ToArray();
+
+            Assert.AreEqual(netArray1.Length, netArray2.Length);
+            Assert.True(Enumerable.SequenceEqual(netArray1, netArray2));
+
+            tc.End();
+        }
     }
 }

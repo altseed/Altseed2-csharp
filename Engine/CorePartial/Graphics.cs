@@ -171,26 +171,4 @@ namespace Altseed
         public static Color operator *(byte value, Color color) => new Color(color.R * value, color.G * value, color.B * value, color.A * value);
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
     }
-
-    /*
-    internal partial class Renderer
-    {
-        /// <summary>
-        /// ポリゴンを描画する
-        /// </summary>
-        /// <param name="vertexBuffer">頂点の情報</param>
-        /// <param name="indexBuffer">頂点インデックスの配列</param>
-        /// <param name="texture">描画するテクスチャ</param>
-        /// <param name="material">使用するマテリアル</param>
-        public void DrawPolygon(Vertex[] vertexBuffer, int[] indexBuffer, Texture2D texture = null, Material material = null)
-        {
-            var vb = VertexArray.Create(vertexBuffer.Length);
-            vb.FromArray(vertexBuffer);
-            var ib = Int32Array.Create(indexBuffer.Length);
-            ib.FromArray(indexBuffer);
-
-            DrawPolygon(vb, ib, texture, material);
-        }
-    }
-    */
 }
