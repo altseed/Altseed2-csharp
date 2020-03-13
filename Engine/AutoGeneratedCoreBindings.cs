@@ -31,7 +31,13 @@ namespace Altseed
     [Serializable]
     public enum FramerateMode : int
     {
+        /// <summary>
+        /// 可変フレームレート
+        /// </summary>
         Variable,
+        /// <summary>
+        /// 固定フレームレート
+        /// </summary>
         Constant,
     }
     
@@ -41,10 +47,25 @@ namespace Altseed
     [Serializable]
     public enum ResourceType : int
     {
+        /// <summary>
+        /// <see cref="Altseed.StaticFile"/>を表す
+        /// </summary>
         StaticFile,
+        /// <summary>
+        /// <see cref="Altseed.StreamFile"/>を表す
+        /// </summary>
         StreamFile,
+        /// <summary>
+        /// <see cref="Altseed.Texture2D"/>を表す
+        /// </summary>
         Texture2D,
+        /// <summary>
+        /// <see cref="Altseed.Font"/>を表す
+        /// </summary>
         Font,
+        /// <summary>
+        /// <see cref="Altseed.Sound"/>を表す
+        /// </summary>
         Sound,
         MAX,
     }
@@ -55,6 +76,9 @@ namespace Altseed
     [Serializable]
     public enum Keys : int
     {
+        /// <summary>
+        /// 未知のキー
+        /// </summary>
         Unknown,
         Space,
         Apostrophe,
@@ -62,15 +86,45 @@ namespace Altseed
         Minus,
         Period,
         Slash,
+        /// <summary>
+        /// テンキーの0
+        /// </summary>
         Num0,
+        /// <summary>
+        /// テンキーの1
+        /// </summary>
         Num1,
+        /// <summary>
+        /// テンキーの2
+        /// </summary>
         Num2,
+        /// <summary>
+        /// テンキーの3
+        /// </summary>
         Num3,
+        /// <summary>
+        /// テンキーの4
+        /// </summary>
         Num4,
+        /// <summary>
+        /// テンキーの5
+        /// </summary>
         Num5,
+        /// <summary>
+        /// テンキーの6
+        /// </summary>
         Num6,
+        /// <summary>
+        /// テンキーの7
+        /// </summary>
         Num7,
+        /// <summary>
+        /// テンキーの8
+        /// </summary>
         Num8,
+        /// <summary>
+        /// テンキーの9
+        /// </summary>
         Num9,
         Semicolon,
         Equal,
@@ -186,9 +240,21 @@ namespace Altseed
     [Serializable]
     public enum ButtonState : int
     {
+        /// <summary>
+        /// ボタンが押されていない状態
+        /// </summary>
         Free = 0,
+        /// <summary>
+        /// ボタンが押された瞬間の状態
+        /// </summary>
         Push = 1,
+        /// <summary>
+        /// ボタンが押されている状態
+        /// </summary>
         Hold = 3,
+        /// <summary>
+        /// ボタンが話された瞬間の状態
+        /// </summary>
         Release = 2,
     }
     
@@ -198,13 +264,37 @@ namespace Altseed
     [Serializable]
     public enum MouseButtons : int
     {
+        /// <summary>
+        /// 左ボタン
+        /// </summary>
         ButtonLeft = 0,
+        /// <summary>
+        /// 中央ボタン
+        /// </summary>
         ButtonRight = 1,
+        /// <summary>
+        /// 右ボタン
+        /// </summary>
         ButtonMiddle = 2,
+        /// <summary>
+        /// サブボタン1
+        /// </summary>
         SubButton1 = 3,
+        /// <summary>
+        /// サブボタン2
+        /// </summary>
         SubButton2 = 4,
+        /// <summary>
+        /// サブボタン3
+        /// </summary>
         SubButton3 = 5,
+        /// <summary>
+        /// サブボタン4
+        /// </summary>
         SubButton4 = 6,
+        /// <summary>
+        /// サブボタン5
+        /// </summary>
         SubButton5 = 7,
     }
     
@@ -214,8 +304,17 @@ namespace Altseed
     [Serializable]
     public enum CursorMode : int
     {
+        /// <summary>
+        /// 通常の状態
+        /// </summary>
         Normal = 212993,
+        /// <summary>
+        /// 隠れている状態
+        /// </summary>
         Hidden = 212994,
+        /// <summary>
+        /// 使用できない状態
+        /// </summary>
         Disable = 212995,
     }
     
@@ -225,10 +324,25 @@ namespace Altseed
     [Serializable]
     public enum JoystickType : int
     {
+        /// <summary>
+        /// 未知の種類のジョイスティック
+        /// </summary>
         Other = 0,
+        /// <summary>
+        /// PlayStation4のジョイスティック
+        /// </summary>
         PS4 = 8200,
+        /// <summary>
+        /// XBOX360のジョイスティック
+        /// </summary>
         XBOX360 = 8199,
+        /// <summary>
+        /// NintendoSwitchの左ジョイスティック
+        /// </summary>
         JoyconL = 8198,
+        /// <summary>
+        /// NintendoSwitchの右ジョイスティック
+        /// </summary>
         JoyconR = 8197,
     }
     
@@ -238,28 +352,97 @@ namespace Altseed
     [Serializable]
     public enum JoystickButtonType : int
     {
+        /// <summary>
+        /// スタートボタン
+        /// </summary>
         Start,
+        /// <summary>
+        /// セレクトボタン
+        /// </summary>
         Select,
+        /// <summary>
+        /// ホームボタン
+        /// </summary>
         Home,
+        /// <summary>
+        /// リリースボタン
+        /// </summary>
         Release,
+        /// <summary>
+        /// キャプチャーボタン
+        /// </summary>
         Capture,
+        /// <summary>
+        /// 左十字キー上
+        /// </summary>
         LeftUp,
+        /// <summary>
+        /// 左十字キー下
+        /// </summary>
         LeftDown,
+        /// <summary>
+        /// 左十字キー左
+        /// </summary>
         LeftLeft,
+        /// <summary>
+        /// 左十字キー右
+        /// </summary>
         LeftRight,
+        /// <summary>
+        /// 左
+        /// </summary>
         LeftPush,
+        /// <summary>
+        /// 右十字キー上
+        /// </summary>
         RightUp,
+        /// <summary>
+        /// 右十字キー右
+        /// </summary>
         RightRight,
+        /// <summary>
+        /// 右十字キー左
+        /// </summary>
         RightLeft,
+        /// <summary>
+        /// 右十字キー下
+        /// </summary>
         RightDown,
+        /// <summary>
+        /// 右
+        /// </summary>
         RightPush,
+        /// <summary>
+        /// Lボタン1
+        /// </summary>
         L1,
+        /// <summary>
+        /// Rボタン1
+        /// </summary>
         R1,
+        /// <summary>
+        /// Lボタン2
+        /// </summary>
         L2,
+        /// <summary>
+        /// Rボタン2
+        /// </summary>
         R2,
+        /// <summary>
+        /// Lボタン3
+        /// </summary>
         L3,
+        /// <summary>
+        /// Rボタン3
+        /// </summary>
         R3,
+        /// <summary>
+        /// 左スタートボタン
+        /// </summary>
         LeftStart,
+        /// <summary>
+        /// 右スタートボタン
+        /// </summary>
         RightStart,
         Max,
     }
@@ -280,10 +463,12 @@ namespace Altseed
         Max,
     }
     
+    [Serializable]
     public enum DeviceType : int
     {
     }
     
+    [Serializable]
     public enum BuiltinShaderType : int
     {
         SpriteUnlitVS,
@@ -291,9 +476,19 @@ namespace Altseed
         FontUnlitPS,
     }
     
+    /// <summary>
+    /// テキストの描画方向
+    /// </summary>
+    [Serializable]
     public enum WritingDirection : int
     {
+        /// <summary>
+        /// 縦書き
+        /// </summary>
         Vertical,
+        /// <summary>
+        /// 横書き
+        /// </summary>
         Horizontal,
     }
     
@@ -304,9 +499,21 @@ namespace Altseed
     public enum ToolDir : int
     {
         None = -1,
+        /// <summary>
+        /// 左方向
+        /// </summary>
         Left = 0,
+        /// <summary>
+        /// 右方向
+        /// </summary>
         Right = 1,
+        /// <summary>
+        /// 上方向
+        /// </summary>
         Up = 2,
+        /// <summary>
+        /// 下方向
+        /// </summary>
         Down = 3,
     }
     
@@ -335,6 +542,7 @@ namespace Altseed
         Appearing = 8,
     }
     
+    [Serializable]
     public enum ToolTreeNode : int
     {
         None = 0,
@@ -397,6 +605,7 @@ namespace Altseed
         CollapsingHeader = 26,
     }
     
+    [Serializable]
     public enum ToolInputText : int
     {
         None = 0,
@@ -478,6 +687,7 @@ namespace Altseed
         CallbackResize = 262144,
     }
     
+    [Serializable]
     public enum ToolColorEdit : int
     {
         None = 0,
@@ -575,6 +785,7 @@ namespace Altseed
         OptionsDefault = 177209344,
     }
     
+    [Serializable]
     public enum ToolSelectable : int
     {
         /// <summary>
@@ -603,6 +814,7 @@ namespace Altseed
         AllowItemOverlap = 16,
     }
     
+    [Serializable]
     public enum ToolWindow : int
     {
         None = 0,
@@ -691,6 +903,7 @@ namespace Altseed
         NoInputs = 786944,
     }
     
+    [Serializable]
     public enum ToolTabBar : int
     {
         None = 0,
@@ -741,10 +954,25 @@ namespace Altseed
         /// キリル文字
         /// </summary>
         Cyrillic,
+        /// <summary>
+        /// 日本語
+        /// </summary>
         Japanese,
+        /// <summary>
+        /// 繁体字中国語
+        /// </summary>
         ChineseFull,
+        /// <summary>
+        /// 簡体字中国語
+        /// </summary>
         ChineseSimplifiedCommon,
+        /// <summary>
+        /// 韓国語
+        /// </summary>
         Korean,
+        /// <summary>
+        /// タイ語
+        /// </summary>
         Thai,
     }
     
@@ -979,6 +1207,9 @@ namespace Altseed
         }
         private string _LogFilename;
         
+        /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
         public Configuration()
         {
             selfPtr = cbg_Configuration_Constructor_0();
@@ -2246,9 +2477,6 @@ namespace Altseed
         private static extern IntPtr cbg_Mouse_GetInstance();
         
         [DllImport("Altseed_Core")]
-        private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
         
         [DllImport("Altseed_Core")]
@@ -2261,6 +2489,10 @@ namespace Altseed
         private static extern int cbg_Mouse_GetCursorMode(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Mouse_SetCursorMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -2318,6 +2550,18 @@ namespace Altseed
         private CursorMode? _CursorMode;
         
         /// <summary>
+        /// マウスホイールの回転量を取得します。
+        /// </summary>
+        public float Wheel
+        {
+            get
+            {
+                var ret = cbg_Mouse_GetWheel(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
@@ -2325,16 +2569,6 @@ namespace Altseed
         {
             var ret = cbg_Mouse_GetInstance();
             return Mouse.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// マウスホイールの回転量を取得します。
-        /// </summary>
-        /// <returns>マウスカーソルの回転量</returns>
-        public float GetWheel()
-        {
-            var ret = cbg_Mouse_GetWheel(selfPtr);
-            return ret;
         }
         
         /// <summary>
@@ -2876,7 +3110,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 使用するシェーダを取得する
         /// </summary>
         public Shader Shader
         {
@@ -2898,7 +3132,7 @@ namespace Altseed
         private Shader _Shader;
         
         /// <summary>
-        /// 
+        /// 新しいインスタンスを生成する
         /// </summary>
         public Material()
         {
@@ -2906,9 +3140,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 指定した名前を持つ<see cref="Vector4F"/>のインスタンスを取得する
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
+        /// <returns><paramref name="key"/>を名前として持つ<see cref="Vector4F"/>のインスタンス</returns>
         public Vector4F GetVector4F(string key)
         {
             var ret = cbg_Material_GetVector4F(selfPtr, key);
@@ -2916,19 +3151,20 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 指定した名前を持つ<see cref="Vector4F"/>の値を設定する
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
+        /// <param name="value">設定する<see cref="Vector4F"/>のインスタンスの値</param>
         public void SetVector4F(string key, ref Vector4F value)
         {
             cbg_Material_SetVector4F(selfPtr, key, ref value);
         }
         
         /// <summary>
-        /// 
+        /// 指定した名前を持つ<see cref="Matrix44F"/>のインスタンスを取得する
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
+        /// <returns><paramref name="key"/>を名前として持つ<see cref="Matrix44F"/>のインスタンス</returns>
         public Matrix44F GetMatrix44F(string key)
         {
             var ret = cbg_Material_GetMatrix44F(selfPtr, key);
@@ -2936,19 +3172,20 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 指定した名前を持つ<see cref="Matrix44F"/>の値を設定する
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
+        /// <param name="value">設定する<see cref="Matrix44F"/>のインスタンスの値</param>
         public void SetMatrix44F(string key, ref Matrix44F value)
         {
             cbg_Material_SetMatrix44F(selfPtr, key, ref value);
         }
         
         /// <summary>
-        /// 
+        /// 指定した名前を持つ<see cref="Texture2D"/>のインスタンスを取得する
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
+        /// <returns><paramref name="key"/>を名前として持つ<see cref="Texture2D"/>のインスタンス</returns>
         public Texture2D GetTexture(string key)
         {
             var ret = cbg_Material_GetTexture(selfPtr, key);
@@ -2956,10 +3193,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 指定した名前を持つ<see cref="Texture2D"/>の値を設定する
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
+        /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
+        /// <param name="value">設定する<see cref="Texture2D"/>のインスタンスの値</param>
         public void SetTexture(string key, Texture2D value)
         {
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
@@ -3050,6 +3287,7 @@ namespace Altseed
         /// <summary>
         /// スプライトを描画します。
         /// </summary>
+        /// <param name="sprite">描画する<see cref="RenderedSprite"/>のインスタンス</param>
         public void DrawSprite(RenderedSprite sprite)
         {
             cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
@@ -3058,6 +3296,7 @@ namespace Altseed
         /// <summary>
         /// テキストを描画します。
         /// </summary>
+        /// <param name="text">描画する<see cref="RenderedText"/>のインスタンス</param>
         public void DrawText(RenderedText text)
         {
             cbg_Renderer_DrawText(selfPtr, text != null ? text.selfPtr : IntPtr.Zero);
@@ -3066,6 +3305,7 @@ namespace Altseed
         /// <summary>
         /// ポリゴンを描画します。
         /// </summary>
+        /// <param name="polygon">描画する<see cref="RenderedPolygon"/>のインスタンス</param>
         public void DrawPolygon(RenderedPolygon polygon)
         {
             cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
@@ -3074,7 +3314,7 @@ namespace Altseed
         /// <summary>
         /// コマンドリストを描画します。
         /// </summary>
-        /// <param name="commandList">コマンドリスト</param>
+        /// <param name="commandList">描画するコマンドリスト</param>
         public void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
@@ -3904,7 +4144,7 @@ namespace Altseed
         /// シェーダを取得します。
         /// </summary>
         /// <param name="type">シェーダの種類</param>
-        /// <returns>シェーダ</returns>
+        /// <returns><paramref name="type"/>に対応した種類のビルド済みの<see cref="Shader"/>のインスタンス</returns>
         public Shader Create(BuiltinShaderType type)
         {
             var ret = cbg_BuiltinShader_Create(selfPtr, (int)type);
@@ -4277,7 +4517,7 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
-        /// <returns>フォント</returns>
+        /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         public static Font LoadDynamicFont(string path, int size)
         {
             var ret = cbg_Font_LoadDynamicFont(path, size);
@@ -4288,7 +4528,7 @@ namespace Altseed
         /// 静的にフォントを生成します
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
-        /// <returns>フォント</returns>
+        /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         public static Font LoadStaticFont(string path)
         {
             var ret = cbg_Font_LoadStaticFont(path);
@@ -5545,10 +5785,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定ファイルを読み込むStreamFileの新しいインスタンスを生成します。
+        /// 指定ファイルを読み込む<see cref="StreamFile"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
-        /// <returns>pathで読み込むファイルを格納するStreamFileの新しいインスタンスを生成します。</returns>
+        /// <returns>pathで読み込むファイルを格納する<see cref="StreamFile"/>の新しいインスタンスを生成します。</returns>
         public static StreamFile Create(string path)
         {
             var ret = cbg_StreamFile_Create(path);
@@ -5713,10 +5953,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定ファイルを読み込んだStaticFileの新しいインスタンスを生成します。
+        /// 指定ファイルを読み込んだ<see cref="StaticFile"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
-        /// <returns>pathで読み込んだファイルを格納するStaticFileの新しいインスタンスを生成します。</returns>
+        /// <returns>pathで読み込んだファイルを格納する<see cref="StaticFile"/>の新しいインスタンスを生成します。</returns>
         public static StaticFile Create(string path)
         {
             var ret = cbg_StaticFile_Create(path);
@@ -5894,11 +6134,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 指定したディレクトリのファイルをパックする
         /// </summary>
-        /// <param name="srcPath"></param>
-        /// <param name="dstPath"></param>
-        /// <returns></returns>
+        /// <param name="srcPath">パックするファイルのディレクトリ</param>
+        /// <param name="dstPath">パックされたファイル名</param>
+        /// <returns>パック処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool Pack(string srcPath, string dstPath)
         {
             var ret = cbg_File_Pack(selfPtr, srcPath, dstPath);
@@ -5906,12 +6146,12 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 指定したディレクトリのファイルをパスワード付きでパックする
         /// </summary>
-        /// <param name="srcPath"></param>
-        /// <param name="dstPath"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
+        /// <param name="srcPath">パックするファイルのディレクトリ</param>
+        /// <param name="dstPath">パックされたファイル名</param>
+        /// <param name="password">かけるパスワード</param>
+        /// <returns>パック処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool PackWithPassword(string srcPath, string dstPath, string password)
         {
             var ret = cbg_File_PackWithPassword(selfPtr, srcPath, dstPath, password);
@@ -5932,7 +6172,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 音声ファイルを読み込みます。
+    /// 音源のクラス
     /// </summary>
     public partial class Sound
     {
@@ -6087,10 +6327,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 
+        /// 音声ファイルを読み込みます。
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="isDecompressed"></param>
+        /// <param name="path">読み込む音声ファイルのパス</param>
+        /// <param name="isDecompressed">音を再生する前にデータを全て解凍するか?</param>
         /// <returns>読み込んだ音源データ</returns>
         public static Sound Load(string path, bool isDecompressed)
         {
@@ -6131,6 +6371,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// 音源を操作するクラス
+    /// </summary>
     public partial class SoundMixer
     {
         #region unmanaged
@@ -6301,7 +6544,7 @@ namespace Altseed
         /// 指定した音の音量を変更します。
         /// </summary>
         /// <param name="id">音のID</param>
-        /// <param name="volume">音量(0.0〜1.0</param>
+        /// <param name="volume">音量(0.0〜1.0)</param>
         public void SetVolume(int id, float volume)
         {
             cbg_SoundMixer_SetVolume(selfPtr, id, volume);
@@ -6535,7 +6778,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルTraceでログを出力します。
+        /// <see cref="LogLevel.Trace"/>でログを出力します。
         /// </summary>
         public void Trace(LogCategory category, string message)
         {
@@ -6543,7 +6786,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルDebugでログを出力します。
+        /// <see cref="LogLevel.Debug"/>でログを出力します。
         /// </summary>
         public void Debug(LogCategory category, string message)
         {
@@ -6551,7 +6794,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルInfoでログを出力します。
+        /// <see cref="LogLevel.Info"/>でログを出力します。
         /// </summary>
         public void Info(LogCategory category, string message)
         {
@@ -6559,7 +6802,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルWarningでログを出力します。
+        /// <see cref="LogLevel.Warning"/>でログを出力します。
         /// </summary>
         public void Warn(LogCategory category, string message)
         {
@@ -6567,7 +6810,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルErrorでログを出力します。
+        /// <see cref="LogLevel.Error"/>でログを出力します。
         /// </summary>
         public void Error(LogCategory category, string message)
         {
@@ -6575,7 +6818,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ログレベルCriticalでログを出力します。
+        /// <see cref="LogLevel.Critical"/>でログを出力します。
         /// </summary>
         public void Critical(LogCategory category, string message)
         {
@@ -6653,6 +6896,9 @@ namespace Altseed
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// ウィンドウに表示するタイトルを取得または設定します
+        /// </summary>
         public string Title
         {
             get
