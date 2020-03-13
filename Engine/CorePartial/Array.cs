@@ -6,7 +6,7 @@ namespace Altseed
     /// Coreとの接続に使用する配列のインターフェイス
     /// </summary>
     /// <typeparam name="T">配列に格納される要素の型</typeparam>
-    public interface IArray<T>
+    internal interface IArray<T>
         where T : unmanaged
     {
         /// <summary>
@@ -37,7 +37,7 @@ namespace Altseed
         void Assign(IntPtr ptr, int size);
     }
 
-    public partial class Int8Array : IArray<byte>
+    internal partial class Int8Array : IArray<byte>
     {
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
@@ -56,7 +56,7 @@ namespace Altseed
         }
     }
 
-    public partial class Int32Array : IArray<int>
+    internal partial class Int32Array : IArray<int>
     {
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
@@ -75,7 +75,7 @@ namespace Altseed
         }
     }
 
-    public partial class VertexArray : IArray<Vertex>
+    internal partial class VertexArray : IArray<Vertex>
     {
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
@@ -94,7 +94,7 @@ namespace Altseed
         }
     }
 
-    public partial class FloatArray : IArray<float>
+    internal partial class FloatArray : IArray<float>
     {
         /// <summary>
         /// 指定したインデックスの要素を取得または設定する
@@ -116,7 +116,7 @@ namespace Altseed
     /// <summary>
     /// Coreとの接続に使用する配列の拡張メソッドの定義クラス
     /// </summary>
-    public static class ArrayExtension
+    internal static class ArrayExtension
     {
         /// <summary>
         /// このインスタンスと同じデータを持った<typeparamref name="TElement"/>型の配列の新しいインスタンスを生成する
