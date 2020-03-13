@@ -7,7 +7,7 @@ namespace Altseed
     /// Coreとの接続に使用する配列のインターフェイス
     /// </summary>
     /// <typeparam name="T">配列に格納される要素の型</typeparam>
-    public interface IArray<T>
+    internal interface IArray<T>
         where T : unmanaged
     {
         /// <summary>
@@ -241,7 +241,7 @@ namespace Altseed
     /// <summary>
     /// Coreとの接続に使用する配列の拡張メソッドの定義クラス
     /// </summary>
-    public static class ArrayExtension
+    internal static class ArrayExtension
     {
         /// <summary>
         /// このインスタンスと同じデータを持った<typeparamref name="TElement"/>型の配列の新しいインスタンスを生成する
