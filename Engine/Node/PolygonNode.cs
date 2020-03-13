@@ -51,6 +51,20 @@ namespace Altseed
         }
 
         /// <summary>
+        /// 描画に適用するマテリアルを取得または設定します。
+        /// </summary>
+        public Vertex[] Vertexes
+        {
+            get => renderedPolygon.Vertexes.ToArray();
+            set
+            {
+                var vertexArray = VertexArray.Create(value.Length);
+                vertexArray.FromArray(value);
+                renderedPolygon.Vertexes = vertexArray;
+            }
+        }
+
+        /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public PolygonNode()
@@ -83,23 +97,19 @@ namespace Altseed
             Transform = mat;
         }
 
-        public Vertex[] GetVertexes()
-        {
-            return renderedPolygon.GetVertexes().ToArray();
-        }
-        
-        public void SetVertexes(Vertex[] vertexes)
-        {
-            var vertexArray = VertexArray.Create(vertexes.Length);
-            vertexArray.FromArray(vertexes);
-            renderedPolygon.SetVertexes(vertexArray);
-        }
-
-        public void SetVertexes(Vector2F[] vertexes)
+        public void SetVertexesByVector2F(Vector2F[] vertexes)
         {
             var vertexArray = Vector2FArray.Create(vertexes.Length);
             vertexArray.FromArray(vertexes);
             renderedPolygon.SetVertexesByVector2F(vertexArray);
+        }
+
+        public void SetAllVertexColor(Color color)
+        {
+            var vertexArray = Vertexes;
+            for(int i = 0; i < vertexArray.Length; ++i)
+                vertexArray[i].Color = color;
+            Vertexes = vertexArray;
         }
 
         #region Serialization
