@@ -524,48 +524,423 @@ namespace Altseed
     public enum ToolCond : int
     {
         None = 0,
+        /// <summary>
+        /// 常に変数を設定します
+        /// </summary>
         Always = 1,
+        /// <summary>
+        /// ランタイムセッションごとに変数を1回設定します（成功した最初の呼び出しのみ）
+        /// </summary>
+        Once = 2,
+        /// <summary>
+        /// オブジェクト/ウィンドウに永続的に保存されたデータがない場合（.iniファイルにエントリがない場合）、変数を設定します
+        /// </summary>
+        FirstUseEver = 4,
+        /// <summary>
+        /// オブジェクト/ウィンドウが非表示/非アクティブになった後（または初めて）表示される場合は、変数を設定します
+        /// </summary>
+        Appearing = 8,
     }
     
     [Serializable]
     public enum ToolTreeNode : int
     {
         None = 0,
+        /// <summary>
+        /// Draw as selected
+        /// </summary>
         Selected = 1,
+        /// <summary>
+        /// 
+        /// </summary>
+        Framed = 2,
+        /// <summary>
+        /// 
+        /// </summary>
+        AllowItemOverlap = 4,
+        /// <summary>
+        /// 
+        /// </summary>
+        NoTreePushOnOpen = 8,
+        /// <summary>
+        /// 
+        /// </summary>
+        NoAutoOpenOnLog = 16,
+        /// <summary>
+        /// 
+        /// </summary>
+        DefaultOpen = 32,
+        /// <summary>
+        /// 
+        /// </summary>
+        OpenOnDoubleClick = 64,
+        /// <summary>
+        /// 
+        /// </summary>
+        OpenOnArrow = 128,
+        /// <summary>
+        /// 
+        /// </summary>
+        Leaf = 256,
+        /// <summary>
+        /// 
+        /// </summary>
+        Bullet = 512,
+        /// <summary>
+        /// 
+        /// </summary>
+        FramePadding = 1024,
+        /// <summary>
+        /// 
+        /// </summary>
+        SpanAvailWidth = 2048,
+        /// <summary>
+        /// 
+        /// </summary>
+        SpanFullWidth = 4096,
+        /// <summary>
+        /// 
+        /// </summary>
+        NavLeftJumpsBackHere = 8192,
+        CollapsingHeader = 26,
     }
     
     [Serializable]
     public enum ToolInputText : int
     {
         None = 0,
+        /// <summary>
+        /// 0123456789.+-*/ を許可します。
+        /// </summary>
         CharsDecimal = 1,
+        /// <summary>
+        /// 0123456789ABCDEFabcdef を許可します
+        /// </summary>
+        CharsHexadecimal = 2,
+        /// <summary>
+        /// a..z を A..Z に変換します
+        /// </summary>
+        CharsUppercase = 4,
+        /// <summary>
+        /// スペースとタブを除外します
+        /// </summary>
+        CharsNoBlank = 8,
+        /// <summary>
+        /// 最初にマウスフォーカスしたときにテキスト全体を選択します
+        /// </summary>
+        AutoSelectAll = 16,
+        /// <summary>
+        /// （値が変更されるたびにではなく）Enterが押されたときに `true` を返します。 `IsItemDeactivatedAfterEdit()` 関数を調べることを検討してください。
+        /// </summary>
+        EnterReturnsTrue = 32,
+        /// <summary>
+        /// Tabキーを押したときのコールバック（完了処理のため）
+        /// </summary>
+        CallbackCompletion = 64,
+        /// <summary>
+        /// 上下矢印を押すとコールバック（履歴処理用）
+        /// </summary>
+        CallbackHistory = 128,
+        /// <summary>
+        /// 各反復でのコールバック。 ユーザーコードは、カーソル位置を照会し、テキストバッファーを変更できます。
+        /// </summary>
+        CallbackAlways = 256,
+        /// <summary>
+        /// 置換または破棄する文字入力のコールバック。 'EventChar'を変更して置換または破棄するか、コールバックで1を返して破棄します。
+        /// </summary>
+        CallbackCharFilter = 512,
+        /// <summary>
+        /// Tabキーを押すと、テキストフィールドに'\t'という文字が入力されます。
+        /// </summary>
+        AllowTabInput = 1024,
+        /// <summary>
+        /// 複数行モードでは、Enterでフォーカスを外し、Ctrl + Enterで新しい行を追加します（デフォルトは反対です：Ctrl + Enterでフォーカスを外し、Enterで行を追加します）。
+        /// </summary>
+        CtrlEnterForNewLine = 2048,
+        /// <summary>
+        /// カーソルの水平方向のフォローを無効にする
+        /// </summary>
+        NoHorizontalScroll = 4096,
+        /// <summary>
+        /// インサートモード
+        /// </summary>
+        AlwaysInsertMode = 8192,
+        /// <summary>
+        /// 読み取り専用モード
+        /// </summary>
+        ReadOnly = 16384,
+        /// <summary>
+        /// パスワードモード。すべての文字を'*'として表示します。
+        /// </summary>
+        Password = 32768,
+        /// <summary>
+        /// 元に戻す/やり直しを無効にします。 アクティブな間は入力テキストがテキストデータを所有していることに注意してください。独自の元に戻す/やり直しスタックを提供する場合は、たとえば ClearActiveID（）を呼び出します。
+        /// </summary>
+        NoUndoRedo = 65536,
+        /// <summary>
+        /// 0123456789.+-*/eE (科学表記法の入力) を許可します
+        /// </summary>
+        CharsScientific = 131072,
+        /// <summary>
+        /// バッファ容量のコールバックはリクエストを変更し（'buf_size 'パラメータ値を超えて）、文字列が大きくなります。 文字列のサイズを変更する必要がある場合に通知します（サイズのキャッシュを保持する文字列タイプの場合）。 コールバックで新しいBufSizeが提供され、それを尊重する必要があります。
+        /// </summary>
+        CallbackResize = 262144,
     }
     
     [Serializable]
     public enum ToolColorEdit : int
     {
         None = 0,
+        /// <summary>
+        /// `ColorEdit, ColorPicker, ColorButton`: Alphaコンポーネントを無視します（入力ポインターから3つのコンポーネントのみを読み取ります）。
+        /// </summary>
         NoAlpha = 2,
+        /// <summary>
+        /// `ColorEdit`: 色付きの正方形をクリックしたときにピッカーを無効にします。
+        /// </summary>
+        NoPicker = 4,
+        /// <summary>
+        /// `ColorEdit`: 入力/小さなプレビューを右クリックしたときのオプションメニューの切り替えを無効にします。
+        /// </summary>
+        NoOptions = 8,
+        /// <summary>
+        /// `ColorEdit, ColorPicker`: 入力の横にある色付きの正方形プレビューを無効にします。 （例：入力のみを表示する）
+        /// </summary>
+        NoSmallPreview = 16,
+        /// <summary>
+        /// `ColorEdit, ColorPicker: 入力スライダー/テキストウィジェットを無効にします（たとえば、小さなプレビューの色付きの四角形のみを表示します）。
+        /// </summary>
+        NoInputs = 32,
+        /// <summary>
+        /// `ColorEdit, ColorPicker, ColorButton`: プレビューをホバーするときにツールチップを無効にします。
+        /// </summary>
+        NoTooltip = 64,
+        /// <summary>
+        /// `ColorEdit, ColorPicker`: インラインテキストラベルの表示を無効にします（ラベルは引き続きツールチップとピッカーに転送されます）。
+        /// </summary>
+        NoLabel = 128,
+        /// <summary>
+        /// `ColorPicker`: ピッカーの右側の大きなカラープレビューを無効にし、代わりに小さな色付きの正方形プレビューを使用します。
+        /// </summary>
+        NoSidePreview = 256,
+        /// <summary>
+        /// `ColorEdit`: ドラッグアンドドロップターゲットを無効にします。 `ColorButton`: ドラッグアンドドロップソースを無効にします。
+        /// </summary>
+        NoDragDrop = 512,
+        /// <summary>
+        /// `ColorEdit, ColorPicker`: ピッカーに垂直アルファバー/グラデーションを表示します。
+        /// </summary>
+        AlphaBar = 65536,
+        /// <summary>
+        /// `ColorEdit, ColorPicker, ColorButton`: プレビューを不透明ではなく、チェッカーボード上の透明色として表示します。
+        /// </summary>
+        AlphaPreview = 131072,
+        /// <summary>
+        /// `ColorEdit, ColorPicker, ColorButton`: 不透明ではなく、半不透明/半市松模様を表示します。
+        /// </summary>
+        AlphaPreviewHalf = 262144,
+        /// <summary>
+        /// `(WIP) ColorEdit`: 現在、RGBAエディションで0.0f..1.0fの制限のみを無効にします（注：おそらくFloatフラグも使用したいでしょう）。
+        /// </summary>
+        HDR = 524288,
+        /// <summary>
+        /// `ColorEdit`: RGB/HSV/Hexの_display_タイプをオーバーライドします。 `ColorPicker`: 1つ以上のRGB/HSV/Hexを使用して任意の組み合わせを選択します。
+        /// </summary>
+        DisplayRGB = 1048576,
+        /// <summary>
+        /// 
+        /// </summary>
+        DisplayHSV = 2097152,
+        /// <summary>
+        /// 
+        /// </summary>
+        DisplayHex = 4194304,
+        /// <summary>
+        /// `ColorEdit, ColorPicker, ColorButton`: 0..255としてフォーマットされた_display_値。
+        /// </summary>
+        Uint8 = 8388608,
+        /// <summary>
+        /// `ColorEdit, ColorPicker, ColorButton`: _display_値は、0..255整数ではなく0.0f..1.0f浮動小数点としてフォーマットされます。 整数による値の往復はありません。
+        /// </summary>
+        Float = 16777216,
+        /// <summary>
+        /// `ColorPicker`: Hueのバー、Sat/Valueの長方形。
+        /// </summary>
+        PickerHueBar = 33554432,
+        /// <summary>
+        /// `ColorPicker`: Hueのホイール、Sat/Valueの三角形。
+        /// </summary>
+        PickerHueWheel = 67108864,
+        /// <summary>
+        /// `ColorEdit, ColorPicker`: RGB形式の入出力データ
+        /// </summary>
+        InputRGB = 134217728,
+        /// <summary>
+        /// `ColorEdit, ColorPicker`: HSV形式の入力および出力データ。
+        /// </summary>
+        InputHSV = 268435456,
+        /// <summary>
+        /// デフォルトオプション。 `SetColorEditOptions()` を使用して、アプリケーションのデフォルトを設定できます。 意図はおそらくあなたの呼び出しのほとんどでそれらをオーバーライドしたくないことです。 ユーザーがオプションメニューから選択できるようにするか、起動時に`SetColorEditOptions()`を1回呼び出します。
+        /// </summary>
+        OptionsDefault = 177209344,
     }
     
     [Serializable]
     public enum ToolSelectable : int
     {
+        /// <summary>
+        /// 
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// このボタンをクリックしても、親ポップアップウィンドウは閉じません
+        /// </summary>
+        DontClosePopups = 1,
+        /// <summary>
+        /// 選択可能なフレームはすべての列にまたがることができます（テキストは現在の列に収まります）
+        /// </summary>
+        SpanAllColumns = 2,
+        /// <summary>
+        /// ダブルクリックした場合もプレスイベントを生成
+        /// </summary>
+        AllowDoubleClick = 4,
+        /// <summary>
+        /// 選択できません、グレー表示されたテキストを表示します
+        /// </summary>
+        Disabled = 8,
+        /// <summary>
+        /// (WIP) ヒットテストにより、後続のウィジェットがこのウィジェットとオーバーラップできるようにします
+        /// </summary>
+        AllowItemOverlap = 16,
     }
     
     [Serializable]
     public enum ToolWindow : int
     {
         None = 0,
+        /// <summary>
+        /// タイトルバーを無効にする
+        /// </summary>
         NoTitleBar = 1,
+        /// <summary>
+        /// 右下のグリップを使ったユーザーのサイズ変更を無効にします
+        /// </summary>
+        NoResize = 2,
+        /// <summary>
+        /// ユーザーがウィンドウを移動できないようにする
+        /// </summary>
+        NoMove = 4,
+        /// <summary>
+        /// スクロールバーを無効にします（ウィンドウはマウスまたはプログラムでスクロールできます）
+        /// </summary>
+        NoScrollbar = 8,
+        /// <summary>
+        /// ユーザーがマウスホイールで垂直にスクロールできないようにします。 子ウィンドウでは、NoScrollbarも設定されていない限り、マウスホイールは親に転送されます。
+        /// </summary>
+        NoScrollWithMouse = 16,
+        /// <summary>
+        /// ユーザー折りたたみウィンドウをダブルクリックして無効にします
+        /// </summary>
+        NoCollapse = 32,
+        /// <summary>
+        /// フレームごとにコンテンツごとにウィンドウのサイズを変更します
+        /// </summary>
+        AlwaysAutoResize = 64,
+        /// <summary>
+        /// 描画背景色(`WindowBg`など)および外枠を無効にします。 `SetNextWindowBgAlpha(0.0f)`を使用する場合と同様です。
+        /// </summary>
+        NoBackground = 128,
+        /// <summary>
+        /// .iniファイルの設定をロード/保存しない
+        /// </summary>
+        NoSavedSettings = 256,
+        /// <summary>
+        /// パススルーでテストをホバリング、キャッチマウスを無効にします。
+        /// </summary>
+        NoMouseInputs = 512,
+        /// <summary>
+        /// メニューバーがあります
+        /// </summary>
+        MenuBar = 1024,
+        /// <summary>
+        /// 水平スクロールバーの表示を許可します（デフォルトではオフ）。 `Begin()`を呼び出す前に、`SetNextWindowContentSize(Vector2F(width, 0.0f));`を使用して幅を指定できます。
+        /// </summary>
+        HorizontalScrollbar = 2048,
+        /// <summary>
+        /// 非表示から表示状態に移行するときにフォーカスを取得できないようにします
+        /// </summary>
+        NoFocusOnAppearing = 4096,
+        /// <summary>
+        /// フォーカスを取得するときにウィンドウを前面に移動することを無効にします（たとえば、クリックするか、プログラムでフォーカスを与える）
+        /// </summary>
+        NoBringToFrontOnFocus = 8192,
+        /// <summary>
+        /// 常に垂直スクロールバーを表示します（`ContentSize.Y < Size.Y`の場合でも）
+        /// </summary>
+        AlwaysVerticalScrollbar = 16384,
+        /// <summary>
+        /// 常に水平スクロールバーを表示します（`ContentSize.x < Size.x`であっても）
+        /// </summary>
+        AlwaysHorizontalScrollbar = 32768,
+        /// <summary>
+        /// 境界線のない子ウィンドウが`style.WindowPadding`を使用するようにします（境界線のない子ウィンドウではデフォルトで無視されるため、より便利です）
+        /// </summary>
+        AlwaysUseWindowPadding = 65536,
+        /// <summary>
+        /// ウィンドウ内にゲームパッド/キーボードナビゲーションはありません
+        /// </summary>
+        NoNavInputs = 262144,
+        /// <summary>
+        /// ゲームパッド/キーボードナビゲーションでこのウィンドウにフォーカスしない（たとえば、CTRL + TABでスキップ）
+        /// </summary>
+        NoNavFocus = 524288,
+        /// <summary>
+        /// ###演算子の使用を避けるために、IDに影響を与えずにタイトルに'*'を追加します。 タブ/ドッキングコンテキストで使用する場合、クロージャーでタブが選択され、クロージャーは1フレーム延期され、コードがちらつきなしに（確認ポップアップなどを使用して）クロージャーをキャンセルできるようにします。
+        /// </summary>
+        UnsavedDocument = 1048576,
+        NoNav = 786432,
+        NoDecoration = 43,
+        NoInputs = 786944,
     }
     
     [Serializable]
     public enum ToolTabBar : int
     {
         None = 0,
+        /// <summary>
+        /// タブを手動でドラッグして並べ替えることができます+リストの最後に新しいタブが追加されます
+        /// </summary>
         Reorderable = 1,
+        /// <summary>
+        /// 新しいタブが表示されたら自動的に選択する
+        /// </summary>
+        AutoSelectNewTabs = 2,
+        /// <summary>
+        /// ボタンを無効にしてタブリストポップアップを開きます
+        /// </summary>
+        TabListPopupButton = 4,
+        /// <summary>
+        /// マウスの中ボタンでタブを閉じる（p_open！= NULLで送信される）動作を無効にします。 `if（IsItemHovered（）&& IsMouseClicked（2））* p_open = false`を使用すると、ユーザー側でこの動作を再現できます。
+        /// </summary>
+        NoCloseWithMiddleMouseButton = 8,
+        /// <summary>
+        /// スクロールボタンを無効にする（フィッティングポリシーが`FittingPolicyScroll`の場合に適用）
+        /// </summary>
+        NoTabListScrollingButtons = 16,
+        /// <summary>
+        /// タブをホバーするときにツールチップを無効にする
+        /// </summary>
+        NoTooltip = 32,
+        /// <summary>
+        /// 収まらないタブのサイズを変更する
+        /// </summary>
+        FittingPolicyResizeDown = 64,
+        /// <summary>
+        /// タブが収まらない場合にスクロールボタンを追加する
+        /// </summary>
+        FittingPolicyScroll = 128,
+        FittingPolicyMask = 192,
+        FittingPolicyDefault = 64,
     }
     
     /// <summary>
@@ -575,6 +950,9 @@ namespace Altseed
     public enum ToolGlyphRanges : int
     {
         Default,
+        /// <summary>
+        /// キリル文字
+        /// </summary>
         Cyrillic,
         /// <summary>
         /// 日本語
@@ -2881,10 +3259,10 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawText(IntPtr selfPtr, IntPtr text);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
+        private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr vertexBuffer, IntPtr indexBuffer, IntPtr texture, IntPtr material);
+        private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
@@ -2925,21 +3303,21 @@ namespace Altseed
         }
         
         /// <summary>
-        /// コマンドリストを描画します。
+        /// ポリゴンを描画します。
         /// </summary>
         /// <param name="polygon">描画する<see cref="RenderedPolygon"/>のインスタンス</param>
         public void DrawPolygon(RenderedPolygon polygon)
         {
-            cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+            cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
-        /// ポリゴンを描画します
+        /// コマンドリストを描画します。
         /// </summary>
         /// <param name="commandList">描画するコマンドリスト</param>
         public void Render(CommandList commandList)
         {
-            cbg_Renderer_DrawPolygon(selfPtr, vertexBuffer != null ? vertexBuffer.selfPtr : IntPtr.Zero, indexBuffer != null ? indexBuffer.selfPtr : IntPtr.Zero, texture != null ? texture.selfPtr : IntPtr.Zero, material != null ? material.selfPtr : IntPtr.Zero);
+            cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
         
         ~Renderer()
@@ -3023,7 +3401,10 @@ namespace Altseed
         }
     }
     
-    public partial class Rendered
+    /// <summary>
+    /// 描画されるオブジェクトの基本クラスを表します
+    /// </summary>
+    internal partial class Rendered
     {
         #region unmanaged
         
@@ -3055,6 +3436,12 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
+        private static extern Matrix44F cbg_Rendered_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Rendered_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Rendered_Release(IntPtr selfPtr);
         
         #endregion
@@ -3063,6 +3450,28 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
+        
+        /// <summary>
+        /// 変換行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get
+            {
+                if (_Transform != null)
+                {
+                    return _Transform.Value;
+                }
+                var ret = cbg_Rendered_GetTransform(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Transform = value;
+                cbg_Rendered_SetTransform(selfPtr, ref value);
+            }
+        }
+        private Matrix44F? _Transform;
         
         ~Rendered()
         {
@@ -3755,6 +4164,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// シェーダ
+    /// </summary>
     public partial class Shader
     {
         #region unmanaged
