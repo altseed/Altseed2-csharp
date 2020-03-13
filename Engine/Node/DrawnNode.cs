@@ -118,6 +118,11 @@ namespace Altseed
         public virtual int ZOrder { get; set; }
 
         /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
+        protected DrawnNode() : base() { }
+
+        /// <summary>
         /// <see cref="Transform"/>を更新する
         /// </summary>
         protected internal abstract void UpdateTransform();
