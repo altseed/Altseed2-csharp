@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Altseed
 {
-    public class TextNode : DrawnNode, IDeserializationCallback
+    [Serializable]
+    public class TextNode : DrawnNode
     {
         private readonly RenderedText renderedText;
 
@@ -33,6 +33,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// 使用するマテリアルを取得または設定します。
+        /// </summary>
         public Material Material
         {
             get => renderedText.Material;
@@ -101,19 +104,5 @@ namespace Altseed
             renderedText.Transform = matAncestor * mat;
             Transform = mat;
         }
-
-        #region Serialization
-
-        /// <summary>
-        /// デシリアライズ時に実行
-        /// </summary>
-        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
-        protected virtual void OnDeserialization(object sender)
-        {
-            throw new NotImplementedException();
-        }
-        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
-
-        #endregion
     }
 }

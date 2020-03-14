@@ -171,4 +171,19 @@ namespace Altseed
         public static Color operator *(byte value, Color color) => new Color(color.R * value, color.G * value, color.B * value, color.A * value);
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
     }
+
+    [Serializable]
+    internal partial class Rendered { }
+
+    [Serializable]
+    public sealed partial class Material
+    {
+
+    }
+
+    [Serializable]
+    public sealed partial class Shader
+    {
+
+    }
 }
