@@ -79,9 +79,10 @@ namespace Altseed
 
     public partial class SoundMixer
     {
-        public float[] GetSpectrumData(int id, FFTWindow window)
+        public float[] GetSpectrumData(int id,　int dataNum, FFTWindow window)
         {
-            var fa = FloatArray.Create(0);
+            if((dataNum & (dataNum - 1)) != 0) return null;
+            var fa = FloatArray.Create(dataNum);
             GetSpectrumData(id, fa, window);
             return fa.ToArray();
         }

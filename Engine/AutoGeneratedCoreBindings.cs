@@ -1,14 +1,9 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//   このファイルは自動生成されました。
-//   このファイルへの変更は消失することがあります。
-//
-//   THIS FILE IS AUTO GENERATED.
-//   YOUR COMMITMENT ON THIS FILE WILL BE WIPED. 
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!                                          !!
+// !!  THIS FILE IS AUTO GENERATED.            !!
+// !!  YOUR COMMIT ON THI FILE WILL BE WIPED.  !!
+// !!                                          !!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -28,7 +23,6 @@ namespace Altseed
     /// <summary>
     /// フレームレートモード
     /// </summary>
-    [Serializable]
     public enum FramerateMode : int
     {
         /// <summary>
@@ -44,7 +38,6 @@ namespace Altseed
     /// <summary>
     /// リソースの種類を表します。
     /// </summary>
-    [Serializable]
     public enum ResourceType : int
     {
         /// <summary>
@@ -73,7 +66,6 @@ namespace Altseed
     /// <summary>
     /// キーボードのキーの種類を表します。
     /// </summary>
-    [Serializable]
     public enum Keys : int
     {
         /// <summary>
@@ -237,7 +229,6 @@ namespace Altseed
     /// <summary>
     /// ボタンの押下状態を表します。
     /// </summary>
-    [Serializable]
     public enum ButtonState : int
     {
         /// <summary>
@@ -261,7 +252,6 @@ namespace Altseed
     /// <summary>
     /// マウスのボタンの種類を表します。
     /// </summary>
-    [Serializable]
     public enum MouseButtons : int
     {
         /// <summary>
@@ -301,7 +291,6 @@ namespace Altseed
     /// <summary>
     /// カーソルの状態を表します。
     /// </summary>
-    [Serializable]
     public enum CursorMode : int
     {
         /// <summary>
@@ -321,7 +310,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの種類を表します。
     /// </summary>
-    [Serializable]
     public enum JoystickType : int
     {
         /// <summary>
@@ -349,7 +337,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックのボタンの種類を表します。
     /// </summary>
-    [Serializable]
     public enum JoystickButtonType : int
     {
         /// <summary>
@@ -450,7 +437,6 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの軸の種類を表します。
     /// </summary>
-    [Serializable]
     public enum JoystickAxisType : int
     {
         Start,
@@ -495,7 +481,6 @@ namespace Altseed
     /// <summary>
     /// ImGuiで使用する方向
     /// </summary>
-    [Serializable]
     public enum ToolDir : int
     {
         None = -1,
@@ -520,7 +505,6 @@ namespace Altseed
     /// <summary>
     /// バイナリ演算子を使用して複数の値を結合しないでください
     /// </summary>
-    [Serializable]
     public enum ToolCond : int
     {
         None = 0,
@@ -946,7 +930,6 @@ namespace Altseed
     /// <summary>
     /// Tool機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
     /// </summary>
-    [Serializable]
     public enum ToolGlyphRanges : int
     {
         Default,
@@ -979,7 +962,6 @@ namespace Altseed
     /// <summary>
     /// 音のスペクトル解析に使用する窓関数
     /// </summary>
-    [Serializable]
     public enum FFTWindow : int
     {
         Rectangular,
@@ -993,7 +975,6 @@ namespace Altseed
     /// <summary>
     /// ログレベルを表します。
     /// </summary>
-    [Serializable]
     public enum LogLevel : int
     {
         Trace = 0,
@@ -1008,7 +989,6 @@ namespace Altseed
     /// <summary>
     /// ログの範囲を表します。
     /// </summary>
-    [Serializable]
     public enum LogCategory : int
     {
         Core = 0,
