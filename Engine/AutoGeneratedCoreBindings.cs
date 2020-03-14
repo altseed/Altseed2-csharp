@@ -3067,6 +3067,68 @@ namespace Altseed
         }
     }
     
+    public partial class RenderTexture : Texture2D
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<RenderTexture>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderTexture>>();
+        
+        internal static new RenderTexture TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderTexture cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderTexture_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderTexture(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderTexture>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderTexture_Create(ref Vector2I size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderTexture_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal RenderTexture(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        public static RenderTexture Create(ref Vector2I size)
+        {
+            var ret = cbg_RenderTexture_Create(ref size);
+            return RenderTexture.TryGetFromCache(ret);
+        }
+        
+        ~RenderTexture()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderTexture_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// マテリアル
     /// </summary>
@@ -3400,6 +3462,15 @@ namespace Altseed
         private static extern void cbg_CommandList_SetRenderTargetWithScreen(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, ref RectI viewport);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_Release(IntPtr selfPtr);
         
         #endregion
@@ -3415,6 +3486,22 @@ namespace Altseed
         public void SetRenderTargetWithScreen()
         {
             cbg_CommandList_SetRenderTargetWithScreen(selfPtr);
+        }
+        
+        public RenderTexture GetScreenTexture()
+        {
+            var ret = cbg_CommandList_GetScreenTexture(selfPtr);
+            return RenderTexture.TryGetFromCache(ret);
+        }
+        
+        public void SetRenderTarget(RenderTexture target, ref RectI viewport)
+        {
+            cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, ref viewport);
+        }
+        
+        public void RenderToRenderTarget(Material material)
+        {
+            cbg_CommandList_RenderToRenderTarget(selfPtr, material != null ? material.selfPtr : IntPtr.Zero);
         }
         
         ~CommandList()
