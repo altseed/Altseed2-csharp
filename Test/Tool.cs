@@ -17,10 +17,12 @@ namespace Altseed.Test
             
             tc.LoopBody(c =>
             {
+                Engine.Tool.NewFrame();
                 if (Engine.Tool.Begin("Test", ToolWindow.None))
                 {
                     Engine.Tool.End();
                 }
+                Engine.Tool.Render();
             }
             , null);
 

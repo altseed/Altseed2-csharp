@@ -1,9 +1,14 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!                                          !!
-// !!  THIS FILE IS AUTO GENERATED.            !!
-// !!  YOUR COMMIT ON THI FILE WILL BE WIPED.  !!
-// !!                                          !!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+//   このファイルは自動生成されました。
+//   このファイルへの変更は消失することがあります。
+//
+//   THIS FILE IS AUTO GENERATED.
+//   YOUR COMMITMENT ON THIS FILE WILL BE WIPED. 
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -23,6 +28,7 @@ namespace Altseed
     /// <summary>
     /// フレームレートモード
     /// </summary>
+    [Serializable]
     public enum FramerateMode : int
     {
         /// <summary>
@@ -38,6 +44,7 @@ namespace Altseed
     /// <summary>
     /// リソースの種類を表します。
     /// </summary>
+    [Serializable]
     public enum ResourceType : int
     {
         /// <summary>
@@ -66,6 +73,7 @@ namespace Altseed
     /// <summary>
     /// キーボードのキーの種類を表します。
     /// </summary>
+    [Serializable]
     public enum Keys : int
     {
         /// <summary>
@@ -229,6 +237,7 @@ namespace Altseed
     /// <summary>
     /// ボタンの押下状態を表します。
     /// </summary>
+    [Serializable]
     public enum ButtonState : int
     {
         /// <summary>
@@ -252,6 +261,7 @@ namespace Altseed
     /// <summary>
     /// マウスのボタンの種類を表します。
     /// </summary>
+    [Serializable]
     public enum MouseButtons : int
     {
         /// <summary>
@@ -291,6 +301,7 @@ namespace Altseed
     /// <summary>
     /// カーソルの状態を表します。
     /// </summary>
+    [Serializable]
     public enum CursorMode : int
     {
         /// <summary>
@@ -310,6 +321,7 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの種類を表します。
     /// </summary>
+    [Serializable]
     public enum JoystickType : int
     {
         /// <summary>
@@ -337,6 +349,7 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックのボタンの種類を表します。
     /// </summary>
+    [Serializable]
     public enum JoystickButtonType : int
     {
         /// <summary>
@@ -437,6 +450,7 @@ namespace Altseed
     /// <summary>
     /// ジョイスティックの軸の種類を表します。
     /// </summary>
+    [Serializable]
     public enum JoystickAxisType : int
     {
         Start,
@@ -481,6 +495,7 @@ namespace Altseed
     /// <summary>
     /// ImGuiで使用する方向
     /// </summary>
+    [Serializable]
     public enum ToolDir : int
     {
         None = -1,
@@ -505,6 +520,7 @@ namespace Altseed
     /// <summary>
     /// バイナリ演算子を使用して複数の値を結合しないでください
     /// </summary>
+    [Serializable]
     public enum ToolCond : int
     {
         None = 0,
@@ -930,6 +946,7 @@ namespace Altseed
     /// <summary>
     /// Tool機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
     /// </summary>
+    [Serializable]
     public enum ToolGlyphRanges : int
     {
         Default,
@@ -962,6 +979,7 @@ namespace Altseed
     /// <summary>
     /// 音のスペクトル解析に使用する窓関数
     /// </summary>
+    [Serializable]
     public enum FFTWindow : int
     {
         Rectangular,
@@ -975,6 +993,7 @@ namespace Altseed
     /// <summary>
     /// ログレベルを表します。
     /// </summary>
+    [Serializable]
     public enum LogLevel : int
     {
         Trace = 0,
@@ -989,6 +1008,7 @@ namespace Altseed
     /// <summary>
     /// ログの範囲を表します。
     /// </summary>
+    [Serializable]
     public enum LogCategory : int
     {
         Core = 0,
@@ -1035,9 +1055,9 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Configuration_GetIsFullscreenMode(IntPtr selfPtr);
+        private static extern bool cbg_Configuration_GetIsFullscreen(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Configuration_SetIsFullscreenMode(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        private static extern void cbg_Configuration_SetIsFullscreen(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed_Core")]
@@ -1049,22 +1069,29 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Configuration_GetEnabledConsoleLogging(IntPtr selfPtr);
+        private static extern bool cbg_Configuration_GetConsoleLoggingEnabled(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Configuration_SetEnabledConsoleLogging(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        private static extern void cbg_Configuration_SetConsoleLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Configuration_GetEnabledFileLogging(IntPtr selfPtr);
+        private static extern bool cbg_Configuration_GetFileLoggingEnabled(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Configuration_SetEnabledFileLogging(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        private static extern void cbg_Configuration_SetFileLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Configuration_GetLogFilename(IntPtr selfPtr);
+        private static extern IntPtr cbg_Configuration_GetLogFileName(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Configuration_SetLogFilename(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        private static extern void cbg_Configuration_SetLogFileName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetToolEnabled(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetToolEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed_Core")]
@@ -1080,24 +1107,24 @@ namespace Altseed
         /// <summary>
         /// 全画面モードかどうかを取得または設定します。
         /// </summary>
-        public bool IsFullscreenMode
+        public bool IsFullscreen
         {
             get
             {
-                if (_IsFullscreenMode != null)
+                if (_IsFullscreen != null)
                 {
-                    return _IsFullscreenMode.Value;
+                    return _IsFullscreen.Value;
                 }
-                var ret = cbg_Configuration_GetIsFullscreenMode(selfPtr);
+                var ret = cbg_Configuration_GetIsFullscreen(selfPtr);
                 return ret;
             }
             set
             {
-                _IsFullscreenMode = value;
-                cbg_Configuration_SetIsFullscreenMode(selfPtr, value);
+                _IsFullscreen = value;
+                cbg_Configuration_SetIsFullscreen(selfPtr, value);
             }
         }
-        private bool? _IsFullscreenMode;
+        private bool? _IsFullscreen;
         
         /// <summary>
         /// 画面サイズ可変かどうかを取得または設定します。
@@ -1124,68 +1151,90 @@ namespace Altseed
         /// <summary>
         /// ログをコンソールに出力するかどうかを取得または設定します。
         /// </summary>
-        public bool EnabledConsoleLogging
+        public bool ConsoleLoggingEnabled
         {
             get
             {
-                if (_EnabledConsoleLogging != null)
+                if (_ConsoleLoggingEnabled != null)
                 {
-                    return _EnabledConsoleLogging.Value;
+                    return _ConsoleLoggingEnabled.Value;
                 }
-                var ret = cbg_Configuration_GetEnabledConsoleLogging(selfPtr);
+                var ret = cbg_Configuration_GetConsoleLoggingEnabled(selfPtr);
                 return ret;
             }
             set
             {
-                _EnabledConsoleLogging = value;
-                cbg_Configuration_SetEnabledConsoleLogging(selfPtr, value);
+                _ConsoleLoggingEnabled = value;
+                cbg_Configuration_SetConsoleLoggingEnabled(selfPtr, value);
             }
         }
-        private bool? _EnabledConsoleLogging;
+        private bool? _ConsoleLoggingEnabled;
         
         /// <summary>
         /// ログをファイルに出力するかどうかを取得または設定します。
         /// </summary>
-        public bool EnabledFileLogging
+        public bool FileLoggingEnabled
         {
             get
             {
-                if (_EnabledFileLogging != null)
+                if (_FileLoggingEnabled != null)
                 {
-                    return _EnabledFileLogging.Value;
+                    return _FileLoggingEnabled.Value;
                 }
-                var ret = cbg_Configuration_GetEnabledFileLogging(selfPtr);
+                var ret = cbg_Configuration_GetFileLoggingEnabled(selfPtr);
                 return ret;
             }
             set
             {
-                _EnabledFileLogging = value;
-                cbg_Configuration_SetEnabledFileLogging(selfPtr, value);
+                _FileLoggingEnabled = value;
+                cbg_Configuration_SetFileLoggingEnabled(selfPtr, value);
             }
         }
-        private bool? _EnabledFileLogging;
+        private bool? _FileLoggingEnabled;
         
         /// <summary>
         /// ログファイル名を取得または設定します。
         /// </summary>
-        public string LogFilename
+        public string LogFileName
         {
             get
             {
-                if (_LogFilename != null)
+                if (_LogFileName != null)
                 {
-                    return _LogFilename;
+                    return _LogFileName;
                 }
-                var ret = cbg_Configuration_GetLogFilename(selfPtr);
+                var ret = cbg_Configuration_GetLogFileName(selfPtr);
                 return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
             }
             set
             {
-                _LogFilename = value;
-                cbg_Configuration_SetLogFilename(selfPtr, value);
+                _LogFileName = value;
+                cbg_Configuration_SetLogFileName(selfPtr, value);
             }
         }
-        private string _LogFilename;
+        private string _LogFileName;
+        
+        /// <summary>
+        /// ツール機能を使用するかどうかを取得または設定します。
+        /// </summary>
+        public bool ToolEnabled
+        {
+            get
+            {
+                if (_ToolEnabled != null)
+                {
+                    return _ToolEnabled.Value;
+                }
+                var ret = cbg_Configuration_GetToolEnabled(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _ToolEnabled = value;
+                cbg_Configuration_SetToolEnabled(selfPtr, value);
+            }
+        }
+        private bool? _ToolEnabled;
         
         /// <summary>
         /// 新しいインスタンスを生成する
@@ -4074,7 +4123,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ビルド済みシェーダの取得を行うクラス
+    /// 組み込みシェーダの取得を行うクラス
     /// </summary>
     public partial class BuiltinShader
     {
@@ -4124,7 +4173,7 @@ namespace Altseed
         /// シェーダを取得します。
         /// </summary>
         /// <param name="type">シェーダの種類</param>
-        /// <returns><paramref name="type"/>に対応した種類のビルド済みの<see cref="Shader"/>のインスタンス</returns>
+        /// <returns><paramref name="type"/>に対応した種類の組み込みの<see cref="Shader"/>のインスタンス</returns>
         public Shader Create(BuiltinShaderType type)
         {
             var ret = cbg_BuiltinShader_Create(selfPtr, (int)type);
@@ -4659,6 +4708,12 @@ namespace Altseed
         private static extern void cbg_Tool_End(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_NewFrame(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_Render(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_Dummy(IntPtr selfPtr, ref Vector2F size);
         
         [DllImport("Altseed_Core")]
@@ -4957,6 +5012,22 @@ namespace Altseed
         public void End()
         {
             cbg_Tool_End(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void NewFrame()
+        {
+            cbg_Tool_NewFrame(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Render()
+        {
+            cbg_Tool_Render(selfPtr);
         }
         
         /// <summary>

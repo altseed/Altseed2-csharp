@@ -93,11 +93,11 @@ namespace Altseed.Test
 
             var config1 = new Configuration()
             {
-                EnabledConsoleLogging = true,
-                EnabledFileLogging = false,
-                IsFullscreenMode = false,
+                ConsoleLoggingEnabled = true,
+                FileLoggingEnabled = false,
+                IsFullscreen = false,
                 IsResizable = true,
-                LogFilename = "Log.txt"
+                LogFileName = "Log.txt"
             };
 
             const string path = "Serialization/Configuration.bin";
@@ -108,16 +108,16 @@ namespace Altseed.Test
 
             var config2 = Deserialize<Configuration>(path);
 
-            Assert.AreEqual(config1.EnabledConsoleLogging, true);
-            Assert.AreEqual(config1.EnabledConsoleLogging, config2.EnabledConsoleLogging);
-            Assert.AreEqual(config1.EnabledFileLogging, false);
-            Assert.AreEqual(config1.EnabledFileLogging, config2.EnabledFileLogging);
-            Assert.AreEqual(config1.IsFullscreenMode, false);
-            Assert.AreEqual(config1.IsFullscreenMode, config2.IsFullscreenMode);
+            Assert.AreEqual(config1.ConsoleLoggingEnabled, true);
+            Assert.AreEqual(config1.ConsoleLoggingEnabled, config2.ConsoleLoggingEnabled);
+            Assert.AreEqual(config1.FileLoggingEnabled, false);
+            Assert.AreEqual(config1.FileLoggingEnabled, config2.FileLoggingEnabled);
+            Assert.AreEqual(config1.IsFullscreen, false);
+            Assert.AreEqual(config1.IsFullscreen, config2.IsFullscreen);
             Assert.AreEqual(config1.IsResizable, true);
             Assert.AreEqual(config1.IsResizable, config2.IsResizable);
-            Assert.AreEqual(config1.LogFilename, "Log.txt");
-            Assert.AreEqual(config1.LogFilename, config2.LogFilename);
+            Assert.AreEqual(config1.LogFileName, "Log.txt");
+            Assert.AreEqual(config1.LogFileName, config2.LogFileName);
 
             tc.End();
         }
