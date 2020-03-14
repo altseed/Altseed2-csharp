@@ -9,6 +9,8 @@ namespace Altseed
     /// </summary>
     public static class Engine
     {
+        private static Configuration _Config;
+
         /// <summary>
         /// ルートノード
         /// </summary>
@@ -32,6 +34,7 @@ namespace Altseed
         /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
+            _Config = config;
             if (Core.Initialize(title, width, height, config ?? new Configuration()))
             {
                 Core = Core.GetInstance();
@@ -47,7 +50,8 @@ namespace Altseed
                 Window = Window.GetInstance();
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
-                Tool = Tool.GetInstance();
+
+                if (config.ToolEnabled) Tool = Tool.GetInstance();
 
                 Sound = SoundMixer.GetInstance();
 
@@ -66,7 +70,17 @@ namespace Altseed
         public static bool DoEvents()
         {
             Graphics.DoEvents();
-            return Core.GetInstance().DoEvent();
+            if (!Core.GetInstance().DoEvent()) return false;
+
+            if (_Config.ToolEnabled)
+            {
+                //ツール機能を使用するときはDoEventsでフレームを開始
+                //使用しないときはUpdateでフレームを開始
+                if (!Graphics.BeginFrame()) return false;
+                Tool.NewFrame();
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -74,7 +88,12 @@ namespace Altseed
         /// </summary>
         public static bool Update()
         {
-            if (!Graphics.BeginFrame()) return false;
+            if (!_Config.ToolEnabled)
+            {
+                //ツール機能を使用するときはDoEventsでフレームを開始
+                //使用しないときはUpdateでフレームを開始
+                if (!Graphics.BeginFrame()) return false;
+            }
 
             _UpdatedNode?.Update();
 
@@ -84,6 +103,12 @@ namespace Altseed
             cmdList.SetRenderTargetWithScreen();
 
             Renderer.Render(cmdList);
+
+            if (_Config.ToolEnabled)
+            {
+                Tool.Render();
+            }
+
             if (!Graphics.EndFrame()) return false;
             return true;
         }

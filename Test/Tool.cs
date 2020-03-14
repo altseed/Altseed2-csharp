@@ -12,17 +12,15 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void BeginEnd()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration { ToolEnabled = true });
             tc.Init();
-            
+
             tc.LoopBody(c =>
             {
-                Engine.Tool.NewFrame();
                 if (Engine.Tool.Begin("Test", ToolWindow.None))
                 {
                     Engine.Tool.End();
                 }
-                Engine.Tool.Render();
             }
             , null);
 

@@ -8,11 +8,17 @@ namespace Altseed.Test
     {
         public int Duration { get; set; } = 200;
         private string _TestName;
+        private Configuration _Config;
+
+        public TestCore(Configuration config = null)
+        {
+            _Config = config ?? new Configuration();
+        }
 
         public void Init([CallerMemberName]string testName = "")
         {
             _TestName = testName;
-            Assert.True(Engine.Initialize($"Altseed2 C# EngineTest:{testName}", 800, 600, new Configuration()));
+            Assert.True(Engine.Initialize($"Altseed2 C# EngineTest:{testName}", 800, 600, _Config));
             Engine.FramerateMode = FramerateMode.Variable;
             Engine.TargetFPS = 60;
         }
