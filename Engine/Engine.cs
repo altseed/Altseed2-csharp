@@ -47,6 +47,7 @@ namespace Altseed
                 Window = Window.GetInstance();
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
+                Tool = Tool.GetInstance();
 
                 Sound = SoundMixer.GetInstance();
 
@@ -166,6 +167,8 @@ namespace Altseed
         /// </summary>
         internal static Window Window { get; private set; }
 
+        public static Tool Tool { get; private set; }
+
         #endregion
 
         #region Node
@@ -194,7 +197,7 @@ namespace Altseed
         internal static void RegisterDrawnNode(DrawnNode node)
         {
             _DrawnNodes.Add(node);
-            _DrawnNodes.Sort(new DrawnNodeSorter()); 
+            _DrawnNodes.Sort(new DrawnNodeSorter());
             // TODO: _DrawnNodesを追加時に自動ソートされるようなコレクションにする
         }
 
