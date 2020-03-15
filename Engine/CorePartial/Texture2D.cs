@@ -5,11 +5,13 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public partial class Texture2D : ISerializable
+    public partial class Texture2D : ISerializable, IDeserializationCallback
     {
         #region SerializeName
         private const string S_Path = "S_Path";
         #endregion
+
+        private SerializationInfo seInfo;
 
         /// <summary>
         /// シリアライズされたデータをもとに<see cref="Texture2D"/>のインスタンスを生成する
@@ -18,13 +20,7 @@ namespace Altseed
         /// <param name="context">送信元の情報</param>
         protected Texture2D(SerializationInfo info, StreamingContext context)
         {
-            var path = info.GetString(S_Path);
-            var ptr = cbg_Texture2D_Load(path);
-
-            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-
-            selfPtr = ptr;
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<Texture2D>(this));
+            seInfo = info;
         }
 
         /// <summary>
@@ -73,5 +69,25 @@ namespace Altseed
             info.AddValue(S_Path, GetPath());
         }
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+
+            var path = seInfo.GetString(S_Path);
+            var ptr = cbg_Texture2D_Load(path);
+
+            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
+
+            selfPtr = ptr;
+            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<Texture2D>(this));
+
+            seInfo = null;
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
     }
 }

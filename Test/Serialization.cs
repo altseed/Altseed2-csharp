@@ -222,6 +222,33 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void RenderTexture()
+        {
+            var tc = new TestCore();
+
+            tc.Init();
+
+            var size = new Vector2I(100, 100);
+            var texture1 = Altseed.RenderTexture.Create(ref size);
+
+            Assert.NotNull(texture1);
+
+            const string path = "Serialization/RenderTexture.bin";
+
+            Serialize(path, texture1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var texture2 = Deserialize<RenderTexture>(path);
+
+            Assert.NotNull(texture2);
+
+            Assert.AreEqual(texture1.Size, texture2.Size);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void Sound()
         {
             var tc = new TestCore();
