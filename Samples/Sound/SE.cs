@@ -13,7 +13,7 @@ namespace Sample
 
             // 音ファイルを読み込みます。
             // 効果音の場合は第2引数を true に設定して事前にファイルを解凍することが推奨されている。
-            var se = Sound.Load("se1.wav", true);
+            var se = Sound.Load(@"TestData\Sound\se1.wav", true);
 
             // 音を再生します。
             var id = Engine.Sound.Play(se);

@@ -13,7 +13,7 @@ namespace Sample
 
             // 音ファイルを読み込みます。
             // 効果音の場合は第2引数を true に設定して再生しながら解凍することが推奨されている。
-            var bgm = Sound.Load("bgm1.ogg", false);
+            var bgm = Sound.Load(@"TestData\Sound\bgm1.ogg", false);
 
             // 音のループモードを有効にします。
             bgm.IsLoopingMode = true;
