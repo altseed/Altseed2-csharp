@@ -5,13 +5,13 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public partial class Texture2D : ISerializable
+    public partial class Texture2D : ISerializable, IDeserializationCallback
     {
         #region SerializeName
         private const string S_Path = "S_Path";
         #endregion
 
-        private string path;
+        private SerializationInfo seInfo;
 
         /// <summary>
         /// シリアライズされたデータをもとに<see cref="Texture2D"/>のインスタンスを生成する
@@ -20,14 +20,7 @@ namespace Altseed
         /// <param name="context">送信元の情報</param>
         protected Texture2D(SerializationInfo info, StreamingContext context)
         {
-            var path = info.GetString(S_Path);
-            var ptr = cbg_Texture2D_Load(path);
-
-            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-
-            selfPtr = ptr;
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<Texture2D>(this));
-            this.path = path;
+            seInfo = info;
         }
 
         /// <summary>
@@ -45,10 +38,7 @@ namespace Altseed
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
 
-            var result = Load(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
-
-            result.path = path;
-            return result;
+            return Load(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
         }
 
         /// <summary>
@@ -59,11 +49,7 @@ namespace Altseed
         /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
         public static bool TryLoad(string path, out Texture2D result)
         {
-            if (IOHelper.CheckLoadPath(path) == null && (result = Load(path)) != null)
-            {
-                result.path = path;
-                return true;
-            }
+            if (IOHelper.CheckLoadPath(path) == null && (result = Load(path)) != null) return true;
             else
             {
                 result = null;
@@ -80,8 +66,28 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
 
-            info.AddValue(S_Path, path);
+            info.AddValue(S_Path, GetPath());
         }
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+
+            var path = seInfo.GetString(S_Path);
+            var ptr = cbg_Texture2D_Load(path);
+
+            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
+
+            selfPtr = ptr;
+            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<Texture2D>(this));
+
+            seInfo = null;
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
     }
 }

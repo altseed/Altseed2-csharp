@@ -12,6 +12,7 @@ namespace Altseed
         private const string S_ConsoleLoggingEnabled = "S_ConsoleLoggingEnabled";
         private const string S_EnabledFileLoging = "S_EnabledFileLoging";
         private const string S_LogFileName = "S_LogFileName";
+        private const string S_ToolEnabled = "S_ToolEnabled";
         #endregion
 
         private Configuration(SerializationInfo info, StreamingContext context) : this()
@@ -21,6 +22,7 @@ namespace Altseed
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
             FileLoggingEnabled = info.GetBoolean(S_EnabledFileLoging);
             LogFileName = info.GetString(S_LogFileName) ?? throw new SerializationException("デシリアライズに失敗しました");
+            ToolEnabled = info.GetBoolean(S_ToolEnabled);
         }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
@@ -32,6 +34,7 @@ namespace Altseed
             info.AddValue(S_ConsoleLoggingEnabled, ConsoleLoggingEnabled);
             info.AddValue(S_EnabledFileLoging, FileLoggingEnabled);
             info.AddValue(S_LogFileName, LogFileName);
+            info.AddValue(S_ToolEnabled, ToolEnabled);
         }
     }
 }

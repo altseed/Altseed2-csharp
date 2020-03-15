@@ -3008,6 +3008,9 @@ namespace Altseed
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Texture2D_GetSize(IntPtr selfPtr);
         
         
@@ -3052,6 +3055,16 @@ namespace Altseed
         {
             var ret = cbg_Texture2D_Reload(selfPtr);
             return ret;
+        }
+        
+        /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        /// <returns>読み込んだファイルのパス</returns>
+        internal string GetPath()
+        {
+            var ret = cbg_Texture2D_GetPath(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         ~Texture2D()

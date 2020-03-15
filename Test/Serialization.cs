@@ -97,7 +97,8 @@ namespace Altseed.Test
                 FileLoggingEnabled = false,
                 IsFullscreen = false,
                 IsResizable = true,
-                LogFileName = "Log.txt"
+                LogFileName = "Log.txt",
+                ToolEnabled = true
             };
 
             const string path = "Serialization/Configuration.bin";
@@ -118,6 +119,8 @@ namespace Altseed.Test
             Assert.AreEqual(config1.IsResizable, config2.IsResizable);
             Assert.AreEqual(config1.LogFileName, "Log.txt");
             Assert.AreEqual(config1.LogFileName, config2.LogFileName);
+            Assert.AreEqual(config1.ToolEnabled, true);
+            Assert.AreEqual(config1.ToolEnabled, config2.ToolEnabled);
 
             tc.End();
         }
@@ -194,6 +197,7 @@ namespace Altseed.Test
             Assert.NotNull(texture2);
 
             Assert.AreEqual(texture1.Size, texture2.Size);
+            Assert.AreEqual(texture1.GetPath(), texture2.GetPath());
 
             var obj1 = new SpriteNode()
             {
@@ -213,6 +217,33 @@ namespace Altseed.Test
             {
                 if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
             });
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RenderTexture()
+        {
+            var tc = new TestCore();
+
+            tc.Init();
+
+            var size = new Vector2I(100, 100);
+            var texture1 = Altseed.RenderTexture.Create(ref size);
+
+            Assert.NotNull(texture1);
+
+            const string path = "Serialization/RenderTexture.bin";
+
+            Serialize(path, texture1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var texture2 = Deserialize<RenderTexture>(path);
+
+            Assert.NotNull(texture2);
+
+            Assert.AreEqual(texture1.Size, texture2.Size);
 
             tc.End();
         }
