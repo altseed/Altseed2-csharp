@@ -16,7 +16,10 @@ namespace Sample
         static void Main(string[] args)
         {
             var list = new List<Sample>();
-            list.Add(new Sample("SpriteNode", "SpriteNodeを使ってテクスチャを描画します。", typeof(SpriteNode)));
+            list.Add(new Sample("Sprite", "SpriteNodeを使ってテクスチャを描画します。", typeof(Sprite)));
+            list.Add(new Sample("SE", "効果音を再生します。", typeof(SoundSE)));
+            list.Add(new Sample("BGM", "BGMを再生します。", typeof(SoundBGM)));
+            list.Add(new Sample("BGMLoop", "BGMをループ再生します。", typeof(SoundLoop)));
 
             Samples = list.ToDictionary(s => s.TypeName);
 
@@ -30,7 +33,7 @@ namespace Sample
             {
                 ToolEnabled = true,
             };
-            if (!Engine.Initialize("Altseed2 サンプルビュワー", 800, 600, config)) return;
+            if (!Engine.Initialize("Altseed2 サンプルビュワー", 640, 480, config)) return;
 
             while (Engine.DoEvents())
             {
