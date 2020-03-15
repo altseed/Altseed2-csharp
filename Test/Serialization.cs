@@ -197,6 +197,7 @@ namespace Altseed.Test
             Assert.NotNull(texture2);
 
             Assert.AreEqual(texture1.Size, texture2.Size);
+            Assert.AreEqual(texture1.GetPath(), texture2.GetPath());
 
             var obj1 = new SpriteNode()
             {
