@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Altseed
 {
-    public class PolygonNode : DrawnNode, IDeserializationCallback
+    [Serializable]
+    public class PolygonNode : DrawnNode
     {
         private readonly RenderedPolygon renderedPolygon;
 
@@ -111,19 +111,5 @@ namespace Altseed
                 vertexArray[i].Color = color;
             Vertexes = vertexArray;
         }
-
-        #region Serialization
-
-        /// <summary>
-        /// デシリアライズ時に実行
-        /// </summary>
-        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
-        protected virtual void OnDeserialization(object sender)
-        {
-            throw new NotImplementedException();
-        }
-        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
-
-        #endregion
     }
 }
