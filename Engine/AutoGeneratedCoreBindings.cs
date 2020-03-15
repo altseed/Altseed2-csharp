@@ -7038,6 +7038,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_Window_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Window_Release(IntPtr selfPtr);
         
         #endregion
@@ -7068,6 +7072,18 @@ namespace Altseed
             }
         }
         private string _Title;
+        
+        /// <summary>
+        /// ウィンドウサイズを取得します
+        /// </summary>
+        public Vector2I Size
+        {
+            get
+            {
+                var ret = cbg_Window_GetSize(selfPtr);
+                return ret;
+            }
+        }
         
         /// <summary>
         /// インスタンスを取得します。
