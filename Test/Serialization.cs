@@ -97,7 +97,8 @@ namespace Altseed.Test
                 FileLoggingEnabled = false,
                 IsFullscreen = false,
                 IsResizable = true,
-                LogFileName = "Log.txt"
+                LogFileName = "Log.txt",
+                ToolEnabled = true
             };
 
             const string path = "Serialization/Configuration.bin";
@@ -118,6 +119,8 @@ namespace Altseed.Test
             Assert.AreEqual(config1.IsResizable, config2.IsResizable);
             Assert.AreEqual(config1.LogFileName, "Log.txt");
             Assert.AreEqual(config1.LogFileName, config2.LogFileName);
+            Assert.AreEqual(config1.ToolEnabled, true);
+            Assert.AreEqual(config1.ToolEnabled, config2.ToolEnabled);
 
             tc.End();
         }
