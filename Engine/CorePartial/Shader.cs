@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Altseed.CorePartial
+namespace Altseed
 {
     [Serializable]
     public partial class Shader : ISerializable
     {
         #region SerializeName
+        private const string S_Code = "S_Code";
+        private const string S_Name = "S_Name";
+        private const string S_ShaderStageType = "S_ShaderStageType";
         #endregion
 
         /// <summary>
@@ -16,7 +19,15 @@ namespace Altseed.CorePartial
         /// <param name="context">送信元の情報</param>
         protected Shader(SerializationInfo info, StreamingContext context)
         {
+            var code = info.GetString(S_Code);
+            var name = info.GetString(S_Name);
+            var stage = info.GetValue<ShaderStageType>(S_ShaderStageType);
 
+            var ptr = cbg_Shader_Create(code, name, (int)stage);
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンスの生成に失敗しました");
+            selfPtr = ptr;
+
+            cacheRepo.TryAdd(ptr, new WeakReference<Shader>(this));
         }
 
         /// <summary>
