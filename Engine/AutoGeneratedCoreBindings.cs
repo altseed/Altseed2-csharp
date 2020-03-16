@@ -3208,7 +3208,7 @@ namespace Altseed
         private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr, int shaderStage);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Material_SetShader(IntPtr selfPtr, int shaderStage, IntPtr shader);
+        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr shader);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
@@ -3297,9 +3297,9 @@ namespace Altseed
             return Shader.TryGetFromCache(ret);
         }
         
-        public void SetShader(ShaderStageType shaderStage, Shader shader)
+        public void SetShader(Shader shader)
         {
-            cbg_Material_SetShader(selfPtr, (int)shaderStage, shader != null ? shader.selfPtr : IntPtr.Zero);
+            cbg_Material_SetShader(selfPtr, shader != null ? shader.selfPtr : IntPtr.Zero);
         }
         
         ~Material()
@@ -4327,6 +4327,14 @@ namespace Altseed
         private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string code, [MarshalAs(UnmanagedType.LPWStr)] string name, int shaderStage);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Shader_GetStageType(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Shader_GetCode(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
@@ -4334,6 +4342,24 @@ namespace Altseed
         internal Shader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        public ShaderStageType StageType
+        {
+            get
+            {
+                var ret = cbg_Shader_GetStageType(selfPtr);
+                return (ShaderStageType)ret;
+            }
+        }
+        
+        public string Code
+        {
+            get
+            {
+                var ret = cbg_Shader_GetCode(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
         }
         
         public static Shader Create(string code, string name, ShaderStageType shaderStage)
