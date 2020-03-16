@@ -92,6 +92,11 @@ namespace Altseed
             return hashCode;
         }
 
+        /// <summary>
+        /// 同じ値を持つ<see cref="RectF"/>の新しいインスタンスを生成する
+        /// </summary>
+        /// <returns>同じ値を持つ<see cref="RectF"/>の新しいインスタンス</returns>
+        public readonly RectF ToF() => new RectF(X, Y, Width, Height);
 
         public static bool operator ==(RectI v1, RectI v2) => Equals(v1, v2);
 

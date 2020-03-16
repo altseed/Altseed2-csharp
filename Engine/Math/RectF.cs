@@ -92,9 +92,17 @@ namespace Altseed
             return hashCode;
         }
 
+        /// <summary>
+        /// 同じ値を持つ<see cref="RectI"/>の新しいインスタンスを生成する
+        /// </summary>
+        /// <returns>同じ値を持つ<see cref="RectI"/>の新しいインスタンス</returns>
+        public readonly RectI ToI() => new RectI((int)X, (int)Y, (int)Width, (int)Height);
 
         public static bool operator ==(RectF v1, RectF v2) => Equals(v1, v2);
 
         public static bool operator !=(RectF v1, RectF v2) => !Equals(v1, v2);
+
+        public static implicit operator RectF(RectI rect) => rect.ToF();
+        public static explicit operator RectI(RectF rect) => rect.ToI();
     }
 }
