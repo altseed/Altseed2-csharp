@@ -4335,6 +4335,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Shader_GetName(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
@@ -4353,6 +4357,9 @@ namespace Altseed
             }
         }
         
+        /// <summary>
+        /// インスタンス生成に使用したコードを取得します
+        /// </summary>
         public string Code
         {
             get
@@ -4362,6 +4369,25 @@ namespace Altseed
             }
         }
         
+        /// <summary>
+        /// 名前を取得します
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                var ret = cbg_Shader_GetName(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
+        /// コードをコンパイルしてシェーダを生成する
+        /// </summary>
+        /// <param name="code">コンパイルするコード</param>
+        /// <param name="name">シェーダの名前</param>
+        /// <param name="shaderStage"></param>
+        /// <returns>コンパイルの結果生成されたシェーダ</returns>
         public static Shader Create(string code, string name, ShaderStageType shaderStage)
         {
             var ret = cbg_Shader_Create(code, name, (int)shaderStage);
