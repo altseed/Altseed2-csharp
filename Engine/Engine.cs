@@ -99,13 +99,16 @@ namespace Altseed
             _UpdatedNode?.Update();
 
             var cmdList = Graphics.CommandList;
-            foreach (var cam in _RootNode.Children.OfType<CameraNode>().OrderBy(c => c.Id))
-                //TODO: あらかじめ整理しておく
-            {
-                Renderer.SetCamera(cam.RenderedCamera);
-                foreach (var dn in _DrawnNodes) dn.Draw();
-                Renderer.Render(cmdList);
-            }
+
+            foreach (var dn in _DrawnNodes) dn.Draw();
+
+            //foreach (var cam in _RootNode.Children.OfType<CameraNode>().OrderBy(c => c.Id))
+            //    //TODO: あらかじめ整理しておく
+            //{
+            //    Renderer.SetCamera(cam.RenderedCamera);
+            //    foreach (var dn in _DrawnNodes) dn.Draw();
+            //    Renderer.Render(cmdList);
+            //}
 
             if (_Config.ToolEnabled)
             {
