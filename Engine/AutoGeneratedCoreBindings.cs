@@ -469,6 +469,13 @@ namespace Altseed
     }
     
     [Serializable]
+    public enum ShaderStageType : int
+    {
+        Vertex,
+        Pixel,
+    }
+    
+    [Serializable]
     public enum BuiltinShaderType : int
     {
         SpriteUnlitVS,
@@ -3198,10 +3205,10 @@ namespace Altseed
         private static extern void cbg_Material_SetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr value);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr value);
+        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr, int shaderStage);
         
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetShader(IntPtr selfPtr, int shaderStage, IntPtr shader);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
@@ -3212,28 +3219,6 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
-        
-        /// <summary>
-        /// 使用するシェーダを取得する
-        /// </summary>
-        public Shader Shader
-        {
-            get
-            {
-                if (_Shader != null)
-                {
-                    return _Shader;
-                }
-                var ret = cbg_Material_GetShader(selfPtr);
-                return Shader.TryGetFromCache(ret);
-            }
-            set
-            {
-                _Shader = value;
-                cbg_Material_SetShader(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
-            }
-        }
-        private Shader _Shader;
         
         /// <summary>
         /// 新しいインスタンスを生成する
@@ -3304,6 +3289,17 @@ namespace Altseed
         public void SetTexture(string key, Texture2D value)
         {
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
+        }
+        
+        public Shader GetShader(ShaderStageType shaderStage)
+        {
+            var ret = cbg_Material_GetShader(selfPtr, (int)shaderStage);
+            return Shader.TryGetFromCache(ret);
+        }
+        
+        public void SetShader(ShaderStageType shaderStage, Shader shader)
+        {
+            cbg_Material_SetShader(selfPtr, (int)shaderStage, shader != null ? shader.selfPtr : IntPtr.Zero);
         }
         
         ~Material()
@@ -4328,6 +4324,9 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string code, [MarshalAs(UnmanagedType.LPWStr)] string name, int shaderStage);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
@@ -4335,6 +4334,12 @@ namespace Altseed
         internal Shader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        public static Shader Create(string code, string name, ShaderStageType shaderStage)
+        {
+            var ret = cbg_Shader_Create(code, name, (int)shaderStage);
+            return Shader.TryGetFromCache(ret);
         }
         
         ~Shader()
