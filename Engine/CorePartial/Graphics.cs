@@ -180,10 +180,4 @@ namespace Altseed
     {
 
     }
-
-    [Serializable]
-    public sealed partial class Shader
-    {
-
-    }
 }

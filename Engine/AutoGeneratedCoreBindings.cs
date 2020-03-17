@@ -469,6 +469,13 @@ namespace Altseed
     }
     
     [Serializable]
+    public enum ShaderStageType : int
+    {
+        Vertex,
+        Pixel,
+    }
+    
+    [Serializable]
     public enum BuiltinShaderType : int
     {
         SpriteUnlitVS,
@@ -1839,7 +1846,7 @@ namespace Altseed
         private static extern Vertex cbg_VertexArray_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_VertexArray_SetAt(IntPtr selfPtr, int index, ref Vertex value);
+        private static extern void cbg_VertexArray_SetAt(IntPtr selfPtr, int index, Vertex value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_VertexArray_Create(int size);
@@ -1922,9 +1929,9 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, ref Vertex value)
+        public void SetAt(int index, Vertex value)
         {
-            cbg_VertexArray_SetAt(selfPtr, index, ref value);
+            cbg_VertexArray_SetAt(selfPtr, index, value);
         }
         
         /// <summary>
@@ -2167,7 +2174,7 @@ namespace Altseed
         private static extern Vector2F cbg_Vector2FArray_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Vector2FArray_SetAt(IntPtr selfPtr, int index, ref Vector2F value);
+        private static extern void cbg_Vector2FArray_SetAt(IntPtr selfPtr, int index, Vector2F value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Vector2FArray_Create(int size);
@@ -2250,9 +2257,9 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, ref Vector2F value)
+        public void SetAt(int index, Vector2F value)
         {
-            cbg_Vector2FArray_SetAt(selfPtr, index, ref value);
+            cbg_Vector2FArray_SetAt(selfPtr, index, value);
         }
         
         /// <summary>
@@ -2511,7 +2518,7 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern Vector2F cbg_Mouse_GetPosition(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, ref Vector2F value);
+        private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed_Core")]
@@ -2551,7 +2558,7 @@ namespace Altseed
             set
             {
                 _Position = value;
-                cbg_Mouse_SetPosition(selfPtr, ref value);
+                cbg_Mouse_SetPosition(selfPtr, value);
             }
         }
         private Vector2F? _Position;
@@ -3111,7 +3118,7 @@ namespace Altseed
         }
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_RenderTexture_Create(ref Vector2I size);
+        private static extern IntPtr cbg_RenderTexture_Create(Vector2I size);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_RenderTexture_Release(IntPtr selfPtr);
@@ -3123,9 +3130,9 @@ namespace Altseed
             selfPtr = handle.selfPtr;
         }
         
-        public static RenderTexture Create(ref Vector2I size)
+        public static RenderTexture Create(Vector2I size)
         {
-            var ret = cbg_RenderTexture_Create(ref size);
+            var ret = cbg_RenderTexture_Create(size);
             return RenderTexture.TryGetFromCache(ret);
         }
         
@@ -3183,13 +3190,13 @@ namespace Altseed
         private static extern Vector4F cbg_Material_GetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Material_SetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, ref Vector4F value);
+        private static extern void cbg_Material_SetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Vector4F value);
         
         [DllImport("Altseed_Core")]
         private static extern Matrix44F cbg_Material_GetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Material_SetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, ref Matrix44F value);
+        private static extern void cbg_Material_SetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Matrix44F value);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Material_GetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
@@ -3198,10 +3205,10 @@ namespace Altseed
         private static extern void cbg_Material_SetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr value);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr value);
+        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr, int shaderStage);
         
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr shader);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
@@ -3212,28 +3219,6 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
-        
-        /// <summary>
-        /// 使用するシェーダを取得する
-        /// </summary>
-        public Shader Shader
-        {
-            get
-            {
-                if (_Shader != null)
-                {
-                    return _Shader;
-                }
-                var ret = cbg_Material_GetShader(selfPtr);
-                return Shader.TryGetFromCache(ret);
-            }
-            set
-            {
-                _Shader = value;
-                cbg_Material_SetShader(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
-            }
-        }
-        private Shader _Shader;
         
         /// <summary>
         /// 新しいインスタンスを生成する
@@ -3259,9 +3244,9 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Vector4F"/>のインスタンスの値</param>
-        public void SetVector4F(string key, ref Vector4F value)
+        public void SetVector4F(string key, Vector4F value)
         {
-            cbg_Material_SetVector4F(selfPtr, key, ref value);
+            cbg_Material_SetVector4F(selfPtr, key, value);
         }
         
         /// <summary>
@@ -3280,9 +3265,9 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Matrix44F"/>のインスタンスの値</param>
-        public void SetMatrix44F(string key, ref Matrix44F value)
+        public void SetMatrix44F(string key, Matrix44F value)
         {
-            cbg_Material_SetMatrix44F(selfPtr, key, ref value);
+            cbg_Material_SetMatrix44F(selfPtr, key, value);
         }
         
         /// <summary>
@@ -3304,6 +3289,17 @@ namespace Altseed
         public void SetTexture(string key, Texture2D value)
         {
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
+        }
+        
+        public Shader GetShader(ShaderStageType shaderStage)
+        {
+            var ret = cbg_Material_GetShader(selfPtr, (int)shaderStage);
+            return Shader.TryGetFromCache(ret);
+        }
+        
+        public void SetShader(Shader shader)
+        {
+            cbg_Material_SetShader(selfPtr, shader != null ? shader.selfPtr : IntPtr.Zero);
         }
         
         ~Material()
@@ -3494,7 +3490,7 @@ namespace Altseed
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, ref RectI viewport);
+        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, [In, Out] ref RectI viewport);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
@@ -3583,7 +3579,7 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern Matrix44F cbg_Rendered_GetTransform(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Rendered_SetTransform(IntPtr selfPtr, ref Matrix44F value);
+        private static extern void cbg_Rendered_SetTransform(IntPtr selfPtr, Matrix44F value);
         
         
         [DllImport("Altseed_Core")]
@@ -3613,7 +3609,7 @@ namespace Altseed
             set
             {
                 _Transform = value;
-                cbg_Rendered_SetTransform(selfPtr, ref value);
+                cbg_Rendered_SetTransform(selfPtr, value);
             }
         }
         private Matrix44F? _Transform;
@@ -3676,7 +3672,7 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern RectF cbg_RenderedSprite_GetSrc(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_RenderedSprite_SetSrc(IntPtr selfPtr, ref RectF value);
+        private static extern void cbg_RenderedSprite_SetSrc(IntPtr selfPtr, RectF value);
         
         
         [DllImport("Altseed_Core")]
@@ -3734,7 +3730,7 @@ namespace Altseed
             set
             {
                 _Src = value;
-                cbg_RenderedSprite_SetSrc(selfPtr, ref value);
+                cbg_RenderedSprite_SetSrc(selfPtr, value);
             }
         }
         private RectF? _Src;
@@ -3846,7 +3842,7 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, ref Color value);
+        private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, Color value);
         
         
         [DllImport("Altseed_Core")]
@@ -3964,7 +3960,7 @@ namespace Altseed
             set
             {
                 _Color = value;
-                cbg_RenderedText_SetColor(selfPtr, ref value);
+                cbg_RenderedText_SetColor(selfPtr, value);
             }
         }
         private Color? _Color;
@@ -4045,7 +4041,7 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern RectF cbg_RenderedPolygon_GetSrc(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_RenderedPolygon_SetSrc(IntPtr selfPtr, ref RectF value);
+        private static extern void cbg_RenderedPolygon_SetSrc(IntPtr selfPtr, RectF value);
         
         
         [DllImport("Altseed_Core")]
@@ -4125,7 +4121,7 @@ namespace Altseed
             set
             {
                 _Src = value;
-                cbg_RenderedPolygon_SetSrc(selfPtr, ref value);
+                cbg_RenderedPolygon_SetSrc(selfPtr, value);
             }
         }
         private RectF? _Src;
@@ -4412,6 +4408,21 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string code, int shaderStage);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Shader_GetStageType(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Shader_GetCode(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Shader_GetName(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
@@ -4419,6 +4430,52 @@ namespace Altseed
         internal Shader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        public ShaderStageType StageType
+        {
+            get
+            {
+                var ret = cbg_Shader_GetStageType(selfPtr);
+                return (ShaderStageType)ret;
+            }
+        }
+        
+        /// <summary>
+        /// インスタンス生成に使用したコードを取得します
+        /// </summary>
+        public string Code
+        {
+            get
+            {
+                var ret = cbg_Shader_GetCode(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
+        /// 名前を取得します
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                var ret = cbg_Shader_GetName(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
+        /// コードをコンパイルしてシェーダを生成する
+        /// </summary>
+        /// <param name="name">シェーダの名前</param>
+        /// <param name="code">コンパイルするコード</param>
+        /// <param name="shaderStage"></param>
+        /// <returns>コンパイルの結果生成されたシェーダ</returns>
+        public static Shader Create(string name, string code, ShaderStageType shaderStage)
+        {
+            var ret = cbg_Shader_Create(name, code, (int)shaderStage);
+            return Shader.TryGetFromCache(ret);
         }
         
         ~Shader()
@@ -4898,7 +4955,7 @@ namespace Altseed
         private static extern void cbg_Tool_Render(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_Dummy(IntPtr selfPtr, ref Vector2F size);
+        private static extern void cbg_Tool_Dummy(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_Text(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
@@ -4910,7 +4967,7 @@ namespace Altseed
         private static extern void cbg_Tool_TextWrapped(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_TextColored(IntPtr selfPtr, ref Vector4F color, [MarshalAs(UnmanagedType.LPWStr)] string text);
+        private static extern void cbg_Tool_TextColored(IntPtr selfPtr, Vector4F color, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_TextDisabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
@@ -4941,7 +4998,7 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_Button(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, ref Vector2F size);
+        private static extern bool cbg_Tool_Button(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -4957,7 +5014,7 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_InvisibleButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, ref Vector2F size);
+        private static extern bool cbg_Tool_InvisibleButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -4985,11 +5042,11 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_VSliderInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, ref Vector2F size, [In, Out] ref int value, int valueMin, int valueMax);
+        private static extern bool cbg_Tool_VSliderInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [In, Out] ref int value, int valueMin, int valueMax);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_VSliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, ref Vector2F size, [In, Out] ref float value, float valueMin, float valueMax);
+        private static extern bool cbg_Tool_VSliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [In, Out] ref float value, float valueMin, float valueMax);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -5015,7 +5072,7 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_BeginChild(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, ref Vector2F size, [MarshalAs(UnmanagedType.Bool)] bool border, int flags);
+        private static extern bool cbg_Tool_BeginChild(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [MarshalAs(UnmanagedType.Bool)] bool border, int flags);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_EndChild(IntPtr selfPtr);
@@ -5136,7 +5193,7 @@ namespace Altseed
         private static extern Vector2F cbg_Tool_GetWindowSize(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetWindowSize(IntPtr selfPtr, ref Vector2F size);
+        private static extern void cbg_Tool_SetWindowSize(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -5157,13 +5214,13 @@ namespace Altseed
         private static extern void cbg_Tool_ResetMouseDragDelta(IntPtr selfPtr, int button);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetNextWindowContentSize(IntPtr selfPtr, ref Vector2F size);
+        private static extern void cbg_Tool_SetNextWindowContentSize(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetNextWindowSize(IntPtr selfPtr, ref Vector2F size);
+        private static extern void cbg_Tool_SetNextWindowSize(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetNextWindowPos(IntPtr selfPtr, ref Vector2F pos);
+        private static extern void cbg_Tool_SetNextWindowPos(IntPtr selfPtr, Vector2F pos);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_Release(IntPtr selfPtr);
@@ -5217,9 +5274,9 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void Dummy(ref Vector2F size)
+        public void Dummy(Vector2F size)
         {
-            cbg_Tool_Dummy(selfPtr, ref size);
+            cbg_Tool_Dummy(selfPtr, size);
         }
         
         /// <summary>
@@ -5249,9 +5306,9 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void TextColored(ref Vector4F color, string text)
+        public void TextColored(Vector4F color, string text)
         {
-            cbg_Tool_TextColored(selfPtr, ref color, text);
+            cbg_Tool_TextColored(selfPtr, color, text);
         }
         
         /// <summary>
@@ -5324,9 +5381,9 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool Button(string label, ref Vector2F size)
+        public bool Button(string label, Vector2F size)
         {
-            var ret = cbg_Tool_Button(selfPtr, label, ref size);
+            var ret = cbg_Tool_Button(selfPtr, label, size);
             return ret;
         }
         
@@ -5360,9 +5417,9 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InvisibleButton(string label, ref Vector2F size)
+        public bool InvisibleButton(string label, Vector2F size)
         {
-            var ret = cbg_Tool_InvisibleButton(selfPtr, label, ref size);
+            var ret = cbg_Tool_InvisibleButton(selfPtr, label, size);
             return ret;
         }
         
@@ -5423,18 +5480,18 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool VSliderInt(string label, ref Vector2F size, ref int value, int valueMin, int valueMax)
+        public bool VSliderInt(string label, Vector2F size, ref int value, int valueMin, int valueMax)
         {
-            var ret = cbg_Tool_VSliderInt(selfPtr, label, ref size, ref value, valueMin, valueMax);
+            var ret = cbg_Tool_VSliderInt(selfPtr, label, size, ref value, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public bool VSliderFloat(string label, ref Vector2F size, ref float value, float valueMin, float valueMax)
+        public bool VSliderFloat(string label, Vector2F size, ref float value, float valueMin, float valueMax)
         {
-            var ret = cbg_Tool_VSliderFloat(selfPtr, label, ref size, ref value, valueMin, valueMax);
+            var ret = cbg_Tool_VSliderFloat(selfPtr, label, size, ref value, valueMin, valueMax);
             return ret;
         }
         
@@ -5493,9 +5550,9 @@ namespace Altseed
         /// <summary>
         /// `EndChild()` を呼び出してください
         /// </summary>
-        public bool BeginChild(string label, ref Vector2F size, bool border, ToolWindow flags)
+        public bool BeginChild(string label, Vector2F size, bool border, ToolWindow flags)
         {
-            var ret = cbg_Tool_BeginChild(selfPtr, label, ref size, border, (int)flags);
+            var ret = cbg_Tool_BeginChild(selfPtr, label, size, border, (int)flags);
             return ret;
         }
         
@@ -5808,9 +5865,9 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void SetWindowSize(ref Vector2F size)
+        public void SetWindowSize(Vector2F size)
         {
-            cbg_Tool_SetWindowSize(selfPtr, ref size);
+            cbg_Tool_SetWindowSize(selfPtr, size);
         }
         
         /// <summary>
@@ -5860,25 +5917,25 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void SetNextWindowContentSize(ref Vector2F size)
+        public void SetNextWindowContentSize(Vector2F size)
         {
-            cbg_Tool_SetNextWindowContentSize(selfPtr, ref size);
+            cbg_Tool_SetNextWindowContentSize(selfPtr, size);
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public void SetNextWindowSize(ref Vector2F size)
+        public void SetNextWindowSize(Vector2F size)
         {
-            cbg_Tool_SetNextWindowSize(selfPtr, ref size);
+            cbg_Tool_SetNextWindowSize(selfPtr, size);
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public void SetNextWindowPos(ref Vector2F pos)
+        public void SetNextWindowPos(Vector2F pos)
         {
-            cbg_Tool_SetNextWindowPos(selfPtr, ref pos);
+            cbg_Tool_SetNextWindowPos(selfPtr, pos);
         }
         
         ~Tool()

@@ -6,12 +6,12 @@ namespace Altseed
 {
     public partial class Tool
     {
-        public bool BeginFullScreen( int offset)
+        public bool BeginFullScreen(int offset)
         {
             var pos = new Vector2F(0, offset);
             var size = Engine.Window.Size - pos;
-            SetNextWindowSize(ref size);
-            SetNextWindowPos(ref pos);
+            SetNextWindowSize(size);
+            SetNextWindowPos(pos);
 
             var flags = ToolWindow.NoMove | ToolWindow.NoBringToFrontOnFocus
                 | ToolWindow.NoResize | ToolWindow.NoScrollbar

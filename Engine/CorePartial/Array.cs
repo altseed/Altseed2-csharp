@@ -147,7 +147,7 @@ namespace Altseed
             set
             {
                 if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
-                SetAt(index, ref value);
+                SetAt(index, value);
             }
         }
 
@@ -227,7 +227,7 @@ namespace Altseed
             set
             {
                 if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
-                SetAt(index, ref value);
+                SetAt(index, value);
             }
         }
 

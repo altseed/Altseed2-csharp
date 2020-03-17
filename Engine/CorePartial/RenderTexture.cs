@@ -43,7 +43,7 @@ namespace Altseed
             if (seInfo == null) return;
 
             var size = seInfo.GetValue<Vector2I>(S_Size);
-            var ptr = cbg_RenderTexture_Create(ref size);
+            var ptr = cbg_RenderTexture_Create(size);
 
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
 
