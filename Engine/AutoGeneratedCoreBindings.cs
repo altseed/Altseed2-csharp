@@ -3362,12 +3362,6 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr camera);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
@@ -3394,7 +3388,7 @@ namespace Altseed
         /// スプライトを描画します。
         /// </summary>
         /// <param name="sprite">描画する<see cref="RenderedSprite"/>のインスタンス</param>
-        internal void DrawSprite(RenderedSprite sprite)
+        public void DrawSprite(RenderedSprite sprite)
         {
             cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
         }
@@ -3403,7 +3397,7 @@ namespace Altseed
         /// テキストを描画します。
         /// </summary>
         /// <param name="text">描画する<see cref="RenderedText"/>のインスタンス</param>
-        internal void DrawText(RenderedText text)
+        public void DrawText(RenderedText text)
         {
             cbg_Renderer_DrawText(selfPtr, text != null ? text.selfPtr : IntPtr.Zero);
         }
@@ -3412,26 +3406,16 @@ namespace Altseed
         /// ポリゴンを描画します。
         /// </summary>
         /// <param name="polygon">描画する<see cref="RenderedPolygon"/>のインスタンス</param>
-        internal void DrawPolygon(RenderedPolygon polygon)
+        public void DrawPolygon(RenderedPolygon polygon)
         {
             cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
-        }
-        
-        internal void SetCamera(RenderedCamera camera)
-        {
-            cbg_Renderer_SetCamera(selfPtr, camera != null ? camera.selfPtr : IntPtr.Zero);
-        }
-        
-        internal void ResetCamera()
-        {
-            cbg_Renderer_ResetCamera(selfPtr);
         }
         
         /// <summary>
         /// コマンドリストを描画します。
         /// </summary>
         /// <param name="commandList">描画するコマンドリスト</param>
-        internal void Render(CommandList commandList)
+        public void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
@@ -4217,7 +4201,7 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         private static extern Vector2F cbg_RenderedCamera_GetCenterOffset(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_RenderedCamera_SetCenterOffset(IntPtr selfPtr, ref Vector2F value);
+        private static extern void cbg_RenderedCamera_SetCenterOffset(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed_Core")]
@@ -4237,7 +4221,7 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ？？？を取得または設定します。
+        /// CenterOffsetを取得または設定します。
         /// </summary>
         public Vector2F CenterOffset
         {
@@ -4253,13 +4237,13 @@ namespace Altseed
             set
             {
                 _CenterOffset = value;
-                cbg_RenderedCamera_SetCenterOffset(selfPtr, ref value);
+                cbg_RenderedCamera_SetCenterOffset(selfPtr, value);
             }
         }
         private Vector2F? _CenterOffset;
         
         /// <summary>
-        /// 描画先のテクスチャを取得または設定します。
+        /// TargetTextureを取得または設定します。
         /// </summary>
         public RenderTexture TargetTexture
         {
@@ -4281,7 +4265,7 @@ namespace Altseed
         private RenderTexture _TargetTexture;
         
         /// <summary>
-        /// カメラを作成します。
+        /// RenderedCameraを作成します。
         /// </summary>
         public static RenderedCamera Create()
         {
