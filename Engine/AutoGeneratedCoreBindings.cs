@@ -469,13 +469,6 @@ namespace Altseed
     }
     
     [Serializable]
-    public enum ShaderStageType : int
-    {
-        Vertex,
-        Pixel,
-    }
-    
-    [Serializable]
     public enum BuiltinShaderType : int
     {
         SpriteUnlitVS,
@@ -3205,10 +3198,10 @@ namespace Altseed
         private static extern void cbg_Material_SetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr value);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr, int shaderStage);
-        
+        private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr shader);
+        private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr value);
+        
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
@@ -3219,6 +3212,28 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
+        
+        /// <summary>
+        /// 使用するシェーダを取得する
+        /// </summary>
+        public Shader Shader
+        {
+            get
+            {
+                if (_Shader != null)
+                {
+                    return _Shader;
+                }
+                var ret = cbg_Material_GetShader(selfPtr);
+                return Shader.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Shader = value;
+                cbg_Material_SetShader(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Shader _Shader;
         
         /// <summary>
         /// 新しいインスタンスを生成する
@@ -3291,17 +3306,6 @@ namespace Altseed
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
         }
         
-        public Shader GetShader(ShaderStageType shaderStage)
-        {
-            var ret = cbg_Material_GetShader(selfPtr, (int)shaderStage);
-            return Shader.TryGetFromCache(ret);
-        }
-        
-        public void SetShader(Shader shader)
-        {
-            cbg_Material_SetShader(selfPtr, shader != null ? shader.selfPtr : IntPtr.Zero);
-        }
-        
         ~Material()
         {
             lock (this) 
@@ -3362,6 +3366,12 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr camera);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
@@ -3388,7 +3398,7 @@ namespace Altseed
         /// スプライトを描画します。
         /// </summary>
         /// <param name="sprite">描画する<see cref="RenderedSprite"/>のインスタンス</param>
-        public void DrawSprite(RenderedSprite sprite)
+        internal void DrawSprite(RenderedSprite sprite)
         {
             cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
         }
@@ -3397,7 +3407,7 @@ namespace Altseed
         /// テキストを描画します。
         /// </summary>
         /// <param name="text">描画する<see cref="RenderedText"/>のインスタンス</param>
-        public void DrawText(RenderedText text)
+        internal void DrawText(RenderedText text)
         {
             cbg_Renderer_DrawText(selfPtr, text != null ? text.selfPtr : IntPtr.Zero);
         }
@@ -3406,16 +3416,26 @@ namespace Altseed
         /// ポリゴンを描画します。
         /// </summary>
         /// <param name="polygon">描画する<see cref="RenderedPolygon"/>のインスタンス</param>
-        public void DrawPolygon(RenderedPolygon polygon)
+        internal void DrawPolygon(RenderedPolygon polygon)
         {
             cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
+        }
+        
+        internal void SetCamera(RenderedCamera camera)
+        {
+            cbg_Renderer_SetCamera(selfPtr, camera != null ? camera.selfPtr : IntPtr.Zero);
+        }
+        
+        internal void ResetCamera()
+        {
+            cbg_Renderer_ResetCamera(selfPtr);
         }
         
         /// <summary>
         /// コマンドリストを描画します。
         /// </summary>
         /// <param name="commandList">描画するコマンドリスト</param>
-        public void Render(CommandList commandList)
+        internal void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
@@ -4196,6 +4216,21 @@ namespace Altseed
         }
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedCamera_Create();
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_RenderedCamera_GetCenterOffset(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedCamera_SetCenterOffset(IntPtr selfPtr, ref Vector2F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RenderedCamera_GetTargetTexture(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedCamera_SetTargetTexture(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedCamera_Release(IntPtr selfPtr);
         
         #endregion
@@ -4203,6 +4238,59 @@ namespace Altseed
         internal RenderedCamera(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// ？？？を取得または設定します。
+        /// </summary>
+        public Vector2F CenterOffset
+        {
+            get
+            {
+                if (_CenterOffset != null)
+                {
+                    return _CenterOffset.Value;
+                }
+                var ret = cbg_RenderedCamera_GetCenterOffset(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _CenterOffset = value;
+                cbg_RenderedCamera_SetCenterOffset(selfPtr, ref value);
+            }
+        }
+        private Vector2F? _CenterOffset;
+        
+        /// <summary>
+        /// 描画先のテクスチャを取得または設定します。
+        /// </summary>
+        public RenderTexture TargetTexture
+        {
+            get
+            {
+                if (_TargetTexture != null)
+                {
+                    return _TargetTexture;
+                }
+                var ret = cbg_RenderedCamera_GetTargetTexture(selfPtr);
+                return RenderTexture.TryGetFromCache(ret);
+            }
+            set
+            {
+                _TargetTexture = value;
+                cbg_RenderedCamera_SetTargetTexture(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private RenderTexture _TargetTexture;
+        
+        /// <summary>
+        /// カメラを作成します。
+        /// </summary>
+        public static RenderedCamera Create()
+        {
+            var ret = cbg_RenderedCamera_Create();
+            return RenderedCamera.TryGetFromCache(ret);
         }
         
         ~RenderedCamera()
@@ -4324,21 +4412,6 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string code, int shaderStage);
-        
-        [DllImport("Altseed_Core")]
-        private static extern int cbg_Shader_GetStageType(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Shader_GetCode(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Shader_GetName(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
@@ -4346,52 +4419,6 @@ namespace Altseed
         internal Shader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
-        }
-        
-        public ShaderStageType StageType
-        {
-            get
-            {
-                var ret = cbg_Shader_GetStageType(selfPtr);
-                return (ShaderStageType)ret;
-            }
-        }
-        
-        /// <summary>
-        /// インスタンス生成に使用したコードを取得します
-        /// </summary>
-        public string Code
-        {
-            get
-            {
-                var ret = cbg_Shader_GetCode(selfPtr);
-                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-            }
-        }
-        
-        /// <summary>
-        /// 名前を取得します
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                var ret = cbg_Shader_GetName(selfPtr);
-                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-            }
-        }
-        
-        /// <summary>
-        /// コードをコンパイルしてシェーダを生成する
-        /// </summary>
-        /// <param name="name">シェーダの名前</param>
-        /// <param name="code">コンパイルするコード</param>
-        /// <param name="shaderStage"></param>
-        /// <returns>コンパイルの結果生成されたシェーダ</returns>
-        public static Shader Create(string name, string code, ShaderStageType shaderStage)
-        {
-            var ret = cbg_Shader_Create(name, code, (int)shaderStage);
-            return Shader.TryGetFromCache(ret);
         }
         
         ~Shader()
