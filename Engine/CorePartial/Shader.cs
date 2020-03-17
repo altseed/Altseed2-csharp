@@ -39,7 +39,9 @@ namespace Altseed
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
-
+            info.AddValue(S_Code, Code);
+            info.AddValue(S_Name, Name);
+            info.AddValue(S_ShaderStageType, StageType);
         }
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
     }
