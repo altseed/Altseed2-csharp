@@ -29,17 +29,18 @@ namespace Altseed
             get => _Camera.Transform;
             set
             {
-                //if (value == _Camera.Transform) return;
-                value = _Camera.Transform;
+                if (value == _Camera.Transform) return;
+                _Camera.Transform = value;
             }
         }
 
         public RenderTexture TargetTexture
         {
             get => _Camera.TargetTexture;
-            set {
+            set
+            {
                 if (value == _Camera.TargetTexture) return;
-                value = _Camera.TargetTexture;
+                _Camera.TargetTexture = value;
             }
         }
     }
