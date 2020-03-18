@@ -8,10 +8,11 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Matrix44F : ICloneable, IEquatable<Matrix44F>
+    public unsafe struct Matrix44F : ICloneable, IEquatable<Matrix44F>
     {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 4 * 4)]
-        private float[,] Values;
+        //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 4 * 4)]
+        //[FieldOffset(0)]
+        private fixed float Values[16];
 
         /// <summary>
         /// 単位行列を取得する
@@ -21,7 +22,14 @@ namespace Altseed
             get
             {
                 var result = new Matrix44F();
-                result.SetIdentity();
+                for (int i = 0; i < 16; i++)
+                    result.Values[i] = 0.0f;
+
+                result.Values[0 * 4 + 0] = 1.0f;
+                result.Values[1 * 4 + 1] = 1.0f;
+                result.Values[2 * 4 + 2] = 1.0f;
+                result.Values[3 * 4 + 3] = 1.0f;
+
                 return result;
             }
         }
@@ -29,12 +37,73 @@ namespace Altseed
         /// <summary>
         /// 逆行列を取得する
         /// </summary>
-        public readonly Matrix44F Inversion
+        public readonly Matrix44F Inverse
         {
             get
             {
-                var result = this;
-                result.SetInverted();
+                var result = Identity;
+                var e = 0.00001f; // TODO:他と統一
+
+                var a11 = Values[0 * 4 + 0];
+                var a12 = Values[0 * 4 + 1];
+                var a13 = Values[0 * 4 + 2];
+                var a14 = Values[0 * 4 + 3];
+                var a21 = Values[1 * 4 + 0];
+                var a22 = Values[1 * 4 + 1];
+                var a23 = Values[1 * 4 + 2];
+                var a24 = Values[1 * 4 + 3];
+                var a31 = Values[2 * 4 + 0];
+                var a32 = Values[2 * 4 + 1];
+                var a33 = Values[2 * 4 + 2];
+                var a34 = Values[2 * 4 + 3];
+                var a41 = Values[3 * 4 + 0];
+                var a42 = Values[3 * 4 + 1];
+                var a43 = Values[3 * 4 + 2];
+                var a44 = Values[3 * 4 + 3];
+
+                /* 行列式の計算 */
+                var b11 = +a22 * (a33 * a44 - a43 * a34) - a23 * (a32 * a44 - a42 * a34) + a24 * (a32 * a43 - a42 * a33);
+                var b12 = -a12 * (a33 * a44 - a43 * a34) + a13 * (a32 * a44 - a42 * a34) - a14 * (a32 * a43 - a42 * a33);
+                var b13 = +a12 * (a23 * a44 - a43 * a24) - a13 * (a22 * a44 - a42 * a24) + a14 * (a22 * a43 - a42 * a23);
+                var b14 = -a12 * (a23 * a34 - a33 * a24) + a13 * (a22 * a34 - a32 * a24) - a14 * (a22 * a33 - a32 * a23);
+
+                var b21 = -a21 * (a33 * a44 - a43 * a34) + a23 * (a31 * a44 - a41 * a34) - a24 * (a31 * a43 - a41 * a33);
+                var b22 = +a11 * (a33 * a44 - a43 * a34) - a13 * (a31 * a44 - a41 * a34) + a14 * (a31 * a43 - a41 * a33);
+                var b23 = -a11 * (a23 * a44 - a43 * a24) + a13 * (a21 * a44 - a41 * a24) - a14 * (a21 * a43 - a41 * a23);
+                var b24 = +a11 * (a23 * a34 - a33 * a24) - a13 * (a21 * a34 - a31 * a24) + a14 * (a21 * a33 - a31 * a23);
+
+                var b31 = +a21 * (a32 * a44 - a42 * a34) - a22 * (a31 * a44 - a41 * a34) + a24 * (a31 * a42 - a41 * a32);
+                var b32 = -a11 * (a32 * a44 - a42 * a34) + a12 * (a31 * a44 - a41 * a34) - a14 * (a31 * a42 - a41 * a32);
+                var b33 = +a11 * (a22 * a44 - a42 * a24) - a12 * (a21 * a44 - a41 * a24) + a14 * (a21 * a42 - a41 * a22);
+                var b34 = -a11 * (a22 * a34 - a32 * a24) + a12 * (a21 * a34 - a31 * a24) - a14 * (a21 * a32 - a31 * a22);
+
+                var b41 = -a21 * (a32 * a43 - a42 * a33) + a22 * (a31 * a43 - a41 * a33) - a23 * (a31 * a42 - a41 * a32);
+                var b42 = +a11 * (a32 * a43 - a42 * a33) - a12 * (a31 * a43 - a41 * a33) + a13 * (a31 * a42 - a41 * a32);
+                var b43 = -a11 * (a22 * a43 - a42 * a23) + a12 * (a21 * a43 - a41 * a23) - a13 * (a21 * a42 - a41 * a22);
+                var b44 = +a11 * (a22 * a33 - a32 * a23) - a12 * (a21 * a33 - a31 * a23) + a13 * (a21 * a32 - a31 * a22);
+
+                // 行列式の逆数をかける
+                var det = (a11 * b11) + (a12 * b21) + (a13 * b31) + (a14 * b41);
+                if ((-e <= det) && (det <= +e)) throw new InvalidOperationException("逆行列が存在しません。");
+
+                float invDet = 1.0f / det;
+
+                result.Values[0 * 4 + 0] = b11 * invDet;
+                result.Values[0 * 4 + 1] = b12 * invDet;
+                result.Values[0 * 4 + 2] = b13 * invDet;
+                result.Values[0 * 4 + 3] = b14 * invDet;
+                result.Values[1 * 4 + 0] = b21 * invDet;
+                result.Values[1 * 4 + 1] = b22 * invDet;
+                result.Values[1 * 4 + 2] = b23 * invDet;
+                result.Values[1 * 4 + 3] = b24 * invDet;
+                result.Values[2 * 4 + 0] = b31 * invDet;
+                result.Values[2 * 4 + 1] = b32 * invDet;
+                result.Values[2 * 4 + 2] = b33 * invDet;
+                result.Values[2 * 4 + 3] = b34 * invDet;
+                result.Values[3 * 4 + 0] = b41 * invDet;
+                result.Values[3 * 4 + 1] = b42 * invDet;
+                result.Values[3 * 4 + 2] = b43 * invDet;
+                result.Values[3 * 4 + 3] = b44 * invDet;
                 return result;
             }
         }
@@ -42,14 +111,14 @@ namespace Altseed
         /// <summary>
         /// 転置行列を取得する
         /// </summary>
-        public readonly Matrix44F TransPosition
+        public readonly Matrix44F Transposed
         {
             get
             {
                 var result = new Matrix44F();
                 for (int i = 0; i < 4; i++)
                     for (int j = 0; j < 4; j++)
-                        result[i, j] = this[j, i];
+                        result.Values[i * 4 + j] = Values[j * 4 + i];
                 return result;
             }
         }
@@ -61,22 +130,21 @@ namespace Altseed
         /// <param name="y">取得する要素の位置</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または4以上</exception>
         /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
-        public float this[int x, int y]
-        {
-            readonly get
-            {
-                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
-                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                return Values?[x, y] ?? 0.0f;
-            }
-            set
-            {
-                Values ??= new float[4, 4];
-                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
-                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                Values[x, y] = value;
-            }
-        }
+        //public float Values[int x ,int y]
+        //{
+        //    readonly get
+        //    {
+        //        if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+        //        if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+        //        return Values[x * 4 + y];
+        //    }
+        //    set
+        //    {
+        //        if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+        //        if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+        //        Values[x * 4 + y] = value;
+        //    }
+        //}
 
         /// <summary>
         /// カメラ行列(右手系)を取得する
@@ -93,21 +161,21 @@ namespace Altseed
             var R = Vector3F.Cross(up, F).Normal;
             var U = Vector3F.Cross(F, R).Normal;
 
-            result[0, 0] = R.X;
-            result[0, 1] = R.Y;
-            result[0, 2] = R.Z;
+            result.Values[0 * 4 + 0] = R.X;
+            result.Values[0 * 4 + 1] = R.Y;
+            result.Values[0 * 4 + 2] = R.Z;
 
-            result[1, 0] = U.X;
-            result[1, 1] = U.Y;
-            result[1, 2] = U.Z;
+            result.Values[1 * 4 + 0] = U.X;
+            result.Values[1 * 4 + 1] = U.Y;
+            result.Values[1 * 4 + 2] = U.Z;
 
-            result[2, 0] = F.X;
-            result[2, 1] = F.Y;
-            result[2, 2] = F.Z;
+            result.Values[2 * 4 + 0] = F.X;
+            result.Values[2 * 4 + 1] = F.Y;
+            result.Values[2 * 4 + 2] = F.Z;
 
-            result[0, 3] = -Vector3F.Dot(R, eye);
-            result[1, 3] = -Vector3F.Dot(U, eye);
-            result[2, 3] = -Vector3F.Dot(F, eye);
+            result.Values[0 * 4 + 3] = -Vector3F.Dot(R, eye);
+            result.Values[1 * 4 + 3] = -Vector3F.Dot(U, eye);
+            result.Values[2 * 4 + 3] = -Vector3F.Dot(F, eye);
 
             return result;
         }
@@ -127,22 +195,22 @@ namespace Altseed
             var R = Vector3F.Cross(up, F).Normal;
             var U = Vector3F.Cross(F, R).Normal;
 
-            result[0, 0] = R.X;
-            result[0, 1] = R.Y;
-            result[0, 2] = R.Z;
+            result.Values[0 * 4 + 0] = R.X;
+            result.Values[0 * 4 + 1] = R.Y;
+            result.Values[0 * 4 + 2] = R.Z;
 
-            result[1, 0] = U.X;
-            result[1, 1] = U.Y;
-            result[1, 2] = U.Z;
+            result.Values[1 * 4 + 0] = U.X;
+            result.Values[1 * 4 + 1] = U.Y;
+            result.Values[1 * 4 + 2] = U.Z;
 
-            result[2, 0] = F.X;
-            result[2, 1] = F.Y;
-            result[2, 2] = F.Z;
+            result.Values[2 * 4 + 0] = F.X;
+            result.Values[2 * 4 + 1] = F.Y;
+            result.Values[2 * 4 + 2] = F.Z;
 
-            result[0, 3] = -Vector3F.Dot(R, eye);
-            result[1, 3] = -Vector3F.Dot(U, eye);
-            result[2, 3] = -Vector3F.Dot(F, eye);
-            result[3, 3] = 0.0f;
+            result.Values[0 * 4 + 3] = -Vector3F.Dot(R, eye);
+            result.Values[1 * 4 + 3] = -Vector3F.Dot(U, eye);
+            result.Values[2 * 4 + 3] = -Vector3F.Dot(F, eye);
+            result.Values[3 * 4 + 3] = 0.0f;
 
             return result;
         }
@@ -158,10 +226,10 @@ namespace Altseed
         {
             var result = Identity;
 
-            result[0, 0] = 2 / width;
-            result[1, 1] = 2 / height;
-            result[2, 2] = 1 / (zf - zn);
-            result[2, 3] = zn / (zn - zf);
+            result.Values[0 * 4 + 0] = 2 / width;
+            result.Values[1 * 4 + 1] = 2 / height;
+            result.Values[2 * 4 + 2] = 1 / (zf - zn);
+            result.Values[2 * 4 + 3] = zn / (zn - zf);
 
             return result;
         }
@@ -177,11 +245,11 @@ namespace Altseed
         {
             var result = Identity;
 
-            result[0, 0] = 2 / width;
-            result[1, 1] = 2 / height;
-            result[2, 2] = 1 / (zn - zf);
-            result[2, 3] = zn / (zn - zf);
-            result[3, 3] = 0.0f;
+            result.Values[0 * 4 + 0] = 2 / width;
+            result.Values[1 * 4 + 1] = 2 / height;
+            result.Values[2 * 4 + 2] = 1 / (zn - zf);
+            result.Values[2 * 4 + 3] = zn / (zn - zf);
+            result.Values[3 * 4 + 3] = 0.0f;
 
             return result; ;
         }
@@ -197,15 +265,15 @@ namespace Altseed
         {
             var result = Identity;
 
-            var yScale = 1 / (float)Math.Tan(ovY / 2);
+            var yScale = 1 / MathF.Tan(ovY / 2);
             var xScale = yScale / aspect;
 
-            result[0, 0] = xScale;
-            result[1, 1] = yScale;
-            result[2, 2] = zf / (zf - zn);
-            result[3, 2] = 1.0f;
-            result[2, 3] = -zn * zf / (zf - zn);
-            result[3, 3] = 0.0f;
+            result.Values[0 * 4 + 0] = xScale;
+            result.Values[1 * 4 + 1] = yScale;
+            result.Values[2 * 4 + 2] = zf / (zf - zn);
+            result.Values[3 * 4 + 2] = 1.0f;
+            result.Values[2 * 4 + 3] = -zn * zf / (zf - zn);
+            result.Values[3 * 4 + 3] = 0.0f;
 
             return result;
         }
@@ -221,14 +289,14 @@ namespace Altseed
         {
             var result = Identity;
 
-            var yScale = 1 / (float)Math.Tan(ovY / 2);
+            var yScale = 1 / MathF.Tan(ovY / 2);
             var xScale = yScale / aspect;
 
-            result[0, 0] = xScale;
-            result[1, 1] = yScale;
-            result[2, 2] = zf / (zn - zf);
-            result[3, 2] = -1.0f;
-            result[2, 3] = zn * zf / (zn - zf);
+            result.Values[0 * 4 + 0] = xScale;
+            result.Values[1 * 4 + 1] = yScale;
+            result.Values[2 * 4 + 2] = zf / (zn - zf);
+            result.Values[3 * 4 + 2] = -1.0f;
+            result.Values[2 * 4 + 3] = zn * zf / (zn - zf);
 
             return result;
         }
@@ -244,15 +312,15 @@ namespace Altseed
         {
             var result = Identity;
 
-            var yScale = 1 / (float)Math.Tan(ovY / 2);
+            var yScale = 1 / MathF.Tan(ovY / 2);
             var xScale = yScale / aspect;
             var dz = zf - zn;
 
-            result[0, 0] = xScale;
-            result[1, 1] = yScale;
-            result[2, 2] = -(zf + zn) / dz;
-            result[3, 2] = -1.0f;
-            result[2, 3] = -2.0f * zn * zf / dz;
+            result.Values[0 * 4 + 0] = xScale;
+            result.Values[1 * 4 + 1] = yScale;
+            result.Values[2 * 4 + 2] = -(zf + zn) / dz;
+            result.Values[3 * 4 + 2] = -1.0f;
+            result.Values[2 * 4 + 3] = -2.0f * zn * zf / dz;
 
             return result;
         }
@@ -275,15 +343,15 @@ namespace Altseed
             var wy = quaternion.W * quaternion.Y;
             var wz = quaternion.W * quaternion.Z;
 
-            result[0, 0] = 1.0f - 2.0f * (yy + zz);
-            result[0, 1] = 2.0f * (xy - wz);
-            result[0, 2] = 2.0f * (xz + wy);
-            result[1, 0] = 2.0f * (xy + wz);
-            result[1, 1] = 1.0f - 2.0f * (xx + zz);
-            result[1, 2] = 2.0f * (yz - wx);
-            result[2, 0] = 2.0f * (xz - wy);
-            result[2, 1] = 2.0f * (yz + wx);
-            result[2, 2] = 1.0f - 2.0f * (xx + yy);
+            result.Values[0 * 4 + 0] = 1.0f - 2.0f * (yy + zz);
+            result.Values[0 * 4 + 1] = 2.0f * (xy - wz);
+            result.Values[0 * 4 + 2] = 2.0f * (xz + wy);
+            result.Values[1 * 4 + 0] = 2.0f * (xy + wz);
+            result.Values[1 * 4 + 1] = 1.0f - 2.0f * (xx + zz);
+            result.Values[1 * 4 + 2] = 2.0f * (yz - wx);
+            result.Values[2 * 4 + 0] = 2.0f * (xz - wy);
+            result.Values[2 * 4 + 1] = 2.0f * (yz + wx);
+            result.Values[2 * 4 + 2] = 1.0f - 2.0f * (xx + yy);
 
             return result;
         }
@@ -297,21 +365,21 @@ namespace Altseed
         {
             var result = Identity;
 
-            var cos = (float)Math.Cos(radian);
-            var sin = (float)Math.Sin(radian);
+            var cos = MathF.Cos(radian);
+            var sin = MathF.Sin(radian);
             var cosM = 1.0f - cos;
 
-            result[0, 0] = cosM * (axis.X * axis.X) + cos;
-            result[1, 0] = cosM * (axis.X * axis.Y) + (axis.Z * sin);
-            result[2, 0] = cosM * (axis.Z * axis.X) - (axis.Y * sin);
+            result.Values[0 * 4 + 0] = cosM * (axis.X * axis.X) + cos;
+            result.Values[1 * 4 + 0] = cosM * (axis.X * axis.Y) + (axis.Z * sin);
+            result.Values[2 * 4 + 0] = cosM * (axis.Z * axis.X) - (axis.Y * sin);
 
-            result[0, 1] = cosM * (axis.X * axis.Y) - (axis.Z * sin);
-            result[1, 1] = cosM * (axis.Y * axis.Y) + cos;
-            result[2, 1] = cosM * (axis.Y * axis.Z) + (axis.X * sin);
+            result.Values[0 * 4 + 1] = cosM * (axis.X * axis.Y) - (axis.Z * sin);
+            result.Values[1 * 4 + 1] = cosM * (axis.Y * axis.Y) + cos;
+            result.Values[2 * 4 + 1] = cosM * (axis.Y * axis.Z) + (axis.X * sin);
 
-            result[0, 2] = cosM * (axis.Z * axis.X) + (axis.Y * sin);
-            result[1, 2] = cosM * (axis.Y * axis.Z) - (axis.X * sin);
-            result[2, 2] = cosM * (axis.Z * axis.Z) + cos;
+            result.Values[0 * 4 + 2] = cosM * (axis.Z * axis.X) + (axis.Y * sin);
+            result.Values[1 * 4 + 2] = cosM * (axis.Y * axis.Z) - (axis.X * sin);
+            result.Values[2 * 4 + 2] = cosM * (axis.Z * axis.Z) + cos;
 
             return result;
         }
@@ -323,14 +391,14 @@ namespace Altseed
         /// <returns><paramref name="radian"/>のX軸回転分を表す行列</returns>
         public static Matrix44F GetRotationX(float radian)
         {
-            var sin = (float)Math.Sin(radian);
-            var cos = (float)Math.Cos(radian);
+            var sin = MathF.Sin(radian);
+            var cos = MathF.Cos(radian);
 
             var result = Identity;
-            result[1, 1] = cos;
-            result[2, 1] = sin;
-            result[1, 2] = -sin;
-            result[2, 2] = cos;
+            result.Values[1 * 4 + 1] = cos;
+            result.Values[2 * 4 + 1] = sin;
+            result.Values[1 * 4 + 2] = -sin;
+            result.Values[2 * 4 + 2] = cos;
 
             return result;
         }
@@ -342,14 +410,14 @@ namespace Altseed
         /// <returns><paramref name="radian"/>のY軸回転分を表す行列</returns>
         public static Matrix44F GetRotationY(float radian)
         {
-            var sin = (float)Math.Sin(radian);
-            var cos = (float)Math.Cos(radian);
+            var sin = MathF.Sin(radian);
+            var cos = MathF.Cos(radian);
 
             var result = Identity;
-            result[0, 0] = cos;
-            result[2, 0] = -sin;
-            result[0, 2] = sin;
-            result[2, 2] = cos;
+            result.Values[0 * 4 + 0] = cos;
+            result.Values[2 * 4 + 0] = -sin;
+            result.Values[0 * 4 + 2] = sin;
+            result.Values[2 * 4 + 2] = cos;
 
             return result;
         }
@@ -361,14 +429,14 @@ namespace Altseed
         /// <returns><paramref name="radian"/>のZ軸回転分を表す行列</returns>
         public static Matrix44F GetRotationZ(float radian)
         {
-            var sin = (float)Math.Sin(radian);
-            var cos = (float)Math.Cos(radian);
+            var sin = MathF.Sin(radian);
+            var cos = MathF.Cos(radian);
 
             var result = Identity;
-            result[0, 0] = cos;
-            result[0, 1] = -sin;
-            result[1, 0] = sin;
-            result[1, 1] = cos;
+            result.Values[0 * 4 + 0] = cos;
+            result.Values[0 * 4 + 1] = -sin;
+            result.Values[1 * 4 + 0] = sin;
+            result.Values[1 * 4 + 1] = cos;
 
             return result;
         }
@@ -388,9 +456,9 @@ namespace Altseed
         public static Matrix44F GetScale3D(Vector3F scale3D)
         {
             var result = Identity;
-            result[0, 0] = scale3D.X;
-            result[1, 1] = scale3D.Y;
-            result[2, 2] = scale3D.Z;
+            result.Values[0 * 4 + 0] = scale3D.X;
+            result.Values[1 * 4 + 1] = scale3D.Y;
+            result.Values[2 * 4 + 2] = scale3D.Z;
 
             return result;
         }
@@ -401,7 +469,7 @@ namespace Altseed
         /// <param name="position2D">平行移動する座標</param>
         /// <returns><paramref name="position2D"/>分の平行移動を表す行列</returns>
         public static Matrix44F GetTranslation2D(Vector2F position2D) => GetTranslation3D(new Vector3F(position2D.X, position2D.Y, 0.0f));
-        
+
         /// <summary>
         /// 3D座標の平行移動分を表す行列を取得する
         /// </summary>
@@ -411,150 +479,60 @@ namespace Altseed
         {
             var result = Identity;
 
-            result[0, 3] = position3D.X;
-            result[1, 3] = position3D.Y;
-            result[2, 3] = position3D.Z;
+            result.Values[0 * 4 + 3] = position3D.X;
+            result.Values[1 * 4 + 3] = position3D.Y;
+            result.Values[2 * 4 + 3] = position3D.Z;
             return result;
-        }
-
-        /// <summary>
-        /// 単位行列に設定する
-        /// </summary>
-        public void SetIdentity()
-        {
-            Values ??= new float[4, 4];
-
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    Values[i, j] = 0.0f;
-
-            Values[0, 0] = 1.0f;
-            Values[1, 1] = 1.0f;
-            Values[2, 2] = 1.0f;
-            Values[3, 3] = 1.0f;
-        }
-
-        /// <summary>
-        /// 逆行列に設定する
-        /// </summary>
-        private void SetInverted()
-        {
-            Values ??= new float[4, 4];
-            float e = 0.00001f;
-
-            float a11 = Values[0, 0];
-            float a12 = Values[0, 1];
-            float a13 = Values[0, 2];
-            float a14 = Values[0, 3];
-            float a21 = Values[1, 0];
-            float a22 = Values[1, 1];
-            float a23 = Values[1, 2];
-            float a24 = Values[1, 3];
-            float a31 = Values[2, 0];
-            float a32 = Values[2, 1];
-            float a33 = Values[2, 2];
-            float a34 = Values[2, 3];
-            float a41 = Values[3, 0];
-            float a42 = Values[3, 1];
-            float a43 = Values[3, 2];
-            float a44 = Values[3, 3];
-
-            /* 行列式の計算 */
-            float b11 = +a22 * (a33 * a44 - a43 * a34) - a23 * (a32 * a44 - a42 * a34) + a24 * (a32 * a43 - a42 * a33);
-            float b12 = -a12 * (a33 * a44 - a43 * a34) + a13 * (a32 * a44 - a42 * a34) - a14 * (a32 * a43 - a42 * a33);
-            float b13 = +a12 * (a23 * a44 - a43 * a24) - a13 * (a22 * a44 - a42 * a24) + a14 * (a22 * a43 - a42 * a23);
-            float b14 = -a12 * (a23 * a34 - a33 * a24) + a13 * (a22 * a34 - a32 * a24) - a14 * (a22 * a33 - a32 * a23);
-
-            float b21 = -a21 * (a33 * a44 - a43 * a34) + a23 * (a31 * a44 - a41 * a34) - a24 * (a31 * a43 - a41 * a33);
-            float b22 = +a11 * (a33 * a44 - a43 * a34) - a13 * (a31 * a44 - a41 * a34) + a14 * (a31 * a43 - a41 * a33);
-            float b23 = -a11 * (a23 * a44 - a43 * a24) + a13 * (a21 * a44 - a41 * a24) - a14 * (a21 * a43 - a41 * a23);
-            float b24 = +a11 * (a23 * a34 - a33 * a24) - a13 * (a21 * a34 - a31 * a24) + a14 * (a21 * a33 - a31 * a23);
-
-            float b31 = +a21 * (a32 * a44 - a42 * a34) - a22 * (a31 * a44 - a41 * a34) + a24 * (a31 * a42 - a41 * a32);
-            float b32 = -a11 * (a32 * a44 - a42 * a34) + a12 * (a31 * a44 - a41 * a34) - a14 * (a31 * a42 - a41 * a32);
-            float b33 = +a11 * (a22 * a44 - a42 * a24) - a12 * (a21 * a44 - a41 * a24) + a14 * (a21 * a42 - a41 * a22);
-            float b34 = -a11 * (a22 * a34 - a32 * a24) + a12 * (a21 * a34 - a31 * a24) - a14 * (a21 * a32 - a31 * a22);
-
-            float b41 = -a21 * (a32 * a43 - a42 * a33) + a22 * (a31 * a43 - a41 * a33) - a23 * (a31 * a42 - a41 * a32);
-            float b42 = +a11 * (a32 * a43 - a42 * a33) - a12 * (a31 * a43 - a41 * a33) + a13 * (a31 * a42 - a41 * a32);
-            float b43 = -a11 * (a22 * a43 - a42 * a23) + a12 * (a21 * a43 - a41 * a23) - a13 * (a21 * a42 - a41 * a22);
-            float b44 = +a11 * (a22 * a33 - a32 * a23) - a12 * (a21 * a33 - a31 * a23) + a13 * (a21 * a32 - a31 * a22);
-
-            // 行列式の逆数をかける
-            float Det = (a11 * b11) + (a12 * b21) + (a13 * b31) + (a14 * b41);
-            if ((-e <= Det) && (Det <= +e))
-            {
-                return;
-            }
-
-            float InvDet = 1.0f / Det;
-
-            Values[0, 0] = b11 * InvDet;
-            Values[0, 1] = b12 * InvDet;
-            Values[0, 2] = b13 * InvDet;
-            Values[0, 3] = b14 * InvDet;
-            Values[1, 0] = b21 * InvDet;
-            Values[1, 1] = b22 * InvDet;
-            Values[1, 2] = b23 * InvDet;
-            Values[1, 3] = b24 * InvDet;
-            Values[2, 0] = b31 * InvDet;
-            Values[2, 1] = b32 * InvDet;
-            Values[2, 2] = b33 * InvDet;
-            Values[2, 3] = b34 * InvDet;
-            Values[3, 0] = b41 * InvDet;
-            Values[3, 1] = b42 * InvDet;
-            Values[3, 2] = b43 * InvDet;
-            Values[3, 3] = b44 * InvDet;
         }
 
         /// <summary>
         /// 行列でベクトルを変形させる。
         /// </summary>
-        /// <param name="in_">変形前ベクトル</param>
+        /// <param name="vector">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public readonly Vector3F Transform3D(Vector3F in_)
+        public readonly Vector3F Transform3D(Vector3F vector)
         {
-            float[] values = new float[4];
+            float[] vec = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
-                values[i] = 0;
-                values[i] += in_.X * this[i, 0];
-                values[i] += in_.Y * this[i, 1];
-                values[i] += in_.Z * this[i, 2];
-                values[i] += this[i, 3];
+                vec[i] = 0;
+                vec[i] += vector.X * Values[i * 4 + 0];
+                vec[i] += vector.Y * Values[i * 4 + 1];
+                vec[i] += vector.Z * Values[i * 4 + 2];
+                vec[i] += Values[i * 4 + 3];
             }
 
             Vector3F o;
-            o.X = values[0] / values[3];
-            o.Y = values[1] / values[3];
-            o.Z = values[2] / values[3];
+            o.X = vec[0] / vec[3];
+            o.Y = vec[1] / vec[3];
+            o.Z = vec[2] / vec[3];
             return o;
         }
 
         /// <summary>
         /// 行列でベクトルを変形させる。
         /// </summary>
-        /// <param name="in_">変形前ベクトル</param>
+        /// <param name="vector">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
-        public readonly Vector4F Transform4D(Vector4F in_)
+        public readonly Vector4F Transform4D(Vector4F vector)
         {
-            float[] values = new float[4];
+            float[] vec = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
-                values[i] = 0;
-                values[i] += in_.X * this[i, 0];
-                values[i] += in_.Y * this[i, 1];
-                values[i] += in_.Z * this[i, 2];
-                values[i] += in_.W * this[i, 3];
+                vec[i] = 0;
+                vec[i] += vector.X * Values[i * 4 + 0];
+                vec[i] += vector.Y * Values[i * 4 + 1];
+                vec[i] += vector.Z * Values[i * 4 + 2];
+                vec[i] += vector.W * Values[i * 4 + 3];
             }
 
             Vector4F o;
-            o.X = values[0];
-            o.Y = values[1];
-            o.Z = values[2];
-            o.W = values[3];
+            o.X = vec[0];
+            o.Y = vec[1];
+            o.Z = vec[2];
+            o.W = vec[3];
 
             return o;
         }
@@ -562,9 +540,8 @@ namespace Altseed
         public static Matrix44F operator +(Matrix44F left, Matrix44F right)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = left[i, j] + right[i, j];
+            for (int i = 0; i < 16; i++)
+                result.Values[i] = left.Values[i] + right.Values[i];
             return result;
         }
 
@@ -573,18 +550,16 @@ namespace Altseed
         public static Matrix44F operator -(Matrix44F left, Matrix44F right)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = left[i, j] - right[i, j];
+            for (int i = 0; i < 16; i++)
+                result.Values[i] = left.Values[i] - right.Values[i];
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F matrix, float scalar)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = matrix[i, j] * scalar;
+            for (int i = 0; i < 16; i++)
+                result.Values[i] = matrix.Values[i] * scalar;
             return result;
         }
 
@@ -593,35 +568,14 @@ namespace Altseed
         public static Matrix44F operator /(Matrix44F matrix, float scalar)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = matrix[i, j] / scalar;
+            for (int i = 0; i < 16; i++)
+                result.Values[i] = matrix.Values[i] / scalar;
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F left, Matrix44F right)
         {
-            var o_ = new Matrix44F();
-            Mul(ref o_, left, right);
-            return o_;
-        }
-
-        public static Vector3F operator *(Matrix44F left, Vector3F right)
-        {
-            return left.Transform3D(right);
-        }
-
-        /// <summary>
-        /// 乗算を行う。
-        /// </summary>
-        /// <param name="o">出力先</param>
-        /// <param name="in1">行列1</param>
-        /// <param name="in2">行列2</param>
-        public static void Mul(ref Matrix44F o, in Matrix44F in1, in Matrix44F in2)
-        {
-            Matrix44F _in1 = in1;
-            Matrix44F _in2 = in2;
-
+            var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -629,11 +583,17 @@ namespace Altseed
                     float v = 0.0f;
                     for (int k = 0; k < 4; k++)
                     {
-                        v += _in1[i, k] * _in2[k, j];
+                        v += left.Values[i * 4 + k] * right.Values[k * 4 + j];
                     }
-                    o[i, j] = v;
+                    result.Values[i * 4 + j] = v;
                 }
             }
+            return result;
+        }
+
+        public static Vector3F operator *(Matrix44F left, Vector3F right)
+        {
+            return left.Transform3D(right);
         }
 
         #region IEquatable
@@ -644,10 +604,9 @@ namespace Altseed
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Matrix44F other)
         {
-            if (Values == null && other.Values == null) return true;
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    if (this[i, j] != other[i, j])
+                    if (Values[i * 4 + j] != other.Values[i * 4 + j])
                         return false;
             return true;
         }
@@ -668,7 +627,7 @@ namespace Altseed
             var hash = new HashCode();
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                    hash.Add(this[i, j]);
+                    hash.Add(Values[i * 4 + j]);
             return hash.ToHashCode();
         }
 
@@ -682,8 +641,9 @@ namespace Altseed
         /// <returns>このインスタンスの複製</returns>
         public readonly Matrix44F Clone()
         {
-            if (Values == null) return default;
-            var clone = new Matrix44F() { Values = (float[,])Values.Clone() };
+            var clone = new Matrix44F();
+            for (int i = 0; i < 16; i++)
+                clone.Values[i] = Values[i];
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();
