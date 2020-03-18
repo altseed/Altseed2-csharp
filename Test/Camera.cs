@@ -52,7 +52,7 @@ namespace Altseed.Test
             Engine.AddNode(node);
 
             var size = new Vector2I(200, 200);
-            var renderTexture = RenderTexture.Create(ref size);
+            var renderTexture = RenderTexture.Create(size);
             var camera = new CameraNode();
             camera.TargetTexture = renderTexture;
             Engine.AddNode(camera);

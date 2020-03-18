@@ -3365,6 +3365,12 @@ namespace Altseed
         private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr commandList);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
         
         #endregion
@@ -3388,7 +3394,7 @@ namespace Altseed
         /// スプライトを描画します。
         /// </summary>
         /// <param name="sprite">描画する<see cref="RenderedSprite"/>のインスタンス</param>
-        public void DrawSprite(RenderedSprite sprite)
+        internal void DrawSprite(RenderedSprite sprite)
         {
             cbg_Renderer_DrawSprite(selfPtr, sprite != null ? sprite.selfPtr : IntPtr.Zero);
         }
@@ -3397,7 +3403,7 @@ namespace Altseed
         /// テキストを描画します。
         /// </summary>
         /// <param name="text">描画する<see cref="RenderedText"/>のインスタンス</param>
-        public void DrawText(RenderedText text)
+        internal void DrawText(RenderedText text)
         {
             cbg_Renderer_DrawText(selfPtr, text != null ? text.selfPtr : IntPtr.Zero);
         }
@@ -3406,7 +3412,7 @@ namespace Altseed
         /// ポリゴンを描画します。
         /// </summary>
         /// <param name="polygon">描画する<see cref="RenderedPolygon"/>のインスタンス</param>
-        public void DrawPolygon(RenderedPolygon polygon)
+        internal void DrawPolygon(RenderedPolygon polygon)
         {
             cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
         }
@@ -3415,9 +3421,26 @@ namespace Altseed
         /// コマンドリストを描画します。
         /// </summary>
         /// <param name="commandList">描画するコマンドリスト</param>
-        public void Render(CommandList commandList)
+        internal void Render(CommandList commandList)
         {
             cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// 使用するカメラを設定します。
+        /// </summary>
+        /// <param name="commandList">描画するカメラ</param>
+        internal void SetCamera(RenderedCamera commandList)
+        {
+            cbg_Renderer_SetCamera(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// 使用するカメラの設定をリセットします。
+        /// </summary>
+        public void ResetCamera()
+        {
+            cbg_Renderer_ResetCamera(selfPtr);
         }
         
         ~Renderer()

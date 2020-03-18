@@ -42,7 +42,7 @@ namespace Sample
                     foreach (var s in Samples.Values)
                     {
                         var size = new Vector2F(96, 24);
-                        if (Engine.Tool.Button(s.Name, ref size))
+                        if (Engine.Tool.Button(s.Name, size))
                             s.CreateProcess();
                     }
                     Engine.Tool.End();

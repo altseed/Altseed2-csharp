@@ -229,7 +229,7 @@ namespace Altseed.Test
             tc.Init();
 
             var size = new Vector2I(100, 100);
-            var texture1 = Altseed.RenderTexture.Create(ref size);
+            var texture1 = Altseed.RenderTexture.Create(size);
 
             Assert.NotNull(texture1);
 
