@@ -25,6 +25,8 @@ namespace Altseed
 
         private static List<DrawnNode> _DrawnNodes;
 
+        private static Dictionary<CameraNode, List<DrawnNode>> _CameraGroups;
+
         /// <summary>
         /// エンジンを初期化します。
         /// </summary>
@@ -60,6 +62,7 @@ namespace Altseed
                 _UpdatedNode = _RootNode;
 
                 _DrawnNodes = new List<DrawnNode>();
+                _CameraGroups = new Dictionary<CameraNode, List<DrawnNode>>();
                 return true;
             }
             return false;
@@ -89,6 +92,10 @@ namespace Altseed
         /// </summary>
         public static bool Update()
         {
+            // ノードの更新
+            _UpdatedNode?.Update();
+
+            // (ツール機能を使用しない場合は)描画を開始
             if (!_Config.ToolEnabled)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
@@ -96,32 +103,36 @@ namespace Altseed
                 if (!Graphics.BeginFrame()) return false;
             }
 
-            _UpdatedNode?.Update();
-
             var cmdList = Graphics.CommandList;
 
-            if (_RootNode.Children.Any(c => c is CameraNode))
-            //TODO: あらかじめ整理しておく
+            // カメラに映らないものを描画
+            Renderer.ResetCamera();
+            cmdList.SetRenderTargetWithScreen();
+            foreach (var drawnNode in _DrawnNodes)
             {
-                foreach (var cam in _RootNode.Children.OfType<CameraNode>().OrderBy(c => c.Id))
-                //TODO: あらかじめ整理しておく
-                {
-                    Renderer.SetCamera(cam.RenderedCamera);
-                    foreach (var dn in _DrawnNodes) dn.Draw();
-                    Renderer.Render(cmdList);
-                }
+                if (drawnNode.CameraGroup == 0)
+                    drawnNode.Draw();
             }
-            else
+            Renderer.Render(cmdList);
+
+            // 特定のカメラに映りこむノードを描画
+            foreach (var camera in _CameraGroups.Keys)
             {
-                foreach (var dn in _DrawnNodes) dn.Draw();
+                Renderer.SetCamera(camera.RenderedCamera);
+
+                foreach (var drawnNode in _CameraGroups[camera])
+                    drawnNode.Draw();
+
                 Renderer.Render(cmdList);
             }
 
+            // （ツール機能を使用する場合は）ツールを描画
             if (_Config.ToolEnabled)
             {
                 Tool.Render();
             }
 
+            // 描画を終了
             if (!Graphics.EndFrame()) return false;
             return true;
         }
@@ -234,14 +245,64 @@ namespace Altseed
 
         internal static void RegisterDrawnNode(DrawnNode node)
         {
+            foreach (var camera in _CameraGroups.Keys)
+            {
+                if ((camera.Group & node.CameraGroup) == 0) continue;
+                var list = _CameraGroups[camera];
+                list.Add(node);
+                list.Sort(new DrawnNodeSorter());
+            }
             _DrawnNodes.Add(node);
             _DrawnNodes.Sort(new DrawnNodeSorter());
-            // TODO: _DrawnNodesを追加時に自動ソートされるようなコレクションにする
         }
 
         internal static void UnregisterDrawnNode(DrawnNode node)
         {
+            foreach (var camera in _CameraGroups.Keys)
+            {
+                if ((camera.Group & node.CameraGroup) == 0) continue;
+                var list = _CameraGroups[camera];
+                if (list.Contains(node)) list.Remove(node);
+                list.Sort(new DrawnNodeSorter());
+            }
             _DrawnNodes.Remove(node);
+        }
+
+        internal static void UpdateCameraGroup(DrawnNode node)
+        {
+            foreach (var camera in _CameraGroups.Keys)
+            {
+                if ((camera.Group & node.CameraGroup) != 0)
+                {
+                    var list = _CameraGroups[camera];
+                    list.Add(node);
+                    list.Sort(new DrawnNodeSorter());
+                }
+                else
+                {
+                    var list = _CameraGroups[camera];
+                    if (list.Contains(node)) list.Remove(node);
+                    list.Sort(new DrawnNodeSorter());
+                }
+            }
+        }
+
+        internal static void RegisterCameraNode(CameraNode camera)
+        {
+            var list = new List<DrawnNode>();
+            _CameraGroups.Add(camera, list);
+
+            foreach (var node in _DrawnNodes)
+            {
+                if ((camera.Group & node.CameraGroup) == 0) continue;
+                list.Add(node);
+            }
+            list.Sort(new DrawnNodeSorter());
+        }
+
+        internal static void UnregisterCameraNode(CameraNode camera)
+        {
+            _CameraGroups.Remove(camera);
         }
 
         #endregion
@@ -293,6 +354,16 @@ namespace Altseed
             {
                 var r = x.ZOrder - y.ZOrder;
                 return r;// r == 0 ? 1 : r;
+            }
+        }
+
+        private class CameraSorter : IComparer<CameraNode>
+        {
+            public int Compare(CameraNode x, CameraNode y)
+            {
+                if (x == null) return 1;
+                if (y == null) return -1;
+                return x.Group - y.Group > 0 ? 1 : -1;
             }
         }
     }

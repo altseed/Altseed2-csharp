@@ -9,14 +9,15 @@ namespace Altseed
         /// <summary>
         /// 変形行列を取得または設定します。
         /// </summary>
-        protected internal Matrix44F Transform { get => _Transform; set { _Transform = value; } }
+        protected internal Matrix44F Transform
+        {
+            get => _Transform;
+            set { _Transform = value; }
+        }
         [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
 
         internal abstract void Draw();
-        // NOTE: 実際はここでRendererを叩くよりも、
-        //       描画対象をどこかに積み、後で
-        //       まとめて描画するほうが良いかも
 
         /// <summary>
         /// 角度(度数法)を取得または設定します。
@@ -33,9 +34,6 @@ namespace Altseed
             }
         }
         private float _Angle = 0.0f;
-        /// <summary>
-        /// <see cref="Angle"/>分の回転を表す行列を取得または設定します。
-        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatAngle = Matrix44F.Identity;
 
@@ -54,9 +52,6 @@ namespace Altseed
             }
         }
         private Vector2F _Position = new Vector2F();
-        /// <summary>
-        /// <see cref="Position"/>分の平行移動を表す行列を取得または設定します。
-        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatPosition = Matrix44F.Identity;
 
@@ -76,14 +71,8 @@ namespace Altseed
             }
         }
         private Vector2F _CenterPosition = new Vector2F();
-        /// <summary>
-        /// <see cref="CenterPosition"/>分の平行移動を表す行列を取得または設定します。
-        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatCenterPosition = Matrix44F.Identity;
-        /// <summary>
-        /// <see cref="CenterPosition"/>のマイナス分の平行移動を表す行列を取得または設定します。
-        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatCenterPositionInv = Matrix44F.Identity;
 
@@ -102,9 +91,6 @@ namespace Altseed
             }
         }
         private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
-        /// <summary>
-        /// <see cref="Scale"/>分の拡大率を表す行列を取得または設定します。
-        /// </summary>
         [NonSerialized]
         protected internal Matrix44F _MatScale = Matrix44F.Identity;
 
@@ -116,6 +102,21 @@ namespace Altseed
         /// 描画時の重ね順を取得または設定します。
         /// </summary>
         public virtual int ZOrder { get; set; }
+
+        /// <summary>
+        /// このノードを描画するカメラを取得または設定します。
+        /// </summary>
+        public uint CameraGroup
+        {
+            get => _CameraGroup;
+            set
+            {
+                if (_CameraGroup == value) return;
+                _CameraGroup = value;
+                Engine.UpdateCameraGroup(this);
+            }
+        }
+        private uint _CameraGroup = 0;
 
         /// <summary>
         /// 新しいインスタンスを生成する

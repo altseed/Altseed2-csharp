@@ -13,11 +13,18 @@ namespace Altseed
         /// <summary>
         /// 描画対象とする <see cref="DrawnNode"/> のグループを取得または設定します。
         /// </summary>
-        public uint Id
+        public uint Group
         {
-            get;
-            set;
+            get => _Group;
+            set
+            {
+                if (Status != RegisterStatus.Free) throw new NotImplementedException();
+
+                if (_Group == value) return;
+                _Group = value;
+            }
         }
+        private uint _Group = 0;
 
         public CameraNode()
         {
@@ -43,5 +50,21 @@ namespace Altseed
                 _Camera.TargetTexture = value;
             }
         }
+
+        #region Node
+
+        protected internal override void Registered()
+        {
+            base.Registered();
+            Engine.RegisterCameraNode(this);
+        }
+
+        protected internal override void Unregistered()
+        {
+            base.Unregistered();
+            Engine.UnregisterCameraNode(this);
+        }
+
+        #endregion
     }
 }
