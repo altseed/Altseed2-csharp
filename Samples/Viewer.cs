@@ -20,6 +20,8 @@ namespace Sample
             list.Add(new Sample("SE", "効果音を再生します。", typeof(SoundSE)));
             list.Add(new Sample("BGM", "BGMを再生します。", typeof(SoundBGM)));
             list.Add(new Sample("BGMLoop", "BGMをループ再生します。", typeof(SoundLoop)));
+            list.Add(new Sample("StaticFile", "StaticFileを使って、ファイルを読み込みます。", typeof(FileStaticFile)));
+            list.Add(new Sample("StreamFile", "StreamFileを使って、ファイルを読み込みます。", typeof(FileStreamFile)));
 
             Samples = list.ToDictionary(s => s.TypeName);
 
