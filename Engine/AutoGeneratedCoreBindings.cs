@@ -166,9 +166,21 @@ namespace Altseed
         Backspace,
         Insert,
         Delete,
+        /// <summary>
+        /// 矢印キー右
+        /// </summary>
         Right,
+        /// <summary>
+        /// 矢印キー左
+        /// </summary>
         Left,
+        /// <summary>
+        /// 矢印キー下
+        /// </summary>
         Down,
+        /// <summary>
+        /// 矢印キー上
+        /// </summary>
         Up,
         PageUp,
         PageDown,
@@ -221,13 +233,37 @@ namespace Altseed
         KeypadAdd,
         KeypadEnter,
         KeypadEqual,
+        /// <summary>
+        /// 左側のShiftキー
+        /// </summary>
         LeftShift,
+        /// <summary>
+        /// 左側のCtrlキー
+        /// </summary>
         LeftControl,
+        /// <summary>
+        /// 左側のAltキー
+        /// </summary>
         LeftAlt,
+        /// <summary>
+        /// 左側のWinキー
+        /// </summary>
         LeftWin,
+        /// <summary>
+        /// 右側のShiftキー
+        /// </summary>
         RightShift,
+        /// <summary>
+        /// 右側のCtrlキー
+        /// </summary>
         RightControl,
+        /// <summary>
+        /// 右側のAltキー
+        /// </summary>
         RightAlt,
+        /// <summary>
+        /// 右側のWinキー
+        /// </summary>
         RightWin,
         Menu,
         Last,
@@ -475,6 +511,9 @@ namespace Altseed
         Pixel,
     }
     
+    /// <summary>
+    /// ビルド済みシェーダの種類を表します
+    /// </summary>
     [Serializable]
     public enum BuiltinShaderType : int
     {
@@ -612,6 +651,9 @@ namespace Altseed
         CollapsingHeader = 26,
     }
     
+    /// <summary>
+    /// Toolにおいてインプットされるテキストの設定を表します
+    /// </summary>
     [Serializable]
     public enum ToolInputText : int
     {
@@ -694,6 +736,9 @@ namespace Altseed
         CallbackResize = 262144,
     }
     
+    /// <summary>
+    /// Toolにおける色の設定を表します
+    /// </summary>
     [Serializable]
     public enum ToolColorEdit : int
     {
@@ -821,6 +866,9 @@ namespace Altseed
         AllowItemOverlap = 16,
     }
     
+    /// <summary>
+    /// Toolのウィンドウにおける設定を表します
+    /// </summary>
     [Serializable]
     public enum ToolWindow : int
     {
@@ -910,6 +958,9 @@ namespace Altseed
         NoInputs = 786944,
     }
     
+    /// <summary>
+    /// Toolのタブバーにおける設定を表します
+    /// </summary>
     [Serializable]
     public enum ToolTabBar : int
     {
@@ -3087,6 +3138,9 @@ namespace Altseed
         }
     }
     
+    /// <summary>
+    /// ポストエフェクトやカメラにおける描画先のクラス
+    /// </summary>
     public partial class RenderTexture : Texture2D
     {
         #region unmanaged
@@ -3291,12 +3345,21 @@ namespace Altseed
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
         }
         
+        /// <summary>
+        /// 指定した種類のシェーダを取得する
+        /// </summary>
+        /// <param name="shaderStage">検索するシェーダのタイプ</param>
+        /// <returns><paramref name="shaderStage"/>に一致するタイプのシェーダ</returns>
         public Shader GetShader(ShaderStageType shaderStage)
         {
             var ret = cbg_Material_GetShader(selfPtr, (int)shaderStage);
             return Shader.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// シェーダを設定する
+        /// </summary>
+        /// <param name="shader">設定するシェーダ</param>
         public void SetShader(Shader shader)
         {
             cbg_Material_SetShader(selfPtr, shader != null ? shader.selfPtr : IntPtr.Zero);
@@ -3497,7 +3560,7 @@ namespace Altseed
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, [In, Out] ref RectI viewport);
+        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RectI viewport);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
@@ -3526,9 +3589,9 @@ namespace Altseed
             return RenderTexture.TryGetFromCache(ret);
         }
         
-        public void SetRenderTarget(RenderTexture target, ref RectI viewport)
+        public void SetRenderTarget(RenderTexture target, RectI viewport)
         {
-            cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, ref viewport);
+            cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, viewport);
         }
         
         public void RenderToRenderTarget(Material material)
@@ -6477,7 +6540,7 @@ namespace Altseed
     {
         #region unmanaged
         
-        private static Dictionary<IntPtr, WeakReference<Sound>> cacheRepo = new Dictionary<IntPtr, WeakReference<Sound>>();
+        private static ConcurrentDictionary<IntPtr, WeakReference<Sound>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Sound>>();
         
         internal static  Sound TryGetFromCache(IntPtr native)
         {
@@ -6494,12 +6557,12 @@ namespace Altseed
                 }
                 else
                 {
-                    cacheRepo.Remove(native);
+                    cacheRepo.TryRemove(native, out _);
                 }
             }
         
             var newObject = new Sound(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Sound>(newObject);
+            cacheRepo.TryAdd(native, new WeakReference<Sound>(newObject));
             return newObject;
         }
         
