@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Altseed
 {
+    [Serializable]
     public class CameraNode : Node
     {
         private readonly RenderedCamera _Camera;
@@ -31,6 +32,9 @@ namespace Altseed
             _Camera = RenderedCamera.Create();
         }
 
+        /// <summary>
+        /// 変形行列を取得または設定します。
+        /// </summary>
         public Matrix44F Transform
         {
             get => _Camera.Transform;
@@ -41,6 +45,9 @@ namespace Altseed
             }
         }
 
+        /// <summary>
+        /// 描画先のテクスチャを取得または設定します。
+        /// </summary>
         public RenderTexture TargetTexture
         {
             get => _Camera.TargetTexture;
