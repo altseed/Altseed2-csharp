@@ -83,6 +83,10 @@ namespace Altseed
         public static bool operator !=(Vector4I v1, Vector4I v2) => !Equals(v1, v2);
         #endregion
 
+        /// <summary>
+        /// このベクトルを表す文字列取得します。
+        /// </summary>
+        /// <returns>このベクトルを表す文字列取得します。</returns>
         public readonly override string ToString() => $"({X}, {Y}, {Z}, {W})";
 
         /// <summary>
