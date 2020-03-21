@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public sealed partial class Sound : ISerializable
+    public sealed partial class Sound : ISerializable, ICacheKeeper<Sound>
     {
         #region SerializeName
         private const string S_IsDecompressed = "S_IsDecompressed";
@@ -23,13 +24,20 @@ namespace Altseed
             var ptr = cbg_Sound_Load(path, isDecompressed);
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
 
-            selfPtr = ptr;
-            cacheRepo.TryAdd(selfPtr, new WeakReference<Sound>(this));
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
 
             LoopStartingPoint = info.GetSingle(S_LoopStaringPoint);
             LoopEndPoint = info.GetSingle(S_LoopEndPoint);
             IsLoopingMode = info.GetBoolean(S_IsLoopingMode);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Sound>> ICacheKeeper<Sound>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<Sound>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Sound>.Release(IntPtr native) => cbg_Sound_Release(native);
+        #endregion
 
         /// <summary>
         /// 指定パスから音源を読み込む

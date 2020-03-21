@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    internal partial class RenderedCamera : ISerializable
+    internal partial class RenderedCamera : ISerializable, ICacheKeeper<RenderedCamera>
     {
         #region SerializeName
         private const string S_CenterOffSet = "S_CenterOffSet";
@@ -22,13 +23,20 @@ namespace Altseed
             var ptr = cbg_RenderedCamera_Create();
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
 
-            selfPtr = ptr;
+            CacheHelper.CacheHandling(this, ptr);
 
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<RenderedCamera>(this));
             Transform = info.GetValue<Matrix44F>(S_Transform);
             CenterOffset = info.GetValue<Vector2F>(S_CenterOffSet);
             TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedCamera>> ICacheKeeper<RenderedCamera>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<RenderedCamera>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<RenderedCamera>.Release(IntPtr native) => cbg_RenderedCamera_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズするデータを設定します。

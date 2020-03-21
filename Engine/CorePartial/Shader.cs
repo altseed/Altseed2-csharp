@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public partial class Shader : ISerializable
+    public partial class Shader : ISerializable, ICacheKeeper<Shader>
     {
         #region SerializeName
         private const string S_Code = "S_Code";
@@ -24,11 +25,17 @@ namespace Altseed
             var stage = info.GetValue<ShaderStageType>(S_ShaderStageType);
 
             var ptr = cbg_Shader_Create(code, name, (int)stage);
-            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンスの生成に失敗しました");
-            selfPtr = ptr;
 
-            cacheRepo.TryAdd(ptr, new WeakReference<Shader>(this));
+            CacheHelper.CacheHandling(this, ptr);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Shader>> ICacheKeeper<Shader>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<Shader>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Shader>.Release(IntPtr native) => cbg_Shader_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズする情報を設定する

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
@@ -39,7 +40,7 @@ namespace Altseed
     }
 
     [Serializable]
-    internal sealed partial class Int8Array : IArray<byte>, ISerializable
+    internal sealed partial class Int8Array : IArray<byte>, ISerializable, ICacheKeeper<Int8Array>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -47,11 +48,10 @@ namespace Altseed
 
         private Int8Array(SerializationInfo info, StreamingContext context)
         {
-            var array = info.GetValue<byte[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
+            var array = info.GetValue<byte[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_Int8Array_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<Int8Array>(this));
+            CacheHelper.CacheHandling(this, ptr);
             this.FromArray(array);
         }
 
@@ -71,6 +71,14 @@ namespace Altseed
             }
         }
 
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Int8Array>> ICacheKeeper<Int8Array>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<Int8Array>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Int8Array>.Release(IntPtr native) => cbg_Int8Array_Release(native);
+        #endregion
+
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
@@ -79,7 +87,7 @@ namespace Altseed
     }
 
     [Serializable]
-    internal sealed partial class Int32Array : IArray<int>, ISerializable
+    internal sealed partial class Int32Array : IArray<int>, ISerializable, ICacheKeeper<Int32Array>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -90,8 +98,7 @@ namespace Altseed
             var array = info.GetValue<int[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_Int32Array_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<Int32Array>(this));
+            CacheHelper.CacheHandling(this, ptr);
             this.FromArray(array);
         }
 
@@ -111,6 +118,14 @@ namespace Altseed
             }
         }
 
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Int32Array>> ICacheKeeper<Int32Array>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<Int32Array>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Int32Array>.Release(IntPtr native) => cbg_Int32Array_Release(native);
+        #endregion
+
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
@@ -119,7 +134,7 @@ namespace Altseed
     }
 
     [Serializable]
-    internal sealed partial class VertexArray : IArray<Vertex>, ISerializable
+    internal sealed partial class VertexArray : IArray<Vertex>, ISerializable, ICacheKeeper<VertexArray>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -130,8 +145,7 @@ namespace Altseed
             var array = info.GetValue<Vertex[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_VertexArray_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<VertexArray>(this));
+            CacheHelper.CacheHandling(this, ptr);
             this.FromArray(array);
         }
 
@@ -151,6 +165,15 @@ namespace Altseed
             }
         }
 
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<VertexArray>> ICacheKeeper<VertexArray>.CacheRepo => cacheRepo;
+
+        internal IntPtr Self { get => selfPtr; set => selfPtr = value; }
+        IntPtr ICacheKeeper<VertexArray>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<VertexArray>.Release(IntPtr native) => cbg_VertexArray_Release(native);
+        #endregion
+
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
@@ -159,7 +182,7 @@ namespace Altseed
     }
 
     [Serializable]
-    internal sealed partial class FloatArray : IArray<float>, ISerializable
+    internal sealed partial class FloatArray : IArray<float>, ISerializable, ICacheKeeper<FloatArray>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -170,8 +193,7 @@ namespace Altseed
             var array = info.GetValue<float[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_FloatArray_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<FloatArray>(this));
+            CacheHelper.CacheHandling(this, ptr);
             this.FromArray(array);
         }
 
@@ -191,6 +213,14 @@ namespace Altseed
             }
         }
 
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<FloatArray>> ICacheKeeper<FloatArray>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<FloatArray>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<FloatArray>.Release(IntPtr native) => cbg_FloatArray_Release(native);
+        #endregion
+
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
@@ -199,7 +229,7 @@ namespace Altseed
     }
 
     [Serializable]
-    internal sealed partial class Vector2FArray : IArray<Vector2F>, ISerializable
+    internal sealed partial class Vector2FArray : IArray<Vector2F>, ISerializable, ICacheKeeper<Vector2FArray>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -210,8 +240,7 @@ namespace Altseed
             var array = info.GetValue<Vector2F[]>(S_Array) ??  throw new SerializationException("デシリアライズに失敗しました");
             var ptr = cbg_Vector2FArray_Create(array.Length);
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<Vector2FArray>(this));
+            CacheHelper.CacheHandling(this, ptr);
             this.FromArray(array);
         }
 
@@ -230,6 +259,14 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Vector2FArray>> ICacheKeeper<Vector2FArray>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<Vector2FArray>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Vector2FArray>.Release(IntPtr native) => cbg_Vector2FArray_Release(native);
+        #endregion
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {

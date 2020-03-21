@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public sealed partial class StaticFile : ISerializable
+    public sealed partial class StaticFile : ISerializable, ICacheKeeper<StaticFile>
     {
         #region SerializeName
         private const string S_Path = "S_Path";
@@ -18,9 +19,16 @@ namespace Altseed
 
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
 
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<StaticFile>(this));
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<StaticFile>> ICacheKeeper<StaticFile>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<StaticFile>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<StaticFile>.Release(IntPtr native) => cbg_StaticFile_Release(native);
+        #endregion
 
         /// <summary>
         /// 指定パスからファイルを読み込む

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public partial class RenderTexture
+    public partial class RenderTexture : ICacheKeeper<RenderTexture>
     {
         #region SerializeName
         private const string S_Size = "S_Size";
@@ -21,6 +22,14 @@ namespace Altseed
         {
             seInfo = info;
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderTexture>> ICacheKeeper<RenderTexture>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<RenderTexture>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<RenderTexture>.Release(IntPtr native) => cbg_RenderTexture_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズするデータを設定します。
@@ -47,8 +56,7 @@ namespace Altseed
 
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
 
-            selfPtr = ptr;
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<RenderTexture>(this));
+            CacheHelper.CacheHandling(this, ptr);
 
             seInfo = null;
         }

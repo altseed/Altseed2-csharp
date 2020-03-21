@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public partial class Font : ISerializable, IDeserializationCallback
+    public partial class Font : ISerializable, IDeserializationCallback, ICacheKeeper<Font>
     {
         [Serializable]
         private enum FontType : int
@@ -14,6 +14,7 @@ namespace Altseed
             Dynamic,
             Static
         }
+
         #region SerializeName
         private const string S_Path = "S_Path";
         private const string S_Size = "S_Size";
@@ -47,11 +48,16 @@ namespace Altseed
                     break;
             }
 
-            if (ptr == IntPtr.Zero) throw new SerializationException("フォントの生成に失敗しました");
-
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<Font>(this));
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Font>> ICacheKeeper<Font>.CacheRepo => cacheRepo;
+        
+        IntPtr ICacheKeeper<Font>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Font>.Release(IntPtr native) => cbg_Font_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズするデータを設定する

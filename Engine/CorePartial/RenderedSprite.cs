@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    internal partial class RenderedSprite : ISerializable
+    internal partial class RenderedSprite : ISerializable, ICacheKeeper<RenderedSprite>
     {
         #region SerializeName
         private const string S_Material = "S_Material";
@@ -23,14 +24,21 @@ namespace Altseed
             var ptr = cbg_RenderedSprite_Create();
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
 
-            selfPtr = ptr;
+            CacheHelper.CacheHandling(this, ptr);
 
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<RenderedSprite>(this));
             Material = info.GetValue<Material>(S_Material);
             Src = info.GetValue<RectF>(S_Src);
             Texture = info.GetValue<Texture2D>(S_Texture);
             Transform = info.GetValue<Matrix44F>(S_Transform);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedSprite>> ICacheKeeper<RenderedSprite>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<RenderedSprite>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<RenderedSprite>.Release(IntPtr native) => cbg_RenderedSprite_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズするデータを設定します。
