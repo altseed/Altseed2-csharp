@@ -8,7 +8,7 @@ namespace Altseed
     /// キャッシュを使用するクラス
     /// </summary>
     /// <typeparam name="TClass">クラスの型</typeparam>
-    internal interface IChacheKeeper<TClass> where TClass : class
+    internal interface ICacheKeeper<TClass> where TClass : class
     {
         /// <summary>
         /// キャッシュをためておくディクショナリを取得する
@@ -37,7 +37,7 @@ namespace Altseed
         /// <param name="obj">キャッシュ制御を行うクラスのインスタンス</param>
         /// <param name="native"><paramref name="obj"/>に登録するポインタ</param>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
-        internal static void CacheHandling<TClass>(TClass obj, IntPtr native) where TClass : class, IChacheKeeper<TClass>
+        internal static void CacheHandling<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
             if (obj == null) throw new ArgumentNullException("引数がnullです", nameof(obj));
             if (native == IntPtr.Zero) throw new ArgumentNullException("引数がnullです", nameof(native));
@@ -65,7 +65,7 @@ namespace Altseed
         /// <param name="native"><paramref name="obj"/>に登録するポインタ</param>
         /// <exception cref="ArgumentException">スレッドセーフなキャッシュ保存ディクショナリを取得できなかった</exception>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
-        internal static void CacheHandlingConcurrent<TClass>(TClass obj, IntPtr native) where TClass : class, IChacheKeeper<TClass>
+        internal static void CacheHandlingConcurrent<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
             if (obj == null) throw new ArgumentNullException("引数がnullです", nameof(obj));
             if (native == IntPtr.Zero) throw new ArgumentNullException("引数がnullです", nameof(native));
