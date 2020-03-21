@@ -29,6 +29,31 @@ namespace Altseed
         public float Z;
 
         /// <summary>
+        /// ベクトルの長さを取得または設定します。
+        /// </summary>
+        public float Length
+        {
+            readonly get => (float)Math.Sqrt(SquaredLength);
+            set
+            {
+                var len = Length;
+                X /= (value / len);
+                Y /= (value / len);
+                Z /= (value / len);
+            }
+        }
+
+        /// <summary>
+        /// このベクトルの単位ベクトルを取得します。
+        /// </summary>
+        public readonly Vector3F Normal => this / Length;
+
+        /// <summary>
+        /// ベクトルの長さの二乗を取得します。
+        /// </summary>
+        public readonly float SquaredLength => X * X + Y * Y + Z * Z;
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="x">X成分</param>
@@ -41,108 +66,98 @@ namespace Altseed
             Z = z;
         }
 
-        public readonly override string ToString() => $"({X}, {Y}, {Z})";
-
-        public readonly Vector3I To3I() => new Vector3I((int)X, (int)Y, (int)Z);
+        #region Equivalence
+        /// <summary>
+        /// 2つの<see cref="Vector3F"/>間の等価性を判定します。
+        /// </summary>
+        /// <param name="v1">等価性を判定するベクトル1</param>
+        /// <param name="v2">等価性を判定するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
+        public static bool Equals(Vector3F v1, Vector3F v2) => v1.Equals(v2);
 
         /// <summary>
-        /// ベクトルの長さの二乗を取得します。
+        /// もう1つの<see cref="Vector3F"/>との等価性を判定します。
         /// </summary>
-        public readonly float SquaredLength
-        {
-            get { return X * X + Y * Y + Z * Z; }
-        }
+        /// <param name="other">比較する<see cref="Vector3F"/>のインスタンス</param>
+        /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
+        public readonly bool Equals(Vector3F other) => X == other.X && Y == other.Y && Z == other.Z;
 
         /// <summary>
-        /// ベクトルの長さを取得または設定します。
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
-        public float Length
-        {
-            readonly get { return (float)Math.Sqrt(SquaredLength); }
-            set
-            {
-                var len = Length;
-                X /= (value / len);
-                Y /= (value / len);
-                Z /= (value / len);
+        /// <param name="obj">等価性を判定するオブジェクト</param>
+        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
+        public readonly override bool Equals(object obj) => obj is Vector3F v ? Equals(v) : false;
 
-            }
-        }
+        /// <summary>
+        /// このオブジェクトのハッシュコードを返します。
+        /// </summary>
+        /// <returns>このオブジェクトのハッシュコード</returns>
+        public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
+
+        public static bool operator ==(Vector3F v1, Vector3F v2) => Equals(v1, v2);
+
+        public static bool operator !=(Vector3F v1, Vector3F v2) => !Equals(v1, v2);
+        #endregion
 
         /// <summary>
         /// このベクトルを単位ベクトル化します。
         /// </summary>
         public void Normalize()
         {
-            float length = Length;
+            var length = Length;
             X /= length;
             Y /= length;
             Z /= length;
         }
 
-        /// <summary>
-        /// このベクトルの単位ベクトルを取得します。
-        /// </summary>
-        public readonly Vector3F Normal
-        {
-            get
-            {
-                float length = Length;
-                return new Vector3F(X / length, Y / length, Z / length);
-            }
-        }
-
-        public static bool operator ==(Vector3F left, Vector3F right)
-        {
-            return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
-        }
-        public static bool operator !=(Vector3F left, Vector3F right)
-        {
-            return left.X != right.X || left.Y != right.Y || left.Z != right.Z;
-        }
-        public static Vector3F operator +(Vector3F left, Vector3F right)
-        {
-            return new Vector3F(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
-        }
-        public static Vector3F operator -(Vector3F left, Vector3F right)
-        {
-            return new Vector3F(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
-        }
-        public static Vector3F operator -(Vector3F op)
-        {
-            return new Vector3F(-op.X, -op.Y, -op.Z);
-        }
-        public static Vector3F operator *(Vector3F op, float scolar)
-        {
-            return new Vector3F(op.X * scolar, op.Y * scolar, op.Z * scolar);
-        }
-        public static Vector3F operator *(float scolar, Vector3F op)
-        {
-            return new Vector3F(scolar * op.X, scolar * op.Y, scolar * op.Z);
-        }
-        public static Vector3F operator *(Vector3F left, Vector3F right)
-        {
-            return new Vector3F(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
-        }
-        public static Vector3F operator /(Vector3F op, float scolar)
-        {
-            return new Vector3F(op.X / scolar, op.Y / scolar, op.Z / scolar);
-        }
-        public static Vector3F operator /(Vector3F left, Vector3F right)
-        {
-            return new Vector3F(left.X / right.X, left.Y / right.Y, left.Z / right.Z);
-        }
+        public readonly override string ToString() => $"({X}, {Y}, {Z})";
 
         /// <summary>
-        /// 内積を取得します。
+        /// <see cref="Vector3I"/>に型変換します。
         /// </summary>
-        /// <param name="v1">v1ベクトル</param>
-        /// <param name="v2">v2ベクトル</param>
-        /// <returns>内積v1・v2</returns>
-        public static float Dot(Vector3F v1, Vector3F v2)
-        {
-            return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
-        }
+        /// <returns>このインスタンスと等価な<see cref="Vector3I"/>の新しいインスタンス</returns>
+        public readonly Vector3I To3I() => new Vector3I((int)X, (int)Y, (int)Z);
+
+        /// <summary>
+        /// 2つのベクトルを加算します。
+        /// </summary>
+        /// <param name="v1">加算するベクトル1</param>
+        /// <param name="v2">加算するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
+        public static Vector3F Add(Vector3F v1, Vector3F v2) => v1 + v2;
+
+        /// <summary>
+        /// 2つのベクトルを減算します。
+        /// </summary>
+        /// <param name="left">減算されるベクトル</param>
+        /// <param name="right">減算するベクトル</param>
+        /// <returns>減算結果</returns>
+        public static Vector3F Subtract(Vector3F left, Vector3F right) => left - right;
+
+        /// <summary>
+        /// 2つのベクトルを積算します。
+        /// </summary>
+        /// <param name="v1">積算するベクトル1</param>
+        /// <param name="v2">積算するベクトル2</param>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z)</returns>
+        public static Vector3F Multiple(Vector3F v1, Vector3F v2) => v1 * v2;
+
+        /// <summary>
+        /// 2つのベクトルを除算します。
+        /// </summary>
+        /// <param name="left">除算されるベクトル</param>
+        /// <param name="right">除算するベクトル</param>
+        /// <returns>除算結果(left.X / right.X, left.Y / right.Y, left.Z / right.Z)</returns>
+        public static Vector3F Divide(Vector3F left, Vector3F right) => left / right;
+
+        /// <summary>
+        /// ベクトルを値で除算します。
+        /// </summary>
+        /// <param name="vector">除算されるベクトル</param>
+        /// <param name="scalar">除算する値</param>
+        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar, vector.Z / scalar)</returns>
+        public static Vector3F DivideByScalar(Vector3F vector, float scalar) => vector / scalar;
 
         /// <summary>
         /// 外積を取得します。
@@ -166,64 +181,12 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 加算します。
+        /// 内積を取得します。
         /// </summary>
-        /// <param name="v1"></param>
-        /// <param name="v2"></param>
-        /// <returns></returns>
-        public static Vector3F Add(Vector3F v1, Vector3F v2)
-        {
-            Vector3F o = new Vector3F();
-            o.X = v1.X + v2.X;
-            o.Y = v1.Y + v2.Y;
-            o.Z = v1.Z + v2.Z;
-            return o;
-        }
-
-        /// <summary>
-        /// 減算します。
-        /// </summary>
-        /// <param name="v1"></param>
-        /// <param name="v2"></param>
-        /// <returns></returns>
-        public static Vector3F Subtract(Vector3F v1, Vector3F v2)
-        {
-            Vector3F o = new Vector3F();
-            o.X = v1.X - v2.X;
-            o.Y = v1.Y - v2.Y;
-            o.Z = v1.Z - v2.Z;
-            return o;
-        }
-
-        /// <summary>
-        /// 除算します。
-        /// </summary>
-        /// <param name="v1">値1</param>
-        /// <param name="v2">値2</param>
-        /// <returns>v1/v2</returns>
-        public static Vector3F Divide(Vector3F v1, Vector3F v2)
-        {
-            var ret = new Vector3F();
-            ret.X = v1.X / v2.X;
-            ret.Y = v1.Y / v2.Y;
-            ret.Z = v1.Z / v2.Z;
-            return ret;
-        }
-
-        /// <summary>
-        /// スカラーで除算します。
-        /// </summary>
-        /// <param name="v1">値1</param>
-        /// <param name="v2">値2</param>
-        /// <returns>v1/v2</returns>
-        public static Vector3F DivideByScalar(Vector3F v1, float v2)
-        {
-            var ret = new Vector3F();
-            ret.X = v1.X / v2;
-            ret.Y = v1.Y / v2;
-            ret.Z = v1.Z / v2;
-            return ret;
-        }
+        /// <param name="v1">v1ベクトル</param>
+        /// <param name="v2">v2ベクトル</param>
+        /// <returns>内積v1・v2</returns>
+        public static float Dot(Vector3F v1, Vector3F v2) => v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
 
         /// <summary>
         /// 2点間の距離を取得します。
@@ -239,40 +202,70 @@ namespace Altseed
             return (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
 
+        #region CalOperators
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定します。
+        /// 2つのベクトルを加算します。
         /// </summary>
-        /// <param name="obj">等価性を判定するオブジェクト</param>
-        /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is Vector3F v ? Equals(v) : false;
+        /// <param name="v1">加算するベクトル1</param>
+        /// <param name="v2">加算するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
+        public static Vector3F operator +(Vector3F v1, Vector3F v2) => new Vector3F(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
 
         /// <summary>
-        /// 2つの<see cref="Vector3F"/>間の等価性を判定します。
+        /// ベクトルの符号を反転します。
         /// </summary>
-        /// <param name="v1">等価性を判定するベクトル1</param>
-        /// <param name="v2">等価性を判定するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public static bool Equals(Vector3F v1, Vector3F v2) => v1.Equals(v2);
+        /// <param name="vector">符合を反転するベクトル</param>
+        /// <returns><paramref name="vector"/>の逆符合版</returns>
+        public static Vector3F operator -(Vector3F vector) => new Vector3F(-vector.X, -vector.Y, -vector.Z);
 
         /// <summary>
-        /// もう1つの<see cref="Vector3F"/>との等価性を判定します。
+        /// 2つのベクトルを減算します。
         /// </summary>
-        /// <param name="other">比較する<see cref="Vector3F"/>のインスタンス</param>
-        /// <returns><paramref name="other"/>等価性をが認められたらtrue、それ以外でfalse</returns>
-        public readonly bool Equals(Vector3F other) => X == other.X && Y == other.Y && Z == other.Z;
+        /// <param name="left">減算されるベクトル</param>
+        /// <param name="right">減算するベクトル</param>
+        /// <returns>減算結果</returns>
+        public static Vector3F operator -(Vector3F left, Vector3F right) => new Vector3F(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返します。
+        /// 2つのベクトルを積算します。
         /// </summary>
-        /// <returns>このオブジェクトのハッシュコード</returns>
-        public readonly override int GetHashCode()
-        {
-            var hashCode = 1861411795;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            hashCode = hashCode * -1521134295 + Z.GetHashCode();
-            return hashCode;
-        }
+        /// <param name="v1">積算するベクトル1</param>
+        /// <param name="v2">積算するベクトル2</param>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z)</returns>
+        public static Vector3F operator *(Vector3F v1, Vector3F v2) => new Vector3F(v1.X * v2.X, v1.Y * v2.Y, v1.Z + v2.Z);
+
+        /// <summary>
+        /// ベクトルと値を積算します。
+        /// </summary>
+        /// <param name="vector">積算するベクトル</param>
+        /// <param name="scalar">積算する値</param>
+        /// <returns>積算結果</returns>
+        public static Vector3F operator *(Vector3F vector, float scalar) => new Vector3F(vector.X * scalar, vector.Y * scalar, vector.Z * scalar);
+
+        /// <summary>
+        /// ベクトルと値を積算します。
+        /// </summary>
+        /// <param name="scalar">積算する値</param>
+        /// <param name="vector">積算するベクトル</param>
+        /// <returns>積算結果</returns>
+        public static Vector3F operator *(float scalar, Vector3F vector) => new Vector3F(vector.X * scalar, vector.Y * scalar, vector.Z * scalar);
+
+        /// <summary>
+        /// 2つのベクトルを除算します。
+        /// </summary>
+        /// <param name="left">除算されるベクトル</param>
+        /// <param name="right">除算するベクトル</param>
+        /// <returns>除算結果(left.X / right.X, left.Y / right.Y, left.Z / right.Z)</returns>
+        public static Vector3F operator /(Vector3F left, Vector3F right) => new Vector3F(left.X / right.X, left.Y / right.Y, left.Z / right.Z);
+
+        /// <summary>
+        /// ベクトルを値で除算します。
+        /// </summary>
+        /// <param name="vector">除算されるベクトル</param>
+        /// <param name="scalar">除算する値</param>
+        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar, vector.Z / scalar)</returns>
+        public static Vector3F operator /(Vector3F vector, float scalar) => new Vector3F(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
+        #endregion
 
         public static implicit operator Vector3F(Vector3I v) => v.To3F();
         public static explicit operator Vector3I(Vector3F v) => v.To3I();

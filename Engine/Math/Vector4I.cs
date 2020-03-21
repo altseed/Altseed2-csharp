@@ -49,83 +49,7 @@ namespace Altseed
             W = w;
         }
 
-        public readonly override string ToString() => $"({X}, {Y}, {Z}, {W})";
-
-        /// <summary>
-        /// <see cref="Vector4F"/>に型変換する
-        /// </summary>
-        /// <returns>このインスタンスと等価な<see cref="Vector4F"/>の新しいインスタンス</returns>
-        public readonly Vector4F To4F() => new Vector4F(X, Y, Z, W);
-
-
-
-        public static bool operator ==(Vector4I left, Vector4I right)
-        {
-            return left.X == right.X && left.Y == right.Y && left.Z == right.Z && left.W == right.W;
-        }
-        public static bool operator !=(Vector4I left, Vector4I right)
-        {
-            return left.X != right.X || left.Y != right.Y || left.Z != right.Z || left.W != right.W;
-        }
-        public static Vector4I operator +(Vector4I left, Vector4I right)
-        {
-            return new Vector4I(left.X + right.X, left.Y + right.Y, left.Z + right.Z, left.W + right.W);
-        }
-        public static Vector4I operator -(Vector4I left, Vector4I right)
-        {
-            return new Vector4I(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
-        }
-        public static Vector4I operator -(Vector4I op)
-        {
-            return new Vector4I(-op.X, -op.Y, -op.Z, -op.W);
-        }
-        public static Vector4I operator *(Vector4I op, int scolar)
-        {
-            return new Vector4I(op.X * scolar, op.Y * scolar, op.Z * scolar, op.W * scolar);
-        }
-        public static Vector4I operator *(int scolar, Vector4I op)
-        {
-            return new Vector4I(scolar * op.X, scolar * op.Y, scolar * op.Z, scolar * op.W);
-        }
-        public static Vector4I operator *(Vector4I left, Vector4I right)
-        {
-            return new Vector4I(left.X * right.X, left.Y * right.Y, left.Z * right.Z, left.W * right.W);
-        }
-        public static Vector4I operator /(Vector4I op, int scolar)
-        {
-            return new Vector4I(op.X / scolar, op.Y / scolar, op.Z / scolar, op.W / scolar);
-        }
-        public static Vector4I operator /(Vector4I left, Vector4I right)
-        {
-            return new Vector4I(left.X / right.X, left.Y / right.Y, left.Z / right.Z, left.W / right.W);
-        }
-
-        /// <summary>
-        /// 外積取得します。
-        /// </summary>
-        /// <param name="v1">v1ベクトル</param>
-        /// <param name="v2">v2ベクトル</param>
-        /// <returns>外積v1×v2</returns>
-        public static int Dot(Vector4I v1, Vector4I v2)
-        {
-            return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z + v1.W * v2.W;
-        }
-
-        /// <summary>
-        /// 2点間の距離取得します。
-        /// </summary>
-        /// <param name="v1">v1ベクトル</param>
-        /// <param name="v2">v2ベクトル</param>
-        /// <returns>v1とv2の距離</returns>
-        public static float Distance(Vector4I v1, Vector4I v2)
-        {
-            float dx = v1.X - v2.X;
-            float dy = v1.Y - v2.Y;
-            float dz = v1.Z - v2.Z;
-            float dw = v1.W - v2.W;
-            return (float)Math.Sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
-        }
-
+        #region Equivalence
         /// <summary>
         /// 2つの<see cref="Vector4I"/>間の等価性を判定します。
         /// </summary>
@@ -152,15 +76,147 @@ namespace Altseed
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public readonly override int GetHashCode()
+        public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
+
+        public static bool operator ==(Vector4I v1, Vector4I v2) => Equals(v1, v2);
+
+        public static bool operator !=(Vector4I v1, Vector4I v2) => !Equals(v1, v2);
+        #endregion
+
+        public readonly override string ToString() => $"({X}, {Y}, {Z}, {W})";
+
+        /// <summary>
+        /// <see cref="Vector4F"/>に型変換する
+        /// </summary>
+        /// <returns>このインスタンスと等価な<see cref="Vector4F"/>の新しいインスタンス</returns>
+        public readonly Vector4F To4F() => new Vector4F(X, Y, Z, W);
+
+        /// <summary>
+        /// 外積取得します。
+        /// </summary>
+        /// <param name="v1">v1ベクトル</param>
+        /// <param name="v2">v2ベクトル</param>
+        /// <returns>外積v1×v2</returns>
+        public static int Dot(Vector4I v1, Vector4I v2) => v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z + v1.W * v2.W;
+
+        /// <summary>
+        /// 2点間の距離取得します。
+        /// </summary>
+        /// <param name="v1">v1ベクトル</param>
+        /// <param name="v2">v2ベクトル</param>
+        /// <returns>v1とv2の距離</returns>
+        public static float Distance(Vector4I v1, Vector4I v2)
         {
-            var hashCode = 1861411795;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            hashCode = hashCode * -1521134295 + Z.GetHashCode();
-            hashCode = hashCode * -1521134295 + W.GetHashCode();
-            return hashCode;
+            float dx = v1.X - v2.X;
+            float dy = v1.Y - v2.Y;
+            float dz = v1.Z - v2.Z;
+            float dw = v1.W - v2.W;
+            return (float)Math.Sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
         }
 
+        /// <summary>
+        /// 2つのベクトルを加算します。
+        /// </summary>
+        /// <param name="v1">加算するベクトル1</param>
+        /// <param name="v2">加算するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
+        public static Vector4I Add(Vector4I v1, Vector4I v2) => v1 + v2;
+
+        /// <summary>
+        /// 2つのベクトルを減算します。
+        /// </summary>
+        /// <param name="left">減算されるベクトル</param>
+        /// <param name="right">減算するベクトル</param>
+        /// <returns>減算結果</returns>
+        public static Vector4I Subtract(Vector4I left, Vector4I right) => left - right;
+
+        /// <summary>
+        /// 2つのベクトルを積算します。
+        /// </summary>
+        /// <param name="v1">積算するベクトル1</param>
+        /// <param name="v2">積算するベクトル2</param>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z, v1.W * v2.W)</returns>
+        public static Vector4I Multiple(Vector4I v1, Vector4I v2) => v1 * v2;
+
+        /// <summary>
+        /// 2つのベクトルを除算します。
+        /// </summary>
+        /// <param name="left">除算されるベクトル</param>
+        /// <param name="right">除算するベクトル</param>
+        /// <returns>除算結果(left.X / right.X, left.Y / right.Y, left.Z / right.Z, left.W / right.Z)</returns>
+        public static Vector4I Divide(Vector4I left, Vector4I right) => left / right;
+
+        /// <summary>
+        /// ベクトルを値で除算します。
+        /// </summary>
+        /// <param name="vector">除算されるベクトル</param>
+        /// <param name="scalar">除算する値</param>
+        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar, vector.Z / scalar, vector.W / scalar, vector.W / scalar)</returns>
+        public static Vector4I DivideByScalar(Vector4I vector, int scalar) => vector / scalar;
+
+        #region CalOperators
+        /// <summary>
+        /// 2つのベクトルを加算します。
+        /// </summary>
+        /// <param name="v1">加算するベクトル1</param>
+        /// <param name="v2">加算するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
+        public static Vector4I operator +(Vector4I v1, Vector4I v2) => new Vector4I(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z, v1.W + v2.W);
+
+        /// <summary>
+        /// ベクトルの符号を反転します。
+        /// </summary>
+        /// <param name="vector">符合を反転するベクトル</param>
+        /// <returns><paramref name="vector"/>の逆符合版</returns>
+        public static Vector4I operator -(Vector4I vector) => new Vector4I(-vector.X, -vector.Y, -vector.Z, -vector.W);
+
+        /// <summary>
+        /// 2つのベクトルを減算します。
+        /// </summary>
+        /// <param name="left">減算されるベクトル</param>
+        /// <param name="right">減算するベクトル</param>
+        /// <returns>減算結果</returns>
+        public static Vector4I operator -(Vector4I left, Vector4I right) => new Vector4I(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
+
+        /// <summary>
+        /// 2つのベクトルを積算します。
+        /// </summary>
+        /// <param name="v1">積算するベクトル1</param>
+        /// <param name="v2">積算するベクトル2</param>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z, v1.W * v2.W)</returns>
+        public static Vector4I operator *(Vector4I v1, Vector4I v2) => new Vector4I(v1.X * v2.X, v1.Y * v2.Y, v1.Z + v2.Z, v1.W + v2.W);
+
+        /// <summary>
+        /// ベクトルと値を積算します。
+        /// </summary>
+        /// <param name="vector">積算するベクトル</param>
+        /// <param name="scalar">積算する値</param>
+        /// <returns>積算結果</returns>
+        public static Vector4I operator *(Vector4I vector, int scalar) => new Vector4I(vector.X * scalar, vector.Y * scalar, vector.Z * scalar, vector.W * scalar);
+
+        /// <summary>
+        /// ベクトルと値を積算します。
+        /// </summary>
+        /// <param name="scalar">積算する値</param>
+        /// <param name="vector">積算するベクトル</param>
+        /// <returns>積算結果</returns>
+        public static Vector4I operator *(int scalar, Vector4I vector) => new Vector4I(vector.X * scalar, vector.Y * scalar, vector.Z * scalar, vector.W * scalar);
+
+        /// <summary>
+        /// 2つのベクトルを除算します。
+        /// </summary>
+        /// <param name="left">除算されるベクトル</param>
+        /// <param name="right">除算するベクトル</param>
+        /// <returns>除算結果(left.X / right.X, left.Y / right.Y, left.Z / right.Z, left.W / right.W)</returns>
+        public static Vector4I operator /(Vector4I left, Vector4I right) => new Vector4I(left.X / right.X, left.Y / right.Y, left.Z / right.Z, left.W / right.W);
+
+        /// <summary>
+        /// ベクトルを値で除算します。
+        /// </summary>
+        /// <param name="vector">除算されるベクトル</param>
+        /// <param name="scalar">除算する値</param>
+        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar, vector.Z / scalar, vector.W / scalar)</returns>
+        public static Vector4I operator /(Vector4I vector, int scalar) => new Vector4I(vector.X / scalar, vector.Y / scalar, vector.Z / scalar, vector.W / scalar);
+        #endregion
     }
 }
