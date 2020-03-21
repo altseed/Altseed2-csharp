@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public sealed partial class StreamFile : ISerializable, IDeserializationCallback
+    public sealed partial class StreamFile : ISerializable, IDeserializationCallback, ICacheKeeper<StreamFile>
     {
         #region SerializeName
         private const string S_CurrentPosition = "S_CurrentPosition";
@@ -21,10 +22,18 @@ namespace Altseed
 
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
 
-            selfPtr = ptr;
-            cacheRepo.TryAdd(ptr, new WeakReference<StreamFile>(this));
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+
             seInfo = info;
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<StreamFile>> ICacheKeeper<StreamFile>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<StreamFile>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<StreamFile>.Release(IntPtr native) => cbg_StreamFile_Release(native);
+        #endregion
 
         /// <summary>
         /// 指定パスからファイルを読み込む

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    internal partial class RenderedPolygon : ISerializable
+    internal partial class RenderedPolygon : ISerializable, ICacheKeeper<RenderedPolygon>
     {
         #region SerializeName
         private const string S_Material = "S_Material";
@@ -24,15 +25,23 @@ namespace Altseed
             var ptr = cbg_RenderedPolygon_Create();
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
 
-            selfPtr = ptr;
+            CacheHelper.CacheHandling(this, ptr);
 
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<RenderedPolygon>(this));
             Material = info.GetValue<Material>(S_Material);
             Src = info.GetValue<RectF>(S_Src);
             Texture = info.GetValue<Texture2D>(S_Texture);
             Transform = info.GetValue<Matrix44F>(S_Transform);
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedPolygon>> ICacheKeeper<RenderedPolygon>.CacheRepo => cacheRepo;
+
+        internal IntPtr Self { get => selfPtr; set => selfPtr = value; }
+        IntPtr ICacheKeeper<RenderedPolygon>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<RenderedPolygon>.Release(IntPtr native) => cbg_RenderedPolygon_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズするデータを設定します。

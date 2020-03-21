@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    public partial class Texture2D : ISerializable, IDeserializationCallback
+    public partial class Texture2D : ISerializable, IDeserializationCallback, ICacheKeeper<Texture2D>
     {
         #region SerializeName
         private const string S_Path = "S_Path";
@@ -22,6 +23,14 @@ namespace Altseed
         {
             seInfo = info;
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Texture2D>> ICacheKeeper<Texture2D>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<Texture2D>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<Texture2D>.Release(IntPtr native) => cbg_Texture2D_Release(native);
+        #endregion
 
         /// <summary>
         /// 指定パスからテクスチャを読み込む
@@ -83,8 +92,7 @@ namespace Altseed
 
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
 
-            selfPtr = ptr;
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<Texture2D>(this));
+            CacheHelper.CacheHandling(this, ptr);
 
             seInfo = null;
         }

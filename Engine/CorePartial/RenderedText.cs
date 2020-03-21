@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
     [Serializable]
-    internal partial class RenderedText : ISerializable
+    internal partial class RenderedText : ISerializable, ICacheKeeper<RenderedText>
     {
         #region SerializeName
         private const string S_Color = "S_Color";
@@ -25,9 +26,8 @@ namespace Altseed
             var ptr = cbg_RenderedText_Create();
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
 
-            selfPtr = ptr;
+            CacheHelper.CacheHandling(this, ptr);
 
-            if (!cacheRepo.ContainsKey(ptr)) cacheRepo.Add(ptr, new WeakReference<RenderedText>(this));
             Color = info.GetValue<Color>(S_Color);
             Font = info.GetValue<Font>(S_Font);
             Material = info.GetValue<Material>(S_Material);
@@ -35,6 +35,14 @@ namespace Altseed
             Transform = info.GetValue<Matrix44F>(S_Transform);
             Weight = info.GetSingle(S_Weight);
         }
+
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedText>> ICacheKeeper<RenderedText>.CacheRepo => cacheRepo;
+
+        IntPtr ICacheKeeper<RenderedText>.Self { get => selfPtr; set => selfPtr = value; }
+
+        void ICacheKeeper<RenderedText>.Release(IntPtr native) => cbg_RenderedText_Release(native);
+        #endregion
 
         /// <summary>
         /// シリアライズするデータを設定します。
