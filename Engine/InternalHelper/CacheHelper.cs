@@ -48,6 +48,7 @@ namespace Altseed
                 if (cacheSet != null)
                 {
                     cacheSet.Release(native);
+                    obj.Self = native;
                     return;
                 }
                 else obj.CacheRepo.Remove(native);
@@ -88,6 +89,7 @@ namespace Altseed
                 if (cacheSet != null)
                 {
                     cacheSet.Release(native);
+                    obj.Self = native;
                     return;
                 }
                 else cacheRepo.TryRemove(native, out _);
