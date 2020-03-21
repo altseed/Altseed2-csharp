@@ -24,7 +24,7 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
 
             selfPtr = ptr;
-            if (cacheRepo.ContainsKey(selfPtr)) cacheRepo.Add(selfPtr, new WeakReference<Sound>(this));
+            cacheRepo.TryAdd(selfPtr, new WeakReference<Sound>(this));
 
             LoopStartingPoint = info.GetSingle(S_LoopStaringPoint);
             LoopEndPoint = info.GetSingle(S_LoopEndPoint);
