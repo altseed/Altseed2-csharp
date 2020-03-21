@@ -21,7 +21,8 @@ namespace Altseed
         /// <summary>
         /// キャッシュを開放する
         /// </summary>
-        internal void Release();
+        /// <param name="native">開放するオブジェクトのポインタ</param>
+        internal void Release(IntPtr native);
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ namespace Altseed
                 obj.CacheRepo[native].TryGetTarget(out var cacheSet);
                 if (cacheSet != null)
                 {
-                    cacheSet.Release();
+                    cacheSet.Release(native);
                     return;
                 }
                 else obj.CacheRepo.Remove(native);
@@ -86,7 +87,7 @@ namespace Altseed
                 cacheRepo[native].TryGetTarget(out var cacheSet);
                 if (cacheSet != null)
                 {
-                    cacheSet.Release();
+                    cacheSet.Release(native);
                     return;
                 }
                 else cacheRepo.TryRemove(native, out _);
