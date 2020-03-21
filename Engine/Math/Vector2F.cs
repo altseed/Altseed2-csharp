@@ -27,8 +27,8 @@ namespace Altseed
         /// </summary>
         public float Degree
         {
-            readonly get => Radian / (float)Math.PI * 180;
-            set => Radian = (float)Math.PI / 180 * value;
+            readonly get => MathHelper.RadianToDegree(Radian);
+            set => Radian = MathHelper.DegreeToRadian(value);
         }
 
         /// <summary>
