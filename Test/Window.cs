@@ -11,14 +11,23 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Base()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
-            while (Engine.DoEvents())
-            {
-                Engine.Update();
-            }
+            tc.LoopBody(null, null);
 
-            Engine.Terminate();
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void FullScreen()
+        {
+            var tc = new TestCore(new Configuration() { IsFullscreen = true });
+            tc.Init();
+
+            tc.LoopBody(null, null);
+
+            tc.End();
         }
     }
 }
