@@ -8,10 +8,10 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Matrix33F : ICloneable, IEquatable<Matrix33F>
+    public unsafe struct Matrix33F : ICloneable, IEquatable<Matrix33F>
     {
         [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.R4, SizeConst = 3 * 3)]
-        private float[,] Values;
+        private fixed float Values[9];
 
         /// <summary>
         /// 単位行列を取得する
@@ -21,7 +21,12 @@ namespace Altseed
             get
             {
                 var result = new Matrix33F();
-                result.SetIdentity();
+                for (int i = 0; i < 9; i++) result.Values[i] = 0.0f;
+
+                result.Values[0 * 3 + 0] = 1.0f;
+                result.Values[1 * 3 + 1] = 1.0f;
+                result.Values[2 * 3 + 2] = 1.0f;
+
                 return result;
             }
         }
@@ -34,7 +39,49 @@ namespace Altseed
             get
             {
                 var result = this;
-                result.SetInverted();
+
+                {
+                    float e = 0.00001f;
+
+                    float a11 = result.Values[0 * 3 + 0];
+                    float a12 = result.Values[0 * 3 + 1];
+                    float a13 = result.Values[0 * 3 + 2];
+                    float a21 = result.Values[1 * 3 + 0];
+                    float a22 = result.Values[1 * 3 + 1];
+                    float a23 = result.Values[1 * 3 + 2];
+                    float a31 = result.Values[2 * 3 + 0];
+                    float a32 = result.Values[2 * 3 + 1];
+                    float a33 = result.Values[2 * 3 + 2];
+
+                    /* 行列式の計算 */
+                    float b11 = +a22 * a33 - a23 * a32;
+                    float b12 = +a13 * a32 - a12 * a33;
+                    float b13 = +a12 * a23 - a13 * a22;
+
+                    float b21 = +a23 * a31 - a21 * a33;
+                    float b22 = +a11 * a33 - a13 * a31;
+                    float b23 = +a13 * a21 - a11 * a23;
+
+                    float b31 = +a21 * a32 - a22 * a31;
+                    float b32 = +a12 * a31 - a11 * a32;
+                    float b33 = +a11 * a22 - a12 * a21;
+
+                    // 行列式の逆数をかける
+                    float Det = a11 * a22 * a33 + a21 * a32 * a13 + a31 * a12 * a23 - a11 * a32 * a23 - a31 * a22 * a13 - a21 * a12 * a33;
+                    if ((-e <= Det) && (Det <= +e)) throw new InvalidOperationException("逆行列が存在しません。");
+
+                    float InvDet = 1.0f / Det;
+
+                    result.Values[0 * 3 + 0] = b11 * InvDet;
+                    result.Values[0 * 3 + 1] = b12 * InvDet;
+                    result.Values[0 * 3 + 2] = b13 * InvDet;
+                    result.Values[1 * 3 + 0] = b21 * InvDet;
+                    result.Values[1 * 3 + 1] = b22 * InvDet;
+                    result.Values[1 * 3 + 2] = b23 * InvDet;
+                    result.Values[2 * 3 + 0] = b31 * InvDet;
+                    result.Values[2 * 3 + 1] = b32 * InvDet;
+                    result.Values[2 * 3 + 2] = b33 * InvDet;
+                }
                 return result;
             }
         }
@@ -67,14 +114,13 @@ namespace Altseed
             {
                 if (x < 0 || x > 3) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
                 if (y < 0 || y > 3) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                return Values?[x, y] ?? 0.0f;
+                return Values[x * 3 + y];
             }
             set
             {
-                Values ??= new float[3, 3];
                 if (x < 0 || x > 3) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
                 if (y < 0 || y > 3) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                Values[x, y] = value;
+                Values[x * 3 + y] = value;
             }
         }
 
@@ -123,73 +169,6 @@ namespace Altseed
             result[0, 2] = position.X;
             result[1, 2] = position.Y;
             return result;
-        }
-
-        /// <summary>
-        /// 単位行列を設定します。
-        /// </summary>
-        public void SetIdentity()
-        {
-            Values ??= new float[3, 3];
-
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    Values[i, j] = 0.0f;
-
-            Values[0, 0] = 1.0f;
-            Values[1, 1] = 1.0f;
-            Values[2, 2] = 1.0f;
-        }
-
-        /// <summary>
-        /// 逆行列を設定します。
-        /// </summary>
-        private void SetInverted()
-        {
-            Values ??= new float[3, 3];
-            float e = 0.00001f;
-
-            float a11 = Values[0, 0];
-            float a12 = Values[0, 1];
-            float a13 = Values[0, 2];
-            float a21 = Values[1, 0];
-            float a22 = Values[1, 1];
-            float a23 = Values[1, 2];
-            float a31 = Values[2, 0];
-            float a32 = Values[2, 1];
-            float a33 = Values[2, 2];
-
-            /* 行列式の計算 */
-            float b11 = +a22 * a33 - a23 * a32;
-            float b12 = +a13 * a32 - a12 * a33;
-            float b13 = +a12 * a23 - a13 * a22;
-
-            float b21 = +a23 * a31 - a21 * a33;
-            float b22 = +a11 * a33 - a13 * a31;
-            float b23 = +a13 * a21 - a11 * a23;
-
-            float b31 = +a21 * a32 - a22 * a31;
-            float b32 = +a12 * a31 - a11 * a32;
-            float b33 = +a11 * a22 - a12 * a21;
-
-            // 行列式の逆数をかける
-            float Det = a11 * a22 * a33 + a21 * a32 * a13 + a31 * a12 * a23 - a11 * a32 * a23 - a31 * a22 * a13 - a21 * a12 * a33;
-            if ((-e <= Det) && (Det <= +e))
-            {
-                return;
-            }
-
-            float InvDet = 1.0f / Det;
-
-            Values[0, 0] = b11 * InvDet;
-            Values[0, 1] = b12 * InvDet;
-            Values[0, 2] = b13 * InvDet;
-            Values[1, 0] = b21 * InvDet;
-            Values[1, 1] = b22 * InvDet;
-            Values[1, 2] = b23 * InvDet;
-            Values[2, 0] = b31 * InvDet;
-            Values[2, 1] = b32 * InvDet;
-            Values[2, 2] = b33 * InvDet;
         }
 
         /// <summary>
@@ -242,9 +221,7 @@ namespace Altseed
         public static Matrix33F operator +(Matrix33F left, Matrix33F right)
         {
             var result = new Matrix33F();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    result[i, j] = left[i, j] + right[i, j];
+            for (int i = 0; i < 9; i++) result.Values[i] = left.Values[i] + right.Values[i];
             return result;
         }
 
@@ -253,18 +230,14 @@ namespace Altseed
         public static Matrix33F operator -(Matrix33F left, Matrix33F right)
         {
             var result = new Matrix33F();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    result[i, j] = left[i, j] - right[i, j];
+            for (int i = 0; i < 9; i++) result.Values[i] = left.Values[i] - right.Values[i];
             return result;
         }
 
         public static Matrix33F operator *(Matrix33F matrix, float scalar)
         {
             var result = new Matrix33F();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    result[i, j] = matrix[i, j] * scalar;
+            for (int i = 0; i < 9; i++) result.Values[i] = matrix.Values[i] * scalar;
             return result;
         }
 
@@ -273,9 +246,7 @@ namespace Altseed
         public static Matrix33F operator /(Matrix33F matrix, float scalar)
         {
             var result = new Matrix33F();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    result[i, j] = matrix[i, j] / scalar;
+            for (int i = 0; i < 9; i++) result.Values[i] = matrix.Values[i] / scalar;
             return result;
         }
 
@@ -287,10 +258,7 @@ namespace Altseed
                 for (int j = 0; j < 3; ++j)
                 {
                     result[i, j] = 0;
-                    for (int k = 0; k < 3; ++k)
-                    {
-                        result[i, j] += left[i, k] * right[k, j];
-                    }
+                    for (int k = 0; k < 3; ++k) result[i, j] += left[i, k] * right[k, j];
                 }
 
             return result;
@@ -302,13 +270,9 @@ namespace Altseed
             float[] rop = { right.X, right.Y, right.Z };
 
             for (int i = 0; i < 3; ++i)
-            {
                 for (int k = 0; k < 3; ++k)
-                {
                     elements[i] += left[i, k] * rop[k];
-                }
-            }
-
+                
             return new Vector3F(elements[0], elements[1], elements[2]);
         }
 
@@ -320,11 +284,9 @@ namespace Altseed
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Matrix33F other)
         {
-            if (Values == null && other.Values == null) return true;
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    if (this[i, j] != other[i, j])
-                        return false;
+            for (int i = 0; i < 9; i++)
+                if (Values[i] != other.Values[i])
+                    return false;
             return true;
         }
 
@@ -342,9 +304,7 @@ namespace Altseed
         public readonly override int GetHashCode()
         {
             var hash = new HashCode();
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    hash.Add(this[i, j]);
+            for (int i = 0; i < 9; i++) hash.Add(Values[i]);
             return hash.ToHashCode();
         }
 
@@ -358,8 +318,8 @@ namespace Altseed
         /// <returns>このインスタンスの複製</returns>
         public readonly Matrix33F Clone()
         {
-            if (Values == null) return default;
-            var clone = new Matrix33F() { Values = (float[,])Values.Clone() };
+            var clone = new Matrix33F();
+            for (int i = 0; i < 9; i++) clone.Values[i] = Values[i];
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();

@@ -130,21 +130,21 @@ namespace Altseed
         /// <param name="y">取得する要素の位置</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または4以上</exception>
         /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
-        //public float Values[int x ,int y]
-        //{
-        //    readonly get
-        //    {
-        //        if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
-        //        if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-        //        return Values[x * 4 + y];
-        //    }
-        //    set
-        //    {
-        //        if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
-        //        if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-        //        Values[x * 4 + y] = value;
-        //    }
-        //}
+        public float this[int x ,int y]
+        {
+            readonly get
+            {
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                return Values[x * 4 + y];
+            }
+            set
+            {
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                Values[x * 4 + y] = value;
+            }
+        }
 
         /// <summary>
         /// カメラ行列(右手系)を取得する
@@ -642,8 +642,7 @@ namespace Altseed
         public readonly Matrix44F Clone()
         {
             var clone = new Matrix44F();
-            for (int i = 0; i < 16; i++)
-                clone.Values[i] = Values[i];
+            for (int i = 0; i < 16; i++) clone.Values[i] = Values[i];
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();
