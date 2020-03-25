@@ -308,6 +308,11 @@ namespace Altseed
         #endregion
 
         /// <summary>
+        /// ウィンドウのサイズを取得する
+        /// </summary>
+        public static Vector2I WindowSize => Window.Size;
+
+        /// <summary>
         /// ウインドウのタイトルを取得または設定します。
         /// </summary>
         public static string WindowTitle
