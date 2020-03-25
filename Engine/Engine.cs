@@ -181,9 +181,9 @@ namespace Altseed
         /// </summary>
         public static Mouse Mouse { get; private set; }
 
-        ///// <summary>
-        ///// ジョイスティックを管理するクラスを取得します。
-        ///// </summary>
+        /// <summary>
+        /// ジョイスティックを管理するクラスを取得します。
+        /// </summary>
         public static Joystick Joystick { get; private set; }
 
         /// <summary>
