@@ -27,8 +27,8 @@ namespace Altseed
         /// </summary>
         public float Degree
         {
-            readonly get => Radian / (float)Math.PI * 180;
-            set => Radian = (float)Math.PI / 180 * value;
+            readonly get => MathHelper.RadianToDegree(Radian);
+            set => Radian = MathHelper.DegreeToRadian(value);
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace Altseed
             readonly get => (float)Math.Sqrt(SquaredLength);
             set
             {
-                var angle = Radian;
-                X = (float)Math.Cos(angle) * value;
-                Y = (float)Math.Sin(angle) * value;
+                var len = Length;
+                X /= (value / len);
+                Y /= (value / len);
             }
         }
 
@@ -80,6 +80,7 @@ namespace Altseed
             Y = y;
         }
 
+        #region Equivalence
         /// <summary>
         /// 2つの<see cref="Vector2F"/>間の等価性を判定します。
         /// </summary>
@@ -106,13 +107,12 @@ namespace Altseed
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public readonly override int GetHashCode()
-        {
-            var hashCode = 1861411795;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            return hashCode;
-        }
+        public readonly override int GetHashCode() => HashCode.Combine(X, Y);
+
+        public static bool operator ==(Vector2F v1, Vector2F v2) => Equals(v1, v2);
+
+        public static bool operator !=(Vector2F v1, Vector2F v2) => !Equals(v1, v2);
+        #endregion
 
         /// <summary>
         /// 単位ベクトル化します。
@@ -145,14 +145,6 @@ namespace Altseed
         public static float Cross(Vector2F left, Vector2F right) => left.X * right.Y - right.X * left.Y;
 
         /// <summary>
-        /// 2つのベクトルの内積を求めます。
-        /// </summary>
-        /// <param name="v1">使用するベクトル1</param>
-        /// <param name="v2">使用するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の内積</returns>
-        public static float Dot(Vector2F v1, Vector2F v2) => v1.X * v2.X + v1.Y + v2.Y;
-
-        /// <summary>
         /// 2つのベクトル間の距離を求めます。
         /// </summary>
         /// <param name="v1">距離を求めるベクトル1</param>
@@ -165,10 +157,15 @@ namespace Altseed
             return (float)Math.Sqrt(x * x + y + y);
         }
 
-        public static bool operator ==(Vector2F v1, Vector2F v2) => Equals(v1, v2);
+        /// <summary>
+        /// 2つのベクトルの内積を求めます。
+        /// </summary>
+        /// <param name="v1">使用するベクトル1</param>
+        /// <param name="v2">使用するベクトル2</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の内積</returns>
+        public static float Dot(Vector2F v1, Vector2F v2) => v1.X * v2.X + v1.Y + v2.Y;
 
-        public static bool operator !=(Vector2F v1, Vector2F v2) => !Equals(v1, v2);
-
+        #region CalOperators
         /// <summary>
         /// 2つのベクトルを加算します。
         /// </summary>
@@ -197,7 +194,7 @@ namespace Altseed
         /// </summary>
         /// <param name="v1">積算するベクトル1</param>
         /// <param name="v2">積算するベクトル2</param>
-        /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y)</returns>
         public static Vector2F operator *(Vector2F v1, Vector2F v2) => new Vector2F(v1.X * v2.X, v1.Y * v2.Y);
 
         /// <summary>
@@ -231,6 +228,7 @@ namespace Altseed
         /// <param name="scalar">除算する値</param>
         /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
         public static Vector2F operator /(Vector2F vector, float scalar) => new Vector2F(vector.X / scalar, vector.Y / scalar);
+        #endregion
 
         public static explicit operator Vector2I(Vector2F f) => f.To2I();
 

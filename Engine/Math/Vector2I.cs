@@ -33,6 +33,7 @@ namespace Altseed
             Y = y;
         }
 
+        #region Equivalence
         /// <summary>
         /// 2つの<see cref="Vector2I"/>間の等価性を判定します。
         /// </summary>
@@ -59,13 +60,12 @@ namespace Altseed
         /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
-        public readonly override int GetHashCode()
-        {
-            var hashCode = 1861411795;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            return hashCode;
-        }
+        public readonly override int GetHashCode() => HashCode.Combine(X, Y);
+
+        public static bool operator ==(Vector2I v1, Vector2I v2) => Equals(v1, v2);
+
+        public static bool operator !=(Vector2I v1, Vector2I v2) => !Equals(v1, v2);
+        #endregion
 
         /// <summary>
         /// このベクトルを表す文字列取得します。
@@ -88,6 +88,19 @@ namespace Altseed
         public static int Cross(Vector2I left, Vector2I right) => left.X * right.Y - right.X * left.Y;
 
         /// <summary>
+        /// 2点間の距離取得します。
+        /// </summary>
+        /// <param name="v1">v1ベクトル</param>
+        /// <param name="v2">v2ベクトル</param>
+        /// <returns>v1とv2の距離</returns>
+        public static float Distance(Vector2I v1, Vector2I v2)
+        {
+            float dx = v1.X - v2.X;
+            float dy = v1.Y - v2.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        /// <summary>
         /// 2つのベクトルの内積を求めます。
         /// </summary>
         /// <param name="v1">使用するベクトル1</param>
@@ -95,10 +108,7 @@ namespace Altseed
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の内積</returns>
         public static int Dot(Vector2I v1, Vector2I v2) => v1.X * v2.X + v1.Y + v2.Y;
 
-        public static bool operator ==(Vector2I v1, Vector2I v2) => Equals(v1, v2);
-
-        public static bool operator !=(Vector2I v1, Vector2I v2) => !Equals(v1, v2);
-
+        #region CalOperators
         /// <summary>
         /// 2つのベクトルを加算します。
         /// </summary>
@@ -127,7 +137,7 @@ namespace Altseed
         /// </summary>
         /// <param name="v1">積算するベクトル1</param>
         /// <param name="v2">積算するベクトル2</param>
-        /// <returns>積算結果(v1.X * v2.X, v1.Y + v2.Y)</returns>
+        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y)</returns>
         public static Vector2I operator *(Vector2I v1, Vector2I v2) => new Vector2I(v1.X * v2.X, v1.Y * v2.Y);
 
         /// <summary>
@@ -161,5 +171,6 @@ namespace Altseed
         /// <param name="scalar">除算する値</param>
         /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
         public static Vector2I operator /(Vector2I vector, int scalar) => new Vector2I(vector.X / scalar, vector.Y / scalar);
+        #endregion
     }
 }

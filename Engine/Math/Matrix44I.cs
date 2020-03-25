@@ -8,10 +8,11 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Matrix44I : ICloneable, IEquatable<Matrix44I>
+    public unsafe struct Matrix44I : ICloneable, IEquatable<Matrix44I>
     {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 4 * 4)]
-        private int[,] Values;
+        //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 4 * 4)]
+        private fixed int Values[16];
+
         /// <summary>
         /// 単位行列を取得する
         /// </summary>
@@ -20,7 +21,14 @@ namespace Altseed
             get
             {
                 var result = new Matrix44I();
-                result.SetIdentity();
+                for (int i = 0; i < 16; i++)
+                    result.Values[i] = 0;
+
+                result.Values[0 * 4 + 0] = 1;
+                result.Values[1 * 4 + 1] = 1;
+                result.Values[2 * 4 + 2] = 1;
+                result.Values[3 * 4 + 3] = 1;
+
                 return result;
             }
         }
@@ -53,14 +61,13 @@ namespace Altseed
             {
                 if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
                 if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                return Values?[x, y] ?? 0;
+                return Values[x * 4 + y];
             }
             set
             {
-                Values ??= new int[4, 4];
                 if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
                 if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
-                Values[x, y] = value;
+                Values[x * 4 + y] = value;
             }
         }
 
@@ -140,30 +147,13 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 単位行列に設定する
-        /// </summary>
-        public void SetIdentity()
-        {
-            Values ??= new int[4, 4];
-
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    Values[i, j] = 0;
-
-            Values[0, 0] = 1;
-            Values[1, 1] = 1;
-            Values[2, 2] = 1;
-            Values[3, 3] = 1;
-        }
-
-        /// <summary>
         /// 行列でベクトルを変形させる。
         /// </summary>
         /// <param name="in_">変形前ベクトル</param>
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3I Transform3D(Vector3I in_)
         {
-            int[] values = new int[4];
+            var values = new int[4];
 
             for (int i = 0; i < 4; i++)
             {
@@ -174,11 +164,7 @@ namespace Altseed
                 values[i] += this[i, 3];
             }
 
-            Vector3I o;
-            o.X = values[0] / values[3];
-            o.Y = values[1] / values[3];
-            o.Z = values[2] / values[3];
-            return o;
+            return new Vector3I(values[0] / values[3], values[1] / values[3], values[2] / values[3]);
         }
 
         /// <summary>
@@ -188,7 +174,7 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector4I Transform4D(Vector4I in_)
         {
-            int[] values = new int[4];
+            var values = new int[4];
 
             for (int i = 0; i < 4; i++)
             {
@@ -199,21 +185,13 @@ namespace Altseed
                 values[i] += in_.W * this[i, 3];
             }
 
-            Vector4I o;
-            o.X = values[0];
-            o.Y = values[1];
-            o.Z = values[2];
-            o.W = values[3];
-
-            return o;
+            return new Vector4I(values[0], values[1], values[2], values[3]);
         }
 
         public static Matrix44I operator +(Matrix44I left, Matrix44I right)
         {
             var result = new Matrix44I();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = left[i, j] + right[i, j];
+            for (int i = 0; i < 16; i++) result.Values[i] = left.Values[i] + right.Values[i]; 
             return result;
         }
 
@@ -222,18 +200,14 @@ namespace Altseed
         public static Matrix44I operator -(Matrix44I left, Matrix44I right)
         {
             var result = new Matrix44I();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = left[i, j] - right[i, j];
+            for (int i = 0; i < 16; i++) result.Values[i] = left.Values[i] - right.Values[i];
             return result;
         }
 
         public static Matrix44I operator *(Matrix44I matrix, int scalar)
         {
             var result = new Matrix44I();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    result[i, j] = matrix[i, j] * scalar;
+            for (int i = 0; i < 4; i++) result.Values[i] = matrix.Values[i] * scalar;
             return result;
         }
 
@@ -250,40 +224,16 @@ namespace Altseed
 
         public static Matrix44I operator *(Matrix44I left, Matrix44I right)
         {
-            var o_ = new Matrix44I();
-            Mul(ref o_, ref left, ref right);
-            return o_;
-        }
-
-        public static Vector3I operator *(Matrix44I left, Vector3I right)
-        {
-            return left.Transform3D(right);
-        }
-
-        /// <summary>
-        /// 乗算を行う。
-        /// </summary>
-        /// <param name="o">出力先</param>
-        /// <param name="in1">行列1</param>
-        /// <param name="in2">行列2</param>
-        public static void Mul(ref Matrix44I o, ref Matrix44I in1, ref Matrix44I in2)
-        {
-            Matrix44I _in1 = in1;
-            Matrix44I _in2 = in2;
+            var result = new Matrix44I();
 
             for (int i = 0; i < 4; i++)
-            {
                 for (int j = 0; j < 4; j++)
-                {
-                    int v = 0;
                     for (int k = 0; k < 4; k++)
-                    {
-                        v += _in1[i, k] * _in2[k, j];
-                    }
-                    o[i, j] = v;
-                }
-            }
+                        result[i, j] += left[i, k] * right[k, j];
+            return result;
         }
+
+        public static Vector3I operator *(Matrix44I left, Vector3I right) => left.Transform3D(right);
 
         #region IEquatable
         /// <summary>
@@ -293,11 +243,9 @@ namespace Altseed
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Matrix44I other)
         {
-            if (Values == null && other.Values == null) return true;
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    if (this[i, j] != other[i, j])
-                        return false;
+            for (int i = 0; i < 16; i++)
+                if (Values[i] != other.Values[i])
+                    return false;
             return true;
         }
 
@@ -315,9 +263,7 @@ namespace Altseed
         public readonly override int GetHashCode()
         {
             var hash = new HashCode();
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++)
-                    hash.Add(this[i, j]);
+            for (int i = 0; i < 16; i++) hash.Add(Values[i]);
             return hash.ToHashCode();
         }
 
@@ -331,8 +277,8 @@ namespace Altseed
         /// <returns>このインスタンスの複製</returns>
         public readonly Matrix44I Clone()
         {
-            if (Values == null) return default;
-            var clone = new Matrix44I() { Values = (int[,])Values.Clone() };
+            var clone = new Matrix44I();
+            for (int i = 0; i < 16; i++) clone.Values[i] = Values[i];
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();

@@ -29,7 +29,7 @@ namespace Altseed
             {
                 if (_Angle == value) return;
                 _Angle = value;
-                _MatAngle = Matrix44F.GetRotationZ((float)(value * Math.PI / 180d));
+                _MatAngle = Matrix44F.GetRotationZ(MathHelper.DegreeToRadian(value));
                 UpdateTransform();
             }
         }
