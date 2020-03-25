@@ -137,46 +137,6 @@ namespace Altseed
         public readonly Vector2I To2I() => new Vector2I((int)X, (int)Y);
 
         /// <summary>
-        /// 2つのベクトルを加算します。
-        /// </summary>
-        /// <param name="v1">加算するベクトル1</param>
-        /// <param name="v2">加算するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
-        public static Vector2F Add(Vector2F v1, Vector2F v2) => v1 + v2;
-
-        /// <summary>
-        /// 2つのベクトルを減算します。
-        /// </summary>
-        /// <param name="left">減算されるベクトル</param>
-        /// <param name="right">減算するベクトル</param>
-        /// <returns>減算結果</returns>
-        public static Vector2F Subtract(Vector2F left, Vector2F right) => left - right;
-
-        /// <summary>
-        /// 2つのベクトルを積算します。
-        /// </summary>
-        /// <param name="v1">積算するベクトル1</param>
-        /// <param name="v2">積算するベクトル2</param>
-        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y)</returns>
-        public static Vector2F Multiple(Vector2F v1, Vector2F v2) => v1 * v2;
-
-        /// <summary>
-        /// 2つのベクトルを除算します。
-        /// </summary>
-        /// <param name="left">除算されるベクトル</param>
-        /// <param name="right">除算するベクトル</param>
-        /// <returns>除算結果(left.X / right.X, left.Y / right.Y)</returns>
-        public static Vector2F Divide(Vector2F left, Vector2F right) => left / right;
-
-        /// <summary>
-        /// ベクトルを値で除算します。
-        /// </summary>
-        /// <param name="vector">除算されるベクトル</param>
-        /// <param name="scalar">除算する値</param>
-        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar)</returns>
-        public static Vector2F DivideByScalar(Vector2F vector, float scalar) => vector / scalar;
-
-        /// <summary>
         /// 2つのベクトルの外積を求めます。
         /// </summary>
         /// <param name="left">使用するベクトル1</param>

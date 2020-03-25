@@ -88,46 +88,6 @@ namespace Altseed
         public readonly Vector3F To3F() => new Vector3F(X, Y, Z);
 
         /// <summary>
-        /// 2つのベクトルを加算します。
-        /// </summary>
-        /// <param name="v1">加算するベクトル1</param>
-        /// <param name="v2">加算するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の和</returns>
-        public static Vector3I Add(Vector3I v1, Vector3I v2) => v1 + v2;
-
-        /// <summary>
-        /// 2つのベクトルを減算します。
-        /// </summary>
-        /// <param name="left">減算されるベクトル</param>
-        /// <param name="right">減算するベクトル</param>
-        /// <returns>減算結果</returns>
-        public static Vector3I Subtract(Vector3I left, Vector3I right) => left - right;
-
-        /// <summary>
-        /// 2つのベクトルを積算します。
-        /// </summary>
-        /// <param name="v1">積算するベクトル1</param>
-        /// <param name="v2">積算するベクトル2</param>
-        /// <returns>積算結果(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z)</returns>
-        public static Vector3I Multiple(Vector3I v1, Vector3I v2) => v1 * v2;
-
-        /// <summary>
-        /// 2つのベクトルを除算します。
-        /// </summary>
-        /// <param name="left">除算されるベクトル</param>
-        /// <param name="right">除算するベクトル</param>
-        /// <returns>除算結果(left.X / right.X, left.Y / right.Y, left.Z / right.Z)</returns>
-        public static Vector3I Divide(Vector3I left, Vector3I right) => left / right;
-
-        /// <summary>
-        /// ベクトルを値で除算します。
-        /// </summary>
-        /// <param name="vector">除算されるベクトル</param>
-        /// <param name="scalar">除算する値</param>
-        /// <returns>除算結果(vector.X / scalar, vector.Y / scalar, vector.Z / scalar)</returns>
-        public static Vector3I DivideByScalar(Vector3I vector, int scalar) => vector / scalar;
-
-        /// <summary>
         /// 外積取得します。
         /// </summary>
         /// <param name="v1">v1ベクトル</param>
