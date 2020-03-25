@@ -10,7 +10,7 @@ namespace Altseed
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct Matrix33I : ICloneable, IEquatable<Matrix33I>
     {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 3 * 3)]
+        //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 3 * 3)]
         private fixed int Values[16];
 
         /// <summary>
