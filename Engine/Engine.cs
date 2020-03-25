@@ -37,8 +37,8 @@ namespace Altseed
         /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
-            _Config = config;
-            if (Core.Initialize(title, width, height, config ?? new Configuration()))
+            _Config = config ?? new Configuration();
+            if (Core.Initialize(title, width, height, config))
             {
                 Core = Core.GetInstance();
                 Log = Log.GetInstance();
@@ -181,9 +181,9 @@ namespace Altseed
         /// </summary>
         public static Mouse Mouse { get; private set; }
 
-        ///// <summary>
-        ///// ジョイスティックを管理するクラスを取得します。
-        ///// </summary>
+        /// <summary>
+        /// ジョイスティックを管理するクラスを取得します。
+        /// </summary>
         public static Joystick Joystick { get; private set; }
 
         /// <summary>

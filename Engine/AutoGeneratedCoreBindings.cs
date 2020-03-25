@@ -539,7 +539,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// ImGuiで使用する方向
+    /// ツール機能で使用する方向
     /// </summary>
     [Serializable]
     public enum ToolDir : int
@@ -652,7 +652,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// Toolにおいてインプットされるテキストの設定を表します
+    /// ツール機能においてインプットされるテキストの設定を表します
     /// </summary>
     [Serializable]
     public enum ToolInputText : int
@@ -737,7 +737,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// Toolにおける色の設定を表します
+    /// ツール機能における色の設定を表します
     /// </summary>
     [Serializable]
     public enum ToolColorEdit : int
@@ -867,7 +867,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// Toolのウィンドウにおける設定を表します
+    /// ツール機能のウィンドウにおける設定を表します
     /// </summary>
     [Serializable]
     public enum ToolWindow : int
@@ -959,7 +959,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// Toolのタブバーにおける設定を表します
+    /// ツール機能のタブバーにおける設定を表します
     /// </summary>
     [Serializable]
     public enum ToolTabBar : int
@@ -1002,7 +1002,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// Tool機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
+    /// ツール機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
     /// </summary>
     [Serializable]
     public enum ToolGlyphRanges : int
@@ -1070,8 +1070,9 @@ namespace Altseed
     public enum LogCategory : int
     {
         Core = 0,
-        Engine = 1,
-        User = 2,
+        Graphics = 1,
+        Engine = 2,
+        User = 3,
     }
     
     /// <summary>
@@ -1469,7 +1470,7 @@ namespace Altseed
         /// <param name="height">ウィンドウの縦幅</param>
         /// <param name="config">初期化時の設定</param>
         /// <returns>初期化処理がうまくいったらtrue，それ以外でfalse</returns>
-        public static bool Initialize(string title, int width, int height, Configuration config)
+        internal static bool Initialize(string title, int width, int height, Configuration config)
         {
             var ret = cbg_Core_Initialize(title, width, height, config != null ? config.selfPtr : IntPtr.Zero);
             return ret;
@@ -1479,7 +1480,7 @@ namespace Altseed
         /// イベントを実行します。
         /// </summary>
         /// <returns>イベントが進行出来たらtrue，それ以外でfalse</returns>
-        public bool DoEvent()
+        internal bool DoEvent()
         {
             var ret = cbg_Core_DoEvent(selfPtr);
             return ret;
@@ -1488,7 +1489,7 @@ namespace Altseed
         /// <summary>
         /// 終了処理を行います。
         /// </summary>
-        public static void Terminate()
+        internal static void Terminate()
         {
             cbg_Core_Terminate();
         }
@@ -1603,7 +1604,7 @@ namespace Altseed
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Int8Array_Clear(selfPtr);
         }
@@ -1612,18 +1613,18 @@ namespace Altseed
         /// サイズを変更します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public void Resize(int size)
+        internal void Resize(int size)
         {
             cbg_Int8Array_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_Int8Array_GetData(selfPtr);
             return ret;
         }
         
-        public void Assign(IntPtr ptr, int size)
+        internal void Assign(IntPtr ptr, int size)
         {
             cbg_Int8Array_Assign(selfPtr, ptr, size);
         }
@@ -1632,7 +1633,7 @@ namespace Altseed
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void CopyTo(IntPtr ptr)
+        internal void CopyTo(IntPtr ptr)
         {
             cbg_Int8Array_CopyTo(selfPtr, ptr);
         }
@@ -1641,7 +1642,7 @@ namespace Altseed
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public byte GetAt(int index)
+        internal byte GetAt(int index)
         {
             var ret = cbg_Int8Array_GetAt(selfPtr, index);
             return ret;
@@ -1652,7 +1653,7 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, byte value)
+        internal void SetAt(int index, byte value)
         {
             cbg_Int8Array_SetAt(selfPtr, index, value);
         }
@@ -1661,7 +1662,7 @@ namespace Altseed
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static Int8Array Create(int size)
+        internal static Int8Array Create(int size)
         {
             var ret = cbg_Int8Array_Create(size);
             return Int8Array.TryGetFromCache(ret);
@@ -1767,7 +1768,7 @@ namespace Altseed
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Int32Array_Clear(selfPtr);
         }
@@ -1776,18 +1777,18 @@ namespace Altseed
         /// サイズを変更します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public void Resize(int size)
+        internal void Resize(int size)
         {
             cbg_Int32Array_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_Int32Array_GetData(selfPtr);
             return ret;
         }
         
-        public void Assign(IntPtr ptr, int size)
+        internal void Assign(IntPtr ptr, int size)
         {
             cbg_Int32Array_Assign(selfPtr, ptr, size);
         }
@@ -1796,7 +1797,7 @@ namespace Altseed
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void CopyTo(IntPtr ptr)
+        internal void CopyTo(IntPtr ptr)
         {
             cbg_Int32Array_CopyTo(selfPtr, ptr);
         }
@@ -1805,7 +1806,7 @@ namespace Altseed
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public int GetAt(int index)
+        internal int GetAt(int index)
         {
             var ret = cbg_Int32Array_GetAt(selfPtr, index);
             return ret;
@@ -1816,7 +1817,7 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, int value)
+        internal void SetAt(int index, int value)
         {
             cbg_Int32Array_SetAt(selfPtr, index, value);
         }
@@ -1825,7 +1826,7 @@ namespace Altseed
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static Int32Array Create(int size)
+        internal static Int32Array Create(int size)
         {
             var ret = cbg_Int32Array_Create(size);
             return Int32Array.TryGetFromCache(ret);
@@ -1931,7 +1932,7 @@ namespace Altseed
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_VertexArray_Clear(selfPtr);
         }
@@ -1940,18 +1941,18 @@ namespace Altseed
         /// サイズを変更します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public void Resize(int size)
+        internal void Resize(int size)
         {
             cbg_VertexArray_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_VertexArray_GetData(selfPtr);
             return ret;
         }
         
-        public void Assign(IntPtr ptr, int size)
+        internal void Assign(IntPtr ptr, int size)
         {
             cbg_VertexArray_Assign(selfPtr, ptr, size);
         }
@@ -1960,7 +1961,7 @@ namespace Altseed
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void CopyTo(IntPtr ptr)
+        internal void CopyTo(IntPtr ptr)
         {
             cbg_VertexArray_CopyTo(selfPtr, ptr);
         }
@@ -1969,7 +1970,7 @@ namespace Altseed
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public Vertex GetAt(int index)
+        internal Vertex GetAt(int index)
         {
             var ret = cbg_VertexArray_GetAt(selfPtr, index);
             return ret;
@@ -1980,7 +1981,7 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, Vertex value)
+        internal void SetAt(int index, Vertex value)
         {
             cbg_VertexArray_SetAt(selfPtr, index, value);
         }
@@ -1989,7 +1990,7 @@ namespace Altseed
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static VertexArray Create(int size)
+        internal static VertexArray Create(int size)
         {
             var ret = cbg_VertexArray_Create(size);
             return VertexArray.TryGetFromCache(ret);
@@ -2095,7 +2096,7 @@ namespace Altseed
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_FloatArray_Clear(selfPtr);
         }
@@ -2104,18 +2105,18 @@ namespace Altseed
         /// サイズを変更します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public void Resize(int size)
+        internal void Resize(int size)
         {
             cbg_FloatArray_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_FloatArray_GetData(selfPtr);
             return ret;
         }
         
-        public void Assign(IntPtr ptr, int size)
+        internal void Assign(IntPtr ptr, int size)
         {
             cbg_FloatArray_Assign(selfPtr, ptr, size);
         }
@@ -2124,7 +2125,7 @@ namespace Altseed
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void CopyTo(IntPtr ptr)
+        internal void CopyTo(IntPtr ptr)
         {
             cbg_FloatArray_CopyTo(selfPtr, ptr);
         }
@@ -2133,7 +2134,7 @@ namespace Altseed
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public float GetAt(int index)
+        internal float GetAt(int index)
         {
             var ret = cbg_FloatArray_GetAt(selfPtr, index);
             return ret;
@@ -2144,7 +2145,7 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, float value)
+        internal void SetAt(int index, float value)
         {
             cbg_FloatArray_SetAt(selfPtr, index, value);
         }
@@ -2153,7 +2154,7 @@ namespace Altseed
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static FloatArray Create(int size)
+        internal static FloatArray Create(int size)
         {
             var ret = cbg_FloatArray_Create(size);
             return FloatArray.TryGetFromCache(ret);
@@ -2259,7 +2260,7 @@ namespace Altseed
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Vector2FArray_Clear(selfPtr);
         }
@@ -2268,18 +2269,18 @@ namespace Altseed
         /// サイズを変更します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public void Resize(int size)
+        internal void Resize(int size)
         {
             cbg_Vector2FArray_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_Vector2FArray_GetData(selfPtr);
             return ret;
         }
         
-        public void Assign(IntPtr ptr, int size)
+        internal void Assign(IntPtr ptr, int size)
         {
             cbg_Vector2FArray_Assign(selfPtr, ptr, size);
         }
@@ -2288,7 +2289,7 @@ namespace Altseed
         /// データを指定したポインタにコピーします。
         /// </summary>
         /// <param name="ptr">ポインタ</param>
-        public void CopyTo(IntPtr ptr)
+        internal void CopyTo(IntPtr ptr)
         {
             cbg_Vector2FArray_CopyTo(selfPtr, ptr);
         }
@@ -2297,7 +2298,7 @@ namespace Altseed
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public Vector2F GetAt(int index)
+        internal Vector2F GetAt(int index)
         {
             var ret = cbg_Vector2FArray_GetAt(selfPtr, index);
             return ret;
@@ -2308,7 +2309,7 @@ namespace Altseed
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, Vector2F value)
+        internal void SetAt(int index, Vector2F value)
         {
             cbg_Vector2FArray_SetAt(selfPtr, index, value);
         }
@@ -2317,7 +2318,7 @@ namespace Altseed
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static Vector2FArray Create(int size)
+        internal static Vector2FArray Create(int size)
         {
             var ret = cbg_Vector2FArray_Create(size);
             return Vector2FArray.TryGetFromCache(ret);
@@ -2407,7 +2408,7 @@ namespace Altseed
         /// </summary>
         /// <param name="type">個数を検索するリソースの種類</param>
         /// <returns>指定した種類のリソースの個数</returns>
-        public int GetResourcesCount(ResourceType type)
+        internal int GetResourcesCount(ResourceType type)
         {
             var ret = cbg_Resources_GetResourcesCount(selfPtr, (int)type);
             return ret;
@@ -2416,7 +2417,7 @@ namespace Altseed
         /// <summary>
         /// 登録されたリソースをすべて削除します。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Resources_Clear(selfPtr);
         }
@@ -2424,7 +2425,7 @@ namespace Altseed
         /// <summary>
         /// リソースの再読み込みを行います。
         /// </summary>
-        public void Reload()
+        internal void Reload()
         {
             cbg_Resources_Reload(selfPtr);
         }
@@ -2985,7 +2986,7 @@ namespace Altseed
         /// 描画を開始します。
         /// </summary>
         /// <returns>正常に開始した場合は　true 。それ以外の場合は false。</returns>
-        public bool BeginFrame()
+        internal bool BeginFrame()
         {
             var ret = cbg_Graphics_BeginFrame(selfPtr);
             return ret;
@@ -2995,7 +2996,7 @@ namespace Altseed
         /// 描画を終了します。
         /// </summary>
         /// <returns>正常に終了した場合は　true 。それ以外の場合は false。</returns>
-        public bool EndFrame()
+        internal bool EndFrame()
         {
             var ret = cbg_Graphics_EndFrame(selfPtr);
             return ret;
@@ -3005,7 +3006,7 @@ namespace Altseed
         /// イベントを処理します。
         /// </summary>
         /// <returns>正常に処理した場合は　true 。それ以外の場合は false。</returns>
-        public bool DoEvents()
+        internal bool DoEvents()
         {
             var ret = cbg_Graphics_DoEvents(selfPtr);
             return ret;
@@ -3501,7 +3502,7 @@ namespace Altseed
         /// <summary>
         /// 使用するカメラの設定をリセットします。
         /// </summary>
-        public void ResetCamera()
+        internal void ResetCamera()
         {
             cbg_Renderer_ResetCamera(selfPtr);
         }
@@ -3830,7 +3831,7 @@ namespace Altseed
         /// <summary>
         /// スプライトを作成します。
         /// </summary>
-        public static RenderedSprite Create()
+        internal static RenderedSprite Create()
         {
             var ret = cbg_RenderedSprite_Create();
             return RenderedSprite.TryGetFromCache(ret);
@@ -4038,7 +4039,7 @@ namespace Altseed
         /// <summary>
         /// テキストを作成します。
         /// </summary>
-        public static RenderedText Create()
+        internal static RenderedText Create()
         {
             var ret = cbg_RenderedText_Create();
             return RenderedText.TryGetFromCache(ret);
@@ -4221,7 +4222,7 @@ namespace Altseed
         /// <summary>
         /// ポリゴンを作成します。
         /// </summary>
-        public static RenderedPolygon Create()
+        internal static RenderedPolygon Create()
         {
             var ret = cbg_RenderedPolygon_Create();
             return RenderedPolygon.TryGetFromCache(ret);
@@ -4230,7 +4231,7 @@ namespace Altseed
         /// <summary>
         /// 頂点情報
         /// </summary>
-        public void SetVertexesByVector2F(Vector2FArray vertexes)
+        internal void SetVertexesByVector2F(Vector2FArray vertexes)
         {
             cbg_RenderedPolygon_SetVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
         }
@@ -4353,7 +4354,7 @@ namespace Altseed
         /// <summary>
         /// RenderedCameraを作成します。
         /// </summary>
-        public static RenderedCamera Create()
+        internal static RenderedCamera Create()
         {
             var ret = cbg_RenderedCamera_Create();
             return RenderedCamera.TryGetFromCache(ret);
@@ -5328,7 +5329,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void NewFrame()
+        internal void NewFrame()
         {
             cbg_Tool_NewFrame(selfPtr);
         }
@@ -5336,7 +5337,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void Render()
+        internal void Render()
         {
             cbg_Tool_Render(selfPtr);
         }
