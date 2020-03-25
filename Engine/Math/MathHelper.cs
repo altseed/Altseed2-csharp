@@ -8,6 +8,11 @@ namespace Altseed
     public static class MathHelper
     {
         private const float PiPer180 = (float)(Math.PI / 180d);
+        /// <summary>
+        /// 行列で使用
+        /// 誤差
+        /// </summary>
+        internal const float MatrixError = 0.00001f;
 
         /// <summary>
         /// 指定した値を決められた範囲に丸める

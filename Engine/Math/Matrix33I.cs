@@ -104,7 +104,7 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector2I Transform2D(Vector2I in_)
         {
-            int[] values = new int[3];
+            var values = new int[3];
 
             for (int i = 0; i < 2; i++)
             {
@@ -114,10 +114,7 @@ namespace Altseed
                 values[i] += 1 * this[i, 2];
             }
 
-            Vector2I o;
-            o.X = values[0];
-            o.Y = values[1];
-            return o;
+            return new Vector2I(values[0], values[1]);
         }
 
         /// <summary>
@@ -127,7 +124,7 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3I Transform3D(Vector3I in_)
         {
-            int[] values = new int[3];
+            var values = new int[3];
 
             for (int i = 0; i < 3; i++)
             {
@@ -137,11 +134,7 @@ namespace Altseed
                 values[i] += in_.Z * this[i, 2];
             }
 
-            Vector3I o;
-            o.X = values[0];
-            o.Y = values[1];
-            o.Z = values[2];
-            return o;
+            return new Vector3I(values[0], values[1], values[2]);
         }
 
         public static Matrix33I operator +(Matrix33I left, Matrix33I right)
@@ -182,25 +175,13 @@ namespace Altseed
 
             for (int i = 0; i < 3; ++i)
                 for (int j = 0; j < 3; ++j)
-                {
-                    result[i, j] = 0;
-                    for (int k = 0; k < 3; ++k) result[i, j] += left[i, k] * right[k, j];
-                }
-
+                    for (int k = 0; k < 3; ++k)
+                        result[i, j] += left[i, k] * right[k, j];
+                
             return result;
         }
 
-        public static Vector3I operator *(Matrix33I left, Vector3I right)
-        {
-            int[] elements = { 0, 0, 0 };
-            int[] rop = { right.X, right.Y, right.Z };
-
-            for (int i = 0; i < 3; ++i)
-                for (int k = 0; k < 3; ++k)
-                    elements[i] += left[i, k] * rop[k];
-                
-            return new Vector3I(elements[0], elements[1], elements[2]);
-        }
+        public static Vector3I operator *(Matrix33I left, Vector3I right) => left.Transform3D(right);
 
         #region IEquatable
         /// <summary>

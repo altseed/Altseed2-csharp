@@ -153,7 +153,7 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3I Transform3D(Vector3I in_)
         {
-            int[] values = new int[4];
+            var values = new int[4];
 
             for (int i = 0; i < 4; i++)
             {
@@ -164,11 +164,7 @@ namespace Altseed
                 values[i] += this[i, 3];
             }
 
-            Vector3I o;
-            o.X = values[0] / values[3];
-            o.Y = values[1] / values[3];
-            o.Z = values[2] / values[3];
-            return o;
+            return new Vector3I(values[0] / values[3], values[1] / values[3], values[2] / values[3]);
         }
 
         /// <summary>
@@ -178,7 +174,7 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector4I Transform4D(Vector4I in_)
         {
-            int[] values = new int[4];
+            var values = new int[4];
 
             for (int i = 0; i < 4; i++)
             {
@@ -189,13 +185,7 @@ namespace Altseed
                 values[i] += in_.W * this[i, 3];
             }
 
-            Vector4I o;
-            o.X = values[0];
-            o.Y = values[1];
-            o.Z = values[2];
-            o.W = values[3];
-
-            return o;
+            return new Vector4I(values[0], values[1], values[2], values[3]);
         }
 
         public static Matrix44I operator +(Matrix44I left, Matrix44I right)
@@ -234,38 +224,16 @@ namespace Altseed
 
         public static Matrix44I operator *(Matrix44I left, Matrix44I right)
         {
-            var o_ = new Matrix44I();
-            Mul(ref o_, ref left, ref right);
-            return o_;
-        }
-
-        public static Vector3I operator *(Matrix44I left, Vector3I right)
-        {
-            return left.Transform3D(right);
-        }
-
-        /// <summary>
-        /// 乗算を行う。
-        /// </summary>
-        /// <param name="o">出力先</param>
-        /// <param name="in1">行列1</param>
-        /// <param name="in2">行列2</param>
-        public static void Mul(ref Matrix44I o, ref Matrix44I in1, ref Matrix44I in2)
-        {
-            Matrix44I _in1 = in1;
-            Matrix44I _in2 = in2;
+            var result = new Matrix44I();
 
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
-                {
-                    int v = 0;
                     for (int k = 0; k < 4; k++)
-                    {
-                        v += _in1[i, k] * _in2[k, j];
-                    }
-                    o[i, j] = v;
-                }
+                        result[i, j] += left[i, k] * right[k, j];
+            return result;
         }
+
+        public static Vector3I operator *(Matrix44I left, Vector3I right) => left.Transform3D(right);
 
         #region IEquatable
         /// <summary>

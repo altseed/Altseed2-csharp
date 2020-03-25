@@ -22,8 +22,7 @@ namespace Altseed
             get
             {
                 var result = new Matrix44F();
-                for (int i = 0; i < 16; i++)
-                    result.Values[i] = 0.0f;
+                for (int i = 0; i < 16; i++) result.Values[i] = 0.0f;
 
                 result.Values[0 * 4 + 0] = 1.0f;
                 result.Values[1 * 4 + 1] = 1.0f;
@@ -42,7 +41,6 @@ namespace Altseed
             get
             {
                 var result = Identity;
-                var e = 0.00001f; // TODO:他と統一
 
                 var a11 = Values[0 * 4 + 0];
                 var a12 = Values[0 * 4 + 1];
@@ -84,9 +82,9 @@ namespace Altseed
 
                 // 行列式の逆数をかける
                 var det = (a11 * b11) + (a12 * b21) + (a13 * b31) + (a14 * b41);
-                if ((-e <= det) && (det <= +e)) throw new InvalidOperationException("逆行列が存在しません。");
+                if ((-MathHelper.MatrixError <= det) && (det <= +MathHelper.MatrixError)) throw new InvalidOperationException("逆行列が存在しません。");
 
-                float invDet = 1.0f / det;
+                var invDet = 1.0f / det;
 
                 result.Values[0 * 4 + 0] = b11 * invDet;
                 result.Values[0 * 4 + 1] = b12 * invDet;
@@ -492,22 +490,18 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3F Transform3D(Vector3F vector)
         {
-            float[] vec = new float[4];
+            var vec = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
-                vec[i] = 0;
+                vec[i] = 0.0f;
                 vec[i] += vector.X * Values[i * 4 + 0];
                 vec[i] += vector.Y * Values[i * 4 + 1];
                 vec[i] += vector.Z * Values[i * 4 + 2];
                 vec[i] += Values[i * 4 + 3];
             }
 
-            Vector3F o;
-            o.X = vec[0] / vec[3];
-            o.Y = vec[1] / vec[3];
-            o.Z = vec[2] / vec[3];
-            return o;
+            return new Vector3F(vec[0] / vec[3], vec[1] / vec[3], vec[2] / vec[3]);
         }
 
         /// <summary>
@@ -517,31 +511,24 @@ namespace Altseed
         /// <returns>変形後ベクトル</returns>
         public readonly Vector4F Transform4D(Vector4F vector)
         {
-            float[] vec = new float[4];
+            var vec = new float[4];
 
             for (int i = 0; i < 4; i++)
             {
-                vec[i] = 0;
+                vec[i] = 0.0f;
                 vec[i] += vector.X * Values[i * 4 + 0];
                 vec[i] += vector.Y * Values[i * 4 + 1];
                 vec[i] += vector.Z * Values[i * 4 + 2];
                 vec[i] += vector.W * Values[i * 4 + 3];
             }
 
-            Vector4F o;
-            o.X = vec[0];
-            o.Y = vec[1];
-            o.Z = vec[2];
-            o.W = vec[3];
-
-            return o;
+            return new Vector4F(vec[0], vec[1], vec[2], vec[3]);
         }
 
         public static Matrix44F operator +(Matrix44F left, Matrix44F right)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 16; i++)
-                result.Values[i] = left.Values[i] + right.Values[i];
+            for (int i = 0; i < 16; i++) result.Values[i] = left.Values[i] + right.Values[i];
             return result;
         }
 
@@ -550,16 +537,14 @@ namespace Altseed
         public static Matrix44F operator -(Matrix44F left, Matrix44F right)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 16; i++)
-                result.Values[i] = left.Values[i] - right.Values[i];
+            for (int i = 0; i < 16; i++) result.Values[i] = left.Values[i] - right.Values[i];
             return result;
         }
 
         public static Matrix44F operator *(Matrix44F matrix, float scalar)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 16; i++)
-                result.Values[i] = matrix.Values[i] * scalar;
+            for (int i = 0; i < 16; i++) result.Values[i] = matrix.Values[i] * scalar;
             return result;
         }
 
@@ -568,8 +553,7 @@ namespace Altseed
         public static Matrix44F operator /(Matrix44F matrix, float scalar)
         {
             var result = new Matrix44F();
-            for (int i = 0; i < 16; i++)
-                result.Values[i] = matrix.Values[i] / scalar;
+            for (int i = 0; i < 16; i++) result.Values[i] = matrix.Values[i] / scalar;
             return result;
         }
 
@@ -577,24 +561,14 @@ namespace Altseed
         {
             var result = new Matrix44F();
             for (int i = 0; i < 4; i++)
-            {
                 for (int j = 0; j < 4; j++)
-                {
-                    float v = 0.0f;
                     for (int k = 0; k < 4; k++)
-                    {
-                        v += left.Values[i * 4 + k] * right.Values[k * 4 + j];
-                    }
-                    result.Values[i * 4 + j] = v;
-                }
-            }
+                        result.Values[i * 4 + j] += left.Values[i * 4 + k] * right.Values[k * 4 + j];
+               
             return result;
         }
 
-        public static Vector3F operator *(Matrix44F left, Vector3F right)
-        {
-            return left.Transform3D(right);
-        }
+        public static Vector3F operator *(Matrix44F left, Vector3F right) => left.Transform3D(right);
 
         #region IEquatable
         /// <summary>
