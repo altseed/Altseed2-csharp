@@ -28,15 +28,15 @@ namespace Altseed
         /// サイズを変更する
         /// </summary>
         /// <param name="size">変更先のサイズ</param>
-        void Resize(int size);
+        internal void Resize(int size);
 
         /// <summary>
         /// データを指定したポインターにコピーする
         /// </summary>
         /// <param name="ptr">コピー先のポインター</param>
-        void CopyTo(IntPtr ptr);
+        internal void CopyTo(IntPtr ptr);
 
-        void Assign(IntPtr ptr, int size);
+        internal void Assign(IntPtr ptr, int size);
     }
 
     [Serializable]
@@ -70,6 +70,14 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
+
+        #region IArray
+        void IArray<byte>.Assign(IntPtr ptr, int size) => Assign(ptr, size);
+
+        void IArray<byte>.CopyTo(IntPtr ptr) => CopyTo(ptr);
+
+        void IArray<byte>.Resize(int size) => Resize(size);
+        #endregion
 
         #region ICacheKeeper
         IDictionary<IntPtr, WeakReference<Int8Array>> ICacheKeeper<Int8Array>.CacheRepo => cacheRepo;
@@ -118,6 +126,14 @@ namespace Altseed
             }
         }
 
+        #region IArray
+        void IArray<int>.Assign(IntPtr ptr, int size) => Assign(ptr, size);
+
+        void IArray<int>.CopyTo(IntPtr ptr) => CopyTo(ptr);
+
+        void IArray<int>.Resize(int size) => Resize(size);
+        #endregion
+
         #region ICacheKeeper
         IDictionary<IntPtr, WeakReference<Int32Array>> ICacheKeeper<Int32Array>.CacheRepo => cacheRepo;
 
@@ -164,6 +180,14 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
+
+        #region IArray
+        void IArray<Vertex>.Assign(IntPtr ptr, int size) => Assign(ptr, size);
+
+        void IArray<Vertex>.CopyTo(IntPtr ptr) => CopyTo(ptr);
+
+        void IArray<Vertex>.Resize(int size) => Resize(size);
+        #endregion
 
         #region ICacheKeeper
         IDictionary<IntPtr, WeakReference<VertexArray>> ICacheKeeper<VertexArray>.CacheRepo => cacheRepo;
@@ -213,6 +237,14 @@ namespace Altseed
             }
         }
 
+        #region IArray
+        void IArray<float>.Assign(IntPtr ptr, int size) => Assign(ptr, size);
+
+        void IArray<float>.CopyTo(IntPtr ptr) => CopyTo(ptr);
+
+        void IArray<float>.Resize(int size) => Resize(size);
+        #endregion
+
         #region ICacheKeeper
         IDictionary<IntPtr, WeakReference<FloatArray>> ICacheKeeper<FloatArray>.CacheRepo => cacheRepo;
 
@@ -259,6 +291,14 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
+
+        #region IArray
+        void IArray<Vector2F>.Assign(IntPtr ptr, int size) => Assign(ptr, size);
+
+        void IArray<Vector2F>.CopyTo(IntPtr ptr) => CopyTo(ptr);
+
+        void IArray<Vector2F>.Resize(int size) => Resize(size);
+        #endregion
 
         #region ICacheKeeper
         IDictionary<IntPtr, WeakReference<Vector2FArray>> ICacheKeeper<Vector2FArray>.CacheRepo => cacheRepo;
