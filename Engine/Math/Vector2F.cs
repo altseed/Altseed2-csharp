@@ -154,7 +154,7 @@ namespace Altseed
         {
             var x = v1.X - v2.X;
             var y = v1.Y - v2.Y;
-            return (float)Math.Sqrt(x * x + y + y);
+            return (float)Math.Sqrt(x * x + y * y);
         }
 
         /// <summary>
