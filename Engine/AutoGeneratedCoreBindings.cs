@@ -3070,6 +3070,10 @@ namespace Altseed
         private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Texture2D_Save(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Texture2D_GetSize(IntPtr selfPtr);
         
         
@@ -3124,6 +3128,17 @@ namespace Altseed
         {
             var ret = cbg_Texture2D_GetPath(selfPtr);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// png画像として保存します
+        /// </summary>
+        /// <param name="path">保存先</param>
+        /// <returns>成功したか否か</returns>
+        public bool Save(string path)
+        {
+            var ret = cbg_Texture2D_Save(selfPtr, path);
+            return ret;
         }
         
         ~Texture2D()
@@ -4756,6 +4771,10 @@ namespace Altseed
         private static extern IntPtr cbg_Font_LoadStaticFont([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Font_GenerateFontFile([MarshalAs(UnmanagedType.LPWStr)] string dynamicFontPath, [MarshalAs(UnmanagedType.LPWStr)] string staticFontPath, int size, [MarshalAs(UnmanagedType.LPWStr)] string characters);
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_GetGlyph(IntPtr selfPtr, int character);
         
         [DllImport("Altseed_Core")]
@@ -4874,6 +4893,20 @@ namespace Altseed
         {
             var ret = cbg_Font_LoadStaticFont(path);
             return Font.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// a2fフォントを生成します
+        /// </summary>
+        /// <param name="dynamicFontPath">読み込むtruetypeフォントのパス</param>
+        /// <param name="staticFontPath">生成するa2fフォントのパス</param>
+        /// <param name="size">フォントのサイズ</param>
+        /// <param name="characters">フォント化させる文字列</param>
+        /// <returns>生成できたか否か</returns>
+        public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int size, string characters)
+        {
+            var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, size, characters);
+            return ret;
         }
         
         /// <summary>
