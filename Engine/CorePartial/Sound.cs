@@ -1,43 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
-    [Serializable]
-    public sealed partial class Sound : ISerializable, ICacheKeeper<Sound>
+    public sealed partial class Sound
     {
-        #region SerializeName
-        private const string S_IsDecompressed = "S_IsDecompressed";
-        private const string S_IsLoopingMode = "S_IsLoopingMode";
-        private const string S_LoopStaringPoint = "S_LoopStaringPoint";
-        private const string S_LoopEndPoint = "S_LoopEndPoint";
-        private const string S_Path = "S_Path";
-        #endregion
-
-        private Sound(SerializationInfo info, StreamingContext context)
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             var path = info.GetString(S_Path);
             var isDecompressed = info.GetBoolean(S_IsDecompressed);
 
-            var ptr = cbg_Sound_Load(path, isDecompressed);
-            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
-
-            LoopStartingPoint = info.GetSingle(S_LoopStaringPoint);
-            LoopEndPoint = info.GetSingle(S_LoopEndPoint);
-            IsLoopingMode = info.GetBoolean(S_IsLoopingMode);
+            ptr = cbg_Sound_Load(path, isDecompressed);
         }
-
-        #region ICacheKeeper
-        IDictionary<IntPtr, WeakReference<Sound>> ICacheKeeper<Sound>.CacheRepo => cacheRepo;
-
-        IntPtr ICacheKeeper<Sound>.Self { get => selfPtr; set => selfPtr = value; }
-
-        void ICacheKeeper<Sound>.Release(IntPtr native) => cbg_Sound_Release(native);
-        #endregion
 
         /// <summary>
         /// 指定パスから音源を読み込む
@@ -71,17 +46,6 @@ namespace Altseed
             if (ex == null && (result = Load(path, isDecompressed)) != null) return true;
             result = null;
             return false;
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
-
-            info.AddValue(S_Path, GetPath());
-            info.AddValue(S_IsDecompressed, GetIsDecompressed());
-            info.AddValue(S_LoopStaringPoint, LoopStartingPoint);
-            info.AddValue(S_LoopEndPoint, LoopEndPoint);
-            info.AddValue(S_IsLoopingMode, IsLoopingMode);
         }
     }
 

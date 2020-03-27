@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -74,7 +73,7 @@ namespace Altseed.Test
             var file2 = Deserialize<StreamFile>(path);
             file2.Save("Serialization/StreamFile.txt");
 
-            Assert.AreEqual(file1.GetPath(), file2.GetPath());
+            Assert.AreEqual(file1.Path, file2.Path);
             Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
             Assert.AreEqual(file1.CurrentPosition, file2.CurrentPosition);
             Assert.AreEqual(file1.TempBufferSize, file2.TempBufferSize);
@@ -145,7 +144,7 @@ namespace Altseed.Test
 
             Assert.NotNull(font2);
 
-            Assert.AreEqual(font1.GetPath(), font2.GetPath());
+            Assert.AreEqual(font1.Path, font2.Path);
             Assert.AreEqual(font1.Ascent, font2.Ascent);
             Assert.AreEqual(font1.Descent, font2.Descent);
             Assert.AreEqual(font1.LineGap, font2.LineGap);
@@ -197,7 +196,7 @@ namespace Altseed.Test
             Assert.NotNull(texture2);
 
             Assert.AreEqual(texture1.Size, texture2.Size);
-            Assert.AreEqual(texture1.GetPath(), texture2.GetPath());
+            Assert.AreEqual(texture1.Path, texture2.Path);
 
             var obj1 = new SpriteNode()
             {
@@ -268,8 +267,8 @@ namespace Altseed.Test
 
             Assert.NotNull(font2);
 
-            Assert.AreEqual(sound1.GetPath(), font2.GetPath());
-            Assert.AreEqual(sound1.GetIsDecompressed(), font2.GetIsDecompressed());
+            Assert.AreEqual(sound1.Path, font2.Path);
+            Assert.AreEqual(sound1.IsDecompressed, font2.IsDecompressed);
             Assert.AreEqual(sound1.IsLoopingMode, font2.IsLoopingMode);
             Assert.AreEqual(sound1.Length, font2.Length);
             Assert.AreEqual(sound1.LoopEndPoint, font2.LoopEndPoint);
