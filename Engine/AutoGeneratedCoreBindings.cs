@@ -13,6 +13,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -1078,7 +1079,8 @@ namespace Altseed
     /// <summary>
     /// Coreを初期化する際の設定を保持すクラス
     /// </summary>
-    public partial class Configuration
+    [Serializable]
+    public sealed partial class Configuration : ISerializable
     {
         #region unmanaged
         
@@ -1303,6 +1305,57 @@ namespace Altseed
             selfPtr = cbg_Configuration_Constructor_0();
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_IsFullscreen = "S_IsFullscreen";
+        private const string S_IsResizable = "S_IsResizable";
+        private const string S_ConsoleLoggingEnabled = "S_ConsoleLoggingEnabled";
+        private const string S_FileLoggingEnabled = "S_FileLoggingEnabled";
+        private const string S_LogFileName = "S_LogFileName";
+        private const string S_ToolEnabled = "S_ToolEnabled";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Configuration"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private Configuration(SerializationInfo info, StreamingContext context) : this()
+        {
+            IsFullscreen = info.GetBoolean(S_IsFullscreen);
+            IsResizable = info.GetBoolean(S_IsResizable);
+            ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
+            FileLoggingEnabled = info.GetBoolean(S_FileLoggingEnabled);
+            LogFileName = info.GetString(S_LogFileName) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            ToolEnabled = info.GetBoolean(S_ToolEnabled);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_IsFullscreen, IsFullscreen);
+            info.AddValue(S_IsResizable, IsResizable);
+            info.AddValue(S_ConsoleLoggingEnabled, ConsoleLoggingEnabled);
+            info.AddValue(S_FileLoggingEnabled, FileLoggingEnabled);
+            info.AddValue(S_LogFileName, LogFileName);
+            info.AddValue(S_ToolEnabled, ToolEnabled);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        #endregion
+        
         ~Configuration()
         {
             lock (this) 
@@ -1520,7 +1573,8 @@ namespace Altseed
     /// <summary>
     /// 8ビット整数の配列のクラスを表します。
     /// </summary>
-    internal partial class Int8Array
+    [Serializable]
+    internal sealed partial class Int8Array : ISerializable, ICacheKeeper<Int8Array>
     {
         #region unmanaged
         
@@ -1668,6 +1722,55 @@ namespace Altseed
             return Int8Array.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Count = "S_Count";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Int8Array"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private Int8Array(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Count, Count);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Int8Array>> ICacheKeeper<Int8Array>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Int8Array>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Int8Array>.Release(IntPtr native) => cbg_Int8Array_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~Int8Array()
         {
             lock (this) 
@@ -1684,7 +1787,8 @@ namespace Altseed
     /// <summary>
     /// 32ビット整数の配列のクラスを表します。
     /// </summary>
-    internal partial class Int32Array
+    [Serializable]
+    internal sealed partial class Int32Array : ISerializable, ICacheKeeper<Int32Array>
     {
         #region unmanaged
         
@@ -1832,6 +1936,55 @@ namespace Altseed
             return Int32Array.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Count = "S_Count";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Int32Array"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private Int32Array(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Count, Count);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Int32Array>> ICacheKeeper<Int32Array>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Int32Array>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Int32Array>.Release(IntPtr native) => cbg_Int32Array_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~Int32Array()
         {
             lock (this) 
@@ -1848,7 +2001,8 @@ namespace Altseed
     /// <summary>
     /// 頂点データの配列のクラスを表します。
     /// </summary>
-    internal partial class VertexArray
+    [Serializable]
+    internal sealed partial class VertexArray : ISerializable, ICacheKeeper<VertexArray>
     {
         #region unmanaged
         
@@ -1996,6 +2150,55 @@ namespace Altseed
             return VertexArray.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Count = "S_Count";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="VertexArray"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private VertexArray(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Count, Count);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<VertexArray>> ICacheKeeper<VertexArray>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<VertexArray>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<VertexArray>.Release(IntPtr native) => cbg_VertexArray_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~VertexArray()
         {
             lock (this) 
@@ -2012,7 +2215,8 @@ namespace Altseed
     /// <summary>
     /// 浮動小数点数の配列のクラスを表します。
     /// </summary>
-    internal partial class FloatArray
+    [Serializable]
+    internal sealed partial class FloatArray : ISerializable, ICacheKeeper<FloatArray>
     {
         #region unmanaged
         
@@ -2160,6 +2364,55 @@ namespace Altseed
             return FloatArray.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Count = "S_Count";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="FloatArray"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private FloatArray(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Count, Count);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<FloatArray>> ICacheKeeper<FloatArray>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<FloatArray>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<FloatArray>.Release(IntPtr native) => cbg_FloatArray_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~FloatArray()
         {
             lock (this) 
@@ -2176,7 +2429,8 @@ namespace Altseed
     /// <summary>
     /// 2次元ベクトルの配列のクラスを表します。
     /// </summary>
-    internal partial class Vector2FArray
+    [Serializable]
+    internal sealed partial class Vector2FArray : ISerializable, ICacheKeeper<Vector2FArray>
     {
         #region unmanaged
         
@@ -2323,6 +2577,55 @@ namespace Altseed
             var ret = cbg_Vector2FArray_Create(size);
             return Vector2FArray.TryGetFromCache(ret);
         }
+        
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Count = "S_Count";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Vector2FArray"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private Vector2FArray(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Count, Count);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Vector2FArray>> ICacheKeeper<Vector2FArray>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Vector2FArray>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Vector2FArray>.Release(IntPtr native) => cbg_Vector2FArray_Release(native);
+        #endregion
+        
+        #endregion
         
         ~Vector2FArray()
         {
@@ -2947,7 +3250,7 @@ namespace Altseed
         /// <summary>
         /// 組み込みのシェーダを取得します。
         /// </summary>
-        public BuiltinShader BuiltinShader
+        internal BuiltinShader BuiltinShader
         {
             get
             {
@@ -3012,11 +3315,12 @@ namespace Altseed
     /// <summary>
     /// 2Dテクスチャのクラス
     /// </summary>
-    public partial class Texture2D
+    [Serializable]
+    public partial class Texture2D : ISerializable, ICacheKeeper<Texture2D>, IDeserializationCallback
     {
         #region unmanaged
         
-        private static Dictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new Dictionary<IntPtr, WeakReference<Texture2D>>();
+        private static ConcurrentDictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Texture2D>>();
         
         internal static  Texture2D TryGetFromCache(IntPtr native)
         {
@@ -3033,12 +3337,12 @@ namespace Altseed
                 }
                 else
                 {
-                    cacheRepo.Remove(native);
+                    cacheRepo.TryRemove(native, out _);
                 }
             }
         
             var newObject = new Texture2D(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Texture2D>(newObject);
+            cacheRepo.TryAdd(native, new WeakReference<Texture2D>(newObject));
             return newObject;
         }
         
@@ -3051,14 +3355,15 @@ namespace Altseed
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Texture2D_Save(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Texture2D_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -3084,6 +3389,18 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        internal string Path
+        {
+            get
+            {
+                var ret = cbg_Texture2D_GetPath(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
         /// 指定したファイルからテクスチャを読み込みます。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
@@ -3105,16 +3422,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのパスを取得します。
-        /// </summary>
-        /// <returns>読み込んだファイルのパス</returns>
-        internal string GetPath()
-        {
-            var ret = cbg_Texture2D_GetPath(selfPtr);
-            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-        }
-        
-        /// <summary>
         /// png画像として保存します
         /// </summary>
         /// <param name="path">保存先</param>
@@ -3124,6 +3431,76 @@ namespace Altseed
             var ret = cbg_Texture2D_Save(selfPtr, path);
             return ret;
         }
+        
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Size = "S_Size";
+        private const string S_Path = "S_Path";
+        #endregion
+        
+        private SerializationInfo seInfo;
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Texture2D"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected Texture2D(SerializationInfo info, StreamingContext context)
+        {
+            seInfo = info;
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Size, Size);
+            info.AddValue(S_Path, Path);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Texture2D>> ICacheKeeper<Texture2D>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Texture2D>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Texture2D>.Release(IntPtr native) => cbg_Texture2D_Release(native);
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+            
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, seInfo);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            
+            OnDeserialize_Method(sender);
+            
+            seInfo = null;
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
+        partial void OnDeserialize_Method(object sender);
         
         ~Texture2D()
         {
@@ -3141,7 +3518,8 @@ namespace Altseed
     /// <summary>
     /// ポストエフェクトやカメラにおける描画先のクラス
     /// </summary>
-    public partial class RenderTexture : Texture2D
+    [Serializable]
+    public sealed partial class RenderTexture : Texture2D, ISerializable, ICacheKeeper<RenderTexture>, IDeserializationCallback
     {
         #region unmanaged
         
@@ -3190,6 +3568,70 @@ namespace Altseed
             return RenderTexture.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        #endregion
+        
+        private SerializationInfo seInfo;
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RenderTexture"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private RenderTexture(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            seInfo = info;
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected override void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderTexture>> ICacheKeeper<RenderTexture>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<RenderTexture>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<RenderTexture>.Release(IntPtr native) => cbg_RenderTexture_Release(native);
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected override void OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+            
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, seInfo);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            OnDeserialize_Method(sender);
+            
+            seInfo = null;
+        }
+        partial void OnDeserialize_Method(object sender);
+        
         ~RenderTexture()
         {
             lock (this) 
@@ -3206,6 +3648,7 @@ namespace Altseed
     /// <summary>
     /// マテリアル
     /// </summary>
+    [Serializable]
     public partial class Material
     {
         #region unmanaged
@@ -3614,6 +4057,7 @@ namespace Altseed
     /// <summary>
     /// 描画されるオブジェクトの基本クラスを表します
     /// </summary>
+    [Serializable]
     internal partial class Rendered
     {
         #region unmanaged
@@ -3699,7 +4143,8 @@ namespace Altseed
     /// <summary>
     /// スプライトのクラス
     /// </summary>
-    internal partial class RenderedSprite : Rendered
+    [Serializable]
+    internal partial class RenderedSprite : Rendered, ISerializable, ICacheKeeper<RenderedSprite>
     {
         #region unmanaged
         
@@ -3835,6 +4280,63 @@ namespace Altseed
             return RenderedSprite.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Texture = "S_Texture";
+        private const string S_Src = "S_Src";
+        private const string S_Material = "S_Material";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RenderedSprite"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected RenderedSprite(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Texture = info.GetValue<Texture2D>(S_Texture) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Src = info.GetValue<RectF>(S_Src);
+            Material = info.GetValue<Material>(S_Material) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Texture, Texture);
+            info.AddValue(S_Src, Src);
+            info.AddValue(S_Material, Material);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedSprite>> ICacheKeeper<RenderedSprite>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<RenderedSprite>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<RenderedSprite>.Release(IntPtr native) => cbg_RenderedSprite_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~RenderedSprite()
         {
             lock (this) 
@@ -3851,7 +4353,8 @@ namespace Altseed
     /// <summary>
     /// テキストのクラス
     /// </summary>
-    internal partial class RenderedText : Rendered
+    [Serializable]
+    internal partial class RenderedText : Rendered, ISerializable, ICacheKeeper<RenderedText>
     {
         #region unmanaged
         
@@ -4043,6 +4546,69 @@ namespace Altseed
             return RenderedText.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Material = "S_Material";
+        private const string S_Text = "S_Text";
+        private const string S_Font = "S_Font";
+        private const string S_Weight = "S_Weight";
+        private const string S_Color = "S_Color";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RenderedText"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected RenderedText(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Material = info.GetValue<Material>(S_Material) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Text = info.GetString(S_Text) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Font = info.GetValue<Font>(S_Font) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Weight = info.GetSingle(S_Weight);
+            Color = info.GetValue<Color>(S_Color);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Material, Material);
+            info.AddValue(S_Text, Text);
+            info.AddValue(S_Font, Font);
+            info.AddValue(S_Weight, Weight);
+            info.AddValue(S_Color, Color);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedText>> ICacheKeeper<RenderedText>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<RenderedText>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<RenderedText>.Release(IntPtr native) => cbg_RenderedText_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~RenderedText()
         {
             lock (this) 
@@ -4059,7 +4625,8 @@ namespace Altseed
     /// <summary>
     /// ポリゴンのクラス
     /// </summary>
-    internal partial class RenderedPolygon : Rendered
+    [Serializable]
+    internal partial class RenderedPolygon : Rendered, ISerializable, ICacheKeeper<RenderedPolygon>
     {
         #region unmanaged
         
@@ -4234,6 +4801,66 @@ namespace Altseed
             cbg_RenderedPolygon_SetVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Vertexes = "S_Vertexes";
+        private const string S_Texture = "S_Texture";
+        private const string S_Src = "S_Src";
+        private const string S_Material = "S_Material";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RenderedPolygon"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected RenderedPolygon(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Vertexes = info.GetValue<VertexArray>(S_Vertexes) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Texture = info.GetValue<Texture2D>(S_Texture) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Src = info.GetValue<RectF>(S_Src);
+            Material = info.GetValue<Material>(S_Material) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Vertexes, Vertexes);
+            info.AddValue(S_Texture, Texture);
+            info.AddValue(S_Src, Src);
+            info.AddValue(S_Material, Material);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedPolygon>> ICacheKeeper<RenderedPolygon>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<RenderedPolygon>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<RenderedPolygon>.Release(IntPtr native) => cbg_RenderedPolygon_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~RenderedPolygon()
         {
             lock (this) 
@@ -4250,7 +4877,8 @@ namespace Altseed
     /// <summary>
     /// カメラのクラス
     /// </summary>
-    internal partial class RenderedCamera : Rendered
+    [Serializable]
+    internal partial class RenderedCamera : Rendered, ISerializable, ICacheKeeper<RenderedCamera>
     {
         #region unmanaged
         
@@ -4358,6 +4986,60 @@ namespace Altseed
             return RenderedCamera.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_CenterOffset = "S_CenterOffset";
+        private const string S_TargetTexture = "S_TargetTexture";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RenderedCamera"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected RenderedCamera(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            CenterOffset = info.GetValue<Vector2F>(S_CenterOffset);
+            TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_CenterOffset, CenterOffset);
+            info.AddValue(S_TargetTexture, TargetTexture);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RenderedCamera>> ICacheKeeper<RenderedCamera>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<RenderedCamera>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<RenderedCamera>.Release(IntPtr native) => cbg_RenderedCamera_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~RenderedCamera()
         {
             lock (this) 
@@ -4445,7 +5127,8 @@ namespace Altseed
     /// <summary>
     /// シェーダ
     /// </summary>
-    public partial class Shader
+    [Serializable]
+    public partial class Shader : ISerializable, ICacheKeeper<Shader>
     {
         #region unmanaged
         
@@ -4546,6 +5229,60 @@ namespace Altseed
             var ret = cbg_Shader_Create(name, code, (int)shaderStage);
             return Shader.TryGetFromCache(ret);
         }
+        
+        #region ISerialiable
+        #region SerializeName
+        private const string S_StageType = "S_StageType";
+        private const string S_Code = "S_Code";
+        private const string S_Name = "S_Name";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Shader"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected Shader(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_StageType, StageType);
+            info.AddValue(S_Code, Code);
+            info.AddValue(S_Name, Name);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Shader>> ICacheKeeper<Shader>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Shader>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Shader>.Release(IntPtr native) => cbg_Shader_Release(native);
+        #endregion
+        
+        #endregion
         
         ~Shader()
         {
@@ -4716,7 +5453,8 @@ namespace Altseed
     /// <summary>
     /// フォント
     /// </summary>
-    public partial class Font
+    [Serializable]
+    public partial class Font : ISerializable, ICacheKeeper<Font>, IDeserializationCallback
     {
         #region unmanaged
         
@@ -4767,9 +5505,6 @@ namespace Altseed
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
         
         [DllImport("Altseed_Core")]
@@ -4795,6 +5530,10 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Font_GetLineGap(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -4856,12 +5595,24 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        internal string Path
+        {
+            get
+            {
+                var ret = cbg_Font_GetPath(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
         /// 動的にフォントを生成します
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
-        public static Font LoadDynamicFont(string path, int size)
+        internal static Font LoadDynamicFont(string path, int size)
         {
             var ret = cbg_Font_LoadDynamicFont(path, size);
             return Font.TryGetFromCache(ret);
@@ -4872,7 +5623,7 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
-        public static Font LoadStaticFont(string path)
+        internal static Font LoadStaticFont(string path)
         {
             var ret = cbg_Font_LoadStaticFont(path);
             return Font.TryGetFromCache(ret);
@@ -4927,16 +5678,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのパスを取得します。
-        /// </summary>
-        /// <returns>読み込んだファイルのパス</returns>
-        internal string GetPath()
-        {
-            var ret = cbg_Font_GetPath(selfPtr);
-            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-        }
-        
-        /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
         /// <param name="text">テキスト</param>
@@ -4980,6 +5721,72 @@ namespace Altseed
             var ret = cbg_Font_GetImageGlyph(selfPtr, character);
             return Texture2D.TryGetFromCache(ret);
         }
+        
+        #region ISerialiable
+        #region SerializeName
+        #endregion
+        
+        private SerializationInfo seInfo;
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Font"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected Font(SerializationInfo info, StreamingContext context)
+        {
+            seInfo = info;
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Font>> ICacheKeeper<Font>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Font>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Font>.Release(IntPtr native) => cbg_Font_Release(native);
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+            
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, seInfo);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            
+            OnDeserialize_Method(sender);
+            
+            seInfo = null;
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
+        partial void OnDeserialize_Method(object sender);
         
         ~Font()
         {
@@ -6041,7 +6848,8 @@ namespace Altseed
     /// <summary>
     /// 段階的にファイルを読み取るクラス
     /// </summary>
-    public partial class StreamFile
+    [Serializable]
+    public sealed partial class StreamFile : ISerializable, ICacheKeeper<StreamFile>, IDeserializationCallback
     {
         #region unmanaged
         
@@ -6082,9 +6890,6 @@ namespace Altseed
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
@@ -6103,6 +6908,10 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -6164,6 +6973,18 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        internal string Path
+        {
+            get
+            {
+                var ret = cbg_StreamFile_GetPath(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
         /// 指定ファイルを読み込む<see cref="StreamFile"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
@@ -6196,16 +7017,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 読み込んだファイルのパスを取得します。
-        /// </summary>
-        /// <returns>読み込んだファイルのパス</returns>
-        internal string GetPath()
-        {
-            var ret = cbg_StreamFile_GetPath(selfPtr);
-            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-        }
-        
-        /// <summary>
         /// 再読み込みを行います。
         /// </summary>
         /// <returns>再読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
@@ -6214,6 +7025,72 @@ namespace Altseed
             var ret = cbg_StreamFile_Reload(selfPtr);
             return ret;
         }
+        
+        #region ISerialiable
+        #region SerializeName
+        private const string S_CurrentPosition = "S_CurrentPosition";
+        #endregion
+        
+        private SerializationInfo seInfo;
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="StreamFile"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private StreamFile(SerializationInfo info, StreamingContext context)
+        {
+            seInfo = info;
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_CurrentPosition, CurrentPosition);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<StreamFile>> ICacheKeeper<StreamFile>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<StreamFile>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<StreamFile>.Release(IntPtr native) => cbg_StreamFile_Release(native);
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        void IDeserializationCallback.OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+            
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, seInfo);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            
+            OnDeserialize_Method(sender);
+            
+            seInfo = null;
+        }
+        partial void OnDeserialize_Method(object sender);
         
         ~StreamFile()
         {
@@ -6231,7 +7108,8 @@ namespace Altseed
     /// <summary>
     /// 一度でファイルを読み取るクラス
     /// </summary>
-    public partial class StaticFile
+    [Serializable]
+    public sealed partial class StaticFile : ISerializable, ICacheKeeper<StaticFile>
     {
         #region unmanaged
         
@@ -6361,6 +7239,53 @@ namespace Altseed
             var ret = cbg_StaticFile_Reload(selfPtr);
             return ret;
         }
+        
+        #region ISerialiable
+        #region SerializeName
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="StaticFile"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private StaticFile(SerializationInfo info, StreamingContext context)
+        {
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            
+            OnGetObjectData(info, context);
+        }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<StaticFile>> ICacheKeeper<StaticFile>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<StaticFile>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<StaticFile>.Release(IntPtr native) => cbg_StaticFile_Release(native);
+        #endregion
+        
+        #endregion
         
         ~StaticFile()
         {
@@ -6553,7 +7478,8 @@ namespace Altseed
     /// <summary>
     /// 音源のクラス
     /// </summary>
-    public partial class Sound
+    [Serializable]
+    public sealed partial class Sound : ISerializable, ICacheKeeper<Sound>
     {
         #region unmanaged
         
@@ -6588,13 +7514,6 @@ namespace Altseed
         private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
@@ -6615,6 +7534,15 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern float cbg_Sound_GetLength(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
         
         
         [DllImport("Altseed_Core")]
@@ -6706,6 +7634,30 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 読み込んだファイルのパスを取得します。
+        /// </summary>
+        internal string Path
+        {
+            get
+            {
+                var ret = cbg_Sound_GetPath(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        /// <summary>
+        /// 音源を解凍するかどうかを取得する
+        /// </summary>
+        internal bool IsDecompressed
+        {
+            get
+            {
+                var ret = cbg_Sound_GetIsDecompressed(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// 音声ファイルを読み込みます。
         /// </summary>
         /// <param name="path">読み込む音声ファイルのパス</param>
@@ -6717,25 +7669,65 @@ namespace Altseed
             return Sound.TryGetFromCache(ret);
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_LoopStartingPoint = "S_LoopStartingPoint";
+        private const string S_LoopEndPoint = "S_LoopEndPoint";
+        private const string S_IsLoopingMode = "S_IsLoopingMode";
+        private const string S_Path = "S_Path";
+        private const string S_IsDecompressed = "S_IsDecompressed";
+        #endregion
+        
         /// <summary>
-        /// 読み込んだファイルのパスを取得します。
+        /// シリアライズされたデータをもとに<see cref="Sound"/>のインスタンスを生成する
         /// </summary>
-        /// <returns>読み込んだファイルのパス</returns>
-        internal string GetPath()
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private Sound(SerializationInfo info, StreamingContext context)
         {
-            var ret = cbg_Sound_GetPath(selfPtr);
-            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            
+            LoopStartingPoint = info.GetSingle(S_LoopStartingPoint);
+            LoopEndPoint = info.GetSingle(S_LoopEndPoint);
+            IsLoopingMode = info.GetBoolean(S_IsLoopingMode);
+            
+            OnDeserialize_Constructor(info, context);
         }
         
         /// <summary>
-        /// 音源を解凍するかどうかを取得する
+        /// シリアライズするデータを設定します。
         /// </summary>
-        /// <returns>音源を解凍するかどうか</returns>
-        internal bool GetIsDecompressed()
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            var ret = cbg_Sound_GetIsDecompressed(selfPtr);
-            return ret;
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_LoopStartingPoint, LoopStartingPoint);
+            info.AddValue(S_LoopEndPoint, LoopEndPoint);
+            info.AddValue(S_IsLoopingMode, IsLoopingMode);
+            info.AddValue(S_Path, Path);
+            info.AddValue(S_IsDecompressed, IsDecompressed);
+            
+            OnGetObjectData(info, context);
         }
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        private void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Sound>> ICacheKeeper<Sound>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Sound>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Sound>.Release(IntPtr native) => cbg_Sound_Release(native);
+        #endregion
+        
+        #endregion
         
         ~Sound()
         {

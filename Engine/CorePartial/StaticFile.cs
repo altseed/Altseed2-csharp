@@ -1,34 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
-    [Serializable]
-    public sealed partial class StaticFile : ISerializable, ICacheKeeper<StaticFile>
+    public sealed partial class StaticFile
     {
         #region SerializeName
         private const string S_Path = "S_Path";
         #endregion
 
-        private StaticFile(SerializationInfo info, StreamingContext context)
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             var path = info.GetString(S_Path);
-            var ptr = cbg_StaticFile_Create(path);
-
-            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            ptr = cbg_StaticFile_Create(path);            
         }
 
-        #region ICacheKeeper
-        IDictionary<IntPtr, WeakReference<StaticFile>> ICacheKeeper<StaticFile>.CacheRepo => cacheRepo;
-
-        IntPtr ICacheKeeper<StaticFile>.Self { get => selfPtr; set => selfPtr = value; }
-
-        void ICacheKeeper<StaticFile>.Release(IntPtr native) => cbg_StaticFile_Release(native);
-        #endregion
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            // インスタンス生成時に./が頭についているのでstring.Substring(int startIndex)で削る
+            info.AddValue(S_Path, Path.Substring(2));            
+        }
 
         /// <summary>
         /// 指定パスからファイルを読み込む
@@ -62,14 +54,6 @@ namespace Altseed
                 result = null;
                 return false;
             }
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
-
-            // インスタンス生成時に./が頭についているのでstring.Substring(int startIndex)で削る
-            info.AddValue(S_Path, Path.Substring(2));
         }
 
         /// <summary>

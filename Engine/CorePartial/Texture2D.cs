@@ -1,37 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
-    [Serializable]
-    public partial class Texture2D : ISerializable, IDeserializationCallback, ICacheKeeper<Texture2D>
+    public partial class Texture2D
     {
-        #region SerializeName
-        private const string S_Path = "S_Path";
-        #endregion
-
-        private SerializationInfo seInfo;
-
-        /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Texture2D"/>のインスタンスを生成する
-        /// </summary>
-        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
-        /// <param name="context">送信元の情報</param>
-        protected Texture2D(SerializationInfo info, StreamingContext context)
-        {
-            seInfo = info;
-        }
-
-        #region ICacheKeeper
-        IDictionary<IntPtr, WeakReference<Texture2D>> ICacheKeeper<Texture2D>.CacheRepo => cacheRepo;
-
-        IntPtr ICacheKeeper<Texture2D>.Self { get => selfPtr; set => selfPtr = value; }
-
-        void ICacheKeeper<Texture2D>.Release(IntPtr native) => cbg_Texture2D_Release(native);
-        #endregion
-
         /// <summary>
         /// 指定パスからテクスチャを読み込む
         /// </summary>
@@ -65,37 +39,10 @@ namespace Altseed
                 return false;
             }
         }
-
-        /// <summary>
-        /// シリアライズするデータを設定します。
-        /// </summary>
-        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
-        /// <param name="context">送信先のデータ</param>
-        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
-
-            info.AddValue(S_Path, GetPath());
-        }
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
-
-        /// <summary>
-        /// デシリアライズ時に実行
-        /// </summary>
-        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
-        protected virtual void OnDeserialization(object sender)
-        {
-            if (seInfo == null) return;
-
             var path = seInfo.GetString(S_Path);
-            var ptr = cbg_Texture2D_Load(path);
-
-            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-
-            CacheHelper.CacheHandling(this, ptr);
-
-            seInfo = null;
+            ptr = cbg_Texture2D_Load(path);
         }
-        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
     }
 }

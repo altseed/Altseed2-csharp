@@ -1,39 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
 namespace Altseed
 {
-    [Serializable]
-    public sealed partial class StreamFile : ISerializable, IDeserializationCallback, ICacheKeeper<StreamFile>
+    public sealed partial class StreamFile
     {
         #region SerializeName
-        private const string S_CurrentPosition = "S_CurrentPosition";
         private const string S_Path = "S_Path";
         #endregion
 
-        private SerializationInfo seInfo;
-
-        private StreamFile(SerializationInfo info, StreamingContext context)
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             var path = info.GetString(S_Path);
-            var ptr = cbg_StreamFile_Create(path);
-
-            if (ptr == IntPtr.Zero) throw new SerializationException("読み込みに失敗しました");
-
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
-
-            seInfo = info;
+            ptr = cbg_StreamFile_Create(path);            
         }
 
-        #region ICacheKeeper
-        IDictionary<IntPtr, WeakReference<StreamFile>> ICacheKeeper<StreamFile>.CacheRepo => cacheRepo;
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(S_Path, Path.Substring(2));            
+        }
 
-        IntPtr ICacheKeeper<StreamFile>.Self { get => selfPtr; set => selfPtr = value; }
-
-        void ICacheKeeper<StreamFile>.Release(IntPtr native) => cbg_StreamFile_Release(native);
-        #endregion
+        partial void OnDeserialize_Method(object sender)
+        {
+            var position = seInfo.GetInt32(S_CurrentPosition);
+            if (position > 0) Read(position);            
+        }
 
         /// <summary>
         /// 指定パスからファイルを読み込む
@@ -71,23 +63,6 @@ namespace Altseed
             }
         }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
-
-            info.AddValue(S_Path, GetPath().Substring(2));
-            info.AddValue(S_CurrentPosition, CurrentPosition);
-        }
-
-        void IDeserializationCallback.OnDeserialization(object sender)
-        {
-            if (seInfo == null) return;
-
-            var position = seInfo.GetInt32(S_CurrentPosition);
-            if (position > 0) Read(position);
-
-            seInfo = null;
-        }
 
         /// <summary>
         /// 指定したパスに保存する
