@@ -426,5 +426,151 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RenderedSprite()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+
+            Assert.NotNull(texture);
+
+            var sprite1 = Altseed.RenderedSprite.Create();
+
+            Assert.NotNull(sprite1);
+
+            sprite1.Src = new RectF(100, 100, 200, 200);
+            sprite1.Texture = texture;
+
+            const string path = "Serialization/RenderedSprite.bin";
+
+            Serialize(path, sprite1);
+
+            var sprite2 = Deserialize<RenderedSprite>(path);
+
+            Assert.NotNull(sprite2);
+
+            Assert.AreEqual(sprite1.Material, sprite2.Material);
+            Assert.AreEqual(sprite1.Src, sprite2.Src);
+            Assert.AreEqual(sprite1.Texture.Path, sprite2.Texture.Path);
+            Assert.AreEqual(sprite1.Texture.Size, sprite2.Texture.Size);
+            Assert.AreEqual(sprite1.Transform, sprite2.Transform);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RenderedText()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var font = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50);
+
+            Assert.NotNull(font);
+
+            var text1 = Altseed.RenderedText.Create();
+
+            Assert.NotNull(text1);
+
+            text1.Color = new Color(100, 255, 200, 255);
+            text1.Font = font;
+            text1.Text = "test";
+
+            const string path = "Serialization/RenderedText.bin";
+
+            Serialize(path, text1);
+
+            var text2 = Deserialize<RenderedText>(path);
+
+            Assert.NotNull(text2);
+
+            Assert.AreEqual(text1.Color, text2.Color);
+            Assert.AreEqual(text1.Material, text2.Material);
+            Assert.AreEqual(text1.Font.Path, text2.Font.Path);
+            Assert.AreEqual(text1.Font.Size, text2.Font.Size);
+            Assert.AreEqual(text1.Text, text2.Text);
+            Assert.AreEqual(text1.Transform, text2.Transform);
+            Assert.AreEqual(text1.Weight, text2.Weight);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RenderedPolygon()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var array = new Vector2F[]
+            {
+                new Vector2F(100, 100),
+                new Vector2F(200, 200)
+            };
+
+            Assert.NotNull(texture);
+
+            var polygon1 = Altseed.RenderedPolygon.Create();
+
+            Assert.NotNull(polygon1);
+
+            polygon1.Src = new RectF(100, 100, 200, 200);
+            polygon1.Texture = texture;
+            var v_array = Altseed.Vector2FArray.Create(array.Length);
+            v_array.FromArray(array);
+            polygon1.SetVertexesByVector2F(v_array);
+
+            const string path = "Serialization/RenderedPolygon.bin";
+
+            Serialize(path, polygon1);
+
+            var polygon2 = Deserialize<RenderedPolygon>(path);
+
+            Assert.NotNull(polygon2);
+
+            Assert.AreEqual(polygon1.Material, polygon2.Material);
+            Assert.AreEqual(polygon1.Src, polygon2.Src);
+            Assert.AreEqual(polygon1.Texture.Path, polygon2.Texture.Path);
+            Assert.AreEqual(polygon1.Texture.Size, polygon2.Texture.Size);
+            Assert.AreEqual(polygon1.Transform, polygon2.Transform);
+            Assert.True(Enumerable.SequenceEqual(polygon1.Vertexes.ToArray(), polygon2.Vertexes.ToArray()));
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RenderedCamera()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Altseed.RenderTexture.Create(new Vector2I(100, 100));
+
+            Assert.NotNull(texture);
+
+            var camera1 = Altseed.RenderedCamera.Create();
+
+            Assert.NotNull(camera1);
+
+            camera1.CenterOffset = new Vector2F(10, 10);
+            camera1.TargetTexture = texture;
+
+            const string path = "Serialization/RenderedCamera.bin";
+
+            Serialize(path, camera1);
+
+            var camera2 = Deserialize<RenderedCamera>(path);
+
+            Assert.NotNull(camera2);
+
+            Assert.AreEqual(camera1.CenterOffset, camera2.CenterOffset);
+            Assert.AreEqual(camera1.TargetTexture.Size, camera2.TargetTexture.Size);
+            Assert.AreEqual(camera1.Transform, camera2.Transform);
+
+            tc.End();
+        }
     }
 }
