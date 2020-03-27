@@ -103,17 +103,14 @@ namespace Altseed
                 if (!Graphics.BeginFrame()) return false;
             }
 
-            var cmdList = Graphics.CommandList;
-
             // カメラに映らないものを描画
             Renderer.ResetCamera();
-            cmdList.SetRenderTargetWithScreen();
             foreach (var drawnNode in _DrawnNodes)
             {
                 if (drawnNode.CameraGroup == 0)
                     drawnNode.Draw();
             }
-            Renderer.Render(cmdList);
+            Renderer.Render();
 
             // 特定のカメラに映りこむノードを描画
             foreach (var camera in _CameraGroups.Keys)
@@ -123,7 +120,7 @@ namespace Altseed
                 foreach (var drawnNode in _CameraGroups[camera])
                     drawnNode.Draw();
 
-                Renderer.Render(cmdList);
+                Renderer.Render();
             }
 
             // （ツール機能を使用する場合は）ツールを描画

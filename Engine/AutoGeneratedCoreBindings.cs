@@ -2931,10 +2931,6 @@ namespace Altseed
         private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
         
         
@@ -2946,18 +2942,6 @@ namespace Altseed
         internal Graphics(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// コマンドリストを取得します。
-        /// </summary>
-        public CommandList CommandList
-        {
-            get
-            {
-                var ret = cbg_Graphics_GetCommandList(selfPtr);
-                return CommandList.TryGetFromCache(ret);
-            }
         }
         
         /// <summary>
@@ -2986,7 +2970,7 @@ namespace Altseed
         /// 描画を開始します。
         /// </summary>
         /// <returns>正常に開始した場合は　true 。それ以外の場合は false。</returns>
-        public bool BeginFrame()
+        internal bool BeginFrame()
         {
             var ret = cbg_Graphics_BeginFrame(selfPtr);
             return ret;
@@ -2996,7 +2980,7 @@ namespace Altseed
         /// 描画を終了します。
         /// </summary>
         /// <returns>正常に終了した場合は　true 。それ以外の場合は false。</returns>
-        public bool EndFrame()
+        internal bool EndFrame()
         {
             var ret = cbg_Graphics_EndFrame(selfPtr);
             return ret;
@@ -3006,7 +2990,7 @@ namespace Altseed
         /// イベントを処理します。
         /// </summary>
         /// <returns>正常に処理した場合は　true 。それ以外の場合は false。</returns>
-        public bool DoEvents()
+        internal bool DoEvents()
         {
             var ret = cbg_Graphics_DoEvents(selfPtr);
             return ret;
@@ -3441,7 +3425,7 @@ namespace Altseed
         private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_Render(IntPtr selfPtr, IntPtr commandList);
+        private static extern void cbg_Renderer_Render(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr commandList);
@@ -3499,10 +3483,9 @@ namespace Altseed
         /// <summary>
         /// コマンドリストを描画します。
         /// </summary>
-        /// <param name="commandList">描画するコマンドリスト</param>
-        internal void Render(CommandList commandList)
+        public void Render()
         {
-            cbg_Renderer_Render(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+            cbg_Renderer_Render(selfPtr);
         }
         
         /// <summary>
