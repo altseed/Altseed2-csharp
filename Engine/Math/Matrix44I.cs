@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -8,8 +9,10 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct Matrix44I : ICloneable, IEquatable<Matrix44I>
+    public unsafe struct Matrix44I : ICloneable, IEquatable<Matrix44I>, ISerializable
     {
+        private const string S_Array = "S_Array";
+
         //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 4 * 4)]
         private fixed int Values[16];
 
@@ -46,6 +49,12 @@ namespace Altseed
                         result[i, j] = this[j, i];
                 return result;
             }
+        }
+
+        private Matrix44I(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<int[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
+            for (int i = 0; i < 16; i++) Values[i] = array[i];
         }
 
         /// <summary>
@@ -282,5 +291,13 @@ namespace Altseed
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            var array = new int[16];
+            for (int i = 0; i < 16; i++) array[i] = Values[i];
+            info.AddValue(S_Array, array);
+        }
     }
 }

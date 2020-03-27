@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -8,10 +9,12 @@ namespace Altseed
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct Matrix33I : ICloneable, IEquatable<Matrix33I>
+    public unsafe struct Matrix33I : ICloneable, IEquatable<Matrix33I>, ISerializable
     {
+        private const string S_Array = "S_Array";
+
         //[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.I4, SizeConst = 3 * 3)]
-        private fixed int Values[16];
+        private fixed int Values[9];
 
         /// <summary>
         /// 単位行列を取得する
@@ -44,6 +47,12 @@ namespace Altseed
                         result[i, j] = this[j, i];
                 return result;
             }
+        }
+
+        private Matrix33I(SerializationInfo info, StreamingContext context)
+        {
+            var array = info.GetValue<int[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
+            for (int i = 0; i < 9; i++) Values[i] = array[i];
         }
 
         /// <summary>
@@ -177,7 +186,7 @@ namespace Altseed
                 for (int j = 0; j < 3; ++j)
                     for (int k = 0; k < 3; ++k)
                         result[i, j] += left[i, k] * right[k, j];
-                
+
             return result;
         }
 
@@ -230,5 +239,13 @@ namespace Altseed
             return clone;
         }
         readonly object ICloneable.Clone() => Clone();
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            var array = new int[9];
+            for (int i = 0; i < 9; i++) array[i] = Values[i];
+            info.AddValue(S_Array, array);
+        }
     }
 }
