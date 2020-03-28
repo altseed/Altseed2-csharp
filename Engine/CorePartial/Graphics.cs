@@ -177,10 +177,7 @@ namespace Altseed
     {
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            var code = info.GetString(S_Code);
-            var name = info.GetString(S_Name);
-            var stage = info.GetValue<ShaderStageType>(S_StageType);
-
+            Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
             ptr = cbg_Shader_Create(code, name, (int)stage);
         }
     }

@@ -109,7 +109,7 @@ namespace Altseed
 
         partial void OnDeserialize_Method(object sender)
         {
-            var position = seInfo.GetInt32(S_CurrentPosition);
+            StreamFile_Unsetter_Deserialize(seInfo, out var position);
             if (position > 0) Read(position);
         }
 
