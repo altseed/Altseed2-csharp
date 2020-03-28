@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -170,5 +171,17 @@ namespace Altseed
         public static Color operator *(Color color, byte value) => new Color(color.R * value, color.G * value, color.B * value, color.A * value);
         public static Color operator *(byte value, Color color) => new Color(color.R * value, color.G * value, color.B * value, color.A * value);
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
+    }
+
+    public partial class Shader
+    {
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            var code = info.GetString(S_Code);
+            var name = info.GetString(S_Name);
+            var stage = info.GetValue<ShaderStageType>(S_StageType);
+
+            ptr = cbg_Shader_Create(code, name, (int)stage);
+        }
     }
 }

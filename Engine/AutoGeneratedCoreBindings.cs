@@ -1326,7 +1326,7 @@ namespace Altseed
             IsResizable = info.GetBoolean(S_IsResizable);
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
             FileLoggingEnabled = info.GetBoolean(S_FileLoggingEnabled);
-            LogFileName = info.GetString(S_LogFileName) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            LogFileName = info.GetString(S_LogFileName);
             ToolEnabled = info.GetBoolean(S_ToolEnabled);
             
             OnDeserialize_Constructor(info, context);
@@ -4300,9 +4300,9 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Texture = info.GetValue<Texture2D>(S_Texture) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Texture = info.GetValue<Texture2D>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
-            Material = info.GetValue<Material>(S_Material) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Material = info.GetValue<Material>(S_Material);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -4568,9 +4568,9 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Material = info.GetValue<Material>(S_Material) ?? throw new SerializationException("デシリアライズに失敗しました。");
-            Text = info.GetString(S_Text) ?? throw new SerializationException("デシリアライズに失敗しました。");
-            Font = info.GetValue<Font>(S_Font) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Material = info.GetValue<Material>(S_Material);
+            Text = info.GetString(S_Text);
+            Font = info.GetValue<Font>(S_Font);
             Weight = info.GetSingle(S_Weight);
             Color = info.GetValue<Color>(S_Color);
             
@@ -4822,10 +4822,10 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Vertexes = info.GetValue<VertexArray>(S_Vertexes) ?? throw new SerializationException("デシリアライズに失敗しました。");
-            Texture = info.GetValue<Texture2D>(S_Texture) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Vertexes = info.GetValue<VertexArray>(S_Vertexes);
+            Texture = info.GetValue<Texture2D>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
-            Material = info.GetValue<Material>(S_Material) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            Material = info.GetValue<Material>(S_Material);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5006,7 +5006,7 @@ namespace Altseed
             CacheHelper.CacheHandling(this, ptr);
             
             CenterOffset = info.GetValue<Vector2F>(S_CenterOffset);
-            TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture) ?? throw new SerializationException("デシリアライズに失敗しました。");
+            TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
             
             OnDeserialize_Constructor(info, context);
         }
