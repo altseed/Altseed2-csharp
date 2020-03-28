@@ -41,7 +41,7 @@ namespace Altseed
         }
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            var path = seInfo.GetString(S_Path);
+            Texture2D_Unsetter_Deserialize(info, out var path);
             ptr = cbg_Texture2D_Load(path);
         }
     }
@@ -51,6 +51,7 @@ namespace Altseed
         #region SerializeName
         private const string S_Size = "S_Size";
         #endregion
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_RenderTexture_Create(info.GetValue<Vector2I>(S_Size));
     }
 }
