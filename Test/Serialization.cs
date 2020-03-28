@@ -140,7 +140,7 @@ namespace Altseed.Test
 
             Assert.True(System.IO.File.Exists(path));
 
-            var font2 = Deserialize<Altseed.Font>(path);
+            var font2 = Deserialize<Font>(path);
 
             Assert.NotNull(font2);
 
@@ -161,6 +161,54 @@ namespace Altseed.Test
                 Position = new Vector2F(100, 500),
                 Font = font2,
                 Text = "Font2"
+            };
+
+            Engine.AddNode(obj1);
+            Engine.AddNode(obj2);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void StaticFont()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            Assert.True(Font.GenerateFontFile("../../Core/TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
+            var font1 = Font.LoadStaticFontStrict("test.a2f");
+
+            Assert.NotNull(font1);
+
+            const string path = "Serialization/StaticFont.bin";
+
+            Serialize(path, font1);
+
+            Assert.True(System.IO.File.Exists(path));
+
+            var font2 = Deserialize<Font>(path);
+
+            Assert.NotNull(font2);
+
+            Assert.AreEqual(font1.Path, font2.Path);
+            Assert.AreEqual(font1.Ascent, font2.Ascent);
+            Assert.AreEqual(font1.Descent, font2.Descent);
+            Assert.AreEqual(font1.LineGap, font2.LineGap);
+            Assert.AreEqual(font1.Size, font2.Size);
+
+            var obj1 = new TextNode()
+            {
+                Position = new Vector2F(100, 100),
+                Font = font1,
+                Text = "Hellow"
+            };
+            var obj2 = new TextNode()
+            {
+                Position = new Vector2F(100, 500),
+                Font = font2,
+                Text = "Hellow"
             };
 
             Engine.AddNode(obj1);
