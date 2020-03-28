@@ -3238,6 +3238,12 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern Color cbg_Graphics_GetClearColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Graphics_SetClearColor(IntPtr selfPtr, Color value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         #endregion
@@ -3258,6 +3264,28 @@ namespace Altseed
                 return BuiltinShader.TryGetFromCache(ret);
             }
         }
+        
+        /// <summary>
+        /// クリア色を取得または設定します。
+        /// </summary>
+        public Color ClearColor
+        {
+            get
+            {
+                if (_ClearColor != null)
+                {
+                    return _ClearColor.Value;
+                }
+                var ret = cbg_Graphics_GetClearColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _ClearColor = value;
+                cbg_Graphics_SetClearColor(selfPtr, value);
+            }
+        }
+        private Color? _ClearColor;
         
         /// <summary>
         /// インスタンスを取得します。
@@ -3313,16 +3341,173 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 2Dテクスチャのクラス
+    /// テクスチャのベースクラス
     /// </summary>
     [Serializable]
-    public partial class Texture2D : ISerializable, ICacheKeeper<Texture2D>, IDeserializationCallback
+    public partial class TextureBase : ISerializable, ICacheKeeper<TextureBase>, IDeserializationCallback
+    {
+        #region unmanaged
+        
+        private static ConcurrentDictionary<IntPtr, WeakReference<TextureBase>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<TextureBase>>();
+        
+        internal static  TextureBase TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                TextureBase cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_TextureBase_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.TryRemove(native, out _);
+                }
+            }
+        
+            var newObject = new TextureBase(new MemoryHandle(native));
+            cacheRepo.TryAdd(native, new WeakReference<TextureBase>(newObject));
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_TextureBase_Save(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2I cbg_TextureBase_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_TextureBase_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal TextureBase(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// テクスチャの大きさ(ピクセル)を取得します。
+        /// </summary>
+        public Vector2I Size
+        {
+            get
+            {
+                var ret = cbg_TextureBase_GetSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// png画像として保存します
+        /// </summary>
+        /// <param name="path">保存先</param>
+        /// <returns>成功したか否か</returns>
+        public bool Save(string path)
+        {
+            var ret = cbg_TextureBase_Save(selfPtr, path);
+            return ret;
+        }
+        
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Size = "S_Size";
+        #endregion
+        
+        private SerializationInfo seInfo;
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="TextureBase"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected TextureBase(SerializationInfo info, StreamingContext context)
+        {
+            seInfo = info;
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先のデータ</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            
+            info.AddValue(S_Size, Size);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<TextureBase>> ICacheKeeper<TextureBase>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<TextureBase>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<TextureBase>.Release(IntPtr native) => cbg_TextureBase_Release(native);
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        protected virtual void OnDeserialization(object sender)
+        {
+            if (seInfo == null) return;
+            
+            var ptr = IntPtr.Zero;
+            Call_GetPtr(ref ptr, seInfo);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            
+            OnDeserialize_Method(sender);
+            
+            seInfo = null;
+        }
+        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
+        partial void OnDeserialize_Method(object sender);
+        
+        ~TextureBase()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_TextureBase_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// テクスチャのクラス
+    /// </summary>
+    [Serializable]
+    public partial class Texture2D : TextureBase, ISerializable, ICacheKeeper<Texture2D>, IDeserializationCallback
     {
         #region unmanaged
         
         private static ConcurrentDictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Texture2D>>();
         
-        internal static  Texture2D TryGetFromCache(IntPtr native)
+        internal static new Texture2D TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3346,21 +3531,12 @@ namespace Altseed
             return newObject;
         }
         
-        internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Texture2D_Load([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Texture2D_Save(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
-        
-        [DllImport("Altseed_Core")]
-        private static extern Vector2I cbg_Texture2D_GetSize(IntPtr selfPtr);
-        
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
@@ -3371,21 +3547,9 @@ namespace Altseed
         
         #endregion
         
-        internal Texture2D(MemoryHandle handle)
+        internal Texture2D(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// テクスチャの大きさ(ピクセル)を取得します。
-        /// </summary>
-        public Vector2I Size
-        {
-            get
-            {
-                var ret = cbg_Texture2D_GetSize(selfPtr);
-                return ret;
-            }
         }
         
         /// <summary>
@@ -3421,20 +3585,8 @@ namespace Altseed
             return ret;
         }
         
-        /// <summary>
-        /// png画像として保存します
-        /// </summary>
-        /// <param name="path">保存先</param>
-        /// <returns>成功したか否か</returns>
-        public bool Save(string path)
-        {
-            var ret = cbg_Texture2D_Save(selfPtr, path);
-            return ret;
-        }
-        
         #region ISerialiable
         #region SerializeName
-        private const string S_Size = "S_Size";
         private const string S_Path = "S_Path";
         #endregion
         
@@ -3445,7 +3597,7 @@ namespace Altseed
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
-        protected Texture2D(SerializationInfo info, StreamingContext context)
+        protected Texture2D(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             seInfo = info;
             
@@ -3457,21 +3609,19 @@ namespace Altseed
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先のデータ</param>
-        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
             
-            info.AddValue(S_Size, Size);
             info.AddValue(S_Path, Path);
             
             OnGetObjectData(info, context);
         }
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
-        protected virtual void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
+        protected override void Call_GetPtr(ref IntPtr ptr, SerializationInfo info) => Deserialize_GetPtr(ref ptr, info);
         
         #region ICacheKeeper
         IDictionary<IntPtr, WeakReference<Texture2D>> ICacheKeeper<Texture2D>.CacheRepo => cacheRepo;
@@ -3485,7 +3635,7 @@ namespace Altseed
         /// デシリアライズ時に実行
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
-        protected virtual void OnDeserialization(object sender)
+        protected override void OnDeserialization(object sender)
         {
             if (seInfo == null) return;
             
@@ -3499,7 +3649,6 @@ namespace Altseed
             
             seInfo = null;
         }
-        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
         partial void OnDeserialize_Method(object sender);
         
         ~Texture2D()
@@ -3519,7 +3668,7 @@ namespace Altseed
     /// ポストエフェクトやカメラにおける描画先のクラス
     /// </summary>
     [Serializable]
-    public sealed partial class RenderTexture : Texture2D, ISerializable, ICacheKeeper<RenderTexture>, IDeserializationCallback
+    public sealed partial class RenderTexture : TextureBase, ISerializable, ICacheKeeper<RenderTexture>, IDeserializationCallback
     {
         #region unmanaged
         
@@ -3772,10 +3921,10 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Texture2D"/>のインスタンス</returns>
-        public Texture2D GetTexture(string key)
+        public TextureBase GetTexture(string key)
         {
             var ret = cbg_Material_GetTexture(selfPtr, key);
-            return Texture2D.TryGetFromCache(ret);
+            return TextureBase.TryGetFromCache(ret);
         }
         
         /// <summary>
@@ -3783,7 +3932,7 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Texture2D"/>のインスタンスの値</param>
-        public void SetTexture(string key, Texture2D value)
+        public void SetTexture(string key, TextureBase value)
         {
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
         }
@@ -4208,7 +4357,7 @@ namespace Altseed
         /// <summary>
         /// テクスチャを取得または設定します。
         /// </summary>
-        public Texture2D Texture
+        public TextureBase Texture
         {
             get
             {
@@ -4217,7 +4366,7 @@ namespace Altseed
                     return _Texture;
                 }
                 var ret = cbg_RenderedSprite_GetTexture(selfPtr);
-                return Texture2D.TryGetFromCache(ret);
+                return TextureBase.TryGetFromCache(ret);
             }
             set
             {
@@ -4225,7 +4374,7 @@ namespace Altseed
                 cbg_RenderedSprite_SetTexture(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
             }
         }
-        private Texture2D _Texture;
+        private TextureBase _Texture;
         
         /// <summary>
         /// 描画範囲を取得または設定します。
@@ -4300,7 +4449,7 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Texture = info.GetValue<Texture2D>(S_Texture);
+            Texture = info.GetValue<TextureBase>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             
