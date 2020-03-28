@@ -8,18 +8,18 @@ namespace Altseed
     [Serializable]
     public class SpriteNode : DrawnNode
     {
-        private readonly RenderedSprite _Sprite;
+        private readonly RenderedSprite _RenderedSprite;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => _Sprite.Src;
+            get => _RenderedSprite.Src;
             set
             {
-                if (_Sprite.Src == value) return;
-                _Sprite.Src = value;
+                if (_RenderedSprite.Src == value) return;
+                _RenderedSprite.Src = value;
             }
         }
 
@@ -28,11 +28,11 @@ namespace Altseed
         /// </summary>
         public TextureBase Texture
         {
-            get => _Sprite.Texture;
+            get => _RenderedSprite.Texture;
             set
             {
-                if (_Sprite.Texture == value) return;
-                _Sprite.Texture = value;
+                if (_RenderedSprite.Texture == value) return;
+                _RenderedSprite.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -44,12 +44,12 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => _Sprite.Material;
+            get => _RenderedSprite.Material;
             set
             {
-                if (_Sprite.Material == value) return;
+                if (_RenderedSprite.Material == value) return;
 
-                _Sprite.Material = value;
+                _RenderedSprite.Material = value;
                 //TODO: Src
             }
         }
@@ -59,7 +59,7 @@ namespace Altseed
         /// </summary>
         public SpriteNode()
         {
-            _Sprite = RenderedSprite.Create();
+            _RenderedSprite = RenderedSprite.Create();
         }
 
         /// <summary>
@@ -67,24 +67,8 @@ namespace Altseed
         /// </summary>
         internal override void Draw()
         {
-            UpdateTransform(); // TODO:変更時のみにする（親ノードでの変更に注意）
-            Engine.Renderer.DrawSprite(_Sprite);
-        }
-
-        protected internal override void UpdateTransform()
-        {
-            var matAncestor = Matrix44F.Identity;
-            foreach (var n in EnumerateAncestors())
-            {
-                if (n is DrawnNode d)
-                {
-                    matAncestor = d.Transform * matAncestor;
-                }
-            }
-            var mat = _MatCenterPosition * _MatPosition * _MatAngle * _MatScale * _MatCenterPositionInv;
-
-            _Sprite.Transform = matAncestor * mat;
-            Transform = mat;
+            _RenderedSprite.Transform = CalcInheritedTransform();
+            Engine.Renderer.DrawSprite(_RenderedSprite);
         }
     }
 }

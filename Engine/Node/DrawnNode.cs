@@ -4,12 +4,12 @@ using System.Runtime.Serialization;
 namespace Altseed
 {
     [Serializable]
-    public abstract class DrawnNode : Node, IDeserializationCallback
+    public abstract class DrawnNode : Node
     {
         /// <summary>
         /// 変形行列を取得または設定します。
         /// </summary>
-        protected internal Matrix44F Transform
+        protected internal virtual Matrix44F Transform
         {
             get => _Transform;
             set { _Transform = value; }
@@ -29,13 +29,10 @@ namespace Altseed
             {
                 if (_Angle == value) return;
                 _Angle = value;
-                _MatAngle = Matrix44F.GetRotationZ(MathHelper.DegreeToRadian(value));
                 UpdateTransform();
             }
         }
         private float _Angle = 0.0f;
-        [NonSerialized]
-        protected internal Matrix44F _MatAngle = Matrix44F.Identity;
 
         /// <summary>
         /// 座標を取得または設定します。
@@ -47,13 +44,10 @@ namespace Altseed
             {
                 if (_Position == value) return;
                 _Position = value;
-                _MatPosition = Matrix44F.GetTranslation2D(value);
                 UpdateTransform();
             }
         }
         private Vector2F _Position = new Vector2F();
-        [NonSerialized]
-        protected internal Matrix44F _MatPosition = Matrix44F.Identity;
 
         /// <summary>
         /// 回転の中心となる座標を取得または設定します。
@@ -64,17 +58,11 @@ namespace Altseed
             set
             {
                 if (_CenterPosition == value) return;
-                _MatCenterPosition = Matrix44F.GetTranslation2D(value);
-                _MatCenterPositionInv = Matrix44F.GetTranslation2D(-value);
-
                 _CenterPosition = value;
+                UpdateTransform();
             }
         }
         private Vector2F _CenterPosition = new Vector2F();
-        [NonSerialized]
-        protected internal Matrix44F _MatCenterPosition = Matrix44F.Identity;
-        [NonSerialized]
-        protected internal Matrix44F _MatCenterPositionInv = Matrix44F.Identity;
 
         /// <summary>
         /// 拡大率を取得または設定します。
@@ -86,16 +74,41 @@ namespace Altseed
             {
                 if (value == _Scale) return;
                 _Scale = value;
-                _MatScale = Matrix44F.GetScale2D(value);
                 UpdateTransform();
             }
         }
         private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
-        [NonSerialized]
-        protected internal Matrix44F _MatScale = Matrix44F.Identity;
 
-        //TODO: TurnLR
-        //TODO: TurnUL
+        /// <summary>
+        /// 左右を反転するかどうかを取得または設定します。
+        /// </summary>
+        public virtual bool TurnLR
+        {
+            get => _TurnLR;
+            set
+            {
+                if (value == _TurnLR) return;
+                _TurnLR = value;
+                UpdateTransform();
+            }
+        }
+        private bool _TurnLR = false;
+
+        /// <summary>
+        /// 上下を反転するかどうかを取得または設定します。
+        /// </summary>
+        public virtual bool TurnUL
+        {
+            get => _TurnUL;
+            set
+            {
+                if (value == _TurnUL) return;
+                _TurnUL = value;
+                UpdateTransform();
+            }
+        }
+        private bool _TurnUL = false;
+
         //TODO: Color
 
         /// <summary>
@@ -118,15 +131,23 @@ namespace Altseed
         }
         private uint _CameraGroup = 0;
 
-        /// <summary>
-        /// 新しいインスタンスを生成する
-        /// </summary>
-        protected DrawnNode() : base() { }
+        protected void UpdateTransform()
+        {
+            var scale = Scale * new Vector2F(TurnLR ? -1 : 1, TurnUL ? -1 : 1);
 
-        /// <summary>
-        /// <see cref="Transform"/>を更新する
-        /// </summary>
-        protected internal abstract void UpdateTransform();
+            Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
+        }
+
+        internal Matrix44F CalcInheritedTransform()
+        {
+            var mat = Transform;
+            for (var n = Parent; !(n is RootNode); n = n.Parent)
+            {
+                if (n is DrawnNode d)
+                    mat = d.Transform * mat;
+            }
+            return mat;
+        }
 
         #region Node
 
@@ -141,25 +162,6 @@ namespace Altseed
             base.Unregistered();
             Engine.UnregisterDrawnNode(this);
         }
-
-        #endregion
-
-        #region Deserialization
-
-        /// <summary>
-        /// デシリアライズ時に実行
-        /// </summary>
-        /// <param name="sender">現在サポートされていない 常にnullを返す</param>
-        protected virtual void OnDeserialization(object sender)
-        {
-            _MatAngle = Matrix44F.GetRotationZ(_Angle);
-            _MatCenterPosition = Matrix44F.GetTranslation2D(_CenterPosition);
-            _MatCenterPositionInv = Matrix44F.GetTranslation2D(-_CenterPosition);
-            _MatPosition = Matrix44F.GetTranslation2D(_Position);
-            _MatScale = Matrix44F.GetScale2D(_Scale);
-            UpdateTransform();
-        }
-        void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
 
         #endregion
     }

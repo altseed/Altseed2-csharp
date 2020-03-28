@@ -5,18 +5,18 @@ namespace Altseed
     [Serializable]
     public class TextNode : DrawnNode
     {
-        private readonly RenderedText renderedText;
+        private readonly RenderedText _RenderedText;
 
         /// <summary>
         /// 描画する文字列を取得または設定します。
         /// </summary>
         public string Text
         {
-            get => renderedText.Text;
+            get => _RenderedText.Text;
             set
             {
-                if (renderedText.Text == value) return;
-                renderedText.Text = value;
+                if (_RenderedText.Text == value) return;
+                _RenderedText.Text = value;
             }
         }
 
@@ -25,11 +25,11 @@ namespace Altseed
         /// </summary>
         public Font Font
         {
-            get => renderedText.Font;
+            get => _RenderedText.Font;
             set
             {
-                if (renderedText.Font == value) return;
-                renderedText.Font = value;
+                if (_RenderedText.Font == value) return;
+                _RenderedText.Font = value;
             }
         }
 
@@ -38,11 +38,11 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => renderedText.Material;
+            get => _RenderedText.Material;
             set
             {
-                if (renderedText.Material == value) return;
-                renderedText.Material = value;
+                if (_RenderedText.Material == value) return;
+                _RenderedText.Material = value;
             }
         }
 
@@ -51,11 +51,11 @@ namespace Altseed
         /// </summary>
         public float Weight
         {
-            get => renderedText.Weight;
+            get => _RenderedText.Weight;
             set
             {
-                if (renderedText.Weight == value) return;
-                renderedText.Weight = value;
+                if (_RenderedText.Weight == value) return;
+                _RenderedText.Weight = value;
             }
         }
 
@@ -64,11 +64,11 @@ namespace Altseed
         /// </summary>
         public Color Color
         {
-            get => renderedText.Color;
+            get => _RenderedText.Color;
             set
             {
-                if (renderedText.Color == value) return;
-                renderedText.Color = value;
+                if (_RenderedText.Color == value) return;
+                _RenderedText.Color = value;
             }
         }
 
@@ -77,7 +77,7 @@ namespace Altseed
         /// </summary>
         public TextNode()
         {
-            renderedText = RenderedText.Create();
+            _RenderedText = RenderedText.Create();
         }
 
         /// <summary>
@@ -85,24 +85,8 @@ namespace Altseed
         /// </summary>
         internal override void Draw()
         {
-            UpdateTransform(); // TODO:変更時のみにする（親ノードでの変更に注意）
-            Engine.Renderer.DrawText(renderedText);
-        }
-
-        protected internal override void UpdateTransform()
-        {
-            var matAncestor = Matrix44F.Identity;
-            foreach (var n in EnumerateAncestors())
-            {
-                if (n is DrawnNode d)
-                {
-                    matAncestor = d.Transform * matAncestor;
-                }
-            }
-            var mat = _MatCenterPosition * _MatPosition * _MatAngle * _MatScale * _MatCenterPositionInv;
-
-            renderedText.Transform = matAncestor * mat;
-            Transform = mat;
+            _RenderedText.Transform = CalcInheritedTransform();
+            Engine.Renderer.DrawText(_RenderedText);
         }
     }
 }

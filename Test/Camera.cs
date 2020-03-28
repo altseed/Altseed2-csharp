@@ -49,9 +49,10 @@ namespace Altseed.Test
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
-            node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
+            //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
-            node.CenterPosition = texture.Size / 2;
+            //node.CenterPosition = texture.Size / 2;
+            node.Scale = new Vector2F(0.5f, 0.5f);
             node.CameraGroup = 1;
             Engine.AddNode(node);
 
@@ -62,10 +63,14 @@ namespace Altseed.Test
             Engine.AddNode(camera);
 
             var node2 = new SpriteNode();
+            node2.CameraGroup = 2;
             node2.Texture = renderTexture;
-            node2.CenterPosition = texture.Size / 2;
-            node2.Position = new Vector2F(300, 0);
+            node2.Position = new Vector2F(300, 300);
             Engine.AddNode(node2);
+
+            var camera2 = new CameraNode();
+            camera2.Group = 2;
+            Engine.AddNode(camera2);
 
             tc.LoopBody(c =>
             {

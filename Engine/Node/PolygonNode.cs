@@ -5,18 +5,18 @@ namespace Altseed
     [Serializable]
     public class PolygonNode : DrawnNode
     {
-        private readonly RenderedPolygon renderedPolygon;
+        private readonly RenderedPolygon _RenderedPolygon;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => renderedPolygon.Src;
+            get => _RenderedPolygon.Src;
             set
             {
-                if (renderedPolygon.Src == value) return;
-                renderedPolygon.Src = value;
+                if (_RenderedPolygon.Src == value) return;
+                _RenderedPolygon.Src = value;
             }
         }
 
@@ -25,11 +25,11 @@ namespace Altseed
         /// </summary>
         public Texture2D Texture
         {
-            get => renderedPolygon.Texture;
+            get => _RenderedPolygon.Texture;
             set
             {
-                if (renderedPolygon.Texture == value) return;
-                renderedPolygon.Texture = value;
+                if (_RenderedPolygon.Texture == value) return;
+                _RenderedPolygon.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -41,12 +41,12 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => renderedPolygon.Material;
+            get => _RenderedPolygon.Material;
             set
             {
-                if (renderedPolygon.Material == value) return;
+                if (_RenderedPolygon.Material == value) return;
 
-                renderedPolygon.Material = value;
+                _RenderedPolygon.Material = value;
             }
         }
 
@@ -55,12 +55,12 @@ namespace Altseed
         /// </summary>
         public Vertex[] Vertexes
         {
-            get => renderedPolygon.Vertexes.ToArray();
+            get => _RenderedPolygon.Vertexes.ToArray();
             set
             {
                 var vertexArray = VertexArray.Create(value.Length);
                 vertexArray.FromArray(value);
-                renderedPolygon.Vertexes = vertexArray;
+                _RenderedPolygon.Vertexes = vertexArray;
             }
         }
 
@@ -69,7 +69,7 @@ namespace Altseed
         /// </summary>
         public PolygonNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
+            _RenderedPolygon = RenderedPolygon.Create();
         }
 
         /// <summary>
@@ -77,37 +77,21 @@ namespace Altseed
         /// </summary>
         internal override void Draw()
         {
-            UpdateTransform(); // TODO:変更時のみにする（親ノードでの変更に注意）
-            Engine.Renderer.DrawPolygon(renderedPolygon);
+            _RenderedPolygon.Transform = CalcInheritedTransform();
+            Engine.Renderer.DrawPolygon(_RenderedPolygon);
         }
 
-        protected internal override void UpdateTransform()
-        {
-            var matAncestor = Matrix44F.Identity;
-            foreach (var n in EnumerateAncestors())
-            {
-                if (n is DrawnNode d)
-                {
-                    matAncestor = d.Transform * matAncestor;
-                }
-            }
-            var mat = _MatCenterPosition * _MatPosition * _MatAngle * _MatScale * _MatCenterPositionInv;
-
-            renderedPolygon.Transform = matAncestor * mat;
-            Transform = mat;
-        }
-
-        public void SetVertexesByVector2F(Vector2F[] vertexes)
+        public void SetVertexes(Vector2F[] vertexes)
         {
             var vertexArray = Vector2FArray.Create(vertexes.Length);
             vertexArray.FromArray(vertexes);
-            renderedPolygon.SetVertexesByVector2F(vertexArray);
+            _RenderedPolygon.SetVertexesByVector2F(vertexArray);
         }
 
         public void SetAllVertexColor(Color color)
         {
             var vertexArray = Vertexes;
-            for(int i = 0; i < vertexArray.Length; ++i)
+            for (int i = 0; i < vertexArray.Length; ++i)
                 vertexArray[i].Color = color;
             Vertexes = vertexArray;
         }

@@ -69,5 +69,24 @@ namespace Altseed
         /// <param name="radian">変換したい弧度法の値</param>
         /// <returns>度数法としての<paramref name="radian"/>の値</returns>
         public static float RadianToDegree(float radian) => radian / PiPer180;
+
+        /// <summary>
+        /// Transformを計算します。
+        /// </summary>
+        /// <param name="position">座標</param>
+        /// <param name="centerPosition">中心座標</param>
+        /// <param name="angle">角度（弧度法）</param>
+        /// <param name="scale">拡大率</param>
+        /// <returns></returns>
+        internal static Matrix44F CalcTransform(Vector2F position, Vector2F centerPosition, float angle, Vector2F scale)
+        {
+            var matPosition = Matrix44F.GetTranslation2D(position);
+            var matCenterPosition = Matrix44F.GetTranslation2D(-centerPosition);
+            var matRotate = Matrix44F.GetRotationZ(angle);
+            var matScale = Matrix44F.GetScale2D(scale);
+
+            return matPosition * matScale * matRotate * matCenterPosition;
+            // NOTE: 一気に計算したほうがよさそう
+        }
     }
 }
