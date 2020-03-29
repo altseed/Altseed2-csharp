@@ -27,6 +27,8 @@ namespace Altseed
 
         private static Dictionary<CameraNode, List<DrawnNode>> _CameraGroups;
 
+        private static RenderedCamera _DefaultCamera;
+
         /// <summary>
         /// エンジンを初期化します。
         /// </summary>
@@ -63,6 +65,7 @@ namespace Altseed
 
                 _DrawnNodes = new List<DrawnNode>();
                 _CameraGroups = new Dictionary<CameraNode, List<DrawnNode>>();
+                _DefaultCamera = RenderedCamera.Create();
                 return true;
             }
             return false;
@@ -103,24 +106,29 @@ namespace Altseed
                 if (!Graphics.BeginFrame()) return false;
             }
 
-            // カメラに映らないものを描画
-            Renderer.ResetCamera();
-            foreach (var drawnNode in _DrawnNodes)
+            if (_CameraGroups.Keys.Count == 0)
             {
-                if (drawnNode.CameraGroup == 0)
-                    drawnNode.Draw();
-            }
-            Renderer.Render();
-
-            // 特定のカメラに映りこむノードを描画
-            foreach (var camera in _CameraGroups.Keys)
-            {
-                Renderer.SetCamera(camera.RenderedCamera);
-
-                foreach (var drawnNode in _CameraGroups[camera])
-                    drawnNode.Draw();
-
+                // カメラが 1 つもない場合はデフォルトカメラを使用
+                Renderer.SetCamera(_DefaultCamera);
+                foreach (var drawnNode in _DrawnNodes)
+                {
+                    if (drawnNode.CameraGroup == 0)
+                        drawnNode.Draw();
+                }
                 Renderer.Render();
+            }
+            else
+            {
+                // 特定のカメラに映りこむノードを描画
+                foreach (var camera in _CameraGroups.Keys)
+                {
+                    Renderer.SetCamera(camera.RenderedCamera);
+
+                    foreach (var drawnNode in _CameraGroups[camera])
+                        drawnNode.Draw();
+
+                    Renderer.Render();
+                }
             }
 
             // （ツール機能を使用する場合は）ツールを描画
