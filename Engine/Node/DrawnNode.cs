@@ -114,7 +114,20 @@ namespace Altseed
         /// <summary>
         /// 描画時の重ね順を取得または設定します。
         /// </summary>
-        public virtual int ZOrder { get; set; }
+        public virtual int ZOrder
+        {
+            get => _ZOrder;
+            set
+            {
+                if (_ZOrder == value) return;
+                var old = _ZOrder;
+                _ZOrder = value;
+
+                if (Status == RegisterStatus.Registered)
+                    Engine.UpdateDrawnNodeZOrder(this, old);
+            }
+        }
+        private int _ZOrder = 0;
 
         /// <summary>
         /// このノードを描画するカメラを取得または設定します。
@@ -125,8 +138,11 @@ namespace Altseed
             set
             {
                 if (_CameraGroup == value) return;
+                var old = _CameraGroup;
                 _CameraGroup = value;
-                Engine.UpdateCameraGroup(this);
+                
+                if (Status == RegisterStatus.Registered)
+                    Engine.UpdateDrawnNodeCameraGroup(this, old);
             }
         }
         private uint _CameraGroup = 0;

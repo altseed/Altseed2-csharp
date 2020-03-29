@@ -23,10 +23,8 @@ namespace Altseed
         /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
         private static Node _UpdatedNode;
 
-        private static List<DrawnNode> _DrawnNodes;
-
-        private static Dictionary<CameraNode, List<DrawnNode>> _CameraGroups;
-
+        private static DrawnNodeCollection _DrawnNodes;
+        private static CameraNodeCollection _CameraNodes;
         private static RenderedCamera _DefaultCamera;
 
         /// <summary>
@@ -63,8 +61,8 @@ namespace Altseed
                 _RootNode = new RootNode();
                 _UpdatedNode = _RootNode;
 
-                _DrawnNodes = new List<DrawnNode>();
-                _CameraGroups = new Dictionary<CameraNode, List<DrawnNode>>();
+                _DrawnNodes = new DrawnNodeCollection();
+                _CameraNodes = new CameraNodeCollection();
                 _DefaultCamera = RenderedCamera.Create();
                 return true;
             }
@@ -106,28 +104,40 @@ namespace Altseed
                 if (!Graphics.BeginFrame()) return false;
             }
 
-            if (_CameraGroups.Keys.Count == 0)
+            if (_CameraNodes.Count == 0)
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
                 Renderer.SetCamera(_DefaultCamera);
-                foreach (var drawnNode in _DrawnNodes)
+
+                var list = _DrawnNodes.Nodes;
+                foreach (var z in list.Keys.OrderBy(x => x))
                 {
-                    if (drawnNode.CameraGroup == 0)
-                        drawnNode.Draw();
+                    var nodes = list[z];
+                    foreach (var node in nodes)
+                        node.Draw();
                 }
+
                 Renderer.Render();
             }
             else
             {
                 // 特定のカメラに映りこむノードを描画
-                foreach (var camera in _CameraGroups.Keys)
+                for (int i = 0; i <= 31; i++)
                 {
-                    Renderer.SetCamera(camera.RenderedCamera);
+                    foreach (var camera in _CameraNodes[i])
+                    {
+                        Renderer.SetCamera(camera.RenderedCamera);
 
-                    foreach (var drawnNode in _CameraGroups[camera])
-                        drawnNode.Draw();
+                        var list = _DrawnNodes[i];
+                        foreach (var z in list.Keys.OrderBy(x => x))
+                        {
+                            var nodes = list[z];
+                            foreach (var node in nodes)
+                                node.Draw();
+                        }
 
-                    Renderer.Render();
+                        Renderer.Render();
+                    }
                 }
             }
 
@@ -248,66 +258,47 @@ namespace Altseed
             _RootNode.RemoveChildNode(node);
         }
 
+        #endregion
+
+        #region DrawnNodeCollection
+
         internal static void RegisterDrawnNode(DrawnNode node)
         {
-            foreach (var camera in _CameraGroups.Keys)
-            {
-                if ((camera.Group & node.CameraGroup) == 0) continue;
-                var list = _CameraGroups[camera];
-                list.Add(node);
-                list.Sort(new DrawnNodeSorter());
-            }
-            _DrawnNodes.Add(node);
-            _DrawnNodes.Sort(new DrawnNodeSorter());
+            _DrawnNodes.AddNode(node);
         }
 
         internal static void UnregisterDrawnNode(DrawnNode node)
         {
-            foreach (var camera in _CameraGroups.Keys)
-            {
-                if ((camera.Group & node.CameraGroup) == 0) continue;
-                var list = _CameraGroups[camera];
-                if (list.Contains(node)) list.Remove(node);
-                list.Sort(new DrawnNodeSorter());
-            }
-            _DrawnNodes.Remove(node);
+            _DrawnNodes.RemoveNode(node);
         }
 
-        internal static void UpdateCameraGroup(DrawnNode node)
+        internal static void UpdateDrawnNodeCameraGroup(DrawnNode node, uint oldCameraGroup)
         {
-            foreach (var camera in _CameraGroups.Keys)
-            {
-                if ((camera.Group & node.CameraGroup) != 0)
-                {
-                    var list = _CameraGroups[camera];
-                    list.Add(node);
-                    list.Sort(new DrawnNodeSorter());
-                }
-                else
-                {
-                    var list = _CameraGroups[camera];
-                    if (list.Contains(node)) list.Remove(node);
-                    list.Sort(new DrawnNodeSorter());
-                }
-            }
+            _DrawnNodes.UpdateCameraGroup(node, oldCameraGroup);
         }
+
+        internal static void UpdateDrawnNodeZOrder(DrawnNode node, int oldZOrder)
+        {
+            _DrawnNodes.UpdateZOrder(node, oldZOrder);
+        }
+
+        #endregion
+
+        #region CameraNodeCollection
 
         internal static void RegisterCameraNode(CameraNode camera)
         {
-            var list = new List<DrawnNode>();
-            _CameraGroups.Add(camera, list);
-
-            foreach (var node in _DrawnNodes)
-            {
-                if ((camera.Group & node.CameraGroup) == 0) continue;
-                list.Add(node);
-            }
-            list.Sort(new DrawnNodeSorter());
+            _CameraNodes.AddCamera(camera);
         }
 
         internal static void UnregisterCameraNode(CameraNode camera)
         {
-            _CameraGroups.Remove(camera);
+            _CameraNodes.RemoveCamera(camera);
+        }
+
+        internal static void UpdateCameraNodeGroup(CameraNode camera, int oldGroup)
+        {
+            _CameraNodes.UpdateGroup(camera, oldGroup);
         }
 
         #endregion
@@ -357,24 +348,5 @@ namespace Altseed
         public static float DeltaSecond => Core.DeltaSecond;
 
         #endregion
-
-        private class DrawnNodeSorter : IComparer<DrawnNode>
-        {
-            public int Compare(DrawnNode x, DrawnNode y)
-            {
-                var r = x.ZOrder - y.ZOrder;
-                return r;// r == 0 ? 1 : r;
-            }
-        }
-
-        private class CameraSorter : IComparer<CameraNode>
-        {
-            public int Compare(CameraNode x, CameraNode y)
-            {
-                if (x == null) return 1;
-                if (y == null) return -1;
-                return x.Group - y.Group > 0 ? 1 : -1;
-            }
-        }
     }
 }

@@ -22,12 +22,12 @@ namespace Altseed.Test
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
             node.CenterPosition = texture.Size / 2;
-            node.CameraGroup = 1;
+            node.CameraGroup = 1 << 0;
             Engine.AddNode(node);
 
             var camera = new CameraNode();
             camera.Transform = Matrix44F.GetTranslation2D(new Vector2F(-200, -200));
-            camera.Group = 1;
+            camera.Group = 0;
             Engine.AddNode(camera);
 
             tc.LoopBody(c =>
@@ -53,23 +53,23 @@ namespace Altseed.Test
             node.Texture = texture;
             //node.CenterPosition = texture.Size / 2;
             node.Scale = new Vector2F(0.5f, 0.5f);
-            node.CameraGroup = 1;
+            node.CameraGroup = 1 << 0;
             Engine.AddNode(node);
 
             var renderTexture = RenderTexture.Create(new Vector2I(200, 200));
             var camera = new CameraNode();
-            camera.Group = 1;
+            camera.Group = 0;
             camera.TargetTexture = renderTexture;
             Engine.AddNode(camera);
 
             var node2 = new SpriteNode();
-            node2.CameraGroup = 2;
+            node2.CameraGroup = 1 << 1;
             node2.Texture = renderTexture;
             node2.Position = new Vector2F(300, 300);
             Engine.AddNode(node2);
 
             var camera2 = new CameraNode();
-            camera2.Group = 2;
+            camera2.Group = 1;
             Engine.AddNode(camera2);
 
             tc.LoopBody(c =>

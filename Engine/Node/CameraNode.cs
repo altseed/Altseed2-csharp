@@ -8,24 +8,26 @@ namespace Altseed
     public class CameraNode : Node
     {
         private readonly RenderedCamera _Camera;
-
         internal RenderedCamera RenderedCamera => _Camera;
 
         /// <summary>
         /// 描画対象とする <see cref="DrawnNode"/> のグループを取得または設定します。
         /// </summary>
-        public uint Group
+        public int Group
         {
             get => _Group;
             set
             {
-                if (Status != RegisterStatus.Free) throw new NotImplementedException();
-
                 if (_Group == value) return;
+                var old = _Group;
                 _Group = value;
+
+                if (Status == RegisterStatus.Registered)
+                    Engine.UpdateCameraNodeGroup(this, old);
+
             }
         }
-        private uint _Group = 0;
+        private int _Group = 0;
 
         public CameraNode()
         {
