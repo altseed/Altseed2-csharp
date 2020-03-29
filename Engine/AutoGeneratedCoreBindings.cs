@@ -3590,9 +3590,11 @@ namespace Altseed
         /// png画像として保存します
         /// </summary>
         /// <param name="path">保存先</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>成功したか否か</returns>
         public bool Save(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_TextureBase_Save(selfPtr, path);
             return ret;
         }
@@ -3787,9 +3789,11 @@ namespace Altseed
         /// 指定したファイルからテクスチャを読み込みます。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>テクスチャ</returns>
         public static Texture2D Load(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_Texture2D_Load(path);
             return Texture2D.TryGetFromCache(ret);
         }
@@ -4164,9 +4168,11 @@ namespace Altseed
         /// 指定した名前を持つ<see cref="Vector4F"/>のインスタンスを取得する
         /// </summary>
         /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
+        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Vector4F"/>のインスタンス</returns>
         public Vector4F GetVector4F(string key)
         {
+            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
             var ret = cbg_Material_GetVector4F(selfPtr, key);
             return ret;
         }
@@ -4176,8 +4182,10 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Vector4F"/>のインスタンスの値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetVector4F(string key, Vector4F value)
         {
+            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
             cbg_Material_SetVector4F(selfPtr, key, value);
         }
         
@@ -4185,9 +4193,11 @@ namespace Altseed
         /// 指定した名前を持つ<see cref="Matrix44F"/>のインスタンスを取得する
         /// </summary>
         /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
+        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Matrix44F"/>のインスタンス</returns>
         public Matrix44F GetMatrix44F(string key)
         {
+            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
             var ret = cbg_Material_GetMatrix44F(selfPtr, key);
             return ret;
         }
@@ -4197,8 +4207,10 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Matrix44F"/>のインスタンスの値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetMatrix44F(string key, Matrix44F value)
         {
+            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
             cbg_Material_SetMatrix44F(selfPtr, key, value);
         }
         
@@ -4206,9 +4218,11 @@ namespace Altseed
         /// 指定した名前を持つ<see cref="Texture2D"/>のインスタンスを取得する
         /// </summary>
         /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
+        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Texture2D"/>のインスタンス</returns>
         public TextureBase GetTexture(string key)
         {
+            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
             var ret = cbg_Material_GetTexture(selfPtr, key);
             return TextureBase.TryGetFromCache(ret);
         }
@@ -4218,8 +4232,10 @@ namespace Altseed
         /// </summary>
         /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Texture2D"/>のインスタンスの値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetTexture(string key, TextureBase value)
         {
+            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
         }
         
@@ -5820,9 +5836,12 @@ namespace Altseed
         /// <param name="name">シェーダの名前</param>
         /// <param name="code">コンパイルするコード</param>
         /// <param name="shaderStage"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>, <paramref name="code"/>のいずれかがnull</exception>
         /// <returns>コンパイルの結果生成されたシェーダ</returns>
         public static Shader Create(string name, string code, ShaderStageType shaderStage)
         {
+            if (name == null) throw new ArgumentNullException("引数がnullです", nameof(name));
+            if (code == null) throw new ArgumentNullException("引数がnullです", nameof(code));
             var ret = cbg_Shader_Create(name, code, (int)shaderStage);
             return Shader.TryGetFromCache(ret);
         }
@@ -6244,9 +6263,11 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         internal static Font LoadDynamicFont(string path, int size)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_Font_LoadDynamicFont(path, size);
             return Font.TryGetFromCache(ret);
         }
@@ -6255,9 +6276,11 @@ namespace Altseed
         /// 静的にフォントを生成します
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         internal static Font LoadStaticFont(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_Font_LoadStaticFont(path);
             return Font.TryGetFromCache(ret);
         }
@@ -6269,9 +6292,12 @@ namespace Altseed
         /// <param name="staticFontPath">生成するa2fフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
         /// <param name="characters">フォント化させる文字列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dynamicFontPath"/>, <paramref name="staticFontPath"/>のいずれかがnull</exception>
         /// <returns>生成できたか否か</returns>
         public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int size, string characters)
         {
+            if (dynamicFontPath == null) throw new ArgumentNullException("引数がnullです", nameof(dynamicFontPath));
+            if (staticFontPath == null) throw new ArgumentNullException("引数がnullです", nameof(staticFontPath));
             var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, size, characters);
             return ret;
         }
@@ -6327,9 +6353,11 @@ namespace Altseed
         /// テクスチャ追加対応フォントを生成します
         /// </summary>
         /// <param name="baseFont">ベースとなるフォント</param>
+        /// <exception cref="ArgumentNullException"><paramref name="baseFont"/>がnull</exception>
         /// <returns>テクスチャ追加対応フォント</returns>
         public static Font CreateImageFont(Font baseFont)
         {
+            if (baseFont == null) throw new ArgumentNullException("引数がnullです", nameof(baseFont));
             var ret = cbg_Font_CreateImageFont(baseFont != null ? baseFont.selfPtr : IntPtr.Zero);
             return Font.TryGetFromCache(ret);
         }
@@ -7647,9 +7675,11 @@ namespace Altseed
         /// 指定ファイルを読み込む<see cref="StreamFile"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>pathで読み込むファイルを格納する<see cref="StreamFile"/>の新しいインスタンスを生成します。</returns>
         public static StreamFile Create(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_StreamFile_Create(path);
             return StreamFile.TryGetFromCache(ret);
         }
@@ -7910,9 +7940,11 @@ namespace Altseed
         /// 指定ファイルを読み込んだ<see cref="StaticFile"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>pathで読み込んだファイルを格納する<see cref="StaticFile"/>の新しいインスタンスを生成します。</returns>
         public static StaticFile Create(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_StaticFile_Create(path);
             return StaticFile.TryGetFromCache(ret);
         }
@@ -8108,9 +8140,11 @@ namespace Altseed
         /// ファイル読み込み時に自動的に保管されるディレクトリを追加します。
         /// </summary>
         /// <param name="path">追加するディレクトリ</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>追加処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootDirectory(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_File_AddRootDirectory(selfPtr, path);
             return ret;
         }
@@ -8120,9 +8154,12 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込むファイルパッケージのパス</param>
         /// <param name="password">読み込むファイルパッケージのパスワード</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>, <paramref name="password"/>のいずれかがnull</exception>
         /// <returns>読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootPackageWithPassword(string path, string password)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (password == null) throw new ArgumentNullException("引数がnullです", nameof(password));
             var ret = cbg_File_AddRootPackageWithPassword(selfPtr, path, password);
             return ret;
         }
@@ -8131,9 +8168,11 @@ namespace Altseed
         /// ファイルパッケージをパスワード無しで読み込む
         /// </summary>
         /// <param name="path">読み込むファイルパッケージのパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootPackage(string path)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_File_AddRootPackage(selfPtr, path);
             return ret;
         }
@@ -8162,9 +8201,12 @@ namespace Altseed
         /// </summary>
         /// <param name="srcPath">パックするファイルのディレクトリ</param>
         /// <param name="dstPath">パックされたファイル名</param>
+        /// <exception cref="ArgumentNullException"><paramref name="srcPath"/>, <paramref name="dstPath"/>のいずれかがnull</exception>
         /// <returns>パック処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool Pack(string srcPath, string dstPath)
         {
+            if (srcPath == null) throw new ArgumentNullException("引数がnullです", nameof(srcPath));
+            if (dstPath == null) throw new ArgumentNullException("引数がnullです", nameof(dstPath));
             var ret = cbg_File_Pack(selfPtr, srcPath, dstPath);
             return ret;
         }
@@ -8175,9 +8217,13 @@ namespace Altseed
         /// <param name="srcPath">パックするファイルのディレクトリ</param>
         /// <param name="dstPath">パックされたファイル名</param>
         /// <param name="password">かけるパスワード</param>
+        /// <exception cref="ArgumentNullException"><paramref name="srcPath"/>, <paramref name="dstPath"/>, <paramref name="password"/>のいずれかがnull</exception>
         /// <returns>パック処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool PackWithPassword(string srcPath, string dstPath, string password)
         {
+            if (srcPath == null) throw new ArgumentNullException("引数がnullです", nameof(srcPath));
+            if (dstPath == null) throw new ArgumentNullException("引数がnullです", nameof(dstPath));
+            if (password == null) throw new ArgumentNullException("引数がnullです", nameof(password));
             var ret = cbg_File_PackWithPassword(selfPtr, srcPath, dstPath, password);
             return ret;
         }
@@ -8382,9 +8428,11 @@ namespace Altseed
         /// </summary>
         /// <param name="path">読み込む音声ファイルのパス</param>
         /// <param name="isDecompressed">音を再生する前にデータを全て解凍するか?</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>読み込んだ音源データ</returns>
         public static Sound Load(string path, bool isDecompressed)
         {
+            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_Sound_Load(path, isDecompressed);
             return Sound.TryGetFromCache(ret);
         }
@@ -8613,9 +8661,11 @@ namespace Altseed
         /// 音を再生します。
         /// </summary>
         /// <param name="sound">音源データ</param>
+        /// <exception cref="ArgumentNullException"><paramref name="sound"/>がnull</exception>
         /// <returns>再生中の音のID</returns>
         public int Play(Sound sound)
         {
+            if (sound == null) throw new ArgumentNullException("引数がnullです", nameof(sound));
             var ret = cbg_SoundMixer_Play(selfPtr, sound != null ? sound.selfPtr : IntPtr.Zero);
             return ret;
         }
@@ -9029,6 +9079,7 @@ namespace Altseed
         /// <summary>
         /// ウィンドウに表示するタイトルを取得または設定します
         /// </summary>
+        /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
         public string Title
         {
             get
@@ -9042,7 +9093,7 @@ namespace Altseed
             }
             set
             {
-                _Title = value;
+                _Title = value ?? throw new ArgumentNullException("設定しようとした値がnullです", nameof(value));
                 cbg_Window_SetTitle(selfPtr, value);
             }
         }
