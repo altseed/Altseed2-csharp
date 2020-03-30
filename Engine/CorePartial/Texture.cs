@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace Altseed
 {
@@ -43,6 +44,16 @@ namespace Altseed
         {
             Texture2D_Unsetter_Deserialize(info, out var path);
             ptr = cbg_Texture2D_Load(path);
+        }
+
+        /// <summary>
+        /// 非同期読み込みを行う
+        /// </summary>
+        /// <param name="path">読み込むパス</param>
+        /// <returns></returns>
+        public static async Task<Texture2D> LoadAsync(string path)
+        {
+            return await Task.Run(() => Load(path));
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace Altseed
 {
@@ -79,6 +80,16 @@ namespace Altseed
             using var stream = new FileStream(path, FileMode.Create);
             var buffer = Buffer;
             stream.Write(buffer, 0, buffer.Length);
+        }
+
+        /// <summary>
+        /// 非同期読み込みを行う
+        /// </summary>
+        /// <param name="path">読み込むパス</param>
+        /// <returns></returns>
+        public static async Task<StaticFile> CreateAsync(string path)
+        {
+            return await Task.Run(() => Create(path));
         }
     }
 
