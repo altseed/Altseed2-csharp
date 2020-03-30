@@ -6185,6 +6185,11 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Font_GetIsStaticFont(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
         
         
@@ -6247,9 +6252,21 @@ namespace Altseed
         }
         
         /// <summary>
+        /// StaticFontか否か
+        /// </summary>
+        public bool IsStaticFont
+        {
+            get
+            {
+                var ret = cbg_Font_GetIsStaticFont(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// 読み込んだファイルのパスを取得します。
         /// </summary>
-        internal string Path
+        public string Path
         {
             get
             {
@@ -6265,7 +6282,7 @@ namespace Altseed
         /// <param name="size">フォントのサイズ</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
-        internal static Font LoadDynamicFont(string path, int size)
+        public static Font LoadDynamicFont(string path, int size)
         {
             if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_Font_LoadDynamicFont(path, size);
@@ -6278,7 +6295,7 @@ namespace Altseed
         /// <param name="path">読み込むフォントのパス</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
-        internal static Font LoadStaticFont(string path)
+        public static Font LoadStaticFont(string path)
         {
             if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
             var ret = cbg_Font_LoadStaticFont(path);
@@ -6385,6 +6402,8 @@ namespace Altseed
         
         #region ISerialiable
         #region SerializeName
+        private const string S_Size = "S_Size";
+        private const string S_IsStaticFont = "S_IsStaticFont";
         #endregion
         
         private SerializationInfo seInfo;
@@ -6410,6 +6429,8 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
             
+            info.AddValue(S_Size, Size);
+            info.AddValue(S_IsStaticFont, IsStaticFont);
             
             OnGetObjectData(info, context);
         }
@@ -6441,6 +6462,18 @@ namespace Altseed
             var ptr = IntPtr.Zero;
             Deserialize_GetPtr(ref ptr, info);
             return ptr;
+        }
+        
+        /// <summary>
+        /// <see cref="OnDeserialization(object)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="Size"><see cref="Font.Size"/></param>
+        /// <param name="IsStaticFont"><see cref="Font.IsStaticFont"/></param>
+        private void Font_Unsetter_Deserialize(SerializationInfo info, out int Size, out bool IsStaticFont)
+        {
+            Size = info.GetInt32(S_Size);
+            IsStaticFont = info.GetBoolean(S_IsStaticFont);
         }
         
         #region ICacheKeeper

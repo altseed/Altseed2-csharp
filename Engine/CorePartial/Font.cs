@@ -7,46 +7,24 @@ namespace Altseed
 {
     public partial class Font
     {
-        [Serializable]
-        private enum FontType : int
-        {
-            Dynamic,
-            Static
-        }
-
         #region SerializeName
         private const string S_Path = "S_Path";
-        private const string S_Size = "S_Size";
         private const string S_Textures = "S_Textures";
-        private const string S_Type = "S_Type";
         #endregion
 
         private Dictionary<int, Texture2D> textures = new Dictionary<int, Texture2D>();
-        private FontType type;
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             var path = info.GetString(S_Path);
-            type = info.GetValue<FontType>(S_Type);
-
-            switch (type)
-            {
-                case FontType.Dynamic:
-                    var size = info.GetInt32(S_Size);
-                    ptr = cbg_Font_LoadDynamicFont(path, size);
-                    break;
-                case FontType.Static:
-                    ptr = cbg_Font_LoadStaticFont(path);
-                    break;
-            }      
+            Font_Unsetter_Deserialize(info, out var size, out var isStatic);
+            ptr = isStatic ? cbg_Font_LoadStaticFont(path) : cbg_Font_LoadDynamicFont(path, size);
         }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(S_Path, Path.Substring(2));
-            info.AddValue(S_Type, type, typeof(FontType));
-            info.AddValue(S_Textures, textures);
-            if (type == FontType.Dynamic) info.AddValue(S_Size, Size);      
+            info.AddValue(S_Textures, textures);  
         }
 
         partial void OnDeserialize_Method(object sender)
@@ -72,9 +50,7 @@ namespace Altseed
             if (size <= 0) throw new ArgumentOutOfRangeException("サイズは正の値にしてください", nameof(size));
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            var result = LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
-            result.type = FontType.Dynamic;
-            return result;
+            return LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
         }
 
         /// <summary>
@@ -91,9 +67,7 @@ namespace Altseed
         {
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            var result = LoadStaticFont(path) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
-            result.type = FontType.Static;
-            return result;
+            return LoadStaticFont(path) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
         }
 
         /// <summary>
@@ -105,11 +79,7 @@ namespace Altseed
         /// <returns><paramref name="result"/>を生成出来たらtrue，それ以外でfalse</returns>
         public static bool TryLoadDynamicFont(string path, int size, out Font result)
         {
-            if (size > 0 && IOHelper.CheckLoadPath(path) == null && (result = LoadDynamicFont(path, size)) != null)
-            {
-                result.type = FontType.Dynamic;
-                return true;
-            }
+            if (size > 0 && IOHelper.CheckLoadPath(path) == null && (result = LoadDynamicFont(path, size)) != null) return true;
             result = null;
             return false;
         }
@@ -122,11 +92,7 @@ namespace Altseed
         /// <returns><paramref name="result"/>を生成出来たらtrue，それ以外でfalse</returns>
         public static bool TryLoadStaticFont(string path, out Font result)
         {
-            if (IOHelper.CheckLoadPath(path) == null && (result = LoadStaticFont(path)) != null)
-            {
-                result.type = FontType.Static;
-                return true;
-            }
+            if (IOHelper.CheckLoadPath(path) == null && (result = LoadStaticFont(path)) != null) return true;
             result = null;
             return false;
         }
