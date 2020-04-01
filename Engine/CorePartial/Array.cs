@@ -234,7 +234,7 @@ namespace Altseed
         public static TElement[] ToArray<TElement>(this IArray<TElement> obj)
             where TElement : unmanaged
         {
-            if (obj == null) throw new ArgumentNullException("引数がnullです", nameof(obj));
+            if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
 
             var array = new TElement[obj.Count];
 
@@ -259,8 +259,8 @@ namespace Altseed
         public static void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
             where TElement : unmanaged
         {
-            if (obj == null) throw new ArgumentNullException("引数がnullです", nameof(obj));
-            if (array == null) throw new ArgumentNullException("引数がnullです", nameof(array));
+            if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
+            if (array == null) throw new ArgumentNullException(nameof(array), "引数がnullです");
 
             if (obj.Count < array.Length) obj.Resize(array.Length);
 

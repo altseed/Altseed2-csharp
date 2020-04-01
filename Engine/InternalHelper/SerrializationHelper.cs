@@ -7,7 +7,7 @@ namespace Altseed
     {
         internal static T GetValue<T>(this SerializationInfo info, string name)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             return (T)info.GetValue(name, typeof(T));
         }
     }

@@ -39,8 +39,8 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
         internal static void CacheHandling<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
-            if (obj == null) throw new ArgumentNullException("引数がnullです", nameof(obj));
-            if (native == IntPtr.Zero) throw new ArgumentNullException("引数がnullです", nameof(native));
+            if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
+            if (native == IntPtr.Zero) throw new ArgumentNullException(nameof(native), "引数がnullです");
 
             if (obj.CacheRepo.ContainsKey(native))
             {
@@ -68,8 +68,8 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
         internal static void CacheHandlingConcurrent<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
-            if (obj == null) throw new ArgumentNullException("引数がnullです", nameof(obj));
-            if (native == IntPtr.Zero) throw new ArgumentNullException("引数がnullです", nameof(native));
+            if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
+            if (native == IntPtr.Zero) throw new ArgumentNullException(nameof(native), "引数がnullです");
 
             ConcurrentDictionary<IntPtr, WeakReference<TClass>> cacheRepo;
 
@@ -79,7 +79,7 @@ namespace Altseed
             }
             catch (InvalidCastException)
             {
-                throw new ArgumentException("スレッドセーフなキャッシュ保存ディクショナリを取得できませんでした");
+                throw new ArgumentException("スレッドセーフなキャッシュ保存ディクショナリを取得できませんでした", nameof(cacheRepo));
             }
            
 

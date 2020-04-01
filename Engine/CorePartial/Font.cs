@@ -47,7 +47,7 @@ namespace Altseed
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
         public static Font LoadDynamicFontStrict(string path, int size)
         {
-            if (size <= 0) throw new ArgumentOutOfRangeException("サイズは正の値にしてください", nameof(size));
+            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), "サイズは正の値にしてください");
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
             return LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
@@ -104,8 +104,7 @@ namespace Altseed
         /// <param name="texture">テクスチャ</param>
         public void AddImageGlyph(char character, Texture2D texture)
         {
-            if (textures.ContainsKey(character)) textures[character] = texture;
-            else textures.Add(character, texture);
+            textures[character] = texture;
             AddImageGlyph((int)character, texture);
         }
     }

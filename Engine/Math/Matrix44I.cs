@@ -68,14 +68,14 @@ namespace Altseed
         {
             readonly get
             {
-                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
-                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException(nameof(x), "引数の値は0-3に収めてください");
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException(nameof(y), "引数の値は0-3に収めてください");
                 return Values[x * 4 + y];
             }
             set
             {
-                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(x));
-                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException("引数の値は0-3に収めてください", nameof(y));
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException(nameof(x), "引数の値は0-3に収めてください");
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException(nameof(y), "引数の値は0-3に収めてください");
                 Values[x * 4 + y] = value;
             }
         }
@@ -294,7 +294,7 @@ namespace Altseed
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             var array = new int[16];
             for (int i = 0; i < 16; i++) array[i] = Values[i];
             info.AddValue(S_Array, array);

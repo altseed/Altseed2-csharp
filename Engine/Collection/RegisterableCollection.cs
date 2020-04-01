@@ -157,7 +157,7 @@ namespace Altseed
         /// <remarks>列挙中に呼び出さないこと</remarks>
         internal void AddImmediately(IEnumerable<TElement> objs)
         {
-            if (objs == null) throw new ArgumentNullException("引数がnullです", nameof(objs));
+            if (objs == null) throw new ArgumentNullException(nameof(objs), "引数がnullです");
             foreach (var o in objs)
             {
                 AddImmediately(o);
