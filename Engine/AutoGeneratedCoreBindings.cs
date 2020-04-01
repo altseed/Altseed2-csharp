@@ -27,6 +27,30 @@ namespace Altseed
     }
     
     /// <summary>
+    /// 描画方法を表します。
+    /// </summary>
+    [Serializable]
+    public enum GraphicsDeviceType : int
+    {
+        /// <summary>
+        /// 実行環境をもとに自動選択
+        /// </summary>
+        Default,
+        /// <summary>
+        /// DirectX
+        /// </summary>
+        DirectX,
+        /// <summary>
+        /// Metal
+        /// </summary>
+        Metal,
+        /// <summary>
+        /// Vulkan
+        /// </summary>
+        Vulkan,
+    }
+    
+    /// <summary>
     /// フレームレートモード
     /// </summary>
     [Serializable]
@@ -1077,7 +1101,7 @@ namespace Altseed
     }
     
     /// <summary>
-    /// Coreを初期化する際の設定を保持すクラス
+    /// Altseed2 の設定を表すクラス
     /// </summary>
     [Serializable]
     public sealed partial class Configuration : ISerializable
@@ -1126,6 +1150,19 @@ namespace Altseed
         private static extern bool cbg_Configuration_GetIsResizable(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Configuration_SetIsResizable(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Configuration_GetDeviceType(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetDeviceType(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetWaitVSync(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetWaitVSync(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed_Core")]
@@ -1208,6 +1245,50 @@ namespace Altseed
             }
         }
         private bool? _IsResizable;
+        
+        /// <summary>
+        /// 描画方法を取得または設定します。
+        /// </summary>
+        public GraphicsDeviceType DeviceType
+        {
+            get
+            {
+                if (_DeviceType != null)
+                {
+                    return _DeviceType.Value;
+                }
+                var ret = cbg_Configuration_GetDeviceType(selfPtr);
+                return (GraphicsDeviceType)ret;
+            }
+            set
+            {
+                _DeviceType = value;
+                cbg_Configuration_SetDeviceType(selfPtr, (int)value);
+            }
+        }
+        private GraphicsDeviceType? _DeviceType;
+        
+        /// <summary>
+        /// 垂直同期信号を待つかどうかを取得または設定します。
+        /// </summary>
+        public bool WaitVSync
+        {
+            get
+            {
+                if (_WaitVSync != null)
+                {
+                    return _WaitVSync.Value;
+                }
+                var ret = cbg_Configuration_GetWaitVSync(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _WaitVSync = value;
+                cbg_Configuration_SetWaitVSync(selfPtr, value);
+            }
+        }
+        private bool? _WaitVSync;
         
         /// <summary>
         /// ログをコンソールに出力するかどうかを取得または設定します。
@@ -1298,7 +1379,7 @@ namespace Altseed
         private bool? _ToolEnabled;
         
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// 新しいインスタンスを生成します。
         /// </summary>
         public Configuration()
         {
@@ -1309,6 +1390,8 @@ namespace Altseed
         #region SerializeName
         private const string S_IsFullscreen = "S_IsFullscreen";
         private const string S_IsResizable = "S_IsResizable";
+        private const string S_DeviceType = "S_DeviceType";
+        private const string S_WaitVSync = "S_WaitVSync";
         private const string S_ConsoleLoggingEnabled = "S_ConsoleLoggingEnabled";
         private const string S_FileLoggingEnabled = "S_FileLoggingEnabled";
         private const string S_LogFileName = "S_LogFileName";
@@ -1324,6 +1407,8 @@ namespace Altseed
         {
             IsFullscreen = info.GetBoolean(S_IsFullscreen);
             IsResizable = info.GetBoolean(S_IsResizable);
+            DeviceType = info.GetValue<GraphicsDeviceType>(S_DeviceType);
+            WaitVSync = info.GetBoolean(S_WaitVSync);
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
             FileLoggingEnabled = info.GetBoolean(S_FileLoggingEnabled);
             LogFileName = info.GetString(S_LogFileName);
@@ -1339,10 +1424,12 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_IsFullscreen, IsFullscreen);
             info.AddValue(S_IsResizable, IsResizable);
+            info.AddValue(S_DeviceType, DeviceType);
+            info.AddValue(S_WaitVSync, WaitVSync);
             info.AddValue(S_ConsoleLoggingEnabled, ConsoleLoggingEnabled);
             info.AddValue(S_FileLoggingEnabled, FileLoggingEnabled);
             info.AddValue(S_LogFileName, LogFileName);
@@ -1766,7 +1853,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Count, Count);
             
@@ -2013,7 +2100,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Count, Count);
             
@@ -2260,7 +2347,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Count, Count);
             
@@ -2507,7 +2594,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Count, Count);
             
@@ -2754,7 +2841,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Count, Count);
             
@@ -3594,7 +3681,7 @@ namespace Altseed
         /// <returns>成功したか否か</returns>
         public bool Save(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_TextureBase_Save(selfPtr, path);
             return ret;
         }
@@ -3625,7 +3712,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Size, Size);
             
@@ -3793,7 +3880,7 @@ namespace Altseed
         /// <returns>テクスチャ</returns>
         public static Texture2D Load(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_Texture2D_Load(path);
             return Texture2D.TryGetFromCache(ret);
         }
@@ -3834,7 +3921,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Path, Path);
             
@@ -3901,6 +3988,7 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingConcurrent(this, ptr);
             
+            base.OnDeserialization(sender);
             
             OnDeserialize_Method(sender);
             
@@ -4172,7 +4260,7 @@ namespace Altseed
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Vector4F"/>のインスタンス</returns>
         public Vector4F GetVector4F(string key)
         {
-            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
+            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
             var ret = cbg_Material_GetVector4F(selfPtr, key);
             return ret;
         }
@@ -4185,7 +4273,7 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetVector4F(string key, Vector4F value)
         {
-            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
+            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
             cbg_Material_SetVector4F(selfPtr, key, value);
         }
         
@@ -4197,7 +4285,7 @@ namespace Altseed
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Matrix44F"/>のインスタンス</returns>
         public Matrix44F GetMatrix44F(string key)
         {
-            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
+            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
             var ret = cbg_Material_GetMatrix44F(selfPtr, key);
             return ret;
         }
@@ -4210,7 +4298,7 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetMatrix44F(string key, Matrix44F value)
         {
-            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
+            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
             cbg_Material_SetMatrix44F(selfPtr, key, value);
         }
         
@@ -4222,7 +4310,7 @@ namespace Altseed
         /// <returns><paramref name="key"/>を名前として持つ<see cref="Texture2D"/>のインスタンス</returns>
         public TextureBase GetTexture(string key)
         {
-            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
+            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
             var ret = cbg_Material_GetTexture(selfPtr, key);
             return TextureBase.TryGetFromCache(ret);
         }
@@ -4235,7 +4323,7 @@ namespace Altseed
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetTexture(string key, TextureBase value)
         {
-            if (key == null) throw new ArgumentNullException("引数がnullです", nameof(key));
+            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
             cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
         }
         
@@ -4607,7 +4695,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Transform, Transform);
             
@@ -5840,8 +5928,8 @@ namespace Altseed
         /// <returns>コンパイルの結果生成されたシェーダ</returns>
         public static Shader Create(string name, string code, ShaderStageType shaderStage)
         {
-            if (name == null) throw new ArgumentNullException("引数がnullです", nameof(name));
-            if (code == null) throw new ArgumentNullException("引数がnullです", nameof(code));
+            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
+            if (code == null) throw new ArgumentNullException(nameof(code), "引数がnullです");
             var ret = cbg_Shader_Create(name, code, (int)shaderStage);
             return Shader.TryGetFromCache(ret);
         }
@@ -5876,7 +5964,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_StageType, StageType);
             info.AddValue(S_Code, Code);
@@ -6284,7 +6372,7 @@ namespace Altseed
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         public static Font LoadDynamicFont(string path, int size)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_Font_LoadDynamicFont(path, size);
             return Font.TryGetFromCache(ret);
         }
@@ -6297,7 +6385,7 @@ namespace Altseed
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         public static Font LoadStaticFont(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_Font_LoadStaticFont(path);
             return Font.TryGetFromCache(ret);
         }
@@ -6313,8 +6401,8 @@ namespace Altseed
         /// <returns>生成できたか否か</returns>
         public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int size, string characters)
         {
-            if (dynamicFontPath == null) throw new ArgumentNullException("引数がnullです", nameof(dynamicFontPath));
-            if (staticFontPath == null) throw new ArgumentNullException("引数がnullです", nameof(staticFontPath));
+            if (dynamicFontPath == null) throw new ArgumentNullException(nameof(dynamicFontPath), "引数がnullです");
+            if (staticFontPath == null) throw new ArgumentNullException(nameof(staticFontPath), "引数がnullです");
             var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, size, characters);
             return ret;
         }
@@ -6374,7 +6462,7 @@ namespace Altseed
         /// <returns>テクスチャ追加対応フォント</returns>
         public static Font CreateImageFont(Font baseFont)
         {
-            if (baseFont == null) throw new ArgumentNullException("引数がnullです", nameof(baseFont));
+            if (baseFont == null) throw new ArgumentNullException(nameof(baseFont), "引数がnullです");
             var ret = cbg_Font_CreateImageFont(baseFont != null ? baseFont.selfPtr : IntPtr.Zero);
             return Font.TryGetFromCache(ret);
         }
@@ -6427,7 +6515,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Size, Size);
             info.AddValue(S_IsStaticFont, IsStaticFont);
@@ -6503,7 +6591,7 @@ namespace Altseed
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         partial void OnDeserialize_Method(object sender);
@@ -7712,7 +7800,7 @@ namespace Altseed
         /// <returns>pathで読み込むファイルを格納する<see cref="StreamFile"/>の新しいインスタンスを生成します。</returns>
         public static StreamFile Create(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_StreamFile_Create(path);
             return StreamFile.TryGetFromCache(ret);
         }
@@ -7774,7 +7862,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_CurrentPosition, CurrentPosition);
             
@@ -7847,7 +7935,7 @@ namespace Altseed
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         partial void OnDeserialize_Method(object sender);
@@ -7977,7 +8065,7 @@ namespace Altseed
         /// <returns>pathで読み込んだファイルを格納する<see cref="StaticFile"/>の新しいインスタンスを生成します。</returns>
         public static StaticFile Create(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_StaticFile_Create(path);
             return StaticFile.TryGetFromCache(ret);
         }
@@ -8029,7 +8117,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             
             OnGetObjectData(info, context);
@@ -8177,7 +8265,7 @@ namespace Altseed
         /// <returns>追加処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootDirectory(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_File_AddRootDirectory(selfPtr, path);
             return ret;
         }
@@ -8191,8 +8279,8 @@ namespace Altseed
         /// <returns>読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootPackageWithPassword(string path, string password)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
-            if (password == null) throw new ArgumentNullException("引数がnullです", nameof(password));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
+            if (password == null) throw new ArgumentNullException(nameof(password), "引数がnullです");
             var ret = cbg_File_AddRootPackageWithPassword(selfPtr, path, password);
             return ret;
         }
@@ -8205,7 +8293,7 @@ namespace Altseed
         /// <returns>読み込み処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool AddRootPackage(string path)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_File_AddRootPackage(selfPtr, path);
             return ret;
         }
@@ -8238,8 +8326,8 @@ namespace Altseed
         /// <returns>パック処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool Pack(string srcPath, string dstPath)
         {
-            if (srcPath == null) throw new ArgumentNullException("引数がnullです", nameof(srcPath));
-            if (dstPath == null) throw new ArgumentNullException("引数がnullです", nameof(dstPath));
+            if (srcPath == null) throw new ArgumentNullException(nameof(srcPath), "引数がnullです");
+            if (dstPath == null) throw new ArgumentNullException(nameof(dstPath), "引数がnullです");
             var ret = cbg_File_Pack(selfPtr, srcPath, dstPath);
             return ret;
         }
@@ -8254,9 +8342,9 @@ namespace Altseed
         /// <returns>パック処理がうまくいったらtrue，それ以外でfalse</returns>
         public bool PackWithPassword(string srcPath, string dstPath, string password)
         {
-            if (srcPath == null) throw new ArgumentNullException("引数がnullです", nameof(srcPath));
-            if (dstPath == null) throw new ArgumentNullException("引数がnullです", nameof(dstPath));
-            if (password == null) throw new ArgumentNullException("引数がnullです", nameof(password));
+            if (srcPath == null) throw new ArgumentNullException(nameof(srcPath), "引数がnullです");
+            if (dstPath == null) throw new ArgumentNullException(nameof(dstPath), "引数がnullです");
+            if (password == null) throw new ArgumentNullException(nameof(password), "引数がnullです");
             var ret = cbg_File_PackWithPassword(selfPtr, srcPath, dstPath, password);
             return ret;
         }
@@ -8465,7 +8553,7 @@ namespace Altseed
         /// <returns>読み込んだ音源データ</returns>
         public static Sound Load(string path, bool isDecompressed)
         {
-            if (path == null) throw new ArgumentNullException("引数がnullです", nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
             var ret = cbg_Sound_Load(path, isDecompressed);
             return Sound.TryGetFromCache(ret);
         }
@@ -8505,7 +8593,7 @@ namespace Altseed
         /// <param name="context">送信先の情報</param>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null) throw new ArgumentNullException("引数がnullです", nameof(info));
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_LoopStartingPoint, LoopStartingPoint);
             info.AddValue(S_LoopEndPoint, LoopEndPoint);
@@ -8698,7 +8786,7 @@ namespace Altseed
         /// <returns>再生中の音のID</returns>
         public int Play(Sound sound)
         {
-            if (sound == null) throw new ArgumentNullException("引数がnullです", nameof(sound));
+            if (sound == null) throw new ArgumentNullException(nameof(sound), "引数がnullです");
             var ret = cbg_SoundMixer_Play(selfPtr, sound != null ? sound.selfPtr : IntPtr.Zero);
             return ret;
         }
@@ -9126,7 +9214,7 @@ namespace Altseed
             }
             set
             {
-                _Title = value ?? throw new ArgumentNullException("設定しようとした値がnullです", nameof(value));
+                _Title = value ?? throw new ArgumentNullException(nameof(value), "設定しようとした値がnullです");
                 cbg_Window_SetTitle(selfPtr, value);
             }
         }
