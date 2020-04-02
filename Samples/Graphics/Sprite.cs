@@ -17,7 +17,12 @@ namespace Sample
 
             // スプライトを描画するノードを作成します。
             var node = new SpriteNode();
+
+            // テクスチャを設定します。
             node.Texture = texture;
+
+            // テクスチャのサイズで切り出す
+            node.Src = new RectF(new Vector2F(), texture.Size);
 
             // ノードを登録します。
             Engine.AddNode(node);
