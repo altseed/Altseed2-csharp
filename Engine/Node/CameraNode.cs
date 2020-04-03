@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Altseed
 {
@@ -29,6 +27,9 @@ namespace Altseed
         }
         private int _Group = 0;
 
+        /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
         public CameraNode()
         {
             _Camera = RenderedCamera.Create();

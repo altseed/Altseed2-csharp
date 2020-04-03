@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -147,6 +146,9 @@ namespace Altseed
         }
         private uint _CameraGroup = 0;
 
+        /// <summary>
+        /// <see cref="Transform"/>を更新する
+        /// </summary>
         protected void UpdateTransform()
         {
             var scale = Scale * new Vector2F(TurnLR ? -1 : 1, TurnUL ? -1 : 1);

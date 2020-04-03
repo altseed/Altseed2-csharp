@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Altseed
 {
@@ -231,6 +229,9 @@ namespace Altseed
         /// </summary>
         internal static Window Window { get; private set; }
 
+        /// <summary>
+        /// ツールを管理するクラスを取得します。
+        /// </summary>
         public static Tool Tool { get; private set; }
 
         #endregion
