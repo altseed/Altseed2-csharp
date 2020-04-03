@@ -27,8 +27,8 @@ namespace Altseed
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
-            // インスタンス生成時に./が頭についているのでstring.Substring(int startIndex)で削る
-            info.AddValue(S_Path, Path.Substring(2));
+            // インスタンス生成時に./が頭についているので削る
+            info.AddValue(S_Path, Path[2..]);
         }
 
         /// <summary>
@@ -47,22 +47,6 @@ namespace Altseed
             if (ex != null) throw ex;
 
             return Create(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
-        }
-
-        /// <summary>
-        /// 指定パスからファイルを読み込む
-        /// </summary>
-        /// <param name="path">読み込むファイルのパス</param>
-        /// <param name="result"><paramref name="path"/>をパスに持つファイルのデータを格納した<see cref="StaticFile"/>の新しいインスタンス 読み込めなかったらnull</param>
-        /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
-        public static bool TryCreate(string path, out StaticFile result)
-        {
-            if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null) return true;
-            else
-            {
-                result = null;
-                return false;
-            }
         }
 
         /// <summary>
@@ -115,7 +99,7 @@ namespace Altseed
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(S_Path, Path.Substring(2));
+            info.AddValue(S_Path, Path[2..]);
         }
 
         partial void OnDeserialize_Method(object sender)
@@ -142,22 +126,6 @@ namespace Altseed
             var result = Create(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
 
             return result;
-        }
-
-        /// <summary>
-        /// 指定パスからファイルを読み込む
-        /// </summary>
-        /// <param name="path">読み込むファイルのパス</param>
-        /// <param name="result"><paramref name="path"/>をパスに持つファイルのデータを格納した<see cref="StreamFile"/>の新しいインスタンス 読み込めなかったらnull</param>
-        /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
-        public static bool TryCreate(string path, out StreamFile result)
-        {
-            if (IOHelper.CheckLoadPath(path) == null && (result = Create(path)) != null) return true;
-            else
-            {
-                result = null;
-                return false;
-            }
         }
 
         /// <summary>

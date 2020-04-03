@@ -30,21 +30,6 @@ namespace Altseed
             var result = Load(path, isDecompressed) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
             return result;
         }
-
-        /// <summary>
-        /// 指定パスから音源を読み込む
-        /// </summary>
-        /// <param name="path">読み込む音源のパス</param>
-        /// <param name="isDecompressed">一気に解凍するかどうか</param>
-        /// <param name="result"><paramref name="path"/>をパスに持つ音源のデータを格納した<see cref="Sound"/>の新しいインスタンス 読み込めなかったらnull</param>
-        /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
-        public static bool TryLoad(string path, bool isDecompressed, out Sound result)
-        {
-            var ex = IOHelper.CheckLoadPath(path);
-            if (ex == null && (result = Load(path, isDecompressed)) != null) return true;
-            result = null;
-            return false;
-        }
     }
 
     public partial class SoundMixer

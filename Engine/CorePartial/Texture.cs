@@ -24,22 +24,6 @@ namespace Altseed
 
             return Load(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
         }
-
-        /// <summary>
-        /// 指定パスからテクスチャを読み込む
-        /// </summary>
-        /// <param name="path">読み込むテクスチャのパス</param>
-        /// <param name="result"><paramref name="path"/>をパスに持つテクスチャのデータを格納した<see cref="Texture2D"/>の新しいインスタンス 読み込めなかったらnull</param>
-        /// <returns><paramref name="result"/>を正常に読み込めたらtrue、それ以外でfalse</returns>
-        public static bool TryLoad(string path, out Texture2D result)
-        {
-            if (IOHelper.CheckLoadPath(path) == null && (result = Load(path)) != null) return true;
-            else
-            {
-                result = null;
-                return false;
-            }
-        }
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             Texture2D_Unsetter_Deserialize(info, out var path);
