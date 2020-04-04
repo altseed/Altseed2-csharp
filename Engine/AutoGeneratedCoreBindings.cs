@@ -564,6 +564,22 @@ namespace Altseed
     }
     
     /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum RenderTargetCareType : int
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        DontCare,
+        /// <summary>
+        /// 
+        /// </summary>
+        Clear,
+    }
+    
+    /// <summary>
     /// ツール機能で使用する方向
     /// </summary>
     [Serializable]
@@ -4541,7 +4557,7 @@ namespace Altseed
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RectI viewport);
+        private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
@@ -4570,9 +4586,9 @@ namespace Altseed
             return RenderTexture.TryGetFromCache(ret);
         }
         
-        public void SetRenderTarget(RenderTexture target, RectI viewport)
+        public void SetRenderTarget(RenderTexture target, RenderPassParameter renderPassParameter)
         {
-            cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, viewport);
+            cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, renderPassParameter);
         }
         
         public void RenderToRenderTarget(Material material)

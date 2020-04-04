@@ -173,6 +173,50 @@ namespace Altseed
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
     }
 
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RenderPassParameter : IEquatable<RenderPassParameter>
+    {
+        public Color ClearColor;
+        public RenderTargetCareType ColorCare;
+        public RenderTargetCareType DepthCare;
+
+        /// <summary>
+        /// 新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="clearColor"></param>
+        /// <param name="colorCare"></param>
+        /// <param name="depthCare"></param>
+        public RenderPassParameter(Color clearColor, RenderTargetCareType colorCare, RenderTargetCareType depthCare)
+        {
+            ClearColor = clearColor;
+            ColorCare = colorCare;
+            DepthCare = depthCare;
+        }
+
+        /// <summary>
+        /// もう一つの<see cref="RenderPassParameter"/>との間の等価性を判定する
+        /// </summary>
+        /// <param name="other">等価線を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
+        /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly bool Equals(RenderPassParameter other) => ClearColor == other.ClearColor && ColorCare == other.ColorCare && DepthCare == other.DepthCare;
+        /// <summary>
+        /// オブジェクトとの等価性を判定する
+        /// </summary>
+        /// <param name="obj">等価性を判定するオブジェクト</param>
+        /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly override bool Equals(object obj) => obj is RenderPassParameter p ? Equals(p) : false;
+
+        /// <summary>
+        /// このインスタンスのハッシュコードを返す
+        /// </summary>
+        /// <returns>このインスタンスのハッシュコード</returns>
+        public readonly override int GetHashCode() => HashCode.Combine(ClearColor, ColorCare, DepthCare);
+
+        public static bool operator ==(RenderPassParameter left, RenderPassParameter right) => left.Equals(right);
+        public static bool operator !=(RenderPassParameter left, RenderPassParameter right) => !(left == right);
+    }
+
     public partial class Shader
     {
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
