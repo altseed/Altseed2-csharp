@@ -54,6 +54,9 @@ namespace Altseed
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
 
+                Context = new AltseedContext();
+                System.Threading.SynchronizationContext.SetSynchronizationContext(Context);
+
                 if (config.ToolEnabled) Tool = Tool.GetInstance();
 
                 Sound = SoundMixer.GetInstance();
@@ -95,6 +98,9 @@ namespace Altseed
         {
             // ノードの更新
             _UpdatedNode?.Update();
+
+            // Contextの更新
+            Context.Update();
 
             // (ツール機能を使用しない場合は)描画を開始
             if (!_Config.ToolEnabled)
@@ -302,6 +308,11 @@ namespace Altseed
         }
 
         #endregion
+
+        /// <summary>
+        /// <see cref="System.Threading.SynchronizationContext"/>を取得します。
+        /// </summary>
+        internal static AltseedContext Context { get; private set; }
 
         /// <summary>
         /// ウィンドウのサイズを取得する
