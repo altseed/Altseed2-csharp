@@ -23,7 +23,7 @@ namespace Altseed
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(S_Path, Path.Substring(2));
+            info.AddValue(S_Path, Path[2..]);
             info.AddValue(S_Textures, textures);  
         }
 
@@ -68,33 +68,6 @@ namespace Altseed
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
             return LoadStaticFont(path) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
-        }
-
-        /// <summary>
-        /// 動的にフォントを読み込む
-        /// </summary>
-        /// <param name="path">フォントファイルのパス</param>
-        /// <param name="size">フォントサイズ</param>
-        /// <param name="result">動的に生成されるフォント 生成できなかったらnull</param>
-        /// <returns><paramref name="result"/>を生成出来たらtrue，それ以外でfalse</returns>
-        public static bool TryLoadDynamicFont(string path, int size, out Font result)
-        {
-            if (size > 0 && IOHelper.CheckLoadPath(path) == null && (result = LoadDynamicFont(path, size)) != null) return true;
-            result = null;
-            return false;
-        }
-
-        /// <summary>
-        /// 静的にフォントを読み込む
-        /// </summary>
-        /// <param name="path">フォントファイルのパス</param>
-        /// <param name="result">静的に生成されるフォント 生成できなかったらnull</param>
-        /// <returns><paramref name="result"/>を生成出来たらtrue，それ以外でfalse</returns>
-        public static bool TryLoadStaticFont(string path, out Font result)
-        {
-            if (IOHelper.CheckLoadPath(path) == null && (result = LoadStaticFont(path)) != null) return true;
-            result = null;
-            return false;
         }
 
         /// <summary>

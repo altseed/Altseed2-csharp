@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace Altseed
 {
@@ -125,15 +124,29 @@ namespace Altseed
         #endregion
 
         #region 仮想メソッド
-
+        /// <summary>
+        /// 自身が親に追加された時に実行
+        /// </summary>
         protected virtual void OnAdded() { }
 
+        /// <summary>
+        /// 自身が親から削除された時に実行
+        /// </summary>
         protected virtual void OnRemoved() { }
 
+        /// <summary>
+        /// 自身がエンジンに追加された時に実行
+        /// </summary>
         protected virtual void OnRegistered() { }
 
+        /// <summary>
+        /// 自身がエンジンから削除された時に実行
+        /// </summary>
         protected virtual void OnUnregistered() { }
 
+        /// <summary>
+        /// 自身が更新された時に実行
+        /// </summary>
         protected virtual void OnUpdate() { }
 
         #endregion
