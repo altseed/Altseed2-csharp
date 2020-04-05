@@ -23,7 +23,7 @@ namespace Altseed
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
         /// </summary>
-        public Texture2D Texture
+        public TextureBase Texture
         {
             get => _RenderedPolygon.Texture;
             set
