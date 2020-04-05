@@ -259,5 +259,22 @@ namespace Altseed.Test
 
             Engine.Terminate();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void StaticFileCache()
+        {
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration() { FileLoggingEnabled = true, LogFileName = "cache.txt" }));
+
+            Assert.True(Engine.File.Exists("E:\\GON\\Pictures\\2018_08_21\\IMG_0001.JPG"));
+            StaticFile test = null;
+            Assert.AreNotEqual(test = StaticFile.Create("E:/GON/Pictures/2018_08_21/IMG_0001.JPG"), null);
+
+            StaticFile test3 = null;
+            Assert.AreNotEqual(test3 = StaticFile.Create("E:/GON/Pictures/2018_08_21/IMG_0001.JPG"), null);
+
+            Engine.Log.Info(LogCategory.Engine, $"{test.selfPtr}/{test3.selfPtr}");
+            Engine.Log.Info(LogCategory.Engine, Engine.Resources.GetResourcesCount(ResourceType.StaticFile).ToString());
+            Engine.Terminate();
+        }
     }
 }
