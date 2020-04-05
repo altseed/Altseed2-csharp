@@ -570,11 +570,11 @@ namespace Altseed
     public enum RenderTargetCareType : int
     {
         /// <summary>
-        /// 
+        /// クリアしない
         /// </summary>
         DontCare,
         /// <summary>
-        /// 
+        /// クリアする
         /// </summary>
         Clear,
     }
@@ -3380,7 +3380,7 @@ namespace Altseed
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="buttonIndex">状態を検索するボタンのインデックス</param>
         /// <returns>指定インデックスのボタンの状態</returns>
-        public ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex)
+        internal ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex)
         {
             var ret = cbg_Joystick_GetButtonStateByIndex(selfPtr, joystickIndex, buttonIndex);
             return (ButtonState)ret;
@@ -3392,7 +3392,7 @@ namespace Altseed
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索するボタンの種類</param>
         /// <returns>指定種類のボタンの状態</returns>
-        public ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type)
+        internal ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type)
         {
             var ret = cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
             return (ButtonState)ret;
@@ -3415,7 +3415,7 @@ namespace Altseed
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="axisIndex">状態を検索する軸のインデックス</param>
         /// <returns>指定インデックスの軸の状態</returns>
-        public float GetAxisStateByIndex(int joystickIndex, int axisIndex)
+        internal float GetAxisStateByIndex(int joystickIndex, int axisIndex)
         {
             var ret = cbg_Joystick_GetAxisStateByIndex(selfPtr, joystickIndex, axisIndex);
             return ret;
@@ -3427,7 +3427,7 @@ namespace Altseed
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索する軸の種類</param>
         /// <returns>指定種類の軸の状態</returns>
-        public float GetAxisStateByType(int joystickIndex, JoystickAxisType type)
+        internal float GetAxisStateByType(int joystickIndex, JoystickAxisType type)
         {
             var ret = cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
             return ret;
@@ -4319,11 +4319,11 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="Texture2D"/>のインスタンスを取得する
+        /// 指定した名前を持つ<see cref="TextureBase"/>のインスタンスを取得する
         /// </summary>
-        /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
+        /// <param name="key">検索する<see cref="TextureBase"/>のインスタンスの名前</param>
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        /// <returns><paramref name="key"/>を名前として持つ<see cref="Texture2D"/>のインスタンス</returns>
+        /// <returns><paramref name="key"/>を名前として持つ<see cref="TextureBase"/>のインスタンス</returns>
         public TextureBase GetTexture(string key)
         {
             if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
@@ -4332,10 +4332,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="Texture2D"/>の値を設定する
+        /// 指定した名前を持つ<see cref="TextureBase"/>の値を設定する
         /// </summary>
-        /// <param name="key">検索する<see cref="Texture2D"/>のインスタンスの名前</param>
-        /// <param name="value">設定する<see cref="Texture2D"/>のインスタンスの値</param>
+        /// <param name="key">検索する<see cref="TextureBase"/>のインスタンスの名前</param>
+        /// <param name="value">設定する<see cref="TextureBase"/>のインスタンスの値</param>
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
         public void SetTexture(string key, TextureBase value)
         {
@@ -5394,7 +5394,7 @@ namespace Altseed
         /// <summary>
         /// テクスチャを取得または設定します。
         /// </summary>
-        public Texture2D Texture
+        public TextureBase Texture
         {
             get
             {
@@ -5403,7 +5403,7 @@ namespace Altseed
                     return _Texture;
                 }
                 var ret = cbg_RenderedPolygon_GetTexture(selfPtr);
-                return Texture2D.TryGetFromCache(ret);
+                return TextureBase.TryGetFromCache(ret);
             }
             set
             {
@@ -5411,7 +5411,7 @@ namespace Altseed
                 cbg_RenderedPolygon_SetTexture(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
             }
         }
-        private Texture2D _Texture;
+        private TextureBase _Texture;
         
         /// <summary>
         /// 描画範囲を取得または設定します。
@@ -5495,7 +5495,7 @@ namespace Altseed
             CacheHelper.CacheHandling(this, ptr);
             
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
-            Texture = info.GetValue<Texture2D>(S_Texture);
+            Texture = info.GetValue<TextureBase>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             
