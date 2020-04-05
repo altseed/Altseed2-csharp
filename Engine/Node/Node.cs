@@ -47,7 +47,6 @@ namespace Altseed
         internal override void Added(Node owner)
         {
             Parent = owner;
-            OnAdded();
 
             for (var n = Parent; ; n = n.Parent)
             {
@@ -63,8 +62,6 @@ namespace Altseed
         internal override void Removed()
         {
             Parent = null;
-            OnRemoved();
-            Unregistered();
         }
 
         /// <summary>
@@ -76,7 +73,8 @@ namespace Altseed
             {
                 c.Registered();
             }
-            OnRegistered();
+
+            OnAdded();
         }
 
         /// <summary>
@@ -89,7 +87,7 @@ namespace Altseed
                 c.Unregistered();
             }
 
-            OnUnregistered();
+            OnRemoved();
         }
 
         #endregion
@@ -124,6 +122,7 @@ namespace Altseed
         #endregion
 
         #region 仮想メソッド
+
         /// <summary>
         /// 自身が親に追加された時に実行
         /// </summary>
@@ -133,16 +132,6 @@ namespace Altseed
         /// 自身が親から削除された時に実行
         /// </summary>
         protected virtual void OnRemoved() { }
-
-        /// <summary>
-        /// 自身がエンジンに追加された時に実行
-        /// </summary>
-        protected virtual void OnRegistered() { }
-
-        /// <summary>
-        /// 自身がエンジンから削除された時に実行
-        /// </summary>
-        protected virtual void OnUnregistered() { }
 
         /// <summary>
         /// 自身が更新された時に実行
