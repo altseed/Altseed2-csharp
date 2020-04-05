@@ -13,7 +13,8 @@
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="buttonIndex">状態を検索するボタンのインデックス</param>
         /// <returns>指定インデックスのボタンの状態</returns>
-        public ButtonState GetButtonState(int joystickIndex, int buttonIndex) => GetButtonStateByIndex(joystickIndex, buttonIndex);
+        public ButtonState GetButtonState(int joystickIndex, int buttonIndex)
+            => (ButtonState)cbg_Joystick_GetButtonStateByIndex(selfPtr, joystickIndex, buttonIndex);
 
         /// <summary>
         /// ボタンの状態を種類から取得します。
@@ -21,7 +22,8 @@
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索するボタンの種類</param>
         /// <returns>指定種類のボタンの状態</returns>
-        public ButtonState GetButtonState(int joystickIndex, JoystickButtonType type) => GetButtonStateByType(joystickIndex, type);
+        public ButtonState GetButtonState(int joystickIndex, JoystickButtonType type)
+            => (ButtonState)cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
 
         /// <summary>
         /// 軸の状態をインデックスで取得します。
@@ -29,7 +31,8 @@
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="axisIndex">状態を検索する軸のインデックス</param>
         /// <returns>指定インデックスの軸の状態</returns>
-        internal float GetAxisState(int joystickIndex, int axisIndex) => GetAxisStateByIndex(joystickIndex, axisIndex);
+        public float GetAxisState(int joystickIndex, int axisIndex)
+            => cbg_Joystick_GetAxisStateByIndex(selfPtr, joystickIndex, axisIndex);
 
         /// <summary>
         /// 軸の状態を軸の種類で取得します。
@@ -37,6 +40,7 @@
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索する軸の種類</param>
         /// <returns>指定種類の軸の状態</returns>
-        internal float GetAxisState(int joystickIndex, JoystickAxisType type) => GetAxisStateByType(joystickIndex, type);
+        public float GetAxisState(int joystickIndex, JoystickAxisType type)
+            => cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
     }
 }

@@ -581,7 +581,6 @@ namespace Altseed.Test
 
             Assert.AreEqual(polygon1.Material, polygon2.Material);
             Assert.AreEqual(polygon1.Src, polygon2.Src);
-            Assert.AreEqual(polygon1.Texture.Path, polygon2.Texture.Path);
             Assert.AreEqual(polygon1.Texture.Size, polygon2.Texture.Size);
             Assert.AreEqual(polygon1.Transform, polygon2.Transform);
             Assert.True(Enumerable.SequenceEqual(polygon1.Vertexes.ToArray(), polygon2.Vertexes.ToArray()));

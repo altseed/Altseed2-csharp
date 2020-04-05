@@ -39,7 +39,7 @@ namespace Sample
                     // ジョイスティックのインデックスと確認したいジョイスティックボタンを指定します。
                     //     第一引数: ジョイスティックのインデックス
                     //     第二引数: ジョイスティックボタンのインデックス
-                    var state = Engine.Joystick.GetButtonStateByType(0, (JoystickButtonType)i);
+                    var state = Engine.Joystick.GetButtonState(0, (JoystickButtonType)i);
                     var button_name = Enum.GetName(typeof(JoystickButtonType), i);
 
                     if (state == ButtonState.Free)
@@ -60,7 +60,7 @@ namespace Sample
                     }
                 }
                 // 周波数の調整
-                if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.RightDown) == ButtonState.Push)
+                if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightDown) == ButtonState.Push)
                 {
                     displayText += $"周波数: \n";
                 }

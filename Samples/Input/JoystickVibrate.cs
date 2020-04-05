@@ -58,43 +58,43 @@ namespace Sample
                 }
 
                 // 周波数の調整
-                if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.RightDown) == ButtonState.Push)
+                if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightDown) == ButtonState.Push)
                 {
                     frequency -= freq_rate;
                     displayText += $"周波数: {frequency}\n";
                 }
-                else if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.RightUp) == ButtonState.Push)
+                else if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightUp) == ButtonState.Push)
                 {
                     frequency += freq_rate;
                     displayText += $"周波数: {frequency}\n";
                 }
 
                 // 振幅の調整
-                if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.RightLeft) == ButtonState.Push)
+                if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightLeft) == ButtonState.Push)
                 {
                     amptitude -= amp_rate;
                     displayText += $"振幅: {amptitude}\n";
                 }
-                else if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.RightRight) == ButtonState.Push)
+                else if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightRight) == ButtonState.Push)
                 {
                     amptitude += amp_rate;
                     displayText += $"振幅: {amptitude}\n";
                 }
 
                 // 時間
-                if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.L3) == ButtonState.Push)
+                if (Engine.Joystick.GetButtonState(0, JoystickButtonType.L3) == ButtonState.Push)
                 {
                     time -= time_rate;
                     displayText += $"時間(ミリ秒): {time}\n";
                 }
-                else if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.R3) == ButtonState.Push)
+                else if (Engine.Joystick.GetButtonState(0, JoystickButtonType.R3) == ButtonState.Push)
                 {
                     time += time_rate;
                     displayText += $"時間(ミリ秒): {time}\n";
                 }
 
                 // ジョイスティックの振動
-                if (Engine.Joystick.GetButtonStateByType(0, JoystickButtonType.R1) == ButtonState.Push && !sw.IsRunning)
+                if (Engine.Joystick.GetButtonState(0, JoystickButtonType.R1) == ButtonState.Push && !sw.IsRunning)
                 {
                     displayText += "振動開始\n";
                     displayText += $"  周波数: {frequency}\n";

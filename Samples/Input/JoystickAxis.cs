@@ -34,10 +34,10 @@ namespace Sample
             {
                 var label = "水平 / 垂直\n";
 
-                var left_h = Engine.Joystick.GetAxisStateByType(0, JoystickAxisType.LeftH);
-                var left_v = Engine.Joystick.GetAxisStateByType(0, JoystickAxisType.LeftV);
-                var right_h = Engine.Joystick.GetAxisStateByType(0, JoystickAxisType.RightH);
-                var right_v = Engine.Joystick.GetAxisStateByType(0, JoystickAxisType.RightV);
+                var left_h = Engine.Joystick.GetAxisState(0, JoystickAxisType.LeftH);
+                var left_v = Engine.Joystick.GetAxisState(0, JoystickAxisType.LeftV);
+                var right_h = Engine.Joystick.GetAxisState(0, JoystickAxisType.RightH);
+                var right_v = Engine.Joystick.GetAxisState(0, JoystickAxisType.RightV);
 
                 var lstick = $"左スティック: {left_h} / {left_v}\n";
                 var rstick = $"右スティック: {right_h} / {right_v}\n";
