@@ -62,6 +62,8 @@ namespace Altseed
         internal override void Removed()
         {
             Parent = null;
+
+            Unregistered();
         }
 
         /// <summary>
@@ -124,13 +126,19 @@ namespace Altseed
         #region 仮想メソッド
 
         /// <summary>
-        /// 自身が親に追加された時に実行
+        /// エンジンに追加された時に実行します。
         /// </summary>
+        /// <remarks>
+        /// 自身もしくは親ノードがEngineに登録されたあとのUpdateの際に実行されます。
+        /// </remarks>
         protected virtual void OnAdded() { }
 
         /// <summary>
-        /// 自身が親から削除された時に実行
+        /// エンジンから削除された時に実行
         /// </summary>
+        /// <remarks>
+        /// 自身もしくは親ノードがEngineにから削除されたあとのUpdateの際に実行されます。
+        /// </remarks>
         protected virtual void OnRemoved() { }
 
         /// <summary>
