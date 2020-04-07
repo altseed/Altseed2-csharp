@@ -619,5 +619,103 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void CircleCollider()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var collider1 = new CircleCollider
+            {
+                Position = new Vector2F(30f, 30f),
+                Rotation = 10.0f,
+                Radius = 30.0f
+            };
+
+            const string path = "Serialization/CircleCollider.bin";
+
+            Serialize(path, collider1);
+
+            var collider2 = Deserialize<CircleCollider>(path);
+
+            Assert.NotNull(collider2);
+
+            Assert.AreEqual(collider1.Position, collider2.Position);
+            Assert.AreEqual(collider1.Rotation, collider2.Rotation);
+            Assert.AreEqual(collider1.Radius, collider2.Radius);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void PolygonCollider()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var collider1 = new PolygonCollider
+            {
+                Position = new Vector2F(30f, 30f),
+                Rotation = 10.0f,
+            };
+
+            var array_g = new Vertex[]
+            {
+                new Vertex(new Vector3F(10f, 10f, 10f), new Color(100, 100, 100, 100), new Vector2F(10f, 10f), new Vector2F(100f, 100f)),
+                new Vertex(new Vector3F(20f, 20f, 20f), new Color(200, 200, 200, 200), new Vector2F(20f, 20f), new Vector2F(200f, 200f)),
+                new Vertex(new Vector3F(30f, 30f, 30f), new Color(300, 300, 300, 300), new Vector2F(30f, 30f), new Vector2F(300f, 300f)),
+            };
+
+            var array_a = Altseed.VertexArray.Create(array_g.Length);
+            Assert.NotNull(array_a);
+            array_a.FromArray(array_g);
+
+            collider1.Vertexes = array_a;
+
+            const string path = "Serialization/PolygonCollider.bin";
+
+            Serialize(path, collider1);
+
+            var collider2 = Deserialize<PolygonCollider>(path);
+
+            Assert.NotNull(collider2);
+
+            Assert.AreEqual(collider1.Position, collider2.Position);
+            Assert.AreEqual(collider1.Rotation, collider2.Rotation);
+            Assert.True(Enumerable.SequenceEqual(collider1.Vertexes.ToArray(), collider2.Vertexes.ToArray()));
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RectangleCollider()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var collider1 = new RectangleCollider
+            {
+                CenterPosition = new Vector2F(15f, 15f),
+                Position = new Vector2F(30f, 30f),
+                Rotation = 10.0f,
+                Size = new Vector2F(20f, 20f)
+            };
+
+            const string path = "Serialization/RectangleCollider.bin";
+
+            Serialize(path, collider1);
+
+            var collider2 = Deserialize<RectangleCollider>(path);
+
+            Assert.NotNull(collider2);
+
+            Assert.AreEqual(collider1.CenterPosition, collider2.CenterPosition);
+            Assert.AreEqual(collider1.Position, collider2.Position);
+            Assert.AreEqual(collider1.Rotation, collider2.Rotation);
+            Assert.AreEqual(collider1.Size, collider2.Size);
+
+            tc.End();
+        }
     }
 }

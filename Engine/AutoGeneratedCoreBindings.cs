@@ -9360,7 +9360,8 @@ namespace Altseed
     /// <summary>
     /// コライダの抽象基本クラスです
     /// </summary>
-    public partial class Collider
+    [Serializable]
+    public partial class Collider : ISerializable, ICacheKeeper<Collider>
     {
         #region unmanaged
         
@@ -9478,6 +9479,83 @@ namespace Altseed
             return ret;
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Position = "S_Position";
+        private const string S_Rotation = "S_Rotation";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="Collider"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected Collider(SerializationInfo info, StreamingContext context) : this()
+        {
+            var ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Position = info.GetValue<Vector2F>(S_Position);
+            Rotation = info.GetSingle(S_Rotation);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
+            
+            info.AddValue(S_Position, Position);
+            info.AddValue(S_Rotation, Rotation);
+            
+            OnGetObjectData(info, context);
+        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+        
+        /// <summary>
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="Collider(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="Collider(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
+        /// </summary>
+        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
+        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        protected private virtual IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<Collider>> ICacheKeeper<Collider>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<Collider>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<Collider>.Release(IntPtr native) => cbg_Collider_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~Collider()
         {
             lock (this) 
@@ -9494,7 +9572,8 @@ namespace Altseed
     /// <summary>
     /// 円形コライダのクラス
     /// </summary>
-    public partial class CircleCollider : Collider
+    [Serializable]
+    public partial class CircleCollider : Collider, ISerializable, ICacheKeeper<CircleCollider>
     {
         #region unmanaged
         
@@ -9570,6 +9649,79 @@ namespace Altseed
             selfPtr = cbg_CircleCollider_Constructor_0();
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Radius = "S_Radius";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="CircleCollider"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected CircleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            var ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Radius = info.GetSingle(S_Radius);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            
+            info.AddValue(S_Radius, Radius);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        /// <summary>
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="CircleCollider(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="CircleCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
+        /// </summary>
+        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
+        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<CircleCollider>> ICacheKeeper<CircleCollider>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<CircleCollider>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<CircleCollider>.Release(IntPtr native) => cbg_CircleCollider_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~CircleCollider()
         {
             lock (this) 
@@ -9586,7 +9738,8 @@ namespace Altseed
     /// <summary>
     /// 矩形コライダのクラス
     /// </summary>
-    public partial class RectangleCollider : Collider
+    [Serializable]
+    public partial class RectangleCollider : Collider, ISerializable, ICacheKeeper<RectangleCollider>
     {
         #region unmanaged
         
@@ -9690,6 +9843,82 @@ namespace Altseed
             selfPtr = cbg_RectangleCollider_Constructor_0();
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Size = "S_Size";
+        private const string S_CenterPosition = "S_CenterPosition";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RectangleCollider"/>のインスタンスを生成する
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected RectangleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            var ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Size = info.GetValue<Vector2F>(S_Size);
+            CenterPosition = info.GetValue<Vector2F>(S_CenterPosition);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            
+            info.AddValue(S_Size, Size);
+            info.AddValue(S_CenterPosition, CenterPosition);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        /// <summary>
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
+        /// </summary>
+        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
+        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<RectangleCollider>> ICacheKeeper<RectangleCollider>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<RectangleCollider>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<RectangleCollider>.Release(IntPtr native) => cbg_RectangleCollider_Release(native);
+        #endregion
+        
+        #endregion
+        
         ~RectangleCollider()
         {
             lock (this) 
@@ -9706,7 +9935,8 @@ namespace Altseed
     /// <summary>
     /// 多角形コライダのクラス
     /// </summary>
-    public partial class PolygonCollider : Collider
+    [Serializable]
+    public partial class PolygonCollider : Collider, ISerializable, ICacheKeeper<PolygonCollider>
     {
         #region unmanaged
         
@@ -9741,9 +9971,9 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_PolygonCollider_GetVertexes(IntPtr selfPtr);
-        
         [DllImport("Altseed_Core")]
-        private static extern void cbg_PolygonCollider_SetVertexes(IntPtr selfPtr, IntPtr vertexes);
+        private static extern void cbg_PolygonCollider_SetVertexes(IntPtr selfPtr, IntPtr value);
+        
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_PolygonCollider_Release(IntPtr selfPtr);
@@ -9755,27 +9985,105 @@ namespace Altseed
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 多角形コライダの頂点の座標を取得または設定します
+        /// </summary>
+        internal VertexArray Vertexes
+        {
+            get
+            {
+                if (_Vertexes != null)
+                {
+                    return _Vertexes;
+                }
+                var ret = cbg_PolygonCollider_GetVertexes(selfPtr);
+                return VertexArray.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Vertexes = value;
+                cbg_PolygonCollider_SetVertexes(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private VertexArray _Vertexes;
+        
         public PolygonCollider()
         {
             selfPtr = cbg_PolygonCollider_Constructor_0();
         }
         
+        #region ISerialiable
+        #region SerializeName
+        private const string S_Vertexes = "S_Vertexes";
+        #endregion
+        
         /// <summary>
-        /// 多角形コライダの頂点の座標を取得します。
+        /// シリアライズされたデータをもとに<see cref="PolygonCollider"/>のインスタンスを生成する
         /// </summary>
-        internal Vector2FArray GetVertexes()
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        protected PolygonCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ret = cbg_PolygonCollider_GetVertexes(selfPtr);
-            return Vector2FArray.TryGetFromCache(ret);
+            var ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            Vertexes = info.GetValue<VertexArray>(S_Vertexes);
+            
+            OnDeserialize_Constructor(info, context);
         }
         
         /// <summary>
-        /// 多角形コライダの頂点の座標を設定します。
+        /// シリアライズするデータを設定します。
         /// </summary>
-        internal void SetVertexes(Vector2FArray vertexes)
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            cbg_PolygonCollider_SetVertexes(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+            base.GetObjectData(info, context);
+            
+            info.AddValue(S_Vertexes, Vertexes);
+            
+            OnGetObjectData(info, context);
         }
+        
+        /// <summary>
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="PolygonCollider(SerializationInfo, StreamingContext)"/>内で実行
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        /// <summary>
+        /// <see cref="PolygonCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
+        /// </summary>
+        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
+        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
+        #region ICacheKeeper
+        IDictionary<IntPtr, WeakReference<PolygonCollider>> ICacheKeeper<PolygonCollider>.CacheRepo => cacheRepo;
+        IntPtr ICacheKeeper<PolygonCollider>.Self { get => selfPtr; set => selfPtr = value; }
+        void ICacheKeeper<PolygonCollider>.Release(IntPtr native) => cbg_PolygonCollider_Release(native);
+        #endregion
+        
+        #endregion
         
         ~PolygonCollider()
         {
