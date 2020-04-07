@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Altseed
@@ -264,6 +265,18 @@ namespace Altseed
         {
             _RootNode.RemoveChildNode(node);
         }
+
+        /// <summary>
+        /// エンジンに登録されている <typeparamref name="T"/> 型のノードを列挙します。
+        /// </summary>
+        public static IEnumerable<T> FindNodes<T>() where T : Node
+            => _RootNode.EnumerateDescendants<T>();
+
+        /// <summary>
+        /// エンジンに登録されている <typeparamref name="T"/> 型のノードのうち <paramref name="condition"/> を満たすものを列挙します。
+        /// </summary>
+        public static IEnumerable<T> FindNodes<T>(Func<T, bool> condition) where T : Node
+                => _RootNode.EnumerateDescendants<T>(condition);
 
         #endregion
 

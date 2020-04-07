@@ -172,5 +172,30 @@ namespace Altseed
                     yield return g;
             }
         }
+
+        /// <summary>
+        /// <typeparamref name="T"/> 型の子孫ノードを列挙します。
+        /// </summary>
+        public IEnumerable<T> EnumerateDescendants<T>()
+             where T : Node
+        {
+            return EnumerateDescendants<T>(null);
+        }
+
+        /// <summary>
+        /// <typeparamref name="T"/>型の子孫ノードのうち <paramref name="condition"/> を満たすものを列挙します。
+        /// </summary>
+        public IEnumerable<T> EnumerateDescendants<T>(Func<T, bool> condition)
+            where T : Node
+        {
+            foreach (var child in Children)
+            {
+                foreach (var g in child.EnumerateDescendants<T>(condition))
+                    yield return g;
+
+                if (child is T c)
+                    yield return c;
+            }
+        }
     }
 }
