@@ -3031,6 +3031,80 @@ namespace Altseed
     }
     
     /// <summary>
+    /// カーソルを表します。
+    /// </summary>
+    public sealed partial class Cursor
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Cursor>> cacheRepo = new Dictionary<IntPtr, WeakReference<Cursor>>();
+        
+        internal static  Cursor TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Cursor cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Cursor_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Cursor(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Cursor>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Cursor_Create([MarshalAs(UnmanagedType.LPWStr)] string path, Vector2I hot);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Cursor_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Cursor(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 指定したpng画像を読み込んだ<see cref="Cursor"/>のインスタンスを生成します。
+        /// </summary>
+        /// <param name="path">読み込むpng画像のパス</param>
+        /// <param name="hot">カーソルのクリック判定座標を指定します。カーソル画像はここが中心となります。</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        /// <returns>指定したpng画像を読み込んだ<see cref="Cursor"/>のインスタンス</returns>
+        public static Cursor Create(string path, Vector2I hot)
+        {
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
+            var ret = cbg_Cursor_Create(path, hot);
+            return Cursor.TryGetFromCache(ret);
+        }
+        
+        ~Cursor()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Cursor_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// キーボードを表します。
     /// </summary>
     public sealed partial class Keyboard
@@ -3155,6 +3229,9 @@ namespace Altseed
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Mouse_SetCursorImage(IntPtr selfPtr, IntPtr cursor);
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2F cbg_Mouse_GetPosition(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, Vector2F value);
@@ -3255,6 +3332,15 @@ namespace Altseed
         {
             var ret = cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
             return (ButtonState)ret;
+        }
+        
+        /// <summary>
+        /// カーソル画像をセットします。
+        /// </summary>
+        /// <param name="cursor">状態を取得するマウスのボタン</param>
+        public void SetCursorImage(Cursor cursor)
+        {
+            cbg_Mouse_SetCursorImage(selfPtr, cursor != null ? cursor.selfPtr : IntPtr.Zero);
         }
         
         ~Mouse()
@@ -9265,6 +9351,439 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_Window_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// コライダの抽象基本クラスです
+    /// </summary>
+    public partial class Collider
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<Collider>> cacheRepo = new Dictionary<IntPtr, WeakReference<Collider>>();
+        
+        internal static  Collider TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Collider cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Collider_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Collider(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Collider>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Collider_Constructor_0();
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Collider_GetIsCollidedWith(IntPtr selfPtr, IntPtr collider);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Collider_GetPosition(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Collider_SetPosition(IntPtr selfPtr, Vector2F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Collider_GetRotation(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Collider_SetRotation(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Collider_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal Collider(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// コライダの位置情報を取得または設定します。
+        /// </summary>
+        public Vector2F Position
+        {
+            get
+            {
+                if (_Position != null)
+                {
+                    return _Position.Value;
+                }
+                var ret = cbg_Collider_GetPosition(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Position = value;
+                cbg_Collider_SetPosition(selfPtr, value);
+            }
+        }
+        private Vector2F? _Position;
+        
+        /// <summary>
+        /// コライダの回転情報を取得または設定します。
+        /// </summary>
+        public float Rotation
+        {
+            get
+            {
+                if (_Rotation != null)
+                {
+                    return _Rotation.Value;
+                }
+                var ret = cbg_Collider_GetRotation(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Rotation = value;
+                cbg_Collider_SetRotation(selfPtr, value);
+            }
+        }
+        private float? _Rotation;
+        
+        internal Collider()
+        {
+            selfPtr = cbg_Collider_Constructor_0();
+        }
+        
+        /// <summary>
+        /// 指定したコライダとの衝突判定を行います。
+        /// </summary>
+        public bool GetIsCollidedWith(Collider collider)
+        {
+            var ret = cbg_Collider_GetIsCollidedWith(selfPtr, collider != null ? collider.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        ~Collider()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Collider_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 円形コライダのクラス
+    /// </summary>
+    public partial class CircleCollider : Collider
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<CircleCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<CircleCollider>>();
+        
+        internal static new CircleCollider TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                CircleCollider cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_CircleCollider_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new CircleCollider(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<CircleCollider>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_CircleCollider_Constructor_0();
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_CircleCollider_GetRadius(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CircleCollider_SetRadius(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CircleCollider_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal CircleCollider(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 円形コライダの半径を取得または設定します。
+        /// </summary>
+        public float Radius
+        {
+            get
+            {
+                if (_Radius != null)
+                {
+                    return _Radius.Value;
+                }
+                var ret = cbg_CircleCollider_GetRadius(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Radius = value;
+                cbg_CircleCollider_SetRadius(selfPtr, value);
+            }
+        }
+        private float? _Radius;
+        
+        public CircleCollider()
+        {
+            selfPtr = cbg_CircleCollider_Constructor_0();
+        }
+        
+        ~CircleCollider()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_CircleCollider_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 矩形コライダのクラス
+    /// </summary>
+    public partial class RectangleCollider : Collider
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<RectangleCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<RectangleCollider>>();
+        
+        internal static new RectangleCollider TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RectangleCollider cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RectangleCollider_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RectangleCollider(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RectangleCollider>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_RectangleCollider_Constructor_0();
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_RectangleCollider_GetSize(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RectangleCollider_SetSize(IntPtr selfPtr, Vector2F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_RectangleCollider_GetCenterPosition(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RectangleCollider_SetCenterPosition(IntPtr selfPtr, Vector2F value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RectangleCollider_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal RectangleCollider(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 矩形コライダの幅・高さを取得または設定します。
+        /// </summary>
+        public Vector2F Size
+        {
+            get
+            {
+                if (_Size != null)
+                {
+                    return _Size.Value;
+                }
+                var ret = cbg_RectangleCollider_GetSize(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Size = value;
+                cbg_RectangleCollider_SetSize(selfPtr, value);
+            }
+        }
+        private Vector2F? _Size;
+        
+        /// <summary>
+        /// 矩形コライダの中心の位置を取得または設定します。
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get
+            {
+                if (_CenterPosition != null)
+                {
+                    return _CenterPosition.Value;
+                }
+                var ret = cbg_RectangleCollider_GetCenterPosition(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _CenterPosition = value;
+                cbg_RectangleCollider_SetCenterPosition(selfPtr, value);
+            }
+        }
+        private Vector2F? _CenterPosition;
+        
+        public RectangleCollider()
+        {
+            selfPtr = cbg_RectangleCollider_Constructor_0();
+        }
+        
+        ~RectangleCollider()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RectangleCollider_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 多角形コライダのクラス
+    /// </summary>
+    public partial class PolygonCollider : Collider
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<PolygonCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<PolygonCollider>>();
+        
+        internal static new PolygonCollider TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                PolygonCollider cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_PolygonCollider_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new PolygonCollider(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<PolygonCollider>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_PolygonCollider_Constructor_0();
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_PolygonCollider_GetVertexes(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_PolygonCollider_SetVertexes(IntPtr selfPtr, IntPtr vertexes);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_PolygonCollider_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal PolygonCollider(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        public PolygonCollider()
+        {
+            selfPtr = cbg_PolygonCollider_Constructor_0();
+        }
+        
+        /// <summary>
+        /// 多角形コライダの頂点の座標を取得します。
+        /// </summary>
+        internal Vector2FArray GetVertexes()
+        {
+            var ret = cbg_PolygonCollider_GetVertexes(selfPtr);
+            return Vector2FArray.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 多角形コライダの頂点の座標を設定します。
+        /// </summary>
+        internal void SetVertexes(Vector2FArray vertexes)
+        {
+            cbg_PolygonCollider_SetVertexes(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+        }
+        
+        ~PolygonCollider()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_PolygonCollider_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
