@@ -40,5 +40,5 @@ jobs:
       run: dotnet restore Altseed2.sln
     - name: Build
       run: dotnet build Altseed2.sln --configuration Release --no-restore
-#     - name: Test
-#       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+    - name: Test
+      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
