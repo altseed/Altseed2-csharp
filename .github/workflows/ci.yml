@@ -47,4 +47,4 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-log.txt
-        path: Build\netcoreapp3.0\test.txt
+        path: Build\netcoreapp3.0\log.txt
