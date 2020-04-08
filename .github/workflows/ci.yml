@@ -26,8 +26,8 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore Altseed2.sln
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build Altseed2.sln --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test Altseed2.sln --no-restore --verbosity normal
