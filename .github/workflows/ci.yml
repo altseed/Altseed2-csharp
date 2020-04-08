@@ -70,7 +70,10 @@ jobs:
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
-        sudo apt -y install vulkan-sdk
+        curl -sL https://cmake.org/files/v3.15/cmake-3.15.3-Linux-x86_64.sh -o cmakeinstall.sh
+        chmod +x cmakeinstall.sh
+        sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+        rm cmakeinstall.sh
         sudo apt -y install libx11-dev libxrandr-dev libxi-dev libxinerama-dev libxcursor-dev libudev-dev
         sudo apt -y install libssl-dev
         sudo apt -y install libglu1-mesa-dev mesa-common-dev
