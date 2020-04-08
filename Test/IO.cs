@@ -265,12 +265,13 @@ namespace Altseed.Test
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration() { FileLoggingEnabled = true, LogFileName = "cache.txt" }));
 
-            Assert.True(Engine.File.Exists("E:\\GON\\Pictures\\2018_08_21\\IMG_0001.JPG"));
+            var path = System.IO.Path.GetFullPath("../../Core/TestData/IO/AltseedPink.png");
+            Assert.True(Engine.File.Exists(path));
             StaticFile test = null;
-            Assert.AreNotEqual(test = StaticFile.Create("E:/GON/Pictures/2018_08_21/IMG_0001.JPG"), null);
+            Assert.AreNotEqual(test = StaticFile.Create(path), null);
 
             StaticFile test3 = null;
-            Assert.AreNotEqual(test3 = StaticFile.Create("E:/GON/Pictures/2018_08_21/IMG_0001.JPG"), null);
+            Assert.AreNotEqual(test3 = StaticFile.Create(path), null);
 
             Engine.Log.Info(LogCategory.Engine, $"{test.selfPtr}/{test3.selfPtr}");
             Engine.Log.Info(LogCategory.Engine, Engine.Resources.GetResourcesCount(ResourceType.StaticFile).ToString());
