@@ -13,14 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        submodules: true
     - name: Build CMake
       run: |
+        git submodule update --init --recursive
         cd Core
         mkdir build
         cd build
-        cmake .. -G "Visual Studio 15 2017" -A x64
+        cmake .. -A x64
         cmake --build . --config Release
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
