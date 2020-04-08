@@ -13,14 +13,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build CMake
-      uses: ashutoshvarma/action-cmake-build@v1
       with:
-        build-dir: Core/build
-        build-type: Release
-        submodule-update: true
-        target: Core 
-        configure-options: -G "Visual Studio 15 2017" -A x64
+        submodules: true
+    - name: Build CMake
+      run: |
+        cd Core
+        mkdir build
+        cd build
+        cmake .. -G "Visual Studio 15 2017" -A x64
+        cmake --build . --config Release
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
