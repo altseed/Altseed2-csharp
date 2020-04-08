@@ -70,7 +70,9 @@ jobs:
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
+        sudo apt-add-repository ppa:canonical-x/vulkan
         sudo apt update
+        sudo apt install vulkan-utils mesa-vulkan-drivers
         sudo apt -y install libx11-dev libxrandr-dev libxi-dev libxinerama-dev libxcursor-dev libudev-dev
         sudo apt -y install libssl-dev
         sudo apt -y install libglu1-mesa-dev mesa-common-dev
@@ -139,5 +141,5 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-mac
-        path: Build/netcoreapp3.0/**
+        path: Build/netcoreapp3.0
   
