@@ -13,9 +13,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build CMake
+    - name: Update Submodules
       run: |
         git submodule update --init --recursive
+    - name: Cache Core
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-core
+      with:
+        path: Core/build
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/**') }}
+    - name: Build CMake
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
         cd Core
         mkdir build
         cd build
@@ -29,5 +39,5 @@ jobs:
       run: dotnet restore Altseed2.sln
     - name: Build
       run: dotnet build Altseed2.sln --configuration Release --no-restore
-    - name: Test
-      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+#     - name: Test
+#       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
