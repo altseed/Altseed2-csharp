@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  windows:
 
     runs-on: windows-latest
 
@@ -46,5 +46,90 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: test-log.txt
+        name: test-windows
         path: Build\netcoreapp3.0\log.txt
+  
+  linux:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update Submodules
+      run: |
+        git submodule update --init --recursive
+    - name: Cache Core
+      uses: actions/cache@v1
+      id: cache-core
+      env:
+        cache-name: cache-core
+      with:
+        path: Core/build
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/core/**') }}
+    - name: Build CMake
+      if: steps.cache-core.outputs.cache-hit != 'true'
+      run: |
+        cd Core
+        mkdir build
+        cd build
+        cmake .. -A x64
+        cmake --build . --config Release
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore Altseed2.sln
+    - name: Build
+      run: dotnet build Altseed2.sln --configuration Release --no-restore
+    - name: Test
+      continue-on-error: true
+      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: test-linux
+        path: Build\netcoreapp3.0\log.txt
+        
+  macOS:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update Submodules
+      run: |
+        git submodule update --init --recursive
+    - name: Cache Core
+      uses: actions/cache@v1
+      id: cache-core
+      env:
+        cache-name: cache-core
+      with:
+        path: Core/build
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/core/**') }}
+    - name: Build CMake
+      if: steps.cache-core.outputs.cache-hit != 'true'
+      run: |
+        cd Core
+        mkdir build
+        cd build
+        cmake .. -A x64
+        cmake --build . --config Release
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore Altseed2.sln
+    - name: Build
+      run: dotnet build Altseed2.sln --configuration Release --no-restore
+    - name: Test
+      continue-on-error: true
+      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: test-mac
+        path: Build\netcoreapp3.0\log.txt
+  
