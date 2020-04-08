@@ -42,3 +42,8 @@ jobs:
       run: dotnet build Altseed2.sln --configuration Release --no-restore
     - name: Test
       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: test-log.txt
+        path: Build\netcoreapp3.0\test.txt
