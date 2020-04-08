@@ -44,6 +44,7 @@ jobs:
       continue-on-error: true
       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
     - name: Upload artifact
+      continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-windows
@@ -69,6 +70,11 @@ jobs:
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
+        sudo apt-get update
+        sudo apt-get dist-upgrade
+        sudo apt-get install libglm-dev cmake libxcb-dri3-0 libxcb-present0 libpciaccess0 \
+        libpng-dev libxcb-keysyms1-dev libxcb-dri3-dev libx11-dev g++ gcc g++-multilib \
+        libmirclient-dev libwayland-dev libxrandr-dev libxcb-ewmh-dev git python3 bison
         sudo apt -y install libx11-dev libxrandr-dev libxi-dev libxinerama-dev libxcursor-dev libudev-dev
         sudo apt -y install libssl-dev
         sudo apt -y install libglu1-mesa-dev mesa-common-dev
@@ -90,6 +96,7 @@ jobs:
       continue-on-error: true
       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
     - name: Upload artifact
+      continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-linux
@@ -132,6 +139,7 @@ jobs:
       continue-on-error: true
       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
     - name: Upload artifact
+      continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-mac
