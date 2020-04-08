@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build CMake
-    - uses: ashutoshvarma/action-cmake-build@v1
+      uses: ashutoshvarma/action-cmake-build@v1
       with:
         build-dir: Core/build
         build-type: Release
