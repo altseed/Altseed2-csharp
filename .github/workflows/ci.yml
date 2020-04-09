@@ -93,7 +93,9 @@ jobs:
       run: dotnet build Altseed2.sln --configuration Release --no-restore
     - name: Test
       continue-on-error: true
-      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+      run: |
+        cd Build/netcoreapp3.0
+        dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
@@ -136,7 +138,9 @@ jobs:
       run: dotnet build Altseed2.sln --configuration Release --no-restore
     - name: Test
       continue-on-error: true
-      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+      run: |
+        cd Build/netcoreapp3.0
+        dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
