@@ -94,8 +94,8 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        ls
         cd Build/netcoreapp3.0
+        mv libAltseed_Core.so libAltseed_Core
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
@@ -140,7 +140,6 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        ls
         cd Build/netcoreapp3.0
         dotnet TestForMacLinux.dll
     - name: Upload artifact
