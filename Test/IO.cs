@@ -10,7 +10,7 @@ namespace Altseed.Test
     [TestFixture]
     public class IO
     {
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void FileRoot()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -61,7 +61,7 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void StaticFileBase()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -103,7 +103,7 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void StreamFileBase()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -164,7 +164,7 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void Zenkaku()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -198,7 +198,7 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void StaticFileAsync()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -260,7 +260,7 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void StaticFileCache()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration() { FileLoggingEnabled = true, LogFileName = "cache.txt" }));

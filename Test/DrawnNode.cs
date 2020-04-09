@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     class DrawnNode
     {
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void SpriteNode()
         {
             var tc = new TestCore();
@@ -42,7 +42,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void TextNode()
         {
             var tc = new TestCore();
@@ -73,7 +73,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void StaticFont()
         {
             var tc = new TestCore();

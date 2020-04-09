@@ -11,7 +11,7 @@ namespace Altseed.Test
     [TestFixture]
     class Async
     {
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void CreateStaticFile()
         {
             if (System.IO.Directory.Exists("tmp"))
@@ -53,7 +53,7 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void LoadTexture()
         {
             if (System.IO.Directory.Exists("tmp"))

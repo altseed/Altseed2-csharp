@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     class Tool
     {
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void BeginEnd()
         {
             var tc = new TestCore(new Configuration { ToolEnabled = true });

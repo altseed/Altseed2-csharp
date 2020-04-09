@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     class Camera
     {
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void NoRenderTexture()
         {
             var tc = new TestCore();
@@ -39,7 +39,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void _RenderTexture()
         {
             var tc = new TestCore();
