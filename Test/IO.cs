@@ -263,7 +263,7 @@ namespace Altseed.Test
         [Test]
         public void StaticFileCache()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration() { FileLoggingEnabled = true, LogFileName = "cache.txt" }));
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration() { FileLoggingEnabled = true, LogFileName = "cache.txt", ConsoleLoggingEnabled = true }));
 
             var path = System.IO.Path.GetFullPath("../../Core/TestData/IO/AltseedPink.png");
             Assert.True(Engine.File.Exists(path));
