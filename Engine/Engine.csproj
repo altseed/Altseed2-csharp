@@ -53,6 +53,22 @@
       </ItemGroup>
     </When>
 
+    <When Condition=" '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('Linux')) ">
+      <ItemGroup>
+        <Content Include="..\Core\build\DEBUG\libAltseed_Core.so">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+
+    <When Condition=" '$(Configuration)'=='Release' And $([MSBuild]::IsOsPlatform('Linux')) ">
+      <ItemGroup>
+        <Content Include="..\Core\build\RELEASE\libAltseed_Core.so">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+    </When>
+
   </Choose>
 
 </Project>
