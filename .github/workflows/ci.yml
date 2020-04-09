@@ -94,6 +94,7 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
+        ls
         cd Build/netcoreapp3.0
         dotnet TestForMacLinux.dll
     - name: Upload artifact
@@ -139,6 +140,7 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
+        ls
         cd Build/netcoreapp3.0
         dotnet TestForMacLinux.dll
     - name: Upload artifact
