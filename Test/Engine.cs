@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     class EngineTest
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void PauseAndResume()
         {
             var tc = new TestCore();

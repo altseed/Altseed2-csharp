@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     public class Input
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void MousePosition()
         {
             var tc = new TestCore();
@@ -33,7 +33,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void MouseButton()
         {
             var tc = new TestCore();
@@ -58,7 +58,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Keyboard()
         {
             var tc = new TestCore();
@@ -82,7 +82,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Joystick()
         {
             var tc = new TestCore();

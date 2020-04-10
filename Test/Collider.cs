@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     class Collider
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void SpriteNode()
         {
             var tc = new TestCore();

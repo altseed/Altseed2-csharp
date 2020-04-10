@@ -10,7 +10,7 @@ namespace Altseed.Test
     [TestFixture]
     class Node
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void TreeAdd()
         {
             var tc = new TestCore();
@@ -39,7 +39,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void TreeDelete()
         {
             var tc = new TestCore();
@@ -70,7 +70,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void EnuemrateAncestors()
         {
             var tc = new TestCore();

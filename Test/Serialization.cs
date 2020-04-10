@@ -28,7 +28,7 @@ namespace Altseed.Test
             return formatter.Deserialize<T>(stream);
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void StaticFile()
         {
             var tc = new TestCore();
@@ -55,7 +55,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void StreamFile()
         {
             var tc = new TestCore();
@@ -84,7 +84,7 @@ namespace Altseed.Test
 
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Configuration()
         {
             var tc = new TestCore();
@@ -124,7 +124,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void DynamicFont()
         {
             var tc = new TestCore();
@@ -171,7 +171,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void StaticFont()
         {
             var tc = new TestCore();
@@ -219,7 +219,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Texture2D()
         {
             var tc = new TestCore()
@@ -268,7 +268,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void RenderTexture()
         {
             var tc = new TestCore();
@@ -295,7 +295,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Sound()
         {
             var tc = new TestCore();
@@ -325,7 +325,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Int8Array()
         {
             var tc = new TestCore();
@@ -353,7 +353,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Int32Array()
         {
             var tc = new TestCore();
@@ -381,7 +381,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void VertexArray()
         {
             var tc = new TestCore();
@@ -414,7 +414,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void FloatArray()
         {
             var tc = new TestCore();
@@ -442,7 +442,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Vector2FArray()
         {
             var tc = new TestCore();
@@ -475,7 +475,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void RenderedSprite()
         {
             var tc = new TestCore();
@@ -509,7 +509,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void RenderedText()
         {
             var tc = new TestCore();
@@ -546,7 +546,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void RenderedPolygon()
         {
             var tc = new TestCore();
@@ -588,7 +588,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void RenderedCamera()
         {
             var tc = new TestCore();
@@ -620,7 +620,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void CircleCollider()
         {
             var tc = new TestCore();
@@ -648,7 +648,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void PolygonCollider()
         {
             var tc = new TestCore();
@@ -688,7 +688,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void RectangleCollider()
         {
             var tc = new TestCore();

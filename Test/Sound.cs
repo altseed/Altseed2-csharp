@@ -8,7 +8,7 @@ namespace Altseed.Test
     [TestFixture]
     public class Sound
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Play()
         {
             var tc = new TestCore();
@@ -30,7 +30,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Loop()
         {
             var tc = new TestCore();
@@ -52,7 +52,7 @@ namespace Altseed.Test
             tc.End();
         }
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void GetPosition()
         {
             var tc = new TestCore();

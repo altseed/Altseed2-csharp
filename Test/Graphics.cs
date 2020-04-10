@@ -9,7 +9,7 @@ namespace Altseed.Test
     [TestFixture]
     public class Graphics
     {
-        //[Test]
+        //[Test, Apartment(ApartmentState.STA)]
         //public void BasicSpriteTexture()
         //{
         //    Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -67,7 +67,7 @@ namespace Altseed.Test
         //    Engine.Terminate();
         //}
 
-        //[Test]
+        //[Test, Apartment(ApartmentState.STA)]
         //public void Polygon()
         //{
         //    Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -103,7 +103,7 @@ namespace Altseed.Test
 
         //    Engine.Terminate();
         //}
-        //[Test]
+        //[Test, Apartment(ApartmentState.STA)]
         //public void VertexIndexAccess()
         //{
         //    Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
@@ -152,7 +152,7 @@ namespace Altseed.Test
         //    Engine.Terminate();
         //}
 
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void DrawText()
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));

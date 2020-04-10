@@ -8,7 +8,7 @@ namespace Altseed.Test
     [TestFixture]
     public class Window
     {
-        [Test]
+        [Test, Apartment(ApartmentState.STA)]
         public void Base()
         {
             var tc = new TestCore();
