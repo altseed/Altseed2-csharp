@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Samples\Sample.csproj", "{B7A43F54-A032-44F4-9FEE-554CF61A3125}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForMacLinux", "TestForMacLinux\TestForMacLinux.csproj", "{2E579EDE-9668-4595-85BF-6020A68C5B6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -30,6 +32,10 @@ Global
 		{B7A43F54-A032-44F4-9FEE-554CF61A3125}.Debug|x64.Build.0 = Debug|x64
 		{B7A43F54-A032-44F4-9FEE-554CF61A3125}.Release|x64.ActiveCfg = Release|x64
 		{B7A43F54-A032-44F4-9FEE-554CF61A3125}.Release|x64.Build.0 = Release|x64
+		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Debug|x64.ActiveCfg = Debug|x64
+		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Debug|x64.Build.0 = Debug|x64
+		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Release|x64.ActiveCfg = Release|x64
+		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

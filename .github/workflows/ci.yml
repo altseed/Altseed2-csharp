@@ -35,7 +35,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.0.103
     - name: Install dependencies
       run: dotnet restore Altseed2.sln
     - name: Build
@@ -86,14 +86,17 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.0.103
     - name: Install dependencies
       run: dotnet restore Altseed2.sln
     - name: Build
       run: dotnet build Altseed2.sln --configuration Release --no-restore
     - name: Test
       continue-on-error: true
-      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+      run: |
+        cd Build/netcoreapp3.0
+        mv libAltseed_Core.so libAltseed_Core
+        dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
@@ -129,14 +132,16 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.0.103
     - name: Install dependencies
       run: dotnet restore Altseed2.sln
     - name: Build
       run: dotnet build Altseed2.sln --configuration Release --no-restore
     - name: Test
       continue-on-error: true
-      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+      run: |
+        cd Build/netcoreapp3.0
+        dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0

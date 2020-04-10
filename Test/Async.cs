@@ -11,7 +11,7 @@ namespace Altseed.Test
     [TestFixture]
     class Async
     {
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void CreateStaticFile()
         {
             if (System.IO.Directory.Exists("tmp"))
@@ -53,14 +53,14 @@ namespace Altseed.Test
             Engine.Terminate();
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         public void LoadTexture()
         {
             if (System.IO.Directory.Exists("tmp"))
                 System.IO.Directory.Delete("tmp", true);
 
             System.IO.Directory.CreateDirectory("tmp");
-            foreach (var i in Enumerable.Range(0, 1000))
+            foreach (var i in Enumerable.Range(0, 300))
             {
                 System.IO.File.Copy("../../Core/TestData/IO/AltseedPink.png", "tmp/test" + i + ".png");
             }
@@ -77,7 +77,7 @@ namespace Altseed.Test
             Engine.AddNode(camera);
 
             var tasks = new List<Task<Texture2D>>();
-            foreach (var i in Enumerable.Range(0, 1000))
+            foreach (var i in Enumerable.Range(0, 300))
             {
                 tasks.Add(Texture2D.LoadAsync("tmp/test" + i + ".png"));
             }
@@ -91,7 +91,7 @@ namespace Altseed.Test
                     break;
             }
 
-            foreach (var i in Enumerable.Range(0, 1000))
+            foreach (var i in Enumerable.Range(0, 300))
             {
                 Assert.AreNotEqual(tasks[0].Result, null);
             }
@@ -106,7 +106,7 @@ namespace Altseed.Test
             sprite.CameraGroup = 1 << 0;
             Engine.AddNode(sprite);
 
-            while (Engine.DoEvents() && count < 1000)
+            while (Engine.DoEvents() && count < 300)
             {
                 node.Text = $"Shown Texture: {count}/{tasks.Count()}";
                 sprite.Texture = tasks[count].Result;

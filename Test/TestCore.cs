@@ -12,7 +12,7 @@ namespace Altseed.Test
 
         public TestCore(Configuration config = null)
         {
-            _Config = config ?? new Configuration() { FileLoggingEnabled = true, LogFileName = "log.txt" };
+            _Config = config ?? new Configuration() { FileLoggingEnabled = true, LogFileName = "log.txt", ConsoleLoggingEnabled = true };
         }
 
         public void Init([CallerMemberName]string testName = "")
