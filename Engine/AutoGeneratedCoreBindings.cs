@@ -4737,6 +4737,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Rendered_GetId(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Rendered_Release(IntPtr selfPtr);
         
         #endregion
@@ -4767,6 +4771,18 @@ namespace Altseed
             }
         }
         private Matrix44F? _Transform;
+        
+        /// <summary>
+        /// BaseObjectのIdを取得します
+        /// </summary>
+        public int Id
+        {
+            get
+            {
+                var ret = cbg_Rendered_GetId(selfPtr);
+                return ret;
+            }
+        }
         
         #region ISerialiable
         #region SerializeName
@@ -6705,6 +6721,119 @@ namespace Altseed
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_Font_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// カリングのクラス
+    /// </summary>
+    internal sealed partial class CullingSystem
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<CullingSystem>> cacheRepo = new Dictionary<IntPtr, WeakReference<CullingSystem>>();
+        
+        internal static  CullingSystem TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                CullingSystem cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_CullingSystem_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new CullingSystem(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<CullingSystem>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_CullingSystem_GetInstance();
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CullingSystem_UpdateAABB(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_CullingSystem_GetDrawingRenderedCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_CullingSystem_GetDrawingRenderedIds(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_CullingSystem_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal CullingSystem(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 描画されているRenderedの個数を取得する
+        /// </summary>
+        public int DrawingRenderedCount
+        {
+            get
+            {
+                var ret = cbg_CullingSystem_GetDrawingRenderedCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 描画されているRenderedのIdの配列を取得する
+        /// </summary>
+        public Int32Array DrawingRenderedIds
+        {
+            get
+            {
+                var ret = cbg_CullingSystem_GetDrawingRenderedIds(selfPtr);
+                return Int32Array.TryGetFromCache(ret);
+            }
+        }
+        
+        /// <summary>
+        /// インスタンスを取得します。
+        /// </summary>
+        /// <returns>使用するインスタンス</returns>
+        internal static CullingSystem GetInstance()
+        {
+            var ret = cbg_CullingSystem_GetInstance();
+            return CullingSystem.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// RenderedのAABBを更新します
+        /// </summary>
+        internal void UpdateAABB()
+        {
+            cbg_CullingSystem_UpdateAABB(selfPtr);
+        }
+        
+        ~CullingSystem()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_CullingSystem_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
@@ -9988,7 +10117,7 @@ namespace Altseed
         /// <summary>
         /// 多角形コライダの頂点の座標を取得または設定します
         /// </summary>
-        internal VertexArray Vertexes
+        internal Vector2FArray Vertexes
         {
             get
             {
@@ -9997,7 +10126,7 @@ namespace Altseed
                     return _Vertexes;
                 }
                 var ret = cbg_PolygonCollider_GetVertexes(selfPtr);
-                return VertexArray.TryGetFromCache(ret);
+                return Vector2FArray.TryGetFromCache(ret);
             }
             set
             {
@@ -10005,7 +10134,7 @@ namespace Altseed
                 cbg_PolygonCollider_SetVertexes(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
             }
         }
-        private VertexArray _Vertexes;
+        private Vector2FArray _Vertexes;
         
         public PolygonCollider()
         {
@@ -10029,7 +10158,7 @@ namespace Altseed
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Vertexes = info.GetValue<VertexArray>(S_Vertexes);
+            Vertexes = info.GetValue<Vector2FArray>(S_Vertexes);
             
             OnDeserialize_Constructor(info, context);
         }

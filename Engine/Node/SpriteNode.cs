@@ -55,6 +55,11 @@ namespace Altseed
         }
 
         /// <summary>
+        /// カリング用ID
+        /// </summary>
+        internal override int CullingId => _RenderedSprite.Id;
+
+        /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public SpriteNode()

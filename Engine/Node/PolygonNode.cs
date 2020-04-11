@@ -65,6 +65,11 @@ namespace Altseed
         }
 
         /// <summary>
+        /// カリング用ID
+        /// </summary>
+        internal override int CullingId => _RenderedPolygon.Id;
+
+        /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public PolygonNode()

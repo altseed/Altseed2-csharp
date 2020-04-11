@@ -667,9 +667,9 @@ namespace Altseed.Test
                 new Vertex(new Vector3F(30f, 30f, 30f), new Color(300, 300, 300, 300), new Vector2F(30f, 30f), new Vector2F(300f, 300f)),
             };
 
-            var array_a = Altseed.VertexArray.Create(array_g.Length);
+            var array_a = Altseed.Vector2FArray.Create(array_g.Length);
             Assert.NotNull(array_a);
-            array_a.FromArray(array_g);
+            array_a.FromArray(array_g.Select(v => new Vector2F(v.Position.X, v.Position.Y)).ToArray());
 
             collider1.Vertexes = array_a;
 
