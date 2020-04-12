@@ -72,8 +72,12 @@ namespace Altseed
         /// </summary>
         internal override void Draw()
         {
-            _RenderedSprite.Transform = CalcInheritedTransform();
             Engine.Renderer.DrawSprite(_RenderedSprite);
+        }
+
+        internal override void UpdateInheritedTransform()
+        {
+            _RenderedSprite.Transform = CalcInheritedTransform();
         }
     }
 }

@@ -82,7 +82,6 @@ namespace Altseed
         /// </summary>
         internal override void Draw()
         {
-            _RenderedPolygon.Transform = CalcInheritedTransform();
             Engine.Renderer.DrawPolygon(_RenderedPolygon);
         }
 
@@ -109,6 +108,11 @@ namespace Altseed
             for (int i = 0; i < vertexArray.Length; ++i)
                 vertexArray[i].Color = color;
             Vertexes = vertexArray;
+        }
+
+        internal override void UpdateInheritedTransform()
+        {
+            _RenderedPolygon.Transform = CalcInheritedTransform();
         }
     }
 }

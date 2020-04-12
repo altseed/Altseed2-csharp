@@ -161,6 +161,8 @@ namespace Altseed
             Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
         }
 
+        internal abstract void UpdateInheritedTransform();
+
         internal Matrix44F CalcInheritedTransform()
         {
             var mat = Transform;

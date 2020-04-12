@@ -90,8 +90,12 @@ namespace Altseed
         /// </summary>
         internal override void Draw()
         {
-            _RenderedText.Transform = CalcInheritedTransform();
             Engine.Renderer.DrawText(_RenderedText);
+        }
+
+        internal override void UpdateInheritedTransform()
+        {
+            _RenderedText.Transform = CalcInheritedTransform();
         }
     }
 }
