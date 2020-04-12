@@ -52,6 +52,7 @@ namespace Altseed
                 Window = Window.GetInstance();
                 Graphics = Graphics.GetInstance();
                 Renderer = Renderer.GetInstance();
+                CullingSystem = CullingSystem.GetInstance();
 
                 Context = new AltseedContext();
                 System.Threading.SynchronizationContext.SetSynchronizationContext(Context);
@@ -101,6 +102,9 @@ namespace Altseed
             // Contextの更新
             Context.Update();
 
+            // カリング用AABBの更新
+            CullingSystem.UpdateAABB();
+
             // (ツール機能を使用しない場合は)描画を開始
             if (!_Config.ToolEnabled)
             {
@@ -113,12 +117,13 @@ namespace Altseed
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
                 Renderer.SetCamera(_DefaultCamera);
+                var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
 
                 var list = _DrawnNodes.Nodes;
                 foreach (var z in list.Keys.OrderBy(x => x))
                 {
                     var nodes = list[z];
-                    foreach (var node in nodes)
+                    foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
                         node.Draw();
                 }
 
@@ -132,12 +137,13 @@ namespace Altseed
                     foreach (var camera in _CameraNodes[i])
                     {
                         Renderer.SetCamera(camera.RenderedCamera);
+                        var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
 
                         var list = _DrawnNodes[i];
                         foreach (var z in list.Keys.OrderBy(x => x))
                         {
                             var nodes = list[z];
-                            foreach (var node in nodes)
+                            foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
                                 node.Draw();
                         }
 
@@ -220,6 +226,11 @@ namespace Altseed
         /// レンダラのクラスを取得します。
         /// </summary>
         internal static Renderer Renderer { get; private set; }
+
+        /// <summary>
+        /// カリングのクラスを取得します。
+        /// </summary>
+        internal static CullingSystem CullingSystem { get; private set; }
 
         /// <summary>
         /// 音を管理するクラスを取得します。

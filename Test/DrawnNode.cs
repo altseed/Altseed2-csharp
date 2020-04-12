@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 
@@ -92,6 +93,44 @@ namespace Altseed.Test
             Engine.AddNode(new TextNode() { Font = font2, Text = "Hello, world! こんにちは", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
 
             tc.LoopBody(c => { }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Culling()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 30);
+            Assert.NotNull(font);
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
+            Engine.AddNode(text);
+
+            var parent = new Altseed.Node();
+            Engine.AddNode(parent);
+
+            tc.LoopBody(c =>
+            {
+                text.Text = "Drawing Object : " + Engine.CullingSystem.DrawingRenderedCount + " FPS: " + Engine.CurrentFPS.ToString();
+
+                var node = new SpriteNode();
+                node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
+                node.Texture = texture;
+                node.Position = new Vector2F(200, 100);
+                parent.AddChildNode(node);
+
+                foreach (var item in parent.Children.OfType<SpriteNode>())
+                {
+                    item.Position += new Vector2F(0, 10);
+                }
+
+            }, null);
 
             tc.End();
         }

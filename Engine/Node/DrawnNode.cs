@@ -147,6 +147,11 @@ namespace Altseed
         private uint _CameraGroup = 0;
 
         /// <summary>
+        /// カリング用ID
+        /// </summary>
+        internal virtual int CullingId => -1;
+
+        /// <summary>
         /// <see cref="Transform"/>を更新する
         /// </summary>
         protected void UpdateTransform()
