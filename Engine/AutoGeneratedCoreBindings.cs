@@ -6610,6 +6610,7 @@ namespace Altseed
         #region SerializeName
         private const string S_Size = "S_Size";
         private const string S_IsStaticFont = "S_IsStaticFont";
+        private const string S_Path = "S_Path";
         #endregion
         
         private SerializationInfo seInfo;
@@ -6637,6 +6638,7 @@ namespace Altseed
             
             info.AddValue(S_Size, Size);
             info.AddValue(S_IsStaticFont, IsStaticFont);
+            info.AddValue(S_Path, Path);
             
             OnGetObjectData(info, context);
         }
@@ -6676,10 +6678,12 @@ namespace Altseed
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Size"><see cref="Font.Size"/></param>
         /// <param name="IsStaticFont"><see cref="Font.IsStaticFont"/></param>
-        private void Font_Unsetter_Deserialize(SerializationInfo info, out int Size, out bool IsStaticFont)
+        /// <param name="Path"><see cref="Font.Path"/></param>
+        private void Font_Unsetter_Deserialize(SerializationInfo info, out int Size, out bool IsStaticFont, out string Path)
         {
             Size = info.GetInt32(S_Size);
             IsStaticFont = info.GetBoolean(S_IsStaticFont);
+            Path = info.GetString(S_Path) ?? throw new SerializationException("デシリアライズに失敗しました");
         }
         
         #region ICacheKeeper
@@ -8070,6 +8074,7 @@ namespace Altseed
         #region ISerialiable
         #region SerializeName
         private const string S_CurrentPosition = "S_CurrentPosition";
+        private const string S_Path = "S_Path";
         #endregion
         
         private SerializationInfo seInfo;
@@ -8096,6 +8101,7 @@ namespace Altseed
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_CurrentPosition, CurrentPosition);
+            info.AddValue(S_Path, Path);
             
             OnGetObjectData(info, context);
         }
@@ -8134,9 +8140,11 @@ namespace Altseed
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="CurrentPosition"><see cref="StreamFile.CurrentPosition"/></param>
-        private void StreamFile_Unsetter_Deserialize(SerializationInfo info, out int CurrentPosition)
+        /// <param name="Path"><see cref="StreamFile.Path"/></param>
+        private void StreamFile_Unsetter_Deserialize(SerializationInfo info, out int CurrentPosition, out string Path)
         {
             CurrentPosition = info.GetInt32(S_CurrentPosition);
+            Path = info.GetString(S_Path);
         }
         
         #region ICacheKeeper
@@ -8323,6 +8331,7 @@ namespace Altseed
         
         #region ISerialiable
         #region SerializeName
+        private const string S_Path = "S_Path";
         #endregion
         
         /// <summary>
@@ -8350,6 +8359,7 @@ namespace Altseed
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
+            info.AddValue(S_Path, Path);
             
             OnGetObjectData(info, context);
         }
@@ -8381,6 +8391,16 @@ namespace Altseed
             var ptr = IntPtr.Zero;
             Deserialize_GetPtr(ref ptr, info);
             return ptr;
+        }
+        
+        /// <summary>
+        /// <see cref="StaticFile(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="Path"><see cref="StaticFile.Path"/></param>
+        private void StaticFile_Unsetter_Deserialize(SerializationInfo info, out string Path)
+        {
+            Path = info.GetString(S_Path);
         }
         
         #region ICacheKeeper
