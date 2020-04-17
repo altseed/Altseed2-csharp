@@ -16,6 +16,8 @@ namespace Altseed.Test
     {
         private static void Serialize<T>(string path, T item)
         {
+            var direc = Path.GetDirectoryName(path);
+            if (!Directory.Exists(direc)) Directory.CreateDirectory(direc);
             var formatter = new BinaryFormatter();
             using var stream = new FileStream(path, FileMode.Create);
             formatter.Serialize(stream, item);

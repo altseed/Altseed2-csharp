@@ -8,7 +8,6 @@ namespace Altseed
     public partial class Font
     {
         #region SerializeName
-        private const string S_Path = "S_Path";
         private const string S_Textures = "S_Textures";
         #endregion
 
@@ -16,14 +15,12 @@ namespace Altseed
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            var path = info.GetString(S_Path);
-            Font_Unsetter_Deserialize(info, out var size, out var isStatic);
+            Font_Unsetter_Deserialize(info, out var size, out var isStatic, out var path);
             ptr = isStatic ? cbg_Font_LoadStaticFont(path) : cbg_Font_LoadDynamicFont(path, size);
         }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(S_Path, Path[2..]);
             info.AddValue(S_Textures, textures);  
         }
 

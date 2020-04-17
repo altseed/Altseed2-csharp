@@ -7,10 +7,6 @@ namespace Altseed
 {
     public partial class StaticFile
     {
-        #region SerializeName
-        private const string S_Path = "S_Path";
-        #endregion
-
         /// <summary>
         /// 読み込まれたデータを取得する
         /// </summary>
@@ -21,14 +17,8 @@ namespace Altseed
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            var path = info.GetString(S_Path);
+            StaticFile_Unsetter_Deserialize(info, out var path);
             ptr = cbg_StaticFile_Create(path);
-        }
-
-        partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // インスタンス生成時に./が頭についているので削る
-            info.AddValue(S_Path, Path[2..]);
         }
 
         /// <summary>
@@ -79,10 +69,6 @@ namespace Altseed
 
     public partial class StreamFile
     {
-        #region SerializeName
-        private const string S_Path = "S_Path";
-        #endregion
-
         /// <summary>
         /// 現在読み込まれているデータを取得する
         /// </summary>
@@ -93,18 +79,13 @@ namespace Altseed
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            var path = info.GetString(S_Path);
+            StreamFile_Unsetter_Deserialize(info, out _, out var path);
             ptr = cbg_StreamFile_Create(path);
-        }
-
-        partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue(S_Path, Path[2..]);
         }
 
         partial void OnDeserialize_Method(object sender)
         {
-            StreamFile_Unsetter_Deserialize(seInfo, out var position);
+            StreamFile_Unsetter_Deserialize(seInfo, out var position, out _);
             if (position > 0) Read(position);
         }
 
