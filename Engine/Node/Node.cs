@@ -96,7 +96,7 @@ namespace Altseed
 
         #region Registerable (親として)
 
-        private RegisterableCollection<Node, Node> _Children;
+        private readonly RegisterableCollection<Node, Node> _Children;
 
         /// <summary>
         /// 子要素のコレクションを取得します。
@@ -109,6 +109,7 @@ namespace Altseed
         /// <param name="node">追加する要素</param>
         public void AddChildNode(Node node)
         {
+            if (ContainsCollisionManager()) throw new InvalidOperationException("既に衝突判定マネージャが格納されており，追加する事が出来ません");
             _Children.Add(node);
         }
 
@@ -119,6 +120,55 @@ namespace Altseed
         public void RemoveChildNode(Node node)
         {
             _Children.Remove(node);
+        }
+
+        #endregion
+
+        #region Physics
+
+        /// <summary>
+        /// 子ノードに<see cref="CollisionManagerNode"/>が格納されている，若しくは格納される予定であり，かつ削除される予定でないかどうかを返す
+        /// </summary>
+        /// <returns>子ノードに<see cref="CollisionManagerNode"/>が格納されている，若しくは格納される予定であり，かつ削除される予定でないならtrue，それ以外でfalse</returns>
+        internal bool ContainsCollisionManager()
+        {
+            return (ContainsCollisionManagerPrivate(_Children.CurrentCollection) || ContainsCollisionManagerPrivate(_Children.AddQueue)) && !ContainsCollisionManagerPrivate(_Children.RemoveQueue);
+        }
+
+        private bool ContainsCollisionManagerPrivate(IEnumerable<Node> collection)
+        {
+            if (collection == null) throw new ArgumentNullException(nameof(collection), "引数がnullです");
+            foreach (var current in collection)
+                if (current is CollisionManagerNode)
+                    return true;
+            return false;
+        }
+
+        internal IEnumerable<ColliderNode> EnumerateColliderNodes()
+        {
+            foreach (var current in Children)
+                if (current is ColliderNode n)
+                    yield return n;
+        }
+
+        /// <summary>
+        /// 子ノードから<see cref="CollisionManagerNode"/>を取得する
+        /// </summary>
+        /// <returns>子ノードの中の<see cref="CollisionManagerNode"/> 無かったらnull</returns>
+        internal CollisionManagerNode SearchManager()
+        {
+            CollisionManagerNode result = null;
+            foreach (var current in _Children.CurrentCollection)
+                if (current is CollisionManagerNode m)
+                    result = m;
+            if (result == null)
+            {
+                foreach (var current in _Children.AddQueue)
+                    if (current is CollisionManagerNode m)
+                        return m;
+                return null;
+            }
+            else return _Children.RemoveQueue.Contains(result) ? null : result;
         }
 
         #endregion
