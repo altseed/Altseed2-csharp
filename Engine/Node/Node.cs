@@ -109,7 +109,7 @@ namespace Altseed
         /// <param name="node">追加する要素</param>
         public void AddChildNode(Node node)
         {
-            if (ContainsCollisionManager()) throw new InvalidOperationException("既に衝突判定マネージャが格納されており，追加する事が出来ません");
+            if (node is CollisionManagerNode && ContainsCollisionManager()) throw new InvalidOperationException("既に衝突判定マネージャが格納されており，追加する事が出来ません");
             _Children.Add(node);
         }
 

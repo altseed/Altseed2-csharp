@@ -233,7 +233,7 @@ namespace Altseed
                 Current = null;
                 enumerator = default;
                 enumerator_set = default;
-                index = set.Count + 1;
+                index = set?.Count + 1 ?? -1;
                 set = null;
                 return false;
             }

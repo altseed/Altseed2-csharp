@@ -18,7 +18,7 @@ namespace Altseed
             {
                 if (_collider == value) return;
                 if (value.Owner != null) throw new ArgumentException("既にほかノードに所属しています", nameof(value));
-                _collider.Owner = null;
+                if (_collider != null) _collider.Owner = null;
                 value.Owner = this;
                 _collider = value;
             }
