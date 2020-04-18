@@ -103,7 +103,7 @@ namespace Altseed
                     {
                         var beforeColliding = (preCollisionInfo != null && preCollisionInfo.TryGetValue(entry, out var value)) ? value : false;
                         var nowColliding = entry.IsColliding();
-                        if (current is ICollisionEventReceiver receiver1)
+                        if (current.Parent is ICollisionEventReceiver receiver1)
                         {
                             if (beforeColliding)
                             {
@@ -112,7 +112,7 @@ namespace Altseed
                             }
                             else if (nowColliding) receiver1.OnCollisionEnter(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Enter));
                         }
-                        if (comparison is ICollisionEventReceiver receiver2)
+                        if (comparison.Parent is ICollisionEventReceiver receiver2)
                         {
                             if (beforeColliding)
                             {
@@ -225,6 +225,7 @@ namespace Altseed
                     if (!enumerator_set.MoveNext()) throw new InvalidOperationException("列挙に失敗しました");
                     Current = enumerator_set.Current;
                     index++;
+                    return true;
                 }
                 return MoveNextRare();
             }
