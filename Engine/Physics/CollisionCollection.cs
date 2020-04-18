@@ -15,6 +15,20 @@ namespace Altseed
         private int version = 0;
 
         /// <summary>
+        /// 格納されている<see cref="ColliderNode"/>の個数を取得する
+        /// </summary>
+        internal int Count
+        {
+            get
+            {
+                if (preCollisionInfo != null) return preCollisionInfo.Count;
+                var count = 0;
+                foreach (var current in collection) count += current.Value.Count;
+                return count;
+            }
+        }
+
+        /// <summary>
         /// 指定したコライダを追加する
         /// </summary>
         /// <param name="node">追加するコライダのノード</param>
