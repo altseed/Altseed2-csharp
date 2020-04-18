@@ -23,6 +23,7 @@ namespace Sample
             list.Add(new Sample("StaticFile", "StaticFileを使って、ファイルを読み込みます。", typeof(FileStaticFile)));
             list.Add(new Sample("StreamFile", "StreamFileを使って、ファイルを読み込みます。", typeof(FileStreamFile)));
             list.Add(new Sample("Serialization", "バイナリデータシリアライズのサンプルです。", typeof(Serialization)));
+            list.Add(new Sample("MouseCursor", "マウスカーソル設定のサンプルです。", typeof(MouseCursor)));
 
             Samples = list.ToDictionary(s => s.TypeName);
 
