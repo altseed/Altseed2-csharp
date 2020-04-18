@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;
@@ -53,6 +54,81 @@ namespace Altseed.Test
             , null);
 
             tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void AutoCollisionSystem()
+        {
+            var tc = new TestCore
+            {
+                Duration = int.MaxValue
+            };
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var scene = new Altseed.Node();
+            scene.AddChildNode(new CollisionManagerNode());
+
+            Engine.AddNode(scene);
+
+            var player = new Player(texture);
+
+            scene.AddChildNode(player);
+
+            var comparison = new SpriteNode()
+            {
+                Texture = texture,
+                Position = new Vector2F(300f, 300f)
+            };
+            comparison.AddChildNode(new ColliderNode(new CircleCollider()
+            {
+                Radius = texture.Size.X / 2,
+                Position = comparison.Position
+            }));
+
+            scene.AddChildNode(comparison);
+
+            tc.LoopBody(null, x =>
+            {
+                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+            });
+            tc.End();
+        }
+        private sealed class Player : SpriteNode, ICollisionEventReceiver
+        {
+            private readonly ColliderNode node;
+            public Player(Texture2D texture)
+            {
+                Texture = texture;
+                var collider = new CircleCollider()
+                {
+                    Radius = texture.Size.X / 2
+                };
+                node = new ColliderNode(collider);
+                AddChildNode(node);
+            }
+            protected override void OnUpdate()
+            {
+                node.Collider.Position = Position;
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
+                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
+            }
+            void ICollisionEventReceiver.OnCollisionEnter(CollisionInfo info)
+            {
+                Debug.WriteLine("Enter");
+            }
+            void ICollisionEventReceiver.OnCollisionExit(CollisionInfo info)
+            {
+                Debug.WriteLine("Exit");
+            }
+            void ICollisionEventReceiver.OnCollisionStay(CollisionInfo info)
+            {
+                Debug.WriteLine("Stay");
+            }
         }
     }
 }
