@@ -4649,6 +4649,9 @@ namespace Altseed
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_CopyTexture(IntPtr selfPtr, IntPtr src, IntPtr dst);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_Release(IntPtr selfPtr);
         
         #endregion
@@ -4680,6 +4683,13 @@ namespace Altseed
         public void RenderToRenderTarget(Material material)
         {
             cbg_CommandList_RenderToRenderTarget(selfPtr, material != null ? material.selfPtr : IntPtr.Zero);
+        }
+        
+        public void CopyTexture(RenderTexture src, RenderTexture dst)
+        {
+            if (src == null) throw new ArgumentNullException(nameof(src), "引数がnullです");
+            if (dst == null) throw new ArgumentNullException(nameof(dst), "引数がnullです");
+            cbg_CommandList_CopyTexture(selfPtr, src != null ? src.selfPtr : IntPtr.Zero, dst != null ? dst.selfPtr : IntPtr.Zero);
         }
         
         ~CommandList()
