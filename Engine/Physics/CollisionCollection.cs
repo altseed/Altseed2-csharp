@@ -21,7 +21,6 @@ namespace Altseed
         {
             get
             {
-                if (preCollisionInfo != null) return preCollisionInfo.Count;
                 var count = 0;
                 foreach (var current in collection) count += current.Value.Count;
                 return count;

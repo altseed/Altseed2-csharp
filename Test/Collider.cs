@@ -69,7 +69,8 @@ namespace Altseed.Test
             Assert.NotNull(texture);
 
             var scene = new Altseed.Node();
-            scene.AddChildNode(new CollisionManagerNode());
+            var manager = new CollisionManagerNode();
+            scene.AddChildNode(manager);
 
             Engine.AddNode(scene);
 
@@ -82,17 +83,23 @@ namespace Altseed.Test
                 Texture = texture,
                 Position = new Vector2F(300f, 300f)
             };
-            comparison.AddChildNode(new ColliderNode(new CircleCollider()
+            var colliderNode = new ColliderNode(new CircleCollider()
             {
                 Radius = texture.Size.X / 2,
                 Position = comparison.Position
-            }));
+            });
+            comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
 
             tc.LoopBody(null, x =>
             {
                 if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (x == 10)
+                {
+                    Assert.True(manager.ContainsCollider(colliderNode));
+                    Assert.AreEqual(manager.ColliderCount, 2);
+                }
             });
             tc.End();
         }
