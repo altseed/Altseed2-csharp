@@ -108,18 +108,18 @@ namespace Altseed
                             if (beforeColliding)
                             {
                                 if (nowColliding) receiver1.OnCollisionStay(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Stay));
-                                else receiver1.OnCollisionStay(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Exit));
+                                else receiver1.OnCollisionExit(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Exit));
                             }
-                            else if (nowColliding) receiver1.OnCollisionStay(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Enter));
+                            else if (nowColliding) receiver1.OnCollisionEnter(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Enter));
                         }
                         if (comparison is ICollisionEventReceiver receiver2)
                         {
                             if (beforeColliding)
                             {
                                 if (nowColliding) receiver2.OnCollisionStay(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Stay));
-                                else receiver2.OnCollisionStay(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Exit));
+                                else receiver2.OnCollisionExit(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Exit));
                             }
-                            else if (nowColliding) receiver2.OnCollisionStay(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Enter));
+                            else if (nowColliding) receiver2.OnCollisionEnter(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Enter));
                         }
                     }
                 }
