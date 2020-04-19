@@ -11,19 +11,7 @@ namespace Altseed
         /// <summary>
         /// コライダを取得する
         /// </summary>
-        public Collider Collider
-        {
-            get => _collider;
-            private set
-            {
-                if (_collider == value) return;
-                if (value.Owner != null) throw new ArgumentException("既にほかノードに所属しています", nameof(value));
-                if (_collider != null) _collider.Owner = null;
-                value.Owner = this;
-                _collider = value;
-            }
-        }
-        private Collider _collider;
+        public Collider Collider { get; }
 
         /// <summary>
         /// 指定した<see cref="Altseed.Collider"/>を持つ<see cref="ColliderNode"/>の新しいインスタンスを生成する
@@ -36,15 +24,24 @@ namespace Altseed
             Collider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
         }
 
+        private static CollisionManagerNode SearchManagerFromChildren(Node node)
+        {
+            if (node == null) return null;
+            foreach (var current in node.Children)
+                if (current is CollisionManagerNode m)
+                    return m;
+            return null;
+        }
+
         internal override void Added(Node owner)
         {
             base.Added(owner);
-            Parent.Parent?.SearchManager()?.AddCollider(this);
+            SearchManagerFromChildren(owner.Parent)?.AddCollider(this);
         }
 
         internal override void Removed()
         {
-            Parent.Parent?.SearchManager()?.RemoveCollider(this);
+            SearchManagerFromChildren(Parent.Parent)?.RemoveCollider(this);
             base.Removed();
         }
     }

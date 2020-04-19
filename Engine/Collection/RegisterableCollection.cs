@@ -10,9 +10,9 @@ namespace Altseed
     internal class RegisterableCollection<TElement, TOwner>
         where TElement : Registerable<TOwner>
     {
-        internal List<TElement> CurrentCollection { get; } = new List<TElement>();
-        internal Queue<TElement> AddQueue { get; } = new Queue<TElement>();
-        internal Queue<TElement> RemoveQueue { get; } = new Queue<TElement>();
+        private readonly List<TElement> CurrentCollection = new List<TElement>();
+        private readonly Queue<TElement> AddQueue = new Queue<TElement>();
+        private readonly Queue<TElement> RemoveQueue = new Queue<TElement>();
 
         private readonly TOwner Owner;
 
