@@ -14,6 +14,24 @@ namespace Altseed
         internal abstract Collider Collider { get; }
 
         /// <summary>
+        /// 座標を取得または設定する
+        /// </summary>
+        public Vector2F Position
+        {
+            get => Collider.Position;
+            set { Collider.Position = value; }
+        }
+
+        /// <summary>
+        /// コライダの回転情報を取得または設定する
+        /// </summary>
+        public float Rotation
+        {
+            get => Collider.Rotation;
+            set { Collider.Rotation = value; }
+        }
+
+        /// <summary>
         /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         protected ColliderNode() { }
@@ -53,6 +71,15 @@ namespace Altseed
         internal override Collider Collider => CircleCollider;
 
         /// <summary>
+        /// 衝突半径を取得または設定する
+        /// </summary>
+        public float Radius
+        {
+            get => CircleCollider.Radius;
+            set { CircleCollider.Radius = value; }
+        }
+
+        /// <summary>
         /// 既定の<see cref="Altseed.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         public CircleColliderNode() : this(new CircleCollider()) { }
@@ -81,6 +108,16 @@ namespace Altseed
         internal override Collider Collider => PolygonCollider;
 
         /// <summary>
+        /// 頂点情報の配列を取得または設定する
+        /// </summary>
+        /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
+        public Vector2F[] Vertexes
+        {
+            get => PolygonCollider.VertexArray;
+            set { PolygonCollider.VertexArray = value; }
+        }
+
+        /// <summary>
         /// 既定の<see cref="Altseed.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         public PolygonColliderNode() : this(new PolygonCollider()) { }
@@ -97,16 +134,34 @@ namespace Altseed
     }
 
     /// <summary>
-    /// 四角形コライダを管理するノード
+    /// 短形コライダを管理するノード
     /// </summary>
     [Serializable]
     public class RectangleColliderNode : ColliderNode
     {
         /// <summary>
+        /// 中心座標を取得または設定する
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get => RectangleCollider.CenterPosition;
+            set { RectangleCollider.CenterPosition = value; }
+        }
+
+        /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
         public RectangleCollider RectangleCollider { get; }
         internal override Collider Collider => RectangleCollider;
+
+        /// <summary>
+        /// サイズを取得または設定する
+        /// </summary>
+        public Vector2F Size
+        {
+            get => RectangleCollider.Size;
+            set { RectangleCollider.Size = value; }
+        }
 
         /// <summary>
         /// 既定の<see cref="Altseed.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
