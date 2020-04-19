@@ -83,7 +83,7 @@ namespace Altseed.Test
                 Texture = texture,
                 Position = new Vector2F(300f, 300f)
             };
-            var colliderNode = new ColliderNode(new CircleCollider()
+            var colliderNode = new CircleColliderNode(new CircleCollider()
             {
                 Radius = texture.Size.X / 2,
                 Position = comparison.Position
@@ -113,7 +113,7 @@ namespace Altseed.Test
                 {
                     Radius = texture.Size.X / 2
                 };
-                node = new ColliderNode(collider);
+                node = new CircleColliderNode(collider);
                 AddChildNode(node);
             }
             protected override void OnUpdate()
