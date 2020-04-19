@@ -6,23 +6,17 @@ namespace Altseed
     /// コライダを管理するノード
     /// </summary>
     [Serializable]
-    public class ColliderNode : Node
+    public abstract class ColliderNode : Node
     {
         /// <summary>
         /// コライダを取得する
         /// </summary>
-        public Collider Collider { get; }
+        internal abstract Collider Collider { get; }
 
         /// <summary>
-        /// 指定した<see cref="Altseed.Collider"/>を持つ<see cref="ColliderNode"/>の新しいインスタンスを生成する
+        /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        /// <param name="collider">登録するコライダ</param>
-        /// <exception cref="ArgumentException"><paramref name="collider"/>が既に別の<see cref="ColliderNode"/>に所属している</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
-        public ColliderNode(Collider collider)
-        {
-            Collider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
-        }
+        protected ColliderNode() { }
 
         private static CollisionManagerNode SearchManagerFromChildren(Node node)
         {
@@ -43,6 +37,90 @@ namespace Altseed
         {
             SearchManagerFromChildren(Parent.Parent)?.RemoveCollider(this);
             base.Removed();
+        }
+    }
+
+    /// <summary>
+    /// 円形コライダを管理するノード
+    /// </summary>
+    [Serializable]
+    public class CircleColliderNode : ColliderNode
+    {
+        /// <summary>
+        /// 使用するコライダを取得する
+        /// </summary>
+        public CircleCollider CircleCollider { get; }
+        internal override Collider Collider => CircleCollider;
+
+        /// <summary>
+        /// 既定の<see cref="Altseed.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
+        /// </summary>
+        public CircleColliderNode() : this(new CircleCollider()) { }
+
+        /// <summary>
+        /// 指定した<see cref="Altseed.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="collider">使用する<see cref="Altseed.CircleCollider"/>のインスタンス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
+        public CircleColliderNode(CircleCollider collider)
+        {
+            CircleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+        }
+    }
+
+    /// <summary>
+    /// ポリゴンコライダを管理するノード
+    /// </summary>
+    [Serializable]
+    public class PolygonColliderNode : ColliderNode
+    {
+        /// <summary>
+        /// 使用するコライダを取得する
+        /// </summary>
+        public PolygonCollider PolygonCollider { get; }
+        internal override Collider Collider => PolygonCollider;
+
+        /// <summary>
+        /// 既定の<see cref="Altseed.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
+        /// </summary>
+        public PolygonColliderNode() : this(new PolygonCollider()) { }
+
+        /// <summary>
+        /// 指定した<see cref="Altseed.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="collider">使用する<see cref="Altseed.PolygonCollider"/>のインスタンス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
+        public PolygonColliderNode(PolygonCollider collider)
+        {
+            PolygonCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+        }
+    }
+
+    /// <summary>
+    /// 四角形コライダを管理するノード
+    /// </summary>
+    [Serializable]
+    public class RectangleColliderNode : ColliderNode
+    {
+        /// <summary>
+        /// 使用するコライダを取得する
+        /// </summary>
+        public RectangleCollider RectangleCollider { get; }
+        internal override Collider Collider => RectangleCollider;
+
+        /// <summary>
+        /// 既定の<see cref="Altseed.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
+        /// </summary>
+        public RectangleColliderNode() : this(new RectangleCollider()) { }
+
+        /// <summary>
+        /// 指定した<see cref="Altseed.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
+        /// </summary>
+        /// <param name="collider">使用する<see cref="Altseed.RectangleCollider"/>のインスタンス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
+        public RectangleColliderNode(RectangleCollider collider)
+        {
+            RectangleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
         }
     }
 }
