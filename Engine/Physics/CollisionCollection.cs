@@ -112,31 +112,26 @@ namespace Altseed
                 {
                     if (current == comparison) continue;
                     var entry = new ColliderEntry(current.Collider, comparison.Collider);
-                    if (dictionary.TryAdd(entry, entry.IsColliding()))
+                    var nowColliding = entry.IsColliding();
+                    if (dictionary.TryAdd(entry, nowColliding))
                     {
                         var beforeColliding = (preCollisionInfo != null && preCollisionInfo.TryGetValue(entry, out var value)) ? value : false;
-                        var nowColliding = entry.IsColliding();
-                        if (current.Parent is ICollisionEventReceiver receiver1)
-                        {
-                            if (beforeColliding)
-                            {
-                                if (nowColliding) receiver1.OnCollisionStay(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Stay));
-                                else receiver1.OnCollisionExit(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Exit));
-                            }
-                            else if (nowColliding) receiver1.OnCollisionEnter(new CollisionInfo(current.Collider, comparison.Collider, CollisionType.Enter));
-                        }
-                        if (comparison.Parent is ICollisionEventReceiver receiver2)
-                        {
-                            if (beforeColliding)
-                            {
-                                if (nowColliding) receiver2.OnCollisionStay(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Stay));
-                                else receiver2.OnCollisionExit(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Exit));
-                            }
-                            else if (nowColliding) receiver2.OnCollisionEnter(new CollisionInfo(comparison.Collider, current.Collider, CollisionType.Enter));
-                        }
+                        InvokeEvents(current, comparison, nowColliding, beforeColliding);
+                        InvokeEvents(comparison, current, nowColliding, beforeColliding);
                     }
                 }
             preCollisionInfo = dictionary;
+        }
+
+        private void InvokeEvents(ColliderNode self, ColliderNode theirs, bool nowColliding, bool beforeColliding)
+        {
+            if (!(self.Parent is ICollisionEventReceiver receiver)) return;
+            if (beforeColliding)
+            {
+                if (nowColliding) receiver.OnCollisionStay(new CollisionInfo(self, theirs, CollisionType.Stay));
+                else receiver.OnCollisionExit(new CollisionInfo(self, theirs, CollisionType.Exit));
+            }
+            else if (nowColliding) receiver.OnCollisionEnter(new CollisionInfo(self, theirs, CollisionType.Enter));
         }
 
         [Serializable]

@@ -14,16 +14,16 @@ namespace Altseed
         public CollisionType CollisionType { get; }
 
         /// <summary>
-        /// 自身のコライダを取得する
+        /// 自身の<see cref="ColliderNode"/>を取得する
         /// </summary>
-        public Collider SelfCollider { get; }
+        public ColliderNode SelfCollider { get; }
 
         /// <summary>
-        /// 衝突相手のコライダを取得する
+        /// 衝突相手の<see cref="ColliderNode"/>を取得する
         /// </summary>
-        public Collider TheirsCollider { get; }
+        public ColliderNode TheirsCollider { get; }
 
-        internal CollisionInfo(Collider selfCollider, Collider theirsCollider, CollisionType type)
+        internal CollisionInfo(ColliderNode selfCollider, ColliderNode theirsCollider, CollisionType type)
         {
             SelfCollider = selfCollider ?? throw new ArgumentNullException(nameof(selfCollider), "引数がnullです");
             TheirsCollider = theirsCollider ?? throw new ArgumentNullException(nameof(theirsCollider), "引数がnullです");
