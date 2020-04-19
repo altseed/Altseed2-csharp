@@ -10,8 +10,8 @@ namespace Altseed
         {
             var pos = new Vector2F(0, offset);
             var size = Engine.Window.Size - pos;
-            SetNextWindowSize(size);
-            SetNextWindowPos(pos);
+            SetNextWindowSize(size, ToolCond.None);
+            SetNextWindowPos(pos, ToolCond.None);
 
             var flags = ToolWindow.NoMove | ToolWindow.NoBringToFrontOnFocus
                 | ToolWindow.NoResize | ToolWindow.NoScrollbar

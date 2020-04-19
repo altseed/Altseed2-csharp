@@ -38,7 +38,7 @@ namespace Altseed
         void Assign(IntPtr ptr, int size);
     }
 
-    internal partial class Int8Array : IArray<byte>
+    public partial class Int8Array : IArray<byte>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -74,7 +74,7 @@ namespace Altseed
     }
 
 
-    internal partial class Int32Array : IArray<int>
+    public partial class Int32Array : IArray<int>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -110,7 +110,7 @@ namespace Altseed
         }
     }
 
-    internal partial class VertexArray : IArray<Vertex>
+    public partial class VertexArray : IArray<Vertex>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -147,7 +147,7 @@ namespace Altseed
     }
 
 
-    internal partial class FloatArray : IArray<float>, ISerializable, ICacheKeeper<FloatArray>
+    public partial class FloatArray : IArray<float>, ISerializable, ICacheKeeper<FloatArray>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
@@ -183,7 +183,7 @@ namespace Altseed
         }
     }
 
-    internal partial class Vector2FArray : IArray<Vector2F>, ISerializable, ICacheKeeper<Vector2FArray>
+    public partial class Vector2FArray : IArray<Vector2F>, ISerializable, ICacheKeeper<Vector2FArray>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
