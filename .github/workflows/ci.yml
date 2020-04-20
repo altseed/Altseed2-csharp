@@ -39,7 +39,9 @@ jobs:
     - name: Install dependencies
       run: dotnet restore Altseed2.sln
     - name: Build
-      run: dotnet build Altseed2.sln --configuration Release --no-restore
+      run: |
+        dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
+        dotnet build Tool\FontGenerator\FontGenerator.csproj --configuration Release --no-restore
     - name: Test
       continue-on-error: true
       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
@@ -91,7 +93,9 @@ jobs:
     - name: Install dependencies
       run: dotnet restore Altseed2.sln
     - name: Build
-      run: dotnet build Altseed2.sln --configuration Release --no-restore
+      run: |
+        dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
+        dotnet build Tool\FontGenerator\FontGenerator.csproj --configuration Release --no-restore
     - name: Test
       continue-on-error: true
       run: |
@@ -137,7 +141,9 @@ jobs:
     - name: Install dependencies
       run: dotnet restore Altseed2.sln
     - name: Build
-      run: dotnet build Altseed2.sln --configuration Release --no-restore
+      run: |
+        dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
+        dotnet build Tool\FontGenerator\FontGenerator.csproj --configuration Release --no-restore
     - name: Test
       continue-on-error: true
       run: |
