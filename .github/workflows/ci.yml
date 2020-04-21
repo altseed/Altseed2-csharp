@@ -37,11 +37,13 @@ jobs:
       with:
         dotnet-version: 3.0.103
     - name: Install dependencies
-      run: dotnet restore Altseed2.sln
+      run: |
+        dotnet restore TestForMacLinux/TestForMacLinux.csproj
+        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
       run: |
         dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
-        dotnet build Tool\FontGenerator\FontGenerator.csproj --configuration Release --no-restore
+        dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
     - name: Test
       continue-on-error: true
       run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
@@ -91,11 +93,13 @@ jobs:
       with:
         dotnet-version: 3.0.103
     - name: Install dependencies
-      run: dotnet restore Altseed2.sln
+      run: |
+        dotnet restore TestForMacLinux/TestForMacLinux.csproj
+        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
       run: |
         dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
-        dotnet build Tool\FontGenerator\FontGenerator.csproj --configuration Release --no-restore
+        dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
     - name: Test
       continue-on-error: true
       run: |
@@ -139,11 +143,13 @@ jobs:
       with:
         dotnet-version: 3.0.103
     - name: Install dependencies
-      run: dotnet restore Altseed2.sln
+      run: |
+        dotnet restore TestForMacLinux/TestForMacLinux.csproj
+        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
       run: |
         dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
-        dotnet build Tool\FontGenerator\FontGenerator.csproj --configuration Release --no-restore
+        dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
     - name: Test
       continue-on-error: true
       run: |
