@@ -33,17 +33,25 @@ namespace Altseed.Tool.FontGenerator
 
                     if (Engine.Tool.Button("Save A2F File", new Vector2F()))
                     {
+                        if (!System.IO.File.Exists(input))
+                        {
+                            msg = "Not Exists TTF File.";
+                            goto fail;
+                        }
+
+                        if (!System.IO.File.Exists(charactersTextFilePath))
+                        {
+                            msg = "Not Exists Characters Text File.";
+                            goto fail;
+                        }
+
                         var output = Engine.Tool.SaveDialog("a2f", "");
-                        
-                        if (output != null)
+
+                        if (output != "")
                         {
                             if (!output.EndsWith(".a2f")) output += ".a2f";
 
-                            if (!System.IO.File.Exists(charactersTextFilePath))
-                            {
-                                msg = "Not Exists Characters Text File.";
-                            }
-                            var characters = System.IO.File.ReadAllText(charactersTextFilePath ?? "");
+                            var characters = System.IO.File.ReadAllText(charactersTextFilePath);
                             var res = Font.GenerateFontFile(input, output, size, characters);
 
                             if (res)
@@ -53,8 +61,8 @@ namespace Altseed.Tool.FontGenerator
                         }
                     }
 
+                fail:
                     Engine.Tool.Text(msg);
-
                     Engine.Tool.End();
                 }
 
