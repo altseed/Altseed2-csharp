@@ -43,7 +43,7 @@ namespace Altseed.Tool.FontGenerator
                             {
                                 msg = "Not Exists Characters Text File.";
                             }
-                            var characters = System.IO.File.ReadAllText(charactersTextFilePath);
+                            var characters = System.IO.File.ReadAllText(charactersTextFilePath ?? "");
                             var res = Font.GenerateFontFile(input, output, size, characters);
 
                             if (res)
