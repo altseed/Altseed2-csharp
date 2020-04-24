@@ -92,7 +92,7 @@ namespace Sample
             Console.WriteLine("Collision is keeped.");
         }
 
-        // 衝突が勝っ除された時に実行
+        // 衝突が解除された時に実行
         void ICollisionEventReceiver.OnCollisionExit(CollisionInfo info)
         {
             Console.WriteLine("Collision finished.");
