@@ -110,7 +110,7 @@ namespace Altseed
         }
     }
 
-    public partial class VertexArray : IArray<Vertex>
+    internal partial class VertexArray : IArray<Vertex>
     {
         #region SerializeName
         private const string S_Array = "S_Array";
