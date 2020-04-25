@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,8 +23,11 @@ namespace Altseed
         private static Node _UpdatedNode;
 
         private static DrawnNodeCollection _DrawnNodes;
+        private static PostEffectNodeCollection _PostEffectNodes;
         private static CameraNodeCollection _CameraNodes;
         private static RenderedCamera _DefaultCamera;
+
+        private static RenderTextureCache _RenderTextureCache;
 
         /// <summary>
         /// エンジンを初期化します。
@@ -65,8 +68,12 @@ namespace Altseed
                 _UpdatedNode = _RootNode;
 
                 _DrawnNodes = new DrawnNodeCollection();
+                _PostEffectNodes = new PostEffectNodeCollection();
                 _CameraNodes = new CameraNodeCollection();
                 _DefaultCamera = RenderedCamera.Create();
+
+                _RenderTextureCache = new RenderTextureCache();
+
                 return true;
             }
             return false;
@@ -123,17 +130,39 @@ namespace Altseed
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
                 Renderer.SetCamera(_DefaultCamera);
-                var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
 
-                var list = _DrawnNodes.Nodes;
-                foreach (var z in list.Keys.OrderBy(x => x))
                 {
-                    var nodes = list[z];
-                    foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
-                        node.Draw();
+                    var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
+
+                    var list = _DrawnNodes.Nodes;
+                    foreach (var z in list.Keys.OrderBy(x => x))
+                    {
+                        var nodes = list[z];
+                        foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
+                            node.Draw();
+                    }
+
+                    Renderer.Render();
                 }
 
-                Renderer.Render();
+                {
+                    var list = _PostEffectNodes.Nodes;
+
+                    RenderTexture buffer = null;
+
+                    foreach (var z in list.Keys.OrderBy(x => x))
+                    {
+                        foreach (var node in list[z])
+                        {
+                            if(buffer is null) {
+                                buffer = _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size);
+                            }
+                            
+                            Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), buffer);
+                            node.CallDraw(buffer);
+                        }
+                    }
+                }
             }
             else
             {
@@ -143,20 +172,45 @@ namespace Altseed
                     foreach (var camera in _CameraNodes[i])
                     {
                         Renderer.SetCamera(camera.RenderedCamera);
-                        var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
 
-                        var list = _DrawnNodes[i];
-                        foreach (var z in list.Keys.OrderBy(x => x))
                         {
-                            var nodes = list[z];
-                            foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
-                                node.Draw();
+                            var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
+
+                            var list = _DrawnNodes[i];
+                            foreach (var z in list.Keys.OrderBy(x => x))
+                            {
+                                var nodes = list[z];
+                                foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
+                                    node.Draw();
+                            }
+
+                            Renderer.Render();
                         }
 
-                        Renderer.Render();
+                        {
+                            var list = _PostEffectNodes[i];
+
+                            var target = camera.TargetTexture ?? Graphics.CommandList.GetScreenTexture();
+                            RenderTexture buffer = null;
+
+                            foreach (var z in list.Keys.OrderBy(x => x))
+                            {
+                                foreach (var node in list[z])
+                                {
+                                    if(buffer is null) {
+                                        buffer = _RenderTextureCache.GetRenderTexture(target.Size);
+                                    }
+
+                                    Graphics.CommandList.CopyTexture(target, buffer);
+                                    node.CallDraw(buffer);
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            _RenderTextureCache.Update();
 
             // （ツール機能を使用する場合は）ツールを描画
             if (_Config.ToolEnabled)
@@ -316,7 +370,31 @@ namespace Altseed
 
         internal static void UpdateDrawnNodeZOrder(DrawnNode node, int oldZOrder)
         {
-            _DrawnNodes.UpdateZOrder(node, oldZOrder);
+            _DrawnNodes.UpdateOrder(node, oldZOrder);
+        }
+
+        #endregion
+
+        #region PostEffectNodeCollection
+
+        internal static void RegisterPostEffectNode(PostEffectNode node)
+        {
+            _PostEffectNodes.AddNode(node);
+        }
+
+        internal static void UnregisterPostEffectNode(PostEffectNode node)
+        {
+            _PostEffectNodes.RemoveNode(node);
+        }
+
+        internal static void UpdatePostEffectNodeCameraGroup(PostEffectNode node, uint oldCameraGroup)
+        {
+            _PostEffectNodes.UpdateCameraGroup(node, oldCameraGroup);
+        }
+
+        internal static void UpdatePostEffectNodeOrder(PostEffectNode node, int oldOrder)
+        {
+            _PostEffectNodes.UpdateOrder(node, oldOrder);
         }
 
         #endregion
