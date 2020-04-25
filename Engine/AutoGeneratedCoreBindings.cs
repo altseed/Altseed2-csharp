@@ -2612,7 +2612,7 @@ namespace Altseed
     /// 頂点データの配列のクラスを表します。
     /// </summary>
     [Serializable]
-    public sealed partial class VertexArray : ISerializable, ICacheKeeper<VertexArray>
+    internal sealed partial class VertexArray : ISerializable, ICacheKeeper<VertexArray>
     {
         #region unmanaged
         
@@ -4029,6 +4029,10 @@ namespace Altseed
         private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
         
         
@@ -4046,6 +4050,15 @@ namespace Altseed
         internal Graphics(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        public CommandList CommandList
+        {
+            get
+            {
+                var ret = cbg_Graphics_GetCommandList(selfPtr);
+                return CommandList.TryGetFromCache(ret);
+            }
         }
         
         /// <summary>
@@ -4937,7 +4950,7 @@ namespace Altseed
         private static extern void cbg_Renderer_Render(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr commandList);
+        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr camera);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
@@ -5000,10 +5013,10 @@ namespace Altseed
         /// <summary>
         /// 使用するカメラを設定します。
         /// </summary>
-        /// <param name="commandList">描画するカメラ</param>
-        internal void SetCamera(RenderedCamera commandList)
+        /// <param name="camera">描画するカメラ</param>
+        internal void SetCamera(RenderedCamera camera)
         {
-            cbg_Renderer_SetCamera(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+            cbg_Renderer_SetCamera(selfPtr, camera != null ? camera.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
