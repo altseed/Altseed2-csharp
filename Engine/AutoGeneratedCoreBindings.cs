@@ -5084,6 +5084,9 @@ namespace Altseed
         private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_RenderToRenderTexture(IntPtr selfPtr, IntPtr material, IntPtr target);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
         
         [DllImport("Altseed_Core")]
@@ -5116,6 +5119,11 @@ namespace Altseed
         public void SetRenderTarget(RenderTexture target, RenderPassParameter renderPassParameter)
         {
             cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, renderPassParameter);
+        }
+        
+        public void RenderToRenderTexture(Material material, RenderTexture target)
+        {
+            cbg_CommandList_RenderToRenderTexture(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, target != null ? target.selfPtr : IntPtr.Zero);
         }
         
         public void RenderToRenderTarget(Material material)
