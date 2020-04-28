@@ -134,5 +134,34 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void MassSpriteNode()
+        {
+            var tc = new TestCore(new Configuration() { WaitVSync = false });
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink256.png");
+            Assert.NotNull(texture);
+
+            var ws = Engine.WindowSize;
+            var size = 10;
+            for (var x = 0; x < ws.X / size; x++)
+            {
+                for (var y = 0; y < ws.Y / size; y++)
+                {
+                    var node = new SpriteNode();
+                    node.Texture = texture;
+                    node.Src = new RectF(new Vector2F(128 * (x % 2), 128 * (y % 2)), new Vector2F(128, 128));
+                    node.Scale = new Vector2F(1, 1) * size / 128f;
+                    node.Position = new Vector2F(x, y) * size;
+                    Engine.AddNode(node);
+                }
+            }
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
     }
 }
