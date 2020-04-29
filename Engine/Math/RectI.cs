@@ -93,5 +93,9 @@ namespace Altseed
         public static bool operator ==(RectI v1, RectI v2) => Equals(v1, v2);
 
         public static bool operator !=(RectI v1, RectI v2) => !Equals(v1, v2);
+
+        public Vector2I Position => new Vector2I(X, Y);
+
+        public Vector2I Size => new Vector2I(Width, Height);
     }
 }
