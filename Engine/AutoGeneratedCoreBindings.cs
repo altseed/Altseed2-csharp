@@ -2118,7 +2118,7 @@ namespace Altseed
     /// 8ビット整数の配列のクラスを表します。
     /// </summary>
     [Serializable]
-    public sealed partial class Int8Array : ISerializable, ICacheKeeper<Int8Array>
+    internal sealed partial class Int8Array : ISerializable, ICacheKeeper<Int8Array>
     {
         #region unmanaged
         
@@ -2365,7 +2365,7 @@ namespace Altseed
     /// 32ビット整数の配列のクラスを表します。
     /// </summary>
     [Serializable]
-    public sealed partial class Int32Array : ISerializable, ICacheKeeper<Int32Array>
+    internal sealed partial class Int32Array : ISerializable, ICacheKeeper<Int32Array>
     {
         #region unmanaged
         
@@ -2859,7 +2859,7 @@ namespace Altseed
     /// 浮動小数点数の配列のクラスを表します。
     /// </summary>
     [Serializable]
-    public sealed partial class FloatArray : ISerializable, ICacheKeeper<FloatArray>
+    internal sealed partial class FloatArray : ISerializable, ICacheKeeper<FloatArray>
     {
         #region unmanaged
         
@@ -3106,7 +3106,7 @@ namespace Altseed
     /// 2次元ベクトルの配列のクラスを表します。
     /// </summary>
     [Serializable]
-    public sealed partial class Vector2FArray : ISerializable, ICacheKeeper<Vector2FArray>
+    internal sealed partial class Vector2FArray : ISerializable, ICacheKeeper<Vector2FArray>
     {
         #region unmanaged
         
@@ -5383,6 +5383,12 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern Color cbg_RenderedSprite_GetColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetColor(IntPtr selfPtr, Color value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
@@ -5459,6 +5465,28 @@ namespace Altseed
         private Material _Material;
         
         /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                if (_Color != null)
+                {
+                    return _Color.Value;
+                }
+                var ret = cbg_RenderedSprite_GetColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Color = value;
+                cbg_RenderedSprite_SetColor(selfPtr, value);
+            }
+        }
+        private Color? _Color;
+        
+        /// <summary>
         /// スプライトを作成します。
         /// </summary>
         public static RenderedSprite Create()
@@ -5472,6 +5500,7 @@ namespace Altseed
         private const string S_Texture = "S_Texture";
         private const string S_Src = "S_Src";
         private const string S_Material = "S_Material";
+        private const string S_Color = "S_Color";
         #endregion
         
         /// <summary>
@@ -5489,6 +5518,7 @@ namespace Altseed
             Texture = info.GetValue<TextureBase>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
+            Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5505,6 +5535,7 @@ namespace Altseed
             info.AddValue(S_Texture, Texture);
             info.AddValue(S_Src, Src);
             info.AddValue(S_Material, Material);
+            info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
         }
@@ -8339,7 +8370,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InputInt2(string label, Int32Array array)
+        internal bool InputInt2(string label, Int32Array array)
         {
             var ret = cbg_Tool_InputInt2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
@@ -8348,7 +8379,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InputInt3(string label, Int32Array array)
+        internal bool InputInt3(string label, Int32Array array)
         {
             var ret = cbg_Tool_InputInt3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
@@ -8357,7 +8388,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InputInt4(string label, Int32Array array)
+        internal bool InputInt4(string label, Int32Array array)
         {
             var ret = cbg_Tool_InputInt4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
@@ -8375,7 +8406,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InputFloat2(string label, FloatArray array)
+        internal bool InputFloat2(string label, FloatArray array)
         {
             var ret = cbg_Tool_InputFloat2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
@@ -8384,7 +8415,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InputFloat3(string label, FloatArray array)
+        internal bool InputFloat3(string label, FloatArray array)
         {
             var ret = cbg_Tool_InputFloat3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
@@ -8393,7 +8424,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool InputFloat4(string label, FloatArray array)
+        internal bool InputFloat4(string label, FloatArray array)
         {
             var ret = cbg_Tool_InputFloat4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
@@ -8411,7 +8442,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderInt2(string label, Int32Array array, float speed, int valueMin, int valueMax)
+        internal bool SliderInt2(string label, Int32Array array, float speed, int valueMin, int valueMax)
         {
             var ret = cbg_Tool_SliderInt2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
@@ -8420,7 +8451,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderInt3(string label, Int32Array array, float speed, int valueMin, int valueMax)
+        internal bool SliderInt3(string label, Int32Array array, float speed, int valueMin, int valueMax)
         {
             var ret = cbg_Tool_SliderInt3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
@@ -8429,7 +8460,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderInt4(string label, Int32Array array, float speed, int valueMin, int valueMax)
+        internal bool SliderInt4(string label, Int32Array array, float speed, int valueMin, int valueMax)
         {
             var ret = cbg_Tool_SliderInt4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
@@ -8438,7 +8469,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
+        internal bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_SliderFloat(selfPtr, label, ref value, speed, valueMin, valueMax);
             return ret;
@@ -8447,7 +8478,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderFloat2(string label, FloatArray array, float speed, float valueMin, float valueMax)
+        internal bool SliderFloat2(string label, FloatArray array, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_SliderFloat2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
@@ -8456,7 +8487,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderFloat3(string label, FloatArray array, float speed, float valueMin, float valueMax)
+        internal bool SliderFloat3(string label, FloatArray array, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_SliderFloat3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
@@ -8465,7 +8496,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderFloat4(string label, FloatArray array, float speed, float valueMin, float valueMax)
+        internal bool SliderFloat4(string label, FloatArray array, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_SliderFloat4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
@@ -9530,7 +9561,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void PlotLines(string label, FloatArray values, int values_count, int values_offset, string overlay_text, float scale_min, float scale_max, Vector2F graph_size, int stride)
+        internal void PlotLines(string label, FloatArray values, int values_count, int values_offset, string overlay_text, float scale_min, float scale_max, Vector2F graph_size, int stride)
         {
             cbg_Tool_PlotLines(selfPtr, label, values != null ? values.selfPtr : IntPtr.Zero, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size, stride);
         }
@@ -9538,7 +9569,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void PlotHistogram(string label, FloatArray values, int values_count, int values_offset, string overlay_text, float scale_min, float scale_max, Vector2F graph_size, int stride)
+        internal void PlotHistogram(string label, FloatArray values, int values_count, int values_offset, string overlay_text, float scale_min, float scale_max, Vector2F graph_size, int stride)
         {
             cbg_Tool_PlotHistogram(selfPtr, label, values != null ? values.selfPtr : IntPtr.Zero, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size, stride);
         }

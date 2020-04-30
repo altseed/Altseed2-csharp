@@ -502,6 +502,7 @@ namespace Altseed.Test
 
             Assert.NotNull(sprite2);
 
+            Assert.AreEqual(sprite1.Color, sprite2.Color);
             Assert.AreEqual(sprite1.Material, sprite2.Material);
             Assert.AreEqual(sprite1.Src, sprite2.Src);
             Assert.AreEqual((sprite1.Texture as Texture2D).Path, (sprite1.Texture as Texture2D).Path);

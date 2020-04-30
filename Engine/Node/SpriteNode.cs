@@ -11,6 +11,19 @@ namespace Altseed
         private readonly RenderedSprite _RenderedSprite;
 
         /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get => _RenderedSprite.Color;
+            set
+            {
+                if (_RenderedSprite.Color == value) return;
+                _RenderedSprite.Color = value;
+            }
+        }
+
+        /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
