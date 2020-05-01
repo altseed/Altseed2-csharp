@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -73,6 +73,8 @@ namespace Altseed
                 _DefaultCamera = RenderedCamera.Create();
 
                 _RenderTextureCache = new RenderTextureCache();
+
+                PostEffectNode.InitializeCache();
 
                 return true;
             }
@@ -211,6 +213,7 @@ namespace Altseed
             }
 
             _RenderTextureCache.Update();
+            PostEffectNode.UpdateCache();
 
             // （ツール機能を使用する場合は）ツールを描画
             if (_Config.ToolEnabled)

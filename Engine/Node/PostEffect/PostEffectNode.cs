@@ -1,9 +1,36 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Altseed
 {
     public abstract class PostEffectNode : Node
     {
+        private static Dictionary<int, RenderTextureCache> Cache;
+
+        protected static RenderTexture GetBuffer(int identifier, Vector2I size)
+        {
+            if(!Cache.ContainsKey(identifier))
+            {
+                Cache[identifier] = new RenderTextureCache();
+            }
+
+            return Cache[identifier].GetRenderTexture(size);
+        }
+
+        internal static void InitializeCache()
+        {
+            Cache = new Dictionary<int, RenderTextureCache>();
+        }
+
+        internal static void UpdateCache()
+        {
+            foreach(var cache in Cache)
+            {
+                cache.Value.Update();
+            }
+        }
+
         private uint _CameraGroup = 0;
 
         /// <summary>
@@ -52,6 +79,8 @@ namespace Altseed
         protected abstract void Draw(RenderTexture src);
 
         protected void RenderToRenderTarget(Material material) => Engine.Graphics.CommandList.RenderToRenderTarget(material);
+
+        protected void RenderToRenderTexture(Material material, RenderTexture texture) => Engine.Graphics.CommandList.RenderToRenderTexture(material, texture);
 
         #region Node
 
