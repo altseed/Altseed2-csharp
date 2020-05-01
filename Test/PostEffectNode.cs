@@ -82,5 +82,85 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void GrayScale()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Engine.AddNode(new SpriteNode() { Texture = texture });
+
+            Engine.AddNode(new PostEffectGrayScaleNode());
+
+            tc.LoopBody(c => {
+
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Sepia()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Engine.AddNode(new SpriteNode() { Texture = texture });
+
+            Engine.AddNode(new PostEffectSepiaNode());
+
+            tc.LoopBody(c => {
+
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void GaussianBlur()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Engine.AddNode(new SpriteNode() { Texture = texture });
+
+            Engine.AddNode(new PostEffectGaussianBlurNode());
+
+            tc.LoopBody(c => {
+
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void LightBloom()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Engine.AddNode(new SpriteNode() { Texture = texture });
+
+            Engine.AddNode(new PostEffectLightBloomNode { Threashold = 0.1f});
+
+            tc.LoopBody(c => {
+
+            }, null);
+
+            tc.End();
+        }
     }
 }
