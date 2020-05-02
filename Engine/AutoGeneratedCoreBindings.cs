@@ -6397,6 +6397,26 @@ namespace Altseed
         private static extern IntPtr cbg_BuiltinShader_Create(IntPtr selfPtr, int type);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetDownsampleShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetSepiaShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetGrayScaleShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetGaussianBlurShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetLightBloomShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_BuiltinShader_Release(IntPtr selfPtr);
         
         #endregion
@@ -6404,6 +6424,51 @@ namespace Altseed
         internal BuiltinShader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        internal string DownsampleShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetDownsampleShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string SepiaShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetSepiaShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string GrayScaleShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetGrayScaleShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string GaussianBlurShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetGaussianBlurShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string LightBloomShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetLightBloomShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
         }
         
         /// <summary>
