@@ -36,6 +36,9 @@ namespace Altseed.Test
             string str0 = "";
             string str1 = "";
             string str2 = "";
+            int[] intArray = new int[] { 0, 1, 2, 3, 4 };
+            float[] floatArray = new float[] { 0, 1, 2, 3, 4 };
+            tc.Duration = 10000;
             tc.LoopBody(c =>
             {
                 if (Engine.Tool.Begin("Test", ToolWindow.None))
@@ -48,6 +51,17 @@ namespace Altseed.Test
 
                     tmp = Engine.Tool.InputTextWithHint("InputTextWithHint", "hint", str2, 1024, ToolInputText.None);
                     if (tmp != null) str2 = tmp;
+
+                    Engine.Tool.InputInt2("InputInt2", intArray);
+                    Engine.Tool.InputInt4("InputInt4", intArray);
+                    Engine.Tool.InputFloat3("InputFloat3", floatArray);
+                    Engine.Tool.InputFloat2("InputFloat2", floatArray);
+
+                    Engine.Tool.SliderInt2("SliderInt2", intArray, 0.1f, 0, 100);
+                    Engine.Tool.SliderInt4("SliderInt4", intArray, 0.1f, 0, 100);
+                    Engine.Tool.SliderFloat3("SliderFloat3", floatArray, 0.1f, 0, 100);
+                    Engine.Tool.SliderFloat2("SliderFloat2", floatArray, 0.1f, 0, 100);
+
                     Engine.Tool.End();
                 }
             }
@@ -104,15 +118,14 @@ namespace Altseed.Test
             tc.Init();
 
             int current = 1;
-            tc.Duration = 10000;
             tc.LoopBody(c =>
             {
                 if (Engine.Tool.Begin("Test", ToolWindow.None))
                 {
                     List<string> items = new List<string>() { "Apple", "Banana", "Cherry", "Kiwi", "Mango", "Orange", "Pineapple", "Strawberry", "Watermelon" };
 
-                    Engine.Tool.ListBox("ListBox", ref current, string.Join('\t', items), 3);
-                    Engine.Tool.Combo("Combo", ref current, string.Join('\t', items), 3);
+                    Engine.Tool.ListBox("ListBox", ref current, items, 3);
+                    Engine.Tool.Combo("Combo", ref current, items, 3);
 
                     Engine.Tool.End();
                 }
