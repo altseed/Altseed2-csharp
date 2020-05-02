@@ -449,7 +449,7 @@ namespace Altseed
             set
             {
                 if (ClearColor == value) return;
-                ClearColor = value;
+                Graphics.ClearColor = value;
             }
         }
 
