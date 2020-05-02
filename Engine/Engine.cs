@@ -440,6 +440,19 @@ namespace Altseed
             set { Window.Title = value; }
         }
 
+        /// <summary>
+        /// 画面や <see cref="RenderTexture"/> の背景色を取得または設定します。
+        /// </summary>
+        public static Color ClearColor
+        {
+            get => Graphics.ClearColor;
+            set
+            {
+                if (ClearColor == value) return;
+                ClearColor = value;
+            }
+        }
+
         #region FPS制御
 
         /// <summary>
