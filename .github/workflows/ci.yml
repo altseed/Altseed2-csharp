@@ -194,3 +194,33 @@ jobs:
         with:
           name: bin
           path: bin
+  make_nuget:
+    runs-on: windows-latest
+    needs: [merge]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download bin
+        uses: actions/download-artifact@v1
+        with:
+          name: bin
+      
+      - name: Make Nuget Package
+        run: |
+          wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+          mkdir -p package/lib/netstandard2.1
+          mkdir -p package/build/netstandard2.1
+          mv Nuget/Altseed2.nuspec package/
+          mv bin/Altseed2.dll package/lib/netstandard2.1/
+          mv Nuget/Altseed2.targets package/build/netstandard2.1/
+          mv bin/Altseed_Core.dll package/build/netstandard2.1/
+          mv bin/libAltseed_Core.dylib package/build/netstandard2.1/
+          mv bin/libAltseed_Core package/build/netstandard2.1/
+          cd package
+          ../nuget.exe pack Altseed2.nuspec
+        shell: powershell
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: nuget
+          path: package/Altseed2.nupkg
