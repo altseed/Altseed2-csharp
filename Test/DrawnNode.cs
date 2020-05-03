@@ -163,5 +163,32 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void PolygonNode_SetVertexesByVector2F()
+        {
+            var tc = new TestCore(new Configuration() { WaitVSync = false });
+            tc.Init();
+
+            var node = new PolygonNode();
+            Engine.AddNode(node);
+
+            tc.LoopBody(c =>
+            {
+                var sin = MathF.Sin(MathHelper.DegreeToRadian(c)) * 50;
+                var cos = MathF.Cos(MathHelper.DegreeToRadian(c)) * 50;
+
+                node.SetVertexes(new[] {
+                    new Vector2F(100 + cos, 100 - sin),
+                    new Vector2F(100 - sin, 100 - cos),
+                    new Vector2F(100 - cos, 100 + sin),
+                    new Vector2F(100 + sin, 100 + cos),
+                });
+                node.SetAllVertexColor(new Color(255, 255, 255, 255));
+
+            }, null);
+
+            tc.End();
+        }
     }
 }
