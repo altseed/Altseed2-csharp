@@ -1,0 +1,11 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <NativeLibs Include="$(MSBuildThisFileDirectory)Altseed_Core.dll" />
+    <NativeLibs Include="$(MSBuildThisFileDirectory)libAltseed_Core.dylib" />
+    <NativeLibs Include="$(MSBuildThisFileDirectory)libAltseed_Core" />
+    <None Include="@(NativeLibs)">
+      <Link>%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
