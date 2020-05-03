@@ -216,7 +216,7 @@ jobs:
           mv bin/libAltseed_Core.dylib package/build/netstandard2.1/
           mv bin/libAltseed_Core package/build/netstandard2.1/
           cd package
-          ../nuget.exe pack Altseed2.nuspec
+          ..\nuget.exe pack Altseed2.nuspec
         shell: powershell
         
       - name: Upload artifact
