@@ -15,7 +15,7 @@
         <tags>Game</tags>
     </metadata>
     <files>
-        <file src="Altseed.targets" target="build\netstandard2.1\Altseed2.targets" />
+        <file src="Altseed2.targets" target="build\netstandard2.1\Altseed2.targets" />
         <file src="Altseed_Core.dll" target="build\netstandard2.1\Altseed_Core.dll" />
         <file src="libAltseed_Core.dylib" target="build\netstandard2.1\libAltseed_Core.dylib" />
         <file src="libAltseed_Core" target="build\netstandard2.1\libAltseed_Core" />
