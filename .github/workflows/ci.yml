@@ -218,4 +218,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: nuget
-          path: package/Altseed2.nupkg
+          path: package/*.nupkg
