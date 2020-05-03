@@ -161,4 +161,36 @@ jobs:
       with:
         name: test-mac
         path: Build/netcoreapp3.0
-  
+
+  merge:
+    runs-on: ubuntu-18.04
+    needs: [windows, linux, macOS]
+    steps:
+      - name: Download Windows
+        uses: actions/download-artifact@v1
+        with:
+          name: test-windows
+
+      - name: Download macOS
+        uses: actions/download-artifact@v1
+        with:
+          name: test-mac
+
+      - name: Download Linux
+        uses: actions/download-artifact@v1
+        with:
+          name: test-linux
+
+      - name: Merge
+        run: |
+          mkdir bin
+          cp test-windows/Altseed2.dll bin/
+          cp test-windows/Altseed_Core.dll bin/
+          cp test-mac/libAltseed_Core.dylib bin/
+          cp test-linux/libAltseed_Core bin/
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: bin
+          path: bin
