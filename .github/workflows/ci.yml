@@ -206,7 +206,7 @@ jobs:
       
       - name: Make Nuget Package
         run: |
-          wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+          wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O nuget.exe
           mkdir -p package/lib/netstandard2.1
           mkdir -p package/build/netstandard2.1
           mv Nuget/Altseed2.nuspec package/
@@ -216,7 +216,6 @@ jobs:
           mv bin/libAltseed_Core.dylib package/build/netstandard2.1/
           mv bin/libAltseed_Core package/build/netstandard2.1/
           cd package
-          ls ..
           ..\nuget.exe pack Altseed2.nuspec
         shell: powershell
         
