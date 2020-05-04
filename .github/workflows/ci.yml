@@ -194,3 +194,29 @@ jobs:
         with:
           name: bin
           path: bin
+  make_nuget:
+    runs-on: windows-latest
+    needs: [merge]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download bin
+        uses: actions/download-artifact@v1
+        with:
+          name: bin
+      
+      - name: Make Nuget Package
+        run: |
+          wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O nuget.exe
+          mkdir package/
+          mkdir result/
+          mv Nuget/* package/
+          mv bin/* package/
+          cd package
+          ..\nuget.exe pack Altseed2.nuspec -OutputDirectory ../result
+        shell: powershell
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: nuget
+          path: result
