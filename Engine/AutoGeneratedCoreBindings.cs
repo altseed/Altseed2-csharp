@@ -11261,7 +11261,7 @@ namespace Altseed
         private static extern void cbg_SoundMixer_SetPlaybackPosition(IntPtr selfPtr, int id, float position);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_SoundMixer_GetSpectrumData(IntPtr selfPtr, int id, IntPtr spectrums, int window);
+        private static extern void cbg_SoundMixer_GetSpectrum(IntPtr selfPtr, int id, IntPtr spectrums, int window);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
@@ -11469,9 +11469,9 @@ namespace Altseed
         /// <param name="id">音のID</param>
         /// <param name="spectrums">音のスペクトル情報を格納するための配列</param>
         /// <param name="window">フーリエ変換に用いる窓関数</param>
-        internal void GetSpectrumData(int id, FloatArray spectrums, FFTWindow window)
+        internal void GetSpectrum(int id, FloatArray spectrums, FFTWindow window)
         {
-            cbg_SoundMixer_GetSpectrumData(selfPtr, id, spectrums != null ? spectrums.selfPtr : IntPtr.Zero, (int)window);
+            cbg_SoundMixer_GetSpectrum(selfPtr, id, spectrums != null ? spectrums.selfPtr : IntPtr.Zero, (int)window);
         }
         
         ~SoundMixer()

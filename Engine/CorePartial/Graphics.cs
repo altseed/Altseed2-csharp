@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
@@ -222,7 +222,7 @@ namespace Altseed
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
-            ptr = cbg_Shader_Create(code, name, (int)stage);
+            ptr = cbg_Shader_Create(name, code, (int)stage);
         }
     }
 }
