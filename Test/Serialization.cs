@@ -720,5 +720,28 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Shader()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var shader1 = Altseed.Shader.Create("ShaderTest", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel);
+            Assert.NotNull(shader1);
+
+            const string path = "Serialization/Shader.bin";
+
+            Serialize(path, shader1);
+
+            var shader2 = Deserialize<Shader>(path);
+            Assert.NotNull(shader2);
+
+            Assert.AreEqual(shader1.Code, shader2.Code);
+            Assert.AreEqual(shader1.Name, shader2.Name);
+            Assert.AreEqual(shader1.StageType, shader2.StageType);
+
+            Engine.Terminate();
+        }
     }
 }
