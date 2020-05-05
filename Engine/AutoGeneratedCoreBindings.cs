@@ -5658,6 +5658,23 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_RenderedText_GetIsEnableKerning(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetIsEnableKerning(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_RenderedText_GetWritingDirection(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetWritingDirection(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedText_Release(IntPtr selfPtr);
         
         #endregion
@@ -5778,6 +5795,62 @@ namespace Altseed
         private Color? _Color;
         
         /// <summary>
+        /// カーニングの有無を取得または設定します。
+        /// </summary>
+        public bool IsEnableKerning
+        {
+            get
+            {
+                if (_IsEnableKerning != null)
+                {
+                    return _IsEnableKerning.Value;
+                }
+                var ret = cbg_RenderedText_GetIsEnableKerning(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _IsEnableKerning = value;
+                cbg_RenderedText_SetIsEnableKerning(selfPtr, value);
+            }
+        }
+        private bool? _IsEnableKerning;
+        
+        /// <summary>
+        /// 行の方向を取得または設定します。
+        /// </summary>
+        public WritingDirection WritingDirection
+        {
+            get
+            {
+                if (_WritingDirection != null)
+                {
+                    return _WritingDirection.Value;
+                }
+                var ret = cbg_RenderedText_GetWritingDirection(selfPtr);
+                return (WritingDirection)ret;
+            }
+            set
+            {
+                _WritingDirection = value;
+                cbg_RenderedText_SetWritingDirection(selfPtr, (int)value);
+            }
+        }
+        private WritingDirection? _WritingDirection;
+        
+        /// <summary>
+        /// テキストを描画したときのサイズを取得します
+        /// </summary>
+        public Vector2F TextureSize
+        {
+            get
+            {
+                var ret = cbg_RenderedText_GetTextureSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// テキストを作成します。
         /// </summary>
         public static RenderedText Create()
@@ -5793,6 +5866,8 @@ namespace Altseed
         private const string S_Font = "S_Font";
         private const string S_Weight = "S_Weight";
         private const string S_Color = "S_Color";
+        private const string S_IsEnableKerning = "S_IsEnableKerning";
+        private const string S_WritingDirection = "S_WritingDirection";
         #endregion
         
         /// <summary>
@@ -5812,6 +5887,8 @@ namespace Altseed
             Font = info.GetValue<Font>(S_Font);
             Weight = info.GetSingle(S_Weight);
             Color = info.GetValue<Color>(S_Color);
+            IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
+            WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5830,6 +5907,8 @@ namespace Altseed
             info.AddValue(S_Font, Font);
             info.AddValue(S_Weight, Weight);
             info.AddValue(S_Color, Color);
+            info.AddValue(S_IsEnableKerning, IsEnableKerning);
+            info.AddValue(S_WritingDirection, WritingDirection);
             
             OnGetObjectData(info, context);
         }
@@ -6915,9 +6994,6 @@ namespace Altseed
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed_Core")]
-        private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
-        
-        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
         [DllImport("Altseed_Core")]
@@ -7108,19 +7184,6 @@ namespace Altseed
         public int GetKerning(int c1, int c2)
         {
             var ret = cbg_Font_GetKerning(selfPtr, c1, c2);
-            return ret;
-        }
-        
-        /// <summary>
-        /// テキストを描画したときのサイズを取得します
-        /// </summary>
-        /// <param name="text">テキスト</param>
-        /// <param name="direction">文字列の方向</param>
-        /// <param name="isEnableKerning">カーニングの有無</param>
-        /// <returns>サイズ</returns>
-        public Vector2I CalcTextureSize(string text, WritingDirection direction, bool isEnableKerning)
-        {
-            var ret = cbg_Font_CalcTextureSize(selfPtr, text, (int)direction, isEnableKerning);
             return ret;
         }
         
