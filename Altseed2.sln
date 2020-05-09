@@ -12,7 +12,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Samples\Sample.csproj", "{B7A43F54-A032-44F4-9FEE-554CF61A3125}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForMacLinux", "TestForMacLinux\TestForMacLinux.csproj", "{2E579EDE-9668-4595-85BF-6020A68C5B6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestForMacLinux", "TestForMacLinux\TestForMacLinux.csproj", "{2E579EDE-9668-4595-85BF-6020A68C5B6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{2604264E-917B-4031-A33F-CFE134662FFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FontGenerator", "Tool\FontGenerator\FontGenerator.csproj", "{1A14729B-0397-4ADB-BEAA-9946CD61BD99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilePackageGenerator", "Tool\FilePackageGenerator\FilePackageGenerator.csproj", "{AE44F118-F8AC-4880-8EE5-757A7330205C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,9 +42,21 @@ Global
 		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Debug|x64.Build.0 = Debug|x64
 		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Release|x64.ActiveCfg = Release|x64
 		{2E579EDE-9668-4595-85BF-6020A68C5B6A}.Release|x64.Build.0 = Release|x64
+		{1A14729B-0397-4ADB-BEAA-9946CD61BD99}.Debug|x64.ActiveCfg = Debug|x64
+		{1A14729B-0397-4ADB-BEAA-9946CD61BD99}.Debug|x64.Build.0 = Debug|x64
+		{1A14729B-0397-4ADB-BEAA-9946CD61BD99}.Release|x64.ActiveCfg = Release|x64
+		{1A14729B-0397-4ADB-BEAA-9946CD61BD99}.Release|x64.Build.0 = Release|x64
+		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Debug|x64.ActiveCfg = Debug|x64
+		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Debug|x64.Build.0 = Debug|x64
+		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Release|x64.ActiveCfg = Release|x64
+		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A14729B-0397-4ADB-BEAA-9946CD61BD99} = {2604264E-917B-4031-A33F-CFE134662FFB}
+		{AE44F118-F8AC-4880-8EE5-757A7330205C} = {2604264E-917B-4031-A33F-CFE134662FFB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03A27F6C-8AA5-4EEE-BE21-B3BFECB9B100}

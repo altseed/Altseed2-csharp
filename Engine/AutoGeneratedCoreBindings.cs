@@ -1076,6 +1076,431 @@ namespace Altseed
     }
     
     /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum ToolFocused : int
+    {
+        None,
+        /// <summary>
+        /// 
+        /// </summary>
+        ChildWindows,
+        /// <summary>
+        /// 
+        /// </summary>
+        RootWindow,
+        /// <summary>
+        /// 
+        /// </summary>
+        AnyWindow,
+        /// <summary>
+        /// 
+        /// </summary>
+        RootAndChildWindows,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum ToolColor : int
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Text,
+        /// <summary>
+        /// 
+        /// </summary>
+        TextDisabled,
+        /// <summary>
+        /// 
+        /// </summary>
+        WindowBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        ChildBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        PopupBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        Border,
+        /// <summary>
+        /// 
+        /// </summary>
+        BorderShadow,
+        /// <summary>
+        /// 
+        /// </summary>
+        FrameBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        FrameBgHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        FrameBgActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        TitleBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        TitleBgActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        TitleBgCollapsed,
+        /// <summary>
+        /// 
+        /// </summary>
+        MenuBarBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        ScrollbarBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        ScrollbarGrab,
+        /// <summary>
+        /// 
+        /// </summary>
+        ScrollbarGrabHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        ScrollbarGrabActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        CheckMark,
+        /// <summary>
+        /// 
+        /// </summary>
+        SliderGrab,
+        /// <summary>
+        /// 
+        /// </summary>
+        SliderGrabActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        Button,
+        /// <summary>
+        /// 
+        /// </summary>
+        ButtonHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        ButtonActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        Header,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeaderHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeaderActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        Separator,
+        /// <summary>
+        /// 
+        /// </summary>
+        SeparatorHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        SeparatorActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        ResizeGrip,
+        /// <summary>
+        /// 
+        /// </summary>
+        ResizeGripHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        ResizeGripActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        Tab,
+        /// <summary>
+        /// 
+        /// </summary>
+        TabHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        TabActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        TabUnfocused,
+        /// <summary>
+        /// 
+        /// </summary>
+        TabUnfocusedActive,
+        /// <summary>
+        /// 
+        /// </summary>
+        PlotLines,
+        /// <summary>
+        /// 
+        /// </summary>
+        PlotLinesHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        PlotHistogram,
+        /// <summary>
+        /// 
+        /// </summary>
+        PlotHistogramHovered,
+        /// <summary>
+        /// 
+        /// </summary>
+        TextSelectedBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        DragDropTarget,
+        /// <summary>
+        /// 
+        /// </summary>
+        NavHighlight,
+        /// <summary>
+        /// 
+        /// </summary>
+        NavWindowingHighlight,
+        /// <summary>
+        /// 
+        /// </summary>
+        NavWindowingDimBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        ModalWindowDimBg,
+        /// <summary>
+        /// 
+        /// </summary>
+        COUNT,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum ToolStyleVar : int
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Alpha,
+        /// <summary>
+        /// 
+        /// </summary>
+        WindowPadding,
+        /// <summary>
+        /// 
+        /// </summary>
+        WindowRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        WindowBorderSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        WindowMinSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        WindowTitleAlign,
+        /// <summary>
+        /// 
+        /// </summary>
+        ChildRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        ChildBorderSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        PopupRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        PopupBorderSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        FramePadding,
+        /// <summary>
+        /// 
+        /// </summary>
+        FrameRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        FrameBorderSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        ItemSpacing,
+        /// <summary>
+        /// 
+        /// </summary>
+        ItemInnerSpacing,
+        /// <summary>
+        /// 
+        /// </summary>
+        IndentSpacing,
+        /// <summary>
+        /// 
+        /// </summary>
+        ScrollbarSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        ScrollbarRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        GrabMinSize,
+        /// <summary>
+        /// 
+        /// </summary>
+        GrabRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        TabRounding,
+        /// <summary>
+        /// 
+        /// </summary>
+        ButtonTextAlign,
+        /// <summary>
+        /// 
+        /// </summary>
+        SelectableTextAlign,
+        /// <summary>
+        /// 
+        /// </summary>
+        COUNT,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum ToolCombo : int
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        None,
+        /// <summary>
+        /// 
+        /// </summary>
+        PopupAlignLeft,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeightSmall,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeightRegular,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeightLarge,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeightLargest,
+        /// <summary>
+        /// 
+        /// </summary>
+        NoArrowButton,
+        /// <summary>
+        /// 
+        /// </summary>
+        NoPreview,
+        /// <summary>
+        /// 
+        /// </summary>
+        HeightMask_,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum ToolHovered : int
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        None,
+        /// <summary>
+        /// 
+        /// </summary>
+        ChildWindows,
+        /// <summary>
+        /// 
+        /// </summary>
+        RootWindow,
+        /// <summary>
+        /// 
+        /// </summary>
+        AnyWindow,
+        /// <summary>
+        /// 
+        /// </summary>
+        AllowWhenBlockedByPopup,
+        /// <summary>
+        /// 
+        /// </summary>
+        AllowWhenBlockedByActiveItem,
+        /// <summary>
+        /// 
+        /// </summary>
+        AllowWhenOverlapped,
+        /// <summary>
+        /// 
+        /// </summary>
+        AllowWhenDisabled,
+        /// <summary>
+        /// 
+        /// </summary>
+        RectOnly,
+        /// <summary>
+        /// 
+        /// </summary>
+        RootAndChildWindows,
+    }
+    
+    /// <summary>
     /// 音のスペクトル解析に使用する窓関数
     /// </summary>
     [Serializable]
@@ -3604,6 +4029,10 @@ namespace Altseed
         private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
         
         
@@ -3621,6 +4050,15 @@ namespace Altseed
         internal Graphics(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        public CommandList CommandList
+        {
+            get
+            {
+                var ret = cbg_Graphics_GetCommandList(selfPtr);
+                return CommandList.TryGetFromCache(ret);
+            }
         }
         
         /// <summary>
@@ -4512,7 +4950,7 @@ namespace Altseed
         private static extern void cbg_Renderer_Render(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr commandList);
+        private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr camera);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
@@ -4575,10 +5013,10 @@ namespace Altseed
         /// <summary>
         /// 使用するカメラを設定します。
         /// </summary>
-        /// <param name="commandList">描画するカメラ</param>
-        internal void SetCamera(RenderedCamera commandList)
+        /// <param name="camera">描画するカメラ</param>
+        internal void SetCamera(RenderedCamera camera)
         {
-            cbg_Renderer_SetCamera(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
+            cbg_Renderer_SetCamera(selfPtr, camera != null ? camera.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -4646,6 +5084,9 @@ namespace Altseed
         private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_CommandList_RenderToRenderTexture(IntPtr selfPtr, IntPtr material, IntPtr target);
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
         
         [DllImport("Altseed_Core")]
@@ -4678,6 +5119,11 @@ namespace Altseed
         public void SetRenderTarget(RenderTexture target, RenderPassParameter renderPassParameter)
         {
             cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, renderPassParameter);
+        }
+        
+        public void RenderToRenderTexture(Material material, RenderTexture target)
+        {
+            cbg_CommandList_RenderToRenderTexture(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, target != null ? target.selfPtr : IntPtr.Zero);
         }
         
         public void RenderToRenderTarget(Material material)
@@ -4937,6 +5383,12 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern Color cbg_RenderedSprite_GetColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetColor(IntPtr selfPtr, Color value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
@@ -5013,6 +5465,28 @@ namespace Altseed
         private Material _Material;
         
         /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                if (_Color != null)
+                {
+                    return _Color.Value;
+                }
+                var ret = cbg_RenderedSprite_GetColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Color = value;
+                cbg_RenderedSprite_SetColor(selfPtr, value);
+            }
+        }
+        private Color? _Color;
+        
+        /// <summary>
         /// スプライトを作成します。
         /// </summary>
         public static RenderedSprite Create()
@@ -5026,6 +5500,7 @@ namespace Altseed
         private const string S_Texture = "S_Texture";
         private const string S_Src = "S_Src";
         private const string S_Material = "S_Material";
+        private const string S_Color = "S_Color";
         #endregion
         
         /// <summary>
@@ -5043,6 +5518,7 @@ namespace Altseed
             Texture = info.GetValue<TextureBase>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
+            Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5059,6 +5535,7 @@ namespace Altseed
             info.AddValue(S_Texture, Texture);
             info.AddValue(S_Src, Src);
             info.AddValue(S_Material, Material);
+            info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
         }
@@ -5175,6 +5652,23 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_RenderedText_GetIsEnableKerning(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetIsEnableKerning(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_RenderedText_GetWritingDirection(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetWritingDirection(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, Color value);
@@ -5279,6 +5773,62 @@ namespace Altseed
         private float? _Weight;
         
         /// <summary>
+        /// カーニングの有無を取得または設定します。
+        /// </summary>
+        public bool IsEnableKerning
+        {
+            get
+            {
+                if (_IsEnableKerning != null)
+                {
+                    return _IsEnableKerning.Value;
+                }
+                var ret = cbg_RenderedText_GetIsEnableKerning(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _IsEnableKerning = value;
+                cbg_RenderedText_SetIsEnableKerning(selfPtr, value);
+            }
+        }
+        private bool? _IsEnableKerning;
+        
+        /// <summary>
+        /// 行の方向を取得または設定します。
+        /// </summary>
+        public WritingDirection WritingDirection
+        {
+            get
+            {
+                if (_WritingDirection != null)
+                {
+                    return _WritingDirection.Value;
+                }
+                var ret = cbg_RenderedText_GetWritingDirection(selfPtr);
+                return (WritingDirection)ret;
+            }
+            set
+            {
+                _WritingDirection = value;
+                cbg_RenderedText_SetWritingDirection(selfPtr, (int)value);
+            }
+        }
+        private WritingDirection? _WritingDirection;
+        
+        /// <summary>
+        /// テキストを描画したときのサイズを取得します
+        /// </summary>
+        public Vector2F TextureSize
+        {
+            get
+            {
+                var ret = cbg_RenderedText_GetTextureSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
@@ -5315,6 +5865,8 @@ namespace Altseed
         private const string S_Text = "S_Text";
         private const string S_Font = "S_Font";
         private const string S_Weight = "S_Weight";
+        private const string S_IsEnableKerning = "S_IsEnableKerning";
+        private const string S_WritingDirection = "S_WritingDirection";
         private const string S_Color = "S_Color";
         #endregion
         
@@ -5334,6 +5886,8 @@ namespace Altseed
             Text = info.GetString(S_Text);
             Font = info.GetValue<Font>(S_Font);
             Weight = info.GetSingle(S_Weight);
+            IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
+            WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
             Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
@@ -5352,6 +5906,8 @@ namespace Altseed
             info.AddValue(S_Text, Text);
             info.AddValue(S_Font, Font);
             info.AddValue(S_Weight, Weight);
+            info.AddValue(S_IsEnableKerning, IsEnableKerning);
+            info.AddValue(S_WritingDirection, WritingDirection);
             info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
@@ -5445,7 +6001,10 @@ namespace Altseed
         private static extern IntPtr cbg_RenderedPolygon_Create();
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_RenderedPolygon_SetVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
+        private static extern void cbg_RenderedPolygon_CreateVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_OverwriteVertexesColor(IntPtr selfPtr, Color color);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_RenderedPolygon_GetVertexes(IntPtr selfPtr);
@@ -5581,9 +6140,17 @@ namespace Altseed
         /// <summary>
         /// 頂点情報
         /// </summary>
-        public void SetVertexesByVector2F(Vector2FArray vertexes)
+        public void CreateVertexesByVector2F(Vector2FArray vertexes)
         {
-            cbg_RenderedPolygon_SetVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+            cbg_RenderedPolygon_CreateVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// 頂点情報
+        /// </summary>
+        public void OverwriteVertexesColor(Color color)
+        {
+            cbg_RenderedPolygon_OverwriteVertexesColor(selfPtr, color);
         }
         
         #region ISerialiable
@@ -5920,6 +6487,26 @@ namespace Altseed
         private static extern IntPtr cbg_BuiltinShader_Create(IntPtr selfPtr, int type);
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetDownsampleShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetSepiaShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetGrayScaleShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetGaussianBlurShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetLightBloomShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_BuiltinShader_Release(IntPtr selfPtr);
         
         #endregion
@@ -5927,6 +6514,51 @@ namespace Altseed
         internal BuiltinShader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        internal string DownsampleShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetDownsampleShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string SepiaShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetSepiaShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string GrayScaleShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetGrayScaleShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string GaussianBlurShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetGaussianBlurShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string LightBloomShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetLightBloomShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
         }
         
         /// <summary>
@@ -6373,9 +7005,6 @@ namespace Altseed
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed_Core")]
-        private static extern Vector2I cbg_Font_CalcTextureSize(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text, int direction, [MarshalAs(UnmanagedType.Bool)] bool isEnableKerning);
-        
-        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
         [DllImport("Altseed_Core")]
@@ -6566,19 +7195,6 @@ namespace Altseed
         public int GetKerning(int c1, int c2)
         {
             var ret = cbg_Font_GetKerning(selfPtr, c1, c2);
-            return ret;
-        }
-        
-        /// <summary>
-        /// テキストを描画したときのサイズを取得します
-        /// </summary>
-        /// <param name="text">テキスト</param>
-        /// <param name="direction">文字列の方向</param>
-        /// <param name="isEnableKerning">カーニングの有無</param>
-        /// <returns>サイズ</returns>
-        public Vector2I CalcTextureSize(string text, WritingDirection direction, bool isEnableKerning)
-        {
-            var ret = cbg_Font_CalcTextureSize(selfPtr, text, (int)direction, isEnableKerning);
             return ret;
         }
         
@@ -6890,6 +7506,10 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_AddFontFromFileTTF(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, float sizePixels, int ranges);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Begin(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, int flags);
         
         [DllImport("Altseed_Core")]
@@ -6914,7 +7534,7 @@ namespace Altseed
         private static extern void cbg_Tool_TextWrapped(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_TextColored(IntPtr selfPtr, Vector4F color, [MarshalAs(UnmanagedType.LPWStr)] string text);
+        private static extern void cbg_Tool_TextColored(IntPtr selfPtr, Color color, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_TextDisabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
@@ -6965,7 +7585,20 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_ListBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int current, [MarshalAs(UnmanagedType.LPWStr)] string items, int popupMaxHeightInItems);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Selectable(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool selected, int flags);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_InputText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_InputTextWithHint(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string hit, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_InputTextMultiline(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, Vector2F size, int flags);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -6973,7 +7606,31 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_InputInt2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_InputInt3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_InputInt4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_InputFloat2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_InputFloat3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_InputFloat4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -6981,7 +7638,31 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SliderInt2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SliderInt3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SliderInt4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value, float speed, float valueMin, float valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SliderFloat2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SliderFloat3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SliderFloat4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -7002,6 +7683,22 @@ namespace Altseed
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value, float speed, float valueMin, float valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_DragIntRange2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int currentMin, [In, Out] ref int currentMax, float speed, int valueMin, int valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_DragFloatRange2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float currentMin, [In, Out] ref float currentMax, float speed, float valueMin, float valueMax);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_ColorEdit3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref Color color, int flags);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_ColorEdit4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref Color color, int flags);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_OpenPopup(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
@@ -7087,9 +7784,6 @@ namespace Altseed
         private static extern void cbg_Tool_PopTextWrapPos(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetNextItemWidth(IntPtr selfPtr, float width);
-        
-        [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_PushItemWidth(IntPtr selfPtr, float width);
         
         [DllImport("Altseed_Core")]
@@ -7125,12 +7819,6 @@ namespace Altseed
         private static extern void cbg_Tool_SetScrollHere(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetScrollHereX(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetScrollHereY(IntPtr selfPtr);
-        
-        [DllImport("Altseed_Core")]
         private static extern float cbg_Tool_GetTextLineHeight(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
@@ -7164,10 +7852,395 @@ namespace Altseed
         private static extern void cbg_Tool_SetNextWindowContentSize(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetNextWindowSize(IntPtr selfPtr, Vector2F size);
+        private static extern void cbg_Tool_SetNextWindowSize(IntPtr selfPtr, Vector2F size, int cond);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Tool_SetNextWindowPos(IntPtr selfPtr, Vector2F pos);
+        private static extern void cbg_Tool_SetNextWindowPos(IntPtr selfPtr, Vector2F pos, int cond);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsWindowAppearing(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsWindowCollapsed(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsWindowFocused(IntPtr selfPtr, int flags);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsWindowHovered(IntPtr selfPtr, int flags);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetWindowPos(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetNextWindowCollapsed(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetNextWindowFocus(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetNextWindowBgAlpha(IntPtr selfPtr, float alpha);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowPosWithCond(IntPtr selfPtr, Vector2F pos, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowSizeWithCond(IntPtr selfPtr, Vector2F pos, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowCollapsedWithCond(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowFocus(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowFontScale(IntPtr selfPtr, float scale);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowPosByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, Vector2F pos, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowSizeByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, Vector2F pos, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowCollapsedByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetWindowFocusByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetContentRegionMax(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetContentRegionAvail(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetWindowContentRegionMin(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetWindowContentRegionMax(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetWindowContentRegionWidth(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetScrollX(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetScrollY(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetScrollMaxX(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetScrollMaxY(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetScrollX(IntPtr selfPtr, float scrollX);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetScrollY(IntPtr selfPtr, float scrollY);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetScrollHereX(IntPtr selfPtr, float centerXRatio);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetScrollHereY(IntPtr selfPtr, float centerYRatio);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetScrollFromPosX(IntPtr selfPtr, float localX, float centerXRatio);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetScrollFromPosY(IntPtr selfPtr, float localY, float centerYRatio);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PushStyleColor(IntPtr selfPtr, int idx, Color col);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PopStyleColor(IntPtr selfPtr, int count);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PushStyleVarFloat(IntPtr selfPtr, int idx, float val);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PushStyleVarVector2F(IntPtr selfPtr, int idx, Vector2F val);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PopStyleVar(IntPtr selfPtr, int count);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Color cbg_Tool_GetStyleColor(IntPtr selfPtr, int idx);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetFontTexUvWhitePixel(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetNextItemWidth(IntPtr selfPtr, float itemWidth);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_CalcItemWidth(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PushAllowKeyboardFocus(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool allowKeyboardFocus);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PopAllowKeyboardFocus(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_Spacing(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_BeginGroup(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_EndGroup(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetCursorPos(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetCursorPos(IntPtr selfPtr, Vector2F localPos);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetCursorStartPos(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetCursorScreenPos(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_AlignTextToFramePadding(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetTextLineHeightWithSpacing(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetFrameHeight(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetFrameHeightWithSpacing(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SmallButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_Image(IntPtr selfPtr, IntPtr texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_ImageButton(IntPtr selfPtr, IntPtr texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_Checkbox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool v);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_ProgressBar(IntPtr selfPtr, float fraction, Vector2F sizeArg, [MarshalAs(UnmanagedType.LPWStr)] string overlay);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_Bullet(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_BeginCombo(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string previewValue, int flags);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_EndCombo(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_Combo(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int current_item, [MarshalAs(UnmanagedType.LPWStr)] string items, int popupMaxHeightInItems);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_ColorButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string descId, [In, Out] ref Color col, int flags, Vector2F size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetColorEditOptions(IntPtr selfPtr, int flags);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetTreeNodeToLabelSpacing(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_ListBoxHeader(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string flags, Vector2F size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_ListBoxFooter(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PlotLines(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr values, int valuesCount, int valuesOffset, [MarshalAs(UnmanagedType.LPWStr)] string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PlotHistogram(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr values, int valuesCount, int valuesOffset, [MarshalAs(UnmanagedType.LPWStr)] string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_ValueBool(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, [MarshalAs(UnmanagedType.Bool)] bool b);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_ValueInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, int v);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_ValueFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, float v, [MarshalAs(UnmanagedType.LPWStr)] string floatFormat);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginMainMenuBar(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_EndMainMenuBar(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginPopupContextItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginPopupContextWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton, [MarshalAs(UnmanagedType.Bool)] bool alsoOverItems);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginPopupContextVoid(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginPopupModalEx(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [Out] out bool isOpen, int flags);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_OpenPopupOnItemClick(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsPopupOpen(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_CloseCurrentPopup(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Tool_GetColumnIndex(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetColumnWidth(IntPtr selfPtr, int columnIndex);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetColumnWidth(IntPtr selfPtr, int columnIndex, float width);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetColumnOffset(IntPtr selfPtr, int columnIndex);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetColumnOffset(IntPtr selfPtr, int columnIndex, float offsetX);
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_Tool_GetColumnsCount(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetTabItemClosed(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string tabOrDockedWindowLabel);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PushClipRect(IntPtr selfPtr, Vector2F clipRectMin, Vector2F clipRectMax, [MarshalAs(UnmanagedType.Bool)] bool intersectWithCurrentClipRect);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_PopClipRect(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetItemDefaultFocus(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetKeyboardFocusHere(IntPtr selfPtr, int offset);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemHoveredWithFlags(IntPtr selfPtr, int flags);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemFocused(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemClicked(IntPtr selfPtr, int mouseButton);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemVisible(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemEdited(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemActivated(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemDeactivated(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsItemDeactivatedAfterEdit(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsAnyItemHovered(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsAnyItemActive(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsAnyItemFocused(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetItemRectMin(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetItemRectMax(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern Vector2F cbg_Tool_GetItemRectSize(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetItemAllowOverlap(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_IsRectVisible(IntPtr selfPtr, Vector2F size);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_IsRectVisibleVector2F2(IntPtr selfPtr, Vector2F rectMin, Vector2F rectMax);
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_Tool_GetTime(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_GetClipboardText(IntPtr selfPtr);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetClipboardText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_LoadIniSettingsFromDisk(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string iniFilename);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SaveIniSettingsToDisk(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string iniFilename);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_OpenDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_OpenDialogMultiple(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_SaveDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_Tool_PickFolder(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_Release(IntPtr selfPtr);
@@ -7183,6 +8256,15 @@ namespace Altseed
         {
             var ret = cbg_Tool_GetInstance();
             return Tool.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// パスからフォントを読み込みます。パックされたファイルは非対応です。
+        /// </summary>
+        public bool AddFontFromFileTTF(string path, float sizePixels, ToolGlyphRanges ranges)
+        {
+            var ret = cbg_Tool_AddFontFromFileTTF(selfPtr, path, sizePixels, (int)ranges);
+            return ret;
         }
         
         /// <summary>
@@ -7253,7 +8335,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void TextColored(Vector4F color, string text)
+        public void TextColored(Color color, string text)
         {
             cbg_Tool_TextColored(selfPtr, color, text);
         }
@@ -7373,6 +8455,16 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="items">タブ文字を用いて分割したアイテム</param>
+        public bool ListBox(string label, ref int current, string items, int popupMaxHeightInItems)
+        {
+            var ret = cbg_Tool_ListBox(selfPtr, label, ref current, items, popupMaxHeightInItems);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public bool Selectable(string label, ref bool selected, ToolSelectable flags)
         {
             var ret = cbg_Tool_Selectable(selfPtr, label, ref selected, (int)flags);
@@ -7382,9 +8474,63 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
+        public string InputText(string label, string input, int maxLength, ToolInputText flags)
+        {
+            var ret = cbg_Tool_InputText(selfPtr, label, input, maxLength, (int)flags);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string InputTextWithHint(string label, string hit, string input, int maxLength, ToolInputText flags)
+        {
+            var ret = cbg_Tool_InputTextWithHint(selfPtr, label, hit, input, maxLength, (int)flags);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string InputTextMultiline(string label, string input, int maxLength, Vector2F size, ToolInputText flags)
+        {
+            var ret = cbg_Tool_InputTextMultiline(selfPtr, label, input, maxLength, size, (int)flags);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public bool InputInt(string label, ref int value)
         {
             var ret = cbg_Tool_InputInt(selfPtr, label, ref value);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool InputInt2(string label, Int32Array array)
+        {
+            var ret = cbg_Tool_InputInt2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool InputInt3(string label, Int32Array array)
+        {
+            var ret = cbg_Tool_InputInt3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool InputInt4(string label, Int32Array array)
+        {
+            var ret = cbg_Tool_InputInt4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
@@ -7400,6 +8546,33 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
+        internal bool InputFloat2(string label, FloatArray array)
+        {
+            var ret = cbg_Tool_InputFloat2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool InputFloat3(string label, FloatArray array)
+        {
+            var ret = cbg_Tool_InputFloat3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool InputFloat4(string label, FloatArray array)
+        {
+            var ret = cbg_Tool_InputFloat4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public bool SliderInt(string label, ref int value, float speed, int valueMin, int valueMax)
         {
             var ret = cbg_Tool_SliderInt(selfPtr, label, ref value, speed, valueMin, valueMax);
@@ -7409,9 +8582,63 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
+        internal bool SliderInt2(string label, Int32Array array, float speed, int valueMin, int valueMax)
+        {
+            var ret = cbg_Tool_SliderInt2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool SliderInt3(string label, Int32Array array, float speed, int valueMin, int valueMax)
+        {
+            var ret = cbg_Tool_SliderInt3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool SliderInt4(string label, Int32Array array, float speed, int valueMin, int valueMax)
+        {
+            var ret = cbg_Tool_SliderInt4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_SliderFloat(selfPtr, label, ref value, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool SliderFloat2(string label, FloatArray array, float speed, float valueMin, float valueMax)
+        {
+            var ret = cbg_Tool_SliderFloat2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool SliderFloat3(string label, FloatArray array, float speed, float valueMin, float valueMax)
+        {
+            var ret = cbg_Tool_SliderFloat3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal bool SliderFloat4(string label, FloatArray array, float speed, float valueMin, float valueMax)
+        {
+            var ret = cbg_Tool_SliderFloat4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero, speed, valueMin, valueMax);
             return ret;
         }
         
@@ -7457,6 +8684,42 @@ namespace Altseed
         public bool DragFloat(string label, ref float value, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_DragFloat(selfPtr, label, ref value, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool DragIntRange2(string label, ref int currentMin, ref int currentMax, float speed, int valueMin, int valueMax)
+        {
+            var ret = cbg_Tool_DragIntRange2(selfPtr, label, ref currentMin, ref currentMax, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool DragFloatRange2(string label, ref float currentMin, ref float currentMax, float speed, float valueMin, float valueMax)
+        {
+            var ret = cbg_Tool_DragFloatRange2(selfPtr, label, ref currentMin, ref currentMax, speed, valueMin, valueMax);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ColorEdit3(string label, ref Color color, ToolColorEdit flags)
+        {
+            var ret = cbg_Tool_ColorEdit3(selfPtr, label, ref color, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ColorEdit4(string label, ref Color color, ToolColorEdit flags)
+        {
+            var ret = cbg_Tool_ColorEdit4(selfPtr, label, ref color, (int)flags);
             return ret;
         }
         
@@ -7671,14 +8934,6 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void SetNextItemWidth(float width)
-        {
-            cbg_Tool_SetNextItemWidth(selfPtr, width);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
         public void PushItemWidth(float width)
         {
             cbg_Tool_PushItemWidth(selfPtr, width);
@@ -7764,22 +9019,6 @@ namespace Altseed
         public void SetScrollHere()
         {
             cbg_Tool_SetScrollHere(selfPtr);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetScrollHereX()
-        {
-            cbg_Tool_SetScrollHereX(selfPtr);
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetScrollHereY()
-        {
-            cbg_Tool_SetScrollHereY(selfPtr);
         }
         
         /// <summary>
@@ -7872,17 +9111,1031 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void SetNextWindowSize(Vector2F size)
+        public void SetNextWindowSize(Vector2F size, ToolCond cond)
         {
-            cbg_Tool_SetNextWindowSize(selfPtr, size);
+            cbg_Tool_SetNextWindowSize(selfPtr, size, (int)cond);
         }
         
         /// <summary>
         /// 
         /// </summary>
-        public void SetNextWindowPos(Vector2F pos)
+        public void SetNextWindowPos(Vector2F pos, ToolCond cond)
         {
-            cbg_Tool_SetNextWindowPos(selfPtr, pos);
+            cbg_Tool_SetNextWindowPos(selfPtr, pos, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsWindowAppearing()
+        {
+            var ret = cbg_Tool_IsWindowAppearing(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsWindowCollapsed()
+        {
+            var ret = cbg_Tool_IsWindowCollapsed(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsWindowFocused(ToolFocused flags)
+        {
+            var ret = cbg_Tool_IsWindowFocused(selfPtr, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsWindowHovered(ToolFocused flags)
+        {
+            var ret = cbg_Tool_IsWindowHovered(selfPtr, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetWindowPos()
+        {
+            var ret = cbg_Tool_GetWindowPos(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetNextWindowCollapsed(bool collapsed, ToolCond cond)
+        {
+            cbg_Tool_SetNextWindowCollapsed(selfPtr, collapsed, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetNextWindowFocus()
+        {
+            cbg_Tool_SetNextWindowFocus(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetNextWindowBgAlpha(float alpha)
+        {
+            cbg_Tool_SetNextWindowBgAlpha(selfPtr, alpha);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowPosWithCond(Vector2F pos, ToolCond cond)
+        {
+            cbg_Tool_SetWindowPosWithCond(selfPtr, pos, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowSizeWithCond(Vector2F pos, ToolCond cond)
+        {
+            cbg_Tool_SetWindowSizeWithCond(selfPtr, pos, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowCollapsedWithCond(bool collapsed, ToolCond cond)
+        {
+            cbg_Tool_SetWindowCollapsedWithCond(selfPtr, collapsed, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowFocus()
+        {
+            cbg_Tool_SetWindowFocus(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowFontScale(float scale)
+        {
+            cbg_Tool_SetWindowFontScale(selfPtr, scale);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowPosByName(string name, Vector2F pos, ToolCond cond)
+        {
+            cbg_Tool_SetWindowPosByName(selfPtr, name, pos, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowSizeByName(string name, Vector2F pos, ToolCond cond)
+        {
+            cbg_Tool_SetWindowSizeByName(selfPtr, name, pos, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowCollapsedByName(string name, bool collapsed, ToolCond cond)
+        {
+            cbg_Tool_SetWindowCollapsedByName(selfPtr, name, collapsed, (int)cond);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetWindowFocusByName(string name)
+        {
+            cbg_Tool_SetWindowFocusByName(selfPtr, name);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetContentRegionMax()
+        {
+            var ret = cbg_Tool_GetContentRegionMax(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetContentRegionAvail()
+        {
+            var ret = cbg_Tool_GetContentRegionAvail(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetWindowContentRegionMin()
+        {
+            var ret = cbg_Tool_GetWindowContentRegionMin(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetWindowContentRegionMax()
+        {
+            var ret = cbg_Tool_GetWindowContentRegionMax(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetWindowContentRegionWidth()
+        {
+            var ret = cbg_Tool_GetWindowContentRegionWidth(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetScrollX()
+        {
+            var ret = cbg_Tool_GetScrollX(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetScrollY()
+        {
+            var ret = cbg_Tool_GetScrollY(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetScrollMaxX()
+        {
+            var ret = cbg_Tool_GetScrollMaxX(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetScrollMaxY()
+        {
+            var ret = cbg_Tool_GetScrollMaxY(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetScrollX(float scrollX)
+        {
+            cbg_Tool_SetScrollX(selfPtr, scrollX);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetScrollY(float scrollY)
+        {
+            cbg_Tool_SetScrollY(selfPtr, scrollY);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetScrollHereX(float centerXRatio)
+        {
+            cbg_Tool_SetScrollHereX(selfPtr, centerXRatio);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetScrollHereY(float centerYRatio)
+        {
+            cbg_Tool_SetScrollHereY(selfPtr, centerYRatio);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetScrollFromPosX(float localX, float centerXRatio)
+        {
+            cbg_Tool_SetScrollFromPosX(selfPtr, localX, centerXRatio);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetScrollFromPosY(float localY, float centerYRatio)
+        {
+            cbg_Tool_SetScrollFromPosY(selfPtr, localY, centerYRatio);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PushStyleColor(ToolColor idx, Color col)
+        {
+            cbg_Tool_PushStyleColor(selfPtr, (int)idx, col);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PopStyleColor(int count)
+        {
+            cbg_Tool_PopStyleColor(selfPtr, count);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PushStyleVarFloat(ToolStyleVar idx, float val)
+        {
+            cbg_Tool_PushStyleVarFloat(selfPtr, (int)idx, val);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PushStyleVarVector2F(ToolStyleVar idx, Vector2F val)
+        {
+            cbg_Tool_PushStyleVarVector2F(selfPtr, (int)idx, val);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PopStyleVar(int count)
+        {
+            cbg_Tool_PopStyleVar(selfPtr, count);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Color GetStyleColor(ToolColor idx)
+        {
+            var ret = cbg_Tool_GetStyleColor(selfPtr, (int)idx);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetFontTexUvWhitePixel()
+        {
+            var ret = cbg_Tool_GetFontTexUvWhitePixel(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetNextItemWidth(float itemWidth)
+        {
+            cbg_Tool_SetNextItemWidth(selfPtr, itemWidth);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float CalcItemWidth()
+        {
+            var ret = cbg_Tool_CalcItemWidth(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PushAllowKeyboardFocus(bool allowKeyboardFocus)
+        {
+            cbg_Tool_PushAllowKeyboardFocus(selfPtr, allowKeyboardFocus);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PopAllowKeyboardFocus()
+        {
+            cbg_Tool_PopAllowKeyboardFocus(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Spacing()
+        {
+            cbg_Tool_Spacing(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void BeginGroup()
+        {
+            cbg_Tool_BeginGroup(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void EndGroup()
+        {
+            cbg_Tool_EndGroup(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetCursorPos()
+        {
+            var ret = cbg_Tool_GetCursorPos(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetCursorPos(Vector2F localPos)
+        {
+            cbg_Tool_SetCursorPos(selfPtr, localPos);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetCursorStartPos()
+        {
+            var ret = cbg_Tool_GetCursorStartPos(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetCursorScreenPos()
+        {
+            var ret = cbg_Tool_GetCursorScreenPos(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void AlignTextToFramePadding()
+        {
+            cbg_Tool_AlignTextToFramePadding(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetTextLineHeightWithSpacing()
+        {
+            var ret = cbg_Tool_GetTextLineHeightWithSpacing(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetFrameHeight()
+        {
+            var ret = cbg_Tool_GetFrameHeight(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetFrameHeightWithSpacing()
+        {
+            var ret = cbg_Tool_GetFrameHeightWithSpacing(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool SmallButton(string label)
+        {
+            var ret = cbg_Tool_SmallButton(selfPtr, label);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Image(Texture2D texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor)
+        {
+            cbg_Tool_Image(selfPtr, texture != null ? texture.selfPtr : IntPtr.Zero, size, uv0, uv1, tintColor, borderColor);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ImageButton(Texture2D texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor)
+        {
+            var ret = cbg_Tool_ImageButton(selfPtr, texture != null ? texture.selfPtr : IntPtr.Zero, size, uv0, uv1, framePadding, tintColor, borderColor);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Checkbox(string label, ref bool v)
+        {
+            var ret = cbg_Tool_Checkbox(selfPtr, label, ref v);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ProgressBar(float fraction, Vector2F sizeArg, string overlay)
+        {
+            cbg_Tool_ProgressBar(selfPtr, fraction, sizeArg, overlay);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Bullet()
+        {
+            cbg_Tool_Bullet(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void BeginCombo(string label, string previewValue, ToolCombo flags)
+        {
+            cbg_Tool_BeginCombo(selfPtr, label, previewValue, (int)flags);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void EndCombo()
+        {
+            cbg_Tool_EndCombo(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items">タブ文字を用いて分割したアイテム</param>
+        public bool Combo(string label, ref int current_item, string items, int popupMaxHeightInItems)
+        {
+            var ret = cbg_Tool_Combo(selfPtr, label, ref current_item, items, popupMaxHeightInItems);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ColorButton(string descId, ref Color col, ToolColorEdit flags, Vector2F size)
+        {
+            var ret = cbg_Tool_ColorButton(selfPtr, descId, ref col, (int)flags, size);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetColorEditOptions(ToolColorEdit flags)
+        {
+            cbg_Tool_SetColorEditOptions(selfPtr, (int)flags);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetTreeNodeToLabelSpacing()
+        {
+            var ret = cbg_Tool_GetTreeNodeToLabelSpacing(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ListBoxHeader(string flags, Vector2F size)
+        {
+            var ret = cbg_Tool_ListBoxHeader(selfPtr, flags, size);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ListBoxFooter()
+        {
+            cbg_Tool_ListBoxFooter(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal void PlotLines(string label, FloatArray values, int valuesCount, int valuesOffset, string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride)
+        {
+            cbg_Tool_PlotLines(selfPtr, label, values != null ? values.selfPtr : IntPtr.Zero, valuesCount, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        internal void PlotHistogram(string label, FloatArray values, int valuesCount, int valuesOffset, string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride)
+        {
+            cbg_Tool_PlotHistogram(selfPtr, label, values != null ? values.selfPtr : IntPtr.Zero, valuesCount, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ValueBool(string prefix, bool b)
+        {
+            cbg_Tool_ValueBool(selfPtr, prefix, b);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ValueInt(string prefix, int v)
+        {
+            cbg_Tool_ValueInt(selfPtr, prefix, v);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ValueFloat(string prefix, float v, string floatFormat)
+        {
+            cbg_Tool_ValueFloat(selfPtr, prefix, v, floatFormat);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool BeginMainMenuBar()
+        {
+            var ret = cbg_Tool_BeginMainMenuBar(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void EndMainMenuBar()
+        {
+            cbg_Tool_EndMainMenuBar(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool BeginPopupContextItem(string strId, int mouseButton)
+        {
+            var ret = cbg_Tool_BeginPopupContextItem(selfPtr, strId, mouseButton);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool BeginPopupContextWindow(string strId, int mouseButton, bool alsoOverItems)
+        {
+            var ret = cbg_Tool_BeginPopupContextWindow(selfPtr, strId, mouseButton, alsoOverItems);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool BeginPopupContextVoid(string strId, int mouseButton)
+        {
+            var ret = cbg_Tool_BeginPopupContextVoid(selfPtr, strId, mouseButton);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool BeginPopupModalEx(string name, out bool isOpen, ToolWindow flags)
+        {
+            var ret = cbg_Tool_BeginPopupModalEx(selfPtr, name, out isOpen, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool OpenPopupOnItemClick(string strId, int mouseButton)
+        {
+            var ret = cbg_Tool_OpenPopupOnItemClick(selfPtr, strId, mouseButton);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsPopupOpen(string strId)
+        {
+            var ret = cbg_Tool_IsPopupOpen(selfPtr, strId);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void CloseCurrentPopup()
+        {
+            cbg_Tool_CloseCurrentPopup(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public int GetColumnIndex()
+        {
+            var ret = cbg_Tool_GetColumnIndex(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetColumnWidth(int columnIndex)
+        {
+            var ret = cbg_Tool_GetColumnWidth(selfPtr, columnIndex);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetColumnWidth(int columnIndex, float width)
+        {
+            cbg_Tool_SetColumnWidth(selfPtr, columnIndex, width);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetColumnOffset(int columnIndex)
+        {
+            var ret = cbg_Tool_GetColumnOffset(selfPtr, columnIndex);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetColumnOffset(int columnIndex, float offsetX)
+        {
+            cbg_Tool_SetColumnOffset(selfPtr, columnIndex, offsetX);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public int GetColumnsCount()
+        {
+            var ret = cbg_Tool_GetColumnsCount(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetTabItemClosed(string tabOrDockedWindowLabel)
+        {
+            cbg_Tool_SetTabItemClosed(selfPtr, tabOrDockedWindowLabel);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PushClipRect(Vector2F clipRectMin, Vector2F clipRectMax, bool intersectWithCurrentClipRect)
+        {
+            cbg_Tool_PushClipRect(selfPtr, clipRectMin, clipRectMax, intersectWithCurrentClipRect);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void PopClipRect()
+        {
+            cbg_Tool_PopClipRect(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetItemDefaultFocus()
+        {
+            cbg_Tool_SetItemDefaultFocus(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetKeyboardFocusHere(int offset)
+        {
+            cbg_Tool_SetKeyboardFocusHere(selfPtr, offset);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemHoveredWithFlags(ToolHovered flags)
+        {
+            var ret = cbg_Tool_IsItemHoveredWithFlags(selfPtr, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemFocused()
+        {
+            var ret = cbg_Tool_IsItemFocused(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemClicked(int mouseButton)
+        {
+            var ret = cbg_Tool_IsItemClicked(selfPtr, mouseButton);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemVisible()
+        {
+            var ret = cbg_Tool_IsItemVisible(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemEdited()
+        {
+            var ret = cbg_Tool_IsItemEdited(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemActivated()
+        {
+            var ret = cbg_Tool_IsItemActivated(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemDeactivated()
+        {
+            var ret = cbg_Tool_IsItemDeactivated(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsItemDeactivatedAfterEdit()
+        {
+            var ret = cbg_Tool_IsItemDeactivatedAfterEdit(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsAnyItemHovered()
+        {
+            var ret = cbg_Tool_IsAnyItemHovered(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsAnyItemActive()
+        {
+            var ret = cbg_Tool_IsAnyItemActive(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsAnyItemFocused()
+        {
+            var ret = cbg_Tool_IsAnyItemFocused(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetItemRectMin()
+        {
+            var ret = cbg_Tool_GetItemRectMin(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetItemRectMax()
+        {
+            var ret = cbg_Tool_GetItemRectMax(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector2F GetItemRectSize()
+        {
+            var ret = cbg_Tool_GetItemRectSize(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetItemAllowOverlap()
+        {
+            cbg_Tool_SetItemAllowOverlap(selfPtr);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void IsRectVisible(Vector2F size)
+        {
+            cbg_Tool_IsRectVisible(selfPtr, size);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void IsRectVisibleVector2F2(Vector2F rectMin, Vector2F rectMax)
+        {
+            cbg_Tool_IsRectVisibleVector2F2(selfPtr, rectMin, rectMax);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public float GetTime()
+        {
+            var ret = cbg_Tool_GetTime(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string GetClipboardText()
+        {
+            var ret = cbg_Tool_GetClipboardText(selfPtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetClipboardText(string text)
+        {
+            cbg_Tool_SetClipboardText(selfPtr, text);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void LoadIniSettingsFromDisk(string iniFilename)
+        {
+            cbg_Tool_LoadIniSettingsFromDisk(selfPtr, iniFilename);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SaveIniSettingsToDisk(string iniFilename)
+        {
+            cbg_Tool_SaveIniSettingsToDisk(selfPtr, iniFilename);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string OpenDialog(string filter, string defaultPath)
+        {
+            var ret = cbg_Tool_OpenDialog(selfPtr, filter, defaultPath);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string OpenDialogMultiple(string filter, string defaultPath)
+        {
+            var ret = cbg_Tool_OpenDialogMultiple(selfPtr, filter, defaultPath);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string SaveDialog(string filter, string defaultPath)
+        {
+            var ret = cbg_Tool_SaveDialog(selfPtr, filter, defaultPath);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string PickFolder(string defaultPath)
+        {
+            var ret = cbg_Tool_PickFolder(selfPtr, defaultPath);
+            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         ~Tool()
@@ -9021,7 +11274,7 @@ namespace Altseed
         private static extern void cbg_SoundMixer_SetPlaybackPosition(IntPtr selfPtr, int id, float position);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_SoundMixer_GetSpectrumData(IntPtr selfPtr, int id, IntPtr spectrums, int window);
+        private static extern void cbg_SoundMixer_GetSpectrum(IntPtr selfPtr, int id, IntPtr spectrums, int window);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
@@ -9229,9 +11482,9 @@ namespace Altseed
         /// <param name="id">音のID</param>
         /// <param name="spectrums">音のスペクトル情報を格納するための配列</param>
         /// <param name="window">フーリエ変換に用いる窓関数</param>
-        internal void GetSpectrumData(int id, FloatArray spectrums, FFTWindow window)
+        internal void GetSpectrum(int id, FloatArray spectrums, FFTWindow window)
         {
-            cbg_SoundMixer_GetSpectrumData(selfPtr, id, spectrums != null ? spectrums.selfPtr : IntPtr.Zero, (int)window);
+            cbg_SoundMixer_GetSpectrum(selfPtr, id, spectrums != null ? spectrums.selfPtr : IntPtr.Zero, (int)window);
         }
         
         ~SoundMixer()

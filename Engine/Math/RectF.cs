@@ -96,5 +96,9 @@ namespace Altseed
 
         public static implicit operator RectF(RectI rect) => rect.ToF();
         public static explicit operator RectI(RectF rect) => rect.ToI();
+
+        public Vector2F Position => new Vector2F(X, Y);
+
+        public Vector2F Size => new Vector2F(Width, Height);
     }
 }

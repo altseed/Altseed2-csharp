@@ -4,97 +4,138 @@ using System.Text;
 
 namespace Altseed
 {
-    internal class DrawnNodeCollection
+    internal abstract class RenderedCollection<T>
     {
-        internal Dictionary<int, List<DrawnNode>> Nodes { get; private set; }
-        private Dictionary<int, List<DrawnNode>>[] _Lists;
+        protected abstract uint GetGroup(T o);
+        protected abstract int GetOrder(T o);
 
-        internal DrawnNodeCollection()
+        internal Dictionary<int, List<T>> Nodes { get; private set; }
+        private Dictionary<int, List<T>>[] _Lists;
+
+        internal RenderedCollection()
         {
-            Nodes = new Dictionary<int, List<DrawnNode>>();
+            Nodes = new Dictionary<int, List<T>>();
 
-            _Lists = new Dictionary<int, List<DrawnNode>>[33];
+            _Lists = new Dictionary<int, List<T>>[33];
             for (int i = 0; i <= 31; i++)
-                _Lists[i] = new Dictionary<int, List<DrawnNode>>();
+                _Lists[i] = new Dictionary<int, List<T>>();
         }
 
-        internal void UpdateCameraGroup(DrawnNode node, uint oldCameraGroup)
+        internal void UpdateCameraGroup(T node, uint oldCameraGroup)
         {
+            var nodeGroup = GetGroup(node);
+            var nodeOrder = GetOrder(node);
+
             for (int i = 0; i <= 31; i++)
             {
                 var mask = 1u << i;
 
-                if (HasBit(oldCameraGroup, mask) && !HasBit(node.CameraGroup, mask))
+                if (HasBit(oldCameraGroup, mask) && !HasBit(nodeGroup, mask))
                 {
                     // 削除
-                    _Lists[i][node.ZOrder].Remove(node);
+                    _Lists[i][nodeOrder].Remove(node);
                 }
 
-                if (!HasBit(oldCameraGroup, mask) && HasBit(node.CameraGroup, mask))
+                if (!HasBit(oldCameraGroup, mask) && HasBit(nodeGroup, mask))
                 {
                     // 追加
-                    if (!_Lists[i].ContainsKey(node.ZOrder))
-                        _Lists[i][node.ZOrder] = new List<DrawnNode>();
+                    if (!_Lists[i].ContainsKey(nodeOrder))
+                        _Lists[i][nodeOrder] = new List<T>();
 
-                    _Lists[i][node.ZOrder].Add(node);
+                    _Lists[i][nodeOrder].Add(node);
                 }
             }
         }
 
-        internal void UpdateZOrder(DrawnNode node, int oldZOrder)
+        internal void UpdateOrder(T node, int oldZOrder)
         {
+            var nodeGroup = GetGroup(node);
+            var nodeOrder = GetOrder(node);
+
             for (int i = 0; i <= 31; i++)
             {
                 var mask = 1u << i;
-                if (!HasBit(node.CameraGroup, mask)) continue;
+                if (!HasBit(nodeGroup, mask)) continue;
 
                 var group = _Lists[i];
 
                 group[oldZOrder].Remove(node);
 
-                if (!group.ContainsKey(node.ZOrder))
-                    group[node.ZOrder] = new List<DrawnNode>();
+                if (!group.ContainsKey(nodeOrder))
+                    group[nodeOrder] = new List<T>();
 
-                group[node.ZOrder].Add(node);
+                group[nodeOrder].Add(node);
             }
         }
 
-        internal void AddNode(DrawnNode node)
+        internal void AddNode(T node)
         {
-            if (!Nodes.ContainsKey(node.ZOrder))
-                Nodes[node.ZOrder] = new List<DrawnNode>();
-            Nodes[node.ZOrder].Add(node);
+            var nodeGroup = GetGroup(node);
+            var nodeOrder = GetOrder(node);
+
+            if (!Nodes.ContainsKey(nodeOrder))
+                Nodes[nodeOrder] = new List<T>();
+            Nodes[nodeOrder].Add(node);
 
             for (int i = 0; i <= 31; i++)
             {
                 var mask = 1u << i;
-                if (!HasBit(node.CameraGroup, mask)) continue;
+                if (!HasBit(nodeGroup, mask)) continue;
 
                 var group = _Lists[i];
 
-                if (!group.ContainsKey(node.ZOrder))
-                    group[node.ZOrder] = new List<DrawnNode>();
-                group[node.ZOrder].Add(node);
+                if (!group.ContainsKey(nodeOrder))
+                    group[nodeOrder] = new List<T>();
+                group[nodeOrder].Add(node);
             }
         }
 
-        internal void RemoveNode(DrawnNode node)
+        internal void RemoveNode(T node)
         {
-            Nodes[node.ZOrder].Remove(node);
+            var nodeGroup = GetGroup(node);
+            var nodeOrder = GetOrder(node);
+
+            Nodes[nodeOrder].Remove(node);
 
             for (int i = 0; i <= 31; i++)
             {
                 var mask = 1u << i;
-                if (!HasBit(node.CameraGroup, mask)) continue;
+                if (!HasBit(nodeGroup, mask)) continue;
 
                 var group = _Lists[i];
-                group[node.ZOrder].Remove(node);
+                group[nodeOrder].Remove(node);
             }
         }
 
-        internal Dictionary<int, List<DrawnNode>> this[int group] => _Lists[group];
+        internal Dictionary<int, List<T>> this[int group] => _Lists[group];
 
         private bool HasBit(uint value, uint mask) => (value & mask) != 0;
+    }
+
+    internal class DrawnNodeCollection : RenderedCollection<DrawnNode>
+    {
+        protected override uint GetGroup(DrawnNode o)
+        {
+            return o.CameraGroup;
+        }
+
+        protected override int GetOrder(DrawnNode o)
+        {
+            return o.ZOrder;
+        }
+    }
+
+    internal class PostEffectNodeCollection : RenderedCollection<PostEffectNode>
+    {
+        protected override uint GetGroup(PostEffectNode o)
+        {
+            return o.CameraGroup;
+        }
+
+        protected override int GetOrder(PostEffectNode o)
+        {
+            return o.DrawingOrder;
+        }
     }
 
     internal class CameraNodeCollection

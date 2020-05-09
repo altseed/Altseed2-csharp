@@ -502,6 +502,7 @@ namespace Altseed.Test
 
             Assert.NotNull(sprite2);
 
+            Assert.AreEqual(sprite1.Color, sprite2.Color);
             Assert.AreEqual(sprite1.Material, sprite2.Material);
             Assert.AreEqual(sprite1.Src, sprite2.Src);
             Assert.AreEqual((sprite1.Texture as Texture2D).Path, (sprite1.Texture as Texture2D).Path);
@@ -571,7 +572,7 @@ namespace Altseed.Test
             polygon1.Texture = texture;
             var v_array = Altseed.Vector2FArray.Create(array.Length);
             v_array.FromArray(array);
-            polygon1.SetVertexesByVector2F(v_array);
+            polygon1.CreateVertexesByVector2F(v_array);
 
             const string path = "Serialization/RenderedPolygon.bin";
 
@@ -718,6 +719,29 @@ namespace Altseed.Test
             Assert.AreEqual(collider1.Size, collider2.Size);
 
             tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Shader()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var shader1 = Altseed.Shader.Create("ShaderTest", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel);
+            Assert.NotNull(shader1);
+
+            const string path = "Serialization/Shader.bin";
+
+            Serialize(path, shader1);
+
+            var shader2 = Deserialize<Shader>(path);
+            Assert.NotNull(shader2);
+
+            Assert.AreEqual(shader1.Code, shader2.Code);
+            Assert.AreEqual(shader1.Name, shader2.Name);
+            Assert.AreEqual(shader1.StageType, shader2.StageType);
+
+            Engine.Terminate();
         }
     }
 }

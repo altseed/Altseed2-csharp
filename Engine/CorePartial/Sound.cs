@@ -40,11 +40,11 @@ namespace Altseed
         /// <param name="id">音のID</param>
         /// <param name="dataNum">音のスペクトル情報を格納するための配列の容量</param>
         /// <param name="window">フーリエ変換に用いる窓関数</param>
-        public float[] GetSpectrumData(int id,　int dataNum, FFTWindow window)
+        public float[] GetSpectrum(int id,　int dataNum, FFTWindow window)
         {
             if((dataNum & (dataNum - 1)) != 0) return null;
             var fa = FloatArray.Create(dataNum);
-            GetSpectrumData(id, fa, window);
+            GetSpectrum(id, fa, window);
             return fa.ToArray();
         }
     }

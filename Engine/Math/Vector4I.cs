@@ -127,6 +127,13 @@ namespace Altseed
         public static Vector4I operator +(Vector4I v1, Vector4I v2) => new Vector4I(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z, v1.W + v2.W);
 
         /// <summary>
+        /// 与えられたベクトルを返します。
+        /// </summary>
+        /// <param name="vector">符合を反転するベクトル</param>
+        /// <returns><paramref name="vector"/></returns>
+        public static Vector4I operator +(Vector4I vector) => vector;
+
+        /// <summary>
         /// ベクトルの符号を反転します。
         /// </summary>
         /// <param name="vector">符合を反転するベクトル</param>

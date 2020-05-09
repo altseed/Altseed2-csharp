@@ -59,6 +59,22 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void MouseCursor()
+        {
+            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+
+            var cursor = Cursor.Create("../../Core/TestData/Input/altseed_logo.png", new Vector2I(16, 16));
+            Assert.NotNull(cursor);
+            if (cursor != null)
+            {
+                // マウスにカーソルをセットします。
+                Engine.Mouse.SetCursorImage(cursor);
+            }
+
+            Engine.Terminate();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void Keyboard()
         {
             var tc = new TestCore();
