@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -213,6 +213,42 @@ namespace Altseed.Test
                 node.SetVertexes(new Color(255, c % 255, 255, 255));
 
             }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void LineNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var line1 = new LineNode()
+            {
+                Color = new Color(255, 0, 0),
+                Point1 = new Vector2F(100f, 100f),
+                Point2 = new Vector2F(200f, 200f),
+                Thickness = 10f
+            };
+            var line2 = new LineNode()
+            {
+                Color = new Color(0, 255, 0),
+                Point1 = new Vector2F(50f, 450f),
+                Point2 = new Vector2F(600f, 50f),
+                Thickness = 5.0f
+            };
+            var line3 = new LineNode()
+            {
+                Color = new Color(0, 0, 255),
+                Point1 = new Vector2F(100f, 150f),
+                Point2 = new Vector2F(100f, 350f),
+                Thickness = 15.0f
+            };
+            Engine.AddNode(line1);
+            Engine.AddNode(line2);
+            Engine.AddNode(line3);
+
+            tc.LoopBody(null, null);
 
             tc.End();
         }
