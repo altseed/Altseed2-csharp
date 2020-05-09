@@ -564,22 +564,6 @@ namespace Altseed
     }
     
     /// <summary>
-    /// 
-    /// </summary>
-    [Serializable]
-    public enum RenderTargetCareType : int
-    {
-        /// <summary>
-        /// クリアしない
-        /// </summary>
-        DontCare,
-        /// <summary>
-        /// クリアする
-        /// </summary>
-        Clear,
-    }
-    
-    /// <summary>
     /// ツール機能で使用する方向
     /// </summary>
     [Serializable]
@@ -4018,7 +4002,7 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Graphics_BeginFrame(IntPtr selfPtr);
+        private static extern bool cbg_Graphics_BeginFrame(IntPtr selfPtr, RenderPassParameter renderPassParmeter);
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -4034,12 +4018,6 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed_Core")]
-        private static extern Color cbg_Graphics_GetClearColor(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Graphics_SetClearColor(IntPtr selfPtr, Color value);
         
         
         [DllImport("Altseed_Core")]
@@ -4074,28 +4052,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// クリア色を取得または設定します。
-        /// </summary>
-        public Color ClearColor
-        {
-            get
-            {
-                if (_ClearColor != null)
-                {
-                    return _ClearColor.Value;
-                }
-                var ret = cbg_Graphics_GetClearColor(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _ClearColor = value;
-                cbg_Graphics_SetClearColor(selfPtr, value);
-            }
-        }
-        private Color? _ClearColor;
-        
-        /// <summary>
         /// インスタンスを取得します。
         /// </summary>
         /// <returns>使用するインスタンス</returns>
@@ -4109,9 +4065,9 @@ namespace Altseed
         /// 描画を開始します。
         /// </summary>
         /// <returns>正常に開始した場合は　true 。それ以外の場合は false。</returns>
-        internal bool BeginFrame()
+        internal bool BeginFrame(RenderPassParameter renderPassParmeter)
         {
-            var ret = cbg_Graphics_BeginFrame(selfPtr);
+            var ret = cbg_Graphics_BeginFrame(selfPtr, renderPassParmeter);
             return ret;
         }
         
@@ -5075,7 +5031,7 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern void cbg_CommandList_SetRenderTargetWithScreen(IntPtr selfPtr);
+        private static extern void cbg_CommandList_SetRenderTargetWithScreen(IntPtr selfPtr, RenderPassParameter renderPassparameter);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
@@ -5084,7 +5040,7 @@ namespace Altseed
         private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_CommandList_RenderToRenderTexture(IntPtr selfPtr, IntPtr material, IntPtr target);
+        private static extern void cbg_CommandList_RenderToRenderTexture(IntPtr selfPtr, IntPtr material, IntPtr target, RenderPassParameter renderPassparameter);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
@@ -5105,9 +5061,9 @@ namespace Altseed
         /// <summary>
         /// ？
         /// </summary>
-        public void SetRenderTargetWithScreen()
+        internal void SetRenderTargetWithScreen(RenderPassParameter renderPassparameter)
         {
-            cbg_CommandList_SetRenderTargetWithScreen(selfPtr);
+            cbg_CommandList_SetRenderTargetWithScreen(selfPtr, renderPassparameter);
         }
         
         public RenderTexture GetScreenTexture()
@@ -5121,9 +5077,9 @@ namespace Altseed
             cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, renderPassParameter);
         }
         
-        public void RenderToRenderTexture(Material material, RenderTexture target)
+        public void RenderToRenderTexture(Material material, RenderTexture target, RenderPassParameter renderPassparameter)
         {
-            cbg_CommandList_RenderToRenderTexture(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, target != null ? target.selfPtr : IntPtr.Zero);
+            cbg_CommandList_RenderToRenderTexture(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, target != null ? target.selfPtr : IntPtr.Zero, renderPassparameter);
         }
         
         public void RenderToRenderTarget(Material material)
@@ -6298,6 +6254,12 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern RenderPassParameter cbg_RenderedCamera_GetRenderPassParameter(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedCamera_SetRenderPassParameter(IntPtr selfPtr, RenderPassParameter value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedCamera_Release(IntPtr selfPtr);
         
         #endregion
@@ -6352,6 +6314,28 @@ namespace Altseed
         private RenderTexture _TargetTexture;
         
         /// <summary>
+        /// RenderPassParameterを取得または設定します。
+        /// </summary>
+        public RenderPassParameter RenderPassParameter
+        {
+            get
+            {
+                if (_RenderPassParameter != null)
+                {
+                    return _RenderPassParameter.Value;
+                }
+                var ret = cbg_RenderedCamera_GetRenderPassParameter(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _RenderPassParameter = value;
+                cbg_RenderedCamera_SetRenderPassParameter(selfPtr, value);
+            }
+        }
+        private RenderPassParameter? _RenderPassParameter;
+        
+        /// <summary>
         /// RenderedCameraを作成します。
         /// </summary>
         public static RenderedCamera Create()
@@ -6364,6 +6348,7 @@ namespace Altseed
         #region SerializeName
         private const string S_CenterOffset = "S_CenterOffset";
         private const string S_TargetTexture = "S_TargetTexture";
+        private const string S_RenderPassParameter = "S_RenderPassParameter";
         #endregion
         
         /// <summary>
@@ -6380,6 +6365,7 @@ namespace Altseed
             
             CenterOffset = info.GetValue<Vector2F>(S_CenterOffset);
             TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
+            RenderPassParameter = info.GetValue<RenderPassParameter>(S_RenderPassParameter);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -6395,6 +6381,7 @@ namespace Altseed
             
             info.AddValue(S_CenterOffset, CenterOffset);
             info.AddValue(S_TargetTexture, TargetTexture);
+            info.AddValue(S_RenderPassParameter, RenderPassParameter);
             
             OnGetObjectData(info, context);
         }
