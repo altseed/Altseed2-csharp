@@ -210,7 +210,7 @@ namespace Altseed.Test
 
             while (Engine.DoEvents() && count++ < 300)
             {
-                Assert.True(Engine.Graphics.BeginFrame());
+                Assert.True(Engine.Graphics.BeginFrame(new RenderPassParameter(Engine.ClearColor, true, true)));
                 rotatedText.Transform = MathHelper.CalcTransform(new Vector2F(0, 300), new Vector2F(), count, new Vector2F(1, 1));
 
                 foreach (var item in texts)

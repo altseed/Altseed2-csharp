@@ -178,20 +178,24 @@ namespace Altseed
     public struct RenderPassParameter : IEquatable<RenderPassParameter>
     {
         public Color ClearColor;
-        public RenderTargetCareType ColorCare;
-        public RenderTargetCareType DepthCare;
+
+        [MarshalAs(UnmanagedType.Bool)]
+        public bool IsColorCleared;
+
+        [MarshalAs(UnmanagedType.Bool)]
+        public bool IsDepthCleared;
 
         /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
         /// <param name="clearColor"></param>
-        /// <param name="colorCare"></param>
-        /// <param name="depthCare"></param>
-        public RenderPassParameter(Color clearColor, RenderTargetCareType colorCare, RenderTargetCareType depthCare)
+        /// <param name="isColorCleared"></param>
+        /// <param name="isDepthCleared"></param>
+        public RenderPassParameter(Color clearColor, bool isColorCleared, bool isDepthCleared)
         {
             ClearColor = clearColor;
-            ColorCare = colorCare;
-            DepthCare = depthCare;
+            IsColorCleared = isColorCleared;
+            IsDepthCleared = isDepthCleared;
         }
 
         /// <summary>
@@ -199,7 +203,7 @@ namespace Altseed
         /// </summary>
         /// <param name="other">等価線を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
-        public readonly bool Equals(RenderPassParameter other) => ClearColor == other.ClearColor && ColorCare == other.ColorCare && DepthCare == other.DepthCare;
+        public readonly bool Equals(RenderPassParameter other) => ClearColor == other.ClearColor && IsColorCleared == other.IsColorCleared && IsDepthCleared == other.IsDepthCleared;
         /// <summary>
         /// オブジェクトとの等価性を判定する
         /// </summary>
@@ -211,7 +215,7 @@ namespace Altseed
         /// このインスタンスのハッシュコードを返す
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
-        public readonly override int GetHashCode() => HashCode.Combine(ClearColor, ColorCare, DepthCare);
+        public readonly override int GetHashCode() => HashCode.Combine(ClearColor, IsColorCleared, IsDepthCleared);
 
         public static bool operator ==(RenderPassParameter left, RenderPassParameter right) => left.Equals(right);
         public static bool operator !=(RenderPassParameter left, RenderPassParameter right) => !(left == right);

@@ -210,7 +210,7 @@ namespace Altseed.Test
                     new Vector2F(100 - cos, 100 + sin),
                     new Vector2F(100 + sin, 100 + cos),
                 });
-                node.SetVertexes(new Color(255, 255, 255, 255));
+                node.SetVertexes(new Color(255, c % 255, 255, 255));
 
             }, null);
 

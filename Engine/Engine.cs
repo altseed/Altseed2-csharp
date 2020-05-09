@@ -29,6 +29,8 @@ namespace Altseed
 
         private static RenderTextureCache _RenderTextureCache;
 
+        public static Color ClearColor { get; set; } = new Color(50, 50, 50, 255);
+
         /// <summary>
         /// エンジンを初期化します。
         /// </summary>
@@ -71,6 +73,7 @@ namespace Altseed
                 _PostEffectNodes = new PostEffectNodeCollection();
                 _CameraNodes = new CameraNodeCollection();
                 _DefaultCamera = RenderedCamera.Create();
+                _DefaultCamera.RenderPassParameter = new RenderPassParameter(new Color(50, 50, 50, 255), true, true);
 
                 _RenderTextureCache = new RenderTextureCache();
 
@@ -93,7 +96,7 @@ namespace Altseed
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
-                if (!Graphics.BeginFrame()) return false;
+                if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
                 Tool.NewFrame();
             }
 
@@ -115,7 +118,7 @@ namespace Altseed
             foreach (var node in _DrawnNodes.Nodes.SelectMany(obj => obj.Value))
             {
                 node.UpdateInheritedTransform();
-            } 
+            }
 
             // カリング用AABBの更新
             CullingSystem.UpdateAABB();
@@ -125,7 +128,7 @@ namespace Altseed
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
-                if (!Graphics.BeginFrame()) return false;
+                if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
             }
 
             if (_CameraNodes.Count == 0)
@@ -156,10 +159,11 @@ namespace Altseed
                     {
                         foreach (var node in list[z])
                         {
-                            if(buffer is null) {
+                            if (buffer is null)
+                            {
                                 buffer = _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size);
                             }
-                            
+
                             Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), buffer);
                             node.CallDraw(buffer);
                         }
@@ -199,7 +203,8 @@ namespace Altseed
                             {
                                 foreach (var node in list[z])
                                 {
-                                    if(buffer is null) {
+                                    if (buffer is null)
+                                    {
                                         buffer = _RenderTextureCache.GetRenderTexture(target.Size);
                                     }
 

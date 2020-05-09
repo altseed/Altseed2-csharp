@@ -33,6 +33,7 @@ namespace Altseed
         public CameraNode()
         {
             _Camera = RenderedCamera.Create();
+            _Camera.RenderPassParameter = new RenderPassParameter(new Color(0, 0, 0, 0), false, false);
         }
 
         /// <summary>

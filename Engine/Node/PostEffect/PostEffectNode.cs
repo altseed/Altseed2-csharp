@@ -10,7 +10,7 @@ namespace Altseed
 
         protected static RenderTexture GetBuffer(int identifier, Vector2I size)
         {
-            if(!Cache.ContainsKey(identifier))
+            if (!Cache.ContainsKey(identifier))
             {
                 Cache[identifier] = new RenderTextureCache();
             }
@@ -25,7 +25,7 @@ namespace Altseed
 
         internal static void UpdateCache()
         {
-            foreach(var cache in Cache)
+            foreach (var cache in Cache)
             {
                 cache.Value.Update();
             }
@@ -74,13 +74,22 @@ namespace Altseed
 
         public PostEffectNode() { }
 
-        internal void CallDraw(RenderTexture src) => Draw(src);
+        internal void CallDraw(RenderTexture src)
+        {
+            Draw(src);
+        }
 
         protected abstract void Draw(RenderTexture src);
 
-        protected void RenderToRenderTarget(Material material) => Engine.Graphics.CommandList.RenderToRenderTarget(material);
+        protected void RenderToRenderTarget(Material material)
+        {
+            Engine.Graphics.CommandList.RenderToRenderTarget(material);
+        }
 
-        protected void RenderToRenderTexture(Material material, RenderTexture texture) => Engine.Graphics.CommandList.RenderToRenderTexture(material, texture);
+        protected void RenderToRenderTexture(Material material, RenderTexture texture)
+        {
+            Engine.Graphics.CommandList.RenderToRenderTexture(material, texture, new RenderPassParameter(new Color(50, 50, 50), true, true));// TODO: 適切な値を設定できるようにする
+        }
 
         #region Node
 
