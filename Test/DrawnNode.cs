@@ -218,6 +218,48 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void ArcNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var arc1 = new ArcNode()
+            {
+                Color = new Color(255, 0, 0),
+                Position = new Vector2F(100, 100),
+                Radius = 50f,
+                VertNum = 30,
+                EndVertNum = 24,
+                StartVertNum = 12,
+            };
+            var arc2 = new ArcNode()
+            {
+                Color = new Color(0, 255, 0),
+                Position = new Vector2F(400, 200),
+                Radius = 30f,
+                VertNum = 8,
+                EndVertNum = 5,
+                StartVertNum = 2
+            };
+            var arc3 = new ArcNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(50, 400),
+                Radius = 40f,
+                VertNum = 5,
+                EndVertNum = 3,
+                StartVertNum = 1
+            };
+            Engine.AddNode(arc1);
+            Engine.AddNode(arc2);
+            Engine.AddNode(arc3);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void CircleNode()
         {
             var tc = new TestCore();
