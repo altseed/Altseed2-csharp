@@ -5,113 +5,85 @@ namespace Altseed
     [Serializable]
     public class TransitionNode : Node
     {
-
-
-        #region トランジション用のポストエフェクト
-        private class PostEffectNodeForTransition : PostEffectNode
-        {
-            internal Material Material;
-
-            internal Node OldNode;
-            internal Node NewNode;
-
-            internal float FadeOutDuration;
-            internal float FadeInDuration;
-
-            private float _TransitionTime;
-
-            internal PostEffectNodeForTransition()
-            {
-                DrawingOrder = 3000;
-            }
-
-            protected override void OnAdded()
-            {
-                _TransitionTime = 0.0f;
-            }
-
-            protected override void OnUpdate()
-            {
-                if (_TransitionTime < FadeOutDuration)
-                {
-                    if ((_TransitionTime += Engine.DeltaSecond) >= FadeOutDuration)
-                    {
-                        var parentNode = OldNode.Parent;
-                        parentNode.RemoveChildNode(OldNode);
-                        parentNode.AddChildNode(NewNode);
-                    }
-                }
-
-                else if (_TransitionTime < FadeOutDuration + FadeInDuration)
-                {
-                    if ((_TransitionTime += Engine.DeltaSecond) >= FadeOutDuration + FadeInDuration)
-                    {
-                        Parent.RemoveChildNode(this);
-                    }
-                }
-            }
-
-            protected override void Draw(RenderTexture src)
-            {
-                Material.SetTexture("mainTex", src);
-                Material.SetVector4F("_TransitionTime", new Vector4F(_TransitionTime, 0, 0, 0));
-                RenderToRenderTarget(Material);
-            }
-        }
-        #endregion
-
-
-
-        private PostEffectNodeForTransition _PostEffectNode;
+        /// <summary>
+        /// トランジションによって取り除かれるノード
+        /// </summary>
+        protected Node OldNode { get; }
 
         /// <summary>
-        /// フェードアウトに要する時間を取得または設定します。
+        /// トランジションによって追加されるノード
         /// </summary>
-        public float FadeOutDuration
+        protected Node NewNode { get; }
+
+        /// <summary>
+        /// トランジションが始まってからの時間
+        /// </summary>
+        protected float TransitionTime { get; private set; }
+
+        /// <summary>
+        /// ノードが入れ替わったかどうか
+        /// </summary>
+        private bool _IsNodeSwapped;
+
+        /// <summary>
+        /// 新しいインスタンスを作成します。
+        /// </summary>
+        /// <param name="oldNode">トランジションによって取り除かれるノード</param>
+        /// <param name="newNode">トランジションによって追加されるノード</param>
+        /// <param name="duration">トランジションの期間</param>
+        public TransitionNode(Node oldNode, Node newNode)
         {
-            get => _PostEffectNode.FadeOutDuration;
-            set => _PostEffectNode.FadeOutDuration = value;
+            OldNode = oldNode;
+            NewNode = newNode;
+        }
+
+        protected override void OnUpdate()
+        {
+            if(_IsNodeSwapped) OnOpening();
+            else               OnClosing();
+
+            TransitionTime += Engine.DeltaSecond;
         }
 
         /// <summary>
-        /// フェードインに要する時間を取得または設定します。
+        /// ノードを入れ替えます。
         /// </summary>
-        public float FadeInDuration
+        protected void SwapNode()
         {
-            get => _PostEffectNode.FadeInDuration;
-            set => _PostEffectNode.FadeInDuration = value;
-        }
-
-        /// <summary>
-        /// トランジション用のポストエフェクトに使用するマテリアルを取得または設定します。
-        /// </summary>
-        public Material Material
-        {
-            get => _PostEffectNode.Material;
-            set
+            if(!_IsNodeSwapped)
             {
-                if (_PostEffectNode.Material == value) return;
-                _PostEffectNode.Material = value;
+                var parentNode = OldNode.Parent;
+                parentNode.RemoveChildNode(OldNode);
+                parentNode.AddChildNode(NewNode);
+
+                OnNodeSwapped();
+
+                _IsNodeSwapped = true;
             }
         }
 
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// トランジションを終了します。
         /// </summary>
-        public TransitionNode()
+        protected void FinishTransition()
         {
-            _PostEffectNode = new PostEffectNodeForTransition();
+            SwapNode();
+            Parent.RemoveChildNode(this);
         }
 
         /// <summary>
-        /// トランジションを開始します
+        /// ノードが入れ替わる前の処理を記述します。
         /// </summary>
-        public void StartTransition(Node oldNode, Node newNode)
-        {
-            _PostEffectNode.OldNode = oldNode;
-            _PostEffectNode.NewNode = newNode;
+        protected virtual void OnClosing() { }
 
-            AddChildNode(_PostEffectNode);
-        }
+        /// <summary>
+        /// ノードが入れ替わった後の処理を記述します。
+        /// </summary>
+        protected virtual void OnOpening() { }
+
+        /// <summary>
+        /// ノードが入れ替わる瞬間の処理を記述します。
+        /// </summary>
+        protected virtual void OnNodeSwapped() { }
     }
 }
