@@ -5193,12 +5193,6 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
-        private static extern Color cbg_Rendered_GetColor(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Rendered_SetColor(IntPtr selfPtr, Color value);
-        
-        
-        [DllImport("Altseed_Core")]
         private static extern int cbg_Rendered_GetId(IntPtr selfPtr);
         
         
@@ -5235,28 +5229,6 @@ namespace Altseed
         private Matrix44F? _Transform;
         
         /// <summary>
-        /// 色を取得または設定します。
-        /// </summary>
-        public Color Color
-        {
-            get
-            {
-                if (_Color != null)
-                {
-                    return _Color.Value;
-                }
-                var ret = cbg_Rendered_GetColor(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _Color = value;
-                cbg_Rendered_SetColor(selfPtr, value);
-            }
-        }
-        private Color? _Color;
-        
-        /// <summary>
         /// BaseObjectのIdを取得します
         /// </summary>
         public int Id
@@ -5271,7 +5243,6 @@ namespace Altseed
         #region ISerialiable
         #region SerializeName
         private const string S_Transform = "S_Transform";
-        private const string S_Color = "S_Color";
         #endregion
         
         /// <summary>
@@ -5287,7 +5258,6 @@ namespace Altseed
             CacheHelper.CacheHandling(this, ptr);
             
             Transform = info.GetValue<Matrix44F>(S_Transform);
-            Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5302,7 +5272,6 @@ namespace Altseed
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Transform, Transform);
-            info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
         }
@@ -5414,6 +5383,12 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern Color cbg_RenderedSprite_GetColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedSprite_SetColor(IntPtr selfPtr, Color value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
@@ -5490,6 +5465,28 @@ namespace Altseed
         private Material _Material;
         
         /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                if (_Color != null)
+                {
+                    return _Color.Value;
+                }
+                var ret = cbg_RenderedSprite_GetColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Color = value;
+                cbg_RenderedSprite_SetColor(selfPtr, value);
+            }
+        }
+        private Color? _Color;
+        
+        /// <summary>
         /// スプライトを作成します。
         /// </summary>
         public static RenderedSprite Create()
@@ -5503,6 +5500,7 @@ namespace Altseed
         private const string S_Texture = "S_Texture";
         private const string S_Src = "S_Src";
         private const string S_Material = "S_Material";
+        private const string S_Color = "S_Color";
         #endregion
         
         /// <summary>
@@ -5520,6 +5518,7 @@ namespace Altseed
             Texture = info.GetValue<TextureBase>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
+            Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5536,6 +5535,7 @@ namespace Altseed
             info.AddValue(S_Texture, Texture);
             info.AddValue(S_Src, Src);
             info.AddValue(S_Material, Material);
+            info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
         }
@@ -5666,6 +5666,12 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, Color value);
         
         
         [DllImport("Altseed_Core")]
@@ -5823,6 +5829,28 @@ namespace Altseed
         }
         
         /// <summary>
+        /// 色を取得または設定します。
+        /// </summary>
+        public Color Color
+        {
+            get
+            {
+                if (_Color != null)
+                {
+                    return _Color.Value;
+                }
+                var ret = cbg_RenderedText_GetColor(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Color = value;
+                cbg_RenderedText_SetColor(selfPtr, value);
+            }
+        }
+        private Color? _Color;
+        
+        /// <summary>
         /// テキストを作成します。
         /// </summary>
         public static RenderedText Create()
@@ -5839,6 +5867,7 @@ namespace Altseed
         private const string S_Weight = "S_Weight";
         private const string S_IsEnableKerning = "S_IsEnableKerning";
         private const string S_WritingDirection = "S_WritingDirection";
+        private const string S_Color = "S_Color";
         #endregion
         
         /// <summary>
@@ -5859,6 +5888,7 @@ namespace Altseed
             Weight = info.GetSingle(S_Weight);
             IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
             WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
+            Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5878,6 +5908,7 @@ namespace Altseed
             info.AddValue(S_Weight, Weight);
             info.AddValue(S_IsEnableKerning, IsEnableKerning);
             info.AddValue(S_WritingDirection, WritingDirection);
+            info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
         }
@@ -5970,7 +6001,10 @@ namespace Altseed
         private static extern IntPtr cbg_RenderedPolygon_Create();
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_RenderedPolygon_SetVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
+        private static extern void cbg_RenderedPolygon_CreateVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedPolygon_OverwriteVertexesColor(IntPtr selfPtr, Color color);
         
         [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_RenderedPolygon_GetVertexes(IntPtr selfPtr);
@@ -6106,9 +6140,17 @@ namespace Altseed
         /// <summary>
         /// 頂点情報
         /// </summary>
-        public void SetVertexesByVector2F(Vector2FArray vertexes)
+        public void CreateVertexesByVector2F(Vector2FArray vertexes)
         {
-            cbg_RenderedPolygon_SetVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+            cbg_RenderedPolygon_CreateVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// 頂点情報
+        /// </summary>
+        public void OverwriteVertexesColor(Color color)
+        {
+            cbg_RenderedPolygon_OverwriteVertexesColor(selfPtr, color);
         }
         
         #region ISerialiable
