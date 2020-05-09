@@ -73,6 +73,37 @@ namespace Altseed
         }
 
         /// <summary>
+        /// カーニングの有無を取得または設定します。
+        /// </summary>
+        public bool IsEnableKerning
+        {
+            get => _RenderedText.IsEnableKerning;
+            set
+            {
+                if (_RenderedText.IsEnableKerning == value) return;
+                _RenderedText.IsEnableKerning = value;
+            }
+        }
+
+        /// <summary>
+        /// 行の方向を取得または設定します。
+        /// </summary>
+        public WritingDirection WritingDirection
+        {
+            get => _RenderedText.WritingDirection;
+            set
+            {
+                if (_RenderedText.WritingDirection == value) return;
+                _RenderedText.WritingDirection = value;
+            }
+        }
+
+        /// <summary>
+        /// 描画時のサイズを取得します。
+        /// </summary>
+        public Vector2F Size => _RenderedText.TextureSize;
+
+        /// <summary>
         /// カリング用ID
         /// </summary>
         internal override int CullingId => _RenderedText.Id;

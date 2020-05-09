@@ -44,7 +44,7 @@ namespace Sample
 
                 // 再生されている音のスペクトル情報を取得します。
                 // データの長さは2のn乗でなくてはなりません。
-                var spectrum = Engine.Sound.GetSpectrumData(id, 1024, FFTWindow.Rectangular);
+                var spectrum = Engine.Sound.GetSpectrum(id, 1024, FFTWindow.Rectangular);
 
                 // 取得したスペクトル情報をスペクトルバーに反映させます。
                 for (int i = 0; i < 1024; ++i)
