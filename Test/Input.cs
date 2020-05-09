@@ -63,7 +63,7 @@ namespace Altseed.Test
         {
             Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
 
-            var cursor = Cursor.Create("../../Core/TestData/Input/altseed_logo.png", new Vector2I(16, 16));
+            var cursor = Cursor.Create("../../Core/TestData/IO/AltseedPink.png", new Vector2I(16, 16));
             Assert.NotNull(cursor);
             if (cursor != null)
             {
