@@ -365,5 +365,25 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void TriangleNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var triangle = new TriangleNode()
+            {
+                Color = new Color(255, 0, 0),
+                Point1 = new Vector2F(100f, 100f),
+                Point2 = new Vector2F(200f, 200f),
+                Point3 = new Vector2F(100f, 200f),
+            };
+            Engine.AddNode(triangle);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
     }
 }
