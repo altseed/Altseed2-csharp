@@ -182,6 +182,13 @@ namespace Altseed
         public static Vector2F operator -(Vector2F vector) => new Vector2F(-vector.X, -vector.Y);
 
         /// <summary>
+        /// 与えられたベクトルを返します。
+        /// </summary>
+        /// <param name="vector">符合を反転するベクトル</param>
+        /// <returns><paramref name="vector"/></returns>
+        public static Vector2F operator +(Vector2F vector) => vector;
+
+        /// <summary>
         /// 2つのベクトルを減算します。
         /// </summary>
         /// <param name="left">減算されるベクトル</param>
