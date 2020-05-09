@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -325,6 +325,41 @@ namespace Altseed.Test
             Engine.AddNode(line1);
             Engine.AddNode(line2);
             Engine.AddNode(line3);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RectangleNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var rectangle1 = new RectangleNode()
+            {
+                Color = new Color(255, 0, 0),
+                Center = new Vector2F(25f, 25f),
+                Position = new Vector2F(100f, 100f),
+                Size = new Vector2F(50f, 50f)
+            };
+            var rectangle2 = new RectangleNode()
+            {
+                Color = new Color(0, 255, 0),
+                Center = new Vector2F(100f, 50f),
+                Position = new Vector2F(400f, 200f),
+                Size = new Vector2F(200f, 100f)
+            };
+            var rectangle3 = new RectangleNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(200f, 300f),
+                Size = new Vector2F(100f, 150f)
+            };
+            Engine.AddNode(rectangle1);
+            Engine.AddNode(rectangle2);
+            Engine.AddNode(rectangle3);
 
             tc.LoopBody(null, null);
 
