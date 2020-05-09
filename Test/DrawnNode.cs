@@ -218,6 +218,42 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void CircleNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var circle1 = new CircleNode()
+            {
+                Color = new Color(255, 0, 0),
+                Position = new Vector2F(100, 100),
+                Radius = 50f,
+                VertNum = 30
+            };
+            var circle2 = new CircleNode()
+            {
+                Color = new Color(0, 255, 0),
+                Position = new Vector2F(400, 200),
+                Radius = 30f,
+                VertNum = 8
+            };
+            var circle3 = new CircleNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(50, 400),
+                Radius = 40f,
+                VertNum = 5
+            };
+            Engine.AddNode(circle1);
+            Engine.AddNode(circle2);
+            Engine.AddNode(circle3);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void LineNode()
         {
             var tc = new TestCore();
