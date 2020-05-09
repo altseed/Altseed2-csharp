@@ -572,7 +572,7 @@ namespace Altseed.Test
             polygon1.Texture = texture;
             var v_array = Altseed.Vector2FArray.Create(array.Length);
             v_array.FromArray(array);
-            polygon1.SetVertexesByVector2F(v_array);
+            polygon1.CreateVertexesByVector2F(v_array);
 
             const string path = "Serialization/RenderedPolygon.bin";
 

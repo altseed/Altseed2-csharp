@@ -90,24 +90,33 @@ namespace Altseed
         /// </summary>
         /// <param name="vertexes">設定する各頂点の座標を格納する配列</param>
         /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
-        public void SetVertexes(Vector2F[] vertexes)
+        public void SetVertexes(Vertex[] vertexes)
+        {
+            if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
+            Vertexes = vertexes;
+        }
+
+        /// <summary>
+        /// 頂点情報を設定する
+        /// </summary>
+        /// <param name="vertexes">設定する各頂点の座標を格納する配列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
+        public void SetVertexes(Vector2F[] vertexes, Color? color = null)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
             var vertexArray = Vector2FArray.Create(vertexes.Length);
             vertexArray.FromArray(vertexes);
-            _RenderedPolygon.SetVertexesByVector2F(vertexArray);
+            _RenderedPolygon.CreateVertexesByVector2F(vertexArray);
+            if (color != null) _RenderedPolygon.OverwriteVertexesColor(color.Value);
         }
 
         /// <summary>
         /// 各頂点に指定した色を設定する
         /// </summary>
         /// <param name="color">設定する色</param>
-        public void SetAllVertexColor(Color color)
+        public void SetVertexes(Color color)
         {
-            var vertexArray = Vertexes;
-            for (int i = 0; i < vertexArray.Length; ++i)
-                vertexArray[i].Color = color;
-            Vertexes = vertexArray;
+            _RenderedPolygon.OverwriteVertexesColor(color);
         }
 
         internal override void UpdateInheritedTransform()
