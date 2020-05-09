@@ -40,7 +40,7 @@ namespace Altseed
                 renderedPolygon.OverwriteVertexesColor(value);
             }
         }
-        private Color _color;
+        private Color _color = new Color(255, 255, 255);
 
         /// <summary>
         /// サイズを取得または設定します。
