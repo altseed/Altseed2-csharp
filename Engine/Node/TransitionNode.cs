@@ -6,6 +6,15 @@ namespace Altseed
     public class TransitionNode : Node
     {
         /// <summary>
+        /// トランジションの状態
+        /// </summary>
+        private enum TransitionState
+        {
+            Closing,
+            Opening
+        }
+
+        /// <summary>
         /// トランジションによって取り除かれるノード
         /// </summary>
         protected Node OldNode { get; }
@@ -21,9 +30,9 @@ namespace Altseed
         protected float TransitionTime { get; private set; }
 
         /// <summary>
-        /// ノードが入れ替わったかどうか
+        /// トランジションの状態
         /// </summary>
-        private bool _IsNodeSwapped;
+        private TransitionState State;
 
         /// <summary>
         /// 新しいインスタンスを作成します。
@@ -39,8 +48,19 @@ namespace Altseed
 
         protected override void OnUpdate()
         {
-            if(_IsNodeSwapped) OnOpening();
-            else               OnClosing();
+            switch(State)
+            {
+                case TransitionState.Closing:
+                    OnClosing();
+                    break;
+
+                case TransitionState.Opening:
+                    OnOpening();
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
 
             TransitionTime += Engine.DeltaSecond;
         }
@@ -50,7 +70,7 @@ namespace Altseed
         /// </summary>
         protected void SwapNode()
         {
-            if(!_IsNodeSwapped)
+            if(State == TransitionState.Closing)
             {
                 var parentNode = OldNode.Parent;
                 parentNode.RemoveChildNode(OldNode);
@@ -58,7 +78,7 @@ namespace Altseed
 
                 OnNodeSwapped();
 
-                _IsNodeSwapped = true;
+                State = TransitionState.Opening;
             }
         }
 
