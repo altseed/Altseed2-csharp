@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed
 {
@@ -56,6 +56,11 @@ namespace Altseed
             }
         }
         private Vector2F _size = new Vector2F(1.0f, 1.0f);
+
+        /// <summary>
+        /// 描画するテクスチャを取得または設定します。
+        /// </summary>
+        public TextureBase Texture { get => renderedPolygon.Texture; set => renderedPolygon.Texture = value; }
 
         /// <summary>
         /// <see cref="RectangleNode"/>の新しいインスタンスを生成する

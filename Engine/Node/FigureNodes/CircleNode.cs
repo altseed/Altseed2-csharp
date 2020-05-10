@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed
 {
@@ -42,6 +42,11 @@ namespace Altseed
             }
         }
         private float _radius;
+
+        /// <summary>
+        /// 描画するテクスチャを取得または設定します。
+        /// </summary>
+        public TextureBase Texture { get => renderedPolygon.Texture; set => renderedPolygon.Texture = value; }
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
