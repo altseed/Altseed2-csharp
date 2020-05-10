@@ -14,7 +14,7 @@ namespace Sample
 
             // Altseed のロゴを描画するノードを作成します。
             var Altseed = new SpriteNode();
-            var texAltseed = Texture2D.Load("Altseed.png");
+            var texAltseed = Texture2D.Load(@"TestData\IO\Altseed.png");
             Altseed.Texture = texAltseed;
             Altseed.CenterPosition = new Vector2F(200, 200);
             Altseed.Position = new Vector2F(320, 240);
@@ -24,7 +24,7 @@ namespace Sample
 
             // Amusement Creators のロゴを描画するノードを作成します。
             var AmusementCreators = new SpriteNode();
-            var texAmusementCreators = Texture2D.Load("AmusementCreators.png");
+            var texAmusementCreators = Texture2D.Load(@"TestData\IO\AmusementCreators.png");
             AmusementCreators.Texture = texAmusementCreators;
             AmusementCreators.CenterPosition = new Vector2F(200, 200);
             AmusementCreators.Position = new Vector2F(320, 240);

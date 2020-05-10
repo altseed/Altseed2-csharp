@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Altseed
 {
@@ -7,53 +7,53 @@ namespace Altseed
     public class TransitionNode : Node
     {
         /// <summary>
-        /// ノードが入れ替わる前の処理を取得または設定します。
+        /// ノードが入れ替わる前の処理を設定します。
         /// トランジション中は設定することができません。
         /// </summary>
-        public Action<float> OnClosingEvent
+        public event Action<float> OnClosingEvent
         {
-            get { return _OnClosingEvent; }
-            set { if(!_IsTransitioning) _OnClosingEvent = value; }
+            add { if (!_IsTransitioning) _OnClosingEvent += value; }
+            remove { if (!_IsTransitioning) _OnClosingEvent -= value; }
         }
 
         /// <summary>
-        /// ノードが入れ替わった後の処理を取得または設定します。
+        /// ノードが入れ替わった後の処理を設定します。
         /// トランジション中は設定することができません。
         /// </summary>
-        public Action<float> OnOpeningEvent
+        public event Action<float> OnOpeningEvent
         {
-            get { return _OnOpeningEvent; }
-            set { if (!_IsTransitioning) _OnOpeningEvent = value; }
+            add { if (!_IsTransitioning) _OnOpeningEvent += value; }
+            remove { if (!_IsTransitioning) _OnOpeningEvent -= value; }
         }
 
         /// <summary>
-        /// ノードが入れ替わる瞬間の処理を取得または設定します。
+        /// ノードが入れ替わる瞬間の処理を設定します。
         /// トランジション中は設定することができません。
         /// </summary>
-        public Action OnNodeSwappedEvent
+        public event Action OnNodeSwappedEvent
         {
-            get { return _OnNodeSwappedEvent; }
-            set { if (!_IsTransitioning) _OnNodeSwappedEvent = value; }
+            add { if (!_IsTransitioning) _OnNodeSwappedEvent += value; }
+            remove { if (!_IsTransitioning) _OnNodeSwappedEvent -= value; }
         }
 
         /// <summary>
         /// トランジションが開始する瞬間の処理を取得または設定します。
         /// トランジション中は設定することができません。
         /// </summary>
-        public Action OnTransitionBeginEvent
+        public event Action OnTransitionBeginEvent
         {
-            get { return _OnTransitionBeginEvent; }
-            set { if (!_IsTransitioning) _OnTransitionBeginEvent = value; }
+            add { if (!_IsTransitioning) _OnTransitionBeginEvent += value; }
+            remove { if (!_IsTransitioning) _OnTransitionBeginEvent -= value; }
         }
 
         /// <summary>
         /// トランジションが終了する瞬間の処理を取得または設定します。
         /// トランジション中は設定することができません。
         /// </summary>
-        public Action OnTransitionEndEvent
+        public event Action OnTransitionEndEvent
         {
-            get { return _OnTransitionEndEvent; }
-            set { if (!_IsTransitioning) _OnTransitionEndEvent = value; }
+            add { if (!_IsTransitioning) _OnTransitionEndEvent += value; }
+            remove { if (!_IsTransitioning) _OnTransitionEndEvent -= value; }
         }
 
         /// <summary>
@@ -70,14 +70,14 @@ namespace Altseed
         private bool _IsTransitioning;
 
         // イベント
-        private Action<float> _OnClosingEvent;
-        private Action<float> _OnOpeningEvent;
-        private Action _OnNodeSwappedEvent;
-        private Action _OnTransitionBeginEvent;
-        private Action _OnTransitionEndEvent;
+        private event Action<float> _OnClosingEvent;
+        private event Action<float> _OnOpeningEvent;
+        private event Action _OnNodeSwappedEvent;
+        private event Action _OnTransitionBeginEvent;
+        private event Action _OnTransitionEndEvent;
 
         // コルーチン
-        private readonly IEnumerator _Coroutine;
+        private readonly IEnumerator<object> _Coroutine;
 
         /// <summary>
         /// 新しいインスタンスを作成します。
@@ -96,7 +96,7 @@ namespace Altseed
 
         protected override void OnUpdate()
         {
-            _Coroutine.MoveNext();
+            _Coroutine?.MoveNext();
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Altseed
         protected virtual void OnTransitionEnd() => _OnTransitionEndEvent?.Invoke();
 
         // トランジションを行うコルーチン
-        private IEnumerator GetCoroutine(float closingDuration, float openingDuration)
+        private IEnumerator<object> GetCoroutine(float closingDuration, float openingDuration)
         {
             // トランジションの開始
             _IsTransitioning = true;
