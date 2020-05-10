@@ -13,24 +13,38 @@ namespace Sample
             Engine.Initialize("Transition", 640, 480);
 
             // Altseed のロゴを描画するノードを作成します。
-            var AltseedPink = new SpriteNode();
-            var texAltseed = Texture2D.Load(@"TestData\IO\AltseedPink.png");
-            AltseedPink.Texture = texAltseed;
-            AltseedPink.CenterPosition = new Vector2F(200, 200);
-            AltseedPink.Position = new Vector2F(320, 240);
-            
+            var Altseed = new SpriteNode();
+            var texAltseed = Texture2D.Load("Altseed.png");
+            Altseed.Texture = texAltseed;
+            Altseed.CenterPosition = new Vector2F(200, 200);
+            Altseed.Position = new Vector2F(320, 240);
+
             // Altseed のロゴを描画するノードを登録します。
-            Engine.AddNode(AltseedPink);
-            
+            Engine.AddNode(Altseed);
+
             // Amusement Creators のロゴを描画するノードを作成します。
             var AmusementCreators = new SpriteNode();
-            var texAmusementCreators = Texture2D.Load(@"TestData\IO\AmusementCreators.png");
+            var texAmusementCreators = Texture2D.Load("AmusementCreators.png");
             AmusementCreators.Texture = texAmusementCreators;
             AmusementCreators.CenterPosition = new Vector2F(200, 200);
             AmusementCreators.Position = new Vector2F(320, 240);
 
+            // トランジションに使用するポストエフェクトのノードを作成します。
+            TransitionEffectNode transitionEffect = new TransitionEffectNode();
+
+            // ポストエフェクトのノードを登録します。
+            Engine.AddNode(transitionEffect);
+
             // トランジションを行うノードを作成します。
-            var transitionNode = new MyTransitionNode(AltseedPink, AmusementCreators);
+            var transitionNode = new TransitionNode(Altseed, AmusementCreators, 1.0f, 1.0f);
+
+           　// ノードが入れ替わるまでの処理を、イベントを使用して記述します。
+            transitionNode.OnClosingEvent += (progress) =>
+                transitionEffect.Material.SetVector4F("_Value", new Vector4F(1.0f - progress, 0, 0, 0));
+
+           　// ノードが入れ替わるまでの処理を、イベントを使用して記述します。
+            transitionNode.OnOpeningEvent += (progress) =>
+                transitionEffect.Material.SetVector4F("_Value", new Vector4F(progress, 0, 0, 0));
 
             // トランジションを行うノードを登録します。
             // この瞬間、トランジションが開始されます。
@@ -38,7 +52,7 @@ namespace Sample
 
             // メインループ。
             // Altseed のウインドウが閉じられると終了します。
-            while(Engine.DoEvents())
+            while (Engine.DoEvents())
             {
                 // Altseed を更新します。
                 Engine.Update();
@@ -46,37 +60,6 @@ namespace Sample
 
             // Altseed の終了処理をします。
             Engine.Terminate();
-        }
-    }
-
-    // トランジションを行うノードのクラス
-    class MyTransitionNode : TransitionNode
-    {
-        // トランジションに使用するポストエフェクトのノード
-        private TransitionEffectNode _MyPostEffect;
-
-        // コンストラクタ
-        public MyTransitionNode(Node oldNode, Node newNode) : base(oldNode, newNode, 1.0f, 1.0f)
-        {
-            // ポストエフェクトのノードを作成します。
-            _MyPostEffect = new TransitionEffectNode();
-
-            // ポストエフェクトのノードを登録します。
-            Engine.AddNode(_MyPostEffect);
-        }
-
-        // ノードが入れ替わるまでの処理
-        protected override void OnClosing()
-        {
-            // ポストエフェクトのマテリアルに値を渡します。
-            _MyPostEffect.Material.SetVector4F("_Value", new Vector4F(1.0f - TransitionTime, 0, 0, 0));
-        }
-        
-        // ノードが入れ替わった後の処理
-        protected override void OnOpening()
-        {
-            // ポストエフェクトのマテリアルに値を渡します。
-            _MyPostEffect.Material.SetVector4F("_Value", new Vector4F(TransitionTime - 1.0f, 0, 0, 0));
         }
     }
 

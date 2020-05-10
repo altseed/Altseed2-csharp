@@ -7,33 +7,76 @@ namespace Altseed
     public class TransitionNode : Node
     {
         /// <summary>
+        /// ノードが入れ替わる前の処理を取得または設定します。
+        /// トランジション中は設定することができません。
+        /// </summary>
+        public Action<float> OnClosingEvent
+        {
+            get { return _OnClosingEvent; }
+            set { if(!_IsTransitioning) _OnClosingEvent = value; }
+        }
+
+        /// <summary>
+        /// ノードが入れ替わった後の処理を取得または設定します。
+        /// トランジション中は設定することができません。
+        /// </summary>
+        public Action<float> OnOpeningEvent
+        {
+            get { return _OnOpeningEvent; }
+            set { if (!_IsTransitioning) _OnOpeningEvent = value; }
+        }
+
+        /// <summary>
+        /// ノードが入れ替わる瞬間の処理を取得または設定します。
+        /// トランジション中は設定することができません。
+        /// </summary>
+        public Action OnNodeSwappedEvent
+        {
+            get { return _OnNodeSwappedEvent; }
+            set { if (!_IsTransitioning) _OnNodeSwappedEvent = value; }
+        }
+
+        /// <summary>
+        /// トランジションが開始する瞬間の処理を取得または設定します。
+        /// トランジション中は設定することができません。
+        /// </summary>
+        public Action OnTransitionBeginEvent
+        {
+            get { return _OnTransitionBeginEvent; }
+            set { if (!_IsTransitioning) _OnTransitionBeginEvent = value; }
+        }
+
+        /// <summary>
+        /// トランジションが終了する瞬間の処理を取得または設定します。
+        /// トランジション中は設定することができません。
+        /// </summary>
+        public Action OnTransitionEndEvent
+        {
+            get { return _OnTransitionEndEvent; }
+            set { if (!_IsTransitioning) _OnTransitionEndEvent = value; }
+        }
+
+        /// <summary>
         /// トランジションによって取り除かれるノード
         /// </summary>
-        protected Node OldNode { get; }
+        protected readonly Node OldNode;
 
         /// <summary>
         /// トランジションによって追加されるノード
         /// </summary>
-        protected Node NewNode { get; }
+        protected readonly Node NewNode;
 
-        /// <summary>
-        /// トランジションが始まってからノードが入れ替わるまでの期間
-        /// </summary>
-        protected float ClosingDuration { get; }
+        // トランジションが行われている最中か
+        private bool _IsTransitioning;
 
-        /// <summary>
-        /// トランジションが始まってからノードが入れ替わるまでの期間
-        /// </summary>
-        protected float OpeningDuration { get; }
+        // イベント
+        private Action<float> _OnClosingEvent;
+        private Action<float> _OnOpeningEvent;
+        private Action _OnNodeSwappedEvent;
+        private Action _OnTransitionBeginEvent;
+        private Action _OnTransitionEndEvent;
 
-        /// <summary>
-        /// トランジションが始まってからの時間
-        /// </summary>
-        protected float TransitionTime { get; private set; }
-
-        /// <summary>
-        /// トランジションを行うコルーチン
-        /// </summary>
+        // コルーチン
         private readonly IEnumerator _Coroutine;
 
         /// <summary>
@@ -48,72 +91,74 @@ namespace Altseed
             OldNode = oldNode;
             NewNode = newNode;
 
-            ClosingDuration = closingDuration;
-            OpeningDuration = openingDuration;
-
-            _Coroutine = GetCoroutine();
+            _Coroutine = GetCoroutine(closingDuration, openingDuration);
         }
 
         protected override void OnUpdate()
         {
             _Coroutine.MoveNext();
-            TransitionTime += Engine.DeltaSecond;
         }
 
         /// <summary>
         /// ノードが入れ替わる前の処理を記述します。
         /// </summary>
-        protected virtual void OnClosing() { }
+        protected virtual void OnClosing(float progress) => _OnClosingEvent?.Invoke(progress);
 
         /// <summary>
         /// ノードが入れ替わった後の処理を記述します。
         /// </summary>
-        protected virtual void OnOpening() { }
+        protected virtual void OnOpening(float progress) => _OnOpeningEvent?.Invoke(progress);
 
         /// <summary>
         /// ノードが入れ替わる瞬間の処理を記述します。
         /// </summary>
-        protected virtual void OnNodeSwapped() { }
+        protected virtual void OnNodeSwapped() => _OnNodeSwappedEvent?.Invoke();
 
         /// <summary>
         /// トランジションが開始する瞬間の処理を記述します。
         /// </summary>
-        protected virtual void OnTransitionBegin() { }
+        protected virtual void OnTransitionBegin() => _OnTransitionBeginEvent?.Invoke();
 
         /// <summary>
         /// トランジションが終了する瞬間の処理を記述します。
         /// </summary>
-        protected virtual void OnTransitionEnd() { }
+        protected virtual void OnTransitionEnd() => _OnTransitionEndEvent?.Invoke();
 
-        /// <summary>
-        /// トランジションを行うコルーチン
-        /// </summary>
-        private IEnumerator GetCoroutine()
+        // トランジションを行うコルーチン
+        private IEnumerator GetCoroutine(float closingDuration, float openingDuration)
         {
+            // トランジションの開始
+            _IsTransitioning = true;
             OnTransitionBegin();
             yield return null;
 
-            while (TransitionTime < ClosingDuration)
+            // ノードが入れ替わる前の処理
+            for(float time = 0.0f;  time < closingDuration; time += Engine.DeltaSecond)
             {
-                OnClosing();
+                OnClosing(MathF.Min(1.0f, time / closingDuration));
                 yield return null;
             }
 
+            // ノードの入れ替え
             var parentNode = OldNode.Parent;
             parentNode.RemoveChildNode(OldNode);
             parentNode.AddChildNode(NewNode);
 
+            // ノードが入れ替わるの処理
             OnNodeSwapped();
             yield return null;
 
-            while (TransitionTime < ClosingDuration + OpeningDuration)
+            // ノードが入れ替わった後の処理
+            for(float time = 0.0f; time < openingDuration; time += Engine.DeltaSecond)
             {
-                OnOpening();
+                OnOpening(MathF.Min(1.0f, time / openingDuration));
                 yield return null;
             }
 
+            // トランジションの終了
             Parent.RemoveChildNode(this);
             OnTransitionEnd();
+            _IsTransitioning = false;
         }
     }
 }
