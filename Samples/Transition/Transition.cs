@@ -56,7 +56,7 @@ namespace Sample
         private TransitionEffectNode _MyPostEffect;
 
         // コンストラクタ
-        public MyTransitionNode(Node oldNode, Node newNode) : base(oldNode, newNode)
+        public MyTransitionNode(Node oldNode, Node newNode) : base(oldNode, newNode, 1.0f, 1.0f)
         {
             // ポストエフェクトのノードを作成します。
             _MyPostEffect = new TransitionEffectNode();
@@ -70,9 +70,6 @@ namespace Sample
         {
             // ポストエフェクトのマテリアルに値を渡します。
             _MyPostEffect.Material.SetVector4F("_Value", new Vector4F(1.0f - TransitionTime, 0, 0, 0));
-
-            // トランジション期間が 1 秒になったらノードを入れ替えます。
-            if(TransitionTime >= 1.0f) SwapNode();
         }
         
         // ノードが入れ替わった後の処理
@@ -80,9 +77,6 @@ namespace Sample
         {
             // ポストエフェクトのマテリアルに値を渡します。
             _MyPostEffect.Material.SetVector4F("_Value", new Vector4F(TransitionTime - 1.0f, 0, 0, 0));
-
-            // トランジション期間が 2 秒になったらトランジションを終了します。
-            if(TransitionTime >= 2.0f) FinishTransition();
         }
     }
 
