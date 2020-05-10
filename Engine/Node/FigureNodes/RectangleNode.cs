@@ -93,6 +93,7 @@ namespace Altseed
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
+            renderedPolygon.OverwriteVertexesColor(_color);
         }
     }
 }
