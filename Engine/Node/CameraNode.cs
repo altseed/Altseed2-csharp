@@ -27,13 +27,39 @@ namespace Altseed
         }
         private int _Group = 0;
 
+        public Color ClearColor
+        {
+            get => _ClearColor;
+            set
+            {
+                if (_ClearColor == value) return;
+                _ClearColor = value;
+                _Camera.RenderPassParameter = new RenderPassParameter(_ClearColor, _IsColorCleared, true);
+            }
+        }
+        private Color _ClearColor;
+
+        public bool IsColorCleared
+        {
+            get => _IsColorCleared;
+            set
+            {
+                if (_IsColorCleared == value) return;
+                _IsColorCleared = value;
+                _Camera.RenderPassParameter = new RenderPassParameter(_ClearColor, _IsColorCleared, true);
+            }
+        }
+        private bool _IsColorCleared;
+
         /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
         public CameraNode()
         {
             _Camera = RenderedCamera.Create();
-            _Camera.RenderPassParameter = new RenderPassParameter(new Color(0, 0, 0, 0), false, false);
+
+            ClearColor = new Color(50, 50, 50);
+            IsColorCleared = false;
         }
 
         /// <summary>
