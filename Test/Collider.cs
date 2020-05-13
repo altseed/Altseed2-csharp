@@ -24,7 +24,7 @@ namespace Altseed.Test
             //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
             node.Position = new Vector2F(200, 200);
-            node.CenterPosition = texture.Size / 2;
+            node.Pivot = texture.Size / 2;
             node.Scale = new Vector2F(0.2f, 0.2f);
             Engine.AddNode(node);
 
@@ -36,7 +36,7 @@ namespace Altseed.Test
             //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node2.Texture = texture;
             node2.Position = new Vector2F(200, 200);
-            node2.CenterPosition = texture.Size / 2;
+            node2.Pivot = texture.Size / 2;
             node2.Scale = new Vector2F(0.2f, 0.2f);
             Engine.AddNode(node2);
             var col2 = new CircleCollider();

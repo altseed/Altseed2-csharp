@@ -2,6 +2,16 @@
 
 namespace Altseed
 {
+    /// <summary>
+    /// ContentRectの指定方法
+    /// </summary>
+    [Serializable]
+    public enum ContentRectMode
+    {
+        Auto,
+        Manual
+    }
+
     [Serializable]
     public abstract class DrawnNode : Node
     {
@@ -51,17 +61,17 @@ namespace Altseed
         /// <summary>
         /// 回転の中心となる座標を取得または設定します。
         /// </summary>
-        public virtual Vector2F CenterPosition
+        public virtual Vector2F Pivot
         {
-            get => _CenterPosition;
+            get => _Pivot;
             set
             {
-                if (_CenterPosition == value) return;
-                _CenterPosition = value;
+                if (_Pivot == value) return;
+                _Pivot = value;
                 UpdateTransform();
             }
         }
-        private Vector2F _CenterPosition = new Vector2F();
+        private Vector2F _Pivot = new Vector2F();
 
         /// <summary>
         /// 拡大率を取得または設定します。
@@ -77,6 +87,50 @@ namespace Altseed
             }
         }
         private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
+
+        /// <summary>
+        /// コンテンツのサイズを取得または設定します。
+        /// </summary>
+        public virtual RectF ContentRect
+        {
+            get => _ContentRect;
+            set
+            {
+                if (value == _ContentRect) return;
+                _ContentRect = value;
+                UpdateTransform();
+            }
+        }
+        private RectF _ContentRect = new RectF(0f, 0f, 0f, 0f);
+
+        /// <summary>
+        /// コンテンツのサイズの指定方法を取得または設定します。
+        /// </summary>
+        public virtual ContentRectMode ContentRectMode
+        {
+            get => _ContentRectMode;
+            set
+            {
+                if (value == _ContentRectMode) return;
+                _ContentRectMode = value;
+            }
+        }
+        private ContentRectMode _ContentRectMode = ContentRectMode.Auto;
+
+        /// <summary>
+        /// アンカーを取得または設定します。
+        /// </summary>
+        public virtual RectF Anchor
+        {
+            get => _Anchor;
+            set
+            {
+                if (value == _Anchor) return;
+                _Anchor = value;
+                UpdateTransform();
+            }
+        }
+        private RectF _Anchor = new RectF(0f, 0f, 0f, 0f);
 
         /// <summary>
         /// 左右を反転するかどうかを取得または設定します。
@@ -158,7 +212,7 @@ namespace Altseed
         {
             var scale = Scale * new Vector2F(TurnLR ? -1 : 1, TurnUL ? -1 : 1);
 
-            Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
+            Transform = MathHelper.CalcTransform(Position, Pivot, MathHelper.DegreeToRadian(Angle), scale);
         }
 
         internal abstract void UpdateInheritedTransform();

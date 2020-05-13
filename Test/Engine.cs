@@ -20,13 +20,13 @@ namespace Altseed.Test
 
             var node = new RotateSpriteNode();
             node.Texture = texture;
-            node.CenterPosition = texture.Size / 2;
+            node.Pivot = texture.Size / 2;
             node.Position = new Vector2F(200, 200);
             Engine.AddNode(node);
 
             var node2 = new RotateSpriteNode();
             node2.Texture = texture;
-            node2.CenterPosition = texture.Size / 2;
+            node2.Pivot = texture.Size / 2;
             node2.Position = new Vector2F(600, 200);
             Engine.AddNode(node2);
 
