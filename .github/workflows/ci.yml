@@ -30,7 +30,7 @@ jobs:
         cd Core
         mkdir build
         cd build
-        cmake .. -A x64
+        cmake .. -A x64 -D USE_MSVC_RUNTIME_LIBRARY_DLL=OFF
         cmake --build . --config Release
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
