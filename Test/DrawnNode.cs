@@ -222,6 +222,7 @@ namespace Altseed.Test
         {
             var tc = new TestCore();
             tc.Init();
+            tc.Duration = 180;
 
             var arc1 = new ArcNode()
             {
@@ -229,8 +230,6 @@ namespace Altseed.Test
                 Position = new Vector2F(100, 100),
                 Radius = 50f,
                 VertNum = 30,
-                EndVertNum = 24,
-                StartVertNum = 12,
             };
             var arc2 = new ArcNode()
             {
@@ -238,8 +237,6 @@ namespace Altseed.Test
                 Position = new Vector2F(400, 200),
                 Radius = 30f,
                 VertNum = 8,
-                EndVertNum = 5,
-                StartVertNum = 2
             };
             var arc3 = new ArcNode()
             {
@@ -247,14 +244,20 @@ namespace Altseed.Test
                 Position = new Vector2F(50, 400),
                 Radius = 40f,
                 VertNum = 5,
-                EndVertNum = 3,
-                StartVertNum = 1
             };
             Engine.AddNode(arc1);
             Engine.AddNode(arc2);
             Engine.AddNode(arc3);
 
-            tc.LoopBody(null, null);
+            tc.LoopBody(x =>
+            {
+                arc1.StartDegree++;
+                arc2.StartDegree++;
+                arc3.StartDegree++;
+                arc1.EndDegree--;
+                arc2.EndDegree--;
+                arc3.EndDegree--;
+            }, null);
 
             tc.End();
         }

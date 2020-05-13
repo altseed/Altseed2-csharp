@@ -29,22 +29,22 @@ namespace Altseed
         private Color _color = new Color(255, 255, 255);
 
         /// <summary>
-        /// 描画を終了する頂点を取得または設定します。
+        /// 描画を終了する角度を取得または設定します。
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">設定しようとした値が<see cref="StartVertNum"/>未満または<see cref="VertNum"/>より大きい</exception>
-        public int EndVertNum
+        /// <exception cref="ArgumentOutOfRangeException">設定しようとした値が<see cref="StartDegree"/>未満または360より大きい</exception>
+        public float EndDegree
         {
-            get => _endvertnum;
+            get => _enddegree;
             set
             {
-                if (value < _startvertnum) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(StartVertNum)}(Value : {_startvertnum})未満です");
-                if (value > _vertnum) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(VertNum)}(Value : {_vertnum})より大きいです");
-                if (_endvertnum == value) return;
-                _endvertnum = value;
+                if (value < _startdegree) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(StartDegree)}(Value : {_startdegree})未満です");
+                if (value > 360) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が360より大きいです");
+                if (_enddegree == value) return;
+                _enddegree = value;
                 changed = true;
             }
         }
-        private int _endvertnum = 2;
+        private float _enddegree = 360.0f;
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -64,20 +64,20 @@ namespace Altseed
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">設定しようとした値が0未満または<see cref="EndVertNum"/>より大きい</exception>
-        public int StartVertNum
+        /// <exception cref="ArgumentOutOfRangeException">設定しようとした値が0未満または<see cref="EndDegree"/>より大きい</exception>
+        public float StartDegree
         {
-            get => _startvertnum;
+            get => _startdegree;
             set
             {
                 if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "設定しようとした値が0未満です");
-                if (value > _endvertnum) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(EndVertNum)}(Value : {_endvertnum})より大きいです");
-                if (_startvertnum == value) return;
-                _startvertnum = value;
+                if (value > _enddegree) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(EndDegree)}(Value : {_enddegree})より大きいです");
+                if (_startdegree == value) return;
+                _startdegree = value;
                 changed = true;
             }
         }
-        private int _startvertnum = 0;
+        private float _startdegree = 0.0f;
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
@@ -91,8 +91,8 @@ namespace Altseed
                 if (_vertnum == value) return;
                 if (value < _vertnum)
                 {
-                    if (value < _endvertnum) _endvertnum = value;
-                    if (_endvertnum < _startvertnum) _startvertnum = 0;
+                    if (value < _enddegree) _enddegree = value;
+                    if (_enddegree < _startdegree) _startdegree = 0;
                 }
                 _vertnum = value;
                 changed = true;
@@ -124,20 +124,35 @@ namespace Altseed
             Engine.Renderer.DrawPolygon(renderedPolygon);
         }
 
+        private Vector2F GetBaseVector(float degree)
+        {
+            var result = new Vector2F(0.0f, -_radius);
+            result.Degree += degree;
+            return result;
+        }
+
         internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();
 
         private void UpdateVertexes()
         {
-            var deg = 360f / _vertnum;          
-            var positions = new Vector2F[_endvertnum - _startvertnum + 2];
-            var vec = new Vector2F(0.0f, -_radius);
-            vec.Degree += deg * _startvertnum;
-            for (int i = _startvertnum; i <= _endvertnum; i++)
+            var deg = 360f / _vertnum;
+            var size = (int)((_enddegree - _startdegree) / deg);
+            var startVertexNum = (uint)MathF.Ceiling(_startdegree / deg);
+            var endVertexNum = (uint)MathF.Floor(_enddegree / deg);
+            var startMatched = startVertexNum * deg == _startdegree;
+            var endMatched = endVertexNum * deg == _enddegree;
+            if (!startMatched) size++;
+            if (!endMatched) size++;
+            var positions = new Vector2F[size + 2];
+            var currentIndex = 1;
+            if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
+            var vec = GetBaseVector(deg * startVertexNum);
+            for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
             {
-                positions[i- _startvertnum + 1] = vec;
+                positions[currentIndex] = vec;
                 vec.Degree += deg;
             }
-
+            if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
