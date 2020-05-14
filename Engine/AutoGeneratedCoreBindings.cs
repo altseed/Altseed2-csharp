@@ -3966,7 +3966,7 @@ namespace Altseed
     /// <summary>
     /// グラフィックの制御を行うクラス
     /// </summary>
-    internal sealed partial class Graphics
+    public sealed partial class Graphics
     {
         #region unmanaged
         
