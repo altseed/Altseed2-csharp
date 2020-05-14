@@ -2,6 +2,7 @@
 
 namespace Altseed
 {
+    [Serializable]
     public class RuledTransitionState
     {
         public Node TargetNode { get; set; }
@@ -73,6 +74,7 @@ namespace Altseed
         }
     }
 
+    [Serializable]
     internal class RuledTransitionEffectNode : PostEffectNode
     {
         private const string _ShaderCode = @"
