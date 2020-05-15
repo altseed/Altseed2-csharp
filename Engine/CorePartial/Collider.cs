@@ -16,13 +16,18 @@ namespace Altseed
         /// <summary>
         /// 頂点情報の配列を取得または設定する
         /// </summary>
-        /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
         public Vector2F[] VertexArray
         {
-            get => Vertexes.ToArray();
+            get => Vertexes?.ToArray();
             set
             {
-                var array = Vector2FArray.Create(Vertexes.Count);
+                if(value is null)
+                {
+                    Vertexes = null;
+                    return;
+                }
+                
+                var array = Vector2FArray.Create(value.Length);
                 array.FromArray(value);
                 Vertexes = array;
             }
