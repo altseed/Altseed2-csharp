@@ -99,11 +99,6 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 描画時のサイズを取得します。
-        /// </summary>
-        public Vector2F Size => _RenderedText.TextureSize;
-
-        /// <summary>
         /// カリング用ID
         /// </summary>
         internal override int CullingId => _RenderedText.Id;
@@ -127,6 +122,14 @@ namespace Altseed
         internal override void UpdateInheritedTransform()
         {
             _RenderedText.Transform = CalcInheritedTransform();
+        }
+
+        protected internal override void UpdateSize()
+        {
+            if (ContentMode == ContentMode.Manual)
+                return;
+
+            Size = _RenderedText.TextureSize;
         }
     }
 }

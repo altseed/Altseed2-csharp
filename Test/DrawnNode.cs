@@ -22,7 +22,8 @@ namespace Altseed.Test
             var node = new SpriteNode();
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
-            node.Pivot = texture.Size / 2;
+            node.Pivot = new Vector2F(0.5f, 0.5f);
+            tc.Duration = 10000;
             Engine.AddNode(node);
 
             tc.LoopBody(c =>
@@ -37,6 +38,8 @@ namespace Altseed.Test
                 if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) node.Angle -= 3;
                 if (Engine.Keyboard.GetKeyState(Keys.X) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width - 2.0f, node.Src.Height - 2.0f);
                 if (Engine.Keyboard.GetKeyState(Keys.Z) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width + 2.0f, node.Src.Height + 2.0f);
+                if (Engine.Keyboard.GetKeyState(Keys.C) == ButtonState.Hold) node.Src = new RectF(node.Src.X - 2.0f, node.Src.Y - 2.0f, node.Src.Width, node.Src.Height);
+                if (Engine.Keyboard.GetKeyState(Keys.V) == ButtonState.Hold) node.Src = new RectF(node.Src.X + 2.0f, node.Src.Y + 2.0f, node.Src.Width, node.Src.Height);
             }
             , null);
 
@@ -210,6 +213,72 @@ namespace Altseed.Test
                     new Vector2F(100 - cos, 100 + sin),
                     new Vector2F(100 + sin, 100 + cos),
                 }, new Color(255, c % 255, 255, 255));
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Pivot()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            Assert.NotNull(font);
+           
+            var rotated = new TextNode() { Font = font, Text = "中心で回転します", Position = new Vector2F(300.0f, 300.0f), Pivot = new Vector2F(0.5f, 0.5f) };
+            Engine.AddNode(rotated);
+
+            tc.LoopBody(c =>
+            {
+                rotated.Angle += 1.0f;
+            }
+            , null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Anchor()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Vector2F rectSize = texture.Size;
+            var parent = new PolygonNode();
+            parent.Position = new Vector2F(320, 240);
+            //parent.Pivot = new Vector2F(0.5f, 0.5f);
+            Engine.AddNode(parent);
+
+            var child = new SpriteNode();
+            child.Texture = texture;
+            child.Position = new Vector2F(200, 200);
+            child.Src = new RectF(new Vector2F(), texture.Size);
+            child.Pivot = new Vector2F(0.5f, 0.5f);
+            child.AnchorMin = new Vector2F(0.2f, 0.2f);
+            child.AnchorMax = new Vector2F(.6f, .6f);
+            child.ZOrder = 10;
+            parent.AddChildNode(child);
+
+            tc.Duration = 10000;
+            tc.LoopBody(c =>
+            {
+                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) rectSize.X += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) rectSize.Y -= 1.5f;
+
+                parent.SetVertexes(new[] {
+                        new Vector2F(0, 0),
+                        new Vector2F(rectSize.X, 0),
+                        new Vector2F(rectSize.X, rectSize.Y),
+                        new Vector2F(0, rectSize.Y),
+                    }, new Color(255, 255, 255, 255));
             }, null);
 
             tc.End();

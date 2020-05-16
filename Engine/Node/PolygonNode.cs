@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Altseed
 {
@@ -122,6 +123,24 @@ namespace Altseed
         internal override void UpdateInheritedTransform()
         {
             _RenderedPolygon.Transform = CalcInheritedTransform();
+        }
+
+        protected internal override void UpdateSize()
+        {
+            if (ContentMode == ContentMode.Manual)
+                return;
+
+            Vector2F min = new Vector2F(float.MaxValue, float.MaxValue);
+            Vector2F max = new Vector2F(float.MinValue, float.MinValue);
+            foreach (var pos in Vertexes.Select(v => v.Position))
+            {
+                min.X = min.X > pos.X ? pos.X : min.X;
+                min.Y = min.Y > pos.Y ? pos.Y : min.Y;
+                max.X = max.X < pos.X ? pos.X : max.X;
+                max.Y = max.Y < pos.Y ? pos.Y : max.Y;
+            }
+
+            Size = max - min;
         }
     }
 }

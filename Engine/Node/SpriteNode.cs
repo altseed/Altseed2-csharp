@@ -92,5 +92,13 @@ namespace Altseed
         {
             _RenderedSprite.Transform = CalcInheritedTransform();
         }
+
+        protected internal override void UpdateSize()
+        {
+            if (ContentMode == ContentMode.Manual)
+                return;
+
+            Size = _RenderedSprite.Src.Size;
+        }
     }
 }
