@@ -97,20 +97,20 @@ namespace Altseed
         private void UpdateVertexes()
         {
             var positions = new Vector2F[4];
-            positions[0] = _point1;
             var sub = _point2 - _point1;
             var degree = sub.Degree;
             var x = new Vector2F(sub.Length, 0.0f)
             {
                 Degree = degree
             };
-            var y = new Vector2F(0.0f, _thickness)
+            var y = new Vector2F(0.0f, _thickness / 2)
             {
                 Degree = degree + 90
             };
+            positions[0] = _point1 - y;
             positions[1] = _point1 + y;
             positions[2] = _point1 + x + y;
-            positions[3] = _point1 + x;
+            positions[3] = _point1 + x - y;
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
