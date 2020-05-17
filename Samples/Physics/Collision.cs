@@ -66,8 +66,10 @@ namespace Sample
             // 半径を設定します
             colliderNode.Radius = Texture.Size.X / 2;
 
-            // 中心座標を設定します
-            Pivot = Texture.Size / 2;
+            // 中心を設定します
+            Pivot = new Vector2F(0.5f, 0.5f);
+
+            AdjustSize();
         }
 
         // フレーム毎に実行
