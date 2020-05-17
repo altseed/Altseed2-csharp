@@ -82,7 +82,8 @@ namespace Altseed.Test
             var node = new SpriteNode();
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
-            node.Pivot = texture.Size / 2;
+            node.AdjustSize();
+            node.CenterPosition = texture.Size / 2;
             Engine.AddNode(node);
 
             var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
