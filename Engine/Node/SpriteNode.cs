@@ -67,14 +67,6 @@ namespace Altseed
             }
         }
 
-        [Serializable]
-        public enum DrawMode
-        {
-            Fill,
-            KeepAspect,
-            Absolute,
-        }
-
         /// <summary>
         /// 描画モードを取得または設定します。
         /// </summary>
@@ -88,7 +80,7 @@ namespace Altseed
                 _Mode = value;
             }
         }
-        private DrawMode _Mode = DrawMode.Fill;
+        private DrawMode _Mode = DrawMode.Absolute;
 
         /// <summary>
         /// カリング用ID

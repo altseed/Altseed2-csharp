@@ -3,6 +3,17 @@ using System.Linq;
 
 namespace Altseed
 {
+    /// <summary>
+    /// 描画方法
+    /// </summary>
+    [Serializable]
+    public enum DrawMode
+    {
+        Fill,
+        KeepAspect,
+        Absolute,
+    }
+
     [Serializable]
     public abstract class DrawnNode : Node
     {

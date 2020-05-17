@@ -273,7 +273,7 @@ namespace Altseed.Test
             child.AnchorMin = new Vector2F(0.2f, 0.0f);
             child.AnchorMax = new Vector2F(0.8f, 1f);
             child.ZOrder = 10;
-            child.Mode = Altseed.SpriteNode.DrawMode.Fill;
+            child.Mode = DrawMode.Fill;
             child.AdjustSize();
             parent.AddChildNode(child);
 
