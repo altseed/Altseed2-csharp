@@ -62,7 +62,7 @@ namespace Altseed
         private Vector2F _Position = new Vector2F();
 
         /// <summary>
-        /// 回転の中心となる座標を取得または設定します。
+        /// 回転の中心となる座標を[0,1]で取得または設定します。
         /// </summary>
         public virtual Vector2F Pivot
         {
@@ -76,6 +76,20 @@ namespace Altseed
             }
         }
         private Vector2F _Pivot = new Vector2F();
+
+        /// <summary>
+        /// 回転の中心となる座標をピクセル単位で取得または設定します。
+        /// </summary>
+        public virtual Vector2F CenterPosition
+        {
+            get => Pivot * Size;
+            set
+            {
+                if (Size.X == 0 || Size.Y == 0)
+                    return;
+                Pivot = value / Size;
+            }
+        }
 
         /// <summary>
         /// 拡大率を取得または設定します。
@@ -129,6 +143,12 @@ namespace Altseed
             {
                 if (value == _AnchorMin) return;
                 _AnchorMin = value;
+
+                if (_AnchorMin.X < 0) _AnchorMin.X = 0;
+                if (_AnchorMin.X > _AnchorMax.X) _AnchorMax.X = _AnchorMin.X;
+                if (_AnchorMin.Y < 0) _AnchorMin.Y = 0;
+                if (_AnchorMin.Y > _AnchorMax.Y) _AnchorMax.Y = _AnchorMin.Y;
+
                 UpdateTransform();
                 SetAnchorMargin();
             }
@@ -145,6 +165,12 @@ namespace Altseed
             {
                 if (value == _AnchorMax) return;
                 _AnchorMax = value;
+
+                if (_AnchorMax.X > 1) _AnchorMax.X = 1;
+                if (_AnchorMax.X < _AnchorMin.X) _AnchorMin.X = _AnchorMax.X;
+                if (_AnchorMax.Y > 1) _AnchorMin.Y = 1;
+                if (_AnchorMax.Y < _AnchorMin.Y) _AnchorMin.Y = _AnchorMax.Y;
+                
                 UpdateTransform();
                 SetAnchorMargin();
             }

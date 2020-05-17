@@ -23,7 +23,7 @@ namespace Altseed.Test
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
             node.Pivot = new Vector2F(0.5f, 0.5f);
-            tc.Duration = 10000;
+            node.AdjustSize();
             Engine.AddNode(node);
 
             tc.LoopBody(c =>
@@ -229,6 +229,7 @@ namespace Altseed.Test
             Assert.NotNull(font);
 
             var rotated = new TextNode() { Font = font, Text = "中心で回転します", Position = new Vector2F(300.0f, 300.0f), Pivot = new Vector2F(0.5f, 0.5f) };
+            rotated.AdjustSize();
             Engine.AddNode(rotated);
 
             tc.LoopBody(c =>

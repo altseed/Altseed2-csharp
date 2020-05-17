@@ -23,8 +23,9 @@ namespace Altseed.Test
             var node = new SpriteNode();
             //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
+            node.AdjustSize();
             node.Position = new Vector2F(200, 200);
-            node.Pivot = texture.Size / 2;
+            node.CenterPosition = texture.Size / 2;
             node.Scale = new Vector2F(0.2f, 0.2f);
             Engine.AddNode(node);
 
@@ -35,8 +36,9 @@ namespace Altseed.Test
             var node2 = new SpriteNode();
             //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node2.Texture = texture;
+            node2.AdjustSize();
             node2.Position = new Vector2F(200, 200);
-            node2.Pivot = texture.Size / 2;
+            node2.CenterPosition = texture.Size / 2;
             node2.Scale = new Vector2F(0.2f, 0.2f);
             Engine.AddNode(node2);
             var col2 = new CircleCollider();
@@ -59,7 +61,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void AutoCollisionSystem()
         {
-            var tc = new TestCore
+            var tc = new TestCore()
             {
                 Duration = int.MaxValue
             };
