@@ -3,16 +3,6 @@ using System.Linq;
 
 namespace Altseed
 {
-    /// <summary>
-    /// ContentRectの指定方法
-    /// </summary>
-    [Serializable]
-    public enum ContentMode
-    {
-        Auto,
-        Manual
-    }
-
     [Serializable]
     public abstract class DrawnNode : Node
     {
@@ -55,6 +45,7 @@ namespace Altseed
                 if (_Position == value) return;
                 _Position = value;
                 UpdateTransform();
+                SetAnchorMargin();
             }
         }
         private Vector2F _Position = new Vector2F();
@@ -70,6 +61,7 @@ namespace Altseed
                 if (_Pivot == value) return;
                 _Pivot = value;
                 UpdateTransform();
+                SetAnchorMargin();
             }
         }
         private Vector2F _Pivot = new Vector2F();
@@ -100,35 +92,21 @@ namespace Altseed
                 if (value == _Size) return;
                 _Size = value;
 
-                _RightBottom = (GetParentDrawnNode()?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin)
-                    - (Position + (new Vector2F(1, 1) - Pivot) * Size);
-                _LeftTop = -Position + Size * Pivot;
-
+                SetAnchorMargin();
                 UpdateTransform();
                 foreach (var descendant in EnumerateDescendants<DrawnNode>())
                 {
+                    descendant.UpdateSize();
+                    descendant.UpdatePosition();
                     descendant.UpdateTransform();
                 }
             }
         }
+
         private Vector2F _Size = new Vector2F(0f, 0f);
 
         private Vector2F _LeftTop = new Vector2F(0f, 0f);
         private Vector2F _RightBottom = new Vector2F(0f, 0f);
-
-        /// <summary>
-        /// コンテンツのサイズの指定方法を取得または設定します。
-        /// </summary>
-        public virtual ContentMode ContentMode
-        {
-            get => _ContentMode;
-            set
-            {
-                if (value == _ContentMode) return;
-                _ContentMode = value;
-            }
-        }
-        private ContentMode _ContentMode = ContentMode.Auto;
 
         /// <summary>
         /// アンカーを取得または設定します。
@@ -141,6 +119,7 @@ namespace Altseed
                 if (value == _AnchorMin) return;
                 _AnchorMin = value;
                 UpdateTransform();
+                SetAnchorMargin();
             }
         }
         private Vector2F _AnchorMin = new Vector2F(0f, 0f);
@@ -156,6 +135,7 @@ namespace Altseed
                 if (value == _AnchorMax) return;
                 _AnchorMax = value;
                 UpdateTransform();
+                SetAnchorMargin();
             }
         }
         private Vector2F _AnchorMax = new Vector2F(0f, 0f);
@@ -238,18 +218,18 @@ namespace Altseed
         /// </summary>
         protected void UpdateTransform()
         {
-            var scale = Scale * new Vector2F(TurnLR ? -1 : 1, TurnUL ? -1 : 1)  * GetRelativeScale();
+            var scale = Scale * new Vector2F(TurnLR ? -1 : 1, TurnUL ? -1 : 1);
+            var position = Position + 
+                AnchorMin * (GetParentDrawnNode()?.Size ?? new Vector2F());
 
-            Transform = MathHelper.CalcTransform(GetRelativePosition(), Pivot * Size, MathHelper.DegreeToRadian(Angle), scale);
+            Transform = MathHelper.CalcTransform(position, Pivot * Size, MathHelper.DegreeToRadian(Angle), scale);
         }
 
         /// <summary>
-        /// <see cref="Size"/>を更新する
+        /// <see cref="Size"/>をコンテンツの大きさに合わせる
         /// </summary>
-        protected internal virtual void UpdateSize()
+        public virtual void AdjustSize()
         {
-            if (ContentMode == ContentMode.Manual)
-                return;
             Size = new Vector2F(0, 0);
         }
 
@@ -266,23 +246,25 @@ namespace Altseed
             return mat;
         }
 
-        private Vector2F GetRelativePosition()
+        private void SetAnchorMargin()
         {
-            return Size * Pivot * GetRelativeScale() - _LeftTop;
+            _RightBottom = GetAnchorDistance() - (Position + (new Vector2F(1, 1) - Pivot) * Size);
+            _LeftTop = Size * Pivot - Position;
         }
 
-        private Vector2F GetRelativeScale()
+        private void UpdatePosition()
         {
-            if (Size.Length == 0)
-                return new Vector2F(1, 1);
+            _Position = Size * Pivot - _LeftTop;
+        }
 
-            var scale = (GetAnchorDistance() + _LeftTop - _RightBottom) / Size;
+        private void UpdateSize()
+        {
+            var old = Size;
+            _Size = GetAnchorDistance() + _LeftTop - _RightBottom;
             if (AnchorMax.X == AnchorMin.X)
-                scale.X = 1;
+                _Size.X = old.X;
             if (AnchorMax.Y == AnchorMin.Y)
-                scale.Y = 1;
-
-            return scale;
+                _Size.Y = old.Y;
         }
 
         private Vector2F GetAnchorDistance()
@@ -295,7 +277,7 @@ namespace Altseed
             if (Parent == null)
                 return null;
 
-            for (var n = Parent; !(n is RootNode); n = n.Parent)
+            for (var n = Parent; !(n is RootNode || n == null); n = n.Parent)
             {
                 if (n is DrawnNode d)
                     return d;
@@ -304,6 +286,14 @@ namespace Altseed
         }
 
         #region Node
+
+        internal override void Added(Node owner)
+        {
+            base.Added(owner);
+
+            SetAnchorMargin();
+            UpdateTransform();
+        }
 
         protected internal override void Registered()
         {

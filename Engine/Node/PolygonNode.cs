@@ -56,7 +56,10 @@ namespace Altseed
         /// </summary>
         public Vertex[] Vertexes
         {
-            get => _RenderedPolygon.Vertexes.ToArray();
+            get
+            {
+                return _RenderedPolygon.Vertexes?.ToArray();
+            }
             set
             {
                 var vertexArray = VertexArray.Create(value.Length);
@@ -125,10 +128,9 @@ namespace Altseed
             _RenderedPolygon.Transform = CalcInheritedTransform();
         }
 
-        protected internal override void UpdateSize()
+        public override void AdjustSize()
         {
-            if (ContentMode == ContentMode.Manual)
-                return;
+            if (Vertexes == null) return;
 
             Vector2F min = new Vector2F(float.MaxValue, float.MaxValue);
             Vector2F max = new Vector2F(float.MinValue, float.MinValue);

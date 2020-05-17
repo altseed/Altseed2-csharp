@@ -114,11 +114,9 @@ namespace Altseed
             // Contextの更新
             Context.Update();
 
+            // RenderedにTransform反映
             foreach (var node in _DrawnNodes.Nodes.SelectMany(obj => obj.Value))
             {
-                // DrawnNodeのSizeを更新
-                node.UpdateSize();
-                // RenderedにTransform反映
                 node.UpdateInheritedTransform();
             }
 

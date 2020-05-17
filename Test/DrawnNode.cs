@@ -227,7 +227,7 @@ namespace Altseed.Test
             var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
             Assert.NotNull(font);
-           
+
             var rotated = new TextNode() { Font = font, Text = "中心で回転します", Position = new Vector2F(300.0f, 300.0f), Pivot = new Vector2F(0.5f, 0.5f) };
             Engine.AddNode(rotated);
 
@@ -246,6 +246,9 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
+            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 30);
+            Assert.NotNull(font);
+
             var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
@@ -253,17 +256,42 @@ namespace Altseed.Test
             var parent = new PolygonNode();
             parent.Position = new Vector2F(320, 240);
             //parent.Pivot = new Vector2F(0.5f, 0.5f);
+            parent.SetVertexes(new[] {
+                        new Vector2F(0, 0),
+                        new Vector2F(rectSize.X, 0),
+                        new Vector2F(rectSize.X, rectSize.Y),
+                        new Vector2F(0, rectSize.Y),
+                    }, new Color(255, 255, 255, 255));
+            parent.AdjustSize();
             Engine.AddNode(parent);
 
             var child = new SpriteNode();
             child.Texture = texture;
-            child.Position = new Vector2F(200, 200);
+            child.Position = new Vector2F(120, 200);
             child.Src = new RectF(new Vector2F(), texture.Size);
             child.Pivot = new Vector2F(0.5f, 0.5f);
-            child.AnchorMin = new Vector2F(0.2f, 0.2f);
-            child.AnchorMax = new Vector2F(.6f, .6f);
+            child.AnchorMin = new Vector2F(0.2f, 0.0f);
+            child.AnchorMax = new Vector2F(0.8f, 1f);
             child.ZOrder = 10;
+            child.Mode = Altseed.SpriteNode.DrawMode.Fill;
+            child.AdjustSize();
             parent.AddChildNode(child);
+
+            var childText = new TextNode();
+            childText.Font = font;
+            childText.Color = new Color(0, 0, 0);
+            childText.Text = "あいうえお";
+            childText.Pivot = new Vector2F(0.5f, 0.5f);
+            childText.AnchorMin = new Vector2F(0.5f, 0.5f);
+            childText.AnchorMax = new Vector2F(0.5f, 0.5f);
+            childText.ZOrder = 15;
+            childText.HorizontalAlignment = HorizontalAlignment.Center;
+            childText.VerticalAlignment = VerticalAlignment.Center;
+            childText.Size = child.Size;
+            child.AddChildNode(childText);
+
+            var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
+            Engine.AddNode(text);
 
             tc.Duration = 10000;
             tc.LoopBody(c =>
@@ -273,12 +301,20 @@ namespace Altseed.Test
                 if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
                 if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) rectSize.Y -= 1.5f;
 
+                if (Engine.Keyboard.GetKeyState(Keys.D) == ButtonState.Hold) parent.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Hold) parent.Position += new Vector2F(-1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
+
                 parent.SetVertexes(new[] {
                         new Vector2F(0, 0),
                         new Vector2F(rectSize.X, 0),
                         new Vector2F(rectSize.X, rectSize.Y),
                         new Vector2F(0, rectSize.Y),
                     }, new Color(255, 255, 255, 255));
+                parent.AdjustSize();
+
+                text.Text = child.Size.ToString();
             }, null);
 
             tc.End();

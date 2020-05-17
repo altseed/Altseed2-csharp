@@ -67,6 +67,29 @@ namespace Altseed
             }
         }
 
+        [Serializable]
+        public enum DrawMode
+        {
+            Fill,
+            KeepAspect,
+            Absolute,
+        }
+
+        /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Fill;
+
         /// <summary>
         /// カリング用ID
         /// </summary>
@@ -90,15 +113,37 @@ namespace Altseed
 
         internal override void UpdateInheritedTransform()
         {
-            _RenderedSprite.Transform = CalcInheritedTransform();
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / Src.Size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > Src.Size.X / Src.Size.Y)
+                        scale.X = Src.Size.X * Size.Y / Src.Size.Y;
+                    else
+                        scale.Y = Src.Size.Y * Size.X / Src.Size.X;
+
+                    scale /= Src.Size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+
+            _RenderedSprite.Transform = CalcInheritedTransform() * mat;
         }
 
-        protected internal override void UpdateSize()
+        public override void AdjustSize()
         {
-            if (ContentMode == ContentMode.Manual)
-                return;
-
-            Size = _RenderedSprite.Src.Size;
+            Size = Src.Size;
         }
     }
 }
