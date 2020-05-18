@@ -283,7 +283,7 @@ namespace Altseed
         /// <summary>
         /// グラフィックのクラスを取得します。
         /// </summary>
-        internal static Graphics Graphics { get; private set; }
+        public static Graphics Graphics { get; private set; }
 
         /// <summary>
         /// ログを管理するクラスを取得します。
