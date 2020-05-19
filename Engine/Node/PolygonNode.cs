@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Altseed
 {
@@ -55,7 +56,10 @@ namespace Altseed
         /// </summary>
         public Vertex[] Vertexes
         {
-            get => _RenderedPolygon.Vertexes.ToArray();
+            get
+            {
+                return _RenderedPolygon.Vertexes?.ToArray();
+            }
             set
             {
                 var vertexArray = VertexArray.Create(value.Length);
@@ -63,6 +67,21 @@ namespace Altseed
                 _RenderedPolygon.Vertexes = vertexArray;
             }
         }
+
+        /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Absolute;
 
         /// <summary>
         /// カリング用ID
@@ -121,7 +140,49 @@ namespace Altseed
 
         internal override void UpdateInheritedTransform()
         {
-            _RenderedPolygon.Transform = CalcInheritedTransform();
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / Src.Size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > Src.Size.X / Src.Size.Y)
+                        scale.X = Src.Size.X * Size.Y / Src.Size.Y;
+                    else
+                        scale.Y = Src.Size.Y * Size.X / Src.Size.X;
+
+                    scale /= Src.Size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+
+            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
+        }
+
+        public override void AdjustSize()
+        {
+            if (Vertexes == null) return;
+
+            Vector2F min = new Vector2F(float.MaxValue, float.MaxValue);
+            Vector2F max = new Vector2F(float.MinValue, float.MinValue);
+            foreach (var pos in Vertexes.Select(v => v.Position))
+            {
+                min.X = min.X > pos.X ? pos.X : min.X;
+                min.Y = min.Y > pos.Y ? pos.Y : min.Y;
+                max.X = max.X < pos.X ? pos.X : max.X;
+                max.Y = max.Y < pos.Y ? pos.Y : max.Y;
+            }
+
+            Size = max - min;
         }
     }
 }

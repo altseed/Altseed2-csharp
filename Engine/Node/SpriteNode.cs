@@ -68,6 +68,21 @@ namespace Altseed
         }
 
         /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Absolute;
+
+        /// <summary>
         /// カリング用ID
         /// </summary>
         internal override int CullingId => _RenderedSprite.Id;
@@ -90,7 +105,37 @@ namespace Altseed
 
         internal override void UpdateInheritedTransform()
         {
-            _RenderedSprite.Transform = CalcInheritedTransform();
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / Src.Size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > Src.Size.X / Src.Size.Y)
+                        scale.X = Src.Size.X * Size.Y / Src.Size.Y;
+                    else
+                        scale.Y = Src.Size.Y * Size.X / Src.Size.X;
+
+                    scale /= Src.Size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+
+            _RenderedSprite.Transform = CalcInheritedTransform() * mat;
+        }
+
+        public override void AdjustSize()
+        {
+            Size = Src.Size;
         }
     }
 }

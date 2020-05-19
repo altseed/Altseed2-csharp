@@ -2,6 +2,28 @@
 
 namespace Altseed
 {
+    /// <summary>
+    /// 水平方向の配置
+    /// </summary>
+    [Serializable]
+    public enum HorizontalAlignment
+    {
+        Left,
+        Center,
+        Right
+    }
+
+    /// <summary>
+    /// 垂直方向の配置
+    /// </summary>
+    [Serializable]
+    public enum VerticalAlignment
+    {
+        Top,
+        Center,
+        Bottom
+    }
+
     [Serializable]
     public class TextNode : DrawnNode
     {
@@ -99,9 +121,36 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 描画時のサイズを取得します。
+        /// 水平方向の配置
         /// </summary>
-        public Vector2F Size => _RenderedText.TextureSize;
+        public HorizontalAlignment HorizontalAlignment
+        {
+            get => _HorizontalAlignment;
+            set
+            {
+                if (value == _HorizontalAlignment)
+                    return;
+
+                _HorizontalAlignment = value;
+            }
+        }
+        private HorizontalAlignment _HorizontalAlignment = HorizontalAlignment.Left;
+
+        /// <summary>
+        /// 垂直方向の配置
+        /// </summary>
+        public VerticalAlignment VerticalAlignment
+        {
+            get => _VerticalAlignment;
+            set
+            {
+                if (value == _VerticalAlignment)
+                    return;
+
+                _VerticalAlignment = value;
+            }
+        }
+        private VerticalAlignment _VerticalAlignment = VerticalAlignment.Top;
 
         /// <summary>
         /// カリング用ID
@@ -126,7 +175,41 @@ namespace Altseed
 
         internal override void UpdateInheritedTransform()
         {
-            _RenderedText.Transform = CalcInheritedTransform();
+            var mat = Matrix44F.Identity;
+            switch (HorizontalAlignment)
+            {
+                case HorizontalAlignment.Left:
+                    break;
+                case HorizontalAlignment.Center:
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F((Size.X - _RenderedText.TextureSize.X) / 2, 0));
+                    break;
+                case HorizontalAlignment.Right:
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F(Size.X - _RenderedText.TextureSize.X, 0));
+                    break;
+                default:
+                    break;
+            }
+
+            switch (VerticalAlignment)
+            {
+                case VerticalAlignment.Top:
+                    break;
+                case VerticalAlignment.Center:
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, (Size.Y - _RenderedText.TextureSize.Y) / 2));
+                    break;
+                case VerticalAlignment.Bottom:
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, Size.Y - _RenderedText.TextureSize.Y));
+                    break;
+                default:
+                    break;
+            }
+
+            _RenderedText.Transform = CalcInheritedTransform() * mat;
+        }
+
+        public override void AdjustSize()
+        {
+            Size = _RenderedText.TextureSize;
         }
     }
 }

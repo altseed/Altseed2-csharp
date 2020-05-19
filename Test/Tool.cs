@@ -82,6 +82,7 @@ namespace Altseed.Test
             var node = new SpriteNode();
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
+            node.AdjustSize();
             node.CenterPosition = texture.Size / 2;
             Engine.AddNode(node);
 
