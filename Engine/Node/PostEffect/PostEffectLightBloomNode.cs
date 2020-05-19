@@ -75,7 +75,7 @@ namespace Altseed
 
         protected override void Draw(RenderTexture src)
         {
-            var downTexture = new RenderTexture[3] { GetBuffer(1, src.Size / 2), GetBuffer(2, src.Size / 4), GetBuffer(3,src.Size / 8), };
+            var downTexture = new RenderTexture[3] { GetBuffer(0, src.Size / 2), GetBuffer(0, src.Size / 4), GetBuffer(0,src.Size / 8), };
             var renderParameter = new RenderPassParameter(new Color(), false, false);
 
             for (int i = 0; i < 3; ++i)
@@ -86,7 +86,7 @@ namespace Altseed
 
             for (int i = 0; i < 3; ++i)
             {
-                var tmpTexture = GetBuffer(4, downTexture[i].Size);
+                var tmpTexture = GetBuffer(1, downTexture[i].Size);
                 if (IsLuminanceMode)
                 {
                     _BlurXLumMaterial.SetTexture("_BaseTexture", downTexture[i]);
@@ -105,7 +105,7 @@ namespace Altseed
             }
 
             var inBuffer = src;
-            var outBuffer = GetBuffer(5, src.Size);
+            var outBuffer = GetBuffer(1, src.Size);
             for (int i = 0; i < 3; ++i)
             {
                 var weight = MathF.Pow(2, -i - 1);
