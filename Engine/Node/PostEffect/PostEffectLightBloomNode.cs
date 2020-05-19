@@ -75,12 +75,7 @@ namespace Altseed
 
         protected override void Draw(RenderTexture src)
         {
-            var downTexture = new RenderTexture[3]
-            {
-                RenderTexture.Create(src.Size / 2),
-                RenderTexture.Create(src.Size / 4),
-                RenderTexture.Create(src.Size / 8),
-            };
+            var downTexture = new RenderTexture[3] { GetBuffer(1, src.Size / 2), GetBuffer(2, src.Size / 4), GetBuffer(3,src.Size / 8), };
             var renderParameter = new RenderPassParameter(new Color(), false, false);
 
             for (int i = 0; i < 3; ++i)
@@ -91,7 +86,7 @@ namespace Altseed
 
             for (int i = 0; i < 3; ++i)
             {
-                var tmpTexture = GetBuffer(1, downTexture[i].Size);
+                var tmpTexture = GetBuffer(4, downTexture[i].Size);
                 if (IsLuminanceMode)
                 {
                     _BlurXLumMaterial.SetTexture("_BaseTexture", downTexture[i]);
@@ -110,7 +105,7 @@ namespace Altseed
             }
 
             var inBuffer = src;
-            var outBuffer = GetBuffer(1, src.Size);
+            var outBuffer = GetBuffer(5, src.Size);
             for (int i = 0; i < 3; ++i)
             {
                 var weight = MathF.Pow(2, -i - 1);
@@ -173,7 +168,7 @@ cbuffer Consts : register(b1)
 Texture2D _BaseTexture : register(t0);
 SamplerState _BaseSampler : register(s0);
 
-static float weight[8];
+static float weight[4];
 
 float3 getLuminance(float3 color)
 {
@@ -213,7 +208,7 @@ float3 getColor(float2 uv)
 float4 getGaussianBlur(float2 uv)
 {
     float weightTotal = 0;
-    for(int i = 0; i < 8; ++i)
+    for(int i = 0; i < 4; ++i)
     {
         weight[i] = gauss(i + 0.5, _Intensity.x);
         weightTotal += weight[i] * 2.0;
@@ -221,7 +216,7 @@ float4 getGaussianBlur(float2 uv)
     
     float3 outputColor = float3(0.0);
 
-    for(int i = 0; i < 8; ++i)
+    for(int i = 0; i < 4; ++i)
     {
 #ifdef BLUR_X
         float2 nShiftedUV = uv + float2(-(i + 0.5) / _Resolution.x, 0.0);
