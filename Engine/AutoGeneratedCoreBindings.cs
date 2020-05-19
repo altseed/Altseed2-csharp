@@ -564,6 +564,22 @@ namespace Altseed
     }
     
     /// <summary>
+    /// ツール機能の使用方法(描画位置)
+    /// </summary>
+    [Serializable]
+    public enum ToolUsage : int
+    {
+        /// <summary>
+        /// 画面の上に表示
+        /// </summary>
+        Overwrapped = 0,
+        /// <summary>
+        /// 画面を表示せずにツールのみ表示
+        /// </summary>
+        Main = 1,
+    }
+    
+    /// <summary>
     /// ツール機能で使用する方向
     /// </summary>
     [Serializable]
@@ -5031,9 +5047,6 @@ namespace Altseed
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed_Core")]
-        private static extern void cbg_CommandList_SetRenderTargetWithScreen(IntPtr selfPtr, RenderPassParameter renderPassparameter);
-        
-        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
@@ -5056,14 +5069,6 @@ namespace Altseed
         internal CommandList(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// ？
-        /// </summary>
-        internal void SetRenderTargetWithScreen(RenderPassParameter renderPassparameter)
-        {
-            cbg_CommandList_SetRenderTargetWithScreen(selfPtr, renderPassparameter);
         }
         
         public RenderTexture GetScreenTexture()
@@ -5621,6 +5626,18 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern float cbg_RenderedText_GetCharacterSpace(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetCharacterSpace(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern float cbg_RenderedText_GetLineGap(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_RenderedText_SetLineGap(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
         
         
@@ -5773,6 +5790,50 @@ namespace Altseed
         private WritingDirection? _WritingDirection;
         
         /// <summary>
+        /// 字間をピクセル単位で取得または設定します。
+        /// </summary>
+        public float CharacterSpace
+        {
+            get
+            {
+                if (_CharacterSpace != null)
+                {
+                    return _CharacterSpace.Value;
+                }
+                var ret = cbg_RenderedText_GetCharacterSpace(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _CharacterSpace = value;
+                cbg_RenderedText_SetCharacterSpace(selfPtr, value);
+            }
+        }
+        private float? _CharacterSpace;
+        
+        /// <summary>
+        /// 行間をピクセル単位で取得または設定します。
+        /// </summary>
+        public float LineGap
+        {
+            get
+            {
+                if (_LineGap != null)
+                {
+                    return _LineGap.Value;
+                }
+                var ret = cbg_RenderedText_GetLineGap(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _LineGap = value;
+                cbg_RenderedText_SetLineGap(selfPtr, value);
+            }
+        }
+        private float? _LineGap;
+        
+        /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
         public Vector2F TextureSize
@@ -5823,6 +5884,8 @@ namespace Altseed
         private const string S_Weight = "S_Weight";
         private const string S_IsEnableKerning = "S_IsEnableKerning";
         private const string S_WritingDirection = "S_WritingDirection";
+        private const string S_CharacterSpace = "S_CharacterSpace";
+        private const string S_LineGap = "S_LineGap";
         private const string S_Color = "S_Color";
         #endregion
         
@@ -5844,6 +5907,8 @@ namespace Altseed
             Weight = info.GetSingle(S_Weight);
             IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
             WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
+            CharacterSpace = info.GetSingle(S_CharacterSpace);
+            LineGap = info.GetSingle(S_LineGap);
             Color = info.GetValue<Color>(S_Color);
             
             OnDeserialize_Constructor(info, context);
@@ -5864,6 +5929,8 @@ namespace Altseed
             info.AddValue(S_Weight, Weight);
             info.AddValue(S_IsEnableKerning, IsEnableKerning);
             info.AddValue(S_WritingDirection, WritingDirection);
+            info.AddValue(S_CharacterSpace, CharacterSpace);
+            info.AddValue(S_LineGap, LineGap);
             info.AddValue(S_Color, Color);
             
             OnGetObjectData(info, context);
@@ -8230,6 +8297,12 @@ namespace Altseed
         private static extern IntPtr cbg_Tool_PickFolder(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Tool_GetToolUsage(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Tool_SetToolUsage(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Tool_Release(IntPtr selfPtr);
         
         #endregion
@@ -8238,6 +8311,28 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
+        
+        /// <summary>
+        /// ツールの使用方法を取得または設定します。
+        /// </summary>
+        public ToolUsage ToolUsage
+        {
+            get
+            {
+                if (_ToolUsage != null)
+                {
+                    return _ToolUsage.Value;
+                }
+                var ret = cbg_Tool_GetToolUsage(selfPtr);
+                return (ToolUsage)ret;
+            }
+            set
+            {
+                _ToolUsage = value;
+                cbg_Tool_SetToolUsage(selfPtr, (int)value);
+            }
+        }
+        private ToolUsage? _ToolUsage;
         
         internal static Tool GetInstance()
         {

@@ -69,7 +69,7 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 文字の太さを取得または設定します。(0 ~ 255)
+        /// 文字の太さを取得または設定します。
         /// </summary>
         public float Weight
         {
@@ -80,6 +80,35 @@ namespace Altseed
                 _RenderedText.Weight = value;
             }
         }
+
+        /// <summary>
+        /// 字間をピクセル単位で取得または設定します。
+        /// </summary>
+        public float CharacterSpace
+        {
+            get => _RenderedText.CharacterSpace;
+            set
+            {
+                if (_RenderedText.CharacterSpace == value) return;
+                _RenderedText.CharacterSpace = value;
+            }
+        }
+
+        /// <summary>
+        /// 行間をピクセル単位で取得または設定します。
+        /// Nullの時、フォント標準の行間を指定します。
+        /// </summary>
+        public float? LineGap
+        {
+            get => _LineGap;
+            set
+            {
+                if (_LineGap == value) return;
+                _LineGap = value;
+                _RenderedText.LineGap = value ?? Font?.LineGap ?? 0;
+            }
+        }
+        private float? _LineGap = null;
 
         /// <summary>
         /// 色を取得または設定します。
