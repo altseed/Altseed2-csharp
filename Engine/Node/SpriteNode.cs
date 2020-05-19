@@ -83,7 +83,7 @@ namespace Altseed
         /// <summary>
         /// 描画を実行します。
         /// </summary>
-        internal override void Draw()
+        internal protected override void Draw()
         {
             Engine.Renderer.DrawSprite(_RenderedSprite);
         }
