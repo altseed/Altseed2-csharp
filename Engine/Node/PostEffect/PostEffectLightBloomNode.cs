@@ -12,34 +12,34 @@ namespace Altseed
 
         public float Intensity
         {
-            get => _BlurXMaterial.GetVector4F("_Intensity").X;
+            get => _BlurXMaterial.GetVector4F("intensity").X;
             set
             {
-                _BlurXLumMaterial.SetVector4F("_Intensity", new Vector4F(value, value, value, value));
-                _BlurXMaterial.SetVector4F("_Intensity", new Vector4F(value, value, value, value));
-                _BlurYMaterial.SetVector4F("_Intensity", new Vector4F(value, value, value, value));
+                _BlurXLumMaterial.SetVector4F("intensity", new Vector4F(value, value, value, value));
+                _BlurXMaterial.SetVector4F("intensity", new Vector4F(value, value, value, value));
+                _BlurYMaterial.SetVector4F("intensity", new Vector4F(value, value, value, value));
             }
         }
 
         public float Threshold
         {
-            get => _BlurXMaterial.GetVector4F("_Threshold").X;
+            get => _BlurXMaterial.GetVector4F("threshold").X;
             set
             {
-                _BlurXLumMaterial.SetVector4F("_Threshold", new Vector4F(value, value, value, value));
-                _BlurXMaterial.SetVector4F("_Threshold", new Vector4F(value, value, value, value));
-                _BlurYMaterial.SetVector4F("_Threshold", new Vector4F(value, value, value, value));
+                _BlurXLumMaterial.SetVector4F("threshold", new Vector4F(value, value, value, value));
+                _BlurXMaterial.SetVector4F("threshold", new Vector4F(value, value, value, value));
+                _BlurYMaterial.SetVector4F("threshold", new Vector4F(value, value, value, value));
             }
         }
 
         public float Exposure
         {
-            get => _BlurXMaterial.GetVector4F("_Exposure").X;
+            get => _BlurXMaterial.GetVector4F("exposure").X;
             set
             {
-                _BlurXLumMaterial.SetVector4F("_Exposure", new Vector4F(value, value, value, value));
-                _BlurXMaterial.SetVector4F("_Exposure", new Vector4F(value, value, value, value));
-                _BlurYMaterial.SetVector4F("_Exposure", new Vector4F(value, value, value, value));
+                _BlurXLumMaterial.SetVector4F("exposure", new Vector4F(value, value, value, value));
+                _BlurXMaterial.SetVector4F("exposure", new Vector4F(value, value, value, value));
+                _BlurYMaterial.SetVector4F("exposure", new Vector4F(value, value, value, value));
             }
         }
 
@@ -56,6 +56,7 @@ namespace Altseed
             _DownSampler.SetShader(Shader.Create("DownSample", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel));
 
             var blurShaderCode = Engine.Graphics.BuiltinShader.LightBloomShader;
+            Console.WriteLine(blurShaderCode);
 
             var xBlurShader = Shader.Create("XBLur", "#define BLUR_X\n" + blurShaderCode, ShaderStageType.Pixel);
             _BlurXMaterial.SetShader(xBlurShader);
@@ -81,7 +82,8 @@ namespace Altseed
 
             for (int i = 0; i < 3; ++i)
             {
-                _DownSampler.SetTexture("_MainTexture", i == 0 ? src : downTexture[i - 1]);
+                _DownSampler.SetTexture("mainTex", i == 0 ? src : downTexture[i - 1]);
+                _DownSampler.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_DownSampler, downTexture[i], renderParameter);
             }
 
@@ -90,18 +92,18 @@ namespace Altseed
                 var tmpTexture = GetBuffer(1, downTexture[i].Size);
                 if (IsLuminanceMode)
                 {
-                    _BlurXLumMaterial.SetTexture("_BaseTexture", downTexture[i]);
-                    _BlurXLumMaterial.SetVector4F("_Resolution", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
+                    _BlurXLumMaterial.SetTexture("mainTex", downTexture[i]);
+                    _BlurXLumMaterial.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
                     Engine.Graphics.CommandList.RenderToRenderTexture(_BlurXLumMaterial, tmpTexture, renderParameter);
                 }
                 else
                 {
-                    _BlurXMaterial.SetTexture("_BaseTexture", downTexture[i]);
-                    _BlurXMaterial.SetVector4F("_Resolution", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
+                    _BlurXMaterial.SetTexture("mainTex", downTexture[i]);
+                    _BlurXMaterial.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
                     Engine.Graphics.CommandList.RenderToRenderTexture(_BlurXMaterial, tmpTexture, renderParameter);
                 }
-                _BlurYMaterial.SetTexture("_BaseTexture", tmpTexture);
-                _BlurYMaterial.SetVector4F("_Resolution", new Vector4F(tmpTexture.Size.X, tmpTexture.Size.Y, 0, 0));
+                _BlurYMaterial.SetTexture("mainTex", tmpTexture);
+                _BlurYMaterial.SetVector4F("imageSize", new Vector4F(tmpTexture.Size.X, tmpTexture.Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_BlurYMaterial, downTexture[i], renderParameter);
             }
 
@@ -111,9 +113,9 @@ namespace Altseed
             {
                 var weight = MathF.Pow(2, -i - 1);
 
-                _TextureMixer.SetTexture("_Texture1", inBuffer);
-                _TextureMixer.SetTexture("_Texture2", downTexture[i]);
-                _TextureMixer.SetVector4F("_Weight", new Vector4F(weight, weight, weight, weight));
+                _TextureMixer.SetTexture("mainTex1", inBuffer);
+                _TextureMixer.SetTexture("mainTex2", downTexture[i]);
+                _TextureMixer.SetVector4F("weight", new Vector4F(weight, weight, weight, weight));
 
                 if (i == 2) RenderToRenderTarget(_TextureMixer);
                 else
