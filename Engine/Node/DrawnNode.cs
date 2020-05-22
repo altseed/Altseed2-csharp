@@ -46,6 +46,11 @@ namespace Altseed
         private float _Angle = 0.0f;
 
         /// <summary>
+        /// 描画するかどうかを取得または設定します。
+        /// </summary>
+        public virtual bool IsDrawn { get; set; } = true;
+
+        /// <summary>
         /// 座標を取得または設定します。
         /// </summary>
         public virtual Vector2F Position
