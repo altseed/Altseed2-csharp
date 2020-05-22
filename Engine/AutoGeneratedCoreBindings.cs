@@ -6561,6 +6561,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetTextureMixShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_BuiltinShader_Release(IntPtr selfPtr);
         
         #endregion
@@ -6611,6 +6615,15 @@ namespace Altseed
             get
             {
                 var ret = cbg_BuiltinShader_GetLightBloomShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string TextureMixShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetTextureMixShader(selfPtr);
                 return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
             }
         }
