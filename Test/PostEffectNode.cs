@@ -154,7 +154,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
 
             Engine.AddNode(new SpriteNode() { Texture = texture });
 
-            Engine.AddNode(new PostEffectLightBloomNode { Threashold = 0.1f});
+            Engine.AddNode(new PostEffectLightBloomNode { Threshold = 0.1f});
 
             tc.LoopBody(c => {
 
