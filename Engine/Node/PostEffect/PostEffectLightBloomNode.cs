@@ -1,143 +1,127 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
 namespace Altseed
 {
     public sealed class PostEffectLightBloomNode : PostEffectNode
     {
-        private readonly Material materialX;
-        private readonly Material materialXLum;
-        private readonly Material materialY;
-        private readonly Material materialSum;
-        private readonly Material materialDownsample;
-
-        private float intensity;
+        private readonly Material _DownSampler;
+        private readonly Material _BlurXMaterial;
+        private readonly Material _BlurXLumMaterial;
+        private readonly Material _BlurYMaterial;
+        private readonly Material _TextureMixer;
 
         public float Intensity
         {
-            get => intensity;
+            get => _BlurXMaterial.GetVector4F("_Intensity").X;
             set
             {
-                intensity = value;
-
-                Vector4F weights1;
-                Vector4F weights2;
-
-                unsafe
-                {
-                    float total = 0.0f;
-                    float dispersion = intensity * intensity;
-
-                    float* ws = stackalloc float[8];
-
-                    for (int i = 0; i < 8; i++)
-                    {
-                        float pos = 1.0f + 2.0f * i;
-                        ws[i] = (float)Math.Exp(-0.5f * pos * pos / dispersion);
-                        total += ws[i] * 2.0f;
-                    }
-
-                    weights1 = new Vector4F(ws[0], ws[1], ws[2], ws[3]) / total;
-                    weights2 = new Vector4F(ws[4], ws[5], ws[6], ws[7]) / total;
-                }
-
-                materialX.SetVector4F("weight1", weights1);
-                materialX.SetVector4F("weight2", weights2);
-
-                materialXLum.SetVector4F("weight1", weights1);
-                materialXLum.SetVector4F("weight2", weights2);
-
-                materialY.SetVector4F("weight1", weights1);
-                materialY.SetVector4F("weight2", weights2);
-
-                materialSum.SetVector4F("weight1", weights1);
-                materialSum.SetVector4F("weight2", weights2);
+                _BlurXLumMaterial.SetVector4F("_Intensity", new Vector4F(value, value, value, value));
+                _BlurXMaterial.SetVector4F("_Intensity", new Vector4F(value, value, value, value));
+                _BlurYMaterial.SetVector4F("_Intensity", new Vector4F(value, value, value, value));
             }
         }
 
-        public float Threashold { get; set; }
-        public float Exposure { get; set; }
+        public float Threshold
+        {
+            get => _BlurXMaterial.GetVector4F("_Threshold").X;
+            set
+            {
+                _BlurXLumMaterial.SetVector4F("_Threshold", new Vector4F(value, value, value, value));
+                _BlurXMaterial.SetVector4F("_Threshold", new Vector4F(value, value, value, value));
+                _BlurYMaterial.SetVector4F("_Threshold", new Vector4F(value, value, value, value));
+            }
+        }
+
+        public float Exposure
+        {
+            get => _BlurXMaterial.GetVector4F("_Exposure").X;
+            set
+            {
+                _BlurXLumMaterial.SetVector4F("_Exposure", new Vector4F(value, value, value, value));
+                _BlurXMaterial.SetVector4F("_Exposure", new Vector4F(value, value, value, value));
+                _BlurYMaterial.SetVector4F("_Exposure", new Vector4F(value, value, value, value));
+            }
+        }
 
         public bool IsLuminanceMode { get; set; }
 
         public PostEffectLightBloomNode()
         {
-            materialX = new Material();
-            materialXLum = new Material();
-            materialY = new Material();
-            materialSum = new Material();
-            materialDownsample = new Material();
+            _DownSampler = new Material();
+            _BlurXMaterial = new Material();
+            _BlurXLumMaterial = new Material();
+            _BlurYMaterial = new Material();
+            _TextureMixer = new Material();
 
-            var baseCode = Engine.Graphics.BuiltinShader.LightBloomShader;
+            _DownSampler.SetShader(Shader.Create("DownSample", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel));
 
-            materialX.SetShader(Shader.Create("LightBloomX", "#define BLUR_X 1\n" + baseCode, ShaderStageType.Pixel));
-            materialXLum.SetShader(Shader.Create("LightBloomXLum", "#define BLUR_X 1\n#define LUM 1\n" + baseCode, ShaderStageType.Pixel));
-            materialY.SetShader(Shader.Create("LightBloomY", "#define BLUR_Y 1\n" + baseCode, ShaderStageType.Pixel));
-            materialSum.SetShader(Shader.Create("LightBloomSum", "#define SUM 1\n" + baseCode, ShaderStageType.Pixel));
-            materialDownsample.SetShader(Shader.Create("Downsample", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel));
+            var blurShaderCode = Engine.Graphics.BuiltinShader.LightBloomShader;
 
-            Intensity = 5.0f;
-            Threashold = 1.0f;
-            Exposure = 1.0f;
-            IsLuminanceMode = false;
+            var xBlurShader = Shader.Create("XBLur", "#define BLUR_X\n" + blurShaderCode, ShaderStageType.Pixel);
+            _BlurXMaterial.SetShader(xBlurShader);
+
+            var xLumBlurShader = Shader.Create("XLumBLur", "#define BLUR_X\n#define LUM_MODE" + blurShaderCode, ShaderStageType.Pixel);
+            _BlurXLumMaterial.SetShader(xLumBlurShader);
+
+            var yBlurShader = Shader.Create("YBLur", "#define BLUR_Y\n" + blurShaderCode, ShaderStageType.Pixel);
+            _BlurYMaterial.SetShader(yBlurShader);
+
+            var mixerShader = Shader.Create("Mixer", Engine.Graphics.BuiltinShader.TextureMixShader, ShaderStageType.Pixel);
+            _TextureMixer.SetShader(mixerShader);
+
+            Intensity = 5;
+            Threshold = 1;
+            Exposure = 1;
         }
 
         protected override void Draw(RenderTexture src)
         {
-            var downsampledTexture0 = GetBuffer(0, src.Size / 2);
-            var downsampledTexture1 = GetBuffer(0, src.Size / 4);
-            var downsampledTexture2 = GetBuffer(0, src.Size / 8);
-            var downsampledTexture3 = GetBuffer(0, src.Size / 16);
+            var downTexture = new RenderTexture[3] { GetBuffer(0, src.Size / 2), GetBuffer(0, src.Size / 4), GetBuffer(0, src.Size / 8), };
+            var renderParameter = new RenderPassParameter(new Color(), false, false);
 
+            for (int i = 0; i < 3; ++i)
             {
-                var offset = new Vector4F(0.5f / src.Size.X, 0.5f / src.Size.Y, 0.0f, 0.0f);
-
-                materialDownsample.SetTexture("mainTex", src);
-                materialDownsample.SetVector4F("offset", offset);
-                RenderToRenderTexture(materialDownsample, downsampledTexture0);
-
-                materialDownsample.SetTexture("mainTex", downsampledTexture0);
-                materialDownsample.SetVector4F("offset", offset * 2.0f);
-                RenderToRenderTexture(materialDownsample, downsampledTexture1);
-
-                materialDownsample.SetTexture("mainTex", downsampledTexture1);
-                materialDownsample.SetVector4F("offset", offset * 4.0f);
-                RenderToRenderTexture(materialDownsample, downsampledTexture2);
-
-                materialDownsample.SetTexture("mainTex", downsampledTexture2);
-                materialDownsample.SetVector4F("offset", offset * 8.0f);
-                RenderToRenderTexture(materialDownsample, downsampledTexture3);
+                _DownSampler.SetTexture("_MainTexture", i == 0 ? src : downTexture[i - 1]);
+                Engine.Graphics.CommandList.RenderToRenderTexture(_DownSampler, downTexture[i], renderParameter);
             }
 
-            var blurX = IsLuminanceMode ? materialXLum : materialX;
-
+            for (int i = 0; i < 3; ++i)
             {
-                var v = new Vector4F(Threashold, Exposure, 0.0f, 0.0f);
-                blurX.SetVector4F("threshold_exposure", v);
-                materialY.SetVector4F("threshold_exposure", v);
-                materialSum.SetVector4F("threshold_exposure", v);
+                var tmpTexture = GetBuffer(1, downTexture[i].Size);
+                if (IsLuminanceMode)
+                {
+                    _BlurXLumMaterial.SetTexture("_BaseTexture", downTexture[i]);
+                    _BlurXLumMaterial.SetVector4F("_Resolution", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
+                    Engine.Graphics.CommandList.RenderToRenderTexture(_BlurXLumMaterial, tmpTexture, renderParameter);
+                }
+                else
+                {
+                    _BlurXMaterial.SetTexture("_BaseTexture", downTexture[i]);
+                    _BlurXMaterial.SetVector4F("_Resolution", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
+                    Engine.Graphics.CommandList.RenderToRenderTexture(_BlurXMaterial, tmpTexture, renderParameter);
+                }
+                _BlurYMaterial.SetTexture("_BaseTexture", tmpTexture);
+                _BlurYMaterial.SetVector4F("_Resolution", new Vector4F(tmpTexture.Size.X, tmpTexture.Size.Y, 0, 0));
+                Engine.Graphics.CommandList.RenderToRenderTexture(_BlurYMaterial, downTexture[i], renderParameter);
             }
 
-            void ApplyBlur(RenderTexture tex)
+            var inBuffer = src;
+            var outBuffer = GetBuffer(1, src.Size);
+            for (int i = 0; i < 3; ++i)
             {
-                var tmp = GetBuffer(1, tex.Size);
-                blurX.SetTexture("blurredTex", tex);
-                RenderToRenderTexture(blurX, tmp);
+                var weight = MathF.Pow(2, -i - 1);
 
-                materialY.SetTexture("blurredTex", tmp);
-                RenderToRenderTexture(materialY, tex);
+                _TextureMixer.SetTexture("_Texture1", inBuffer);
+                _TextureMixer.SetTexture("_Texture2", downTexture[i]);
+                _TextureMixer.SetVector4F("_Weight", new Vector4F(weight, weight, weight, weight));
+
+                if (i == 2) RenderToRenderTarget(_TextureMixer);
+                else
+                {
+                    Engine.Graphics.CommandList.RenderToRenderTexture(_TextureMixer, outBuffer, renderParameter);
+                    Engine.Graphics.CommandList.CopyTexture(outBuffer, inBuffer);
+                }
             }
-
-            ApplyBlur(downsampledTexture1);
-            ApplyBlur(downsampledTexture2);
-            ApplyBlur(downsampledTexture3);
-
-            materialSum.SetTexture("blurred0Tex", downsampledTexture1);
-            materialSum.SetTexture("blurred1Tex", downsampledTexture2);
-            materialSum.SetTexture("blurred2Tex", downsampledTexture3);
-            materialSum.SetTexture("blurred3Tex", src);
-
-            RenderToRenderTarget(materialSum);
         }
     }
 }
