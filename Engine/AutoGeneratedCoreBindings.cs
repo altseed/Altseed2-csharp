@@ -1608,6 +1608,13 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Configuration_GetIsGraphicsOnly(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Configuration_SetIsGraphicsOnly(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetConsoleLoggingEnabled(IntPtr selfPtr);
         [DllImport("Altseed_Core")]
         private static extern void cbg_Configuration_SetConsoleLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
@@ -1732,6 +1739,28 @@ namespace Altseed
         private bool? _WaitVSync;
         
         /// <summary>
+        /// IO・描画機能以外の機能を無効にします。
+        /// </summary>
+        public bool IsGraphicsOnly
+        {
+            get
+            {
+                if (_IsGraphicsOnly != null)
+                {
+                    return _IsGraphicsOnly.Value;
+                }
+                var ret = cbg_Configuration_GetIsGraphicsOnly(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _IsGraphicsOnly = value;
+                cbg_Configuration_SetIsGraphicsOnly(selfPtr, value);
+            }
+        }
+        private bool? _IsGraphicsOnly;
+        
+        /// <summary>
         /// ログをコンソールに出力するかどうかを取得または設定します。
         /// </summary>
         public bool ConsoleLoggingEnabled
@@ -1833,6 +1862,7 @@ namespace Altseed
         private const string S_IsResizable = "S_IsResizable";
         private const string S_DeviceType = "S_DeviceType";
         private const string S_WaitVSync = "S_WaitVSync";
+        private const string S_IsGraphicsOnly = "S_IsGraphicsOnly";
         private const string S_ConsoleLoggingEnabled = "S_ConsoleLoggingEnabled";
         private const string S_FileLoggingEnabled = "S_FileLoggingEnabled";
         private const string S_LogFileName = "S_LogFileName";
@@ -1850,6 +1880,7 @@ namespace Altseed
             IsResizable = info.GetBoolean(S_IsResizable);
             DeviceType = info.GetValue<GraphicsDeviceType>(S_DeviceType);
             WaitVSync = info.GetBoolean(S_WaitVSync);
+            IsGraphicsOnly = info.GetBoolean(S_IsGraphicsOnly);
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
             FileLoggingEnabled = info.GetBoolean(S_FileLoggingEnabled);
             LogFileName = info.GetString(S_LogFileName);
@@ -1871,6 +1902,7 @@ namespace Altseed
             info.AddValue(S_IsResizable, IsResizable);
             info.AddValue(S_DeviceType, DeviceType);
             info.AddValue(S_WaitVSync, WaitVSync);
+            info.AddValue(S_IsGraphicsOnly, IsGraphicsOnly);
             info.AddValue(S_ConsoleLoggingEnabled, ConsoleLoggingEnabled);
             info.AddValue(S_FileLoggingEnabled, FileLoggingEnabled);
             info.AddValue(S_LogFileName, LogFileName);
