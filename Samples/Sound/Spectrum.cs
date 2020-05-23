@@ -30,7 +30,7 @@ namespace Sample
                 vertexes[1] = new Vector2F(0.0f, 480.0f);
                 vertexes[2] = new Vector2F(0.625f, 480.0f);
                 vertexes[3] = new Vector2F(0.625f, 480.0f);
-                spectrumBar.SetVertexes(vertexes);
+                spectrumBar.SetVertexes(vertexes, new Color(255, 255, 255));
                 spectrumBars[i] = spectrumBar;
                 Engine.AddNode(spectrumBar);
             }
@@ -54,7 +54,7 @@ namespace Sample
                     vertexes[1] = new Vector2F(0.0f, 480.0f - spectrum[i]);
                     vertexes[2] = new Vector2F(0.625f, 480.0f - spectrum[i]);
                     vertexes[3] = new Vector2F(0.625f, 480.0f);
-                    spectrumBars[i].SetVertexes(vertexes);
+                    spectrumBars[i].SetVertexes(vertexes, new Color(255, 255, 255));
                 }
 
                 // 音の再生が終了しているか調べる。
