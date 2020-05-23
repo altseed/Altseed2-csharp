@@ -12,6 +12,10 @@ namespace Altseed.Test
 
         public TestCore(Configuration config = null)
         {
+#if CI
+            if (config != null)
+                config.WaitVSync = true;
+#endif
             _Config = config ?? new Configuration()
             {
                 FileLoggingEnabled = true,
@@ -19,7 +23,6 @@ namespace Altseed.Test
                 ConsoleLoggingEnabled = true,
 #if CI
                 IsGraphicsOnly = true,
-                WaitVSync = true
 #endif
             };
         }
