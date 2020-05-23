@@ -12,3 +12,6 @@ cmake -D BUILD_TEST=OFF ../ -G "Xcode"
 cmake --build . --config Debug
 
 cmake --build . --config Release
+
+cp RELEASE/libAltseed_Core.dylib ../../Build/netcoreapp3.0
+cp RELEASE/libAltseed_Core.dylib ../../Build/netstandard2.1
