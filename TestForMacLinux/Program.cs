@@ -24,6 +24,9 @@ namespace Altseed.TestForMacLinux
 
             // if you test specific cases in code, you add filter.
             //options.Filter = new List<string> { "-Async", "Sound" };
+#if CI
+            options.Filter = new List<string> { "-Sound" };
+#endif
 
             bool isSuccessful = true;
             var testProjctAssembly = typeof(Test.Window).Assembly;

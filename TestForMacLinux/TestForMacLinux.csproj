@@ -6,6 +6,7 @@
     <RootNamespace>Altseed.TestForMacLinux</RootNamespace>
     <OutputPath>../Build</OutputPath>
     <Platforms>x64</Platforms>
+    <Configurations>Debug;Release;CI</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -14,6 +15,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DefineConstants>TRACE;CI</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
