@@ -61,7 +61,8 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void MouseCursor()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var cursor = Cursor.Create("../../Core/TestData/Input/altseed_logo.png", new Vector2I(16, 16));
             Assert.NotNull(cursor);
@@ -71,7 +72,7 @@ namespace Altseed.Test
                 Engine.Mouse.SetCursorImage(cursor);
             }
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]

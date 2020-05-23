@@ -23,7 +23,7 @@ namespace Altseed.Test
             };
         }
 
-        public void Init([CallerMemberName]string testName = "")
+        public void Init([CallerMemberName] string testName = "")
         {
             _TestName = testName;
             Assert.True(Engine.Initialize($"Altseed2 C# EngineTest:{testName}", 800, 600, _Config));
@@ -33,6 +33,9 @@ namespace Altseed.Test
 
         public void LoopBody(Action<int> beforeUpdateAction, Action<int> afterUpdateAction)
         {
+#if CI
+            Duration = 200;
+#endif
             int count = 0;
             while (Engine.DoEvents() && count++ < Duration)
             {

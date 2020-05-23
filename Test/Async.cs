@@ -22,7 +22,8 @@ namespace Altseed.Test
             {
                 System.IO.File.Copy("../../Core/TestData/IO/test.txt", "tmp/test" + i + ".txt");
             }
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
@@ -50,7 +51,7 @@ namespace Altseed.Test
                 Assert.AreEqual(tasks[0].Result.Size, tasks[i].Result.Size);
             }
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
@@ -60,11 +61,12 @@ namespace Altseed.Test
                 System.IO.Directory.Delete("tmp", true);
 
             System.IO.Directory.CreateDirectory("tmp");
-            foreach (var i in Enumerable.Range(0, 300))
+            foreach (var i in Enumerable.Range(0, 100))
             {
                 System.IO.File.Copy("../../Core/TestData/IO/AltseedPink.png", "tmp/test" + i + ".png");
             }
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
@@ -77,7 +79,7 @@ namespace Altseed.Test
             Engine.AddNode(camera);
 
             var tasks = new List<Task<Texture2D>>();
-            foreach (var i in Enumerable.Range(0, 300))
+            foreach (var i in Enumerable.Range(0, 100))
             {
                 tasks.Add(Texture2D.LoadAsync("tmp/test" + i + ".png"));
             }
@@ -91,7 +93,7 @@ namespace Altseed.Test
                     break;
             }
 
-            foreach (var i in Enumerable.Range(0, 300))
+            foreach (var i in Enumerable.Range(0, 100))
             {
                 Assert.AreNotEqual(tasks[0].Result, null);
             }
@@ -106,7 +108,7 @@ namespace Altseed.Test
             sprite.CameraGroup = 1 << 0;
             Engine.AddNode(sprite);
 
-            while (Engine.DoEvents() && count < 300)
+            while (Engine.DoEvents() && count < 100)
             {
                 node.Text = $"Shown Texture: {count}/{tasks.Count()}";
                 sprite.Texture = tasks[count].Result;
@@ -114,7 +116,7 @@ namespace Altseed.Test
                 count++;
             }
 
-            Engine.Terminate();
+            tc.End();
         }
     }
 }
