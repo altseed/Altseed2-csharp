@@ -18,7 +18,8 @@ namespace Altseed.Test
                 LogFileName = "log.txt",
                 ConsoleLoggingEnabled = true,
 #if CI
-                IsGraphicsOnly = true
+                IsGraphicsOnly = true,
+                WaitVSync = true
 #endif
             };
         }
