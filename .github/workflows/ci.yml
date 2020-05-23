@@ -42,12 +42,14 @@ jobs:
         dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
       run: |
+        dotnet build Engine/Engine.csproj --configuration Release --no-restore
         dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
         dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration CI --no-restore
     - name: Test
       continue-on-error: true
       run: |
         cd Build/netcoreapp3.0
+        cp netstandard2.1/Altseed_Core.dll .
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
@@ -100,12 +102,14 @@ jobs:
         dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
       run: |
+        dotnet build Engine/Engine.csproj --configuration Release --no-restore
         dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
         dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration CI --no-restore
     - name: Test
       continue-on-error: true
       run: |
         cd Build/netcoreapp3.0
+        cp netstandard2.1/Altseed_Core.so .
         mv libAltseed_Core.so libAltseed_Core
         dotnet TestForMacLinux.dll
     - name: Upload artifact
@@ -150,12 +154,14 @@ jobs:
         dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
       run: |
+        dotnet build Engine/Engine.csproj --configuration Release --no-restore
         dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
         dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration CI --no-restore
     - name: Test
       continue-on-error: true
       run: |
         cd Build/netcoreapp3.0
+        cp netstandard2.1/Altseed_Core.dylib .
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
