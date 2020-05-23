@@ -36,12 +36,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.103
-    - name: Install dependencies
-      run: |
-        dotnet restore TestForMacLinux/TestForMacLinux.csproj
-        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
-      run: dotnet build Altseed2.sln --configuration CI --no-restore
+      run: dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |
@@ -92,12 +88,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.103
-    - name: Install dependencies
-      run: |
-        dotnet restore TestForMacLinux/TestForMacLinux.csproj
-        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
-      run: dotnet build Altseed2.sln --configuration CI --no-restore
+      run: dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |
@@ -140,12 +132,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.103
-    - name: Install dependencies
-      run: |
-        dotnet restore TestForMacLinux/TestForMacLinux.csproj
-        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
-      run: dotnet build Altseed2.sln --configuration CI --no-restore
+      run: dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |
