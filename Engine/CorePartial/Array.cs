@@ -59,7 +59,10 @@ namespace Altseed
                 SetAt(index, value);
             }
         }
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_Int8Array_Create(info.GetInt32(S_Count));
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_Int8Array_Create(info.GetInt32(S_Count));
+        }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -96,7 +99,10 @@ namespace Altseed
             }
         }
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_Int32Array_Create(info.GetInt32(S_Count));
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_Int32Array_Create(info.GetInt32(S_Count));
+        }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -132,7 +138,10 @@ namespace Altseed
             }
         }
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_VertexArray_Create(info.GetInt32(S_Count));
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_VertexArray_Create(info.GetInt32(S_Count));
+        }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -169,7 +178,10 @@ namespace Altseed
             }
         }
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_FloatArray_Create(info.GetInt32(S_Count));
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_FloatArray_Create(info.GetInt32(S_Count));
+        }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -205,7 +217,10 @@ namespace Altseed
             }
         }
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_Vector2FArray_Create(info.GetInt32(S_Count));
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_Vector2FArray_Create(info.GetInt32(S_Count));
+        }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
