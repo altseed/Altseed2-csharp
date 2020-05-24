@@ -12,10 +12,27 @@ namespace Altseed.Test
 
         public TestCore(Configuration config = null)
         {
-            _Config = config ?? new Configuration() { FileLoggingEnabled = true, LogFileName = "log.txt", ConsoleLoggingEnabled = true };
+            if (config != null)
+            {
+                config.FileLoggingEnabled = true;
+                config.LogFileName = "log.txt";
+                config.ConsoleLoggingEnabled = true;
+#if CI
+                config.IsGraphicsOnly = true;
+#endif
+            }
+            _Config = config ?? new Configuration()
+            {
+                FileLoggingEnabled = true,
+                LogFileName = "log.txt",
+                ConsoleLoggingEnabled = true,
+#if CI
+                IsGraphicsOnly = true,
+#endif
+            };
         }
 
-        public void Init([CallerMemberName]string testName = "")
+        public void Init([CallerMemberName] string testName = "")
         {
             _TestName = testName;
             Assert.True(Engine.Initialize($"Altseed2 C# EngineTest:{testName}", 800, 600, _Config));
@@ -25,6 +42,9 @@ namespace Altseed.Test
 
         public void LoopBody(Action<int> beforeUpdateAction, Action<int> afterUpdateAction)
         {
+#if CI
+            Duration = 200;
+#endif
             int count = 0;
             while (Engine.DoEvents() && count++ < Duration)
             {

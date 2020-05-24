@@ -13,7 +13,8 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void FileRoot()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/pack/", "pack.pack"));
             Assert.True(Engine.File.PackWithPassword("../../Core/TestData/IO/pack/", "password.pack", "altseed"));
@@ -58,13 +59,14 @@ namespace Altseed.Test
             Assert.True(Engine.File.Exists("testDir/test.txt"));
             Assert.True(Engine.File.Exists("test dir/test.txt"));
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFileBase()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -100,13 +102,14 @@ namespace Altseed.Test
             Assert.AreEqual(test3.Size, testPack2.Size);
             Assert.AreEqual(test3.Size, testPack2.Size);
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void StreamFileBase()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -161,13 +164,14 @@ namespace Altseed.Test
                 Assert.AreEqual(testPack2.TempBufferSize, i + 1);
             }
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void Zenkaku()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -195,13 +199,14 @@ namespace Altseed.Test
             Assert.AreNotEqual(testPack1.Size, 0);
             Assert.AreNotEqual(testPack2.Size, 0);
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFileAsync()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             // pack files
             Assert.True(Engine.File.Pack("../../Core/TestData/IO/", "pack.pack"));
@@ -221,7 +226,8 @@ namespace Altseed.Test
             StaticFile testPack4 = null;
             StaticFile testPackCache = null;
 
-            var task1 = Task.Run(() => {
+            var task1 = Task.Run(() =>
+            {
                 test1 = StaticFile.Create("../../Core/TestData/IO/test.txt");
                 test3 = StaticFile.Create("../../Core/TestData/IO/全角 テスト.txt");
                 testPack1 = StaticFile.Create("test.txt");
@@ -229,7 +235,8 @@ namespace Altseed.Test
                 testCache = StaticFile.Create("../../Core/TestData/IO/test.txt");
             });
 
-            var task2 = Task.Run(() => {
+            var task2 = Task.Run(() =>
+            {
                 test2 = StaticFile.Create("../../Core/TestData/IO/space test.txt");
                 test4 = StaticFile.Create("../../Core/TestData/IO/全角　テスト.txt");
                 testPack2 = StaticFile.Create("space test.txt");
@@ -257,13 +264,14 @@ namespace Altseed.Test
             Assert.AreEqual(test3.Size, testPack3.Size);
             Assert.AreEqual(test4.Size, testPack4.Size);
 
-            Engine.Terminate();
+            tc.End();
         }
 
         [Test, Apartment(ApartmentState.STA)]
         public void StaticFileCache()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration() { FileLoggingEnabled = true, LogFileName = "cache.txt", ConsoleLoggingEnabled = true }));
+            var tc = new TestCore();
+            tc.Init();
 
             var path = System.IO.Path.GetFullPath("../../Core/TestData/IO/AltseedPink.png");
             Assert.True(Engine.File.Exists(path));
@@ -275,7 +283,7 @@ namespace Altseed.Test
 
             Engine.Log.Info(LogCategory.Engine, $"{test.selfPtr}/{test3.selfPtr}");
             Engine.Log.Info(LogCategory.Engine, Engine.Resources.GetResourcesCount(ResourceType.StaticFile).ToString());
-            Engine.Terminate();
+            tc.End();
         }
     }
 }

@@ -36,17 +36,13 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.103
-    - name: Install dependencies
-      run: |
-        dotnet restore TestForMacLinux/TestForMacLinux.csproj
-        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
-      run: |
-        dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
-        dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
+      run: dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
-      run: dotnet test Altseed2.sln --configuration Release --no-restore --verbosity normal
+      run: |
+        cd Build/netcoreapp3.0
+        dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
@@ -92,14 +88,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.103
-    - name: Install dependencies
-      run: |
-        dotnet restore TestForMacLinux/TestForMacLinux.csproj
-        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
-      run: |
-        dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
-        dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
+      run: dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |
@@ -142,14 +132,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.103
-    - name: Install dependencies
-      run: |
-        dotnet restore TestForMacLinux/TestForMacLinux.csproj
-        dotnet restore Tool/FontGenerator/FontGenerator.csproj
     - name: Build
-      run: |
-        dotnet build TestForMacLinux/TestForMacLinux.csproj --configuration Release --no-restore
-        dotnet build Tool/FontGenerator/FontGenerator.csproj --configuration Release --no-restore
+      run: dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |

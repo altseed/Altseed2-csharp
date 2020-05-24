@@ -741,7 +741,7 @@ namespace Altseed.Test
             Assert.AreEqual(shader1.Name, shader2.Name);
             Assert.AreEqual(shader1.StageType, shader2.StageType);
 
-            Engine.Terminate();
+            tc.End();
         }
     }
 }

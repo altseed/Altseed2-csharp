@@ -155,7 +155,8 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void DrawText()
         {
-            Assert.True(Engine.Initialize("Altseed2 C# Engine", 800, 600, new Configuration()));
+            var tc = new TestCore();
+            tc.Init();
 
             var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
@@ -222,7 +223,7 @@ namespace Altseed.Test
                 Assert.True(Engine.Graphics.EndFrame());
             }
 
-            Engine.Terminate();
+            tc.End();
         }
     }
 }
