@@ -26,14 +26,19 @@ namespace Altseed
             return visible;
         }
 
-        public bool ListBox(string label, ref int current, IEnumerable<string> items, int popup_max_height_in_items)
+        public bool Button(string label)
         {
-            return ListBox(label, ref current, string.Join('\t', items), popup_max_height_in_items);
+            return Button(label, new Vector2F());
         }
 
-        public bool Combo(string label, ref int current, IEnumerable<string> items, int popup_max_height_in_items)
+        public bool ListBox(string label, ref int current, IEnumerable<string> items, int popupMaxHeightInItems)
         {
-            return Combo(label, ref current, string.Join('\t', items), popup_max_height_in_items);
+            return ListBox(label, ref current, string.Join('\t', items), popupMaxHeightInItems);
+        }
+
+        public bool Combo(string label, ref int current, IEnumerable<string> items, int popupMaxHeightInItems)
+        {
+            return Combo(label, ref current, string.Join('\t', items), popupMaxHeightInItems);
         }
 
         public bool InputInt2(string label, int[] array)
@@ -219,31 +224,31 @@ namespace Altseed
         public void PlotLines(
             string label,
             float[] values,
-            int values_count,
-            int values_offset = 0,
-            string overlay_text = null,
-            float scale_min = float.MinValue,
-            float scale_max = float.MaxValue,
-            Vector2F graph_size = default,
+            int valuesCount,
+            int valuesOffset = 0,
+            string overlayText = null,
+            float scaleMin = float.MinValue,
+            float scaleMax = float.MaxValue,
+            Vector2F graphSize = default,
             int stride = sizeof(float))
         {
             floatArray.FromArray(values);
-            PlotLines(label, floatArray, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size, stride);
+            PlotLines(label, floatArray, valuesCount, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
         }
 
         public void PlotHistogram(
             string label,
             float[] values,
             int values_count,
-            int values_offset = 0,
-            string overlay_text = null,
-            float scale_min = float.MinValue,
-            float scale_max = float.MaxValue,
-            Vector2F graph_size = default,
+            int valuesOffset = 0,
+            string overlayText = null,
+            float scaleMin = float.MinValue,
+            float scaleMax = float.MaxValue,
+            Vector2F graphSize = default,
             int stride = sizeof(float))
         {
             floatArray.FromArray(values);
-            PlotHistogram(label, floatArray, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size, stride);
+            PlotHistogram(label, floatArray, values_count, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
         }
     }
 }

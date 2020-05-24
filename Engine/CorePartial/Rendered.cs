@@ -9,7 +9,10 @@ namespace Altseed
         private const string S_Transform = "S_Transform";
         #endregion
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_RenderedCamera_Create();
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_RenderedCamera_Create();
+        }
     }
 
     internal partial class RenderedPolygon
@@ -18,7 +21,10 @@ namespace Altseed
         private const string S_Transform = "S_Transform";
         #endregion
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_RenderedPolygon_Create();
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_RenderedPolygon_Create();
+        }
     }
 
     internal partial class RenderedSprite
@@ -27,7 +33,10 @@ namespace Altseed
         private const string S_Transform = "S_Transform";
         #endregion
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_RenderedSprite_Create();
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_RenderedSprite_Create();
+        }
     }
 
     internal partial class RenderedText
@@ -36,6 +45,9 @@ namespace Altseed
         private const string S_Transform = "S_Transform";
         #endregion
 
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info) => ptr = cbg_RenderedText_Create();
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_RenderedText_Create();
+        }
     }
 }

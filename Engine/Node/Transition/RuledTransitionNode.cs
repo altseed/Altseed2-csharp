@@ -120,32 +120,44 @@ namespace Altseed
         public TextureBase MaskTexture
         {
             get => _Material.GetTexture("_MaskTex");
-            set => _Material.SetTexture("_MaskTex", value);
+            set
+            {
+                if (MaskTexture == value) return;
+                _Material.SetTexture("_MaskTex", value);
+            }
         }
 
         public TextureBase RuleTexture
         {
             get => _Material.GetTexture("_RuleTex");
-            set => _Material.SetTexture("_RuleTex", value);
+            set
+            {
+                if (RuleTexture == value) return;
+                _Material.SetTexture("_RuleTex", value);
+            }
         }
 
         public float Softness
         {
             get => _Material.GetVector4F("_Softness").X;
-            set => _Material.SetVector4F("_Softness", new Vector4F(value, value, value, value));
+            set
+            {
+                if (Softness == value) return;
+                _Material.SetVector4F("_Softness", new Vector4F(value, value, value, value));
+            }
         }
 
         public float MixRate
         {
             get => _Material.GetVector4F("_MixRate").X;
-            set => _Material.SetVector4F("_MixRate", new Vector4F(value, value, value, value));
+            set
+            {
+                if (MixRate == value) return;
+                _Material.SetVector4F("_MixRate", new Vector4F(value, value, value, value));
+            }
         }
 
-        public bool UseCaptionAsMaskTexture
-        {
-            get;
-            set;
-        }
+        public bool UseCaptionAsMaskTexture { get; set; }
 
         public RuledTransitionEffectNode()
         {

@@ -22,7 +22,10 @@ namespace Altseed
                 this.state = state;
             }
 
-            internal void Invoke() => d.Invoke(state);
+            internal void Invoke()
+            {
+                d.Invoke(state);
+            }
         }
 
         private readonly ConcurrentQueue<Entry> actions = new ConcurrentQueue<Entry>();
