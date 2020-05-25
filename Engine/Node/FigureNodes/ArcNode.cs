@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Altseed
 {
@@ -31,20 +32,17 @@ namespace Altseed
         /// <summary>
         /// 描画を終了する角度を取得または設定します。
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">設定しようとした値が<see cref="StartDegree"/>未満または360より大きい</exception>
         public float EndDegree
         {
             get => _enddegree;
             set
             {
-                if (value < _startdegree) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(StartDegree)}(Value : {_startdegree})未満です");
-                if (value > 360) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が360より大きいです");
                 if (_enddegree == value) return;
-                _enddegree = value;
+                _enddegree = Math.Abs(_startdegree - value) == 360f ? value : value % 360f;
                 changed = true;
             }
         }
-        private float _enddegree = 360.0f;
+        private float _enddegree = 360f;
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -63,17 +61,14 @@ namespace Altseed
 
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">設定しようとした値が0未満または<see cref="EndDegree"/>より大きい</exception>
+        /// </summary
         public float StartDegree
         {
             get => _startdegree;
             set
             {
-                if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "設定しようとした値が0未満です");
-                if (value > _enddegree) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が{nameof(EndDegree)}(Value : {_enddegree})より大きいです");
                 if (_startdegree == value) return;
-                _startdegree = value;
+                _startdegree = Math.Abs(_enddegree - value) == 360f ? value : value % 360f;
                 changed = true;
             }
         }
@@ -131,14 +126,41 @@ namespace Altseed
             return result;
         }
 
+        private void GetDegrees(out float min, out float max)
+        {
+            if (_startdegree == _enddegree)
+            {
+                min = max = _startdegree;
+                return;
+            }
+            if (_startdegree < _enddegree)
+            {
+                min = _startdegree;
+                max = _enddegree;
+            }
+            else
+            {
+                min = _enddegree;
+                max = _startdegree;
+            }
+            if (min < 0 && _startdegree * _enddegree > 0)
+            {
+                min += 360f;
+                max += 360f;
+            }
+            if (max - min > 360f) max -= 360f;
+            Debug.WriteLine($"min({min}), max({max}), start({_startdegree}), end({_enddegree})");
+        }
+
         internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();
 
         private void UpdateVertexes()
         {
+            GetDegrees(out var _startdegree, out var _enddegree);
             var deg = 360f / _vertnum;
-            var size = (int)((_enddegree - _startdegree) / deg);
-            var startVertexNum = (uint)MathF.Ceiling(_startdegree / deg);
-            var endVertexNum = (uint)MathF.Floor(_enddegree / deg);
+            var size = (int)(Math.Abs(_enddegree - _startdegree) / deg);
+            var startVertexNum = (int)MathF.Ceiling(_startdegree / deg);
+            var endVertexNum = (int)MathF.Floor(_enddegree / deg);
             var startMatched = startVertexNum * deg == _startdegree;
             var endMatched = endVertexNum * deg == _enddegree;
             if (!startMatched) size++;
