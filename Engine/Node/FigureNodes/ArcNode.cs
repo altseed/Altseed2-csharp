@@ -84,11 +84,6 @@ namespace Altseed
             {
                 if (value < 3) throw new ArgumentOutOfRangeException(nameof(value), "設定しようとした値が3未満です");
                 if (_vertnum == value) return;
-                if (value < _vertnum)
-                {
-                    if (value < _enddegree) _enddegree = value;
-                    if (_enddegree < _startdegree) _startdegree = 0;
-                }
                 _vertnum = value;
                 changed = true;
             }
