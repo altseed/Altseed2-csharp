@@ -8,24 +8,8 @@ namespace Altseed
     [Serializable]
     public class RectangleNode : DrawnNode
     {
-        private bool changed = false;
         private readonly RenderedPolygon renderedPolygon;
         internal override int CullingId => renderedPolygon.Id;
-
-        /// <summary>
-        /// 中心座標を取得または設定します。
-        /// </summary>
-        public Vector2F Center
-        {
-            get => _center;
-            set
-            {
-                if (_center == value) return;
-                _center = value;
-                changed = true;
-            }
-        }
-        private Vector2F _center;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -45,17 +29,16 @@ namespace Altseed
         /// <summary>
         /// サイズを取得または設定します。
         /// </summary>
-        public Vector2F Size
+        public override Vector2F Size
         {
-            get => _size;
+            get => base.Size;
             set
             {
-                if (_size == value) return;
-                _size = value;
-                changed = true;
+                if (base.Size == value) return;
+                base.Size = value;
+                UpdateVertexes();
             }
         }
-        private Vector2F _size = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
@@ -73,11 +56,6 @@ namespace Altseed
 
         protected internal override void Draw()
         {
-            if (changed)
-            {
-                UpdateVertexes();
-                changed = false;
-            }
             Engine.Renderer.DrawPolygon(renderedPolygon);
         }
 
@@ -86,10 +64,10 @@ namespace Altseed
         private void UpdateVertexes()
         {
             var positions = new Vector2F[4];
-            positions[0] = -_center;
-            positions[1] = new Vector2F(0.0f, Size.Y) - _center;
-            positions[2] = new Vector2F(Size.X, Size.Y) - _center;
-            positions[3] = new Vector2F(Size.X, 0.0f) - _center;
+            positions[0] = new Vector2F(0.0f, 0.0f);
+            positions[1] = new Vector2F(0.0f, Size.Y);
+            positions[2] = new Vector2F(Size.X, Size.Y);
+            positions[3] = new Vector2F(Size.X, 0.0f);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
