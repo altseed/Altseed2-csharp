@@ -449,14 +449,14 @@ namespace Altseed.Test
             var rectangle1 = new RectangleNode()
             {
                 Color = new Color(255, 0, 0),
-                Center = new Vector2F(25f, 25f),
+                // Center = new Vector2F(25f, 25f),
                 Position = new Vector2F(100f, 100f),
                 Size = new Vector2F(50f, 50f)
             };
             var rectangle2 = new RectangleNode()
             {
                 Color = new Color(0, 255, 0),
-                Center = new Vector2F(100f, 50f),
+                // Center = new Vector2F(100f, 50f),
                 Position = new Vector2F(400f, 200f),
                 Size = new Vector2F(200f, 100f)
             };
