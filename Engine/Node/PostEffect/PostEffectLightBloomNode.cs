@@ -56,7 +56,6 @@ namespace Altseed
             _DownSampler.SetShader(Shader.Create("DownSample", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel));
 
             var blurShaderCode = Engine.Graphics.BuiltinShader.LightBloomShader;
-            Console.WriteLine(blurShaderCode);
 
             var xBlurShader = Shader.Create("XBLur", "#define BLUR_X\n" + blurShaderCode, ShaderStageType.Pixel);
             _BlurXMaterial.SetShader(xBlurShader);
