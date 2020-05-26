@@ -64,7 +64,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var cursor = Cursor.Create("../../Core/TestData/Input/altseed_logo.png", new Vector2I(16, 16));
+            var cursor = Cursor.Create("../../Core/TestData/IO/AltseedPink.png", new Vector2I(16, 16));
             Assert.NotNull(cursor);
             if (cursor != null)
             {

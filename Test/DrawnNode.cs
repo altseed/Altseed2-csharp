@@ -322,5 +322,177 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void ArcNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+            tc.Duration = 180;
+
+            var arc1 = new ArcNode()
+            {
+                Color = new Color(255, 0, 0),
+                Position = new Vector2F(100, 100),
+                Radius = 50f,
+                VertNum = 30,
+            };
+            var arc2 = new ArcNode()
+            {
+                Color = new Color(0, 255, 0),
+                Position = new Vector2F(400, 200),
+                Radius = 30f,
+                VertNum = 8,
+            };
+            var arc3 = new ArcNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(50, 400),
+                Radius = 40f,
+                VertNum = 5,
+            };
+            Engine.AddNode(arc1);
+            Engine.AddNode(arc2);
+            Engine.AddNode(arc3);
+
+            tc.LoopBody(x =>
+            {
+                arc1.StartDegree++;
+                arc2.StartDegree++;
+                arc3.StartDegree++;
+                arc1.EndDegree--;
+                arc2.EndDegree--;
+                arc3.EndDegree--;
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void CircleNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var circle1 = new CircleNode()
+            {
+                Color = new Color(255, 0, 0),
+                Position = new Vector2F(100, 100),
+                Radius = 50f,
+                VertNum = 30
+            };
+            var circle2 = new CircleNode()
+            {
+                Color = new Color(0, 255, 0),
+                Position = new Vector2F(400, 200),
+                Radius = 30f,
+                VertNum = 8
+            };
+            var circle3 = new CircleNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(50, 400),
+                Radius = 40f,
+                VertNum = 5
+            };
+            Engine.AddNode(circle1);
+            Engine.AddNode(circle2);
+            Engine.AddNode(circle3);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void LineNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var line1 = new LineNode()
+            {
+                Color = new Color(255, 0, 0),
+                Point1 = new Vector2F(100f, 100f),
+                Point2 = new Vector2F(200f, 200f),
+                Thickness = 10f
+            };
+            var line2 = new LineNode()
+            {
+                Color = new Color(0, 255, 0),
+                Point1 = new Vector2F(50f, 450f),
+                Point2 = new Vector2F(600f, 50f),
+                Thickness = 5.0f
+            };
+            var line3 = new LineNode()
+            {
+                Color = new Color(0, 0, 255),
+                Point1 = new Vector2F(100f, 150f),
+                Point2 = new Vector2F(100f, 350f),
+                Thickness = 15.0f
+            };
+            Engine.AddNode(line1);
+            Engine.AddNode(line2);
+            Engine.AddNode(line3);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RectangleNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var rectangle1 = new RectangleNode()
+            {
+                Color = new Color(255, 0, 0),
+                Center = new Vector2F(25f, 25f),
+                Position = new Vector2F(100f, 100f),
+                Size = new Vector2F(50f, 50f)
+            };
+            var rectangle2 = new RectangleNode()
+            {
+                Color = new Color(0, 255, 0),
+                Center = new Vector2F(100f, 50f),
+                Position = new Vector2F(400f, 200f),
+                Size = new Vector2F(200f, 100f)
+            };
+            var rectangle3 = new RectangleNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(200f, 300f),
+                Size = new Vector2F(100f, 150f)
+            };
+            Engine.AddNode(rectangle1);
+            Engine.AddNode(rectangle2);
+            Engine.AddNode(rectangle3);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void TriangleNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var triangle = new TriangleNode()
+            {
+                Color = new Color(255, 0, 0),
+                Point1 = new Vector2F(100f, 100f),
+                Point2 = new Vector2F(200f, 200f),
+                Point3 = new Vector2F(100f, 200f),
+            };
+            Engine.AddNode(triangle);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
     }
 }
