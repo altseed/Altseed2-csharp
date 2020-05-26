@@ -27,7 +27,7 @@ namespace Altseed
                     for (int i = 0; i < 3; i++)
                     {
                         float pos = 1.0f + 2.0f * i;
-                        ws[i] = (float)Math.Exp(-0.5f * pos * pos / dispersion);
+                        ws[i] = MathF.Exp(-0.5f * pos * pos / dispersion);
                         total += ws[i] * 2.0f;
                     }
 

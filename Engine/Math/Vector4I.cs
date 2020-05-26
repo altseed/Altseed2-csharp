@@ -115,7 +115,7 @@ namespace Altseed
             float dy = v1.Y - v2.Y;
             float dz = v1.Z - v2.Z;
             float dw = v1.W - v2.W;
-            return (float)Math.Sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
+            return MathF.Sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
         }
         #region CalOperators
         /// <summary>

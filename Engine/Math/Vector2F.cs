@@ -44,7 +44,7 @@ namespace Altseed
         /// </summary>
         public float Length
         {
-            readonly get => (float)Math.Sqrt(SquaredLength);
+            readonly get => MathF.Sqrt(SquaredLength);
             set
             {
                 var len = Length;
@@ -58,12 +58,12 @@ namespace Altseed
         /// </summary>
         public float Radian
         {
-            readonly get => (float)Math.Atan2(Y, X);
+            readonly get => MathF.Atan2(Y, X);
             set
             {
                 var length = Length;
-                X = (float)Math.Cos(value) * length;
-                Y = (float)Math.Sin(value) * length;
+                X = MathF.Cos(value) * length;
+                Y = MathF.Sin(value) * length;
             }
         }
 
@@ -157,7 +157,7 @@ namespace Altseed
         {
             var x = v1.X - v2.X;
             var y = v1.Y - v2.Y;
-            return (float)Math.Sqrt(x * x + y * y);
+            return MathF.Sqrt(x * x + y * y);
         }
 
         /// <summary>

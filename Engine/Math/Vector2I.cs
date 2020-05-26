@@ -97,7 +97,7 @@ namespace Altseed
         {
             float dx = v1.X - v2.X;
             float dy = v1.Y - v2.Y;
-            return (float)Math.Sqrt(dx * dx + dy * dy);
+            return MathF.Sqrt(dx * dx + dy * dy);
         }
 
         /// <summary>

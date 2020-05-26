@@ -33,7 +33,7 @@ namespace Altseed
         /// </summary>
         public float Length
         {
-            readonly get => (float)Math.Sqrt(SquaredLength);
+            readonly get => MathF.Sqrt(SquaredLength);
             set
             {
                 var len = Length;
@@ -163,7 +163,7 @@ namespace Altseed
             float dx = v1.X - v2.X;
             float dy = v1.Y - v2.Y;
             float dz = v1.Z - v2.Z;
-            return (float)Math.Sqrt(dx * dx + dy * dy + dz * dz);
+            return MathF.Sqrt(dx * dx + dy * dy + dz * dz);
         }
 
         #region CalOperators

@@ -88,17 +88,17 @@ namespace Altseed
 
                 case EasingType.InSine:
                     {
-                        return 1.0f - (float)Math.Cos(t * Math.PI * 0.5f);
+                        return 1.0f - MathF.Cos(t * MathF.PI * 0.5f);
                     }
 
                 case EasingType.OutSine:
                     {
-                        return (float)Math.Sin(t * Math.PI * 0.5f);
+                        return MathF.Sin(t * MathF.PI * 0.5f);
                     }
 
                 case EasingType.InOutSine:
                     {
-                        return -1.0f / 2.0f * (float)(Math.Cos(t * Math.PI) - 1.0f);
+                        return -1.0f / 2.0f * (MathF.Cos(t * MathF.PI) - 1.0f);
                     }
 
                 case EasingType.InQuad:
@@ -180,35 +180,35 @@ namespace Altseed
 
                 case EasingType.InExpo:
                     {
-                        return (float)Math.Pow(2.0f, 10.0f * (t - 1.0f));
+                        return MathF.Pow(2.0f, 10.0f * (t - 1.0f));
                     }
 
                 case EasingType.OutExpo:
                     {
-                        return -(float)Math.Pow(2.0f, -10.0f * t) + 1.0f;
+                        return -MathF.Pow(2.0f, -10.0f * t) + 1.0f;
                     }
 
                 case EasingType.InOutExpo:
                     {
-                        if (t < 0.5f) return (float)(Math.Pow(2.0f, 16.0f * t) - 1.0f) / 510.0f;
+                        if (t < 0.5f) return (MathF.Pow(2.0f, 16.0f * t) - 1.0f) / 510.0f;
 
-                        return 1.0f - 0.5f * (float)Math.Pow(2.0f, -16.0f * (t - 0.5f));
+                        return 1.0f - 0.5f * MathF.Pow(2.0f, -16.0f * (t - 0.5f));
                     }
 
                 case EasingType.InCirc:
                     {
-                        return 1.0f - (float)Math.Sqrt(1.0f - t);
+                        return 1.0f - MathF.Sqrt(1.0f - t);
                     }
 
                 case EasingType.OutCirc:
                     {
-                        return (float)Math.Sqrt(t);
+                        return MathF.Sqrt(t);
                     }
 
                 case EasingType.InOutCirc:
                     {
-                        if (t < 0.5f) return (1.0f - (float)Math.Sqrt(1.0f - 2.0f * t)) * 0.5f;
-                        return (1.0f + (float)Math.Sqrt(2.0f * t - 1.0f)) * 0.5f;
+                        if (t < 0.5f) return (1.0f - MathF.Sqrt(1.0f - 2.0f * t)) * 0.5f;
+                        return (1.0f + MathF.Sqrt(2.0f * t - 1.0f)) * 0.5f;
                     }
 
                 case EasingType.InBack:
@@ -232,39 +232,39 @@ namespace Altseed
 
                 case EasingType.InElastic:
                     {
-                        return t * t * t * t * (float)Math.Sin(t * Math.PI * 4.5f);
+                        return t * t * t * t * MathF.Sin(t * MathF.PI * 4.5f);
                     }
 
                 case EasingType.OutElastic:
                     {
                         float t_ = (t - 1.0f) * (t - 1.0f);
-                        return 1.0f - t_ * t_ * (float)Math.Cos(t * Math.PI * 4.5f);
+                        return 1.0f - t_ * t_ * MathF.Cos(t * MathF.PI * 4.5f);
                     }
 
                 case EasingType.InOutElastic:
                     {
-                        if (t < 0.45f) return 8.0f * t * t * t * t * (float)Math.Sin(t * Math.PI * 9.0f);
-                        if (t < 0.55f) return 0.5f + 0.75f * (float)Math.Sin(t * Math.PI * 4.0f);
+                        if (t < 0.45f) return 8.0f * t * t * t * t * MathF.Sin(t * MathF.PI * 9.0f);
+                        if (t < 0.55f) return 0.5f + 0.75f * MathF.Sin(t * MathF.PI * 4.0f);
 
                         float t_ = (t - 1.0f) * (t - 1.0f);
-                        return 1.0f - 8.0f * t_ * t_ * (float)Math.Sin(t * Math.PI * 9.0f);
+                        return 1.0f - 8.0f * t_ * t_ * MathF.Sin(t * MathF.PI * 9.0f);
                     }
 
                 case EasingType.InBounce:
                     {
-                        return (float)Math.Pow(2.0f, 6.0f * (t - 1.0f)) * (float)Math.Abs(Math.Sin(t * Math.PI * 3.5f));
+                        return MathF.Pow(2.0f, 6.0f * (t - 1.0f)) * MathF.Abs(MathF.Sin(t * MathF.PI * 3.5f));
                     }
 
                 case EasingType.OutBounce:
                     {
-                        return 1.0f - (float)Math.Pow(2.0f, -6.0f * t) * (float)Math.Abs(Math.Cos(t * Math.PI * 3.5f));
+                        return 1.0f - MathF.Pow(2.0f, -6.0f * t) * MathF.Abs(MathF.Cos(t * MathF.PI * 3.5f));
                     }
 
                 case EasingType.InOutBounce:
                     {
-                        if (t < 0.5f) return 8.0f * (float)Math.Pow(2.0f, 8.0f * (t - 1.0f)) * (float)Math.Abs(Math.Sin(t * Math.PI * 7.0f));
+                        if (t < 0.5f) return 8.0f * MathF.Pow(2.0f, 8.0f * (t - 1.0f)) * MathF.Abs(MathF.Sin(t * MathF.PI * 7.0f));
 
-                        return 1.0f - 8.0f * (float)Math.Pow(2.0f, -8.0f * t) * (float)Math.Abs(Math.Sin(t * Math.PI * 7.0f));
+                        return 1.0f - 8.0f * MathF.Pow(2.0f, -8.0f * t) * MathF.Abs(MathF.Sin(t * MathF.PI * 7.0f));
                     }
                 default: return t;
             }

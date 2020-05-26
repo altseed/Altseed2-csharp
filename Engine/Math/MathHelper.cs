@@ -7,7 +7,7 @@ namespace Altseed
     /// </summary>
     public static class MathHelper
     {
-        private const float PiPer180 = (float)(Math.PI / 180d);
+        private const float PiPer180 = (MathF.PI / 180f);
         /// <summary>
         /// 行列で使用
         /// 誤差

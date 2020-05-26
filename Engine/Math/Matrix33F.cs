@@ -137,8 +137,8 @@ namespace Altseed
         /// <returns><paramref name="radian"/>の回転分を表す行列</returns>
         public static Matrix33F GetRotation(float radian)
         {
-            var sin = (float)Math.Sin(radian);
-            var cos = (float)Math.Cos(radian);
+            var sin = MathF.Sin(radian);
+            var cos = MathF.Cos(radian);
 
             var result = Identity;
             result[0, 0] = cos;
