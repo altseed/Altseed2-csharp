@@ -46,7 +46,14 @@ namespace Altseed
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
         /// </summary>
-        public TextureBase Texture { get => renderedPolygon.Texture; set => renderedPolygon.Texture = value; }
+        public TextureBase Texture
+        {
+            get => renderedPolygon.Texture;
+            set
+            {
+                renderedPolygon.Texture = value;
+            }
+        }
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
@@ -90,11 +97,22 @@ namespace Altseed
             var deg = 360f / _vertnum;          
             var positions = new Vector2F[_vertnum];
             var vec = new Vector2F(0.0f, -_radius);
+            
+            float minx = 0.0f, miny = 0.0f, maxx = 0.0f, maxy = 0.0f;
             for (int i = 0; i < _vertnum; i++)
             {
                 positions[i] = vec;
                 vec.Degree += deg;
+
+                if (vec.X < minx) minx = vec.X;
+                if (maxx < vec.X) maxx = vec.X;
+                if (vec.Y < miny) miny = vec.Y;
+                if (maxy < vec.Y) maxy = vec.Y;
             }
+
+            Size = new Vector2F(maxx - minx, maxy - miny);
+            // NOTE: 半径から雑に計算してもいいかもしれない
+
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);

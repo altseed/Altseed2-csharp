@@ -93,7 +93,14 @@ namespace Altseed
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
         /// </summary>
-        public TextureBase Texture { get => renderedPolygon.Texture; set => renderedPolygon.Texture = value; }
+        public TextureBase Texture
+        {
+            get => renderedPolygon.Texture;
+            set
+            {
+                renderedPolygon.Texture = value;
+            }
+        }
 
         /// <summary>
         /// <see cref="ArcNode"/>の新しいインスタンスを生成する
@@ -144,7 +151,7 @@ namespace Altseed
                 max += 360f;
             }
             if (max - min > 360f) max -= 360f;
-            Debug.WriteLine($"min({min}), max({max}), start({_startdegree}), end({_enddegree})");
+            //Debug.WriteLine($"min({min}), max({max}), start({_startdegree}), end({_enddegree})");
         }
 
         internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();
@@ -164,11 +171,22 @@ namespace Altseed
             var currentIndex = 1;
             if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
             var vec = GetBaseVector(deg * startVertexNum);
+
+            float minx = 0.0f, miny = 0.0f, maxx = 0.0f, maxy = 0.0f;
             for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
             {
                 positions[currentIndex] = vec;
                 vec.Degree += deg;
+
+                if (vec.X < minx) minx = vec.X;
+                if (maxx < vec.X) maxx = vec.X;
+                if (vec.Y < miny) miny = vec.Y;
+                if (maxy < vec.Y) maxy = vec.Y;
             }
+
+            Size = new Vector2F(maxx - minx, maxy - miny);
+            // NOTE: 半径から雑に計算してもいいかもしれない
+
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);

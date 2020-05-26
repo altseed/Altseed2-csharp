@@ -43,7 +43,14 @@ namespace Altseed
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
         /// </summary>
-        public TextureBase Texture { get => renderedPolygon.Texture; set => renderedPolygon.Texture = value; }
+        public TextureBase Texture
+        {
+            get => renderedPolygon.Texture;
+            set
+            {
+                renderedPolygon.Texture = value;
+            }
+        }
 
         /// <summary>
         /// <see cref="RectangleNode"/>の新しいインスタンスを生成する

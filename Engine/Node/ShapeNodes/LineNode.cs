@@ -111,6 +111,19 @@ namespace Altseed
             positions[1] = _point1 + y;
             positions[2] = _point1 + x + y;
             positions[3] = _point1 + x - y;
+
+            float minx = 0.0f, miny = 0.0f, maxx = 0.0f, maxy = 0.0f;
+            for (int i = 0; i < 4; i++)
+            {
+                if (positions[i].X < minx) minx = positions[i].X;
+                if (maxx < positions[i].X) maxx = positions[i].X;
+                if (positions[i].Y < miny) miny = positions[i].Y;
+                if (maxy < positions[i].Y) maxy = positions[i].Y;
+            }
+
+            Size = new Vector2F(maxx - minx, maxy - miny);
+            // NOTE: 中心線から雑に計算してもいいかもしれない
+
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
