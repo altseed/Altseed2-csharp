@@ -197,7 +197,7 @@ namespace Altseed
         /// <summary>
         /// 描画を実行します。
         /// </summary>
-        internal protected override void Draw()
+        protected internal override void Draw()
         {
             Engine.Renderer.DrawText(_RenderedText);
         }

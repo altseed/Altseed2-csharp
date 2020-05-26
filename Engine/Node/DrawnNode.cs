@@ -28,7 +28,7 @@ namespace Altseed
         [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
 
-        internal protected abstract void Draw();
+        protected internal abstract void Draw();
 
         /// <summary>
         /// 角度(度数法)を取得または設定します。

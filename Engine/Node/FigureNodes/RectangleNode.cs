@@ -71,7 +71,7 @@ namespace Altseed
             renderedPolygon.Vertexes = VertexArray.Create(4);
         }
 
-        internal override void Draw()
+        protected internal override void Draw()
         {
             if (changed)
             {
