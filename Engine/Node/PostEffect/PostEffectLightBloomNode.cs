@@ -116,7 +116,7 @@ namespace Altseed
 
             var inBuffer = src;
             var outBuffer = GetBuffer(1, src.Size);
-            var weight = 0.25f; // ここ任意の値に設定できるようにしたい
+            var weight = 0.5f; // ここ任意の値に設定できるようにしたい
             for (int i = 0; i < downSampleCount; ++i)
             {
                 _TextureMixer.SetTexture("mainTex1", inBuffer);
