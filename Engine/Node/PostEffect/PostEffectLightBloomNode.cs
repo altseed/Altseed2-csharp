@@ -76,17 +76,25 @@ namespace Altseed
 
         protected override void Draw(RenderTexture src)
         {
-            var downTexture = new RenderTexture[3] { GetBuffer(0, src.Size / 2), GetBuffer(0, src.Size / 4), GetBuffer(0, src.Size / 8), };
+            var downSampleCount = 3; // ここ任意の値に設定できるようにしたい
+            var downSampleScale = 16; // ここ任意の値に設定できるようにしたい
+            var downTexture = new RenderTexture[downSampleCount];
+            for(int i = 0; i < downSampleCount; ++i)
+            {
+                downTexture[i] = GetBuffer(0, src.Size / downSampleScale);
+                downSampleScale *= 2;
+            }
+
             var renderParameter = new RenderPassParameter(new Color(), false, false);
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < downSampleCount; ++i)
             {
                 _DownSampler.SetTexture("mainTex", i == 0 ? src : downTexture[i - 1]);
                 _DownSampler.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_DownSampler, downTexture[i], renderParameter);
             }
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < downSampleCount; ++i)
             {
                 var tmpTexture = GetBuffer(1, downTexture[i].Size);
                 if (IsLuminanceMode)
@@ -108,20 +116,21 @@ namespace Altseed
 
             var inBuffer = src;
             var outBuffer = GetBuffer(1, src.Size);
-            for (int i = 0; i < 3; ++i)
+            var weight = 0.25f; // ここ任意の値に設定できるようにしたい
+            for (int i = 0; i < downSampleCount; ++i)
             {
-                var weight = MathF.Pow(2, -i - 1);
-
                 _TextureMixer.SetTexture("mainTex1", inBuffer);
                 _TextureMixer.SetTexture("mainTex2", downTexture[i]);
                 _TextureMixer.SetVector4F("weight", new Vector4F(weight, weight, weight, weight));
 
-                if (i == 2) RenderToRenderTarget(_TextureMixer);
+                if (i == downSampleCount - 1) RenderToRenderTarget(_TextureMixer);
                 else
                 {
                     Engine.Graphics.CommandList.RenderToRenderTexture(_TextureMixer, outBuffer, renderParameter);
                     Engine.Graphics.CommandList.CopyTexture(outBuffer, inBuffer);
                 }
+
+                weight *= 0.5f;
             }
         }
     }
