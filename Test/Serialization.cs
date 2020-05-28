@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -742,6 +744,100 @@ namespace Altseed.Test
             Assert.AreEqual(shader1.StageType, shader2.StageType);
 
             tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Node()
+        {
+            var tc = new TestCore()
+            {
+                Duration = 5
+            };
+            tc.Init();
+
+            var node0 = new NumericNode(0);
+            var node1 = new NumericNode(1);
+            var node2 = new NumericNode(2);
+            var node3 = new NumericNode(3);
+
+            NumericNode deserialized_node0 = null;
+            NumericNode deserialized_node3 = null;
+
+            node0.AddChildNode(node1);
+            node0.AddChildNode(node2);
+            Engine.AddNode(node0);
+
+            int[] comparisonArray = null;
+
+            const string path = "Serialization/Node.bin";
+
+            tc.LoopBody(null, x =>
+            {
+                switch (x)
+                {
+                    case 1:
+                        var set = new SortedSet<int>();
+                        foreach (var node in EnumerateEngineNodes())
+                            if (node is NumericNode n)
+                                set.Add(n.Index);
+                        comparisonArray = set.ToArray();
+
+                        Serialize(path, (node0, node3));
+
+                        Assert.AreEqual(node0.Children.Count, 2);
+                        Assert.AreEqual(EnumerateEngineNodes().Count(), 3);
+                        break;
+                    case 2:
+                        Engine.RemoveNode(node0);
+                        break;
+                    case 3:
+                        var tuple = Deserialize<(NumericNode, NumericNode)>(path);
+                        deserialized_node0 = tuple.Item1;
+                        deserialized_node3 = tuple.Item2;
+
+                        Assert.AreEqual(node0.Index, deserialized_node0.Index);
+                        Assert.AreEqual(node3.Index, deserialized_node3.Index);
+                        Assert.AreEqual(EnumerateEngineNodes().Count(), 0);
+                        break;
+                    case 4:
+                        Assert.NotNull(comparisonArray);
+                        Assert.NotNull(deserialized_node0);
+                        Assert.NotNull(deserialized_node3);
+
+                        set = new SortedSet<int>();
+                        foreach (var node in EnumerateEngineNodes())
+                            if (node is NumericNode n)
+                                set.Add(n.Index);
+
+                        Assert.True(Enumerable.SequenceEqual(comparisonArray, set.ToArray()));
+                        Assert.AreEqual(deserialized_node0.Children.Count, 2);
+                        Assert.AreEqual(EnumerateEngineNodes().Count(), 3);
+                        break;
+                }
+            });
+
+            tc.End();
+
+            static IEnumerable<Altseed.Node> EnumerateEngineNodes()
+            {
+                foreach (var child in Engine.GetNodes())
+                {
+                    yield return child;
+                    foreach (var node in child.EnumerateDescendants())
+                        yield return node;
+                }
+            }
+        }
+
+        [Serializable]
+        private class NumericNode : Altseed.Node
+        {
+            public int Index { get; set; }
+            public NumericNode(int index)
+            {
+                Index = index;
+            }
+            public override string ToString() => Index.ToString();
         }
     }
 }
