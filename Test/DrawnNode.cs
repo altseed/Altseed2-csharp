@@ -494,5 +494,32 @@ namespace Altseed.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void LineNodeAndCulling()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var line1 = new LineNode()
+            {
+                Color = new Color(255, 0, 0),
+                Point1 = new Vector2F(2000f, 0f),
+                Point2 = new Vector2F(2000f, 1000f),
+                Thickness = 10f
+            };
+
+            Engine.AddNode(line1);
+
+            tc.LoopBody(c=> {
+                if (c == 3)
+                {
+                    line1.Point1 = new Vector2F(100f, 0f);
+                    line1.Point2 = new Vector2F(100f, 1000f);
+                }
+            }, null);
+
+            tc.End();
+        }
     }
 }
