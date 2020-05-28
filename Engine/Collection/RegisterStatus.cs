@@ -24,13 +24,5 @@ namespace Altseed
         /// 削除待ち
         /// </summary>
         WaitRemoved,
-        /// <summary>
-        /// 破棄待ち
-        /// </summary>
-        WaitDisposed,
-        /// <summary>
-        /// 破棄済み
-        /// </summary>
-        Disposed
     }
 }

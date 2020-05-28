@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 
 namespace Altseed
 {
@@ -16,7 +17,6 @@ namespace Altseed
         public Node()
         {
             _Children = new RegisterableCollection<Node, Node>(this);
-            Children = _Children.AsReadOnly();
         }
 
         /// <summary>
@@ -38,7 +38,13 @@ namespace Altseed
         /// <summary>
         /// 親ノードを取得または設定します。
         /// </summary>
-        public Node Parent { get; private set; }
+        public Node Parent { get => _parent; private set { _parent = value; } }
+        [NonSerialized]
+        private Node _parent;
+
+        public override RegisterStatus Status { get => _status; internal set { _status = value; } }
+        [NonSerialized]
+        private RegisterStatus _status;
 
         /// <summary>
         /// <paramref name="owner"/> に登録された際の処理
@@ -71,6 +77,12 @@ namespace Altseed
         /// </summary>
         protected internal virtual void Registered()
         {
+            if (surpressing)
+            {
+                surpressing = false;
+                return;
+            }
+
             foreach (var c in Children)
             {
                 c.Registered();
@@ -101,7 +113,9 @@ namespace Altseed
         /// <summary>
         /// 子要素のコレクションを取得します。
         /// </summary>
-        public ReadOnlyCollection<Node> Children { get; }
+        public ReadOnlyCollection<Node> Children => _readonlyChildren ??= _Children.AsReadOnly();
+        [NonSerialized]
+        private ReadOnlyCollection<Node> _readonlyChildren;
 
         /// <summary>
         /// 子要素を追加します。
@@ -146,6 +160,56 @@ namespace Altseed
         /// </summary>
         protected virtual void OnUpdate() { }
 
+        #endregion
+
+        #region Serialization
+        // 
+        // Rootはシリアライズしない
+        // 親がRootだった場合は親無しとしてシリアライズし，デシリアライズ時にEngine.AddNode(this)を実行する
+        //
+
+        private Node serialization_Parent;
+        private RegisterStatus serialization_Status;
+        private bool isRootChild;
+        private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行うのを止める
+
+        /// <summary>
+        /// シリアライズ時に実行
+        /// </summary>
+        /// <param name="context">送信先の情報</param>
+        [OnSerializing]
+        private void OnSerializing(StreamingContext context)
+        {
+            if (Parent is RootNode)
+            {
+                isRootChild = true;
+                serialization_Parent = null;
+                serialization_Status = RegisterStatus.Free;
+                surpressing = true;
+            }
+            else
+            {
+                isRootChild = false;
+                serialization_Parent = _parent;
+                serialization_Status = Status;
+                surpressing = false;
+            }
+        }
+
+        /// <summary>
+        /// デシリアライズ時に実行
+        /// </summary>
+        /// <param name="context">送信元の情報</param>
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            if (isRootChild) Engine.AddNode(this);
+            else _parent = serialization_Parent;
+            Status = serialization_Status;
+            isRootChild = default;
+            serialization_Parent = null;
+            serialization_Status = default;
+        }
         #endregion
 
         /// <summary>
