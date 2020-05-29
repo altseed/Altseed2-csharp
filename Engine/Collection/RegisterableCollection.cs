@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
 namespace Altseed
 {
     /// <summary>
@@ -62,7 +63,7 @@ namespace Altseed
             }
             if (!CurrentCollection.Contains(obj))
             {
-                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
+                Engine.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素が含まれていません。");
                 return;
             }
             if (obj.Status != RegisterStatus.Registered)
@@ -83,6 +84,8 @@ namespace Altseed
             while (RemoveQueue.Count > 0)
             {
                 var obj = RemoveQueue.Dequeue();
+                if (obj.Status != RegisterStatus.WaitRemoved)
+                    return;
                 CurrentCollection.Remove(obj);
                 obj.Status = RegisterStatus.Free;
                 obj.Removed();
@@ -91,6 +94,8 @@ namespace Altseed
             while (AddQueue.Count > 0)
             {
                 var obj = AddQueue.Dequeue();
+                if (obj.Status != RegisterStatus.WaitAdded)
+                    return;
                 CurrentCollection.Add(obj);
                 obj.Status = RegisterStatus.Registered;
                 obj.Added(Owner);

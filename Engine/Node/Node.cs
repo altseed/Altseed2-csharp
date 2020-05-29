@@ -40,6 +40,8 @@ namespace Altseed
         /// </summary>
         public Node Parent { get; private set; }
 
+        private Node _ParentReserved;
+
         /// <summary>
         /// <paramref name="owner"/> に登録された際の処理
         /// </summary>
@@ -109,7 +111,11 @@ namespace Altseed
         /// <param name="node">追加する要素</param>
         public void AddChildNode(Node node)
         {
+            if (node.Status == RegisterStatus.WaitRemoved && node.Parent == this)
+                node.Status = RegisterStatus.Registered;
+
             _Children.Add(node);
+            node._ParentReserved = this;
         }
 
         /// <summary>
@@ -118,7 +124,11 @@ namespace Altseed
         /// <param name="node">削除する要素</param>
         public void RemoveChildNode(Node node)
         {
+            if (node.Status == RegisterStatus.WaitAdded && node._ParentReserved == this)
+                node.Status = RegisterStatus.Registered;
+
             _Children.Remove(node);
+            node._ParentReserved = null;
         }
 
         #endregion
