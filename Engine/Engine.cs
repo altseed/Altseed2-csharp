@@ -29,7 +29,17 @@ namespace Altseed
 
         private static RenderTextureCache _RenderTextureCache;
 
-        public static Color ClearColor { get; set; } = new Color(50, 50, 50, 255);
+        public static Color ClearColor
+        {
+            get => _ClearColor; 
+            set
+            {
+                if (_ClearColor == value) return;
+                _ClearColor = value;
+                _DefaultCamera.RenderPassParameter = new RenderPassParameter(value, true, true);
+            }
+        }
+        private static Color _ClearColor = new Color(50, 50, 50, 255);
 
         /// <summary>
         /// エンジンを初期化します。
@@ -73,7 +83,7 @@ namespace Altseed
                 _PostEffectNodes = new PostEffectNodeCollection();
                 _CameraNodes = new CameraNodeCollection();
                 _DefaultCamera = RenderedCamera.Create();
-                _DefaultCamera.RenderPassParameter = new RenderPassParameter(new Color(50, 50, 50, 255), true, true);
+                _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
                 _RenderTextureCache = new RenderTextureCache();
 
