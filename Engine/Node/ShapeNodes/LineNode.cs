@@ -82,17 +82,18 @@ namespace Altseed
             renderedPolygon.Vertexes = VertexArray.Create(4);
         }
 
-        protected internal override void Draw()
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+
+        internal override void UpdateInheritedTransform()
         {
             if (changed)
             {
                 UpdateVertexes();
                 changed = false;
             }
-            Engine.Renderer.DrawPolygon(renderedPolygon);
-        }
 
-        internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();
+            renderedPolygon.Transform = CalcInheritedTransform();
+        }
 
         private void UpdateVertexes()
         {
@@ -120,9 +121,6 @@ namespace Altseed
                 if (positions[i].Y < miny) miny = positions[i].Y;
                 if (maxy < positions[i].Y) maxy = positions[i].Y;
             }
-
-            Size = new Vector2F(maxx - minx, maxy - miny);
-            // NOTE: 中心線から雑に計算してもいいかもしれない
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
