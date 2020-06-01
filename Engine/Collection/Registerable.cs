@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Altseed
 {
@@ -25,6 +21,6 @@ namespace Altseed
         /// <summary>
         /// 登録状況を取得します。
         /// </summary>
-        public RegisterStatus Status { get; internal set; } = RegisterStatus.Free;
+        public virtual RegisterStatus Status { get; internal set; } = RegisterStatus.Free;
     }
 }
