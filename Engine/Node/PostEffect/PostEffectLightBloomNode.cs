@@ -77,7 +77,7 @@ namespace Altseed
         protected override void Draw(RenderTexture src)
         {
             var downSampleCount = 3; // ここ任意の値に設定できるようにしたい
-            var downSampleScale = 16; // ここ任意の値に設定できるようにしたい
+            var downSampleScale = 8; // ここ任意の値に設定できるようにしたい
             var downTexture = new RenderTexture[downSampleCount];
             for(int i = 0; i < downSampleCount; ++i)
             {
@@ -90,7 +90,7 @@ namespace Altseed
             for (int i = 0; i < downSampleCount; ++i)
             {
                 _DownSampler.SetTexture("mainTex", i == 0 ? src : downTexture[i - 1]);
-                _DownSampler.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
+                _DownSampler.SetVector4F("imageSize", new Vector4F(src.Size.X, src.Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_DownSampler, downTexture[i], renderParameter);
             }
 
