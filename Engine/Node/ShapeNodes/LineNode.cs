@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed
 {
@@ -27,6 +27,11 @@ namespace Altseed
         private Color _color = new Color(255, 255, 255);
 
         internal override int CullingId => renderedPolygon.Id;
+
+        /// <summary>
+        /// 使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
 
         /// <summary>
         /// 描画の始点を取得または設定します。

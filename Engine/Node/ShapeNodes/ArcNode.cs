@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 
 namespace Altseed
 {
@@ -43,6 +42,11 @@ namespace Altseed
             }
         }
         private float _enddegree = 360f;
+
+        /// <summary>
+        /// 使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -151,7 +155,6 @@ namespace Altseed
                 max += 360f;
             }
             if (max - min > 360f) max -= 360f;
-            //Debug.WriteLine($"min({min}), max({max}), start({_startdegree}), end({_enddegree})");
         }
 
         internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();

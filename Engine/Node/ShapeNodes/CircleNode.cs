@@ -29,6 +29,11 @@ namespace Altseed
         private Color _color = new Color(255, 255, 255);
 
         /// <summary>
+        /// 使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
+
+        /// <summary>
         /// 半径を取得または設定します。
         /// </summary>
         public float Radius

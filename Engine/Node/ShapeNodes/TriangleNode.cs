@@ -74,6 +74,11 @@ namespace Altseed
         private Vector2F _point3;
 
         /// <summary>
+        /// 使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
+
+        /// <summary>
         /// <see cref="TriangleNode"/>の新しいインスタンスを生成する
         /// </summary>
         public TriangleNode()
