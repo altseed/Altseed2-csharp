@@ -10,26 +10,34 @@ namespace Sample
 {
     public static class Viewer
     {
-        private static Dictionary<string, Sample> Samples;
+        private static List<Sample> Samples;
+        private static int Selected;
+        private static string SamplesString;
 
         [STAThread]
         static void Main(string[] args)
         {
-            var list = new List<Sample>();
-            list.Add(new Sample("Sprite", "SpriteNodeを使ってテクスチャを描画します。", typeof(Sprite)));
-            list.Add(new Sample("SE", "効果音を再生します。", typeof(SoundSE)));
-            list.Add(new Sample("BGM", "BGMを再生します。", typeof(SoundBGM)));
-            list.Add(new Sample("BGMLoop", "BGMをループ再生します。", typeof(SoundLoop)));
-            list.Add(new Sample("StaticFile", "StaticFileを使って、ファイルを読み込みます。", typeof(FileStaticFile)));
-            list.Add(new Sample("StreamFile", "StreamFileを使って、ファイルを読み込みます。", typeof(FileStreamFile)));
-            list.Add(new Sample("Serialization", "バイナリデータシリアライズのサンプルです。", typeof(Serialization)));
-            list.Add(new Sample("MouseCursor", "マウスカーソル設定のサンプルです。", typeof(MouseCursor)));
-            list.Add(new Sample("Collision", "衝突の実装を行います。", typeof(Collision)));
+            Samples = new List<Sample>();
+            Samples.Add(new Sample("Sprite", "SpriteNode を使ってテクスチャを描画します。", typeof(Sprite)));
+            Samples.Add(new Sample("Camera", "CameraNode を使って描画対象を設定して描画します。", typeof(Camera)));
+            Samples.Add(new Sample("RenderTexture", "描画結果を再利用します。", typeof(Camera_RenderTexture)));
+            Samples.Add(new Sample("SE", "効果音を再生します。", typeof(SoundSE)));
+            Samples.Add(new Sample("BGM", "BGM を再生します。", typeof(SoundBGM)));
+            Samples.Add(new Sample("BGMLoop", "BGM をループ再生します。", typeof(SoundLoop)));
+            Samples.Add(new Sample("StaticFile", "StaticFile を使って、ファイルを読み込みます。", typeof(FileStaticFile)));
+            Samples.Add(new Sample("StreamFile", "StreamFile を使って、ファイルを読み込みます。", typeof(FileStreamFile)));
+            Samples.Add(new Sample("Serialization", "バイナリデータシリアライズのサンプルです。", typeof(Serialization)));
+            Samples.Add(new Sample("MouseCursor", "マウスカーソル設定のサンプルです。", typeof(MouseCursor)));
+            Samples.Add(new Sample("Collision", "衝突の実装を行います。", typeof(Collision)));
 
-            Samples = list.ToDictionary(s => s.TypeName);
+            SamplesString = string.Join('\t', Samples.Select(s => s.Name));
 
             if (args.Length != 1) ShowViewer();
-            else if (Samples.TryGetValue(args[0], out var s)) s.Run();
+            else
+            {
+                var s = Samples.FirstOrDefault(s => s.TypeName == args[0]);
+                s?.Run();
+            }
         }
 
         private static void ShowViewer()
@@ -37,19 +45,21 @@ namespace Sample
             var config = new Configuration()
             {
                 ToolEnabled = true,
+                FileLoggingEnabled = true,
             };
             if (!Engine.Initialize("Altseed2 サンプルビュワー", 640, 480, config)) return;
+
+            Engine.Tool.AddFontFromFileTTF(@"mplus-1m-regular.ttf", 20, ToolGlyphRanges.Japanese);
 
             while (Engine.DoEvents())
             {
                 if (Engine.Tool.BeginFullScreen(0))
                 {
-                    foreach (var s in Samples.Values)
-                    {
-                        var size = new Vector2F(96, 24);
-                        if (Engine.Tool.Button(s.Name, size))
-                            s.CreateProcess();
-                    }
+                    Engine.Tool.ListBox("", ref Selected, SamplesString, 8);
+
+                    var selectedSample = Samples[Selected];
+                    Engine.Tool.Text($"{ selectedSample.Name}\n{selectedSample.Description}");
+                    if (Engine.Tool.Button("実行")) selectedSample.CreateProcess();
                     Engine.Tool.End();
                 }
                 Engine.Update();
