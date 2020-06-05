@@ -4146,6 +4146,9 @@ namespace Altseed
         private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
         [DllImport("Altseed_Core")]
+        private static extern void cbg_Graphics_SaveScreenshot(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
         
         
@@ -4222,6 +4225,17 @@ namespace Altseed
         {
             var ret = cbg_Graphics_DoEvents(selfPtr);
             return ret;
+        }
+        
+        /// <summary>
+        /// スクリーンショットを保存します。
+        /// </summary>
+        /// <param name="path">出力先のパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        public void SaveScreenshot(string path)
+        {
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
+            cbg_Graphics_SaveScreenshot(selfPtr, path);
         }
         
         ~Graphics()
