@@ -18,4 +18,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Core\TestData\**\*.*" LinkBase="TestData">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
