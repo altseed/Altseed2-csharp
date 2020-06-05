@@ -11,8 +11,8 @@ namespace Sample
         {
             const int cameraGroup = 1;
 
-            // Altseed を初期化します。
-            if (!Engine.Initialize("Camera", 640, 480, new Configuration())) return;
+            // Altseed2 を初期化します。
+            if (!Engine.Initialize("Camera", 640, 480)) return;
 
             // SpriteNode を作成します。
             // 詳しくは SpriteNode のサンプルを参照してください。

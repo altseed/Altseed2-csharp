@@ -9,8 +9,8 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            // Altseed を初期化します。
-            if (!Engine.Initialize("SpriteNode", 640, 480, new Configuration())) return;
+            // Altseed2 を初期化します。
+            if (!Engine.Initialize("SpriteNode", 640, 480)) return;
 
             // テクスチャを読み込みます。
             var texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
@@ -20,9 +20,6 @@ namespace Sample
 
             // テクスチャを設定します。
             node.Texture = texture;
-
-            // テクスチャのサイズで切り出す
-            node.Src = new RectF(new Vector2F(), texture.Size);
 
             // ノードを登録します。
             Engine.AddNode(node);

@@ -9,7 +9,7 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            // Altseed を初期化します。
+            // Altseed2 を初期化します。
             Engine.Initialize("Transition", 640, 480);
 
             // Altseed のロゴを描画するノードを作成します。

@@ -10,8 +10,8 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            // Altseed を初期化します。
-            if (!Engine.Initialize("StaticFile", 640, 480, new Configuration())) return;
+            // Altseed2 を初期化します。
+            if (!Engine.Initialize("StaticFile", 640, 480)) return;
 
             // ファイルを読み込みます。
             var staticFile = StaticFile.Create(@"TestData\IO\test.txt");

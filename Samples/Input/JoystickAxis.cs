@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Altseed;
 
 namespace Sample
@@ -7,41 +8,44 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            Engine.Initialize("Altseed Docs Test", 640, 480, new Configuration());
+            // Altseed2 を初期化します。
+            Engine.Initialize("JoystickAxis", 640, 480);
 
-            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 100);
+            // 状態を出力するための TextNode を作成します。
+            // 詳細は TextNode のサンプルを参照してください。
+            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 40);
+            var textNode = new TextNode();
+            textNode.Font = font;
+            Engine.AddNode(textNode);
 
-            var node = new TextNode();
-            var stick_text = new TextNode();
-            node.Font = font;
-            stick_text.Font = font;
-
-            Engine.AddNode(node);
-            Engine.AddNode(stick_text);
-
-            if (Altseed.Engine.Joystick.IsPresent(0))
+            string displayText;
+            // 指定したインデックスのジョイスティックが接続しているかどうかを取得します。
+            if (Engine.Joystick.IsPresent(0))
             {
-                var name = Altseed.Engine.Joystick.GetJoystickName(0);
-                node.Text = $"コントローラー名: {name}";
+                var name = Engine.Joystick.GetJoystickName(0);
+                displayText = $"コントローラー名: {name}";
             }
             else
             {
-                node.Text = "コントローラーが接続されていません。";
+                displayText = "コントローラーが接続されていません。";
             }
 
             // ゲームのメインループ
             while (Engine.DoEvents())
             {
-                var label = "水平 / 垂直\n";
+                if (Engine.Joystick.IsPresent(0))
+                {
+                    var leftH = Engine.Joystick.GetAxisState(0, JoystickAxisType.LeftH);
+                    var leftV = Engine.Joystick.GetAxisState(0, JoystickAxisType.LeftV);
+                    var rightH = Engine.Joystick.GetAxisState(0, JoystickAxisType.RightH);
+                    var rightV = Engine.Joystick.GetAxisState(0, JoystickAxisType.RightV);
 
-                var left_h = Engine.Joystick.GetAxisState(0, JoystickAxisType.LeftH);
-                var left_v = Engine.Joystick.GetAxisState(0, JoystickAxisType.LeftV);
-                var right_h = Engine.Joystick.GetAxisState(0, JoystickAxisType.RightH);
-                var right_v = Engine.Joystick.GetAxisState(0, JoystickAxisType.RightV);
-
-                var lstick = $"左スティック: {left_h} / {left_v}\n";
-                var rstick = $"右スティック: {right_h} / {right_v}\n";
-                stick_text.Text = label + lstick + rstick;
+                    textNode.Text = displayText +
+                        $"水平 / 垂直\n" +
+                        $"左スティック:{leftH} / {leftV}\n" +
+                        $"右スティック: {rightH} / {rightV}";
+                }
+                else textNode.Text = displayText;
 
                 // Altseed2 の各種更新処理を行います。
                 Engine.Update();

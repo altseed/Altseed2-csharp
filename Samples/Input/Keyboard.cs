@@ -7,33 +7,35 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            Engine.Initialize("Altseed Docs Test", 640, 480);
+            // Altseed2 を初期化します。
+            Engine.Initialize("Keyboard", 640, 480);
 
-            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 100);
-
-            var nodeText = new TextNode();
-            nodeText.Font = font;
+            // 状態を出力するための TextNode を作成します。
+            // 詳細は TextNode のサンプルを参照してください。
+            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 40);
+            var textNode = new TextNode();
+            textNode.Font = font;
 
             while (Engine.DoEvents())
             {
-                var zstate = Engine.Keyboard.GetKeyState(Keys.Z);
+                var zState = Engine.Keyboard.GetKeyState(Keys.Z);
 
-                // Zキーが押されているかどうかを取得
-                if (zstate == ButtonState.Free)
+                // Zキーが押されているかどうかを取得します。
+                if (zState == ButtonState.Free)
                 {
-                    nodeText.Text = "Zキーを離しています。";
+                    textNode.Text = "Zキーを離しています。";
                 }
-                else if (zstate == ButtonState.Hold)
+                else if (zState == ButtonState.Hold)
                 {
-                    nodeText.Text = "Zキーを押しています。";
+                    textNode.Text = "Zキーを押しています。";
                 }
-                else if (zstate == ButtonState.Push)
+                else if (zState == ButtonState.Push)
                 {
-                    nodeText.Text = "Zキーを押しました！";
+                    textNode.Text = "Zキーを押しました！";
                 }
-                else if (zstate == ButtonState.Release)
+                else if (zState == ButtonState.Release)
                 {
-                    nodeText.Text = "Zキーを離しました！";
+                    textNode.Text = "Zキーを離しました！";
                 }
 
                 Engine.Update();

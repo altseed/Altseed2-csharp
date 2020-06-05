@@ -8,7 +8,7 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            // Altseed を初期化します。
+            // Altseed2 を初期化します。
             Engine.Initialize("Sound_BGM", 640, 480);
 
             // 音ファイルを読み込みます。

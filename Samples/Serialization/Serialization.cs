@@ -12,8 +12,8 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            // Altseed を初期化します。
-            if (!Engine.Initialize("Serialization", 640, 480, new Configuration())) return;
+            // Altseed2 を初期化します。
+            if (!Engine.Initialize("Serialization", 640, 480)) return;
 
             // シリアライズ結果を保存するファイルのパス
             var path = "SerializeSample.bin";

@@ -29,7 +29,7 @@ namespace Sample
         {
             var config = new Configuration();
             
-            // Altseed を初期化します。
+            // Altseed2 を初期化します。
             Engine.Initialize("~ Altseed2 DEMO ~", 640, 480);
             Engine.ClearColor = new Color(0, 0, 0);
 

@@ -7,49 +7,46 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            Engine.Initialize("Altseed Docs Test", 640, 480, new Configuration());
+            // Altseed2 を初期化します。
+            Engine.Initialize("JoystickVibrate", 640, 480);
 
-            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 100);
+            // 状態を出力するための TextNode を作成します。
+            // 詳細は TextNode のサンプルを参照してください。
+            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 40);
+            var textNode = new TextNode();
+            textNode.Font = font;
+            Engine.AddNode(textNode);
 
-            var node = new TextNode();
-            var status = new TextNode();
-            node.Font = font;
-            status.Font = font;
-
-            //Engine.AddNode(node);
-            //Engine.AddNode(status);
-            if (Altseed.Engine.Joystick.IsPresent(0))
+            var displayText = "";
+            // 指定したインデックスのジョイスティックが接続しているかどうかを取得します。
+            if (Engine.Joystick.IsPresent(0))
             {
-                var name = Altseed.Engine.Joystick.GetJoystickType(0);
-                node.Text = $"コントローラー名: {name}";
+                var name = Engine.Joystick.GetJoystickName(0);
+                displayText = $"コントローラー名: {name}\n";
             }
             else
             {
-                node.Text = "コントローラーが接続されていません。";
+                displayText = "コントローラーが接続されていません。\n";
             }
-            Console.WriteLine(node.Text);
 
             //インデックス0のジョイスティックを、振動数150・振幅0.7で振動させます。
             var frequency = 100.0f;
             var amptitude = 0.7f;
             var time = 500f;
 
-            var freq_rate = 10.0f;
-            var amp_rate = 0.05f;
-            var time_rate = 25f;
+            var freqRate = 10.0f;
+            var ampRate = 0.05f;
+            var timeRate = 25f;
 
-            // 振動時間を管理
+            // 振動時間を管理します。
             var sw = new System.Diagnostics.Stopwatch();
             var tl = new System.Diagnostics.Stopwatch();
             tl.Start();
 
-            var displayText = "";
-
             // ゲームのメインループ
             while (Engine.DoEvents())
             {
-
-                // 指定した時間になったら、振動を停止させる。
+                // 指定した時間になったら、振動を停止させます。
                 if (sw.IsRunning && sw.Elapsed.TotalMilliseconds >= time)
                 {
                     Engine.Joystick.Vibrate(0, 100f, 0.0f);
@@ -60,36 +57,36 @@ namespace Sample
                 // 周波数の調整
                 if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightDown) == ButtonState.Push)
                 {
-                    frequency -= freq_rate;
+                    frequency -= freqRate;
                     displayText += $"周波数: {frequency}\n";
                 }
                 else if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightUp) == ButtonState.Push)
                 {
-                    frequency += freq_rate;
+                    frequency += freqRate;
                     displayText += $"周波数: {frequency}\n";
                 }
 
                 // 振幅の調整
                 if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightLeft) == ButtonState.Push)
                 {
-                    amptitude -= amp_rate;
+                    amptitude -= ampRate;
                     displayText += $"振幅: {amptitude}\n";
                 }
                 else if (Engine.Joystick.GetButtonState(0, JoystickButtonType.RightRight) == ButtonState.Push)
                 {
-                    amptitude += amp_rate;
+                    amptitude += ampRate;
                     displayText += $"振幅: {amptitude}\n";
                 }
 
                 // 時間
                 if (Engine.Joystick.GetButtonState(0, JoystickButtonType.L3) == ButtonState.Push)
                 {
-                    time -= time_rate;
+                    time -= timeRate;
                     displayText += $"時間(ミリ秒): {time}\n";
                 }
                 else if (Engine.Joystick.GetButtonState(0, JoystickButtonType.R3) == ButtonState.Push)
                 {
-                    time += time_rate;
+                    time += timeRate;
                     displayText += $"時間(ミリ秒): {time}\n";
                 }
 
@@ -103,9 +100,8 @@ namespace Sample
                     Engine.Joystick.Vibrate(0, frequency, amptitude);
                     sw.Start();
                 }
-                status.Text = displayText;
 
-                Console.WriteLine(displayText);
+                textNode.Text = displayText;
 
                 // Altseed2 の各種更新処理を行います。
                 Engine.Update();
