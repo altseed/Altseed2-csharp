@@ -9973,7 +9973,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public void Image(Texture2D texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor)
+        public void Image(TextureBase texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor)
         {
             cbg_Tool_Image(selfPtr, texture != null ? texture.selfPtr : IntPtr.Zero, size, uv0, uv1, tintColor, borderColor);
         }
@@ -9981,7 +9981,7 @@ namespace Altseed
         /// <summary>
         /// 
         /// </summary>
-        public bool ImageButton(Texture2D texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor)
+        public bool ImageButton(TextureBase texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor)
         {
             var ret = cbg_Tool_ImageButton(selfPtr, texture != null ? texture.selfPtr : IntPtr.Zero, size, uv0, uv1, framePadding, tintColor, borderColor);
             return ret;
