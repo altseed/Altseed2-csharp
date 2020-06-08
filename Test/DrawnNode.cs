@@ -20,8 +20,8 @@ namespace Altseed.Test
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
-            node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
+            node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Pivot = new Vector2F(0.5f, 0.5f);
             node.AdjustSize();
             Engine.AddNode(node);
@@ -56,19 +56,20 @@ namespace Altseed.Test
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
+            node.Texture = texture;
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Pivot = new Vector2F(0.5f, 0.5f);
             node.AdjustSize();
-            node.Texture = texture;
 
             Engine.AddNode(node);
 
             var node2 = new SpriteNode();
+            node2.Texture = texture;
             node2.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node2.Pivot = new Vector2F(0.5f, 0.5f);
             node2.AdjustSize();
-            node2.Texture = texture;
             node2.Angle = 45;
+            node2.ZOrder = 1;
 
             node2.Material = new Material()
             {
