@@ -536,6 +536,16 @@ namespace Altseed
         Pixel,
     }
     
+    [Serializable]
+    public enum AlphaBlendMode : int
+    {
+        Opacity,
+        Normal,
+        Add,
+        Subtract,
+        Multiply,
+    }
+    
     /// <summary>
     /// ビルド済みシェーダの種類を表します
     /// </summary>
@@ -4926,6 +4936,12 @@ namespace Altseed
         private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr shader);
         
         [DllImport("Altseed_Core")]
+        private static extern int cbg_Material_GetBlendMode(IntPtr selfPtr);
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_Material_SetBlendMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
         
         #endregion
@@ -4934,6 +4950,28 @@ namespace Altseed
         {
             selfPtr = handle.selfPtr;
         }
+        
+        /// <summary>
+        /// 組み込みのシェーダを取得します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get
+            {
+                if (_BlendMode != null)
+                {
+                    return _BlendMode.Value;
+                }
+                var ret = cbg_Material_GetBlendMode(selfPtr);
+                return (AlphaBlendMode)ret;
+            }
+            set
+            {
+                _BlendMode = value;
+                cbg_Material_SetBlendMode(selfPtr, (int)value);
+            }
+        }
+        private AlphaBlendMode? _BlendMode;
         
         /// <summary>
         /// 新しいインスタンスを生成する

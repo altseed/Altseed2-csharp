@@ -47,6 +47,59 @@ namespace Altseed.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void SpriteNodeWithMaterial()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
+            node.Pivot = new Vector2F(0.5f, 0.5f);
+            node.AdjustSize();
+            node.Texture = texture;
+
+            Engine.AddNode(node);
+
+            var node2 = new SpriteNode();
+            node2.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
+            node2.Pivot = new Vector2F(0.5f, 0.5f);
+            node2.AdjustSize();
+            node2.Texture = texture;
+            node2.Angle = 45;
+
+            node2.Material = new Material()
+            {
+                BlendMode = AlphaBlendMode.Multiply,
+            };
+            var psCode = @"
+Texture2D mainTex : register(t0);
+SamplerState mainSamp : register(s0);
+struct PS_INPUT
+{
+    float4  Position : SV_POSITION;
+    float4  Color    : COLOR0;
+    float2  UV1 : UV0;
+    float2  UV2 : UV1;
+};
+float4 main(PS_INPUT input) : SV_TARGET 
+{ 
+    float4 c;
+    c = mainTex.Sample(mainSamp, input.UV1) * input.Color;
+    return c;
+}";
+            node2.Material.SetShader(Shader.Create("ps", psCode, ShaderStageType.Pixel));
+            node2.Material.SetTexture("mainTex", texture);
+            Engine.AddNode(node2);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void TextNode()
         {
             var tc = new TestCore();
@@ -511,7 +564,8 @@ namespace Altseed.Test
 
             Engine.AddNode(line1);
 
-            tc.LoopBody(c=> {
+            tc.LoopBody(c =>
+            {
                 if (c == 3)
                 {
                     line1.Point1 = new Vector2F(100f, 0f);
