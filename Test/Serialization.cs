@@ -226,10 +226,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Texture2D()
         {
-            var tc = new TestCore()
-            {
-                Duration = int.MaxValue
-            };
+            var tc = new TestCore();
 
             tc.Init();
 

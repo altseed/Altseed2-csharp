@@ -11,6 +11,8 @@ namespace Altseed
         private readonly RenderedPolygon renderedPolygon;
         internal override int CullingId => renderedPolygon.Id;
 
+        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
+
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
@@ -71,7 +73,10 @@ namespace Altseed
             Engine.Renderer.DrawPolygon(renderedPolygon);
         }
 
-        internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();
+        internal override void UpdateInheritedTransform()
+        {
+            renderedPolygon.Transform = CalcInheritedTransform();
+        }
 
         private void UpdateVertexes()
         {

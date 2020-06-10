@@ -14,7 +14,6 @@ namespace Altseed.Test
         public void SpriteNode()
         {
             var tc = new TestCore();
-            tc.Duration = 2000;
             tc.Init();
 
             var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
@@ -61,10 +60,7 @@ namespace Altseed.Test
         [Test, Apartment(ApartmentState.STA)]
         public void AutoCollisionSystem()
         {
-            var tc = new TestCore()
-            {
-                Duration = int.MaxValue
-            };
+            var tc = new TestCore();
             tc.Init();
 
             var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");

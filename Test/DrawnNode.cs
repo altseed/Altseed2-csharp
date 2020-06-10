@@ -150,7 +150,6 @@ float4 main(PS_INPUT input) : SV_TARGET
             Engine.AddNode(new TextNode() { Font = font, Text = node.Size.ToString(), Position = new Vector2F(0.0f, 50.0f) });
             Engine.AddNode(new TextNode() { Font = font, Text = "字間5です。\n行間標準です。", CharacterSpace = 10, Position = new Vector2F(0.0f, 150.0f) });
             Engine.AddNode(new TextNode() { Font = font, Text = "字間10です。\n行間70です。", CharacterSpace = 50, LineGap = 200, Position = new Vector2F(0.0f, 250.0f) });
-            tc.Duration = 1000;
             tc.LoopBody(c =>
             {
             }
@@ -350,7 +349,6 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
-            tc.Duration = 10000;
             tc.LoopBody(c =>
             {
                 if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) rectSize.X += 1.5f;
@@ -382,7 +380,6 @@ float4 main(PS_INPUT input) : SV_TARGET
         {
             var tc = new TestCore();
             tc.Init();
-            tc.Duration = 180;
 
             var arc1 = new ArcNode()
             {

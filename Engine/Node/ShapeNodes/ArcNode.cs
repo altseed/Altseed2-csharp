@@ -9,9 +9,11 @@ namespace Altseed
     public class ArcNode : DrawnNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon renderedPolygon;
+        private readonly RenderedPolygon _RenderedPolygon;
 
-        internal override int CullingId => renderedPolygon.Id;
+        internal override int CullingId => _RenderedPolygon.Id;
+
+        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -23,7 +25,7 @@ namespace Altseed
             {
                 if (_color == value) return;
                 _color = value;
-                renderedPolygon.OverwriteVertexesColor(value);
+                _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
@@ -46,7 +48,11 @@ namespace Altseed
         /// <summary>
         /// 使用するマテリアルを取得または設定します。
         /// </summary>
-        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
+        public Material Material
+        {
+            get => _RenderedPolygon.Material;
+            set { _RenderedPolygon.Material = value; }
+        }
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -99,10 +105,10 @@ namespace Altseed
         /// </summary>
         public TextureBase Texture
         {
-            get => renderedPolygon.Texture;
+            get => _RenderedPolygon.Texture;
             set
             {
-                renderedPolygon.Texture = value;
+                _RenderedPolygon.Texture = value;
             }
         }
 
@@ -111,8 +117,8 @@ namespace Altseed
         /// </summary>
         public ArcNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
-            renderedPolygon.Vertexes = VertexArray.Create(_vertnum);
+            _RenderedPolygon = RenderedPolygon.Create();
+            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
         }
 
         protected internal override void Draw()
@@ -122,7 +128,7 @@ namespace Altseed
                 UpdateVertexes();
                 changed = true;
             }
-            Engine.Renderer.DrawPolygon(renderedPolygon);
+            Engine.Renderer.DrawPolygon(_RenderedPolygon);
         }
 
         private Vector2F GetBaseVector(float degree)
@@ -157,7 +163,10 @@ namespace Altseed
             if (max - min > 360f) max -= 360f;
         }
 
-        internal override void UpdateInheritedTransform() => renderedPolygon.Transform = CalcInheritedTransform();
+        internal override void UpdateInheritedTransform()
+        {
+            _RenderedPolygon.Transform = CalcInheritedTransform();
+        }
 
         private void UpdateVertexes()
         {
@@ -193,8 +202,8 @@ namespace Altseed
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            renderedPolygon.CreateVertexesByVector2F(array);
-            renderedPolygon.OverwriteVertexesColor(_color);
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(_color);
         }
     }
 }

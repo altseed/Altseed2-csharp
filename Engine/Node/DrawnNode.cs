@@ -28,6 +28,8 @@ namespace Altseed
         [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
 
+        public virtual Matrix44F AbsoluteTransform { get; }
+
         protected internal abstract void Draw();
 
         /// <summary>

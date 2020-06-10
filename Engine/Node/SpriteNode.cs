@@ -8,18 +8,20 @@ namespace Altseed
     [Serializable]
     public class SpriteNode : DrawnNode
     {
-        private readonly RenderedSprite _RenderedSprite;
+        private readonly RenderedSprite renderedSprite;
+
+        public override Matrix44F AbsoluteTransform => renderedSprite.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => _RenderedSprite.Color;
+            get => renderedSprite.Color;
             set
             {
-                if (_RenderedSprite.Color == value) return;
-                _RenderedSprite.Color = value;
+                if (renderedSprite.Color == value) return;
+                renderedSprite.Color = value;
             }
         }
 
@@ -28,11 +30,11 @@ namespace Altseed
         /// </summary>
         public RectF Src
         {
-            get => _RenderedSprite.Src;
+            get => renderedSprite.Src;
             set
             {
-                if (_RenderedSprite.Src == value) return;
-                _RenderedSprite.Src = value;
+                if (renderedSprite.Src == value) return;
+                renderedSprite.Src = value;
             }
         }
 
@@ -41,11 +43,11 @@ namespace Altseed
         /// </summary>
         public TextureBase Texture
         {
-            get => _RenderedSprite.Texture;
+            get => renderedSprite.Texture;
             set
             {
-                if (_RenderedSprite.Texture == value) return;
-                _RenderedSprite.Texture = value;
+                if (renderedSprite.Texture == value) return;
+                renderedSprite.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -57,12 +59,12 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => _RenderedSprite.Material;
+            get => renderedSprite.Material;
             set
             {
-                if (_RenderedSprite.Material == value) return;
+                if (renderedSprite.Material == value) return;
 
-                _RenderedSprite.Material = value;
+                renderedSprite.Material = value;
                 //TODO: Src
             }
         }
@@ -85,14 +87,14 @@ namespace Altseed
         /// <summary>
         /// カリング用ID
         /// </summary>
-        internal override int CullingId => _RenderedSprite.Id;
+        internal override int CullingId => renderedSprite.Id;
 
         /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public SpriteNode()
         {
-            _RenderedSprite = RenderedSprite.Create();
+            renderedSprite = RenderedSprite.Create();
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace Altseed
         /// </summary>
         protected internal override void Draw()
         {
-            Engine.Renderer.DrawSprite(_RenderedSprite);
+            Engine.Renderer.DrawSprite(renderedSprite);
         }
 
         internal override void UpdateInheritedTransform()
@@ -130,7 +132,7 @@ namespace Altseed
                     break;
             }
 
-            _RenderedSprite.Transform = CalcInheritedTransform() * mat;
+            renderedSprite.Transform = CalcInheritedTransform() * mat;
         }
 
         public override void AdjustSize()

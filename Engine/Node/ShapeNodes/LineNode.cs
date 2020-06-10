@@ -11,6 +11,8 @@ namespace Altseed
         private bool changed = false;
         private readonly RenderedPolygon renderedPolygon;
 
+        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
+        
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>

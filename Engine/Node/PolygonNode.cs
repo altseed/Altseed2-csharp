@@ -7,18 +7,20 @@ namespace Altseed
     [Serializable]
     public class PolygonNode : DrawnNode
     {
-        private readonly RenderedPolygon _RenderedPolygon;
+        private readonly RenderedPolygon renderedPolygon;
+
+        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => _RenderedPolygon.Src;
+            get => renderedPolygon.Src;
             set
             {
-                if (_RenderedPolygon.Src == value) return;
-                _RenderedPolygon.Src = value;
+                if (renderedPolygon.Src == value) return;
+                renderedPolygon.Src = value;
             }
         }
 
@@ -27,11 +29,11 @@ namespace Altseed
         /// </summary>
         public TextureBase Texture
         {
-            get => _RenderedPolygon.Texture;
+            get => renderedPolygon.Texture;
             set
             {
-                if (_RenderedPolygon.Texture == value) return;
-                _RenderedPolygon.Texture = value;
+                if (renderedPolygon.Texture == value) return;
+                renderedPolygon.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -43,12 +45,12 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => _RenderedPolygon.Material;
+            get => renderedPolygon.Material;
             set
             {
-                if (_RenderedPolygon.Material == value) return;
+                if (renderedPolygon.Material == value) return;
 
-                _RenderedPolygon.Material = value;
+                renderedPolygon.Material = value;
             }
         }
 
@@ -59,24 +61,24 @@ namespace Altseed
         {
             get
             {
-                return _RenderedPolygon.Vertexes?.ToArray();
+                return renderedPolygon.Vertexes?.ToArray();
             }
             set
             {
                 var vertexArray = VertexArray.Create(value.Length);
                 vertexArray.FromArray(value);
-                _RenderedPolygon.Vertexes = vertexArray;
+                renderedPolygon.Vertexes = vertexArray;
             }
         }
 
-        public Vertex[] GetVertexes=> _RenderedPolygon.Vertexes?.ToArray();
+        public Vertex[] GetVertexes=> renderedPolygon.Vertexes?.ToArray();
 
         public void SetVertexes(Vertex[] vertexes)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
             var vertexArray = VertexArray.Create(vertexes.Length);
             vertexArray.FromArray(vertexes);
-            _RenderedPolygon.Vertexes = vertexArray;
+            renderedPolygon.Vertexes = vertexArray;
         }
 
         public void SetVertexes(IEnumerable<Vertex> vertexes)
@@ -85,7 +87,7 @@ namespace Altseed
             var array = vertexes.ToArray();
             var vertexArray = VertexArray.Create(array.Length);
             vertexArray.FromArray(array);
-            _RenderedPolygon.Vertexes = vertexArray;
+            renderedPolygon.Vertexes = vertexArray;
         }
 
         /// <summary>
@@ -98,8 +100,8 @@ namespace Altseed
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
             var vertexArray = Vector2FArray.Create(vertexes.Length);
             vertexArray.FromArray(vertexes);
-            _RenderedPolygon.CreateVertexesByVector2F(vertexArray);
-            _RenderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.CreateVertexesByVector2F(vertexArray);
+            renderedPolygon.OverwriteVertexesColor(color);
         }
 
         /// <summary>
@@ -113,8 +115,8 @@ namespace Altseed
             var array = vertexes.ToArray();
             var vertexArray = Vector2FArray.Create(array.Length);
             vertexArray.FromArray(array);
-            _RenderedPolygon.CreateVertexesByVector2F(vertexArray);
-            _RenderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.CreateVertexesByVector2F(vertexArray);
+            renderedPolygon.OverwriteVertexesColor(color);
         }
 
         /// <summary>
@@ -135,14 +137,14 @@ namespace Altseed
         /// <summary>
         /// カリング用ID
         /// </summary>
-        internal override int CullingId => _RenderedPolygon.Id;
+        internal override int CullingId => renderedPolygon.Id;
 
         /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public PolygonNode()
         {
-            _RenderedPolygon = RenderedPolygon.Create();
+            renderedPolygon = RenderedPolygon.Create();
         }
 
         /// <summary>
@@ -150,7 +152,7 @@ namespace Altseed
         /// </summary>
         protected internal override void Draw()
         {
-            Engine.Renderer.DrawPolygon(_RenderedPolygon);
+            Engine.Renderer.DrawPolygon(renderedPolygon);
         }
 
         /// <summary>
@@ -159,7 +161,7 @@ namespace Altseed
         /// <param name="color">設定する色</param>
         public void OverwriteVertexColor(Color color)
         {
-            _RenderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.OverwriteVertexesColor(color);
         }
 
         internal override void UpdateInheritedTransform()
@@ -189,7 +191,7 @@ namespace Altseed
                     break;
             }
 
-            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
+            renderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         public override void AdjustSize()

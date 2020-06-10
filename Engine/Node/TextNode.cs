@@ -27,18 +27,20 @@ namespace Altseed
     [Serializable]
     public class TextNode : DrawnNode
     {
-        private readonly RenderedText _RenderedText;
+        private readonly RenderedText renderedText;
+
+        public override Matrix44F AbsoluteTransform => renderedText.Transform;
 
         /// <summary>
         /// 描画する文字列を取得または設定します。
         /// </summary>
         public string Text
         {
-            get => _RenderedText.Text;
+            get => renderedText.Text;
             set
             {
-                if (_RenderedText.Text == value) return;
-                _RenderedText.Text = value;
+                if (renderedText.Text == value) return;
+                renderedText.Text = value;
             }
         }
 
@@ -47,11 +49,11 @@ namespace Altseed
         /// </summary>
         public Font Font
         {
-            get => _RenderedText.Font;
+            get => renderedText.Font;
             set
             {
-                if (_RenderedText.Font == value) return;
-                _RenderedText.Font = value;
+                if (renderedText.Font == value) return;
+                renderedText.Font = value;
             }
         }
 
@@ -60,11 +62,11 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => _RenderedText.Material;
+            get => renderedText.Material;
             set
             {
-                if (_RenderedText.Material == value) return;
-                _RenderedText.Material = value;
+                if (renderedText.Material == value) return;
+                renderedText.Material = value;
             }
         }
 
@@ -73,11 +75,11 @@ namespace Altseed
         /// </summary>
         public float Weight
         {
-            get => _RenderedText.Weight;
+            get => renderedText.Weight;
             set
             {
-                if (_RenderedText.Weight == value) return;
-                _RenderedText.Weight = value;
+                if (renderedText.Weight == value) return;
+                renderedText.Weight = value;
             }
         }
 
@@ -86,11 +88,11 @@ namespace Altseed
         /// </summary>
         public float CharacterSpace
         {
-            get => _RenderedText.CharacterSpace;
+            get => renderedText.CharacterSpace;
             set
             {
-                if (_RenderedText.CharacterSpace == value) return;
-                _RenderedText.CharacterSpace = value;
+                if (renderedText.CharacterSpace == value) return;
+                renderedText.CharacterSpace = value;
             }
         }
 
@@ -105,7 +107,7 @@ namespace Altseed
             {
                 if (_LineGap == value) return;
                 _LineGap = value;
-                _RenderedText.LineGap = value ?? Font?.LineGap ?? 0;
+                renderedText.LineGap = value ?? Font?.LineGap ?? 0;
             }
         }
         private float? _LineGap = null;
@@ -115,11 +117,11 @@ namespace Altseed
         /// </summary>
         public Color Color
         {
-            get => _RenderedText.Color;
+            get => renderedText.Color;
             set
             {
-                if (_RenderedText.Color == value) return;
-                _RenderedText.Color = value;
+                if (renderedText.Color == value) return;
+                renderedText.Color = value;
             }
         }
 
@@ -128,11 +130,11 @@ namespace Altseed
         /// </summary>
         public bool IsEnableKerning
         {
-            get => _RenderedText.IsEnableKerning;
+            get => renderedText.IsEnableKerning;
             set
             {
-                if (_RenderedText.IsEnableKerning == value) return;
-                _RenderedText.IsEnableKerning = value;
+                if (renderedText.IsEnableKerning == value) return;
+                renderedText.IsEnableKerning = value;
             }
         }
 
@@ -141,11 +143,11 @@ namespace Altseed
         /// </summary>
         public WritingDirection WritingDirection
         {
-            get => _RenderedText.WritingDirection;
+            get => renderedText.WritingDirection;
             set
             {
-                if (_RenderedText.WritingDirection == value) return;
-                _RenderedText.WritingDirection = value;
+                if (renderedText.WritingDirection == value) return;
+                renderedText.WritingDirection = value;
             }
         }
 
@@ -184,14 +186,14 @@ namespace Altseed
         /// <summary>
         /// カリング用ID
         /// </summary>
-        internal override int CullingId => _RenderedText.Id;
+        internal override int CullingId => renderedText.Id;
 
         /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public TextNode()
         {
-            _RenderedText = RenderedText.Create();
+            renderedText = RenderedText.Create();
         }
 
         /// <summary>
@@ -199,7 +201,7 @@ namespace Altseed
         /// </summary>
         protected internal override void Draw()
         {
-            Engine.Renderer.DrawText(_RenderedText);
+            Engine.Renderer.DrawText(renderedText);
         }
 
         internal override void UpdateInheritedTransform()
@@ -210,10 +212,10 @@ namespace Altseed
                 case HorizontalAlignment.Left:
                     break;
                 case HorizontalAlignment.Center:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F((Size.X - _RenderedText.TextureSize.X) / 2, 0));
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F((Size.X - renderedText.TextureSize.X) / 2, 0));
                     break;
                 case HorizontalAlignment.Right:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F(Size.X - _RenderedText.TextureSize.X, 0));
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F(Size.X - renderedText.TextureSize.X, 0));
                     break;
                 default:
                     break;
@@ -224,21 +226,21 @@ namespace Altseed
                 case VerticalAlignment.Top:
                     break;
                 case VerticalAlignment.Center:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, (Size.Y - _RenderedText.TextureSize.Y) / 2));
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, (Size.Y - renderedText.TextureSize.Y) / 2));
                     break;
                 case VerticalAlignment.Bottom:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, Size.Y - _RenderedText.TextureSize.Y));
+                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, Size.Y - renderedText.TextureSize.Y));
                     break;
                 default:
                     break;
             }
 
-            _RenderedText.Transform = CalcInheritedTransform() * mat;
+            renderedText.Transform = CalcInheritedTransform() * mat;
         }
 
         public override void AdjustSize()
         {
-            Size = _RenderedText.TextureSize;
+            Size = renderedText.TextureSize;
         }
     }
 }

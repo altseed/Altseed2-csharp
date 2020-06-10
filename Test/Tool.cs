@@ -38,7 +38,6 @@ namespace Altseed.Test
             string str2 = "";
             int[] intArray = new int[] { 0, 1, 2, 3, 4 };
             float[] floatArray = new float[] { 0, 1, 2, 3, 4 };
-            tc.Duration = 10000;
             tc.LoopBody(c =>
             {
                 if (Engine.Tool.Begin("Test", ToolWindow.None))
