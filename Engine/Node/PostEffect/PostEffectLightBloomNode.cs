@@ -76,10 +76,12 @@ namespace Altseed
 
         protected override void Draw(RenderTexture src)
         {
-            var downSampleCount = 3; // ここ任意の値に設定できるようにしたい
-            var downSampleScale = 8; // ここ任意の値に設定できるようにしたい
-            var downTexture = new RenderTexture[downSampleCount];
-            for(int i = 0; i < downSampleCount; ++i)
+            var downSampleCount = 6;
+            var downSampleScale = 2;
+            var downTexture = new RenderTexture[downSampleCount + 1];
+
+            downTexture[0] = src;
+            for(int i = 1; i <= downSampleCount; ++i)
             {
                 downTexture[i] = GetBuffer(0, src.Size / downSampleScale);
                 downSampleScale *= 2;
@@ -87,14 +89,14 @@ namespace Altseed
 
             var renderParameter = new RenderPassParameter(new Color(), false, false);
 
-            for (int i = 0; i < downSampleCount; ++i)
+            for (int i = 1; i <= downSampleCount; ++i)
             {
-                _DownSampler.SetTexture("mainTex", i == 0 ? src : downTexture[i - 1]);
-                _DownSampler.SetVector4F("imageSize", new Vector4F(src.Size.X, src.Size.Y, 0, 0));
+                _DownSampler.SetTexture("mainTex", downTexture[i - 1]);
+                _DownSampler.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_DownSampler, downTexture[i], renderParameter);
             }
 
-            for (int i = 0; i < downSampleCount; ++i)
+            for (int i = 4; i <= downSampleCount; ++i)
             {
                 var tmpTexture = GetBuffer(1, downTexture[i].Size);
                 if (IsLuminanceMode)
@@ -116,14 +118,14 @@ namespace Altseed
 
             var inBuffer = src;
             var outBuffer = GetBuffer(1, src.Size);
-            var weight = 0.5f; // ここ任意の値に設定できるようにしたい
-            for (int i = 0; i < downSampleCount; ++i)
+            var weight = 0.5f;
+            for (int i = 4; i <= downSampleCount; ++i)
             {
                 _TextureMixer.SetTexture("mainTex1", inBuffer);
                 _TextureMixer.SetTexture("mainTex2", downTexture[i]);
                 _TextureMixer.SetVector4F("weight", new Vector4F(weight, weight, weight, weight));
 
-                if (i == downSampleCount - 1) RenderToRenderTarget(_TextureMixer);
+                if (i == downSampleCount) RenderToRenderTarget(_TextureMixer);
                 else
                 {
                     Engine.Graphics.CommandList.RenderToRenderTexture(_TextureMixer, outBuffer, renderParameter);
