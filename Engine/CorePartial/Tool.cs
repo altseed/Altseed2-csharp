@@ -131,13 +131,13 @@ namespace Altseed
             return res;
         }
 
-        public bool SliderInt2(string label, int[] array, float speed, int v_min, int v_max)
+        public bool SliderInt2(string label, int[] array, float speed, int vMin, int vMax)
         {
             if (array.Length < 2)
                 throw new ArgumentException("配列の長さが足りません");
 
             int32Array.FromArray(array);
-            bool res = SliderInt2(label, int32Array, speed, v_min, v_max);
+            bool res = SliderInt2(label, int32Array, speed, vMin, vMax);
 
             if (res)
                 for (int i = 0; i < array.Length; i++)
@@ -146,13 +146,13 @@ namespace Altseed
             return res;
         }
 
-        public bool SliderInt3(string label, int[] array, float speed, int v_min, int v_max)
+        public bool SliderInt3(string label, int[] array, float speed, int vMin, int vMax)
         {
             if (array.Length < 3)
                 throw new ArgumentException("配列の長さが足りません");
 
             int32Array.FromArray(array);
-            bool res = SliderInt3(label, int32Array, speed, v_min, v_max);
+            bool res = SliderInt3(label, int32Array, speed, vMin, vMax);
 
             if (res)
                 for (int i = 0; i < array.Length; i++)
@@ -161,13 +161,13 @@ namespace Altseed
             return res;
         }
 
-        public bool SliderInt4(string label, int[] array, float speed, int v_min, int v_max)
+        public bool SliderInt4(string label, int[] array, float speed, int vMin, int vMax)
         {
             if (array.Length < 4)
                 throw new ArgumentException("配列の長さが足りません");
 
             int32Array.FromArray(array);
-            bool res = SliderInt4(label, int32Array, speed, v_min, v_max);
+            bool res = SliderInt4(label, int32Array, speed, vMin, vMax);
 
             if (res)
                 for (int i = 0; i < array.Length; i++)
@@ -176,13 +176,13 @@ namespace Altseed
             return res;
         }
 
-        public bool SliderFloat2(string label, float[] array, float speed, float v_min, float v_max)
+        public bool SliderFloat2(string label, float[] array, float speed, float vMin, float vMax)
         {
             if (array.Length < 2)
                 throw new ArgumentException("配列の長さが足りません");
 
             floatArray.FromArray(array);
-            bool res = SliderFloat2(label, floatArray, speed, v_min, v_max);
+            bool res = SliderFloat2(label, floatArray, speed, vMin, vMax);
 
             if (res)
                 for (int i = 0; i < array.Length; i++)
@@ -191,13 +191,13 @@ namespace Altseed
             return res;
         }
 
-        public bool SliderFloat3(string label, float[] array, float speed, float v_min, float v_max)
+        public bool SliderFloat3(string label, float[] array, float speed, float vMin, float vMax)
         {
             if (array.Length < 3)
                 throw new ArgumentException("配列の長さが足りません");
 
             floatArray.FromArray(array);
-            bool res = SliderFloat3(label, floatArray, speed, v_min, v_max);
+            bool res = SliderFloat3(label, floatArray, speed, vMin, vMax);
 
             if (res)
                 for (int i = 0; i < array.Length; i++)
@@ -206,19 +206,24 @@ namespace Altseed
             return res;
         }
 
-        public bool SliderFloat4(string label, float[] array, float speed, float v_min, float v_max)
+        public bool SliderFloat4(string label, float[] array, float speed, float vMin, float vMax)
         {
             if (array.Length < 4)
                 throw new ArgumentException("配列の長さが足りません");
 
             floatArray.FromArray(array);
-            bool res = SliderFloat4(label, floatArray, speed, v_min, v_max);
+            bool res = SliderFloat4(label, floatArray, speed, vMin, vMax);
 
             if (res)
                 for (int i = 0; i < array.Length; i++)
                     array[i] = floatArray.GetAt(i);
 
             return res;
+        }
+
+        public bool RadioButton(string label, ref int v, int vButton)
+        {
+            return RadioButton_2(label, ref v, vButton);
         }
 
         public void PlotLines(
