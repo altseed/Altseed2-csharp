@@ -6854,6 +6854,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetHighLuminanceShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetLightBloomShader(IntPtr selfPtr);
         
         
@@ -6903,6 +6907,15 @@ namespace Altseed
             get
             {
                 var ret = cbg_BuiltinShader_GetGaussianBlurShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string HighLuminanceShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetHighLuminanceShader(selfPtr);
                 return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
             }
         }
@@ -7973,6 +7986,10 @@ namespace Altseed
         
         [DllImport("Altseed_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_RadioButton_2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int v, int v_button);
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ArrowButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int dir);
         
         [DllImport("Altseed_Core")]
@@ -8851,6 +8868,12 @@ namespace Altseed
         public bool RadioButton(string label, bool active)
         {
             var ret = cbg_Tool_RadioButton(selfPtr, label, active);
+            return ret;
+        }
+        
+        internal bool RadioButton_2(string label, ref int v, int v_button)
+        {
+            var ret = cbg_Tool_RadioButton_2(selfPtr, label, ref v, v_button);
             return ret;
         }
         
