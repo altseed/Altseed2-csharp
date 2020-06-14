@@ -95,18 +95,15 @@ namespace Altseed
             Size = new Vector2F(length, length);
         }
 
-        protected internal override void Draw()
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+
+        internal override void UpdateInheritedTransform()
         {
             if (changed)
             {
                 UpdateVertexes();
                 changed = false;
             }
-            Engine.Renderer.DrawPolygon(renderedPolygon);
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
             renderedPolygon.Transform = CalcInheritedTransform();
         }
 

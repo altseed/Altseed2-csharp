@@ -130,15 +130,7 @@ namespace Altseed
             Size = max - min;
         }
 
-        protected internal override void Draw()
-        {
-            if (changed)
-            {
-                UpdateVertexes();
-                changed = true;
-            }
-            Engine.Renderer.DrawPolygon(_RenderedPolygon);
-        }
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(_RenderedPolygon);
 
         private Vector2F GetBaseVector(float degree)
         {
@@ -174,6 +166,11 @@ namespace Altseed
 
         internal override void UpdateInheritedTransform()
         {
+            if (changed)
+            {
+                UpdateVertexes();
+                changed = false;
+            }
             _RenderedPolygon.Transform = CalcInheritedTransform();
         }
 

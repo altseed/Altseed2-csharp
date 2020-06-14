@@ -8,7 +8,9 @@ namespace Altseed
     [Serializable]
     public class RectangleNode : DrawnNode
     {
+        private bool changed = false;
         private readonly RenderedPolygon renderedPolygon;
+
         internal override int CullingId => renderedPolygon.Id;
 
         public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
@@ -38,7 +40,7 @@ namespace Altseed
             {
                 if (base.Size == value) return;
                 base.Size = value;
-                UpdateVertexes();
+                changed = true;
             }
         }
 
@@ -72,13 +74,15 @@ namespace Altseed
 
         public override void AdjustSize() { }
 
-        protected internal override void Draw()
-        {
-            Engine.Renderer.DrawPolygon(renderedPolygon);
-        }
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         internal override void UpdateInheritedTransform()
         {
+            if (changed)
+            {
+                UpdateVertexes();
+                changed = false;
+            }
             renderedPolygon.Transform = CalcInheritedTransform();
         }
 
