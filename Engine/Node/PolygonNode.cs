@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,8 +70,6 @@ namespace Altseed
                 renderedPolygon.Vertexes = vertexArray;
             }
         }
-
-        public Vertex[] GetVertexes=> renderedPolygon.Vertexes?.ToArray();
 
         public void SetVertexes(Vertex[] vertexes)
         {
