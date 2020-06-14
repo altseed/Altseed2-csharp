@@ -87,6 +87,12 @@ namespace Altseed
             renderedPolygon.Vertexes = VertexArray.Create(_vertnum);
         }
 
+        public override void AdjustSize()
+        {
+            var length = _radius * 2;
+            Size = new Vector2F(length, length);
+        }
+
         protected internal override void Draw()
         {
             if (changed)
@@ -108,20 +114,13 @@ namespace Altseed
             var positions = new Vector2F[_vertnum];
             var vec = new Vector2F(0.0f, -_radius);
             
-            float minx = 0.0f, miny = 0.0f, maxx = 0.0f, maxy = 0.0f;
             for (int i = 0; i < _vertnum; i++)
             {
                 positions[i] = vec;
                 vec.Degree += deg;
-
-                if (vec.X < minx) minx = vec.X;
-                if (maxx < vec.X) maxx = vec.X;
-                if (vec.Y < miny) miny = vec.Y;
-                if (maxy < vec.Y) maxy = vec.Y;
             }
 
-            Size = new Vector2F(maxx - minx, maxy - miny);
-            // NOTE: 半径から雑に計算してもいいかもしれない
+            AdjustSize();
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
