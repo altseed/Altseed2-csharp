@@ -6854,6 +6854,10 @@ namespace Altseed
         
         
         [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_BuiltinShader_GetHighLuminanceShader(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetLightBloomShader(IntPtr selfPtr);
         
         
@@ -6903,6 +6907,15 @@ namespace Altseed
             get
             {
                 var ret = cbg_BuiltinShader_GetGaussianBlurShader(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        internal string HighLuminanceShader
+        {
+            get
+            {
+                var ret = cbg_BuiltinShader_GetHighLuminanceShader(selfPtr);
                 return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
             }
         }
