@@ -9,11 +9,11 @@ namespace Altseed
     public class ArcNode : DrawnNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon _RenderedPolygon;
+        private readonly RenderedPolygon renderedPolygon;
 
-        internal override int CullingId => _RenderedPolygon.Id;
+        internal override int CullingId => renderedPolygon.Id;
 
-        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
+        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -25,7 +25,7 @@ namespace Altseed
             {
                 if (_color == value) return;
                 _color = value;
-                _RenderedPolygon.OverwriteVertexesColor(value);
+                renderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
@@ -50,8 +50,8 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => _RenderedPolygon.Material;
-            set { _RenderedPolygon.Material = value; }
+            get => renderedPolygon.Material;
+            set { renderedPolygon.Material = value; }
         }
 
         /// <summary>
@@ -89,12 +89,12 @@ namespace Altseed
         /// </summary>
         public TextureBase Texture
         {
-            get => _RenderedPolygon.Texture;
+            get => renderedPolygon.Texture;
             set
             {
-                if (_RenderedPolygon.Texture == value) return;
-                _RenderedPolygon.Texture = value;
-                _RenderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
+                if (renderedPolygon.Texture == value) return;
+                renderedPolygon.Texture = value;
+                renderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
             }
         }
 
@@ -119,18 +119,18 @@ namespace Altseed
         /// </summary>
         public ArcNode()
         {
-            _RenderedPolygon = RenderedPolygon.Create();
-            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
+            renderedPolygon = RenderedPolygon.Create();
+            renderedPolygon.Vertexes = VertexArray.Create(_vertnum);
         }
 
         public override void AdjustSize()
         {
             // TODO:Radiusから求めたい
-            MathHelper.GetMinMax(out var min, out var max, _RenderedPolygon.Vertexes);
+            MathHelper.GetMinMax(out var min, out var max, renderedPolygon.Vertexes);
             Size = max - min;
         }
 
-        protected internal override void Draw() => Engine.Renderer.DrawPolygon(_RenderedPolygon);
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         private Vector2F GetBaseVector(float degree)
         {
@@ -171,7 +171,7 @@ namespace Altseed
                 UpdateVertexes();
                 changed = false;
             }
-            _RenderedPolygon.Transform = CalcInheritedTransform();
+            renderedPolygon.Transform = CalcInheritedTransform();
         }
 
         private void UpdateVertexes()
@@ -201,8 +201,8 @@ namespace Altseed
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(_color);
+            renderedPolygon.CreateVertexesByVector2F(array);
+            renderedPolygon.OverwriteVertexesColor(_color);
         }
     }
 }
