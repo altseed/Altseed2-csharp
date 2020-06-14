@@ -85,6 +85,20 @@ namespace Altseed
         private float _startdegree = 0.0f;
 
         /// <summary>
+        /// 描画するテクスチャを取得または設定します。
+        /// </summary>
+        public TextureBase Texture
+        {
+            get => _RenderedPolygon.Texture;
+            set
+            {
+                if (_RenderedPolygon.Texture == value) return;
+                _RenderedPolygon.Texture = value;
+                _RenderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
+            }
+        }
+
+        /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
         public int VertNum
@@ -99,18 +113,6 @@ namespace Altseed
             }
         }
         private int _vertnum = 3;
-
-        /// <summary>
-        /// 描画するテクスチャを取得または設定します。
-        /// </summary>
-        public TextureBase Texture
-        {
-            get => _RenderedPolygon.Texture;
-            set
-            {
-                _RenderedPolygon.Texture = value;
-            }
-        }
 
         /// <summary>
         /// <see cref="ArcNode"/>の新しいインスタンスを生成する

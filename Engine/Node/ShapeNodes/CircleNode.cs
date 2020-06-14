@@ -58,7 +58,9 @@ namespace Altseed
             get => renderedPolygon.Texture;
             set
             {
+                if (renderedPolygon.Texture == value) return;
                 renderedPolygon.Texture = value;
+                renderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
             }
         }
 
