@@ -35,6 +35,7 @@ namespace Sample
             Samples.Add(new Sample("Keyboard", "キーボード入力を行います。", typeof(Keyboard)));
             Samples.Add(new Sample("Mouse", "マウス入力を行います。", typeof(Mouse)));
             Samples.Add(new Sample("MouseCursor", "マウスカーソルを変更します。", typeof(MouseCursor)));
+            Samples.Add(new Sample("ShapeNode", "図形ノードを描画します。", typeof(ShapeNode)));
             
             SamplesString = string.Join('\t', Samples.Select(s => s.Name));
 
