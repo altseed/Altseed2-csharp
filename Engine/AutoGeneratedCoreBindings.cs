@@ -4013,30 +4013,6 @@ namespace Altseed
         }
         
         /// <summary>
-        /// ボタンの状態をインデックスで取得します。
-        /// </summary>
-        /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
-        /// <param name="buttonIndex">状態を検索するボタンのインデックス</param>
-        /// <returns>指定インデックスのボタンの状態</returns>
-        internal ButtonState GetButtonStateByIndex(int joystickIndex, int buttonIndex)
-        {
-            var ret = cbg_Joystick_GetButtonStateByIndex(selfPtr, joystickIndex, buttonIndex);
-            return (ButtonState)ret;
-        }
-        
-        /// <summary>
-        /// ボタンの状態を種類から取得します。
-        /// </summary>
-        /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
-        /// <param name="type">状態を検索するボタンの種類</param>
-        /// <returns>指定種類のボタンの状態</returns>
-        internal ButtonState GetButtonStateByType(int joystickIndex, JoystickButtonType type)
-        {
-            var ret = cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
-            return (ButtonState)ret;
-        }
-        
-        /// <summary>
         /// 指定インデックスのジョイスティックの種類を取得します。
         /// </summary>
         /// <param name="index">種類を取得するジョイスティックのインデックス</param>
@@ -4045,30 +4021,6 @@ namespace Altseed
         {
             var ret = cbg_Joystick_GetJoystickType(selfPtr, index);
             return (JoystickType)ret;
-        }
-        
-        /// <summary>
-        /// 軸の状態をインデックスで取得します。
-        /// </summary>
-        /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
-        /// <param name="axisIndex">状態を検索する軸のインデックス</param>
-        /// <returns>指定インデックスの軸の状態</returns>
-        internal float GetAxisStateByIndex(int joystickIndex, int axisIndex)
-        {
-            var ret = cbg_Joystick_GetAxisStateByIndex(selfPtr, joystickIndex, axisIndex);
-            return ret;
-        }
-        
-        /// <summary>
-        /// 軸の状態を軸の種類で取得します。
-        /// </summary>
-        /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
-        /// <param name="type">状態を検索する軸の種類</param>
-        /// <returns>指定種類の軸の状態</returns>
-        internal float GetAxisStateByType(int joystickIndex, JoystickAxisType type)
-        {
-            var ret = cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
-            return ret;
         }
         
         /// <summary>
@@ -4877,7 +4829,7 @@ namespace Altseed
     /// マテリアル
     /// </summary>
     [Serializable]
-    public sealed partial class Material
+    public sealed partial class Material : ISerializable, ICacheKeeper<Material>
     {
         #region unmanaged
         
@@ -4981,100 +4933,91 @@ namespace Altseed
             selfPtr = cbg_Material_Constructor_0();
         }
         
+        
+        #region ISerialiable
+        
+        #region SerializeName
+        #endregion
+        
         /// <summary>
-        /// 指定した名前を持つ<see cref="Vector4F"/>のインスタンスを取得する
+        /// シリアライズされたデータをもとに<see cref="Material"/>のインスタンスを生成する
         /// </summary>
-        /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        /// <returns><paramref name="key"/>を名前として持つ<see cref="Vector4F"/>のインスタンス</returns>
-        public Vector4F GetVector4F(string key)
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        private Material(SerializationInfo info, StreamingContext context) : this()
         {
-            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
-            var ret = cbg_Material_GetVector4F(selfPtr, key);
-            return ret;
+            var ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandling(this, ptr);
+            
+            
+            OnDeserialize_Constructor(info, context);
         }
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="Vector4F"/>の値を設定する
+        /// シリアライズするデータを設定します。
         /// </summary>
-        /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
-        /// <param name="value">設定する<see cref="Vector4F"/>のインスタンスの値</param>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        public void SetVector4F(string key, Vector4F value)
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
-            cbg_Material_SetVector4F(selfPtr, key, value);
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
+            
+            
+            OnGetObjectData(info, context);
         }
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="Matrix44F"/>のインスタンスを取得する
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
         /// </summary>
-        /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        /// <returns><paramref name="key"/>を名前として持つ<see cref="Matrix44F"/>のインスタンス</returns>
-        public Matrix44F GetMatrix44F(string key)
-        {
-            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
-            var ret = cbg_Material_GetMatrix44F(selfPtr, key);
-            return ret;
-        }
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="Matrix44F"/>の値を設定する
+        /// <see cref="Material(SerializationInfo, StreamingContext)"/>内で実行
         /// </summary>
-        /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
-        /// <param name="value">設定する<see cref="Matrix44F"/>のインスタンスの値</param>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        public void SetMatrix44F(string key, Matrix44F value)
-        {
-            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
-            cbg_Material_SetMatrix44F(selfPtr, key, value);
-        }
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="TextureBase"/>のインスタンスを取得する
+        /// <see cref="Material(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="key">検索する<see cref="TextureBase"/>のインスタンスの名前</param>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        /// <returns><paramref name="key"/>を名前として持つ<see cref="TextureBase"/>のインスタンス</returns>
-        public TextureBase GetTexture(string key)
-        {
-            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
-            var ret = cbg_Material_GetTexture(selfPtr, key);
-            return TextureBase.TryGetFromCache(ret);
-        }
+        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
+        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
-        /// 指定した名前を持つ<see cref="TextureBase"/>の値を設定する
+        /// 呼び出し禁止
         /// </summary>
-        /// <param name="key">検索する<see cref="TextureBase"/>のインスタンスの名前</param>
-        /// <param name="value">設定する<see cref="TextureBase"/>のインスタンスの値</param>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
-        public void SetTexture(string key, TextureBase value)
+        private IntPtr Call_GetPtr(SerializationInfo info)
         {
-            if (key == null) throw new ArgumentNullException(nameof(key), "引数がnullです");
-            cbg_Material_SetTexture(selfPtr, key, value != null ? value.selfPtr : IntPtr.Zero);
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
         }
         
-        /// <summary>
-        /// 指定した種類のシェーダを取得する
-        /// </summary>
-        /// <param name="shaderStage">検索するシェーダのタイプ</param>
-        /// <returns><paramref name="shaderStage"/>に一致するタイプのシェーダ</returns>
-        public Shader GetShader(ShaderStageType shaderStage)
+        #region ICacheKeeper
+        
+        IDictionary<IntPtr, WeakReference<Material>> ICacheKeeper<Material>.CacheRepo => cacheRepo;
+        
+        IntPtr ICacheKeeper<Material>.Self
         {
-            var ret = cbg_Material_GetShader(selfPtr, (int)shaderStage);
-            return Shader.TryGetFromCache(ret);
+            get => selfPtr;
+            set
+            {
+                selfPtr = value;
+            }
         }
         
-        /// <summary>
-        /// シェーダを設定する
-        /// </summary>
-        /// <param name="shader">設定するシェーダ</param>
-        public void SetShader(Shader shader)
-        {
-            cbg_Material_SetShader(selfPtr, shader != null ? shader.selfPtr : IntPtr.Zero);
-        }
+        void ICacheKeeper<Material>.Release(IntPtr native) => cbg_Material_Release(native);
+        
+        #endregion
+        
+        #endregion
         
         ~Material()
         {
