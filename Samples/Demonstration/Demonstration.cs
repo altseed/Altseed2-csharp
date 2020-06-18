@@ -2,9 +2,9 @@
 using System.Linq;
 using Altseed;
 
-namespace Sample
+namespace AltseedDemo
 {
-    class Demonstration
+    class Program
     {
         // HSV を RGB に変換します。
         private static Color HSV2RGB(int hue, int saturation, int value)
@@ -27,9 +27,7 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            var config = new Configuration();
-            
-            // Altseed2 を初期化します。
+            // Altseed を初期化します。
             Engine.Initialize("~ Altseed2 DEMO ~", 640, 480);
             Engine.ClearColor = new Color(0, 0, 0);
 
@@ -75,8 +73,8 @@ namespace Sample
 
             // ライトブルームのポストエフェクトを作成し、エンジンに登録します。
             var lightBloom = new PostEffectLightBloomNode();
-            lightBloom.Intensity = 3.0f;
-            lightBloom.Threshold = 1.0f;
+            lightBloom.Intensity = 5.0f;
+            lightBloom.Threshold = 0.1f;
             lightBloom.CameraGroup = 1;
             Engine.AddNode(lightBloom);
 
@@ -91,21 +89,22 @@ namespace Sample
                 // スペクトル情報を取得します。
                 var spectrum = Engine.Sound.GetSpectrum(soundId, 1024, FFTWindow.Blackman);
 
-                // スペクトル情報を区分ごとに平均し、スペクトルバーにその値を反映させます。
+                // スペクトル情報を区分ごとに合計し、スペクトルバーにその値を反映させます。
                 for(int i = 0; i < 16; ++i)
                 {
-                    var freqAverage = spectrum.Skip(i * 32).Take(32).Average();
+                    var freqAverage = spectrum.Skip(i * 32).Take(32).Sum();
+                    var amplitude = MathF.Log2(freqAverage);
                     for(int j = 0; j < 16; ++j)
                     {
                         var color = spectrumBars[i, 15 - j].Color;
-                        color.A = (byte)((freqAverage > (j + 1) * 1.5f) ? 255 : 0);
+                        color.A = (byte)((amplitude > j) ? 255 : 0);
                         spectrumBars[i, 15 - j].Color = color;
                     }
                 }
 
                 // スペクトル情報を全て平均し、ライトブルームの光の強さに使用します。
-                var amplitude = spectrum.Average();
-                lightBloom.Exposure = amplitude * 1.5f;
+                var amplitudeTotal = spectrum.Average();
+                lightBloom.Exposure = amplitudeTotal;
 
                 // 曲の長さと再生位置を取得します。
                 var songLength = sound.Length;
