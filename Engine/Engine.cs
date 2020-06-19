@@ -194,7 +194,7 @@ namespace Altseed
             else
             {
                 // 特定のカメラに映りこむノードを描画
-                for (int i = 0; i <= 31; i++)
+                for (int i = 0; i <= 63; i++)
                 {
                     foreach (var camera in _CameraNodes[i])
                     {
@@ -398,7 +398,7 @@ namespace Altseed
             _DrawnNodes.RemoveNode(node);
         }
 
-        internal static void UpdateDrawnNodeCameraGroup(DrawnNode node, uint oldCameraGroup)
+        internal static void UpdateDrawnNodeCameraGroup(DrawnNode node, ulong oldCameraGroup)
         {
             _DrawnNodes.UpdateCameraGroup(node, oldCameraGroup);
         }
@@ -422,7 +422,7 @@ namespace Altseed
             _PostEffectNodes.RemoveNode(node);
         }
 
-        internal static void UpdatePostEffectNodeCameraGroup(PostEffectNode node, uint oldCameraGroup)
+        internal static void UpdatePostEffectNodeCameraGroup(PostEffectNode node, ulong oldCameraGroup)
         {
             _PostEffectNodes.UpdateCameraGroup(node, oldCameraGroup);
         }

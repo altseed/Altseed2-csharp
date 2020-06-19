@@ -31,12 +31,10 @@ namespace Altseed
             }
         }
 
-        private uint _CameraGroup = 0;
-
         /// <summary>
         /// このノードを描画するカメラを取得または設定します。
         /// </summary>
-        public uint CameraGroup
+        public ulong CameraGroup
         {
             get => _CameraGroup;
             set
@@ -51,8 +49,7 @@ namespace Altseed
                 }
             }
         }
-
-        private int _DrawingOrder = 0;
+        private ulong _CameraGroup = 0;
 
         /// <summary>
         /// PostEffectNodeが描画される順番。DrawnNodeを描画した後にまとめて描画されます。
@@ -71,6 +68,7 @@ namespace Altseed
                 }
             }
         }
+        private int _DrawingOrder = 0;
 
         public PostEffectNode() { }
 

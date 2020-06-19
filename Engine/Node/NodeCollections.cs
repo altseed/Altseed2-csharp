@@ -6,7 +6,7 @@ namespace Altseed
 {
     internal abstract class RenderedCollection<T>
     {
-        protected abstract uint GetGroup(T o);
+        protected abstract ulong GetGroup(T o);
         protected abstract int GetOrder(T o);
 
         internal Dictionary<int, List<T>> Nodes { get; private set; }
@@ -16,17 +16,17 @@ namespace Altseed
         {
             Nodes = new Dictionary<int, List<T>>();
 
-            _Lists = new Dictionary<int, List<T>>[33];
-            for (int i = 0; i <= 31; i++)
+            _Lists = new Dictionary<int, List<T>>[65];
+            for (int i = 0; i <= 63; i++)
                 _Lists[i] = new Dictionary<int, List<T>>();
         }
 
-        internal void UpdateCameraGroup(T node, uint oldCameraGroup)
+        internal void UpdateCameraGroup(T node, ulong oldCameraGroup)
         {
             var nodeGroup = GetGroup(node);
             var nodeOrder = GetOrder(node);
 
-            for (int i = 0; i <= 31; i++)
+            for (int i = 0; i <= 63; i++)
             {
                 var mask = 1u << i;
 
@@ -52,7 +52,7 @@ namespace Altseed
             var nodeGroup = GetGroup(node);
             var nodeOrder = GetOrder(node);
 
-            for (int i = 0; i <= 31; i++)
+            for (int i = 0; i <= 63; i++)
             {
                 var mask = 1u << i;
                 if (!HasBit(nodeGroup, mask)) continue;
@@ -77,7 +77,7 @@ namespace Altseed
                 Nodes[nodeOrder] = new List<T>();
             Nodes[nodeOrder].Add(node);
 
-            for (int i = 0; i <= 31; i++)
+            for (int i = 0; i <= 63; i++)
             {
                 var mask = 1u << i;
                 if (!HasBit(nodeGroup, mask)) continue;
@@ -97,7 +97,7 @@ namespace Altseed
 
             Nodes[nodeOrder].Remove(node);
 
-            for (int i = 0; i <= 31; i++)
+            for (int i = 0; i <= 63; i++)
             {
                 var mask = 1u << i;
                 if (!HasBit(nodeGroup, mask)) continue;
@@ -109,12 +109,12 @@ namespace Altseed
 
         internal Dictionary<int, List<T>> this[int group] => _Lists[group];
 
-        private bool HasBit(uint value, uint mask) => (value & mask) != 0;
+        private bool HasBit(ulong value, uint mask) => (value & mask) != 0;
     }
 
     internal class DrawnNodeCollection : RenderedCollection<DrawnNode>
     {
-        protected override uint GetGroup(DrawnNode o)
+        protected override ulong GetGroup(DrawnNode o)
         {
             return o.CameraGroup;
         }
@@ -127,7 +127,7 @@ namespace Altseed
 
     internal class PostEffectNodeCollection : RenderedCollection<PostEffectNode>
     {
-        protected override uint GetGroup(PostEffectNode o)
+        protected override ulong GetGroup(PostEffectNode o)
         {
             return o.CameraGroup;
         }
@@ -146,8 +146,8 @@ namespace Altseed
 
         internal CameraNodeCollection()
         {
-            _Lists = new List<CameraNode>[32];
-            for (int i = 0; i <= 31; i++)
+            _Lists = new List<CameraNode>[64];
+            for (int i = 0; i <= 63; i++)
                 _Lists[i] = new List<CameraNode>();
 
         }

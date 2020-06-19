@@ -17,6 +17,10 @@ namespace Altseed
             set
             {
                 if (_Group == value) return;
+
+                if (value <= 0) Engine.Log.Warn(LogCategory.Engine, $"{GetType()} のGroupの値が小さすぎます。");
+                if (value >= 64) Engine.Log.Warn(LogCategory.Engine, $"{GetType()} のGroupの値が大きすぎます。");
+
                 var old = _Group;
                 _Group = value;
 

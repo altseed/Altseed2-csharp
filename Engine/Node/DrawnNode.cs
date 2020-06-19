@@ -30,7 +30,7 @@
         /// <summary>
         /// このノードを描画するカメラを取得または設定します。
         /// </summary>
-        public uint CameraGroup
+        public ulong CameraGroup
         {
             get => _CameraGroup;
             set
@@ -43,7 +43,7 @@
                     Engine.UpdateDrawnNodeCameraGroup(this, old);
             }
         }
-        private uint _CameraGroup = 0;
+        private ulong _CameraGroup = 0;
 
         /// <summary>
         /// カリング用ID
