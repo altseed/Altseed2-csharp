@@ -263,15 +263,15 @@ namespace Altseed
             return (GetParentTransformNode()?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin);
         }
 
-        private DrawnNode GetParentTransformNode()
+        private TransformNode GetParentTransformNode()
         {
             if (Parent == null)
                 return null;
 
             for (var n = Parent; !(n is RootNode || n == null); n = n.Parent)
             {
-                if (n is DrawnNode d)
-                    return d;
+                if (n is TransformNode t)
+                    return t;
             }
             return null;
         }
