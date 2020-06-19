@@ -88,5 +88,90 @@ namespace Altseed
             return matPosition * matScale * matRotate * matCenterPosition;
             // NOTE: 一気に計算したほうがよさそう
         }
+
+        /// <summary>
+        /// 左上と右下の座標を割り出す
+        /// </summary>
+        /// <param name="min">左上の座標</param>
+        /// <param name="max">右下の座標</param>
+        /// <param name="positions">計算する座標</param>
+        /// <exception cref="ArgumentException"><paramref name="positions"/>が空</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        internal static void GetMinMax(out Vector2F min, out Vector2F max, IArray<Vertex> positions)
+        {
+            var min_x = float.MaxValue;
+            var min_y = float.MaxValue;
+            var max_x = float.MinValue;
+            var max_y = float.MinValue;
+            if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
+            var count = positions.Count;
+            if (count == 0) throw new ArgumentException("配列が空です", nameof(positions));
+            for (int i = 0; i < count; i++)
+            {
+                var current = positions[i].Position;
+                if (min_x > current.X) min_x = current.X;
+                if (min_y > current.Y) min_y = current.Y;
+                if (max_x < current.X) max_x = current.X;
+                if (max_y < current.Y) max_y = current.Y;
+            }
+            min = new Vector2F(min_x, min_y);
+            max = new Vector2F(max_x, max_y);
+        }
+
+        /// <summary>
+        /// 左上と右下の座標を割り出す
+        /// </summary>
+        /// <param name="min">左上の座標</param>
+        /// <param name="max">右下の座標</param>
+        /// <param name="positions">計算する座標</param>
+        /// <exception cref="ArgumentException"><paramref name="positions"/>が空</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        internal static void GetMinMax(out Vector2F min, out Vector2F max, IArray<Vector2F> positions)
+        {
+            var min_x = float.MaxValue;
+            var min_y = float.MaxValue;
+            var max_x = float.MinValue;
+            var max_y = float.MinValue;
+            if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
+            var count = positions.Count;
+            if (count == 0) throw new ArgumentException("配列が空です", nameof(positions));
+            for (int i = 0; i < count; i++)
+            {
+                var current = positions[i];
+                if (min_x > current.X) min_x = current.X;
+                if (min_y > current.Y) min_y = current.Y;
+                if (max_x < current.X) max_x = current.X;
+                if (max_y < current.Y) max_y = current.Y;
+            }
+            min = new Vector2F(min_x, min_y);
+            max = new Vector2F(max_x, max_y);
+        }
+
+        /// <summary>
+        /// 左上と右下の座標を割り出す
+        /// </summary>
+        /// <param name="min">左上の座標</param>
+        /// <param name="max">右下の座標</param>
+        /// <param name="positions">計算する座標</param>
+        /// <exception cref="ArgumentException"><paramref name="positions"/>が空</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        internal static void GetMinMax(out Vector2F min, out Vector2F max, params Vector2F[] positions)
+        {
+            var min_x = float.MaxValue;
+            var min_y = float.MaxValue;
+            var max_x = float.MinValue;
+            var max_y = float.MinValue;
+            if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
+            if (positions.Length == 0) throw new ArgumentException("配列が空です", nameof(positions));
+            foreach (var current in positions)
+            {
+                if (min_x > current.X) min_x = current.X;
+                if (min_y > current.Y) min_y = current.Y;
+                if (max_x < current.X) max_x = current.X;
+                if (max_y < current.Y) max_y = current.Y;
+            }
+            min = new Vector2F(min_x, min_y);
+            max = new Vector2F(max_x, max_y);
+        }
     }
 }

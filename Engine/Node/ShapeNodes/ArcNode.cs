@@ -9,11 +9,11 @@ namespace Altseed
     public class ArcNode : DrawnNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon _RenderedPolygon;
+        private readonly RenderedPolygon renderedPolygon;
 
-        internal override int CullingId => _RenderedPolygon.Id;
+        internal override int CullingId => renderedPolygon.Id;
 
-        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
+        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -25,7 +25,7 @@ namespace Altseed
             {
                 if (_color == value) return;
                 _color = value;
-                _RenderedPolygon.OverwriteVertexesColor(value);
+                renderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
@@ -50,8 +50,8 @@ namespace Altseed
         /// </summary>
         public Material Material
         {
-            get => _RenderedPolygon.Material;
-            set { _RenderedPolygon.Material = value; }
+            get => renderedPolygon.Material;
+            set { renderedPolygon.Material = value; }
         }
 
         /// <summary>
@@ -85,6 +85,20 @@ namespace Altseed
         private float _startdegree = 0.0f;
 
         /// <summary>
+        /// 描画するテクスチャを取得または設定します。
+        /// </summary>
+        public TextureBase Texture
+        {
+            get => renderedPolygon.Texture;
+            set
+            {
+                if (renderedPolygon.Texture == value) return;
+                renderedPolygon.Texture = value;
+                renderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
+            }
+        }
+
+        /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
         public int VertNum
@@ -101,35 +115,22 @@ namespace Altseed
         private int _vertnum = 3;
 
         /// <summary>
-        /// 描画するテクスチャを取得または設定します。
-        /// </summary>
-        public TextureBase Texture
-        {
-            get => _RenderedPolygon.Texture;
-            set
-            {
-                _RenderedPolygon.Texture = value;
-            }
-        }
-
-        /// <summary>
         /// <see cref="ArcNode"/>の新しいインスタンスを生成する
         /// </summary>
         public ArcNode()
         {
-            _RenderedPolygon = RenderedPolygon.Create();
-            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
+            renderedPolygon = RenderedPolygon.Create();
+            renderedPolygon.Vertexes = VertexArray.Create(_vertnum);
         }
 
-        protected internal override void Draw()
+        public override void AdjustSize()
         {
-            if (changed)
-            {
-                UpdateVertexes();
-                changed = true;
-            }
-            Engine.Renderer.DrawPolygon(_RenderedPolygon);
+            // TODO:Radiusから求めたい
+            MathHelper.GetMinMax(out var min, out var max, renderedPolygon.Vertexes);
+            Size = max - min;
         }
+
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         private Vector2F GetBaseVector(float degree)
         {
@@ -165,7 +166,12 @@ namespace Altseed
 
         internal override void UpdateInheritedTransform()
         {
-            _RenderedPolygon.Transform = CalcInheritedTransform();
+            if (changed)
+            {
+                UpdateVertexes();
+                changed = false;
+            }
+            renderedPolygon.Transform = CalcInheritedTransform();
         }
 
         private void UpdateVertexes()
@@ -184,26 +190,19 @@ namespace Altseed
             if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
             var vec = GetBaseVector(deg * startVertexNum);
 
-            float minx = 0.0f, miny = 0.0f, maxx = 0.0f, maxy = 0.0f;
             for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
             {
                 positions[currentIndex] = vec;
                 vec.Degree += deg;
-
-                if (vec.X < minx) minx = vec.X;
-                if (maxx < vec.X) maxx = vec.X;
-                if (vec.Y < miny) miny = vec.Y;
-                if (maxy < vec.Y) maxy = vec.Y;
             }
 
-            Size = new Vector2F(maxx - minx, maxy - miny);
-            // NOTE: 半径から雑に計算してもいいかもしれない
+            AdjustSize();
 
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(_color);
+            renderedPolygon.CreateVertexesByVector2F(array);
+            renderedPolygon.OverwriteVertexesColor(_color);
         }
     }
 }

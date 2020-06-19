@@ -22,6 +22,8 @@ namespace Altseed
         [MarshalAs(UnmanagedType.R4)]
         public float Y;
 
+        internal static readonly Vector2F One = new Vector2F(1.0f, 1.0f);
+
         /// <summary>
         /// ベクトルの度数法の角度を取得または設定します。
         /// </summary>

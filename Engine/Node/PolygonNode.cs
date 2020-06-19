@@ -71,8 +71,6 @@ namespace Altseed
             }
         }
 
-        public Vertex[] GetVertexes=> renderedPolygon.Vertexes?.ToArray();
-
         public void SetVertexes(Vertex[] vertexes)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
@@ -198,17 +196,13 @@ namespace Altseed
         {
             if (Vertexes == null) return;
 
-            Vector2F min = new Vector2F(float.MaxValue, float.MaxValue);
-            Vector2F max = new Vector2F(float.MinValue, float.MinValue);
-            foreach (var pos in Vertexes.Select(v => v.Position))
+            var array = renderedPolygon.Vertexes;
+            if (array != null && array.Count > 0)
             {
-                min.X = min.X > pos.X ? pos.X : min.X;
-                min.Y = min.Y > pos.Y ? pos.Y : min.Y;
-                max.X = max.X < pos.X ? pos.X : max.X;
-                max.Y = max.Y < pos.Y ? pos.Y : max.Y;
+                MathHelper.GetMinMax(out var min, out var max, array);
+                Size = max - min;
             }
-
-            Size = max - min;
+            else Size = default;
         }
     }
 }
