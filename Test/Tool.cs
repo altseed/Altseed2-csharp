@@ -146,6 +146,6 @@ namespace Altseed.Test
 
             tc.End();
         }
-    }
 #endif
+    }
 }
