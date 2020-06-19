@@ -90,13 +90,13 @@ namespace Altseed
 
         #region Node
 
-        protected internal override void Registered()
+        internal override void Registered()
         {
             base.Registered();
             Engine.RegisterCameraNode(this);
         }
 
-        protected internal override void Unregistered()
+        internal override void Unregistered()
         {
             base.Unregistered();
             Engine.UnregisterCameraNode(this);

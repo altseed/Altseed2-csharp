@@ -29,9 +29,12 @@ namespace Altseed
 
         private static RenderTextureCache _RenderTextureCache;
 
+        /// <summary>
+        /// スクリーンのクリア色を取得または設定します。
+        /// </summary>
         public static Color ClearColor
         {
-            get => _ClearColor; 
+            get => _ClearColor;
             set
             {
                 if (_ClearColor == value) return;
@@ -152,7 +155,8 @@ namespace Altseed
                     var list = _DrawnNodes.Nodes;
                     foreach (var z in list.Keys.OrderBy(x => x))
                     {
-                        var nodes = list[z].Where(n => {
+                        var nodes = list[z].Where(n =>
+                        {
                             for (Node i = n; i != _RootNode; i = i.Parent)
                                 if (i is DrawnNode d && !d.IsDrawn)
                                     return false;
@@ -202,7 +206,8 @@ namespace Altseed
                             var list = _DrawnNodes[i];
                             foreach (var z in list.Keys.OrderBy(x => x))
                             {
-                                var nodes = list[z].Where(n => {
+                                var nodes = list[z].Where(n =>
+                                {
                                     for (Node i = n; i != _RootNode; i = i.Parent)
                                         if (i is DrawnNode d && !d.IsDrawn)
                                             return false;

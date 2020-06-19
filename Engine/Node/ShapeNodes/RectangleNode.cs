@@ -68,7 +68,7 @@ namespace Altseed
             renderedPolygon.Vertexes = VertexArray.Create(4);
         }
 
-        protected internal override void Draw()
+        internal override void Draw()
         {
             Engine.Renderer.DrawPolygon(renderedPolygon);
         }

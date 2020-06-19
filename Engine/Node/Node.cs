@@ -77,7 +77,7 @@ namespace Altseed
         /// <summary>
         /// エンジンに登録され、木を辿って<see cref="RootNode"/> にたどり着けるようになったとき実行
         /// </summary>
-        protected internal virtual void Registered()
+        internal virtual void Registered()
         {
             if (surpressing)
             {
@@ -96,7 +96,7 @@ namespace Altseed
         /// <summary>
         /// エンジンから削除され、木を辿って<see cref="RootNode"/> にたどり着けなくなったとき実行
         /// </summary>
-        protected internal virtual void Unregistered()
+        internal virtual void Unregistered()
         {
             foreach (var c in Children)
             {
