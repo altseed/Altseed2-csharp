@@ -9,6 +9,8 @@ namespace Altseed
     /// </summary>
     public static class Engine
     {
+        internal const int MaxCameraCount = 64;
+
         private static Configuration _Config;
 
         /// <summary>

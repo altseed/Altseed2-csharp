@@ -14,8 +14,8 @@ namespace Altseed
         {
             Nodes = new Dictionary<int, List<T>>();
 
-            _Lists = new Dictionary<int, List<T>>[65];
-            for (int i = 0; i <= 63; i++)
+            _Lists = new Dictionary<int, List<T>>[Engine.MaxCameraCount + 1];
+            for (int i = 0; i < Engine.MaxCameraCount; i++)
                 _Lists[i] = new Dictionary<int, List<T>>();
         }
 
@@ -24,7 +24,7 @@ namespace Altseed
             var nodeGroup = GetGroup(node);
             var nodeOrder = GetOrder(node);
 
-            for (int i = 0; i <= 63; i++)
+            for (int i = 0; i < Engine.MaxCameraCount; i++)
             {
                 var mask = 1u << i;
 
@@ -50,7 +50,7 @@ namespace Altseed
             var nodeGroup = GetGroup(node);
             var nodeOrder = GetOrder(node);
 
-            for (int i = 0; i <= 63; i++)
+            for (int i = 0; i < Engine.MaxCameraCount; i++)
             {
                 var mask = 1u << i;
                 if (!HasBit(nodeGroup, mask)) continue;
@@ -75,7 +75,7 @@ namespace Altseed
                 Nodes[nodeOrder] = new List<T>();
             Nodes[nodeOrder].Add(node);
 
-            for (int i = 0; i <= 63; i++)
+            for (int i = 0; i < Engine.MaxCameraCount; i++)
             {
                 var mask = 1u << i;
                 if (!HasBit(nodeGroup, mask)) continue;
@@ -95,7 +95,7 @@ namespace Altseed
 
             Nodes[nodeOrder].Remove(node);
 
-            for (int i = 0; i <= 63; i++)
+            for (int i = 0; i < Engine.MaxCameraCount; i++)
             {
                 var mask = 1u << i;
                 if (!HasBit(nodeGroup, mask)) continue;
@@ -144,8 +144,8 @@ namespace Altseed
 
         internal CameraNodeCollection()
         {
-            _Lists = new List<CameraNode>[64];
-            for (int i = 0; i <= 63; i++)
+            _Lists = new List<CameraNode>[Engine.MaxCameraCount];
+            for (int i = 0; i < Engine.MaxCameraCount; i++)
                 _Lists[i] = new List<CameraNode>();
 
         }
