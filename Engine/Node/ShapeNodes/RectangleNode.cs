@@ -74,7 +74,7 @@ namespace Altseed
 
         public override void AdjustSize() { }
 
-        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+        internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         internal override void UpdateInheritedTransform()
         {

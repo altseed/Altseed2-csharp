@@ -29,9 +29,12 @@ namespace Altseed
 
         private static RenderTextureCache _RenderTextureCache;
 
+        /// <summary>
+        /// スクリーンのクリア色を取得または設定します。
+        /// </summary>
         public static Color ClearColor
         {
-            get => _ClearColor; 
+            get => _ClearColor;
             set
             {
                 if (_ClearColor == value) return;
@@ -152,7 +155,8 @@ namespace Altseed
                     var list = _DrawnNodes.Nodes;
                     foreach (var z in list.Keys.OrderBy(x => x))
                     {
-                        var nodes = list[z].Where(n => {
+                        var nodes = list[z].Where(n =>
+                        {
                             for (Node i = n; i != _RootNode; i = i.Parent)
                                 if (i is DrawnNode d && !d.IsDrawn)
                                     return false;
@@ -190,7 +194,7 @@ namespace Altseed
             else
             {
                 // 特定のカメラに映りこむノードを描画
-                for (int i = 0; i <= 31; i++)
+                for (int i = 0; i <= 63; i++)
                 {
                     foreach (var camera in _CameraNodes[i])
                     {
@@ -202,7 +206,8 @@ namespace Altseed
                             var list = _DrawnNodes[i];
                             foreach (var z in list.Keys.OrderBy(x => x))
                             {
-                                var nodes = list[z].Where(n => {
+                                var nodes = list[z].Where(n =>
+                                {
                                     for (Node i = n; i != _RootNode; i = i.Parent)
                                         if (i is DrawnNode d && !d.IsDrawn)
                                             return false;
@@ -393,7 +398,7 @@ namespace Altseed
             _DrawnNodes.RemoveNode(node);
         }
 
-        internal static void UpdateDrawnNodeCameraGroup(DrawnNode node, uint oldCameraGroup)
+        internal static void UpdateDrawnNodeCameraGroup(DrawnNode node, ulong oldCameraGroup)
         {
             _DrawnNodes.UpdateCameraGroup(node, oldCameraGroup);
         }
@@ -417,7 +422,7 @@ namespace Altseed
             _PostEffectNodes.RemoveNode(node);
         }
 
-        internal static void UpdatePostEffectNodeCameraGroup(PostEffectNode node, uint oldCameraGroup)
+        internal static void UpdatePostEffectNodeCameraGroup(PostEffectNode node, ulong oldCameraGroup)
         {
             _PostEffectNodes.UpdateCameraGroup(node, oldCameraGroup);
         }
