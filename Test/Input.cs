@@ -122,7 +122,7 @@ namespace Altseed.Test
                 var name = Engine.Joystick.GetJoystickName(i);
                 tc.LoopBody(c =>
                 {
-                    var leftup = Engine.Joystick.GetButtonStateByType(i, JoystickButtonType.LeftUp);
+                    var leftup = Engine.Joystick.GetButtonState(i, JoystickButtonType.LeftUp);
                     node.Text = $"{name}：LeftUp = {leftup}";
                 }
                 , null);

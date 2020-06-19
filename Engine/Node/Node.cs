@@ -46,6 +46,7 @@ namespace Altseed
         [NonSerialized]
         private RegisterStatus _status;
 
+        [NonSerialized]
         private Node _ParentReserved;
 
         /// <summary>
@@ -179,6 +180,7 @@ namespace Altseed
         //
 
         private Node serialization_Parent;
+        private Node serialization_ParentReserved;
         private RegisterStatus serialization_Status;
         private bool isRootChild;
         private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行うのを止める
@@ -190,10 +192,11 @@ namespace Altseed
         [OnSerializing]
         private void OnSerializing(StreamingContext context)
         {
-            if (Parent is RootNode)
+            if (_ParentReserved is RootNode)
             {
                 isRootChild = true;
                 serialization_Parent = null;
+                serialization_ParentReserved = null;
                 serialization_Status = RegisterStatus.Free;
                 surpressing = true;
             }
@@ -201,9 +204,21 @@ namespace Altseed
             {
                 isRootChild = false;
                 serialization_Parent = _parent;
+                serialization_Parent = _ParentReserved;
                 serialization_Status = Status;
                 surpressing = false;
             }
+        }
+
+        /// <summary>
+        /// シリアライズ終了時に実行
+        /// </summary>
+        /// <param name="context">送信先の情報</param>
+        [OnSerializing]
+        private void OnSerialized(StreamingContext context)
+        {
+            ResetSerializationField();
+            surpressing = false;
         }
 
         /// <summary>
@@ -213,11 +228,21 @@ namespace Altseed
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            if (isRootChild) Engine.AddNode(this);
-            else _parent = serialization_Parent;
             Status = serialization_Status;
+            if (isRootChild) Engine.AddNode(this);
+            else
+            {
+                _parent = serialization_Parent;
+                _ParentReserved = serialization_ParentReserved;
+            }
+            ResetSerializationField();
+        }
+
+        private void ResetSerializationField()
+        {
             isRootChild = default;
             serialization_Parent = null;
+            serialization_ParentReserved = null;
             serialization_Status = default;
         }
         #endregion

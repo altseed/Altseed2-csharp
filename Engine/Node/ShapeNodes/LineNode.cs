@@ -89,10 +89,13 @@ namespace Altseed
             renderedPolygon.Vertexes = VertexArray.Create(4);
         }
 
-        internal override void Draw()
+        public override void AdjustSize()
         {
-            Engine.Renderer.DrawPolygon(renderedPolygon);
+            MathHelper.GetMinMax(out var min, out var max, renderedPolygon.Vertexes);
+            Size = max - min;
         }
+
+        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         internal override void UpdateInheritedTransform()
         {
@@ -123,14 +126,7 @@ namespace Altseed
             positions[2] = _point1 + x + y;
             positions[3] = _point1 + x - y;
 
-            float minx = 0.0f, miny = 0.0f, maxx = 0.0f, maxy = 0.0f;
-            for (int i = 0; i < 4; i++)
-            {
-                if (positions[i].X < minx) minx = positions[i].X;
-                if (maxx < positions[i].X) maxx = positions[i].X;
-                if (positions[i].Y < miny) miny = positions[i].Y;
-                if (maxy < positions[i].Y) maxy = positions[i].Y;
-            }
+            AdjustSize();
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
