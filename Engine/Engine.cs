@@ -59,27 +59,27 @@ namespace Altseed
             _Config = (config ??= new Configuration());
             if (Core.Initialize(title, width, height, config))
             {
-                Core = Core.GetInstance();
-                Log = Log.GetInstance();
+                _core = Core.GetInstance();
+                _log = Log.GetInstance();
 
-                Keyboard = Keyboard.GetInstance();
-                Mouse = Mouse.GetInstance();
-                Joystick = Joystick.GetInstance();
+                _keyboard = Keyboard.GetInstance();
+                _mouse = Mouse.GetInstance();
+                _joystick = Joystick.GetInstance();
 
-                File = File.GetInstance();
-                Resources = Resources.GetInstance();
+                _file = File.GetInstance();
+                _resources = Resources.GetInstance();
 
-                Window = Window.GetInstance();
-                Graphics = Graphics.GetInstance();
-                Renderer = Renderer.GetInstance();
-                CullingSystem = CullingSystem.GetInstance();
+                _window = Window.GetInstance();
+                _graphics = Graphics.GetInstance();
+                _renderer = Renderer.GetInstance();
+                _cullingSystem = CullingSystem.GetInstance();
 
                 Context = new AltseedContext();
                 System.Threading.SynchronizationContext.SetSynchronizationContext(Context);
 
-                if (config.ToolEnabled) Tool = Tool.GetInstance();
+                if (config.ToolEnabled) _tool = Tool.GetInstance();
 
-                Sound = SoundMixer.GetInstance();
+                _sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
                 _UpdatedNode = _RootNode;
@@ -93,6 +93,8 @@ namespace Altseed
                 _RenderTextureCache = new RenderTextureCache();
 
                 PostEffectNode.InitializeCache();
+
+                isCompatible = true;
 
                 return true;
             }
@@ -266,6 +268,7 @@ namespace Altseed
         public static void Terminate()
         {
             Core.Terminate();
+            isCompatible = false;
         }
 
         /// <summary>
@@ -286,68 +289,94 @@ namespace Altseed
         }
 
         #region Modules
+        private static bool isCompatible;
 
-        internal static Core Core { get; private set; }
+        internal static Core Core => isCompatible ? _core : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Core _core;
 
         /// <summary>
         /// ファイルを管理するクラスを取得します。
         /// </summary>
-        public static File File { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static File File => isCompatible ? _file : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static File _file;
 
         /// <summary>
         /// キーボードを管理するクラスを取得します。
         /// </summary>
-        public static Keyboard Keyboard { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Keyboard Keyboard => isCompatible ? _keyboard : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Keyboard _keyboard;
 
         /// <summary>
         /// マウスを管理するクラスを取得します。
         /// </summary>
-        public static Mouse Mouse { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Mouse Mouse => isCompatible ? _mouse : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Mouse _mouse;
 
         /// <summary>
         /// ジョイスティックを管理するクラスを取得します。
         /// </summary>
-        public static Joystick Joystick { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Joystick Joystick => isCompatible ? _joystick : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Joystick _joystick;
 
         /// <summary>
         /// グラフィックのクラスを取得します。
         /// </summary>
-        public static Graphics Graphics { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Graphics Graphics => isCompatible ? _graphics : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Graphics _graphics;
 
         /// <summary>
         /// ログを管理するクラスを取得します。
         /// </summary>
-        public static Log Log { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Log Log => isCompatible ? _log : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Log _log;
 
         /// <summary>
         /// レンダラのクラスを取得します。
         /// </summary>
-        internal static Renderer Renderer { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Renderer Renderer => isCompatible ? _renderer : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Renderer _renderer;
 
         /// <summary>
         /// カリングのクラスを取得します。
         /// </summary>
-        internal static CullingSystem CullingSystem { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static CullingSystem CullingSystem => isCompatible ? _cullingSystem : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static CullingSystem _cullingSystem;
 
         /// <summary>
         /// 音を管理するクラスを取得します。
         /// </summary>
-        public static SoundMixer Sound { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static SoundMixer Sound => isCompatible ? _sound : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static SoundMixer _sound;
 
         /// <summary>
         /// リソースを管理するクラスを取得します。
         /// </summary>
-        internal static Resources Resources { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Resources Resources => isCompatible ? _resources : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Resources _resources;
 
         /// <summary>
         /// ウインドウを表すクラスを取得します。
         /// </summary>
-        internal static Window Window { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Window Window => isCompatible ? _window : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Window _window;
 
         /// <summary>
         /// ツールを管理するクラスを取得します。
         /// </summary>
-        public static Tool Tool { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Tool Tool => isCompatible ? _tool : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Tool _tool;
 
         #endregion
 
