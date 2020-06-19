@@ -95,7 +95,7 @@ namespace Altseed
             Size = max - min;
         }
 
-        protected internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+        internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         internal override void UpdateInheritedTransform()
         {
