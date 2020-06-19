@@ -43,7 +43,7 @@ namespace Altseed.Test
         public void LoopBody(Action<int> beforeUpdateAction, Action<int> afterUpdateAction)
         {
 #if CI
-            Duration = 200;
+            Duration = 20;
 #endif
             int count = 0;
             while (Engine.DoEvents() && count++ < Duration)
