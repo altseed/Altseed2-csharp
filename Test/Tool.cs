@@ -135,6 +135,7 @@ namespace Altseed.Test
             tc.End();
         }
 
+#if !CI
         [Test, Apartment(ApartmentState.STA)]
         public void OpenDialog()
         {
@@ -146,4 +147,5 @@ namespace Altseed.Test
             tc.End();
         }
     }
+#endif
 }
