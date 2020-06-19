@@ -252,8 +252,7 @@ namespace Altseed
         /// </summary>
         public IEnumerable<Node> EnumerateAncestors()
         {
-            var current = Parent;
-            for (var n = Parent; current != null && !(current is RootNode); current = current.Parent)
+            for (var current = Parent; current != null && !(current is RootNode); current = current.Parent)
                 yield return current;
 
             yield break;
@@ -293,9 +292,9 @@ namespace Altseed
             foreach (var child in Children)
             {
                 foreach (var g in child.EnumerateDescendants<T>(condition))
-                    yield return g;
+                    if (condition?.Invoke(g) ?? false) yield return g;
 
-                if (child is T c)
+                if (child is T c && (condition?.Invoke(c) ?? false))
                     yield return c;
             }
         }
