@@ -278,7 +278,7 @@ namespace Altseed
         public IEnumerable<T> EnumerateDescendants<T>()
              where T : Node
         {
-            return EnumerateDescendants<T>(null);
+            return EnumerateDescendants<T>(x => true);
         }
 
         /// <summary>
