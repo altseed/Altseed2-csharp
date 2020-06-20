@@ -9,7 +9,10 @@ namespace Altseed
     /// </summary>
     public static class Engine
     {
-        internal const int MaxCameraCount = 64;
+        /// <summary>
+        /// カメラグループの個数の最大値
+        /// </summary>
+        internal const int MaxCameraGroupCount = 64;
 
         private static Configuration _Config;
 
