@@ -20,7 +20,7 @@ namespace Altseed
             if (string.IsNullOrWhiteSpace(path)) return new ArgumentException("パスが空白文字のみからなります", nameof(path));
             if (ContainsInvalidChar(path)) return new ArgumentException("パスに不正な文字が含まれています", nameof(path));
             if (IsTooLongPath(path)) return new PathTooLongException("パスが長すぎます");
-            if (!Engine.File.Exists(path)) return new FileNotFoundException("指定したパスのファイルが見つかりませんでした", path);
+            if (!Engine.File.Exists(path)) return new FileNotFoundException($"指定したパスのファイルが見つかりませんでした\nパス：{path}", path);
             return null;
         } 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Altseed
             if (string.IsNullOrWhiteSpace(path)) return new ArgumentException("パスが空白文字のみからなります", nameof(path));
             if (ContainsInvalidChar(path)) return new ArgumentException("パスに不正な文字が含まれています", nameof(path));
             if (IsTooLongPath(path)) return new PathTooLongException("パスが長すぎます");
-            if (!Directory.Exists(Path.GetDirectoryName(path))) return new DirectoryNotFoundException($"指定したパスのディレクトリが見つかりませんでした：{Path.GetDirectoryName(path)}");
+            if (!Directory.Exists(Path.GetDirectoryName(path))) return new DirectoryNotFoundException($"指定したパスのディレクトリが見つかりませんでした\nディレクトリ：{Path.GetDirectoryName(path)}");
             return null;
         } 
         internal static bool ContainsInvalidChar(string path)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
@@ -68,14 +68,14 @@ namespace Altseed
         {
             readonly get
             {
-                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException(nameof(x), "引数の値は0-3に収めてください");
-                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException(nameof(y), "引数の値は0-3に収めてください");
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException(nameof(x), $"引数の値は0-3に収めてください\n実際の値：{x}");
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException(nameof(y), $"引数の値は0-3に収めてください\n実際の値：{y}");
                 return Values[x * 4 + y];
             }
             set
             {
-                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException(nameof(x), "引数の値は0-3に収めてください");
-                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException(nameof(y), "引数の値は0-3に収めてください");
+                if (x < 0 || x >= 4) throw new ArgumentOutOfRangeException(nameof(x), $"引数の値は0-3に収めてください\n実際の値：{x}");
+                if (y < 0 || y >= 4) throw new ArgumentOutOfRangeException(nameof(y), $"引数の値は0-3に収めてください\n実際の値：{y}");
                 Values[x * 4 + y] = value;
             }
         }

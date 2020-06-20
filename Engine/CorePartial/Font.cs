@@ -44,7 +44,7 @@ namespace Altseed
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
         public static Font LoadDynamicFontStrict(string path, int size)
         {
-            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), "サイズは正の値にしてください");
+            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), $"サイズは正の値にしてください\n実際の値：{size}");
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
             return LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
