@@ -113,9 +113,10 @@ namespace Altseed
         /// </summary>
         internal void Clear()
         {
+            foreach (var current in CurrentCollection) current.Status = RegisterStatus.Free;
             CurrentCollection.Clear();
-            AddQueue.Clear();
-            RemoveQueue.Clear();
+            while (AddQueue.TryDequeue(out var current)) current.Status = RegisterStatus.Free;
+            while (RemoveQueue.TryDequeue(out var current)) current.Status = RegisterStatus.Free;
         }
 
         /// <summary>
