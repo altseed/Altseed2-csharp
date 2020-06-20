@@ -97,7 +97,7 @@ namespace Altseed
 
                 PostEffectNode.InitializeCache();
 
-                isCompatible = true;
+                isActive = true;
 
                 return true;
             }
@@ -271,7 +271,7 @@ namespace Altseed
         public static void Terminate()
         {
             Core.Terminate();
-            isCompatible = false;
+            isActive = false;
         }
 
         /// <summary>
@@ -292,93 +292,93 @@ namespace Altseed
         }
 
         #region Modules
-        private static bool isCompatible;
+        private static bool isActive;
 
-        internal static Core Core => isCompatible ? _core : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Core Core => isActive ? _core : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Core _core;
 
         /// <summary>
         /// ファイルを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static File File => isCompatible ? _file : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static File File => isActive ? _file : throw new InvalidOperationException("現在その操作は許可されていません");
         private static File _file;
 
         /// <summary>
         /// キーボードを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Keyboard Keyboard => isCompatible ? _keyboard : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Keyboard Keyboard => isActive ? _keyboard : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Keyboard _keyboard;
 
         /// <summary>
         /// マウスを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Mouse Mouse => isCompatible ? _mouse : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Mouse Mouse => isActive ? _mouse : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Mouse _mouse;
 
         /// <summary>
         /// ジョイスティックを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Joystick Joystick => isCompatible ? _joystick : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Joystick Joystick => isActive ? _joystick : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Joystick _joystick;
 
         /// <summary>
         /// グラフィックのクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Graphics Graphics => isCompatible ? _graphics : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Graphics Graphics => isActive ? _graphics : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Graphics _graphics;
 
         /// <summary>
         /// ログを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Log Log => isCompatible ? _log : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Log Log => isActive ? _log : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Log _log;
 
         /// <summary>
         /// レンダラのクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Renderer Renderer => isCompatible ? _renderer : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Renderer Renderer => isActive ? _renderer : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Renderer _renderer;
 
         /// <summary>
         /// カリングのクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static CullingSystem CullingSystem => isCompatible ? _cullingSystem : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static CullingSystem CullingSystem => isActive ? _cullingSystem : throw new InvalidOperationException("現在その操作は許可されていません");
         private static CullingSystem _cullingSystem;
 
         /// <summary>
         /// 音を管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static SoundMixer Sound => isCompatible ? _sound : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static SoundMixer Sound => isActive ? _sound : throw new InvalidOperationException("現在その操作は許可されていません");
         private static SoundMixer _sound;
 
         /// <summary>
         /// リソースを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Resources Resources => isCompatible ? _resources : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Resources Resources => isActive ? _resources : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Resources _resources;
 
         /// <summary>
         /// ウインドウを表すクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Window Window => isCompatible ? _window : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Window Window => isActive ? _window : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Window _window;
 
         /// <summary>
         /// ツールを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Tool Tool => isCompatible ? _tool : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Tool Tool => isActive ? _tool : throw new InvalidOperationException("現在その操作は許可されていません");
         private static Tool _tool;
 
         #endregion
