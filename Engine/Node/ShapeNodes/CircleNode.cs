@@ -72,7 +72,7 @@ namespace Altseed
             get => _vertnum;
             set
             {
-                if (value < 3) throw new ArgumentOutOfRangeException(nameof(value), "設定しようとした値が3未満です");
+                if (value < 3) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が3未満です\n実際の値：{value}");
                 if (_vertnum == value) return;
                 _vertnum = value;
                 changed = true;

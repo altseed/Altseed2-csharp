@@ -70,7 +70,7 @@ namespace Altseed
         internal bool Contains(ColliderNode node)
         {
             if (node?.Parent == null) return false;
-            return collection.TryGetValue(node.Parent, out var set) ? set.Contains(node) : false;
+            return collection.TryGetValue(node.Parent, out var set) && set.Contains(node);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Altseed
                     var nowColliding = entry.IsColliding();
                     if (dictionary.TryAdd(entry, nowColliding))
                     {
-                        var beforeColliding = (preCollisionInfo != null && preCollisionInfo.TryGetValue(entry, out var value)) ? value : false;
+                        var beforeColliding = (preCollisionInfo != null && preCollisionInfo.TryGetValue(entry, out var value)) && value;
                         InvokeEvents(current, comparison, nowColliding, beforeColliding);
                         InvokeEvents(comparison, current, nowColliding, beforeColliding);
                     }
@@ -152,10 +152,10 @@ namespace Altseed
             public readonly bool Equals(ColliderEntry other)
             {
                 if (collider1 == other.collider1) return collider2 == other.collider2;
-                else return collider1 == other.collider2 ? collider2 == other.collider1 : false;
+                else return collider1 == other.collider2 && collider2 == other.collider1;
             }
 
-            public readonly override bool Equals(object obj) => obj is ColliderEntry other ? Equals(other) : false;
+            public readonly override bool Equals(object obj) => obj is ColliderEntry other && Equals(other);
 
             public readonly override int GetHashCode() => collider1.GetHashCode() ^ collider2.GetHashCode();
 

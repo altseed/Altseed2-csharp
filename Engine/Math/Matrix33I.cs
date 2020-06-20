@@ -66,14 +66,14 @@ namespace Altseed
         {
             readonly get
             {
-                if (x < 0 || x > 3) throw new ArgumentOutOfRangeException(nameof(x), "引数の値は0-2に収めてください");
-                if (y < 0 || y > 3) throw new ArgumentOutOfRangeException(nameof(y), "引数の値は0-2に収めてください");
+                if (x < 0 || x > 3) throw new ArgumentOutOfRangeException(nameof(x), $"引数の値は0-2に収めてください\n実際の値：{x}");
+                if (y < 0 || y > 3) throw new ArgumentOutOfRangeException(nameof(y), $"引数の値は0-2に収めてください\n実際の値：{y}");
                 return Values[x * 3 + y];
             }
             set
             {
-                if (x < 0 || x > 3) throw new ArgumentOutOfRangeException(nameof(x), "引数の値は0-2に収めてください");
-                if (y < 0 || y > 3) throw new ArgumentOutOfRangeException(nameof(y), "引数の値は0-2に収めてください");
+                if (x < 0 || x > 3) throw new ArgumentOutOfRangeException(nameof(x), $"引数の値は0-2に収めてください\n実際の値：{x}");
+                if (y < 0 || y > 3) throw new ArgumentOutOfRangeException(nameof(y), $"引数の値は0-2に収めてください\n実際の値：{y}");
                 Values[x * 3 + y] = value;
             }
         }
@@ -211,7 +211,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is Matrix33I m ? Equals(m) : false;
+        public readonly override bool Equals(object obj) => obj is Matrix33I m && Equals(m);
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返す

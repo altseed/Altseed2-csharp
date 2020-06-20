@@ -52,13 +52,14 @@ namespace Altseed
         /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
         public byte this[int index]
         {
-            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
             set
             {
-                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}");
                 SetAt(index, value);
             }
         }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_Int8Array_Create(info.GetInt32(S_Count));
@@ -91,10 +92,10 @@ namespace Altseed
         /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
         public int this[int index]
         {
-            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
             set
             {
-                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}");
                 SetAt(index, value);
             }
         }
@@ -130,10 +131,10 @@ namespace Altseed
         /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
         public Vertex this[int index]
         {
-            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
             set
             {
-                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}");
                 SetAt(index, value);
             }
         }
@@ -170,10 +171,10 @@ namespace Altseed
         /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
         public float this[int index]
         {
-            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
             set
             {
-                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}");
                 SetAt(index, value);
             }
         }
@@ -209,10 +210,10 @@ namespace Altseed
         /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
         public Vector2F this[int index]
         {
-            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException("インデックスが無効です"); }
+            get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
             set
             {
-                if (index < 0 || Count <= index) throw new IndexOutOfRangeException("インデックスが無効です");
+                if (index < 0 || Count <= index) throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}");
                 SetAt(index, value);
             }
         }

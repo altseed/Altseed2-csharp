@@ -8,8 +8,17 @@ namespace Altseed
     [Serializable]
     public enum HorizontalAlignment
     {
+        /// <summary>
+        /// 左揃え
+        /// </summary>
         Left,
+        /// <summary>
+        /// 中央揃え
+        /// </summary>
         Center,
+        /// <summary>
+        /// 右揃え
+        /// </summary>
         Right
     }
 
@@ -19,11 +28,23 @@ namespace Altseed
     [Serializable]
     public enum VerticalAlignment
     {
+        /// <summary>
+        /// 上揃え
+        /// </summary>
         Top,
+        /// <summary>
+        /// 中央揃え
+        /// </summary>
         Center,
+        /// <summary>
+        /// 下揃え
+        /// </summary>
         Bottom
     }
 
+    /// <summary>
+    /// テキストを描画するノードのクラス
+    /// </summary>
     [Serializable]
     public class TextNode : DrawnNode
     {

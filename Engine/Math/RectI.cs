@@ -34,6 +34,10 @@ namespace Altseed
         [MarshalAs(UnmanagedType.I4)]
         public int Height;
 
+        public Vector2I Position => new Vector2I(X, Y);
+
+        public Vector2I Size => new Vector2I(Width, Height);
+
         /// <summary>
         /// 新しいインスタンスを生成する
         /// </summary>
@@ -76,7 +80,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is RectI r ? Equals(r) : false;
+        public readonly override bool Equals(object obj) => obj is RectI r && Equals(r);
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。
@@ -93,9 +97,5 @@ namespace Altseed
         public static bool operator ==(RectI v1, RectI v2) => Equals(v1, v2);
 
         public static bool operator !=(RectI v1, RectI v2) => !Equals(v1, v2);
-
-        public Vector2I Position => new Vector2I(X, Y);
-
-        public Vector2I Size => new Vector2I(Width, Height);
     }
 }
