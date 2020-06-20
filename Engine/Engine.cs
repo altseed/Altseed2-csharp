@@ -359,6 +359,7 @@ namespace Altseed
         /// <summary>
         /// エンジンにノードを追加します。
         /// </summary>
+        /// <param name="node">追加されるノード</param>
         public static void AddNode(Node node)
         {
             _RootNode.AddChildNode(node);
@@ -367,6 +368,7 @@ namespace Altseed
         /// <summary>
         /// エンジンからノードを削除します。
         /// </summary>
+        /// <param name="node">削除するノード</param>
         public static void RemoveNode(Node node)
         {
             _RootNode.RemoveChildNode(node);
@@ -375,14 +377,17 @@ namespace Altseed
         /// <summary>
         /// エンジンに登録されている <typeparamref name="T"/> 型のノードを列挙します。
         /// </summary>
+        /// <typeparam name="T">検索するノードの型</typeparam>
         public static IEnumerable<T> FindNodes<T>() where T : Node
             => _RootNode.EnumerateDescendants<T>();
 
         /// <summary>
         /// エンジンに登録されている <typeparamref name="T"/> 型のノードのうち <paramref name="condition"/> を満たすものを列挙します。
         /// </summary>
+        /// <typeparam name="T">検索するノードの型</typeparam>
+        /// <param name="condition">検索するノードの条件 nullの場合は何も列挙されない</param>
         public static IEnumerable<T> FindNodes<T>(Func<T, bool> condition) where T : Node
-                => _RootNode.EnumerateDescendants<T>(condition);
+                => _RootNode.EnumerateDescendants(condition);
 
         #endregion
 

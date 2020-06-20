@@ -13,6 +13,9 @@ namespace Altseed
         Absolute,
     }
 
+    /// <summary>
+    /// 変形行列を備えたノードのクラス
+    /// </summary>
     [Serializable]
     public abstract class TransformNode : Node
     {
@@ -26,6 +29,10 @@ namespace Altseed
         }
         [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
+
+        /// <summary>
+        /// 基準となる変形行列を取得します。
+        /// </summary>
         public virtual Matrix44F AbsoluteTransform { get; }
 
         /// <summary>

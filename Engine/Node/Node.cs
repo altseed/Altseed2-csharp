@@ -275,6 +275,7 @@ namespace Altseed
         /// <summary>
         /// <typeparamref name="T"/> 型の子孫ノードを列挙します。
         /// </summary>
+        /// <typeparam name="T">列挙されるノードの型</typeparam>
         public IEnumerable<T> EnumerateDescendants<T>()
              where T : Node
         {
@@ -284,6 +285,8 @@ namespace Altseed
         /// <summary>
         /// <typeparamref name="T"/>型の子孫ノードのうち <paramref name="condition"/> を満たすものを列挙します。
         /// </summary>
+        /// <typeparam name="T">列挙されるノードの型</typeparam>
+        /// <param name="condition">列挙するノードの条件 nullの場合は何も列挙されない。</param>
         public IEnumerable<T> EnumerateDescendants<T>(Func<T, bool> condition)
             where T : Node
         {

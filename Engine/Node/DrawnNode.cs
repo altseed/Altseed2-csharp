@@ -2,8 +2,6 @@
 {
     public abstract class DrawnNode : TransformNode
     {
-        internal abstract void Draw();
-
         /// <summary>
         /// 描画するかどうかを取得または設定します。
         /// </summary>
@@ -49,6 +47,11 @@
         /// カリング用ID
         /// </summary>
         internal virtual int CullingId => -1;
+
+        /// <summary>
+        /// 描画を実行します。
+        /// </summary>
+        internal abstract void Draw();
 
         #region Node
 

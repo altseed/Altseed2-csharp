@@ -2,6 +2,9 @@
 
 namespace Altseed
 {
+    /// <summary>
+    /// カメラとして機能するノードのクラス
+    /// </summary>
     [Serializable]
     public class CameraNode : Node
     {
@@ -31,6 +34,9 @@ namespace Altseed
         }
         private int _Group = 0;
 
+        /// <summary>
+        /// 何も描画されていない部分の色を取得または設定します。
+        /// </summary>
         public Color ClearColor
         {
             get => _ClearColor;
