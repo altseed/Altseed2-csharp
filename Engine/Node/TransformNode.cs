@@ -221,7 +221,7 @@ namespace Altseed
         /// </summary>
         public virtual void AdjustSize()
         {
-            Size = new Vector2F(0, 0);
+            Size = default;
         }
 
         internal abstract void UpdateInheritedTransform();

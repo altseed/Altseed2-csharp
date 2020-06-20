@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Altseed
 {
     public sealed class PostEffectSepiaNode : PostEffectNode

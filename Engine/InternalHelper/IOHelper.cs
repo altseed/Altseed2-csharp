@@ -6,7 +6,7 @@ namespace Altseed
 {
     internal static class IOHelper
     {
-        private static char[] InvalidChars => _invalidChars ?? (_invalidChars = Path.GetInvalidPathChars());
+        private static char[] InvalidChars => _invalidChars ??= Path.GetInvalidPathChars();
         private static char[] _invalidChars;
         /// <summary>
         /// <see cref="ArgumentException"/>
