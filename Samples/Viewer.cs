@@ -31,7 +31,7 @@ namespace Sample
             Samples.Add(new Sample("Collision", "衝突の実装を行います。", typeof(Collision)));
             Samples.Add(new Sample("JoystickAxis", "ジョイスティックのアナログ入力を行います。", typeof(JoystickAxis)));
             Samples.Add(new Sample("JoystickButton", "ジョイスティックのボタン入力を行います。", typeof(JoystickButton)));
-            Samples.Add(new Sample("JoystickVibrate", "ジョイスティックの振動を行います。", typeof(JoystickVibrate)));
+            // Samples.Add(new Sample("JoystickVibrate", "ジョイスティックの振動を行います。", typeof(JoystickVibrate)));
             Samples.Add(new Sample("Keyboard", "キーボード入力を行います。", typeof(Keyboard)));
             Samples.Add(new Sample("Mouse", "マウス入力を行います。", typeof(Mouse)));
             Samples.Add(new Sample("MouseCursor", "マウスカーソルを変更します。", typeof(MouseCursor)));
