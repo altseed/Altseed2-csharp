@@ -106,7 +106,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間に等価性が認められたらtrue、それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is Vector2F v ? Equals(v) : false;
+        public readonly override bool Equals(object obj) => obj is Vector2F v && Equals(v);
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返します。

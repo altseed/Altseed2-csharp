@@ -55,7 +55,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is Vertex v ? Equals(v) : false;
+        public readonly override bool Equals(object obj) => obj is Vertex v && Equals(v);
 
         /// <summary>
         /// このインスタンスのハッシュコードを返す
@@ -150,7 +150,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is Color c ? Equals(c) : false;
+        public readonly override bool Equals(object obj) => obj is Color c && Equals(c);
 
         /// <summary>
         /// このインスタンスのハッシュコードを返す
@@ -209,7 +209,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is RenderPassParameter p ? Equals(p) : false;
+        public readonly override bool Equals(object obj) => obj is RenderPassParameter p && Equals(p);
 
         /// <summary>
         /// このインスタンスのハッシュコードを返す

@@ -5,23 +5,28 @@ namespace Altseed
 {
     public class RenderTextureCache
     {
-        private struct CacheKey
+        private struct CacheKey : IEquatable<CacheKey>
         {
             public Vector2I size;
 
-            public override int GetHashCode()
+            public readonly override int GetHashCode()
             {
                 return HashCode.Combine(size);
             }
 
-            public override bool Equals(object obj)
+            public readonly override bool Equals(object obj)
             {
-                return obj is CacheKey other && this == other;
+                return obj is CacheKey other && Equals(other);
+            }
+
+            public readonly bool Equals(CacheKey other)
+            {
+                return size == other.size;
             }
 
             public static bool operator ==(CacheKey a, CacheKey b)
             {
-                return a.size == b.size;
+                return a.Equals(b);
             }
 
             public static bool operator !=(CacheKey a, CacheKey b)

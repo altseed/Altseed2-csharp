@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
@@ -263,7 +263,7 @@ namespace Altseed
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
-        public readonly override bool Equals(object obj) => obj is Matrix44I m ? Equals(m) : false;
+        public readonly override bool Equals(object obj) => obj is Matrix44I m && Equals(m);
 
         /// <summary>
         /// このオブジェクトのハッシュコードを返す
