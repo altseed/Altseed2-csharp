@@ -390,21 +390,33 @@ namespace Altseed
         /// </summary>
         Other = 0,
         /// <summary>
-        /// PlayStation4のジョイスティック
+        /// PlayStation DualShock3
         /// </summary>
-        PS4 = 8200,
+        DualShock3 = 616,
+        /// <summary>
+        /// PlayStation DualShock4
+        /// </summary>
+        DualShock4 = 1476,
+        /// <summary>
+        /// PlayStation DualShock4Slim
+        /// </summary>
+        DualShock4Slim = 2508,
         /// <summary>
         /// XBOX360のジョイスティック
         /// </summary>
-        XBOX360 = 8199,
+        XBOX360 = 654,
         /// <summary>
-        /// NintendoSwitchの左ジョイスティック
+        /// NintendoSwitch 左のJon-Con
         /// </summary>
         JoyconL = 8198,
         /// <summary>
-        /// NintendoSwitchの右ジョイスティック
+        /// NintendoSwitch 右のJon-Con
         /// </summary>
-        JoyconR = 8197,
+        JoyconR = 8199,
+        /// <summary>
+        /// NintendoSwitch ProController
+        /// </summary>
+        ProController = 8201,
     }
     
     /// <summary>
@@ -414,98 +426,65 @@ namespace Altseed
     public enum JoystickButtonType : int
     {
         /// <summary>
+        /// 右側下ボタン
+        /// </summary>
+        RightDown = 0,
+        /// <summary>
+        /// 右側右ボタン
+        /// </summary>
+        RightRight = 1,
+        /// <summary>
+        /// 右側左ボタン
+        /// </summary>
+        RightLeft = 2,
+        /// <summary>
+        /// 右側上ボタン
+        /// </summary>
+        RightUp = 3,
+        /// <summary>
+        /// Lボタン
+        /// </summary>
+        LeftBumper = 4,
+        /// <summary>
+        /// Rボタン
+        /// </summary>
+        RightBumper = 5,
+        /// <summary>
+        /// 戻るボタン
+        /// </summary>
+        Back = 6,
+        /// <summary>
         /// スタートボタン
         /// </summary>
-        Start,
+        Start = 7,
         /// <summary>
-        /// セレクトボタン
+        /// ガイドボタン
         /// </summary>
-        Select,
+        Guide = 8,
         /// <summary>
-        /// ホームボタン
+        /// 左スティック押し込み
         /// </summary>
-        Home,
+        LeftThumb = 9,
         /// <summary>
-        /// リリースボタン
+        /// 右スティック押し込み
         /// </summary>
-        Release,
+        RightThumb = 10,
         /// <summary>
-        /// キャプチャーボタン
+        /// 十字キー上
         /// </summary>
-        Capture,
+        DPadUp = 11,
         /// <summary>
-        /// 左十字キー上
+        /// 十字キー右
         /// </summary>
-        LeftUp,
+        DPadRight = 12,
         /// <summary>
-        /// 左十字キー下
+        /// 十字キー下
         /// </summary>
-        LeftDown,
+        DPadDown = 13,
         /// <summary>
-        /// 左十字キー左
+        /// 十字キー左
         /// </summary>
-        LeftLeft,
-        /// <summary>
-        /// 左十字キー右
-        /// </summary>
-        LeftRight,
-        /// <summary>
-        /// 左
-        /// </summary>
-        LeftPush,
-        /// <summary>
-        /// 右十字キー上
-        /// </summary>
-        RightUp,
-        /// <summary>
-        /// 右十字キー右
-        /// </summary>
-        RightRight,
-        /// <summary>
-        /// 右十字キー左
-        /// </summary>
-        RightLeft,
-        /// <summary>
-        /// 右十字キー下
-        /// </summary>
-        RightDown,
-        /// <summary>
-        /// 右
-        /// </summary>
-        RightPush,
-        /// <summary>
-        /// Lボタン1
-        /// </summary>
-        L1,
-        /// <summary>
-        /// Rボタン1
-        /// </summary>
-        R1,
-        /// <summary>
-        /// Lボタン2
-        /// </summary>
-        L2,
-        /// <summary>
-        /// Rボタン2
-        /// </summary>
-        R2,
-        /// <summary>
-        /// Lボタン3
-        /// </summary>
-        L3,
-        /// <summary>
-        /// Rボタン3
-        /// </summary>
-        R3,
-        /// <summary>
-        /// 左スタートボタン
-        /// </summary>
-        LeftStart,
-        /// <summary>
-        /// 右スタートボタン
-        /// </summary>
-        RightStart,
-        Max,
+        DPadLeft = 14,
     }
     
     /// <summary>
@@ -514,14 +493,30 @@ namespace Altseed
     [Serializable]
     public enum JoystickAxisType : int
     {
-        Start,
-        LeftH,
-        LeftV,
-        RightH,
-        RightV,
-        L2,
-        R2,
-        Max,
+        /// <summary>
+        /// 左スティック横
+        /// </summary>
+        LeftX = 0,
+        /// <summary>
+        /// 左スティック縦
+        /// </summary>
+        LeftY = 1,
+        /// <summary>
+        /// 右スティック横
+        /// </summary>
+        RightX = 2,
+        /// <summary>
+        /// 右スティック縦
+        /// </summary>
+        RightY = 3,
+        /// <summary>
+        /// 左トリガー
+        /// </summary>
+        LeftTriger = 4,
+        /// <summary>
+        /// 右トリガー
+        /// </summary>
+        RightTriger = 5,
     }
     
     [Serializable]
@@ -3908,6 +3903,216 @@ namespace Altseed
         }
     }
     
+    public partial class JoystickInfo
+    {
+        #region unmanaged
+        
+        private static Dictionary<IntPtr, WeakReference<JoystickInfo>> cacheRepo = new Dictionary<IntPtr, WeakReference<JoystickInfo>>();
+        
+        internal static  JoystickInfo TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                JoystickInfo cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_JoystickInfo_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new JoystickInfo(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<JoystickInfo>(newObject);
+            return newObject;
+        }
+        
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_JoystickInfo_IsJoystickType(IntPtr selfPtr, int type);
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_JoystickInfo_GetName(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_JoystickInfo_GetButtonCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_JoystickInfo_GetAxisCount(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_JoystickInfo_GetIsGamepad(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_JoystickInfo_GetGamepadName(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern IntPtr cbg_JoystickInfo_GetGUID(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_JoystickInfo_GetBustype(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_JoystickInfo_GetVendor(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_JoystickInfo_GetProduct(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern int cbg_JoystickInfo_GetVersion(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed_Core")]
+        private static extern void cbg_JoystickInfo_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        internal JoystickInfo(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        public string Name
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetName(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        public int ButtonCount
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetButtonCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        public int AxisCount
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetAxisCount(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// ジョイスティックがGamepadとして使えるかどうかを取得します。
+        /// </summary>
+        public bool IsGamepad
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetIsGamepad(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// ジョイスティックがGamepadとして使える時、その名前を取得します。
+        /// </summary>
+        public string GamepadName
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetGamepadName(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        public string GUID
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetGUID(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        public int Bustype
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetBustype(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 製造者IDを取得します。
+        /// </summary>
+        public int Vendor
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetVendor(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 製品IDを取得します。
+        /// </summary>
+        public int Product
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetProduct(selfPtr);
+                return ret;
+            }
+        }
+        
+        public int Version
+        {
+            get
+            {
+                var ret = cbg_JoystickInfo_GetVersion(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// 指定したジョイスティックの種類に合致するかどうかを取得します。
+        /// </summary>
+        public bool IsJoystickType(JoystickType type)
+        {
+            var ret = cbg_JoystickInfo_IsJoystickType(selfPtr, (int)type);
+            return ret;
+        }
+        
+        ~JoystickInfo()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_JoystickInfo_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// ジョイスティックを表すクラス
     /// </summary>
@@ -3950,7 +4155,7 @@ namespace Altseed
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_RefreshConnectedState(IntPtr selfPtr);
+        private static extern IntPtr cbg_Joystick_GetJoystickInfo(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed_Core")]
         private static extern int cbg_Joystick_GetButtonStateByIndex(IntPtr selfPtr, int joystickIndex, int buttonIndex);
@@ -3959,19 +4164,14 @@ namespace Altseed
         private static extern int cbg_Joystick_GetButtonStateByType(IntPtr selfPtr, int joystickIndex, int type);
         
         [DllImport("Altseed_Core")]
-        private static extern int cbg_Joystick_GetJoystickType(IntPtr selfPtr, int index);
-        
-        [DllImport("Altseed_Core")]
         private static extern float cbg_Joystick_GetAxisStateByIndex(IntPtr selfPtr, int joystickIndex, int axisIndex);
         
         [DllImport("Altseed_Core")]
         private static extern float cbg_Joystick_GetAxisStateByType(IntPtr selfPtr, int joystickIndex, int type);
         
         [DllImport("Altseed_Core")]
-        private static extern IntPtr cbg_Joystick_GetJoystickName(IntPtr selfPtr, int index);
+        private static extern int cbg_Joystick_GetConnectedJoystickCount(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
-        private static extern void cbg_Joystick_Vibrate(IntPtr selfPtr, int index, float frequency, float amplitude);
         
         [DllImport("Altseed_Core")]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
@@ -3981,6 +4181,18 @@ namespace Altseed
         internal Joystick(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 接続されているジョイスティックの数を取得します。
+        /// </summary>
+        public int ConnectedJoystickCount
+        {
+            get
+            {
+                var ret = cbg_Joystick_GetConnectedJoystickCount(selfPtr);
+                return ret;
+            }
         }
         
         /// <summary>
@@ -3994,10 +4206,10 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 指定したジョイスティックが親であるかどうかを取得します。
+        /// 指定したジョイスティックが存在しているかどうかを取得します。
         /// </summary>
         /// <param name="joystickIndex">ジョイスティックのインデックス</param>
-        /// <returns>指定したジョイスティックが親であったらtrue，それ以外でfalse</returns>
+        /// <returns>指定したジョイスティックが存在したらtrue，存在していなかったらfalse</returns>
         public bool IsPresent(int joystickIndex)
         {
             var ret = cbg_Joystick_IsPresent(selfPtr, joystickIndex);
@@ -4005,44 +4217,13 @@ namespace Altseed
         }
         
         /// <summary>
-        /// 接続の状態をリセットします。
+        /// 指定したジョイスティックの情報を取得します。
         /// </summary>
-        public void RefreshConnectedState()
+        /// <param name="joystickIndex">ジョイスティックのインデックス</param>
+        public JoystickInfo GetJoystickInfo(int joystickIndex)
         {
-            cbg_Joystick_RefreshConnectedState(selfPtr);
-        }
-        
-        /// <summary>
-        /// 指定インデックスのジョイスティックの種類を取得します。
-        /// </summary>
-        /// <param name="index">種類を取得するジョイスティックのインデックス</param>
-        /// <returns>指定インデックスのジョイスティックの種類</returns>
-        public JoystickType GetJoystickType(int index)
-        {
-            var ret = cbg_Joystick_GetJoystickType(selfPtr, index);
-            return (JoystickType)ret;
-        }
-        
-        /// <summary>
-        /// ジョイスティックの名前を取得します。
-        /// </summary>
-        /// <param name="index">名前を検索するジョイスティックのインデックス</param>
-        /// <returns>指定したインデックスのジョイスティックの名前</returns>
-        public string GetJoystickName(int index)
-        {
-            var ret = cbg_Joystick_GetJoystickName(selfPtr, index);
-            return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
-        }
-        
-        /// <summary>
-        /// 指定したジョイスティックコントローラーを振動させます
-        /// </summary>
-        /// <param name="index">ジョイスティックのインデックス</param>
-        /// <param name="frequency">周波数</param>
-        /// <param name="amplitude">振幅</param>
-        public void Vibrate(int index, float frequency, float amplitude)
-        {
-            cbg_Joystick_Vibrate(selfPtr, index, frequency, amplitude);
+            var ret = cbg_Joystick_GetJoystickInfo(selfPtr, joystickIndex);
+            return JoystickInfo.TryGetFromCache(ret);
         }
         
         ~Joystick()
