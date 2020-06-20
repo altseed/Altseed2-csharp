@@ -419,7 +419,8 @@ namespace Altseed
         /// エンジンに登録されている <typeparamref name="T"/> 型のノードのうち <paramref name="condition"/> を満たすものを列挙します。
         /// </summary>
         /// <typeparam name="T">検索するノードの型</typeparam>
-        /// <param name="condition">検索するノードの条件 nullの場合は何も列挙されない</param>
+        /// <param name="condition">検索するノードの条件</param>
+        /// <exception cref="ArgumentNullException"><paramref name="condition"/>がnull</exception>
         public static IEnumerable<T> FindNodes<T>(Func<T, bool> condition) where T : Node
                 => _RootNode.EnumerateDescendants(condition);
 
