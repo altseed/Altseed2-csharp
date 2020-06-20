@@ -112,21 +112,27 @@ namespace Altseed.Test
             node.Font = font;
 
             Engine.AddNode(node);
-
-            Engine.Joystick.RefreshConnectedState();
-
-            for (int i = 0; i < Engine.Joystick.MaxCount; i++)
-            {
-                if (!Engine.Joystick.IsPresent(i)) continue;
-
-                var name = Engine.Joystick.GetJoystickName(i);
                 tc.LoopBody(c =>
                 {
-                    var leftup = Engine.Joystick.GetButtonState(i, JoystickButtonType.LeftUp);
-                    node.Text = $"{name}：LeftUp = {leftup}";
+                    var text = "";
+                    for (int i = 0; i < Engine.Joystick.MaxCount; i++)
+                    {
+                        var info = Engine.Joystick.GetJoystickInfo(i);
+                        if(info == null) continue;
+
+                        if (info.IsGamepad) {
+                            var name = info.GamepadName;
+                            var state = Engine.Joystick.GetButtonState(i, JoystickButtonType.DPadUp);
+                            text += $"{name}: LeftUp = {state}\n";
+                        } else {
+                            var name = info.Name;
+                            var state = Engine.Joystick.GetButtonState(i, 0);
+                            text += $"{name}: Button 0 = {state}\n";
+                        }
+                    }
+                    node.Text = text;
                 }
                 , null);
-            }
             tc.End();
         }
     }
