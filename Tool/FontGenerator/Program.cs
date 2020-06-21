@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed.Tool.FontGenerator
+namespace Altseed2.Tool.FontGenerator
 {
     class Program
     {

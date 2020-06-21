@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// コライダを管理するノード
@@ -80,14 +80,14 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 既定の<see cref="Altseed.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
+        /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         public CircleColliderNode() : this(new CircleCollider()) { }
 
         /// <summary>
-        /// 指定した<see cref="Altseed.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
+        /// 指定した<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        /// <param name="collider">使用する<see cref="Altseed.CircleCollider"/>のインスタンス</param>
+        /// <param name="collider">使用する<see cref="Altseed2.CircleCollider"/>のインスタンス</param>
         /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
         public CircleColliderNode(CircleCollider collider)
         {
@@ -118,14 +118,14 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 既定の<see cref="Altseed.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
+        /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         public PolygonColliderNode() : this(new PolygonCollider()) { }
 
         /// <summary>
-        /// 指定した<see cref="Altseed.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
+        /// 指定した<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        /// <param name="collider">使用する<see cref="Altseed.PolygonCollider"/>のインスタンス</param>
+        /// <param name="collider">使用する<see cref="Altseed2.PolygonCollider"/>のインスタンス</param>
         /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
         public PolygonColliderNode(PolygonCollider collider)
         {
@@ -164,14 +164,14 @@ namespace Altseed
         }
 
         /// <summary>
-        /// 既定の<see cref="Altseed.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
+        /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         public RectangleColliderNode() : this(new RectangleCollider()) { }
 
         /// <summary>
-        /// 指定した<see cref="Altseed.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
+        /// 指定した<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        /// <param name="collider">使用する<see cref="Altseed.RectangleCollider"/>のインスタンス</param>
+        /// <param name="collider">使用する<see cref="Altseed2.RectangleCollider"/>のインスタンス</param>
         /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
         public RectangleColliderNode(RectangleCollider collider)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Altseed
+namespace Altseed2
 {
     public class RenderTextureCache
     {

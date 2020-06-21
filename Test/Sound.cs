@@ -3,7 +3,7 @@ using System.Threading;
 using System.IO;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     public class Sound
@@ -14,8 +14,8 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var bgm = Altseed.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
-            var se = Altseed.Sound.Load(@"../../Core/TestData/Sound/se1.wav", true);
+            var bgm = Altseed2.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
+            var se = Altseed2.Sound.Load(@"../../Core/TestData/Sound/se1.wav", true);
 
             Assert.NotNull(bgm);
             Assert.NotNull(se);
@@ -36,7 +36,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var bgm = Altseed.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
+            var bgm = Altseed2.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(bgm);
 
             bgm.IsLoopingMode = true;
@@ -58,7 +58,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var bgm = Altseed.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
+            var bgm = Altseed2.Sound.Load(@"../../Core/TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(bgm);
 
             int bgm_id = Engine.Sound.Play(bgm);

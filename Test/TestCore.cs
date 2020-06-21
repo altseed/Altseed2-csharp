@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     class TestCore
     {

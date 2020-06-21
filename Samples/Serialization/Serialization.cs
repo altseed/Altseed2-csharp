@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
-using Altseed;
+using Altseed2;
 
 namespace Sample
 {

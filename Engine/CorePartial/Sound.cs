@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     public sealed partial class Sound
     {

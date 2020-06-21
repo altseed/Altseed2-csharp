@@ -1,6 +1,6 @@
 using System;
 
-namespace Altseed
+namespace Altseed2
 {
     public sealed class PostEffectGrayScaleNode : PostEffectNode
     {

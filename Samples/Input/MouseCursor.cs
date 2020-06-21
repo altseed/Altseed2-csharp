@@ -1,5 +1,5 @@
 ﻿using System;
-using Altseed;
+using Altseed2;
 
 namespace Sample
 {
@@ -11,7 +11,7 @@ namespace Sample
             Engine.Initialize("MouseCursor", 640, 480);
 
             // まず、カーソルオブジェクトを生成します。画像の読み込みに失敗するとnullが返ります。
-            // 引数は、string(png画像のパス), Altseed.Vector2I(クリック判定の相対座標) です。
+            // 引数は、string(png画像のパス), Altseed2.Vector2I(クリック判定の相対座標) です。
             var cursor = Cursor.Create("../../Core/TestData/Input/altseed_logo.png", new Vector2I(16, 16));
 
             if (cursor != null)

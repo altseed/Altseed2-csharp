@@ -1,4 +1,4 @@
-using Altseed;
+using Altseed2;
 
 class Empty
 {

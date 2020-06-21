@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 三角形を描画するノードのクラス

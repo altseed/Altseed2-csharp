@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Altseed.TestForMacLinux
+namespace Altseed2.TestForMacLinux
 {
     public class Options
     {

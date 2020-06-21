@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// Coreとの接続に使用する配列のインターフェイス

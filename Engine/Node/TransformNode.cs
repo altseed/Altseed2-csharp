@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 描画方法

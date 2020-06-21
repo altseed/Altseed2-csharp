@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace Altseed
+namespace Altseed2
 {
     public partial class Texture2D
     {

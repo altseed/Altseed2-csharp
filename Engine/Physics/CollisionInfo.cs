@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 衝突判定に関する情報を格納したクラス

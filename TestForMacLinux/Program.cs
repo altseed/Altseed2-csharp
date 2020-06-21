@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace Altseed.TestForMacLinux
+namespace Altseed2.TestForMacLinux
 {
     class Program
     {

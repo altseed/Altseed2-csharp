@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Altseed
+namespace Altseed2
 {
     [Serializable]
     public class PolygonNode : DrawnNode

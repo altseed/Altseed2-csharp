@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     struct MemoryHandle
     {
@@ -73,23 +73,23 @@ namespace Altseed
     public enum ResourceType : int
     {
         /// <summary>
-        /// <see cref="Altseed.StaticFile"/>を表す
+        /// <see cref="Altseed2.StaticFile"/>を表す
         /// </summary>
         StaticFile,
         /// <summary>
-        /// <see cref="Altseed.StreamFile"/>を表す
+        /// <see cref="Altseed2.StreamFile"/>を表す
         /// </summary>
         StreamFile,
         /// <summary>
-        /// <see cref="Altseed.Texture2D"/>を表す
+        /// <see cref="Altseed2.Texture2D"/>を表す
         /// </summary>
         Texture2D,
         /// <summary>
-        /// <see cref="Altseed.Font"/>を表す
+        /// <see cref="Altseed2.Font"/>を表す
         /// </summary>
         Font,
         /// <summary>
-        /// <see cref="Altseed.Sound"/>を表す
+        /// <see cref="Altseed2.Sound"/>を表す
         /// </summary>
         Sound,
         MAX,
@@ -1581,71 +1581,71 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Configuration_Constructor_0();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetIsFullscreen(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetIsFullscreen(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetIsResizable(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetIsResizable(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Configuration_GetDeviceType(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetDeviceType(IntPtr selfPtr, int value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetWaitVSync(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetWaitVSync(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetIsGraphicsOnly(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetIsGraphicsOnly(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetConsoleLoggingEnabled(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetConsoleLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetFileLoggingEnabled(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetFileLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Configuration_GetLogFileName(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetLogFileName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetToolEnabled(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_SetToolEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Configuration_Release(IntPtr selfPtr);
         
         #endregion
@@ -1989,41 +1989,41 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, IntPtr config);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_DoEvent(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Core_Terminate();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Core_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Core_GetDeltaSecond(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Core_GetCurrentFPS(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Core_GetTargetFPS(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Core_SetTargetFPS(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Core_GetFramerateMode(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Core_SetFramerateMode(IntPtr selfPtr, int value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Core_Release(IntPtr selfPtr);
         
         #endregion
@@ -2191,35 +2191,35 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int8Array_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int8Array_Resize(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Int8Array_GetData(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int8Array_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern byte cbg_Int8Array_GetAt(IntPtr selfPtr, int index);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int8Array_SetAt(IntPtr selfPtr, int index, byte value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Int8Array_Create(int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -2454,35 +2454,35 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int32Array_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int32Array_Resize(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Int32Array_GetData(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int32Array_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Int32Array_GetAt(IntPtr selfPtr, int index);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int32Array_SetAt(IntPtr selfPtr, int index, int value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Int32Array_Create(int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Int32Array_GetCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
         
         #endregion
@@ -2717,35 +2717,35 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_VertexArray_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_VertexArray_Resize(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_VertexArray_GetData(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_VertexArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_VertexArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vertex cbg_VertexArray_GetAt(IntPtr selfPtr, int index);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_VertexArray_SetAt(IntPtr selfPtr, int index, Vertex value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_VertexArray_Create(int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_VertexArray_GetCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_VertexArray_Release(IntPtr selfPtr);
         
         #endregion
@@ -2980,35 +2980,35 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_FloatArray_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_FloatArray_Resize(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_FloatArray_GetData(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_FloatArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_FloatArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_FloatArray_GetAt(IntPtr selfPtr, int index);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_FloatArray_SetAt(IntPtr selfPtr, int index, float value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_FloatArray_Create(int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_FloatArray_GetCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_FloatArray_Release(IntPtr selfPtr);
         
         #endregion
@@ -3243,35 +3243,35 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Vector2FArray_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Vector2FArray_Resize(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Vector2FArray_GetData(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Vector2FArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Vector2FArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Vector2FArray_GetAt(IntPtr selfPtr, int index);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Vector2FArray_SetAt(IntPtr selfPtr, int index, Vector2F value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Vector2FArray_Create(int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Vector2FArray_GetCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Vector2FArray_Release(IntPtr selfPtr);
         
         #endregion
@@ -3505,19 +3505,19 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Resources_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Resources_GetResourcesCount(IntPtr selfPtr, int type);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Resources_Clear(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Resources_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Resources_Release(IntPtr selfPtr);
         
         #endregion
@@ -3611,10 +3611,10 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Cursor_Create([MarshalAs(UnmanagedType.LPWStr)] string path, Vector2I hot);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Cursor_Release(IntPtr selfPtr);
         
         #endregion
@@ -3685,13 +3685,13 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Keyboard_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
         
         #endregion
@@ -3769,32 +3769,32 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Mouse_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Mouse_SetCursorImage(IntPtr selfPtr, IntPtr cursor);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Mouse_GetPosition(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, Vector2F value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Mouse_GetCursorMode(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Mouse_SetCursorMode(IntPtr selfPtr, int value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Mouse_Release(IntPtr selfPtr);
         
         #endregion
@@ -3934,52 +3934,52 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_JoystickInfo_IsJoystickType(IntPtr selfPtr, int type);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_JoystickInfo_GetName(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_JoystickInfo_GetButtonCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_JoystickInfo_GetAxisCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_JoystickInfo_GetIsGamepad(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_JoystickInfo_GetGamepadName(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_JoystickInfo_GetGUID(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_JoystickInfo_GetBustype(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_JoystickInfo_GetVendor(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_JoystickInfo_GetProduct(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_JoystickInfo_GetVersion(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_JoystickInfo_Release(IntPtr selfPtr);
         
         #endregion
@@ -4147,33 +4147,33 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Joystick_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Joystick_GetJoystickInfo(IntPtr selfPtr, int joystickIndex);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Joystick_GetButtonStateByIndex(IntPtr selfPtr, int joystickIndex, int buttonIndex);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Joystick_GetButtonStateByType(IntPtr selfPtr, int joystickIndex, int type);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Joystick_GetAxisStateByIndex(IntPtr selfPtr, int joystickIndex, int axisIndex);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Joystick_GetAxisStateByType(IntPtr selfPtr, int joystickIndex, int type);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Joystick_GetConnectedJoystickCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
         
         #endregion
@@ -4273,33 +4273,33 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Graphics_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_BeginFrame(IntPtr selfPtr, RenderPassParameter renderPassParmeter);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_EndFrame(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Graphics_SaveScreenshot(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         #endregion
@@ -4429,15 +4429,15 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_TextureBase_Save(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2I cbg_TextureBase_GetSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_TextureBase_Release(IntPtr selfPtr);
         
         #endregion
@@ -4641,18 +4641,18 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Texture2D_Load([MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
         
         #endregion
@@ -4865,10 +4865,10 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderTexture_Create(Vector2I size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderTexture_Release(IntPtr selfPtr);
         
         #endregion
@@ -5041,40 +5041,40 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Material_Constructor_0();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector4F cbg_Material_GetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Material_SetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Vector4F value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Matrix44F cbg_Material_GetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Material_SetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Matrix44F value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Material_GetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Material_SetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr, int shaderStage);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr shader);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Material_GetBlendMode(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Material_SetBlendMode(IntPtr selfPtr, int value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
         
         #endregion
@@ -5247,28 +5247,28 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Renderer_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_DrawSprite(IntPtr selfPtr, IntPtr sprite);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_DrawText(IntPtr selfPtr, IntPtr text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr camera);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
         
         #endregion
@@ -5387,22 +5387,22 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CommandList_RenderToRenderTexture(IntPtr selfPtr, IntPtr material, IntPtr target, RenderPassParameter renderPassparameter);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CommandList_CopyTexture(IntPtr selfPtr, IntPtr src, IntPtr dst);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CommandList_Release(IntPtr selfPtr);
         
         #endregion
@@ -5488,17 +5488,17 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Matrix44F cbg_Rendered_GetTransform(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Rendered_SetTransform(IntPtr selfPtr, Matrix44F value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Rendered_GetId(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Rendered_Release(IntPtr selfPtr);
         
         #endregion
@@ -5679,34 +5679,34 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedSprite_Create();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedSprite_GetTexture(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedSprite_SetTexture(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern RectF cbg_RenderedSprite_GetSrc(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedSprite_SetSrc(IntPtr selfPtr, RectF value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedSprite_GetMaterial(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedSprite_SetMaterial(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Color cbg_RenderedSprite_GetColor(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedSprite_SetColor(IntPtr selfPtr, Color value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
@@ -5958,69 +5958,69 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedText_Create();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedText_GetMaterial(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetMaterial(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedText_GetText(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedText_GetFont(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetFont(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_RenderedText_GetWeight(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetWeight(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_RenderedText_GetIsEnableKerning(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetIsEnableKerning(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_RenderedText_GetWritingDirection(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetWritingDirection(IntPtr selfPtr, int value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_RenderedText_GetCharacterSpace(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetCharacterSpace(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_RenderedText_GetLineGap(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetLineGap(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, Color value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_Release(IntPtr selfPtr);
         
         #endregion
@@ -6409,40 +6409,40 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedPolygon_Create();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_CreateVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_OverwriteVertexesColor(IntPtr selfPtr, Color color);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedPolygon_GetVertexes(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_SetVertexes(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedPolygon_GetTexture(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_SetTexture(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern RectF cbg_RenderedPolygon_GetSrc(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_SetSrc(IntPtr selfPtr, RectF value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedPolygon_GetMaterial(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_SetMaterial(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_Release(IntPtr selfPtr);
         
         #endregion
@@ -6710,28 +6710,28 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedCamera_Create();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_RenderedCamera_GetCenterOffset(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedCamera_SetCenterOffset(IntPtr selfPtr, Vector2F value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RenderedCamera_GetTargetTexture(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedCamera_SetTargetTexture(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern RenderPassParameter cbg_RenderedCamera_GetRenderPassParameter(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedCamera_SetRenderPassParameter(IntPtr selfPtr, RenderPassParameter value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedCamera_Release(IntPtr selfPtr);
         
         #endregion
@@ -6958,38 +6958,38 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_Create(IntPtr selfPtr, int type);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetDownsampleShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetSepiaShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetGrayScaleShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetGaussianBlurShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetHighLuminanceShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetLightBloomShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_BuiltinShader_GetTextureMixShader(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_BuiltinShader_Release(IntPtr selfPtr);
         
         #endregion
@@ -7121,22 +7121,22 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string code, int shaderStage);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Shader_GetStageType(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Shader_GetCode(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Shader_GetName(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
@@ -7348,31 +7348,31 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2I cbg_Glyph_GetTextureSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Glyph_GetTextureIndex(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2I cbg_Glyph_GetPosition(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2I cbg_Glyph_GetSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2I cbg_Glyph_GetOffset(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Glyph_GetGlyphWidth(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Glyph_Release(IntPtr selfPtr);
         
         #endregion
@@ -7502,60 +7502,60 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_LoadStaticFont([MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Font_GenerateFontFile([MarshalAs(UnmanagedType.LPWStr)] string dynamicFontPath, [MarshalAs(UnmanagedType.LPWStr)] string staticFontPath, int size, [MarshalAs(UnmanagedType.LPWStr)] string characters);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_GetGlyph(IntPtr selfPtr, int character);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_GetFontTexture(IntPtr selfPtr, int index);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Font_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_GetImageGlyph(IntPtr selfPtr, int character);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Font_GetSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Font_GetAscent(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Font_GetDescent(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Font_GetLineGap(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Font_GetIsStaticFont(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Font_Release(IntPtr selfPtr);
         
         #endregion
@@ -7924,21 +7924,21 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_CullingSystem_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CullingSystem_UpdateAABB(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_CullingSystem_GetDrawingRenderedCount(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_CullingSystem_GetDrawingRenderedIds(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CullingSystem_Release(IntPtr selfPtr);
         
         #endregion
@@ -8034,754 +8034,754 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_AddFontFromFileTTF(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, float sizePixels, int ranges);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Begin(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_End(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_NewFrame(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Render(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Dummy(IntPtr selfPtr, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Text(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_TextUnformatted(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_TextWrapped(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_TextColored(IntPtr selfPtr, Color color, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_TextDisabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_BulletText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_LabelText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_CollapsingHeader(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_TreeNode(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_TreeNodeEx(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_TreePop(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextItemOpen(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool isOpen, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Button(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_CheckBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool v);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_RadioButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] bool active);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_RadioButton_2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int v, int v_button);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ArrowButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int dir);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InvisibleButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ListBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int current, [MarshalAs(UnmanagedType.LPWStr)] string items, int popupMaxHeightInItems);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Selectable(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool selected, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_InputText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_InputTextWithHint(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string hit, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_InputTextMultiline(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, Vector2F size, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int value, float speed, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value, float speed, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderAngle(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float angle);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_VSliderInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [In, Out] ref int value, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_VSliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [In, Out] ref float value, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int value, float speed, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value, float speed, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragIntRange2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int currentMin, [In, Out] ref int currentMax, float speed, int valueMin, int valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragFloatRange2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float currentMin, [In, Out] ref float currentMax, float speed, float valueMin, float valueMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ColorEdit3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref Color color, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ColorEdit4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref Color color, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_OpenPopup(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopup(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupModal(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndPopup(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginChild(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [MarshalAs(UnmanagedType.Bool)] bool border, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndChild(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginMenuBar(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndMenuBar(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginMenu(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] bool enabled);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndMenu(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_MenuItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string shortcut, [MarshalAs(UnmanagedType.Bool)] bool selected, [MarshalAs(UnmanagedType.Bool)] bool enabled);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginTabBar(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndTabBar(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginTabItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndTabItem(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Indent(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Unindent(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Separator(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetTooltip(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_BeginTooltip(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndTooltip(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_NewLine(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SameLine(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushTextWrapPos(IntPtr selfPtr, float wrapLocalPosX);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopTextWrapPos(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushItemWidth(IntPtr selfPtr, float width);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopItemWidth(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushButtonRepeat(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool repeat);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopButtonRepeat(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Columns(IntPtr selfPtr, int count, [MarshalAs(UnmanagedType.Bool)] bool border);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_NextColumn(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushID(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopID(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemActive(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemHovered(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollHere(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetTextLineHeight(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetFontSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetWindowSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowSize(IntPtr selfPtr, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsMousePosValid(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsMouseDragging(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsMouseDoubleClicked(IntPtr selfPtr, int button);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetMouseDragDelta(IntPtr selfPtr, int button);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_ResetMouseDragDelta(IntPtr selfPtr, int button);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextWindowContentSize(IntPtr selfPtr, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextWindowSize(IntPtr selfPtr, Vector2F size, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextWindowPos(IntPtr selfPtr, Vector2F pos, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowAppearing(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowCollapsed(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowFocused(IntPtr selfPtr, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowHovered(IntPtr selfPtr, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetWindowPos(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextWindowCollapsed(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextWindowFocus(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextWindowBgAlpha(IntPtr selfPtr, float alpha);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowPosWithCond(IntPtr selfPtr, Vector2F pos, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowSizeWithCond(IntPtr selfPtr, Vector2F pos, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowCollapsedWithCond(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowFocus(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowFontScale(IntPtr selfPtr, float scale);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowPosByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, Vector2F pos, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowSizeByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, Vector2F pos, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowCollapsedByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetWindowFocusByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetContentRegionMax(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetContentRegionAvail(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetWindowContentRegionMin(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetWindowContentRegionMax(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetWindowContentRegionWidth(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetScrollX(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetScrollY(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetScrollMaxX(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetScrollMaxY(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollX(IntPtr selfPtr, float scrollX);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollY(IntPtr selfPtr, float scrollY);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollHereX(IntPtr selfPtr, float centerXRatio);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollHereY(IntPtr selfPtr, float centerYRatio);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollFromPosX(IntPtr selfPtr, float localX, float centerXRatio);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetScrollFromPosY(IntPtr selfPtr, float localY, float centerYRatio);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushStyleColor(IntPtr selfPtr, int idx, Color col);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopStyleColor(IntPtr selfPtr, int count);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushStyleVarFloat(IntPtr selfPtr, int idx, float val);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushStyleVarVector2F(IntPtr selfPtr, int idx, Vector2F val);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopStyleVar(IntPtr selfPtr, int count);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Color cbg_Tool_GetStyleColor(IntPtr selfPtr, int idx);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetFontTexUvWhitePixel(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetNextItemWidth(IntPtr selfPtr, float itemWidth);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_CalcItemWidth(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushAllowKeyboardFocus(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool allowKeyboardFocus);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopAllowKeyboardFocus(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Spacing(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_BeginGroup(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndGroup(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetCursorPos(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetCursorPos(IntPtr selfPtr, Vector2F localPos);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetCursorStartPos(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetCursorScreenPos(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_AlignTextToFramePadding(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetTextLineHeightWithSpacing(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetFrameHeight(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetFrameHeightWithSpacing(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SmallButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Image(IntPtr selfPtr, IntPtr texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ImageButton(IntPtr selfPtr, IntPtr texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_ProgressBar(IntPtr selfPtr, float fraction, Vector2F sizeArg, [MarshalAs(UnmanagedType.LPWStr)] string overlay);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Bullet(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_BeginCombo(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string previewValue, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndCombo(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Combo(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int current_item, [MarshalAs(UnmanagedType.LPWStr)] string items, int popupMaxHeightInItems);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ColorButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string descId, [In, Out] ref Color col, int flags, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetColorEditOptions(IntPtr selfPtr, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetTreeNodeToLabelSpacing(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ListBoxHeader(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string flags, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_ListBoxFooter(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PlotLines(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr values, int valuesCount, int valuesOffset, [MarshalAs(UnmanagedType.LPWStr)] string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PlotHistogram(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr values, int valuesCount, int valuesOffset, [MarshalAs(UnmanagedType.LPWStr)] string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_ValueBool(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, [MarshalAs(UnmanagedType.Bool)] bool b);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_ValueInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, int v);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_ValueFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, float v, [MarshalAs(UnmanagedType.LPWStr)] string floatFormat);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginMainMenuBar(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_EndMainMenuBar(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupContextItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupContextWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton, [MarshalAs(UnmanagedType.Bool)] bool alsoOverItems);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupContextVoid(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupModalEx(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [Out] out bool isOpen, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_OpenPopupOnItemClick(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsPopupOpen(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_CloseCurrentPopup(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Tool_GetColumnIndex(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetColumnWidth(IntPtr selfPtr, int columnIndex);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetColumnWidth(IntPtr selfPtr, int columnIndex, float width);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetColumnOffset(IntPtr selfPtr, int columnIndex);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetColumnOffset(IntPtr selfPtr, int columnIndex, float offsetX);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Tool_GetColumnsCount(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetTabItemClosed(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string tabOrDockedWindowLabel);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PushClipRect(IntPtr selfPtr, Vector2F clipRectMin, Vector2F clipRectMax, [MarshalAs(UnmanagedType.Bool)] bool intersectWithCurrentClipRect);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_PopClipRect(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetItemDefaultFocus(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetKeyboardFocusHere(IntPtr selfPtr, int offset);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemHoveredWithFlags(IntPtr selfPtr, int flags);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemFocused(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemClicked(IntPtr selfPtr, int mouseButton);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemVisible(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemEdited(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemActivated(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemDeactivated(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemDeactivatedAfterEdit(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsAnyItemHovered(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsAnyItemActive(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsAnyItemFocused(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetItemRectMin(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetItemRectMax(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Tool_GetItemRectSize(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetItemAllowOverlap(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_IsRectVisible(IntPtr selfPtr, Vector2F size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_IsRectVisibleVector2F2(IntPtr selfPtr, Vector2F rectMin, Vector2F rectMax);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Tool_GetTime(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_GetClipboardText(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetClipboardText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_LoadIniSettingsFromDisk(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string iniFilename);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SaveIniSettingsToDisk(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string iniFilename);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_OpenDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_OpenDialogMultiple(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_SaveDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Tool_PickFolder(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_Tool_GetToolUsage(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_SetToolUsage(IntPtr selfPtr, int value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Tool_Release(IntPtr selfPtr);
         
         #endregion
@@ -10744,41 +10744,41 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_StreamFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_StreamFile_GetTempBufferSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
         
         #endregion
@@ -11064,30 +11064,30 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_StaticFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_StaticFile_GetPath(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_StaticFile_GetSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_GetIsInPackage(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
         
         #endregion
@@ -11311,37 +11311,37 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_File_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootDirectory(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootPackageWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] string password);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootPackage(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_File_ClearRootDirectories(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_Exists(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_Pack(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_PackWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath, [MarshalAs(UnmanagedType.LPWStr)] string password);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_File_Release(IntPtr selfPtr);
         
         #endregion
@@ -11501,42 +11501,42 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Sound_GetLoopEndPoint(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Sound_SetLoopEndPoint(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Sound_GetIsLoopingMode(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Sound_SetIsLoopingMode(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Sound_GetLength(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Sound_Release(IntPtr selfPtr);
         
         #endregion
@@ -11820,69 +11820,69 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_SoundMixer_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern int cbg_SoundMixer_Play(IntPtr selfPtr, IntPtr sound);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_SoundMixer_GetIsPlaying(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_StopAll(IntPtr selfPtr);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_Stop(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_Pause(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_Resume(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_SetVolume(IntPtr selfPtr, int id, float volume);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_FadeIn(IntPtr selfPtr, int id, float second);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_FadeOut(IntPtr selfPtr, int id, float second);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_Fade(IntPtr selfPtr, int id, float second, float targetedVolume);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_SoundMixer_GetIsPlaybackSpeedEnabled(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_SetIsPlaybackSpeedEnabled(IntPtr selfPtr, int id, [MarshalAs(UnmanagedType.Bool)] bool isPlaybackSpeedEnabled);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_SoundMixer_GetPlaybackSpeed(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_SetPlaybackSpeed(IntPtr selfPtr, int id, float playbackSpeed);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_SoundMixer_GetPanningPosition(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_SetPanningPosition(IntPtr selfPtr, int id, float panningPosition);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_SoundMixer_GetPlaybackPosition(IntPtr selfPtr, int id);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_SetPlaybackPosition(IntPtr selfPtr, int id, float position);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_GetSpectrum(IntPtr selfPtr, int id, IntPtr spectrums, int window);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
         
         #endregion
@@ -12140,34 +12140,34 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Log_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Write(IntPtr selfPtr, int category, int level, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Trace(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Debug(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Info(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Warn(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Error(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Critical(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_SetLevel(IntPtr selfPtr, int category, int level);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Log_Release(IntPtr selfPtr);
         
         #endregion
@@ -12294,20 +12294,20 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Window_GetInstance();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Window_GetTitle(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Window_SetTitle(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2I cbg_Window_GetSize(IntPtr selfPtr);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Window_Release(IntPtr selfPtr);
         
         #endregion
@@ -12410,26 +12410,26 @@ namespace Altseed
         }
         
         internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_Collider_Constructor_0();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Collider_GetIsCollidedWith(IntPtr selfPtr, IntPtr collider);
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_Collider_GetPosition(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Collider_SetPosition(IntPtr selfPtr, Vector2F value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_Collider_GetRotation(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Collider_SetRotation(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_Collider_Release(IntPtr selfPtr);
         
         #endregion
@@ -12637,16 +12637,16 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_CircleCollider_Constructor_0();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern float cbg_CircleCollider_GetRadius(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CircleCollider_SetRadius(IntPtr selfPtr, float value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_CircleCollider_Release(IntPtr selfPtr);
         
         #endregion
@@ -12819,22 +12819,22 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_RectangleCollider_Constructor_0();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_RectangleCollider_GetSize(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RectangleCollider_SetSize(IntPtr selfPtr, Vector2F value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern Vector2F cbg_RectangleCollider_GetCenterPosition(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RectangleCollider_SetCenterPosition(IntPtr selfPtr, Vector2F value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RectangleCollider_Release(IntPtr selfPtr);
         
         #endregion
@@ -13032,16 +13032,16 @@ namespace Altseed
             return newObject;
         }
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_PolygonCollider_Constructor_0();
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern IntPtr cbg_PolygonCollider_GetVertexes(IntPtr selfPtr);
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_PolygonCollider_SetVertexes(IntPtr selfPtr, IntPtr value);
         
         
-        [DllImport("Altseed_Core")]
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_PolygonCollider_Release(IntPtr selfPtr);
         
         #endregion

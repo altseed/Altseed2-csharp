@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>Altseed.Tool.FilePackageGenerator</RootNamespace>
+    <RootNamespace>Altseed2.Tool.FilePackageGenerator</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon />
     <StartupObject />

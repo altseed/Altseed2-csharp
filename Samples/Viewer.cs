@@ -4,7 +4,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
 
-using Altseed;
+using Altseed2;
 
 namespace Sample
 {

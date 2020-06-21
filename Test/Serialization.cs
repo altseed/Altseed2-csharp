@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     internal static class FormatterExtension
     {
@@ -38,7 +38,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var file1 = Altseed.StaticFile.CreateStrict("../../Core/TestData/IO/test.txt");
+            var file1 = Altseed2.StaticFile.CreateStrict("../../Core/TestData/IO/test.txt");
 
             const string path = "Serialization/StaticFile.bin";
 
@@ -65,7 +65,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var file1 = Altseed.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
+            var file1 = Altseed2.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
 
             const string path = "Serialization/StreamFile.bin";
             file1.Read(3);
@@ -230,7 +230,7 @@ namespace Altseed.Test
 
             tc.Init();
 
-            var texture1 = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture1 = Altseed2.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
 
             Assert.NotNull(texture1);
 
@@ -277,7 +277,7 @@ namespace Altseed.Test
             tc.Init();
 
             var size = new Vector2I(100, 100);
-            var texture1 = Altseed.RenderTexture.Create(size);
+            var texture1 = Altseed2.RenderTexture.Create(size);
 
             Assert.NotNull(texture1);
 
@@ -302,7 +302,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var sound1 = Altseed.Sound.LoadStrict(@"../../Core/TestData/Sound/se1.wav", true);
+            var sound1 = Altseed2.Sound.LoadStrict(@"../../Core/TestData/Sound/se1.wav", true);
 
             Assert.NotNull(sound1);
 
@@ -312,7 +312,7 @@ namespace Altseed.Test
 
             Assert.True(System.IO.File.Exists(path));
 
-            var font2 = Deserialize<Altseed.Sound>(path);
+            var font2 = Deserialize<Altseed2.Sound>(path);
 
             Assert.NotNull(font2);
 
@@ -334,7 +334,7 @@ namespace Altseed.Test
 
             var netArray1 = new byte[] { 1, 2, 3, 4, 5 };
 
-            var array1 = Altseed.Int8Array.Create(netArray1.Length);
+            var array1 = Altseed2.Int8Array.Create(netArray1.Length);
             Assert.NotNull(array1);
             array1.FromArray(netArray1);
 
@@ -362,7 +362,7 @@ namespace Altseed.Test
 
             var netArray1 = new int[] { 1, 2, 3, 4, 5 };
 
-            var array1 = Altseed.Int32Array.Create(netArray1.Length);
+            var array1 = Altseed2.Int32Array.Create(netArray1.Length);
             Assert.NotNull(array1);
             array1.FromArray(netArray1);
 
@@ -395,7 +395,7 @@ namespace Altseed.Test
                 new Vertex(new Vector3F(30, 30, 30), new Color(30, 30, 30, 30), new Vector2F(30, 30), new Vector2F(30, 30))
             };
 
-            var array1 = Altseed.VertexArray.Create(netArray1.Length);
+            var array1 = Altseed2.VertexArray.Create(netArray1.Length);
             Assert.NotNull(array1);
             array1.FromArray(netArray1);
 
@@ -423,7 +423,7 @@ namespace Altseed.Test
 
             var netArray1 = new float[] { 1, 2, 3, 4, 5 };
 
-            var array1 = Altseed.FloatArray.Create(netArray1.Length);
+            var array1 = Altseed2.FloatArray.Create(netArray1.Length);
             Assert.NotNull(array1);
             array1.FromArray(netArray1);
 
@@ -456,7 +456,7 @@ namespace Altseed.Test
                 new Vector2F(30, 30)
             };
 
-            var array1 = Altseed.Vector2FArray.Create(netArray1.Length);
+            var array1 = Altseed2.Vector2FArray.Create(netArray1.Length);
             Assert.NotNull(array1);
             array1.FromArray(netArray1);
 
@@ -482,11 +482,11 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Altseed2.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
 
             Assert.NotNull(texture);
 
-            var sprite1 = Altseed.RenderedSprite.Create();
+            var sprite1 = Altseed2.RenderedSprite.Create();
 
             Assert.NotNull(sprite1);
 
@@ -521,7 +521,7 @@ namespace Altseed.Test
 
             Assert.NotNull(font);
 
-            var text1 = Altseed.RenderedText.Create();
+            var text1 = Altseed2.RenderedText.Create();
 
             Assert.NotNull(text1);
 
@@ -554,7 +554,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Altseed2.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
             var array = new Vector2F[]
             {
                 new Vector2F(100, 100),
@@ -563,13 +563,13 @@ namespace Altseed.Test
 
             Assert.NotNull(texture);
 
-            var polygon1 = Altseed.RenderedPolygon.Create();
+            var polygon1 = Altseed2.RenderedPolygon.Create();
 
             Assert.NotNull(polygon1);
 
             polygon1.Src = new RectF(100, 100, 200, 200);
             polygon1.Texture = texture;
-            var v_array = Altseed.Vector2FArray.Create(array.Length);
+            var v_array = Altseed2.Vector2FArray.Create(array.Length);
             v_array.FromArray(array);
             polygon1.CreateVertexesByVector2F(v_array);
 
@@ -596,11 +596,11 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed.RenderTexture.Create(new Vector2I(100, 100));
+            var texture = Altseed2.RenderTexture.Create(new Vector2I(100, 100));
 
             Assert.NotNull(texture);
 
-            var camera1 = Altseed.RenderedCamera.Create();
+            var camera1 = Altseed2.RenderedCamera.Create();
 
             Assert.NotNull(camera1);
 
@@ -669,7 +669,7 @@ namespace Altseed.Test
                 new Vertex(new Vector3F(30f, 30f, 30f), new Color(300, 300, 300, 300), new Vector2F(30f, 30f), new Vector2F(300f, 300f)),
             };
 
-            var array_a = Altseed.Vector2FArray.Create(array_g.Length);
+            var array_a = Altseed2.Vector2FArray.Create(array_g.Length);
             Assert.NotNull(array_a);
             array_a.FromArray(array_g.Select(v => new Vector2F(v.Position.X, v.Position.Y)).ToArray());
 
@@ -726,7 +726,7 @@ namespace Altseed.Test
             var tc = new TestCore();
             tc.Init();
 
-            var shader1 = Altseed.Shader.Create("ShaderTest", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel);
+            var shader1 = Altseed2.Shader.Create("ShaderTest", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel);
             Assert.NotNull(shader1);
 
             const string path = "Serialization/Shader.bin";
@@ -815,7 +815,7 @@ namespace Altseed.Test
 
             tc.End();
 
-            static IEnumerable<Altseed.Node> EnumerateEngineNodes()
+            static IEnumerable<Altseed2.Node> EnumerateEngineNodes()
             {
                 foreach (var child in Engine.GetNodes())
                 {
@@ -827,7 +827,7 @@ namespace Altseed.Test
         }
 
         [Serializable]
-        private class NumericNode : Altseed.Node
+        private class NumericNode : Altseed2.Node
         {
             public int Index { get; set; }
             public NumericNode(int index)

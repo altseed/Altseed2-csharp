@@ -23,7 +23,7 @@
 
 using System;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// イージングの種類を表します。

@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Altseed;
+using Altseed2;
 using System.Linq;
 
 namespace Sample

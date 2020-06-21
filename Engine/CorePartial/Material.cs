@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     public partial class Material
     {

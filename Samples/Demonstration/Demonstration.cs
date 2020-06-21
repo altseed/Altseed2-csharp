@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Altseed;
+using Altseed2;
 
-namespace AltseedDemo
+namespace Altseed2Demo
 {
     class Program
     {

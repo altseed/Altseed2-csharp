@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 3次元ベクトル

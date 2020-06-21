@@ -3,7 +3,7 @@ using System.Threading;
 using System.IO;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     public class Window

@@ -23,7 +23,7 @@
   <Choose>
     <When Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
-        <Content Include="..\Core\build\DEBUG\Altseed_Core.dll">
+        <Content Include="..\Core\build\DEBUG\Altseed2_Core.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
@@ -31,7 +31,7 @@
 
     <When Condition="'$(Configuration)|$(Platform)'=='Release|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
-        <Content Include="..\Core\build\RELEASE\Altseed_Core.dll">
+        <Content Include="..\Core\build\RELEASE\Altseed2_Core.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
@@ -39,7 +39,7 @@
 
     <When Condition=" '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('OSX')) ">
       <ItemGroup>
-        <Content Include="..\Core\build\DEBUG\libAltseed_Core.dylib">
+        <Content Include="..\Core\build\DEBUG\libAltseed2_Core.dylib">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
@@ -47,7 +47,7 @@
 
     <When Condition=" '$(Configuration)'=='Release' And $([MSBuild]::IsOsPlatform('OSX')) ">
       <ItemGroup>
-        <Content Include="..\Core\build\RELEASE\libAltseed_Core.dylib">
+        <Content Include="..\Core\build\RELEASE\libAltseed2_Core.dylib">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
@@ -55,7 +55,7 @@
 
     <When Condition=" '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('Linux')) ">
       <ItemGroup>
-        <Content Include="..\Core\build\DEBUG\libAltseed_Core.so">
+        <Content Include="..\Core\build\DEBUG\libAltseed2_Core.so">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
@@ -63,7 +63,7 @@
 
     <When Condition=" '$(Configuration)'=='Release' And $([MSBuild]::IsOsPlatform('Linux')) ">
       <ItemGroup>
-        <Content Include="..\Core\build\RELEASE\libAltseed_Core.so">
+        <Content Include="..\Core\build\RELEASE\libAltseed2_Core.so">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
       </ItemGroup>

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// Altseed2における<see cref="SynchronizationContext"/>

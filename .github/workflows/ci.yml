@@ -94,7 +94,7 @@ jobs:
       continue-on-error: true
       run: |
         cd Build/netcoreapp3.0
-        mv libAltseed_Core.so libAltseed_Core
+        mv libAltseed2_Core.so libAltseed2_Core
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
@@ -169,9 +169,9 @@ jobs:
         run: |
           mkdir bin
           cp test-windows/Altseed2.dll bin/
-          cp test-windows/Altseed_Core.dll bin/
-          cp test-mac/libAltseed_Core.dylib bin/
-          cp test-linux/libAltseed_Core bin/
+          cp test-windows/Altseed2_Core.dll bin/
+          cp test-mac/libAltseed2_Core.dylib bin/
+          cp test-linux/libAltseed2_Core bin/
         
       - name: Upload artifact
         uses: actions/upload-artifact@v1

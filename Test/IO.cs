@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     public class IO

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     class DrawnNode
@@ -196,7 +196,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
-            var parent = new Altseed.Node();
+            var parent = new Altseed2.Node();
             Engine.AddNode(parent);
 
             tc.LoopBody(c =>

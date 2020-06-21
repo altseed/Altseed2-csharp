@@ -5,12 +5,12 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     class PostEffectNode
     {
-        private class TestPostEffect : Altseed.PostEffectNode {
+        private class TestPostEffect : Altseed2.PostEffectNode {
 
             const string Code = @"
 Texture2D mainTex : register(t0);

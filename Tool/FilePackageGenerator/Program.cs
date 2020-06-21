@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Altseed.Tool.FilePackageGenerator
+namespace Altseed2.Tool.FilePackageGenerator
 {
     class Program
     {

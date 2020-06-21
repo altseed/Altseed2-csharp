@@ -1,6 +1,6 @@
 using System;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 円弧を描画するノードのクラス

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// <see cref="float"/>型の二次元ベクトルを表す構造体

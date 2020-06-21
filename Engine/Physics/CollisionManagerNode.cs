@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 衝突判定を制御ノード

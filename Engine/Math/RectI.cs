@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// <see cref="int"/>型の矩形を表す構造体

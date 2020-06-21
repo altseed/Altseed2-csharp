@@ -1,4 +1,4 @@
-﻿namespace Altseed
+﻿namespace Altseed2
 {
     public abstract class DrawnNode : TransformNode
     {

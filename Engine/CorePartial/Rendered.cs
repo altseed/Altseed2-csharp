@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     internal partial class RenderedCamera
     {

@@ -13,5 +13,5 @@ cmake --build . --config Debug
 
 cmake --build . --config Release
 
-cp RELEASE/libAltseed_Core.dylib ../../Build/netcoreapp3.0
-cp RELEASE/libAltseed_Core.dylib ../../Build/netstandard2.1
+cp RELEASE/libAltseed2_Core.dylib ../../Build/netcoreapp3.0
+cp RELEASE/libAltseed2_Core.dylib ../../Build/netstandard2.1

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// コライダを格納するコレクション

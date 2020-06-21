@@ -1,4 +1,4 @@
-﻿namespace Altseed
+﻿namespace Altseed2
 {
     /// <summary>
     /// 衝突判定を感知するイベントを提供するインターフェイス

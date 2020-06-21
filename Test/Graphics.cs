@@ -4,7 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     public class Graphics

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// ゲームシーンを構成するノードを表します。

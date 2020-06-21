@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 追加および削除を予約できるコレクションを表します。

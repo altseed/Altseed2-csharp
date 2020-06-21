@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-using Altseed;
+using Altseed2;
 
 namespace Sample
 {

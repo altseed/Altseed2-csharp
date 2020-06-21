@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>Altseed.Test</RootNamespace>
+    <RootNamespace>Altseed2.Test</RootNamespace>
     <OutputPath>../Build</OutputPath>
     <Platforms>x64</Platforms>
     <Configurations>Debug;Release;CI</Configurations>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Altseed
+namespace Altseed2
 {
     internal static class IOHelper
     {

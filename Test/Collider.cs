@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     class Collider
@@ -66,7 +66,7 @@ namespace Altseed.Test
             var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            var scene = new Altseed.Node();
+            var scene = new Altseed2.Node();
             var manager = new CollisionManagerNode();
             scene.AddChildNode(manager);
 

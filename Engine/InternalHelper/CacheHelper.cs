@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// キャッシュを使用するクラス

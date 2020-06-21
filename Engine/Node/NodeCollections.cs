@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Altseed
+namespace Altseed2
 {
     internal abstract class RenderedCollection<T>
     {

@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using NUnit.Framework;
 
-namespace Altseed.Test
+namespace Altseed2.Test
 {
     [TestFixture]
     class EngineTest

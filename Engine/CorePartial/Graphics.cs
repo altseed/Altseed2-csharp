@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// 頂点の情報を格納する構造体

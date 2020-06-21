@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
-namespace Altseed
+namespace Altseed2
 {
     /// <summary>
     /// <see cref="float"/>型の4x4行列を表す構造体

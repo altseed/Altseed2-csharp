@@ -1,5 +1,5 @@
 ﻿using System;
-using Altseed;
+using Altseed2;
 
 namespace Sample
 {
