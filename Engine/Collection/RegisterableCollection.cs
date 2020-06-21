@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -84,8 +84,7 @@ namespace Altseed
             while (RemoveQueue.Count > 0)
             {
                 var obj = RemoveQueue.Dequeue();
-                if (obj.Status != RegisterStatus.WaitRemoved)
-                    return;
+                if (obj.Status != RegisterStatus.WaitRemoved) continue;
                 CurrentCollection.Remove(obj);
                 obj.Status = RegisterStatus.Free;
                 obj.Removed();
@@ -94,8 +93,7 @@ namespace Altseed
             while (AddQueue.Count > 0)
             {
                 var obj = AddQueue.Dequeue();
-                if (obj.Status != RegisterStatus.WaitAdded)
-                    return;
+                if (obj.Status != RegisterStatus.WaitAdded) continue;
                 CurrentCollection.Add(obj);
                 obj.Status = RegisterStatus.Registered;
                 obj.Added(Owner);
@@ -115,9 +113,10 @@ namespace Altseed
         /// </summary>
         internal void Clear()
         {
+            foreach (var current in CurrentCollection) current.Status = RegisterStatus.Free;
             CurrentCollection.Clear();
-            AddQueue.Clear();
-            RemoveQueue.Clear();
+            while (AddQueue.TryDequeue(out var current)) current.Status = RegisterStatus.Free;
+            while (RemoveQueue.TryDequeue(out var current)) current.Status = RegisterStatus.Free;
         }
 
         /// <summary>

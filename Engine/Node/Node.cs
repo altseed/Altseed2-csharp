@@ -252,8 +252,7 @@ namespace Altseed
         /// </summary>
         public IEnumerable<Node> EnumerateAncestors()
         {
-            var current = Parent;
-            for (var n = Parent; current != null && !(current is RootNode); current = current.Parent)
+            for (var current = Parent; current != null && !(current is RootNode); current = current.Parent)
                 yield return current;
 
             yield break;
@@ -279,23 +278,25 @@ namespace Altseed
         public IEnumerable<T> EnumerateDescendants<T>()
              where T : Node
         {
-            return EnumerateDescendants<T>(null);
+            return EnumerateDescendants<T>(x => true);
         }
 
         /// <summary>
         /// <typeparamref name="T"/>型の子孫ノードのうち <paramref name="condition"/> を満たすものを列挙します。
         /// </summary>
         /// <typeparam name="T">列挙されるノードの型</typeparam>
-        /// <param name="condition">列挙するノードの条件 nullの場合は何も列挙されない。</param>
+        /// <param name="condition">列挙するノードの条件</param>
+        /// <exception cref="ArgumentNullException"><paramref name="condition"/>がnull</exception>
         public IEnumerable<T> EnumerateDescendants<T>(Func<T, bool> condition)
             where T : Node
         {
+            if (condition == null) throw new ArgumentNullException(nameof(condition), "引数がnullです");
             foreach (var child in Children)
             {
-                foreach (var g in child.EnumerateDescendants<T>(condition))
-                    yield return g;
+                foreach (var g in child.EnumerateDescendants(condition))
+                    if (condition.Invoke(g)) yield return g;
 
-                if (child is T c)
+                if (child is T c && (condition?.Invoke(c) ?? false))
                     yield return c;
             }
         }

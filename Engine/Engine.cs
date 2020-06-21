@@ -9,6 +9,11 @@ namespace Altseed
     /// </summary>
     public static class Engine
     {
+        /// <summary>
+        /// カメラグループの個数の最大値
+        /// </summary>
+        internal const int MaxCameraGroupCount = 64;
+
         private static Configuration _Config;
 
         /// <summary>
@@ -57,27 +62,27 @@ namespace Altseed
             _Config = (config ??= new Configuration());
             if (Core.Initialize(title, width, height, config))
             {
-                Core = Core.GetInstance();
-                Log = Log.GetInstance();
+                _core = Core.GetInstance();
+                _log = Log.GetInstance();
 
-                Keyboard = Keyboard.GetInstance();
-                Mouse = Mouse.GetInstance();
-                Joystick = Joystick.GetInstance();
+                _keyboard = Keyboard.GetInstance();
+                _mouse = Mouse.GetInstance();
+                _joystick = Joystick.GetInstance();
 
-                File = File.GetInstance();
-                Resources = Resources.GetInstance();
+                _file = File.GetInstance();
+                _resources = Resources.GetInstance();
 
-                Window = Window.GetInstance();
-                Graphics = Graphics.GetInstance();
-                Renderer = Renderer.GetInstance();
-                CullingSystem = CullingSystem.GetInstance();
+                _window = Window.GetInstance();
+                _graphics = Graphics.GetInstance();
+                _renderer = Renderer.GetInstance();
+                _cullingSystem = CullingSystem.GetInstance();
 
                 Context = new AltseedContext();
                 System.Threading.SynchronizationContext.SetSynchronizationContext(Context);
 
-                if (config.ToolEnabled) Tool = Tool.GetInstance();
+                if (config.ToolEnabled) _tool = Tool.GetInstance();
 
-                Sound = SoundMixer.GetInstance();
+                _sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
                 _UpdatedNode = _RootNode;
@@ -91,6 +96,8 @@ namespace Altseed
                 _RenderTextureCache = new RenderTextureCache();
 
                 PostEffectNode.InitializeCache();
+
+                isActive = true;
 
                 return true;
             }
@@ -264,6 +271,7 @@ namespace Altseed
         public static void Terminate()
         {
             Core.Terminate();
+            isActive = false;
         }
 
         /// <summary>
@@ -284,68 +292,94 @@ namespace Altseed
         }
 
         #region Modules
+        private static bool isActive;
 
-        internal static Core Core { get; private set; }
+        internal static Core Core => isActive ? _core : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Core _core;
 
         /// <summary>
         /// ファイルを管理するクラスを取得します。
         /// </summary>
-        public static File File { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static File File => isActive ? _file : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static File _file;
 
         /// <summary>
         /// キーボードを管理するクラスを取得します。
         /// </summary>
-        public static Keyboard Keyboard { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Keyboard Keyboard => isActive ? _keyboard : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Keyboard _keyboard;
 
         /// <summary>
         /// マウスを管理するクラスを取得します。
         /// </summary>
-        public static Mouse Mouse { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Mouse Mouse => isActive ? _mouse : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Mouse _mouse;
 
         /// <summary>
         /// ジョイスティックを管理するクラスを取得します。
         /// </summary>
-        public static Joystick Joystick { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Joystick Joystick => isActive ? _joystick : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Joystick _joystick;
 
         /// <summary>
         /// グラフィックのクラスを取得します。
         /// </summary>
-        public static Graphics Graphics { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Graphics Graphics => isActive ? _graphics : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Graphics _graphics;
 
         /// <summary>
         /// ログを管理するクラスを取得します。
         /// </summary>
-        public static Log Log { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Log Log => isActive ? _log : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Log _log;
 
         /// <summary>
         /// レンダラのクラスを取得します。
         /// </summary>
-        internal static Renderer Renderer { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Renderer Renderer => isActive ? _renderer : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Renderer _renderer;
 
         /// <summary>
         /// カリングのクラスを取得します。
         /// </summary>
-        internal static CullingSystem CullingSystem { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static CullingSystem CullingSystem => isActive ? _cullingSystem : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static CullingSystem _cullingSystem;
 
         /// <summary>
         /// 音を管理するクラスを取得します。
         /// </summary>
-        public static SoundMixer Sound { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static SoundMixer Sound => isActive ? _sound : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static SoundMixer _sound;
 
         /// <summary>
         /// リソースを管理するクラスを取得します。
         /// </summary>
-        internal static Resources Resources { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Resources Resources => isActive ? _resources : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Resources _resources;
 
         /// <summary>
         /// ウインドウを表すクラスを取得します。
         /// </summary>
-        internal static Window Window { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Window Window => isActive ? _window : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Window _window;
 
         /// <summary>
         /// ツールを管理するクラスを取得します。
         /// </summary>
-        public static Tool Tool { get; private set; }
+        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Tool Tool => isActive ? _tool : throw new InvalidOperationException("現在その操作は許可されていません");
+        private static Tool _tool;
 
         #endregion
 
@@ -385,7 +419,8 @@ namespace Altseed
         /// エンジンに登録されている <typeparamref name="T"/> 型のノードのうち <paramref name="condition"/> を満たすものを列挙します。
         /// </summary>
         /// <typeparam name="T">検索するノードの型</typeparam>
-        /// <param name="condition">検索するノードの条件 nullの場合は何も列挙されない</param>
+        /// <param name="condition">検索するノードの条件</param>
+        /// <exception cref="ArgumentNullException"><paramref name="condition"/>がnull</exception>
         public static IEnumerable<T> FindNodes<T>(Func<T, bool> condition) where T : Node
                 => _RootNode.EnumerateDescendants(condition);
 
