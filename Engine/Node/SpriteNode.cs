@@ -26,6 +26,19 @@ namespace Altseed2
         }
 
         /// <summary>
+        /// ブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get => renderedSprite.BlendMode;
+            set
+            {
+                if (renderedSprite.BlendMode == value) return;
+                renderedSprite.BlendMode = value;
+            }
+        }
+
+        /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src

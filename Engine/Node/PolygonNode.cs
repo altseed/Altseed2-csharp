@@ -72,6 +72,19 @@ namespace Altseed2
         }
 
         /// <summary>
+        /// ブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get => renderedPolygon.BlendMode;
+            set
+            {
+                if (renderedPolygon.BlendMode == value) return;
+                renderedPolygon.BlendMode = value;
+            }
+        }
+
+        /// <summary>
         /// 描画モードを取得または設定します。
         /// </summary>
         public DrawMode Mode

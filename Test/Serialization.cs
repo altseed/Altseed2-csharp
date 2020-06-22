@@ -503,6 +503,7 @@ namespace Altseed2.Test
 
             Assert.AreEqual(sprite1.Color, sprite2.Color);
             Assert.AreEqual(sprite1.Material, sprite2.Material);
+            Assert.AreEqual(sprite1.BlendMode, sprite2.BlendMode);
             Assert.AreEqual(sprite1.Src, sprite2.Src);
             Assert.AreEqual((sprite1.Texture as Texture2D).Path, (sprite1.Texture as Texture2D).Path);
             Assert.AreEqual(sprite1.Texture.Size, sprite2.Texture.Size);
@@ -538,7 +539,9 @@ namespace Altseed2.Test
             Assert.NotNull(text2);
 
             Assert.AreEqual(text1.Color, text2.Color);
-            Assert.AreEqual(text1.Material, text2.Material);
+            Assert.AreEqual(text1.BlendMode, text2.BlendMode);
+            Assert.AreEqual(text1.MaterialGlyph, text2.MaterialGlyph);
+            Assert.AreEqual(text1.MaterialImage, text2.MaterialImage);
             Assert.AreEqual(text1.Font.Path, text2.Font.Path);
             Assert.AreEqual(text1.Font.Size, text2.Font.Size);
             Assert.AreEqual(text1.Text, text2.Text);
@@ -582,6 +585,7 @@ namespace Altseed2.Test
             Assert.NotNull(polygon2);
 
             Assert.AreEqual(polygon1.Material, polygon2.Material);
+            Assert.AreEqual(polygon1.BlendMode, polygon2.BlendMode);
             Assert.AreEqual(polygon1.Src, polygon2.Src);
             Assert.AreEqual(polygon1.Texture.Size, polygon2.Texture.Size);
             Assert.AreEqual(polygon1.Transform, polygon2.Transform);

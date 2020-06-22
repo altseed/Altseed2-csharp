@@ -79,15 +79,28 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 使用するマテリアルを取得または設定します。
+        /// 文字の描画に使用するマテリアルを取得または設定します。
         /// </summary>
-        public Material Material
+        public Material MaterialGlyph
         {
-            get => renderedText.Material;
+            get => renderedText.MaterialGlyph;
             set
             {
-                if (renderedText.Material == value) return;
-                renderedText.Material = value;
+                if (renderedText.MaterialGlyph == value) return;
+                renderedText.MaterialGlyph = value;
+            }
+        }
+
+        /// <summary>
+        /// 文字テクスチャの描画に使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material MaterialImage
+        {
+            get => renderedText.MaterialImage;
+            set
+            {
+                if (renderedText.MaterialImage == value) return;
+                renderedText.MaterialImage = value;
             }
         }
 
@@ -143,6 +156,19 @@ namespace Altseed2
             {
                 if (renderedText.Color == value) return;
                 renderedText.Color = value;
+            }
+        }
+
+        /// <summary>
+        /// ブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get => renderedText.BlendMode;
+            set
+            {
+                if (renderedText.BlendMode == value) return;
+                renderedText.BlendMode = value;
             }
         }
 
