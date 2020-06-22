@@ -5085,7 +5085,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 組み込みのシェーダを取得します。
+        /// 描画時のブレンドモードを取得または設定します。
         /// </summary>
         public AlphaBlendMode BlendMode
         {
@@ -5118,6 +5118,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        private const string S_BlendMode = "S_BlendMode";
         #endregion
         
         /// <summary>
@@ -5132,6 +5133,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
+            BlendMode = info.GetValue<AlphaBlendMode>(S_BlendMode);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5145,6 +5147,7 @@ namespace Altseed2
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
+            info.AddValue(S_BlendMode, BlendMode);
             
             OnGetObjectData(info, context);
         }
@@ -5707,6 +5710,12 @@ namespace Altseed2
         
         
         [DllImport("Altseed2_Core")]
+        private static extern int cbg_RenderedSprite_GetBlendMode(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_RenderedSprite_SetBlendMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
@@ -5805,6 +5814,28 @@ namespace Altseed2
         private Color? _Color;
         
         /// <summary>
+        /// 描画時のブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get
+            {
+                if (_BlendMode != null)
+                {
+                    return _BlendMode.Value;
+                }
+                var ret = cbg_RenderedSprite_GetBlendMode(selfPtr);
+                return (AlphaBlendMode)ret;
+            }
+            set
+            {
+                _BlendMode = value;
+                cbg_RenderedSprite_SetBlendMode(selfPtr, (int)value);
+            }
+        }
+        private AlphaBlendMode? _BlendMode;
+        
+        /// <summary>
         /// スプライトを作成します。
         /// </summary>
         public static RenderedSprite Create()
@@ -5821,6 +5852,7 @@ namespace Altseed2
         private const string S_Src = "S_Src";
         private const string S_Material = "S_Material";
         private const string S_Color = "S_Color";
+        private const string S_BlendMode = "S_BlendMode";
         #endregion
         
         /// <summary>
@@ -5839,6 +5871,7 @@ namespace Altseed2
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             Color = info.GetValue<Color>(S_Color);
+            BlendMode = info.GetValue<AlphaBlendMode>(S_BlendMode);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5856,6 +5889,7 @@ namespace Altseed2
             info.AddValue(S_Src, Src);
             info.AddValue(S_Material, Material);
             info.AddValue(S_Color, Color);
+            info.AddValue(S_BlendMode, BlendMode);
             
             OnGetObjectData(info, context);
         }
@@ -5962,9 +5996,15 @@ namespace Altseed2
         private static extern IntPtr cbg_RenderedText_Create();
         
         [DllImport("Altseed2_Core")]
-        private static extern IntPtr cbg_RenderedText_GetMaterial(IntPtr selfPtr);
+        private static extern IntPtr cbg_RenderedText_GetMaterialGlyph(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
-        private static extern void cbg_RenderedText_SetMaterial(IntPtr selfPtr, IntPtr value);
+        private static extern void cbg_RenderedText_SetMaterialGlyph(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        private static extern IntPtr cbg_RenderedText_GetMaterialImage(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_RenderedText_SetMaterialImage(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
@@ -6021,6 +6061,12 @@ namespace Altseed2
         
         
         [DllImport("Altseed2_Core")]
+        private static extern int cbg_RenderedText_GetBlendMode(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_RenderedText_SetBlendMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedText_Release(IntPtr selfPtr);
         
         #endregion
@@ -6031,26 +6077,48 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// マテリアルを取得または設定します。
+        /// 文字の描画に使用するマテリアルを取得または設定します。
         /// </summary>
-        public Material Material
+        public Material MaterialGlyph
         {
             get
             {
-                if (_Material != null)
+                if (_MaterialGlyph != null)
                 {
-                    return _Material;
+                    return _MaterialGlyph;
                 }
-                var ret = cbg_RenderedText_GetMaterial(selfPtr);
+                var ret = cbg_RenderedText_GetMaterialGlyph(selfPtr);
                 return Material.TryGetFromCache(ret);
             }
             set
             {
-                _Material = value;
-                cbg_RenderedText_SetMaterial(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+                _MaterialGlyph = value;
+                cbg_RenderedText_SetMaterialGlyph(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
             }
         }
-        private Material _Material;
+        private Material _MaterialGlyph;
+        
+        /// <summary>
+        /// テクスチャ文字の描画に使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material MaterialImage
+        {
+            get
+            {
+                if (_MaterialImage != null)
+                {
+                    return _MaterialImage;
+                }
+                var ret = cbg_RenderedText_GetMaterialImage(selfPtr);
+                return Material.TryGetFromCache(ret);
+            }
+            set
+            {
+                _MaterialImage = value;
+                cbg_RenderedText_SetMaterialImage(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Material _MaterialImage;
         
         /// <summary>
         /// テキストを取得または設定します。
@@ -6241,6 +6309,28 @@ namespace Altseed2
         private Color? _Color;
         
         /// <summary>
+        /// 描画時のブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get
+            {
+                if (_BlendMode != null)
+                {
+                    return _BlendMode.Value;
+                }
+                var ret = cbg_RenderedText_GetBlendMode(selfPtr);
+                return (AlphaBlendMode)ret;
+            }
+            set
+            {
+                _BlendMode = value;
+                cbg_RenderedText_SetBlendMode(selfPtr, (int)value);
+            }
+        }
+        private AlphaBlendMode? _BlendMode;
+        
+        /// <summary>
         /// テキストを作成します。
         /// </summary>
         public static RenderedText Create()
@@ -6253,7 +6343,8 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
-        private const string S_Material = "S_Material";
+        private const string S_MaterialGlyph = "S_MaterialGlyph";
+        private const string S_MaterialImage = "S_MaterialImage";
         private const string S_Text = "S_Text";
         private const string S_Font = "S_Font";
         private const string S_Weight = "S_Weight";
@@ -6262,6 +6353,7 @@ namespace Altseed2
         private const string S_CharacterSpace = "S_CharacterSpace";
         private const string S_LineGap = "S_LineGap";
         private const string S_Color = "S_Color";
+        private const string S_BlendMode = "S_BlendMode";
         #endregion
         
         /// <summary>
@@ -6276,7 +6368,8 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Material = info.GetValue<Material>(S_Material);
+            MaterialGlyph = info.GetValue<Material>(S_MaterialGlyph);
+            MaterialImage = info.GetValue<Material>(S_MaterialImage);
             Text = info.GetString(S_Text);
             Font = info.GetValue<Font>(S_Font);
             Weight = info.GetSingle(S_Weight);
@@ -6285,6 +6378,7 @@ namespace Altseed2
             CharacterSpace = info.GetSingle(S_CharacterSpace);
             LineGap = info.GetSingle(S_LineGap);
             Color = info.GetValue<Color>(S_Color);
+            BlendMode = info.GetValue<AlphaBlendMode>(S_BlendMode);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -6298,7 +6392,8 @@ namespace Altseed2
         {
             base.GetObjectData(info, context);
             
-            info.AddValue(S_Material, Material);
+            info.AddValue(S_MaterialGlyph, MaterialGlyph);
+            info.AddValue(S_MaterialImage, MaterialImage);
             info.AddValue(S_Text, Text);
             info.AddValue(S_Font, Font);
             info.AddValue(S_Weight, Weight);
@@ -6307,6 +6402,7 @@ namespace Altseed2
             info.AddValue(S_CharacterSpace, CharacterSpace);
             info.AddValue(S_LineGap, LineGap);
             info.AddValue(S_Color, Color);
+            info.AddValue(S_BlendMode, BlendMode);
             
             OnGetObjectData(info, context);
         }
@@ -6443,6 +6539,12 @@ namespace Altseed2
         
         
         [DllImport("Altseed2_Core")]
+        private static extern int cbg_RenderedPolygon_GetBlendMode(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_RenderedPolygon_SetBlendMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_RenderedPolygon_Release(IntPtr selfPtr);
         
         #endregion
@@ -6541,6 +6643,28 @@ namespace Altseed2
         private Material _Material;
         
         /// <summary>
+        /// 描画時のブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get
+            {
+                if (_BlendMode != null)
+                {
+                    return _BlendMode.Value;
+                }
+                var ret = cbg_RenderedPolygon_GetBlendMode(selfPtr);
+                return (AlphaBlendMode)ret;
+            }
+            set
+            {
+                _BlendMode = value;
+                cbg_RenderedPolygon_SetBlendMode(selfPtr, (int)value);
+            }
+        }
+        private AlphaBlendMode? _BlendMode;
+        
+        /// <summary>
         /// ポリゴンを作成します。
         /// </summary>
         public static RenderedPolygon Create()
@@ -6573,6 +6697,7 @@ namespace Altseed2
         private const string S_Texture = "S_Texture";
         private const string S_Src = "S_Src";
         private const string S_Material = "S_Material";
+        private const string S_BlendMode = "S_BlendMode";
         #endregion
         
         /// <summary>
@@ -6591,6 +6716,7 @@ namespace Altseed2
             Texture = info.GetValue<TextureBase>(S_Texture);
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
+            BlendMode = info.GetValue<AlphaBlendMode>(S_BlendMode);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -6608,6 +6734,7 @@ namespace Altseed2
             info.AddValue(S_Texture, Texture);
             info.AddValue(S_Src, Src);
             info.AddValue(S_Material, Material);
+            info.AddValue(S_BlendMode, BlendMode);
             
             OnGetObjectData(info, context);
         }
