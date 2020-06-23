@@ -150,22 +150,32 @@ namespace Altseed2
                 //使用しないときはUpdateでフレームを開始
                 if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
             }
-
+            
             if (_CameraNodes.Count == 0)
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
                 Renderer.SetCamera(_DefaultCamera);
 
+                // カリングの結果
+                var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
+                Array.Sort(cullingIds);
+
                 {
-                    var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
 
                     var list = _DrawnNodes.Nodes;
                     foreach (var z in list.Keys.OrderBy(x => x))
+                    // TODO: DrawnNodeはあらかじめ ZOrder でソートされるようなコレクションに格納する
                     {
-                        var nodes = list[z].Where(n => n.IsDrawnActually);
-                        foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
+                        var nodes = list[z];
+                        foreach (var node in nodes)
                         {
+                            if (!node.IsDrawnActually) continue;
+                            // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
+
+                            if (Array.BinarySearch(cullingIds, node.CullingId) < 0) continue;
+
                             node.Draw();
+
                         }
                     }
 
@@ -201,15 +211,26 @@ namespace Altseed2
                     {
                         Renderer.SetCamera(camera.RenderedCamera);
 
-                        {
-                            var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
+                        // カリングの結果
+                        var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
+                        Array.Sort(cullingIds);
 
+                        {
                             var list = _DrawnNodes[i];
                             foreach (var z in list.Keys.OrderBy(x => x))
+                            // TODO: DrawnNodeはあらかじめ ZOrder でソートされるようなコレクションに格納する
                             {
-                                var nodes = list[z].Where(n => n.IsDrawnActually);
-                                foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
+                                var nodes = list[z];
+                                foreach (var node in nodes)
+                                {
+                                    if (!node.IsDrawnActually) continue;
+                                    // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
+
+                                    if (Array.BinarySearch(cullingIds, node.CullingId) < 0) continue;
+
                                     node.Draw();
+
+                                }
                             }
 
                             Renderer.Render();
