@@ -195,7 +195,7 @@ namespace Altseed2
             else
             {
                 // 特定のカメラに映りこむノードを描画
-                for (int i = 0; i <= 63; i++)
+                for (int i = 0; i < MaxCameraGroupCount; i++)
                 {
                     foreach (var camera in _CameraNodes[i])
                     {
