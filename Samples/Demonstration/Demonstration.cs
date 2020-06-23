@@ -2,9 +2,9 @@
 using System.Linq;
 using Altseed2;
 
-namespace Altseed2Demo
+namespace Sample
 {
-    class Program
+    class Demonstration
     {
         // HSV を RGB に変換します。
         private static Color HSV2RGB(int hue, int saturation, int value)
