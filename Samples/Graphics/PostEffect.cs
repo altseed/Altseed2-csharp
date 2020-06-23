@@ -5,30 +5,30 @@ namespace Sample
 {
     public class MyPostEffectNode : PostEffectNode
     {
-        static readonly string _HlslCode = @"
+        const string _HlslCode = @"
 
-        struct PS_INPUT
-        {
-            float4 Position : SV_POSITION;
-            float4 Color : COLOR0;
-            float2 UV1 : UV0;
-            float2 UV2 : UV1;
-        };
+struct PS_INPUT
+{
+    float4 Position : SV_POSITION;
+    float4 Color : COLOR0;
+    float2 UV1 : UV0;
+    float2 UV2 : UV1;
+};
 
-        Texture2D mainTex : register(t0);
-        SamplerState mainSamp : register(s0);
+Texture2D mainTex : register(t0);
+SamplerState mainSamp : register(s0);
 
-        float4 main(PS_INPUT input) : SV_TARGET 
-        {
-            // 入力画像のUV画像に対応するピクセルの色を取得します。
-            float4 color = mainTex.Sample(mainSamp, input.UV1);
+float4 main(PS_INPUT input) : SV_TARGET 
+{
+    // 入力画像のUV画像に対応するピクセルの色を取得します。
+    float4 color = mainTex.Sample(mainSamp, input.UV1);
 
-            // RGBの値を反転します。
-            color.xyz = float3(1.0) - color.xyz;
+    // RGBの値を反転します。
+    color.xyz = float3(1.0) - color.xyz;
 
-            // 算出した値を返します。
-            return color;
-        }
+    // 算出した値を返します。
+    return color;
+}
 
         ";
 
