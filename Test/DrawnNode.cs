@@ -573,5 +573,75 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void IsDrawn()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Texture = texture;
+            node.Pivot = new Vector2F(0.5f, 0.5f);
+            node.Position = new Vector2F(100, 100);
+            node.AdjustSize();
+            Engine.AddNode(node);
+
+            var node2 = new SpriteNode();
+            var node3 = new SpriteNode();
+
+            tc.LoopBody(c =>
+            {
+                node2.Texture = texture;
+                node2.Pivot = new Vector2F(0.5f, 0.5f);
+                node2.Position = new Vector2F(200, 200);
+                node2.AdjustSize();
+
+                node3.Texture = texture;
+                node3.Pivot = new Vector2F(0.5f, 0.5f);
+                node3.Position = new Vector2F(300, 300);
+                node3.AdjustSize();
+
+                if (c == 2)
+                {
+                    node.AddChildNode(node2);
+                }
+
+                if (c == 4)
+                {
+                    node.IsDrawn = false;
+                    Assert.IsFalse(node.IsDrawnActually);
+                    Assert.IsFalse(node2.IsDrawnActually);
+                }
+
+                if (c == 6)
+                {
+                    node2.AddChildNode(node3);
+                }
+
+                if (c == 8)
+                {
+                    node.IsDrawn = true;
+
+                    Assert.IsTrue(node.IsDrawnActually);
+                    Assert.IsTrue(node2.IsDrawnActually);
+                    Assert.IsTrue(node3.IsDrawnActually);
+                }
+
+                if (c == 10)
+                {
+                    node2.IsDrawn = false;
+
+                    Assert.IsTrue(node.IsDrawnActually);
+                    Assert.IsFalse(node2.IsDrawnActually);
+                    Assert.IsFalse(node3.IsDrawnActually);
+                }
+            }, null);
+
+            tc.End();
+        }
     }
 }

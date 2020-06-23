@@ -162,13 +162,7 @@ namespace Altseed2
                     var list = _DrawnNodes.Nodes;
                     foreach (var z in list.Keys.OrderBy(x => x))
                     {
-                        var nodes = list[z].Where(n =>
-                        {
-                            for (Node i = n; i != _RootNode; i = i.Parent)
-                                if (i is DrawnNode d && !d.IsDrawn)
-                                    return false;
-                            return true;
-                        });
+                        var nodes = list[z].Where(n => n.IsDrawnActually);
                         foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
                         {
                             node.Draw();
@@ -213,13 +207,7 @@ namespace Altseed2
                             var list = _DrawnNodes[i];
                             foreach (var z in list.Keys.OrderBy(x => x))
                             {
-                                var nodes = list[z].Where(n =>
-                                {
-                                    for (Node i = n; i != _RootNode; i = i.Parent)
-                                        if (i is DrawnNode d && !d.IsDrawn)
-                                            return false;
-                                    return true;
-                                });
+                                var nodes = list[z].Where(n => n.IsDrawnActually);
                                 foreach (var node in cullingIds.Join(nodes, id => id, n => n.CullingId, (id, n) => n))
                                     node.Draw();
                             }

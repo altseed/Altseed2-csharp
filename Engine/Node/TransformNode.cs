@@ -218,7 +218,7 @@ namespace Altseed2
         {
             var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
             var position = Position +
-                AnchorMin * (GetParentTransformNode()?.Size ?? new Vector2F());
+                AnchorMin * (GetAncestorSpecificNode<TransformNode>()?.Size ?? new Vector2F());
 
             Transform = MathHelper.CalcTransform(position, Pivot * Size, MathHelper.DegreeToRadian(Angle), scale);
         }
@@ -267,20 +267,7 @@ namespace Altseed2
 
         private Vector2F GetAnchorDistance()
         {
-            return (GetParentTransformNode()?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin);
-        }
-
-        private TransformNode GetParentTransformNode()
-        {
-            if (Parent == null)
-                return null;
-
-            for (var n = Parent; !(n is RootNode || n == null); n = n.Parent)
-            {
-                if (n is TransformNode t)
-                    return t;
-            }
-            return null;
+            return (GetAncestorSpecificNode<TransformNode>()?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin);
         }
 
         #region Node

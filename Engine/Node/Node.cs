@@ -258,6 +258,20 @@ namespace Altseed2
             yield break;
         }
 
+        internal T GetAncestorSpecificNode<T>()
+            where T : Node
+        {
+            if (Parent == null)
+                return null;
+
+            for (var n = Parent; !(n is RootNode || n == null); n = n.Parent)
+            {
+                if (n is T t)
+                    return t;
+            }
+            return null;
+        }
+
         /// <summary>
         /// 子孫ノードを列挙します。
         /// </summary>
@@ -296,7 +310,7 @@ namespace Altseed2
                 foreach (var g in child.EnumerateDescendants(condition))
                     if (condition.Invoke(g)) yield return g;
 
-                if (child is T c && (condition?.Invoke(c) ?? false))
+                if (child is T c && condition.Invoke(c))
                     yield return c;
             }
         }

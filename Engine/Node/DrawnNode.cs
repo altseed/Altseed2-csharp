@@ -5,7 +5,23 @@
         /// <summary>
         /// 描画するかどうかを取得または設定します。
         /// </summary>
-        public virtual bool IsDrawn { get; set; } = true;
+        public bool IsDrawn
+        {
+            get => isDrawn;
+            set
+            {
+                if (isDrawn == value) return;
+                isDrawn = value;
+                UpdateDescendantsIsDrawnActually();
+            }
+        }
+        private bool isDrawn = true;
+
+        /// <summary>
+        /// 親要素の <see cref="IsDrawn"/> も考慮して描画するかどうかを取得します。
+        /// </summary>
+        public bool IsDrawnActually => isDrawnActually;
+        private bool isDrawnActually = true;
 
         /// <summary>
         /// 描画時の重ね順を取得または設定します。
@@ -53,17 +69,35 @@
         /// </summary>
         internal abstract void Draw();
 
+        /// <summary>
+        /// 自身と子孫ノードの IsDrawnActually プロパティを更新します。
+        /// </summary>
+        private void UpdateDescendantsIsDrawnActually()
+        {
+            isDrawnActually = isDrawn && (GetAncestorSpecificNode<DrawnNode>()?.isDrawnActually ?? true);
+            foreach (var n in EnumerateDescendants())
+            {
+                if (n is DrawnNode d)
+                {
+                    d.isDrawnActually
+                        = d.isDrawn && (d.GetAncestorSpecificNode<DrawnNode>()?.isDrawnActually ?? true);
+                }
+            }
+        }
+
         #region Node
 
         internal override void Registered()
         {
             base.Registered();
+            UpdateDescendantsIsDrawnActually();
             Engine.RegisterDrawnNode(this);
         }
 
         internal override void Unregistered()
         {
             base.Unregistered();
+            UpdateDescendantsIsDrawnActually();
             Engine.UnregisterDrawnNode(this);
         }
 
