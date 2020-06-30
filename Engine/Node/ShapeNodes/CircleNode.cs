@@ -112,11 +112,13 @@ namespace Altseed2
             var deg = 360f / _vertnum;          
             var positions = new Vector2F[_vertnum];
             var vec = new Vector2F(0.0f, -_radius);
-            
+
+            var halfRadius = new Vector2F(Radius / 2f, Radius / 2f);
             for (int i = 0; i < _vertnum; i++)
             {
                 positions[i] = vec;
                 vec.Degree += deg;
+                positions[i] -= halfRadius;
             }
 
             AdjustSize();

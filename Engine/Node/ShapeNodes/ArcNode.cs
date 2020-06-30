@@ -196,7 +196,9 @@ namespace Altseed2
                 vec.Degree += deg;
             }
 
-            AdjustSize();
+            MathHelper.GetMinMax(out var min, out var max, positions);
+            for (int i = 0; i < positions.Length; i++) positions[i] -= min;
+            Size = max - min;
 
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
