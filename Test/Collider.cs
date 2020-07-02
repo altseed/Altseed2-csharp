@@ -79,12 +79,13 @@ namespace Altseed2.Test
             var comparison = new SpriteNode()
             {
                 Texture = texture,
-                Position = new Vector2F(300f, 300f)
+                Pivot = new Vector2F(0.5f, 0.5f),
+                Position = new Vector2F(500f, 300f)
             };
+            comparison.AdjustSize();
             var colliderNode = new CircleColliderNode()
             {
-                Radius = texture.Size.X / 2,
-                Position = comparison.Position
+                Radius = texture.Size.X / 2
             };
             comparison.AddChildNode(colliderNode);
 
@@ -107,6 +108,9 @@ namespace Altseed2.Test
             public Player(Texture2D texture)
             {
                 Texture = texture;
+                Pivot = new Vector2F(0.5f, 0.5f);
+                Position = new Vector2F(0f, 300f);
+                AdjustSize();
                 node = new CircleColliderNode()
                 {
                     Radius = texture.Size.X / 2
@@ -115,7 +119,7 @@ namespace Altseed2.Test
             }
             protected override void OnUpdate()
             {
-                node.Collider.Position = Position;
+                Position += new Vector2F(5f, 0f);
                 if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
                 if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
                 if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
@@ -123,15 +127,15 @@ namespace Altseed2.Test
             }
             void ICollisionEventReceiver.OnCollisionEnter(CollisionInfo info)
             {
-                Debug.WriteLine("Enter");
+                Color = new Color(100, 100, 100);
             }
             void ICollisionEventReceiver.OnCollisionExit(CollisionInfo info)
             {
-                Debug.WriteLine("Exit");
+                Color = new Color(255, 255, 255);
             }
             void ICollisionEventReceiver.OnCollisionStay(CollisionInfo info)
             {
-                Debug.WriteLine("Stay");
+                Angle++;
             }
         }
     }

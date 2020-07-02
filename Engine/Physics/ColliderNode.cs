@@ -16,20 +16,12 @@ namespace Altseed2
         /// <summary>
         /// 座標を取得または設定する
         /// </summary>
-        public Vector2F Position
-        {
-            get => Collider.Position;
-            set { Collider.Position = value; }
-        }
+        public Vector2F Position { get; set; }
 
         /// <summary>
         /// コライダの回転情報を取得または設定する
         /// </summary>
-        public float Rotation
-        {
-            get => Collider.Rotation;
-            set { Collider.Rotation = value; }
-        }
+        public float Rotation { get; set; }
 
         /// <summary>
         /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
@@ -55,6 +47,24 @@ namespace Altseed2
         {
             SearchManagerFromChildren(Parent.Parent)?.RemoveCollider(this);
             base.Removed();
+        }
+
+        internal virtual void UpdateCollider()
+        {
+            var angle = default(float);
+            var centerPosition = default(Vector2F);
+            var position = Position;
+
+            for (var node = Parent; node != null ; node = node.Parent)
+                if (node is TransformNode t)
+                {
+                    centerPosition += t.CenterPosition;
+                    position += t.Position;
+                    angle += t.Angle;
+                }
+
+            Collider.Position = Position + position - centerPosition;
+            Collider.Rotation = Rotation + angle;
         }
     }
 

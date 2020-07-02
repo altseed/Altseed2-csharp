@@ -73,12 +73,6 @@ namespace Sample
             // コライダを登録します。
             AddChildNode(colliderNode);
         }
-
-        // フレーム毎に実行されます。
-        protected override void OnUpdate()
-        {
-            colliderNode.Position = Position;
-        }
     }
 
     // 衝突時の内容を実装できるクラス
