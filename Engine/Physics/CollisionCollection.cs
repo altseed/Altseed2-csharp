@@ -115,7 +115,10 @@ namespace Altseed2
                     var nowColliding = entry.IsColliding();
                     if (dictionary.TryAdd(entry, nowColliding))
                     {
-                        var beforeColliding = (preCollisionInfo != null && preCollisionInfo.TryGetValue(entry, out var value)) && value;
+                        current.UpdateCollider();
+                        comparison.UpdateCollider();
+
+                        var beforeColliding = preCollisionInfo != null && preCollisionInfo.TryGetValue(entry, out var value) && value;
                         InvokeEvents(current, comparison, nowColliding, beforeColliding);
                         InvokeEvents(comparison, current, nowColliding, beforeColliding);
                     }
