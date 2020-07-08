@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -95,7 +95,6 @@ namespace Altseed2
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
         /// <param name="positions">計算する座標</param>
-        /// <exception cref="ArgumentException"><paramref name="positions"/>が空</exception>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
         internal static void GetMinMax(out Vector2F min, out Vector2F max, IArray<Vertex> positions)
         {
@@ -105,7 +104,11 @@ namespace Altseed2
             var max_y = float.MinValue;
             if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
             var count = positions.Count;
-            if (count == 0) throw new ArgumentException("配列が空です", nameof(positions));
+            if (count == 0)
+            {
+                min = max = default;
+                return;
+            }
             for (int i = 0; i < count; i++)
             {
                 var current = positions[i].Position;
@@ -124,7 +127,6 @@ namespace Altseed2
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
         /// <param name="positions">計算する座標</param>
-        /// <exception cref="ArgumentException"><paramref name="positions"/>が空</exception>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
         internal static void GetMinMax(out Vector2F min, out Vector2F max, IArray<Vector2F> positions)
         {
@@ -134,7 +136,11 @@ namespace Altseed2
             var max_y = float.MinValue;
             if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
             var count = positions.Count;
-            if (count == 0) throw new ArgumentException("配列が空です", nameof(positions));
+            if (count == 0)
+            {
+                min = max = default;
+                return;
+            }
             for (int i = 0; i < count; i++)
             {
                 var current = positions[i];
@@ -153,7 +159,6 @@ namespace Altseed2
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
         /// <param name="positions">計算する座標</param>
-        /// <exception cref="ArgumentException"><paramref name="positions"/>が空</exception>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
         internal static void GetMinMax(out Vector2F min, out Vector2F max, params Vector2F[] positions)
         {
@@ -162,7 +167,11 @@ namespace Altseed2
             var max_x = float.MinValue;
             var max_y = float.MinValue;
             if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
-            if (positions.Length == 0) throw new ArgumentException("配列が空です", nameof(positions));
+            if (positions.Length == 0)
+            {
+                min = max = default;
+                return;
+            }
             foreach (var current in positions)
             {
                 if (min_x > current.X) min_x = current.X;
