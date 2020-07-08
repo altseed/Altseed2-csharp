@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -38,7 +38,7 @@ namespace Altseed2
             MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            RectangleCollider.Size = Size * Scale;
+            RectangleCollider.Size = Size * scale;
         }
     }
 }

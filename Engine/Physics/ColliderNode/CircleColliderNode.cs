@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -8,34 +8,6 @@ namespace Altseed2
     [Serializable]
     public class CircleColliderNode : ColliderNode
     {
-        /// <summary>
-        /// 拡大率を適用する方法を表す
-        /// </summary>
-        [Serializable]
-        public enum ScaleCalcType
-        {
-            /// <summary>
-            /// Scale.Xで計算する
-            /// </summary>
-            X,
-            /// <summary>
-            /// Scale.Yで計算する
-            /// </summary>
-            Y,
-            /// <summary>
-            /// Scale.Lengthで計算する
-            /// </summary>
-            Length,
-            /// <summary>
-            /// X，Yの最小値で計算する
-            /// </summary>
-            Min,
-            /// <summary>
-            /// X，Yの最大値で計算する
-            /// </summary>
-            Max
-        }
-
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
@@ -56,12 +28,6 @@ namespace Altseed2
             }
         }
         private float _radius;
-
-        /// <summary>
-        /// 拡大率の計算方法を取得または設定します。
-        /// </summary>
-        /// <remarks>既定値：<see cref="ScaleCalcType.Max"/></remarks>
-        public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.Max;
 
         public override Vector2F Size
         {
@@ -92,7 +58,8 @@ namespace Altseed2
 
         public override void AdjustSize()
         {
-            Size = Scale * Radius * 2;
+            var length = Radius * 2;
+            Size = new Vector2F(length, length);
         }
 
         internal override void UpdateCollider()
@@ -103,15 +70,7 @@ namespace Altseed2
             Collider.Position = position - new Vector2F(Radius, Radius);
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
 
-            CircleCollider.Radius = Radius * (ScaleType switch
-            {
-                ScaleCalcType.X => scale.X,
-                ScaleCalcType.Y => scale.Y,
-                ScaleCalcType.Length => scale.Length,
-                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
-                ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
-                _ => 1.0f
-            });
+            CircleCollider.Radius = Radius * scale;
         }
     }
 }
