@@ -238,8 +238,8 @@ namespace Altseed2
             var mat = Transform;
             for (var n = Parent; !(n is RootNode); n = n.Parent)
             {
-                if (n is DrawnNode d)
-                    mat = d.Transform * mat;
+                if (n is TransformNode t)
+                    mat = t.Transform * mat;
             }
             return mat;
         }
