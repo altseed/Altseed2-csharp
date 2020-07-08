@@ -183,7 +183,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: Altseed2-${{ github.job }}
+          name: Altseed2-${{ github.sha }}
           path: Altseed2
   make_nuget:
     runs-on: windows-latest
@@ -193,7 +193,7 @@ jobs:
       - name: Download Altseed2
         uses: actions/download-artifact@v1
         with:
-          name: Altseed2-${{ github.job }}
+          name: Altseed2-${{ github.sha }}
       
       - name: Make Nuget Package
         run: |
@@ -201,7 +201,7 @@ jobs:
           mkdir package/
           mkdir result/
           mv Nuget/* package/
-          mv Altseed2-${{ github.job }}/* package/
+          mv Altseed2-${{ github.sha }}/* package/
           cd package
           ..\nuget.exe pack Altseed2.nuspec -OutputDirectory ../result
         shell: powershell
