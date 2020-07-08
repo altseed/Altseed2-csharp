@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -181,6 +181,23 @@ namespace Altseed2
             }
             min = new Vector2F(min_x, min_y);
             max = new Vector2F(max_x, max_y);
+        }
+
+        /// <summary>
+        /// <see cref="Matrix44F"/>から2次元座標，拡大率，角度を算出する
+        /// </summary>
+        /// <param name="transform">計算元となる4x4行列</param>
+        /// <param name="absolutePosition">出力される座標</param>
+        /// <param name="scale">出力される拡大率</param>
+        /// <param name="angle">出力される角度</param>
+        internal static void CalcFromTransform(Matrix44F transform, out Vector2F absolutePosition, out Vector2F scale, out float angle)
+        {
+            var p0 = transform * new Vector3F(0f, 0f, 1f);
+            var p1 = transform * new Vector3F(1f, 0f, 1f);
+            absolutePosition = new Vector2F(p0.X, p0.Y);
+            var sub = new Vector2F(p1.X - p0.X, p1.Y - p0.Y);
+            angle = sub.Degree;
+            scale = new Vector2F(1f, 1f) * sub.Length;
         }
     }
 }

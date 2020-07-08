@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -6,22 +6,15 @@ namespace Altseed2
     /// コライダを管理するノード
     /// </summary>
     [Serializable]
-    public abstract class ColliderNode : Node
+    public abstract class ColliderNode : TransformNode
     {
+        public override Matrix44F AbsoluteTransform => _absoluteTransform;
+        private Matrix44F _absoluteTransform;
+
         /// <summary>
         /// コライダを取得する
         /// </summary>
         internal abstract Collider Collider { get; }
-
-        /// <summary>
-        /// 座標を取得または設定する
-        /// </summary>
-        public Vector2F Position { get; set; }
-
-        /// <summary>
-        /// コライダの回転情報を取得または設定する
-        /// </summary>
-        public float Rotation { get; set; }
 
         /// <summary>
         /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
@@ -49,22 +42,11 @@ namespace Altseed2
             base.Removed();
         }
 
-        internal virtual void UpdateCollider()
+        internal abstract void UpdateCollider();
+
+        internal override void UpdateInheritedTransform()
         {
-            var angle = default(float);
-            var centerPosition = default(Vector2F);
-            var position = Position;
-
-            for (var node = Parent; node != null ; node = node.Parent)
-                if (node is TransformNode t)
-                {
-                    centerPosition += t.CenterPosition;
-                    position += t.Position;
-                    angle += t.Angle;
-                }
-
-            Collider.Position = Position + position - centerPosition;
-            Collider.Rotation = Rotation + angle;
+            _absoluteTransform = CalcInheritedTransform();
         }
     }
 
@@ -74,6 +56,34 @@ namespace Altseed2
     [Serializable]
     public class CircleColliderNode : ColliderNode
     {
+        /// <summary>
+        /// 拡大率を適用する方法を表す
+        /// </summary>
+        [Serializable]
+        public enum ScaleCalcType
+        {
+            /// <summary>
+            /// Scale.Xで計算する
+            /// </summary>
+            X,
+            /// <summary>
+            /// Scale.Yで計算する
+            /// </summary>
+            Y,
+            /// <summary>
+            /// Scale.Lengthで計算する
+            /// </summary>
+            Length,
+            /// <summary>
+            /// X，Yの最小値で計算する
+            /// </summary>
+            Min,
+            /// <summary>
+            /// X，Yの最大値で計算する
+            /// </summary>
+            Max
+        }
+
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
@@ -85,10 +95,33 @@ namespace Altseed2
         /// </summary>
         public float Radius
         {
-            get => CircleCollider.Radius;
-            set { CircleCollider.Radius = value; }
+            get => _radius;
+            set
+            {
+                if (_radius == value) return;
+                _radius = value;
+                AdjustSize();
+            }
         }
+        private float _radius;
 
+        /// <summary>
+        /// 拡大率の計算方法を取得または設定します。
+        /// </summary>
+        /// <remarks>既定値：<see cref="ScaleCalcType.Max"/></remarks>
+        public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.Max;
+
+        public override Vector2F Size
+        {
+            get => base.Size;
+            set
+            {
+                if (base.Size == value) return;
+                base.Size = value;
+
+                if (Radius != 0) Scale = value / Radius / 2f;
+            }
+        }
         /// <summary>
         /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
@@ -102,6 +135,30 @@ namespace Altseed2
         public CircleColliderNode(CircleCollider collider)
         {
             CircleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+        }
+
+        public override void AdjustSize()
+        {
+            Size = Scale * Radius * 2;
+        }
+
+        internal override void UpdateCollider()
+        {
+            UpdateInheritedTransform();
+
+            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            Collider.Position = position - new Vector2F(Radius, Radius);
+            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+
+            CircleCollider.Radius = Radius * (ScaleType switch
+            {
+                ScaleCalcType.X => scale.X,
+                ScaleCalcType.Y => scale.Y,
+                ScaleCalcType.Length => scale.Length,
+                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
+                ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
+                _ => 1.0f
+            });
         }
     }
 
@@ -123,9 +180,19 @@ namespace Altseed2
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
         public Vector2F[] Vertexes
         {
-            get => PolygonCollider.VertexArray;
-            set { PolygonCollider.VertexArray = value; }
+            get => _vertexes;
+            set
+            {
+                _vertexes = value ?? throw new ArgumentNullException(nameof(value), "引数がnullです");
+                AdjustSize();
+            }
         }
+        private Vector2F[] _vertexes = Array.Empty<Vector2F>();
+
+        /// <summary>
+        /// コンテンツのサイズを取得します。
+        /// </summary>
+        public new Vector2F Size => base.Size;
 
         /// <summary>
         /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
@@ -141,6 +208,27 @@ namespace Altseed2
         {
             PolygonCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
         }
+
+        public override void AdjustSize()
+        {
+            MathHelper.GetMinMax(out var min, out var max, _vertexes);
+            base.Size = max - min;
+        }
+
+        internal override void UpdateCollider()
+        {
+            UpdateInheritedTransform();
+
+            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            Collider.Position = position;
+            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+
+            var count = _vertexes.Length;
+            var array = new Vector2F[count];
+            for (int i = 0; i < count; i++) array[i] = _vertexes[i] * Scale;
+
+            PolygonCollider.VertexArray = _vertexes;
+        }
     }
 
     /// <summary>
@@ -150,28 +238,10 @@ namespace Altseed2
     public class RectangleColliderNode : ColliderNode
     {
         /// <summary>
-        /// 中心座標を取得または設定する
-        /// </summary>
-        public Vector2F CenterPosition
-        {
-            get => RectangleCollider.CenterPosition;
-            set { RectangleCollider.CenterPosition = value; }
-        }
-
-        /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
         public RectangleCollider RectangleCollider { get; }
         internal override Collider Collider => RectangleCollider;
-
-        /// <summary>
-        /// サイズを取得または設定する
-        /// </summary>
-        public Vector2F Size
-        {
-            get => RectangleCollider.Size;
-            set { RectangleCollider.Size = value; }
-        }
 
         /// <summary>
         /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
@@ -186,6 +256,18 @@ namespace Altseed2
         public RectangleColliderNode(RectangleCollider collider)
         {
             RectangleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+        }
+
+        public override void AdjustSize() { }
+
+        internal override void UpdateCollider()
+        {
+            UpdateInheritedTransform();
+
+            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            Collider.Position = position;
+            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+            RectangleCollider.Size = Size * Scale;
         }
     }
 }
