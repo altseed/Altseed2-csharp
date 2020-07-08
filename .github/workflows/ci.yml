@@ -150,6 +150,11 @@ jobs:
     runs-on: ubuntu-18.04
     needs: [windows, linux, macOS]
     steps:
+      - uses: actions/checkout@v2
+      - name: Update Submodules
+        run: |
+          git submodule update --init
+          
       - name: Download Windows
         uses: actions/download-artifact@v1
         with:
@@ -167,26 +172,28 @@ jobs:
 
       - name: Merge
         run: |
-          mkdir bin
-          cp test-windows/Altseed2.dll bin/
-          cp test-windows/Altseed2_Core.dll bin/
-          cp test-mac/libAltseed2_Core.dylib bin/
-          cp test-linux/libAltseed2_Core bin/
+          mkdir Altseed2
+          cp Core/LICENSE Altseed2/
+          cp test-windows/Altseed2.dll Altseed2/
+          cp test-windows/Altseed2.dll Altseed2/
+          cp test-windows/Altseed2_Core.dll Altseed2/
+          cp test-mac/libAltseed2_Core.dylib Altseed2/
+          cp test-linux/libAltseed2_Core Altseed2/
         
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: Altseed2-${{ github.sha }}
+          name: Altseed2-${{ github.job }}
           path: bin
   make_nuget:
     runs-on: windows-latest
     needs: [merge]
     steps:
       - uses: actions/checkout@v2
-      - name: Download bin
+      - name: Download Altseed2
         uses: actions/download-artifact@v1
         with:
-          name: Altseed2-${{ github.sha }}
+          name: Altseed2-${{ github.job }}
       
       - name: Make Nuget Package
         run: |
@@ -194,7 +201,7 @@ jobs:
           mkdir package/
           mkdir result/
           mv Nuget/* package/
-          mv bin/* package/
+          mv Altseed2-${{ github.job }}/* package/
           cd package
           ..\nuget.exe pack Altseed2.nuspec -OutputDirectory ../result
         shell: powershell
