@@ -184,7 +184,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Altseed2-${{ github.job }}
-          path: bin
+          path: Altseed2
   make_nuget:
     runs-on: windows-latest
     needs: [merge]
