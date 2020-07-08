@@ -46,6 +46,7 @@ namespace Altseed2
                 if (_radius == value) return;
                 _radius = value;
                 changed = true;
+                AdjustSize();
             }
         }
         private float _radius;
@@ -120,8 +121,6 @@ namespace Altseed2
                 vec.Degree += deg;
                 positions[i] += rad;
             }
-
-            AdjustSize();
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);

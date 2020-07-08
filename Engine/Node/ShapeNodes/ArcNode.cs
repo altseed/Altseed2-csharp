@@ -65,6 +65,7 @@ namespace Altseed2
                 if (_radius == value) return;
                 _radius = value;
                 changed = true;
+                AdjustSize();
             }
         }
         private float _radius;
@@ -194,12 +195,11 @@ namespace Altseed2
                 vec.Degree += deg;
             }
 
+            if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
+
             var rad = new Vector2F(Radius, Radius);
             for (int i = 0; i < positions.Length; i++) positions[i] += rad;
 
-            AdjustSize();
-
-            if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
