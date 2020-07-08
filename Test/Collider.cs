@@ -172,6 +172,7 @@ namespace Altseed2.Test
             {
                 Size = texture.Size
             };
+            colliderNode.AddChildNode(colliderNode.CollisionArea);
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -189,7 +190,7 @@ namespace Altseed2.Test
         }
         private sealed class Player_Rectangle: SpriteNode, ICollisionEventReceiver
         {
-            private readonly ColliderNode node;
+            private readonly RectangleColliderNode node;
             private readonly TextNode text = new TextNode()
             {
                 Font = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 40)
@@ -205,6 +206,7 @@ namespace Altseed2.Test
                 {
                     Size = texture.Size
                 };
+                node.AddChildNode(node.CollisionArea);
                 AddChildNode(node);
             }
             protected override void OnUpdate()

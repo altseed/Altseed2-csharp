@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -9,10 +9,25 @@ namespace Altseed2
     public class RectangleColliderNode : ColliderNode
     {
         /// <summary>
+        /// 衝突判定が行われる範囲を描画するノードを取得します
+        /// </summary>
+        public RectangleNode CollisionArea => _collisionArea ??= CreateShapeNode();
+        private RectangleNode _collisionArea;
+        /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
         public RectangleCollider RectangleCollider { get; }
         internal override Collider Collider => RectangleCollider;
+
+        public override Vector2F Size
+        {
+            get => base.Size;
+            set
+            {
+                base.Size = value;
+                if (_collisionArea != null) _collisionArea.Size = Size;
+            }
+        }
 
         /// <summary>
         /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
@@ -31,6 +46,18 @@ namespace Altseed2
 
         public override void AdjustSize() { }
 
+        private RectangleNode CreateShapeNode()
+        {
+            var result = new RectangleNode()
+            {
+                Color = new Color(255, 100, 100, 100),
+                Size = Size
+            };
+            var anc = GetAncestorSpecificNode<DrawnNode>();
+            if (anc != null) result.ZOrder = anc.ZOrder;
+            return result;
+        }
+
         internal override void UpdateCollider()
         {
             UpdateInheritedTransform();
@@ -39,6 +66,15 @@ namespace Altseed2
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = Size * scale;
+        }
+
+        internal override void Update()
+        {
+            base.Update();
+
+            if (_collisionArea == null) return;
+            var anc = GetAncestorSpecificNode<DrawnNode>();
+            if (anc != null) _collisionArea.ZOrder = anc.ZOrder;
         }
     }
 }
