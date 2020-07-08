@@ -176,7 +176,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: bin
+          name: Altseed2-${{ github.sha }}
           path: bin
   make_nuget:
     runs-on: windows-latest
@@ -186,7 +186,7 @@ jobs:
       - name: Download bin
         uses: actions/download-artifact@v1
         with:
-          name: bin
+          name: Altseed2-${{ github.sha }}
       
       - name: Make Nuget Package
         run: |
