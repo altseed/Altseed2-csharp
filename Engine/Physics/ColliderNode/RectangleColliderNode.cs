@@ -42,6 +42,11 @@ namespace Altseed2
         public RectangleColliderNode(RectangleCollider collider)
         {
             RectangleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+
+            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            Collider.Position = position;
+            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+            RectangleCollider.Size = Size * scale;
         }
 
         public override void AdjustSize() { }
@@ -50,7 +55,7 @@ namespace Altseed2
         {
             var result = new RectangleNode()
             {
-                Color = new Color(255, 100, 100, 100),
+                Color = AreaColor,
                 Size = Size
             };
             var anc = GetAncestorSpecificNode<DrawnNode>();

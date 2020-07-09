@@ -8,6 +8,8 @@ namespace Altseed2
     [Serializable]
     public abstract class ColliderNode : TransformNode
     {
+        internal readonly static Color AreaColor = new Color(255, 100, 100, 100);
+
         public override Matrix44F AbsoluteTransform => _absoluteTransform;
         private Matrix44F _absoluteTransform;
 

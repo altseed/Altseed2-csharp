@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -8,6 +8,12 @@ namespace Altseed2
     [Serializable]
     public class CircleColliderNode : ColliderNode
     {
+        /// <summary>
+        /// 衝突判定が行われる範囲を描画するノードを取得します
+        /// </summary>
+        public CircleNode CollisionArea => _collisionArea ??= CreateShapeNode();
+        private CircleNode _collisionArea;
+
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
@@ -25,6 +31,7 @@ namespace Altseed2
                 if (_radius == value) return;
                 _radius = value;
                 AdjustSize();
+                if (_collisionArea != null) _collisionArea.Radius = value;
             }
         }
         private float _radius;
@@ -54,6 +61,11 @@ namespace Altseed2
         public CircleColliderNode(CircleCollider collider)
         {
             CircleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+
+            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            Collider.Position = position;
+            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+            CircleCollider.Radius = Radius * scale;
         }
 
         public override void AdjustSize()
@@ -62,15 +74,36 @@ namespace Altseed2
             Size = new Vector2F(length, length);
         }
 
+        private CircleNode CreateShapeNode()
+        {
+            var result = new CircleNode()
+            {
+                Color = AreaColor,
+                VertNum = 100,
+                Radius = Radius
+            };
+            var anc = GetAncestorSpecificNode<DrawnNode>();
+            if (anc != null) result.ZOrder = anc.ZOrder;
+            return result;
+        }
+
         internal override void UpdateCollider()
         {
             UpdateInheritedTransform();
 
             MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
-            Collider.Position = position - new Vector2F(Radius, Radius);
+            Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-
             CircleCollider.Radius = Radius * scale;
+        }
+
+        internal override void Update()
+        {
+            base.Update();
+
+            if (_collisionArea == null) return;
+            var anc = GetAncestorSpecificNode<DrawnNode>();
+            if (anc != null) _collisionArea.ZOrder = anc.ZOrder;
         }
     }
 }
