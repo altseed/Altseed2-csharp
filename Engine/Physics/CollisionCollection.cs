@@ -106,6 +106,16 @@ namespace Altseed2
         /// </summary>
         internal void Update()
         {
+            if (Count == 1)
+            {
+                preCollisionInfo = null;
+                foreach (var pair in collection)
+                    foreach (var node in pair.Value)
+                    {
+                        node.UpdateCollider();
+                        return;
+                    }
+            }
             var dictionary = new Dictionary<ColliderEntry, bool>(preCollisionInfo?.Count ?? collection.Count);
             foreach (var current in this)
                 foreach (var comparison in this)
