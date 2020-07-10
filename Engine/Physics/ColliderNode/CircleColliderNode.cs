@@ -8,6 +8,34 @@ namespace Altseed2
     [Serializable]
     public class CircleColliderNode : ColliderNode
     {
+        /// <summary>
+        /// 拡大率を適用する方法を表す
+        /// </summary>
+        [Serializable]
+        public enum ScaleCalcType
+        {
+            /// <summary>
+            /// Scale.Xで計算する
+            /// </summary>
+            X,
+            /// <summary>
+            /// Scale.Yで計算する
+            /// </summary>
+            Y,
+            /// <summary>
+            /// Scale.Lengthで計算する
+            /// </summary>
+            Length,
+            /// <summary>
+            /// X，Yの最小値で計算する
+            /// </summary>
+            Min,
+            /// <summary>
+            /// X，Yの最大値で計算する
+            /// </summary>
+            Max
+        }
+
         internal const int VisualizerVertNum = 100;
 
         private bool changed;
@@ -33,6 +61,12 @@ namespace Altseed2
             }
         }
         private float _radius;
+
+        /// <summary>
+        /// 拡大率の計算方法を取得または設定します。
+        /// </summary>
+        /// <remarks>既定値：<see cref="ScaleCalcType.Max"/></remarks>
+        public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.Max;
 
         public override Vector2F Size
         {
@@ -63,7 +97,15 @@ namespace Altseed2
             MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            CircleCollider.Radius = Radius * scale;
+            CircleCollider.Radius = Radius * (ScaleType switch
+            {
+                ScaleCalcType.X => scale.X,
+                ScaleCalcType.Y => scale.Y,
+                ScaleCalcType.Length => scale.Length,
+                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
+                ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
+                _ => 1.0f
+            });
         }
 
         public override void AdjustSize()
@@ -79,7 +121,15 @@ namespace Altseed2
             MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            CircleCollider.Radius = Radius * scale;
+            CircleCollider.Radius = Radius * (ScaleType switch
+            {
+                ScaleCalcType.X => scale.X,
+                ScaleCalcType.Y => scale.Y,
+                ScaleCalcType.Length => scale.Length,
+                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
+                ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
+                _ => 1.0f
+            });
 
             if (changed)
             {

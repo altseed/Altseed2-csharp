@@ -87,7 +87,7 @@ namespace Sample
         // 衝突が継続している時に実行されます。
         void ICollisionEventReceiver.OnCollisionStay(CollisionInfo info)
         {
-            Console.WriteLine("Collision is keeped.");
+            Angle++;
         }
 
         // 衝突が解除された時に実行されます。
