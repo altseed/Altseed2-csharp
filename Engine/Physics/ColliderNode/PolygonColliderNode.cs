@@ -8,11 +8,7 @@ namespace Altseed2
     [Serializable]
     public class PolygonColliderNode : ColliderNode
     {
-        /// <summary>
-        /// 衝突判定が行われる範囲を描画するノードを取得します
-        /// </summary>
-        public PolygonNode CollisionArea => _collisionArea ??= CreateShapeNode();
-        private PolygonNode _collisionArea;
+        private bool changed;
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -33,11 +29,7 @@ namespace Altseed2
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
                 AdjustSize();
-                if (_collisionArea == null) return;
-                _collisionArea.SetVertexes(value, AreaColor);
-                _collisionArea.AdjustSize();
-                MathHelper.GetMinMax(out var min, out _, value);
-                _collisionArea.Position = -min;
+                changed = true;
             }
         }
         private Vector2F[] _vertexes = Array.Empty<Vector2F>();
@@ -72,18 +64,6 @@ namespace Altseed2
             base.Size = max - min;
         }
 
-        private PolygonNode CreateShapeNode()
-        {
-            var result = new PolygonNode();
-            result.SetVertexes(Vertexes, AreaColor);
-            var anc = GetAncestorSpecificNode<DrawnNode>();
-            if (anc != null) result.ZOrder = anc.ZOrder;
-            MathHelper.GetMinMax(out var min, out _, _vertexes);
-            result.Position = -min;
-            result.AdjustSize();
-            return result;
-        }
-
         internal override void UpdateCollider()
         {
             UpdateInheritedTransform();
@@ -101,15 +81,27 @@ namespace Altseed2
             }
 
             PolygonCollider.VertexArray = array;
+
+            if (changed)
+            {
+                UpdateVisualizerPolygon();
+                changed = false;
+            }
         }
 
-        internal override void Update()
+        private protected override void UpdateVisualizerPolygon()
         {
-            base.Update();
+            if (!TryGetVisualizePolygon(out var polygon)) return;
 
-            if (_collisionArea == null) return;
-            var anc = GetAncestorSpecificNode<DrawnNode>();
-            if (anc != null) _collisionArea.ZOrder = anc.ZOrder;
+            MathHelper.GetMinMax(out var min, out _, _vertexes);
+
+            var positions = new Vector2F[_vertexes.Length];
+            for (int i = 0; i < _vertexes.Length; i++) positions[i] = _vertexes[i] - min;
+
+            var array = Vector2FArray.Create(_vertexes.Length);
+            array.FromArray(positions);
+            polygon.CreateVertexesByVector2F(array);
+            polygon.OverwriteVertexesColor(AreaColor);
         }
     }
 }

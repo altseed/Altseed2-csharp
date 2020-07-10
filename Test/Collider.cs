@@ -84,7 +84,7 @@ namespace Altseed2.Test
             {
                 Radius = texture.Size.X / 2
             };
-            colliderNode.AddChildNode(colliderNode.CollisionArea);
+            colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -118,7 +118,7 @@ namespace Altseed2.Test
                 {
                     Radius = texture.Size.X / 2
                 };
-                node.AddChildNode(node.CollisionArea);
+                node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
                 AddChildNode(node);
             }
             protected override void OnUpdate()
@@ -186,7 +186,7 @@ namespace Altseed2.Test
             {
                 Vertexes = array
             };
-            colliderNode.AddChildNode(colliderNode.CollisionArea);
+            colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -222,7 +222,7 @@ namespace Altseed2.Test
                 {
                     Vertexes = array
                 };
-                node.AddChildNode(node.CollisionArea);
+                node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
                 AddChildNode(node);
             }
             //protected override void OnUpdate()
@@ -278,7 +278,7 @@ namespace Altseed2.Test
             {
                 Size = texture.Size
             };
-            colliderNode.AddChildNode(colliderNode.CollisionArea);
+            colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -312,7 +312,7 @@ namespace Altseed2.Test
                 {
                     Size = texture.Size
                 };
-                node.AddChildNode(node.CollisionArea);
+                node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
                 AddChildNode(node);
             }
             protected override void OnUpdate()

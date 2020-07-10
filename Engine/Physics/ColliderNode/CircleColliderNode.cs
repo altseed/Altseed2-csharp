@@ -8,11 +8,9 @@ namespace Altseed2
     [Serializable]
     public class CircleColliderNode : ColliderNode
     {
-        /// <summary>
-        /// 衝突判定が行われる範囲を描画するノードを取得します
-        /// </summary>
-        public CircleNode CollisionArea => _collisionArea ??= CreateShapeNode();
-        private CircleNode _collisionArea;
+        internal const int VisualizerVertNum = 100;
+
+        private bool changed;
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -31,7 +29,7 @@ namespace Altseed2
                 if (_radius == value) return;
                 _radius = value;
                 AdjustSize();
-                if (_collisionArea != null) _collisionArea.Radius = value;
+                changed = true;
             }
         }
         private float _radius;
@@ -74,19 +72,6 @@ namespace Altseed2
             Size = new Vector2F(length, length);
         }
 
-        private CircleNode CreateShapeNode()
-        {
-            var result = new CircleNode()
-            {
-                Color = AreaColor,
-                VertNum = 100,
-                Radius = Radius
-            };
-            var anc = GetAncestorSpecificNode<DrawnNode>();
-            if (anc != null) result.ZOrder = anc.ZOrder;
-            return result;
-        }
-
         internal override void UpdateCollider()
         {
             UpdateInheritedTransform();
@@ -95,15 +80,34 @@ namespace Altseed2
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             CircleCollider.Radius = Radius * scale;
+
+            if (changed)
+            {
+                UpdateVisualizerPolygon();
+                changed = false;
+            }
         }
 
-        internal override void Update()
+        private protected override void UpdateVisualizerPolygon()
         {
-            base.Update();
+            if (!TryGetVisualizePolygon(out var polygon)) return;
 
-            if (_collisionArea == null) return;
-            var anc = GetAncestorSpecificNode<DrawnNode>();
-            if (anc != null) _collisionArea.ZOrder = anc.ZOrder;
+            const float deg = 360f / VisualizerVertNum;
+            var positions = new Vector2F[VisualizerVertNum];
+            var vec = new Vector2F(0.0f, -_radius);
+
+            var rad = new Vector2F(_radius, _radius);
+            for (int i = 0; i < VisualizerVertNum; i++)
+            {
+                positions[i] = vec;
+                vec.Degree += deg;
+                positions[i] += rad;
+            }
+
+            var array = Vector2FArray.Create(positions.Length);
+            array.FromArray(positions);
+            polygon.CreateVertexesByVector2F(array);
+            polygon.OverwriteVertexesColor(AreaColor);
         }
     }
 }

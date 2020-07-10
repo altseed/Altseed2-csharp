@@ -8,11 +8,8 @@ namespace Altseed2
     [Serializable]
     public class RectangleColliderNode : ColliderNode
     {
-        /// <summary>
-        /// 衝突判定が行われる範囲を描画するノードを取得します
-        /// </summary>
-        public RectangleNode CollisionArea => _collisionArea ??= CreateShapeNode();
-        private RectangleNode _collisionArea;
+        private bool changed;
+
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
@@ -24,8 +21,9 @@ namespace Altseed2
             get => base.Size;
             set
             {
+                if (base.Size == value) return;
                 base.Size = value;
-                if (_collisionArea != null) _collisionArea.Size = Size;
+                changed = true;
             }
         }
 
@@ -51,18 +49,6 @@ namespace Altseed2
 
         public override void AdjustSize() { }
 
-        private RectangleNode CreateShapeNode()
-        {
-            var result = new RectangleNode()
-            {
-                Color = AreaColor,
-                Size = Size
-            };
-            var anc = GetAncestorSpecificNode<DrawnNode>();
-            if (anc != null) result.ZOrder = anc.ZOrder;
-            return result;
-        }
-
         internal override void UpdateCollider()
         {
             UpdateInheritedTransform();
@@ -71,15 +57,27 @@ namespace Altseed2
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = Size * scale;
+
+            if (changed)
+            {
+                UpdateVisualizerPolygon();
+                changed = false;
+            }
         }
 
-        internal override void Update()
+        private protected override void UpdateVisualizerPolygon()
         {
-            base.Update();
+            if (!TryGetVisualizePolygon(out var polygon)) return;
 
-            if (_collisionArea == null) return;
-            var anc = GetAncestorSpecificNode<DrawnNode>();
-            if (anc != null) _collisionArea.ZOrder = anc.ZOrder;
+            var positions = new Vector2F[4];
+            positions[0] = new Vector2F(0.0f, 0.0f);
+            positions[1] = new Vector2F(0.0f, Size.Y);
+            positions[2] = new Vector2F(Size.X, Size.Y);
+            positions[3] = new Vector2F(Size.X, 0.0f);
+            var array = Vector2FArray.Create(positions.Length);
+            array.FromArray(positions);
+            polygon.CreateVertexesByVector2F(array);
+            polygon.OverwriteVertexesColor(AreaColor);
         }
     }
 }
