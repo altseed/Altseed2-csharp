@@ -13,7 +13,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
-        public PolygonCollider PolygonCollider { get; }
+        internal PolygonCollider PolygonCollider { get; }
         internal override Collider Collider => PolygonCollider;
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.PolygonCollider"/>のインスタンス</param>
         /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
-        public PolygonColliderNode(PolygonCollider collider)
+        internal PolygonColliderNode(PolygonCollider collider)
         {
             PolygonCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
 

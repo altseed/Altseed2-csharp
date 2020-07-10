@@ -13,7 +13,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
-        public RectangleCollider RectangleCollider { get; }
+        internal RectangleCollider RectangleCollider { get; }
         internal override Collider Collider => RectangleCollider;
 
         public override Vector2F Size
@@ -37,7 +37,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.RectangleCollider"/>のインスタンス</param>
         /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
-        public RectangleColliderNode(RectangleCollider collider)
+        internal RectangleColliderNode(RectangleCollider collider)
         {
             RectangleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
 

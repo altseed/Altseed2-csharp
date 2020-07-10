@@ -15,7 +15,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
-        public CircleCollider CircleCollider { get; }
+        internal CircleCollider CircleCollider { get; }
         internal override Collider Collider => CircleCollider;
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.CircleCollider"/>のインスタンス</param>
         /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
-        public CircleColliderNode(CircleCollider collider)
+        internal CircleColliderNode(CircleCollider collider)
         {
             CircleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
 
