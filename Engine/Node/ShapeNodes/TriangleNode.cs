@@ -114,7 +114,9 @@ namespace Altseed2
             positions[1] = _point2;
             positions[2] = _point3;
 
-            AdjustSize();
+            MathHelper.GetMinMax(out var min, out var max, positions);
+            for (int i = 0; i < 3; i++) positions[i] -= min;
+            Size = max - min;
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);

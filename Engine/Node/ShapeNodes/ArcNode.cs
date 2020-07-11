@@ -65,6 +65,7 @@ namespace Altseed2
                 if (_radius == value) return;
                 _radius = value;
                 changed = true;
+                AdjustSize();
             }
         }
         private float _radius;
@@ -125,9 +126,8 @@ namespace Altseed2
 
         public override void AdjustSize()
         {
-            // TODO:Radiusから求めたい
-            MathHelper.GetMinMax(out var min, out var max, renderedPolygon.Vertexes);
-            Size = max - min;
+            var length = _radius * 2;
+            Size = new Vector2F(length, length);
         }
 
         internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
@@ -189,16 +189,17 @@ namespace Altseed2
             var currentIndex = 1;
             if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
             var vec = GetBaseVector(deg * startVertexNum);
-
             for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
             {
                 positions[currentIndex] = vec;
                 vec.Degree += deg;
             }
 
-            AdjustSize();
-
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
+
+            var rad = new Vector2F(Radius, Radius);
+            for (int i = 0; i < positions.Length; i++) positions[i] += rad;
+
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
