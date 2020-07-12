@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
@@ -37,6 +37,7 @@ namespace Sample
             Samples.Add(new Sample("MouseCursor", "マウスカーソルを変更します。", typeof(MouseCursor)));
             Samples.Add(new Sample("ShapeNode", "図形ノードを描画します。", typeof(ShapeNode)));
             
+            Samples.Add(new Sample("CustomPostEffect", "自作のポストエフェクトを適用します。", typeof(CustomPostEffect)));
             SamplesString = string.Join('\t', Samples.Select(s => s.Name));
 
             if (args.Length != 1) ShowViewer();
