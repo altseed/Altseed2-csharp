@@ -32,7 +32,7 @@ namespace Altseed2.Test
         {
             var tc = new TestCore(new Configuration { ToolEnabled = true });
             tc.Init();
-            Engine.Tool.AddFontFromFileTTF("../../Core/TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRanges.Japanese);
+            Engine.Tool.AddFontFromFileTTF("../Core/TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRanges.Japanese);
             string str0 = "";
             string str1 = "";
             string str2 = "";
@@ -75,7 +75,7 @@ namespace Altseed2.Test
             var tc = new TestCore(new Configuration { ToolEnabled = true });
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
@@ -85,7 +85,7 @@ namespace Altseed2.Test
             node.CenterPosition = texture.Size / 2;
             Engine.AddNode(node);
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             var text = new TextNode() { Font = font, Text = "色テスト", Position = new Vector2F(0.0f, 0.0f) };
             Engine.AddNode(text);
 

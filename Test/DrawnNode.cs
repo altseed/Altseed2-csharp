@@ -16,7 +16,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
@@ -52,7 +52,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
@@ -106,12 +106,12 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
-            var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font2 = Font.LoadDynamicFont("../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
-            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png"));
+            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png"));
 
             Engine.AddNode(new TextNode() { Font = font, Text = "Hello, world! こんにちは" });
             Engine.AddNode(new TextNode() { Font = font, Text = "色を指定します。", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
@@ -137,12 +137,12 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 40);
-            var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 40);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 40);
+            var font2 = Font.LoadDynamicFont("../Core/TestData/Font/GenYoMinJP-Bold.ttf", 40);
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
-            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png"));
+            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png"));
 
             TextNode node = new TextNode() { Font = font2, Text = "Hello, world! こんにちは カーニングあるよ！！", IsEnableKerning = false, Color = new Color(255, 0, 0, 200) };
             Engine.AddNode(node);
@@ -164,14 +164,14 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            Assert.IsTrue(Font.GenerateFontFile("../../Core/TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
+            Assert.IsTrue(Font.GenerateFontFile("../Core/TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             var font2 = Font.LoadStaticFont("test.a2f");
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
-            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png"));
+            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png"));
 
             Engine.AddNode(new TextNode() { Font = font, Text = "Hello, world! こんにちは" });
             Engine.AddNode(new TextNode() { Font = font2, Text = "Hello, world! こんにちは", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
@@ -187,10 +187,10 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 30);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 30);
             Assert.NotNull(font);
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
@@ -225,7 +225,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore(new Configuration() { WaitVSync = false });
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink256.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink256.png");
             Assert.NotNull(texture);
 
             var ws = Engine.WindowSize;
@@ -279,8 +279,8 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
-            var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font2 = Font.LoadDynamicFont("../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
             Assert.NotNull(font);
 
             var rotated = new TextNode() { Font = font, Text = "中心で回転します", Position = new Vector2F(300.0f, 300.0f), Pivot = new Vector2F(0.5f, 0.5f) };
@@ -302,10 +302,10 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 30);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 30);
             Assert.NotNull(font);
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Vector2F rectSize = texture.Size;
@@ -580,7 +580,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var node = new SpriteNode();

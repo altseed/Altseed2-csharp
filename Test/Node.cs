@@ -16,7 +16,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(t1);
 
             var s = new SpriteNode();
@@ -45,7 +45,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(t1);
 
             var s = new SpriteNode();
@@ -76,7 +76,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(t1);
 
             var s = new SpriteNode();

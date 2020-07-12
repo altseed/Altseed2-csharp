@@ -10,7 +10,8 @@ namespace Altseed2.Test
     [TestFixture]
     class PostEffectNode
     {
-        private class TestPostEffect : Altseed2.PostEffectNode {
+        private class TestPostEffect : Altseed2.PostEffectNode
+        {
 
             const string Code = @"
 Texture2D mainTex : register(t0);
@@ -67,7 +68,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode() { Texture = texture });
@@ -76,8 +77,9 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
 
             Engine.AddNode(postEffect);
 
-            tc.LoopBody(c => {
-                
+            tc.LoopBody(c =>
+            {
+
             }, null);
 
             tc.End();
@@ -89,14 +91,15 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode() { Texture = texture });
 
             Engine.AddNode(new PostEffectGrayScaleNode());
 
-            tc.LoopBody(c => {
+            tc.LoopBody(c =>
+            {
 
             }, null);
 
@@ -109,14 +112,15 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode() { Texture = texture });
 
             Engine.AddNode(new PostEffectSepiaNode());
 
-            tc.LoopBody(c => {
+            tc.LoopBody(c =>
+            {
 
             }, null);
 
@@ -129,14 +133,15 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode() { Texture = texture });
 
             Engine.AddNode(new PostEffectGaussianBlurNode());
 
-            tc.LoopBody(c => {
+            tc.LoopBody(c =>
+            {
 
             }, null);
 
@@ -149,14 +154,15 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode() { Texture = texture });
 
-            Engine.AddNode(new PostEffectLightBloomNode { Threshold = 0.1f});
+            Engine.AddNode(new PostEffectLightBloomNode { Threshold = 0.1f });
 
-            tc.LoopBody(c => {
+            tc.LoopBody(c =>
+            {
 
             }, null);
 
