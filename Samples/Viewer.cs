@@ -36,7 +36,13 @@ namespace Sample
             Samples.Add(new Sample("Mouse", "マウス入力を行います。", typeof(Mouse)));
             Samples.Add(new Sample("MouseCursor", "マウスカーソルを変更します。", typeof(MouseCursor)));
             Samples.Add(new Sample("ShapeNode", "図形ノードを描画します。", typeof(ShapeNode)));
-            
+
+            Samples.Add(new Sample("PostEffect/GrayScale", "グレースケールのポストエフェクトを適用します。", typeof(PostEffectGrayScale)));
+            Samples.Add(new Sample("PostEffect/Sepia", "セピアのポストエフェクトを適用します。", typeof(PostEffectSepia)));
+            Samples.Add(new Sample("PostEffect/GaussianBlur", "ガウスぼかしのポストエフェクトを適用します。", typeof(PostEffectGaussianBlur)));
+            Samples.Add(new Sample("PostEffect/LightBloom", "ライトブルームのポストエフェクトを適用します。", typeof(PostEffectLightBloom)));
+            Samples.Add(new Sample("CustomPostEffect", "自作のポストエフェクトを適用します。", typeof(CustomPostEffect)));
+
             SamplesString = string.Join('\t', Samples.Select(s => s.Name));
 
             if (args.Length != 1) ShowViewer();
