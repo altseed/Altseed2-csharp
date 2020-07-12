@@ -129,7 +129,7 @@ namespace Sample
             Material.SetTexture("mainTex", src);
 
             // ポストエフェクトを適用します。
-            RenderToRenderTarget(Material);
+            Engine.Graphics.CommandList.RenderToRenderTarget(Material);
         }
     }
 }

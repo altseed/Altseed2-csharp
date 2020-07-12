@@ -57,10 +57,10 @@ namespace Altseed2
             var buffer = GetBuffer(0, src.Size);
 
             materialX.SetTexture("mainTex", src);
-            RenderToRenderTexture(materialX, buffer);
+            Engine.Graphics.CommandList.RenderToRenderTexture(materialX, buffer, new RenderPassParameter(Engine.ClearColor, true, true));
 
             materialY.SetTexture("mainTex", buffer);
-            RenderToRenderTarget(materialY);
+            Engine.Graphics.CommandList.RenderToRenderTarget(materialY);
         }
     }
 }

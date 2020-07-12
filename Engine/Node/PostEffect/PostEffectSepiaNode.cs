@@ -16,7 +16,7 @@ namespace Altseed2
         protected override void Draw(RenderTexture src)
         {
             material.SetTexture("mainTex", src);
-            RenderToRenderTarget(material);
+            Engine.Graphics.CommandList.RenderToRenderTarget(material);
         }
     }
 }
