@@ -1990,6 +1990,12 @@ namespace Altseed2
         
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        private static extern int cbg_Core_GetBaseObjectCount(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_Core_PrintAllBaseObjectName(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, IntPtr config);
         
@@ -2100,6 +2106,24 @@ namespace Altseed2
             }
         }
         private FramerateMode? _FramerateMode;
+        
+        /// <summary>
+        /// 内部オブジェクトの数を取得します。
+        /// </summary>
+        /// <returns>数</returns>
+        internal int GetBaseObjectCount()
+        {
+            var ret = cbg_Core_GetBaseObjectCount(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 全ての内部オブジェクトの名前を出力します。
+        /// </summary>
+        internal void PrintAllBaseObjectName()
+        {
+            cbg_Core_PrintAllBaseObjectName(selfPtr);
+        }
         
         /// <summary>
         /// 初期化処理を行います。
