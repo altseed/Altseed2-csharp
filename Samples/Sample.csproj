@@ -3,12 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Sample</RootNamespace>
-    <OutputPath>../Build</OutputPath>
     <OutputType>WinExe</OutputType>
     <Platforms>x64</Platforms>
     <ApplicationIcon />
     <StartupObject>Sample.Viewer</StartupObject>
     <AssemblyName>Sample</AssemblyName>
+    <OutputPath>$(SolutionDir)Build/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

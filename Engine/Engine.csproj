@@ -3,9 +3,11 @@
   <PropertyGroup>
     <RootNamespace>Altseed2</RootNamespace>
     <AssemblyName>Altseed2</AssemblyName>
-    <OutputPath>../Build</OutputPath>
     <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputPath>$(SolutionDir)Build/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,6 +16,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>$(SolutionDir)Build/Altseed2.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

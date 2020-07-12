@@ -4,9 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Altseed2.TestForMacLinux</RootNamespace>
-    <OutputPath>../Build</OutputPath>
     <Platforms>x64</Platforms>
     <Configurations>Debug;Release;CI</Configurations>
+    <OutputPath>$(SolutionDir)Build/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

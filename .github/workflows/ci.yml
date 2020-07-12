@@ -41,14 +41,14 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        cd Build/netcoreapp3.0
+        cd Build
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-windows
-        path: Build/netcoreapp3.0
+        path: Build
   
   linux:
 
@@ -93,7 +93,7 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        cd Build/netcoreapp3.0
+        cd Build
         mv libAltseed2_Core.so libAltseed2_Core
         dotnet TestForMacLinux.dll
     - name: Upload artifact
@@ -101,7 +101,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-linux
-        path: Build/netcoreapp3.0
+        path: Build
         
   macOS:
 
@@ -137,14 +137,14 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        cd Build/netcoreapp3.0
+        cd Build
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
       with:
         name: test-mac
-        path: Build/netcoreapp3.0
+        path: Build
 
   merge:
     runs-on: ubuntu-18.04
@@ -175,7 +175,7 @@ jobs:
           mkdir Altseed2
           cp Core/LICENSE Altseed2/
           cp test-windows/Altseed2.dll Altseed2/
-          cp test-windows/Altseed2.dll Altseed2/
+          cp test-windows/Altseed2.xml Altseed2/
           cp test-windows/Altseed2_Core.dll Altseed2/
           cp test-mac/libAltseed2_Core.dylib Altseed2/
           cp test-linux/libAltseed2_Core Altseed2/

@@ -3,9 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Altseed.Test</RootNamespace>
-    <OutputPath>../Build</OutputPath>
     <OutputType>Exe</OutputType>
     <Platforms>x64</Platforms>
+    <OutputPath>$(SolutionDir)Build/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
