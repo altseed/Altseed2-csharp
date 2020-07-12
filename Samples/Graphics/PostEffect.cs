@@ -53,7 +53,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             _Material.SetTexture("mainTex", src);
 
             // マテリアルを適用します。
-            RenderToRenderTarget(_Material);
+            Engine.Graphics.CommandList.RenderToRenderTarget(_Material);
         }
     }
 

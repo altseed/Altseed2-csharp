@@ -56,7 +56,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 count = (count + 1) % 200;
                 material.SetVector4F("time", new Vector4F(count / 200.0f, 0.0f, 0.0f, 0.0f));
 
-                RenderToRenderTarget(material);
+                Engine.Graphics.CommandList.RenderToRenderTarget(material);
             }
         }
 

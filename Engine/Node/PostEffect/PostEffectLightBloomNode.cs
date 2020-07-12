@@ -121,7 +121,10 @@ namespace Altseed2
                 _TextureMixer.SetTexture("mainTex2", downTexture[i]);
                 _TextureMixer.SetVector4F("weight", new Vector4F(weight, weight, weight, weight));
 
-                if (i == downSampleCount - 1) RenderToRenderTarget(_TextureMixer);
+                if (i == downSampleCount - 1)
+                {
+                    Engine.Graphics.CommandList.RenderToRenderTarget(_TextureMixer);
+                }
                 else
                 {
                     Engine.Graphics.CommandList.RenderToRenderTexture(_TextureMixer, outBuffer, renderParameter);

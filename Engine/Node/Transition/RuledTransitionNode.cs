@@ -175,7 +175,7 @@ namespace Altseed2
             }
 
             _Material.SetTexture("_MainTex", src);
-            RenderToRenderTarget(_Material);
+            Engine.Graphics.CommandList.RenderToRenderTarget(_Material);
         }
     }
 }

@@ -78,16 +78,6 @@ namespace Altseed2
 
         protected abstract void Draw(RenderTexture src);
 
-        protected void RenderToRenderTarget(Material material)
-        {
-            Engine.Graphics.CommandList.RenderToRenderTarget(material);
-        }
-
-        protected void RenderToRenderTexture(Material material, RenderTexture texture)
-        {
-            Engine.Graphics.CommandList.RenderToRenderTexture(material, texture, new RenderPassParameter(new Color(50, 50, 50), true, true));// TODO: 適切な値を設定できるようにする
-        }
-
         #region Node
 
         internal override void Registered()
