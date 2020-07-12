@@ -38,7 +38,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var file1 = Altseed2.StaticFile.CreateStrict("../../Core/TestData/IO/test.txt");
+            var file1 = Altseed2.StaticFile.CreateStrict("../Core/TestData/IO/test.txt");
 
             const string path = "Serialization/StaticFile.bin";
 
@@ -65,7 +65,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var file1 = Altseed2.StreamFile.CreateStrict("../../Core/TestData/IO/test.txt");
+            var file1 = Altseed2.StreamFile.CreateStrict("../Core/TestData/IO/test.txt");
 
             const string path = "Serialization/StreamFile.bin";
             file1.Read(3);
@@ -134,7 +134,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font1 = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50);
+            var font1 = Font.LoadDynamicFontStrict("../Core/TestData/Font/mplus-1m-regular.ttf", 50);
 
             Assert.NotNull(font1);
 
@@ -181,7 +181,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            Assert.True(Font.GenerateFontFile("../../Core/TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
+            Assert.True(Font.GenerateFontFile("../Core/TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
             var font1 = Font.LoadStaticFontStrict("test.a2f");
 
             Assert.NotNull(font1);
@@ -230,7 +230,7 @@ namespace Altseed2.Test
 
             tc.Init();
 
-            var texture1 = Altseed2.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture1 = Altseed2.Texture2D.LoadStrict(@"../Core/TestData/IO/AltseedPink.png");
 
             Assert.NotNull(texture1);
 
@@ -302,7 +302,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var sound1 = Altseed2.Sound.LoadStrict(@"../../Core/TestData/Sound/se1.wav", true);
+            var sound1 = Altseed2.Sound.LoadStrict(@"../Core/TestData/Sound/se1.wav", true);
 
             Assert.NotNull(sound1);
 
@@ -482,7 +482,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed2.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Altseed2.Texture2D.LoadStrict(@"../Core/TestData/IO/AltseedPink.png");
 
             Assert.NotNull(texture);
 
@@ -518,7 +518,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 50);
+            var font = Font.LoadDynamicFontStrict("../Core/TestData/Font/mplus-1m-regular.ttf", 50);
 
             Assert.NotNull(font);
 
@@ -557,7 +557,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed2.Texture2D.LoadStrict(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Altseed2.Texture2D.LoadStrict(@"../Core/TestData/IO/AltseedPink.png");
             var array = new Vector2F[]
             {
                 new Vector2F(100, 100),

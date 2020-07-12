@@ -16,8 +16,8 @@ namespace Altseed2.Test
 
         //    var count = 0;
 
-        //    var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
-        //    var t2 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.jpg");
+        //    var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+        //    var t2 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.jpg");
 
         //    Assert.NotNull(t1);
         //    Assert.NotNull(t2);
@@ -74,7 +74,7 @@ namespace Altseed2.Test
 
         //    var count = 0;
 
-        //    var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+        //    var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
 
         //    Assert.NotNull(t1);
 
@@ -110,7 +110,7 @@ namespace Altseed2.Test
 
         //    var count = 0;
 
-        //    var t1 = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+        //    var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
 
         //    Assert.NotNull(t1);
 
@@ -158,12 +158,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
-            var font2 = Font.LoadDynamicFont("../../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font2 = Font.LoadDynamicFont("../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
-            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png"));
+            imageFont.AddImageGlyph('〇', Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png"));
 
             List<RenderedText> texts = new List<RenderedText>();
 

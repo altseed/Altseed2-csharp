@@ -15,7 +15,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
@@ -39,7 +39,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
@@ -64,7 +64,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var cursor = Cursor.Create("../../Core/TestData/IO/AltseedPink.png", new Vector2I(16, 16));
+            var cursor = Cursor.Create("../Core/TestData/IO/AltseedPink.png", new Vector2I(16, 16));
             Assert.NotNull(cursor);
             if (cursor != null)
             {
@@ -81,7 +81,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
@@ -105,34 +105,37 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
             node.Font = font;
 
             Engine.AddNode(node);
-                tc.LoopBody(c =>
+            tc.LoopBody(c =>
+            {
+                var text = "";
+                for (int i = 0; i < Engine.Joystick.MaxCount; i++)
                 {
-                    var text = "";
-                    for (int i = 0; i < Engine.Joystick.MaxCount; i++)
-                    {
-                        var info = Engine.Joystick.GetJoystickInfo(i);
-                        if(info == null) continue;
+                    var info = Engine.Joystick.GetJoystickInfo(i);
+                    if (info == null) continue;
 
-                        if (info.IsGamepad) {
-                            var name = info.GamepadName;
-                            var state = Engine.Joystick.GetButtonState(i, JoystickButtonType.DPadUp);
-                            text += $"{name}: LeftUp = {state}\n";
-                        } else {
-                            var name = info.Name;
-                            var state = Engine.Joystick.GetButtonState(i, 0);
-                            text += $"{name}: Button 0 = {state}\n";
-                        }
+                    if (info.IsGamepad)
+                    {
+                        var name = info.GamepadName;
+                        var state = Engine.Joystick.GetButtonState(i, JoystickButtonType.DPadUp);
+                        text += $"{name}: LeftUp = {state}\n";
                     }
-                    node.Text = text;
+                    else
+                    {
+                        var name = info.Name;
+                        var state = Engine.Joystick.GetButtonState(i, 0);
+                        text += $"{name}: Button 0 = {state}\n";
+                    }
                 }
-                , null);
+                node.Text = text;
+            }
+            , null);
             tc.End();
         }
     }

@@ -20,12 +20,12 @@ namespace Altseed2.Test
             System.IO.Directory.CreateDirectory("tmp");
             foreach (var i in Enumerable.Range(0, 1000))
             {
-                System.IO.File.Copy("../../Core/TestData/IO/test.txt", "tmp/test" + i + ".txt");
+                System.IO.File.Copy("../Core/TestData/IO/test.txt", "tmp/test" + i + ".txt");
             }
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode() { Font = font, Text = "" };
@@ -63,12 +63,12 @@ namespace Altseed2.Test
             System.IO.Directory.CreateDirectory("tmp");
             foreach (var i in Enumerable.Range(0, 100))
             {
-                System.IO.File.Copy("../../Core/TestData/IO/AltseedPink.png", "tmp/test" + i + ".png");
+                System.IO.File.Copy("../Core/TestData/IO/AltseedPink.png", "tmp/test" + i + ".png");
             }
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode() { Font = font, Text = "", CameraGroup = 1 << 0 };
