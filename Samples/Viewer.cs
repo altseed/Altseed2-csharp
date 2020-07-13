@@ -19,6 +19,8 @@ namespace Sample
         {
             Samples = new List<Sample>();
             Samples.Add(new Sample("Sprite", "SpriteNode を使ってテクスチャを描画します。", typeof(Sprite)));
+            Samples.Add(new Sample("Text", "TextNode を使って文字列を描画します。", typeof(TextSample)));
+            Samples.Add(new Sample("ImageGlyph", "ImageGlyph を使って絵文字を描画します。", typeof(ImageTextSample)));
             Samples.Add(new Sample("Camera", "CameraNode を使って描画対象を設定して描画します。", typeof(Camera)));
             Samples.Add(new Sample("RenderTexture", "描画結果を再利用します。", typeof(Camera_RenderTexture)));
             Samples.Add(new Sample("SE", "効果音を再生します。", typeof(SoundSE)));
