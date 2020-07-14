@@ -79,7 +79,7 @@ namespace Altseed2
                 UpdateTransform();
                 SetAnchorMargin();
 
-                TransformNodeInfo.UpdatePivot();
+                TransformNodeInfo?.UpdatePivot();
             }
         }
         private Vector2F _Pivot = new Vector2F();
