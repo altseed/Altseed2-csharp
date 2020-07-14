@@ -175,7 +175,7 @@ namespace Altseed2
                             if (Array.BinarySearch(cullingIds, node.CullingId) < 0) continue;
 
                             node.Draw();
-
+                            node.DrawTransformInfo();
                         }
                     }
 
@@ -229,7 +229,7 @@ namespace Altseed2
                                     if (Array.BinarySearch(cullingIds, node.CullingId) < 0) continue;
 
                                     node.Draw();
-
+                                    node.DrawTransformInfo();
                                 }
                             }
 
@@ -511,6 +511,8 @@ namespace Altseed2
         /// ウィンドウのサイズを取得する
         /// </summary>
         public static Vector2I WindowSize => Window.Size;
+
+        internal static Configuration Config => _Config;
 
         /// <summary>
         /// ウインドウのタイトルを取得または設定します。

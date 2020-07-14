@@ -78,6 +78,8 @@ namespace Altseed2
                 _Pivot = value;
                 UpdateTransform();
                 SetAnchorMargin();
+
+                TransformNodeInfo.UpdatePivot();
             }
         }
         private Vector2F _Pivot = new Vector2F();
@@ -130,6 +132,8 @@ namespace Altseed2
                     descendant.UpdatePosition();
                     descendant.UpdateTransform();
                 }
+
+                TransformNodeInfo?.UpdateSize();
             }
         }
         private Vector2F _Size = new Vector2F(0f, 0f);
@@ -211,6 +215,17 @@ namespace Altseed2
         }
         private bool _VerticalFlip = false;
 
+        protected TransformNode()
+        {
+            if (Engine.Config.VisibleTransformInfo)
+                TransformNodeInfo = new TransformNodeInfo(this);
+        }
+
+        /// <summary>
+        /// 変形に関する情報
+        /// </summary>
+        TransformNodeInfo TransformNodeInfo { get; }
+
         /// <summary>
         /// <see cref="Transform"/>を更新する
         /// </summary>
@@ -231,6 +246,22 @@ namespace Altseed2
             Size = default;
         }
 
+        /// <summary>
+        /// 自動的に<see cref="AdjustSize"/>を実行するか否か
+        /// </summary>
+        public bool IsAutoAdjustSize
+        {
+            get => _IsAutoAdjustSize;
+            set
+            {
+                if (_IsAutoAdjustSize == value) return;
+                _IsAutoAdjustSize = value;
+
+                if (_IsAutoAdjustSize) AdjustSize();
+            }
+        }
+        private bool _IsAutoAdjustSize = false;
+
         internal abstract void UpdateInheritedTransform();
 
         internal Matrix44F CalcInheritedTransform()
@@ -242,6 +273,11 @@ namespace Altseed2
                     mat = t.Transform * mat;
             }
             return mat;
+        }
+
+        internal void DrawTransformInfo()
+        {
+            TransformNodeInfo?.Draw();
         }
 
         private void SetAnchorMargin()
@@ -263,6 +299,8 @@ namespace Altseed2
                 _Size.X = old.X;
             if (AnchorMax.Y == AnchorMin.Y)
                 _Size.Y = old.Y;
+
+            TransformNodeInfo?.UpdateSize();
         }
 
         private Vector2F GetAnchorDistance()
