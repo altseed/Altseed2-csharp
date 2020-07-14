@@ -48,6 +48,8 @@ namespace Altseed2
             {
                 if (renderedSprite.Src == value) return;
                 renderedSprite.Src = value;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 

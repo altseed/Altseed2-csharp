@@ -62,6 +62,8 @@ namespace Altseed2
             {
                 if (renderedText.Text == value) return;
                 renderedText.Text = value;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 
@@ -75,6 +77,8 @@ namespace Altseed2
             {
                 if (renderedText.Font == value) return;
                 renderedText.Font = value;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 
@@ -127,6 +131,8 @@ namespace Altseed2
             {
                 if (renderedText.CharacterSpace == value) return;
                 renderedText.CharacterSpace = value;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 
@@ -142,6 +148,8 @@ namespace Altseed2
                 if (_LineGap == value) return;
                 _LineGap = value;
                 renderedText.LineGap = value ?? Font?.LineGap ?? 0;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
         private float? _LineGap = null;
@@ -182,6 +190,8 @@ namespace Altseed2
             {
                 if (renderedText.IsEnableKerning == value) return;
                 renderedText.IsEnableKerning = value;
+                
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 
@@ -195,6 +205,8 @@ namespace Altseed2
             {
                 if (renderedText.WritingDirection == value) return;
                 renderedText.WritingDirection = value;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 

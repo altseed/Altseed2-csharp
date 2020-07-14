@@ -274,6 +274,31 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void PolygonNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            PolygonNode node = new PolygonNode()
+            {
+                IsAutoAdjustSize = true,
+                Position = new Vector2F(250, 250)
+            };
+            Engine.AddNode(node);
+
+            node.SetVertexes(new[] {
+                new Vector2F(-100 , -100),
+                new Vector2F(100, -100),
+                new Vector2F(100, 100),
+                new Vector2F(-100, 100),
+            }, new Color(255, 0, 0));
+
+            tc.LoopBody(c => { }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void Pivot()
         {
             var tc = new TestCore();
@@ -299,7 +324,7 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void Anchor()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 30);
@@ -349,6 +374,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
+            tc.Duration = 1000;
             tc.LoopBody(c =>
             {
                 if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) rectSize.X += 1.5f;
@@ -378,7 +404,7 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void ArcNode()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var arc1 = new ArcNode()
@@ -387,6 +413,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(100, 100),
                 Radius = 50f,
                 VertNum = 30,
+                IsAutoAdjustSize = true,
             };
             var arc2 = new ArcNode()
             {
@@ -394,6 +421,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(400, 200),
                 Radius = 30f,
                 VertNum = 8,
+                IsAutoAdjustSize = true,
             };
             var arc3 = new ArcNode()
             {
@@ -401,6 +429,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(50, 400),
                 Radius = 40f,
                 VertNum = 5,
+                IsAutoAdjustSize = true,
             };
             Engine.AddNode(arc1);
             Engine.AddNode(arc2);
@@ -422,7 +451,7 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void CircleNode()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var circle1 = new CircleNode()
@@ -430,21 +459,24 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Color = new Color(255, 0, 0),
                 Position = new Vector2F(100, 100),
                 Radius = 50f,
-                VertNum = 30
+                VertNum = 30,
+                IsAutoAdjustSize = true,
             };
             var circle2 = new CircleNode()
             {
                 Color = new Color(0, 255, 0),
                 Position = new Vector2F(400, 200),
                 Radius = 30f,
-                VertNum = 8
+                VertNum = 8,
+                IsAutoAdjustSize = true,
             };
             var circle3 = new CircleNode()
             {
                 Color = new Color(0, 0, 255),
                 Position = new Vector2F(50, 400),
                 Radius = 40f,
-                VertNum = 5
+                VertNum = 5,
+                IsAutoAdjustSize = true,
             };
             Engine.AddNode(circle1);
             Engine.AddNode(circle2);
@@ -458,7 +490,7 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void LineNode()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var line1 = new LineNode()
@@ -466,21 +498,24 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Color = new Color(255, 0, 0),
                 Point1 = new Vector2F(100f, 100f),
                 Point2 = new Vector2F(200f, 200f),
-                Thickness = 10f
+                Thickness = 10f,
+                IsAutoAdjustSize = true
             };
             var line2 = new LineNode()
             {
                 Color = new Color(0, 255, 0),
                 Point1 = new Vector2F(50f, 450f),
                 Point2 = new Vector2F(600f, 50f),
-                Thickness = 5.0f
+                Thickness = 5.0f,
+                IsAutoAdjustSize = true,
             };
             var line3 = new LineNode()
             {
                 Color = new Color(0, 0, 255),
                 Point1 = new Vector2F(100f, 150f),
                 Point2 = new Vector2F(100f, 350f),
-                Thickness = 15.0f
+                Thickness = 15.0f,
+                IsAutoAdjustSize = true
             };
             Engine.AddNode(line1);
             Engine.AddNode(line2);
@@ -494,34 +529,39 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void RectangleNode()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var rectangle1 = new RectangleNode()
             {
                 Color = new Color(255, 0, 0),
-                // Center = new Vector2F(25f, 25f),
                 Position = new Vector2F(100f, 100f),
-                Size = new Vector2F(50f, 50f)
+                Pivot = new Vector2F(0.5f, 0.5f),
+                RectangleSize = new Vector2F(50f, 50f),
+                IsAutoAdjustSize = true,
             };
             var rectangle2 = new RectangleNode()
             {
                 Color = new Color(0, 255, 0),
-                // Center = new Vector2F(100f, 50f),
                 Position = new Vector2F(400f, 200f),
-                Size = new Vector2F(200f, 100f)
+                RectangleSize = new Vector2F(200f, 100f),
+                IsAutoAdjustSize = true,
             };
             var rectangle3 = new RectangleNode()
             {
                 Color = new Color(0, 0, 255),
                 Position = new Vector2F(200f, 300f),
-                Size = new Vector2F(100f, 150f)
+                RectangleSize = new Vector2F(100f, 150f),
+                IsAutoAdjustSize = true,
             };
             Engine.AddNode(rectangle1);
             Engine.AddNode(rectangle2);
             Engine.AddNode(rectangle3);
 
-            tc.LoopBody(null, null);
+            tc.LoopBody((c) =>
+            {
+                rectangle1.RectangleSize += new Vector2F(1, 1);
+            }, null);
 
             tc.End();
         }
@@ -529,7 +569,7 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void TriangleNode()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var triangle = new TriangleNode()
@@ -538,10 +578,16 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Point1 = new Vector2F(100f, 100f),
                 Point2 = new Vector2F(200f, 200f),
                 Point3 = new Vector2F(100f, 200f),
+                Position = new Vector2F(100, 100),
+                Pivot = new Vector2F(0.5f, 0.1f),
+                IsAutoAdjustSize = true,
             };
             Engine.AddNode(triangle);
 
-            tc.LoopBody(null, null);
+            tc.LoopBody((c) =>
+            {
+                triangle.Point2 += new Vector2F(1, 1);
+            }, null);
 
             tc.End();
         }
@@ -557,7 +603,8 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Color = new Color(255, 0, 0),
                 Point1 = new Vector2F(2000f, 0f),
                 Point2 = new Vector2F(2000f, 1000f),
-                Thickness = 10f
+                Thickness = 10f,
+                IsAutoAdjustSize = true,
             };
 
             Engine.AddNode(line1);

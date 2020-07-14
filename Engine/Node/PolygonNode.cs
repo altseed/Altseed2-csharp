@@ -68,6 +68,8 @@ namespace Altseed2
                 var vertexArray = VertexArray.Create(value.Length);
                 vertexArray.FromArray(value);
                 renderedPolygon.Vertexes = vertexArray;
+
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
 
@@ -155,6 +157,8 @@ namespace Altseed2
             var vertexArray = VertexArray.Create(array.Length);
             vertexArray.FromArray(array);
             renderedPolygon.Vertexes = vertexArray;
+
+            if (IsAutoAdjustSize) AdjustSize();
         }
 
         /// <summary>
@@ -184,25 +188,31 @@ namespace Altseed2
             vertexArray.FromArray(array);
             renderedPolygon.CreateVertexesByVector2F(vertexArray);
             renderedPolygon.OverwriteVertexesColor(color);
+
+            if (IsAutoAdjustSize) AdjustSize();
         }
 
         internal override void UpdateInheritedTransform()
         {
+            var array = renderedPolygon.Vertexes;
+            MathHelper.GetMinMax(out var min, out var max, array);
+            var size = max - min;
+
             var mat = new Matrix44F();
             switch (Mode)
             {
                 case DrawMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / Src.Size);
+                    mat = Matrix44F.GetScale2D(Size / size);
                     break;
                 case DrawMode.KeepAspect:
                     var scale = Size;
 
-                    if (Size.X / Size.Y > Src.Size.X / Src.Size.Y)
-                        scale.X = Src.Size.X * Size.Y / Src.Size.Y;
+                    if (Size.X / Size.Y > size.X / size.Y)
+                        scale.X = size.X * Size.Y / size.Y;
                     else
-                        scale.Y = Src.Size.Y * Size.X / Src.Size.X;
+                        scale.Y = size.Y * Size.X / size.X;
 
-                    scale /= Src.Size;
+                    scale /= size;
 
                     mat = Matrix44F.GetScale2D(scale);
                     break;
@@ -212,6 +222,7 @@ namespace Altseed2
                 default:
                     break;
             }
+            mat *= Matrix44F.GetTranslation2D(-min);
 
             renderedPolygon.Transform = CalcInheritedTransform() * mat;
         }

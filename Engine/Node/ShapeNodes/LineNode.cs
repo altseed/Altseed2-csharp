@@ -8,11 +8,10 @@ namespace Altseed2
     [Serializable]
     public class LineNode : DrawnNode
     {
-        private bool changed = false;
         private readonly RenderedPolygon renderedPolygon;
 
         public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
-        
+
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
@@ -36,6 +35,21 @@ namespace Altseed2
         public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
 
         /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Absolute;
+
+        /// <summary>
         /// 描画の始点を取得または設定します。
         /// </summary>
         public Vector2F Point1
@@ -45,7 +59,8 @@ namespace Altseed2
             {
                 if (_point1 == value) return;
                 _point1 = value;
-                changed = true;
+                UpdateVertexes();
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
         private Vector2F _point1;
@@ -60,7 +75,8 @@ namespace Altseed2
             {
                 if (_point2 == value) return;
                 _point2 = value;
-                changed = true;
+                UpdateVertexes();
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
         private Vector2F _point2;
@@ -75,10 +91,18 @@ namespace Altseed2
             {
                 if (_thickness == value) return;
                 _thickness = value;
-                changed = true;
+                UpdateVertexes();
+                if (IsAutoAdjustSize) AdjustSize();
             }
         }
         private float _thickness;
+
+        public override void AdjustSize()
+        {
+            var array = renderedPolygon.Vertexes;
+            MathHelper.GetMinMax(out var min, out var max, array);
+            Size = max - min;
+        }
 
         /// <summary>
         /// <see cref="LineNode"/>の新しいインスタンスを生成する
@@ -89,23 +113,41 @@ namespace Altseed2
             renderedPolygon.Vertexes = VertexArray.Create(4);
         }
 
-        public override void AdjustSize()
-        {
-            MathHelper.GetMinMax(out var min, out var max, renderedPolygon.Vertexes);
-            Size = max - min;
-        }
-
         internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         internal override void UpdateInheritedTransform()
         {
-            if (changed)
-            {
-                UpdateVertexes();
-                changed = false;
-            }
+            var array = renderedPolygon.Vertexes;
+            MathHelper.GetMinMax(out var min, out var max, array);
+            var size = max - min;
 
-            renderedPolygon.Transform = CalcInheritedTransform();
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > size.X / size.Y)
+                        scale.X = size.X * Size.Y / size.Y;
+                    else
+                        scale.Y = size.Y * Size.X / size.X;
+
+                    scale /= size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+            mat *= Matrix44F.GetTranslation2D(-min);
+
+            renderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -125,10 +167,6 @@ namespace Altseed2
             positions[1] = _point1 + y;
             positions[2] = _point1 + x + y;
             positions[3] = _point1 + x - y;
-
-            MathHelper.GetMinMax(out var min, out var max, positions);
-            for (int i = 0; i < 4; i++) positions[i] -= min;
-            Size = max - min;
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);

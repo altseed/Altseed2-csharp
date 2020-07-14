@@ -31,18 +31,19 @@ namespace Altseed2
         private Color _color = new Color(255, 255, 255);
 
         /// <summary>
-        /// サイズを取得または設定します。
+        /// 短形のサイズを取得または設定します。
         /// </summary>
-        public override Vector2F Size
+        public Vector2F RectangleSize
         {
-            get => base.Size;
+            get => _RectangleSize;
             set
             {
-                if (base.Size == value) return;
-                base.Size = value;
+                if (_RectangleSize == value) return;
+                _RectangleSize = value;
                 changed = true;
             }
         }
+        private Vector2F _RectangleSize = new Vector2F();
 
         /// <summary>
         /// 使用するマテリアルを取得または設定します。
@@ -64,6 +65,26 @@ namespace Altseed2
         }
 
         /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Absolute;
+
+        public override void AdjustSize()
+        {
+            Size = RectangleSize;
+        }
+
+        /// <summary>
         /// <see cref="RectangleNode"/>の新しいインスタンスを生成する
         /// </summary>
         public RectangleNode()
@@ -71,8 +92,6 @@ namespace Altseed2
             renderedPolygon = RenderedPolygon.Create();
             renderedPolygon.Vertexes = VertexArray.Create(4);
         }
-
-        public override void AdjustSize() { }
 
         internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
@@ -83,20 +102,53 @@ namespace Altseed2
                 UpdateVertexes();
                 changed = false;
             }
-            renderedPolygon.Transform = CalcInheritedTransform();
+
+            var array = renderedPolygon.Vertexes;
+            MathHelper.GetMinMax(out var min, out var max, array);
+            var size = max - min;
+
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > size.X / size.Y)
+                        scale.X = size.X * Size.Y / size.Y;
+                    else
+                        scale.Y = size.Y * Size.X / size.X;
+
+                    scale /= size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+            mat *= Matrix44F.GetTranslation2D(-min);
+
+            renderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
         {
             var positions = new Vector2F[4];
             positions[0] = new Vector2F(0.0f, 0.0f);
-            positions[1] = new Vector2F(0.0f, Size.Y);
-            positions[2] = new Vector2F(Size.X, Size.Y);
-            positions[3] = new Vector2F(Size.X, 0.0f);
+            positions[1] = new Vector2F(0.0f, RectangleSize.Y);
+            positions[2] = new Vector2F(RectangleSize.X, RectangleSize.Y);
+            positions[3] = new Vector2F(RectangleSize.X, 0.0f);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
             renderedPolygon.OverwriteVertexesColor(_color);
+         
+            if (IsAutoAdjustSize) AdjustSize();
         }
     }
 }

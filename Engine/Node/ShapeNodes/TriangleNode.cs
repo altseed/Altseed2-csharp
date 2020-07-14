@@ -81,18 +81,40 @@ namespace Altseed2
         public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
 
         /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Absolute;
+
+        public override void AdjustSize()
+        {
+            var array = new Vector2F[3]
+            {
+                Point1,
+                Point2,
+                Point3
+            };
+
+            MathHelper.GetMinMax(out var min, out var max, array);
+            Size = max - min;
+        }
+
+        /// <summary>
         /// <see cref="TriangleNode"/>の新しいインスタンスを生成する
         /// </summary>
         public TriangleNode()
         {
             renderedPolygon = RenderedPolygon.Create();
             renderedPolygon.Vertexes = VertexArray.Create(3);
-        }
-
-        public override void AdjustSize()
-        {
-            MathHelper.GetMinMax(out var min, out var max, renderedPolygon.Vertexes);
-            Size = max - min;
         }
 
         internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
@@ -102,9 +124,41 @@ namespace Altseed2
             if (changed)
             {
                 UpdateVertexes();
+                if (IsAutoAdjustSize) AdjustSize();
                 changed = false;
             }
-            renderedPolygon.Transform = CalcInheritedTransform();
+
+            var array = renderedPolygon.Vertexes;
+            MathHelper.GetMinMax(out var min, out var max, array);
+            var size = max - min;
+
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > size.X / size.Y)
+                        scale.X = size.X * Size.Y / size.Y;
+                    else
+                        scale.Y = size.Y * Size.X / size.X;
+
+                    scale /= size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+            mat *= Matrix44F.GetTranslation2D(-min);
+
+            renderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -113,10 +167,6 @@ namespace Altseed2
             positions[0] = _point1;
             positions[1] = _point2;
             positions[2] = _point3;
-
-            MathHelper.GetMinMax(out var min, out var max, positions);
-            for (int i = 0; i < 3; i++) positions[i] -= min;
-            Size = max - min;
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
