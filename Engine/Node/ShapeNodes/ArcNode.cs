@@ -72,7 +72,7 @@ namespace Altseed2
 
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。
-        /// </summary
+        /// </summary>
         public float StartDegree
         {
             get => _startdegree;
@@ -114,6 +114,21 @@ namespace Altseed2
             }
         }
         private int _vertnum = 3;
+
+        /// <summary>
+        /// 描画モードを取得または設定します。
+        /// </summary>
+        public DrawMode Mode
+        {
+            get => _Mode;
+            set
+            {
+                if (_Mode == value) return;
+
+                _Mode = value;
+            }
+        }
+        private DrawMode _Mode = DrawMode.Absolute;
 
         /// <summary>
         /// <see cref="ArcNode"/>の新しいインスタンスを生成する
@@ -171,7 +186,37 @@ namespace Altseed2
                 UpdateVertexes();
                 changed = false;
             }
-            renderedPolygon.Transform = CalcInheritedTransform();
+
+            var array = renderedPolygon.Vertexes;
+            MathHelper.GetMinMax(out var min, out var max, array);
+            var size = max - min;
+
+            var mat = new Matrix44F();
+            switch (Mode)
+            {
+                case DrawMode.Fill:
+                    mat = Matrix44F.GetScale2D(Size / size);
+                    break;
+                case DrawMode.KeepAspect:
+                    var scale = Size;
+
+                    if (Size.X / Size.Y > size.X / size.Y)
+                        scale.X = size.X * Size.Y / size.Y;
+                    else
+                        scale.Y = size.Y * Size.X / size.X;
+
+                    scale /= size;
+
+                    mat = Matrix44F.GetScale2D(scale);
+                    break;
+                case DrawMode.Absolute:
+                    mat = Matrix44F.Identity;
+                    break;
+                default:
+                    break;
+            }
+
+            renderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -204,6 +249,8 @@ namespace Altseed2
             array.FromArray(positions);
             renderedPolygon.CreateVertexesByVector2F(array);
             renderedPolygon.OverwriteVertexesColor(_color);
+
+            if (IsAutoAdjustSize) AdjustSize();
         }
     }
 }
