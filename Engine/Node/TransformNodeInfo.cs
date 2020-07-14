@@ -72,7 +72,7 @@ namespace Altseed2
 
         internal void UpdatePivot()
         {
-            var pos = TransformNode.Size * TransformNode.Pivot;
+            var pos = TransformNode.CenterPosition;
             var points = new Vector2F[4];
             points[0] = pos + new Vector2F(-3, -3);
             points[1] = pos + new Vector2F(3, -3);

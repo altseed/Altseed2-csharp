@@ -71,32 +71,28 @@ namespace Altseed2
         /// </summary>
         public virtual Vector2F Pivot
         {
-            get => _Pivot;
-            set
-            {
-                if (_Pivot == value) return;
-                _Pivot = value;
-                UpdateTransform();
-                SetAnchorMargin();
-
-                TransformNodeInfo?.UpdatePivot();
-            }
+            get => _CenterPosition / Size;
+            set => CenterPosition = value * Size;
         }
-        private Vector2F _Pivot = new Vector2F();
 
         /// <summary>
         /// 回転の中心となる座標をピクセル単位で取得または設定します。
         /// </summary>
         public virtual Vector2F CenterPosition
         {
-            get => Pivot * Size;
+            get => _CenterPosition;
             set
             {
-                if (Size.X == 0 || Size.Y == 0)
-                    return;
-                Pivot = value / Size;
+                if (_CenterPosition == value) return;
+                _CenterPosition = value;
+
+                UpdateTransform();
+                SetAnchorMargin();
+
+                TransformNodeInfo?.UpdatePivot();
             }
         }
+        private Vector2F _CenterPosition;
 
         /// <summary>
         /// 拡大率を取得または設定します。
@@ -121,7 +117,8 @@ namespace Altseed2
             get => _Size;
             set
             {
-                if (value == _Size) return;
+                if (value == _Size || value.X == 0 || value.Y == 0) return;
+                _CenterPosition *= value / _Size;
                 _Size = value;
 
                 SetAnchorMargin();
@@ -134,9 +131,10 @@ namespace Altseed2
                 }
 
                 TransformNodeInfo?.UpdateSize();
+                TransformNodeInfo?.UpdatePivot();
             }
         }
-        private Vector2F _Size = new Vector2F(0f, 0f);
+        private Vector2F _Size = new Vector2F(1f, 1f);
 
         private Vector2F _LeftTop = new Vector2F(0f, 0f);
         private Vector2F _RightBottom = new Vector2F(0f, 0f);
@@ -235,7 +233,7 @@ namespace Altseed2
             var position = Position +
                 AnchorMin * (GetAncestorSpecificNode<TransformNode>()?.Size ?? new Vector2F());
 
-            Transform = MathHelper.CalcTransform(position, Pivot * Size, MathHelper.DegreeToRadian(Angle), scale);
+            Transform = MathHelper.CalcTransform(position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
         }
 
         /// <summary>
@@ -299,6 +297,7 @@ namespace Altseed2
                 _Size.X = old.X;
             if (AnchorMax.Y == AnchorMin.Y)
                 _Size.Y = old.Y;
+            _CenterPosition *= _Size / old;
 
             TransformNodeInfo?.UpdateSize();
         }

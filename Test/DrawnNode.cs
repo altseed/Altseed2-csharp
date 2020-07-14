@@ -324,7 +324,7 @@ float4 main(PS_INPUT input) : SV_TARGET
         [Test, Apartment(ApartmentState.STA)]
         public void Anchor()
         {
-            var tc = new TestCore();
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
             var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 30);
@@ -374,6 +374,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
+            tc.Duration = 1000;
             tc.LoopBody(c =>
             {
                 if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) rectSize.X += 1.5f;
