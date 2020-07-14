@@ -569,6 +569,26 @@ namespace Altseed2
     }
     
     /// <summary>
+    /// テクスチャをフィルタリングする方法を表します。
+    /// </summary>
+    [Serializable]
+    public enum TextureFilterType : int
+    {
+        Nearest,
+        Linear,
+    }
+    
+    /// <summary>
+    /// テクスチャをサンプリングする方法を表します。
+    /// </summary>
+    [Serializable]
+    public enum TextureWrapMode : int
+    {
+        Repeat,
+        Clamp,
+    }
+    
+    /// <summary>
     /// ツール機能の使用方法(描画位置)
     /// </summary>
     [Serializable]
@@ -4462,6 +4482,18 @@ namespace Altseed2
         
         
         [DllImport("Altseed2_Core")]
+        private static extern int cbg_TextureBase_GetWrapMode(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_TextureBase_SetWrapMode(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        private static extern int cbg_TextureBase_GetFilterType(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        private static extern void cbg_TextureBase_SetFilterType(IntPtr selfPtr, int value);
+        
+        
+        [DllImport("Altseed2_Core")]
         private static extern void cbg_TextureBase_Release(IntPtr selfPtr);
         
         #endregion
@@ -4484,6 +4516,50 @@ namespace Altseed2
         }
         
         /// <summary>
+        /// テクスチャをサンプリングする方法を取得または設定します。
+        /// </summary>
+        public TextureWrapMode WrapMode
+        {
+            get
+            {
+                if (_WrapMode != null)
+                {
+                    return _WrapMode.Value;
+                }
+                var ret = cbg_TextureBase_GetWrapMode(selfPtr);
+                return (TextureWrapMode)ret;
+            }
+            set
+            {
+                _WrapMode = value;
+                cbg_TextureBase_SetWrapMode(selfPtr, (int)value);
+            }
+        }
+        private TextureWrapMode? _WrapMode;
+        
+        /// <summary>
+        /// テクスチャをフィルタリングする方法を取得または設定します。
+        /// </summary>
+        public TextureFilterType FilterType
+        {
+            get
+            {
+                if (_FilterType != null)
+                {
+                    return _FilterType.Value;
+                }
+                var ret = cbg_TextureBase_GetFilterType(selfPtr);
+                return (TextureFilterType)ret;
+            }
+            set
+            {
+                _FilterType = value;
+                cbg_TextureBase_SetFilterType(selfPtr, (int)value);
+            }
+        }
+        private TextureFilterType? _FilterType;
+        
+        /// <summary>
         /// png画像として保存します
         /// </summary>
         /// <param name="path">保存先</param>
@@ -4501,6 +4577,8 @@ namespace Altseed2
         
         #region SerializeName
         private const string S_Size = "S_Size";
+        private const string S_WrapMode = "S_WrapMode";
+        private const string S_FilterType = "S_FilterType";
         #endregion
         
         private SerializationInfo seInfo;
@@ -4527,6 +4605,8 @@ namespace Altseed2
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_Size, Size);
+            info.AddValue(S_WrapMode, WrapMode);
+            info.AddValue(S_FilterType, FilterType);
             
             OnGetObjectData(info, context);
         }
@@ -4606,6 +4686,8 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingConcurrent(this, ptr);
             
+            WrapMode = seInfo.GetValue<TextureWrapMode>(S_WrapMode);
+            FilterType = seInfo.GetValue<TextureFilterType>(S_FilterType);
             
             OnDeserialize_Method(sender);
             
