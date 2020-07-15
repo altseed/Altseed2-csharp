@@ -584,8 +584,8 @@ namespace Altseed2
     [Serializable]
     public enum TextureWrapMode : int
     {
-        Repeat,
         Clamp,
+        Repeat,
     }
     
     /// <summary>
