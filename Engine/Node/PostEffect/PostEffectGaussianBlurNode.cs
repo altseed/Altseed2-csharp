@@ -52,12 +52,16 @@ namespace Altseed2
             Intensity = 5.0f;
         }
 
-        protected override void Draw(RenderTexture src)
+        protected override void Draw(RenderTexture src, Color clearColor)
         {
+            src.WrapMode = TextureWrapMode.Clamp;
+
             var buffer = GetBuffer(0, src.Size);
+            buffer.WrapMode = TextureWrapMode.Clamp;
+            buffer.FilterType = TextureFilterType.Linear;
 
             materialX.SetTexture("mainTex", src);
-            Engine.Graphics.CommandList.RenderToRenderTexture(materialX, buffer, new RenderPassParameter(Engine.ClearColor, true, true));
+            Engine.Graphics.CommandList.RenderToRenderTexture(materialX, buffer, new RenderPassParameter(clearColor, true, true));
 
             materialY.SetTexture("mainTex", buffer);
             Engine.Graphics.CommandList.RenderToRenderTarget(materialY);

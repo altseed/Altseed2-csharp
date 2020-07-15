@@ -165,7 +165,7 @@ namespace Altseed2
             _Material.SetShader(Shader.Create("Transition", _ShaderCode, ShaderStageType.Pixel));
         }
 
-        protected override void Draw(RenderTexture src)
+        protected override void Draw(RenderTexture src, Color clearColor)
         {
             if (UseCaptionAsMaskTexture && MaskTexture == null)
             {

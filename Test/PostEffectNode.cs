@@ -51,7 +51,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 material.SetShader(ps);
             }
 
-            protected override void Draw(RenderTexture src)
+            protected override void Draw(RenderTexture src, Color clearColor)
             {
                 material.SetTexture("mainTex", src);
                 count = (count + 1) % 200;

@@ -123,7 +123,7 @@ namespace Sample
         }
 
         // ポストエフェクトを適用する処理
-        protected override void Draw(RenderTexture src)
+        protected override void Draw(RenderTexture src, Color clearColor)
         {
             // マテリアルにテクスチャを渡します。
             Material.SetTexture("mainTex", src);
