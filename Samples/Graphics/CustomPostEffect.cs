@@ -79,7 +79,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 _Material.SetShader(shader);
             }
 
-            protected override void Draw(RenderTexture src)
+            protected override void Draw(RenderTexture src, Color clearColor)
             {
                 // マテリアルを入力画像を設定します。
                 _Material.SetTexture("mainTex", src);

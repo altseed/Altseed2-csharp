@@ -69,13 +69,21 @@ namespace Altseed2
             Exposure = 1;
         }
 
-        protected override void Draw(RenderTexture src)
-        {
-            var downSampleCount = 6;
-            var downTexture = new RenderTexture[downSampleCount];
-            for (int i = 0; i < downSampleCount; ++i) downTexture[i] = GetBuffer(0, src.Size / (int)Math.Pow(2, i));
+        private const int DownSampleCount = 6;
+        private readonly RenderTexture[] downTexture = new RenderTexture[DownSampleCount];
 
-            var renderParameter = new RenderPassParameter(new Color(), true, true);
+        protected override void Draw(RenderTexture src, Color clearColor)
+        {
+            src.WrapMode = TextureWrapMode.Clamp;
+
+            for (int i = 0; i < DownSampleCount; ++i)
+            {
+                downTexture[i] = GetBuffer(0, src.Size / (int)Math.Pow(2, i));
+                downTexture[i].WrapMode = TextureWrapMode.Clamp;
+                downTexture[i].FilterType = TextureFilterType.Linear;
+            }
+
+            var renderParameter = new RenderPassParameter(clearColor, true, true);
 
             // 高輝度抽出
             if (IsLuminanceMode)
@@ -90,7 +98,7 @@ namespace Altseed2
             }
 
             // ダウンサンプリング
-            for (int i = 1; i < downSampleCount; ++i)
+            for (int i = 1; i < DownSampleCount; ++i)
             {
                 _DownSampler.SetTexture("mainTex", downTexture[i - 1]);
                 _DownSampler.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
@@ -98,9 +106,11 @@ namespace Altseed2
             }
 
             // ガウスぼかし
-            for (int i = downSampleCount - 3; i < downSampleCount; ++i)
+            for (int i = DownSampleCount - 3; i < DownSampleCount; ++i)
             {
                 var tmpTexture = GetBuffer(1, downTexture[i].Size);
+                tmpTexture.WrapMode = TextureWrapMode.Clamp;
+                tmpTexture.FilterType = TextureFilterType.Linear;
 
                 _BlurXMaterial.SetTexture("mainTex", downTexture[i]);
                 _BlurXMaterial.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
@@ -115,13 +125,13 @@ namespace Altseed2
             var inBuffer = src;
             var outBuffer = GetBuffer(1, src.Size);
             var weight = 1.0f;
-            for (int i = downSampleCount - 3; i < downSampleCount; ++i)
+            for (int i = DownSampleCount - 3; i < DownSampleCount; ++i)
             {
                 _TextureMixer.SetTexture("mainTex1", inBuffer);
                 _TextureMixer.SetTexture("mainTex2", downTexture[i]);
                 _TextureMixer.SetVector4F("weight", new Vector4F(weight, weight, weight, weight));
 
-                if (i == downSampleCount - 1)
+                if (i == DownSampleCount - 1)
                 {
                     Engine.Graphics.CommandList.RenderToRenderTarget(_TextureMixer);
                 }
@@ -133,6 +143,8 @@ namespace Altseed2
 
                 weight *= 0.5f;
             }
+
+            Array.Clear(downTexture, 0, downTexture.Length);
         }
     }
 }

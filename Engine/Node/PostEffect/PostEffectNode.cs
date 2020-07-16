@@ -71,12 +71,15 @@ namespace Altseed2
 
         public PostEffectNode() { }
 
-        internal void CallDraw(RenderTexture src)
+        internal void CallDraw(RenderTexture src, Color clearColor)
         {
-            Draw(src);
+            // 変更されている可能性があるので初期化しておく。
+            src.WrapMode = TextureWrapMode.Repeat;
+            src.FilterType = TextureFilterType.Linear;
+            Draw(src, clearColor);
         }
 
-        protected abstract void Draw(RenderTexture src);
+        protected abstract void Draw(RenderTexture src, Color clearColor);
 
         #region Node
 

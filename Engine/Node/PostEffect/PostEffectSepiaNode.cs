@@ -13,7 +13,7 @@ namespace Altseed2
             material.SetShader(shader);
         }
 
-        protected override void Draw(RenderTexture src)
+        protected override void Draw(RenderTexture src, Color clearColor)
         {
             material.SetTexture("mainTex", src);
             Engine.Graphics.CommandList.RenderToRenderTarget(material);

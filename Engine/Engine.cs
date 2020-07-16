@@ -197,7 +197,7 @@ namespace Altseed2
                             }
 
                             Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), buffer);
-                            node.CallDraw(buffer);
+                            node.CallDraw(buffer, ClearColor);
                         }
                     }
                 }
@@ -252,7 +252,7 @@ namespace Altseed2
                                     }
 
                                     Graphics.CommandList.CopyTexture(target, buffer);
-                                    node.CallDraw(buffer);
+                                    node.CallDraw(buffer, camera.ClearColor);
                                 }
                             }
                         }
