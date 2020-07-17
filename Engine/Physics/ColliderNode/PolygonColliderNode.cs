@@ -108,7 +108,7 @@ namespace Altseed2
 
             internal override void UpdateInheritedTransform()
             {
-                RenderedPolygon.Transform = CalcInheritedTransform();
+                base.UpdateInheritedTransform();
 
                 if (currentVersion != owner.version)
                 {
