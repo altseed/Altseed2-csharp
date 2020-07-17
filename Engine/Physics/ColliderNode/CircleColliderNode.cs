@@ -38,7 +38,7 @@ namespace Altseed2
 
         internal const int VisualizerVertNum = 100;
 
-        private bool changed;
+        private int version;
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -57,7 +57,7 @@ namespace Altseed2
                 if (_radius == value) return;
                 _radius = value;
                 AdjustSize();
-                changed = true;
+                version++;
             }
         }
         private float _radius;
@@ -130,34 +130,53 @@ namespace Altseed2
                 ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
                 _ => 1.0f
             });
-
-            if (changed)
-            {
-                UpdateVisualizerPolygon();
-                changed = false;
-            }
         }
 
-        private protected override void UpdateVisualizerPolygon()
+        [Serializable]
+        internal sealed class CircleColliderVisualizeNode : ColliderVisualizeNode
         {
-            if (!TryGetVisualizePolygon(out var polygon)) return;
+            private readonly CircleColliderNode owner;
+            private int currentVersion;
 
-            const float deg = 360f / VisualizerVertNum;
-            var positions = new Vector2F[VisualizerVertNum];
-            var vec = new Vector2F(0.0f, -_radius);
-
-            var rad = new Vector2F(_radius, _radius);
-            for (int i = 0; i < VisualizerVertNum; i++)
+            internal CircleColliderVisualizeNode(CircleColliderNode owner)
             {
-                positions[i] = vec;
-                vec.Degree += deg;
-                positions[i] += rad;
+                this.owner = owner;
+                currentVersion = owner.version;
+
+                UpdatePolygon();
             }
 
-            var array = Vector2FArray.Create(positions.Length);
-            array.FromArray(positions);
-            polygon.CreateVertexesByVector2F(array);
-            polygon.OverwriteVertexesColor(AreaColor);
+            internal override void UpdatePolygon()
+            {
+                const float deg = 360f / VisualizerVertNum;
+                var positions = new Vector2F[VisualizerVertNum];
+                var radius = owner._radius;
+                var vec = new Vector2F(0.0f, -radius);
+
+                var rad = new Vector2F(radius, radius);
+                for (int i = 0; i < VisualizerVertNum; i++)
+                {
+                    positions[i] = vec;
+                    vec.Degree += deg;
+                    positions[i] += rad;
+                }
+
+                var array = Vector2FArray.Create(positions.Length);
+                array.FromArray(positions);
+                RenderedPolygon.CreateVertexesByVector2F(array);
+                RenderedPolygon.OverwriteVertexesColor(AreaColor);                
+            }
+
+            internal override void UpdateInheritedTransform()
+            {
+                RenderedPolygon.Transform = CalcInheritedTransform();
+
+                if (currentVersion != owner.version)
+                {
+                    UpdatePolygon();
+                    currentVersion = owner.version;
+                }
+            }
         }
     }
 }

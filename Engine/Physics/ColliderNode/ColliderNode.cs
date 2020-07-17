@@ -18,25 +18,10 @@ namespace Altseed2
         /// </summary>
         internal abstract Collider Collider { get; }
 
-        internal RenderedPolygon VisualizerPolygon
-        {
-            get
-            {
-                if (_visualizerPolygon == null)
-                {
-                    _visualizerPolygon = RenderedPolygon.Create();
-                    _visualizerPolygon.Transform = _absoluteTransform;
-                    UpdateVisualizerPolygon();
-                }
-                return _visualizerPolygon;
-            }
-        }
-        private RenderedPolygon _visualizerPolygon;
-
         /// <summary>
         /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        protected ColliderNode() { }
+        private protected ColliderNode() { }
 
         /// <summary>
         /// 指定した<see cref="ColliderNode"/>の当たり判定領域を表示するノードを生成する
@@ -47,7 +32,13 @@ namespace Altseed2
         public static ColliderVisualizeNode CreateVisualizeNode(ColliderNode colliderNode)
         {
             if (colliderNode == null) throw new ArgumentNullException(nameof(colliderNode), "引数がnullです");
-            return new ColliderVisualizeNode(colliderNode.VisualizerPolygon);
+            return colliderNode switch
+            {
+                CircleColliderNode c => new CircleColliderNode.CircleColliderVisualizeNode(c),
+                PolygonColliderNode p => new PolygonColliderNode.PolygonColliderVisualizeNode(p),
+                RectangleColliderNode r => new RectangleColliderNode.RectangleColliderVisualizeNode(r),
+                _ => throw new ArgumentException($"サポートされていない型です\n型：{colliderNode.GetType()}", nameof(colliderNode))
+            };
         }
 
         private static CollisionManagerNode SearchManagerFromChildren(Node node)
@@ -71,20 +62,11 @@ namespace Altseed2
             base.Removed();
         }
 
-        internal bool TryGetVisualizePolygon(out RenderedPolygon result)
-        {
-            result = _visualizerPolygon;
-            return _visualizerPolygon != null;
-        }
-
         internal abstract void UpdateCollider();
-
-        private protected abstract void UpdateVisualizerPolygon();
 
         internal override void UpdateInheritedTransform()
         {
             _absoluteTransform = CalcInheritedTransform();
-            if (_visualizerPolygon != null) _visualizerPolygon.Transform = _absoluteTransform;
         }
     }
 }

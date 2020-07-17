@@ -6,7 +6,7 @@ namespace Altseed2
     /// <see cref="ColliderNode"/>の当たり判定範囲として描画されるノードの基底クラス
     /// </summary>
     [Serializable]
-    public class ColliderVisualizeNode : DrawnNode
+    public abstract class ColliderVisualizeNode : DrawnNode
     {
         public override Matrix44F AbsoluteTransform => RenderedPolygon.Transform;
 
@@ -14,16 +14,13 @@ namespace Altseed2
 
         internal RenderedPolygon RenderedPolygon { get; } = RenderedPolygon.Create();
 
-        internal ColliderVisualizeNode(RenderedPolygon renderedPolygon)
-        {
-            RenderedPolygon = renderedPolygon;
-        }
+        private protected ColliderVisualizeNode() { }
 
         internal override void Draw()
         {
             Engine.Renderer.DrawPolygon(RenderedPolygon);
         }
 
-        internal override void UpdateInheritedTransform() { }
+        internal abstract void UpdatePolygon();
     }
 }
