@@ -16,6 +16,21 @@ namespace Altseed2
         internal RectangleCollider RectangleCollider { get; }
         internal override Collider Collider => RectangleCollider;
 
+        /// <summary>
+        /// 短形のサイズを取得または設定します。
+        /// </summary>
+        public Vector2F RectangleSize
+        {
+            get => _rectangleSize;
+            set
+            {
+                if (_rectangleSize == value) return;
+                _rectangleSize = value;
+                version++;
+            }
+        }
+        private Vector2F _rectangleSize;
+
         public override Vector2F Size
         {
             get => base.Size;
@@ -23,7 +38,8 @@ namespace Altseed2
             {
                 if (base.Size == value) return;
                 base.Size = value;
-                version++;
+
+                if (_rectangleSize.X != 0 && _rectangleSize.Y != 0) Scale = value / _rectangleSize;
             }
         }
 
@@ -44,10 +60,13 @@ namespace Altseed2
             MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            RectangleCollider.Size = Size * scale;
+            RectangleCollider.Size = _rectangleSize * scale;
         }
 
-        public override void AdjustSize() { }
+        public override void AdjustSize()
+        {
+            base.Size = _rectangleSize;
+        }
 
         internal override void UpdateCollider()
         {
@@ -56,7 +75,7 @@ namespace Altseed2
             MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            RectangleCollider.Size = Size * scale;
+            RectangleCollider.Size = _rectangleSize * scale;
         }
 
         [Serializable]
@@ -76,7 +95,7 @@ namespace Altseed2
             internal override void UpdatePolygon()
             {
                 var positions = new Vector2F[4];
-                var Size = owner.Size;
+                var Size = owner._rectangleSize;
 
                 positions[0] = new Vector2F(0.0f, 0.0f);
                 positions[1] = new Vector2F(0.0f, Size.Y);

@@ -276,7 +276,7 @@ namespace Altseed2.Test
             comparison.AdjustSize();
             var colliderNode = new RectangleColliderNode()
             {
-                Size = texture.Size
+                RectangleSize = texture.Size
             };
             colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
@@ -310,7 +310,7 @@ namespace Altseed2.Test
                 AdjustSize();
                 node = new RectangleColliderNode()
                 {
-                    Size = texture.Size
+                    RectangleSize = texture.Size
                 };
                 node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
                 AddChildNode(node);

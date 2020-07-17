@@ -33,7 +33,15 @@ namespace Altseed2
             /// <summary>
             /// X，Yの最大値で計算する
             /// </summary>
-            Max
+            Max,
+            /// <summary>
+            /// X，Yの絶対値の最小値で計算する
+            /// </summary>
+            AbsMin,
+            /// <summary>
+            /// X，Yの絶対値の最大値で計算する
+            /// </summary>
+            AbsMax
         }
 
         internal const int VisualizerVertNum = 100;
@@ -65,8 +73,8 @@ namespace Altseed2
         /// <summary>
         /// 拡大率の計算方法を取得または設定します。
         /// </summary>
-        /// <remarks>既定値：<see cref="ScaleCalcType.Max"/></remarks>
-        public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.Max;
+        /// <remarks>既定値：<see cref="ScaleCalcType.AbsMax"/></remarks>
+        public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.AbsMax;
 
         public override Vector2F Size
         {
@@ -102,8 +110,8 @@ namespace Altseed2
                 ScaleCalcType.X => scale.X,
                 ScaleCalcType.Y => scale.Y,
                 ScaleCalcType.Length => scale.Length,
-                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
-                ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
+                ScaleCalcType.AbsMin => Math.Min(scale.X, scale.Y),
+                ScaleCalcType.AbsMax => Math.Max(scale.X, scale.Y),
                 _ => 1.0f
             });
         }
@@ -111,7 +119,7 @@ namespace Altseed2
         public override void AdjustSize()
         {
             var length = Radius * 2;
-            Size = new Vector2F(length, length);
+            base.Size = new Vector2F(length, length);
         }
 
         internal override void UpdateCollider()
@@ -126,8 +134,10 @@ namespace Altseed2
                 ScaleCalcType.X => scale.X,
                 ScaleCalcType.Y => scale.Y,
                 ScaleCalcType.Length => scale.Length,
-                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
                 ScaleCalcType.Max => Math.Max(scale.X, scale.Y),
+                ScaleCalcType.Min => Math.Min(scale.X, scale.Y),
+                ScaleCalcType.AbsMin => Math.Min(Math.Abs(scale.X), Math.Abs(scale.Y)),
+                ScaleCalcType.AbsMax => Math.Max(Math.Abs(scale.X), Math.Abs(scale.Y)),
                 _ => 1.0f
             });
         }
