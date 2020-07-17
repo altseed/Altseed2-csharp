@@ -9,10 +9,10 @@ namespace Sample
         static void Main(string[] args)
         {
             // Altseed2 を初期化します。
-            if (!Engine.Initialize("TextNode", 640, 480)) return;
+            if (!Engine.Initialize("PostEffect - Custom", 640, 480)) return;
 
             // 画像を表示するノードを作成して登録します。
-            // 詳しくはSpriteのサンプルをご覧ください。
+            // 詳しくはSpriteのサンプルを参照してください。
             var node = new SpriteNode
             {
                 Texture = Texture2D.Load(@"TestData/Graphics/flower.png"),
