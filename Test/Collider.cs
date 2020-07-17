@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using NUnit.Framework;
 
 namespace Altseed2.Test
@@ -60,7 +60,7 @@ namespace Altseed2.Test
             tc.Init();
             //tc.Duration = int.MaxValue;
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.LoadStrict(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var scene = new Altseed2.Node();
@@ -105,7 +105,7 @@ namespace Altseed2.Test
             private readonly CircleColliderNode node;
             private readonly TextNode text = new TextNode()
             {
-                Font = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 40)
+                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40)
             };
             public Player_Circle(Texture2D texture)
             {
@@ -161,7 +161,7 @@ namespace Altseed2.Test
             tc.Init();
             //tc.Duration = int.MaxValue;
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.LoadStrict(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
             
             var scene = new Altseed2.Node();
@@ -209,7 +209,7 @@ namespace Altseed2.Test
             private readonly PolygonColliderNode node;
             private readonly TextNode text = new TextNode()
             {
-                Font = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 40)
+                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40)
             };
             public Player_Polygon(Texture2D texture)
             {
@@ -254,7 +254,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.LoadStrict(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var scene = new Altseed2.Node();
@@ -299,7 +299,7 @@ namespace Altseed2.Test
             private readonly RectangleColliderNode node;
             private readonly TextNode text = new TextNode()
             {
-                Font = Font.LoadDynamicFontStrict("../../Core/TestData/Font/mplus-1m-regular.ttf", 40)
+                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40)
             };
             public Player_Rectangle(Texture2D texture)
             {
