@@ -9,6 +9,9 @@ namespace Altseed2
 
         private float intensity;
 
+        /// <summary>
+        /// ぼけの強さ。値が大きいほど画面がぼけます。
+        /// </summary>
         public float Intensity
         {
             get => intensity;

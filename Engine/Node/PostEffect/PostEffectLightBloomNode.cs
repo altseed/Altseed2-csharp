@@ -11,6 +11,9 @@ namespace Altseed2
         private readonly Material _BlurYMaterial;
         private readonly Material _TextureMixer;
 
+        /// <summary>
+        /// ぼけの強さ。値が大きいほど光がぼけます。
+        /// </summary>
         public float Intensity
         {
             get => _BlurXMaterial.GetVector4F("intensity").X;
@@ -21,6 +24,9 @@ namespace Altseed2
             }
         }
 
+        /// <summary>
+        /// この値を超えた画素がぼかされます。255を1.0とした数値を指定します。
+        /// </summary>
         public float Threshold
         {
             get => _BlurXMaterial.GetVector4F("threshold").X;
@@ -31,6 +37,9 @@ namespace Altseed2
             }
         }
 
+        /// <summary>
+        /// 露光の強さ。この値が大きいほど、ぼけた光が強くなります。
+        /// </summary>
         public float Exposure
         {
             get => _BlurXMaterial.GetVector4F("exposure").X;
@@ -41,6 +50,9 @@ namespace Altseed2
             }
         }
 
+        /// <summary>
+        /// RGBではなく、輝度を参照してぼかす色を決定します。
+        /// </summary>
         public bool IsLuminanceMode { get; set; }
 
         public PostEffectLightBloomNode()
