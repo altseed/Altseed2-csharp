@@ -192,12 +192,12 @@ namespace Altseed2
         /// <param name="angle">出力される角度</param>
         internal static void CalcFromTransform(Matrix44F transform, out Vector2F absolutePosition, out Vector2F scale, out float angle)
         {
-            var p0 = transform * new Vector3F(0f, 0f, 1f);
-            var p1 = transform * new Vector3F(1f, 1f, 1f);
-            absolutePosition = new Vector2F(p0.X, p0.Y);
-            var sub = new Vector2F(p1.X - p0.X, p1.Y - p0.Y);
-            angle = sub.Degree - 45;
-            scale = sub;
+            absolutePosition = new Vector2F(transform[0, 3], transform[1, 3]); // transform * (0, 0)
+            var sub = new Vector2F(transform[0, 0] + transform[0, 2], transform[1, 0] + transform[1, 2]); // transform * (1, 0) - transform * (0, 0)
+            var radian = sub.Radian;
+            angle = RadianToDegree(radian);
+            transform *= Matrix44F.GetRotationZ(-radian);
+            scale = new Vector2F(transform[0, 0] + transform[0, 1] + transform[0, 2], transform[1, 0] + transform[1, 1] + transform[1, 2]); // transform * (1, 1) - transform * (0, 0)
         }
     }
 }
