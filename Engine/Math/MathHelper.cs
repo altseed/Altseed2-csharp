@@ -189,15 +189,37 @@ namespace Altseed2
         /// <param name="transform">計算元となる4x4行列</param>
         /// <param name="absolutePosition">出力される座標</param>
         /// <param name="scale">出力される拡大率</param>
-        /// <param name="angle">出力される角度</param>
-        internal static void CalcFromTransform(Matrix44F transform, out Vector2F absolutePosition, out Vector2F scale, out float angle)
+        /// <param name="angle">出力される角度(度数法)</param>
+        public static void CalcFromTransform2D(Matrix44F transform, out Vector2F absolutePosition, out Vector2F scale, out float angle)
         {
-            absolutePosition = new Vector2F(transform[0, 3], transform[1, 3]); // transform * (0, 0)
-            var sub = new Vector2F(transform[0, 0] + transform[0, 2], transform[1, 0] + transform[1, 2]); // transform * (1, 0) - transform * (0, 0)
-            var radian = sub.Radian;
-            angle = RadianToDegree(radian);
-            transform *= Matrix44F.GetRotationZ(-radian);
-            scale = new Vector2F(transform[0, 0] + transform[0, 1] + transform[0, 2], transform[1, 0] + transform[1, 1] + transform[1, 2]); // transform * (1, 1) - transform * (0, 0)
+            absolutePosition = new Vector2F(transform[0, 3], transform[1, 3]);
+            var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
+            var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
+            scale = new Vector2F(sx, sy);
+            transform = Matrix44F.GetScale2D(new Vector2F(1f / sx, 1f / sy)) * transform;
+            angle = new Vector2F(transform[0, 0], transform[1, 0]).Degree;
+        }
+
+        /// <summary>
+        /// <see cref="Matrix44F"/>から3次元座標，拡大率，角度を算出する
+        /// </summary>
+        /// <param name="transform">計算元となる4x4行列</param>
+        /// <param name="absolutePosition">出力される座標</param>
+        /// <param name="scale">出力される拡大率</param>
+        /// <param name="rotationX">出力されるX軸回転角度(度数法)</param>
+        /// <param name="rotationY">出力されるY軸回転角度(度数法)</param>
+        /// <param name="rotationZ">出力されるZ軸回転角度(度数法)</param>
+        public static void CalcFromTransform3D(Matrix44F transform, out Vector3F absolutePosition, out Vector3F scale, out float rotationX, out float rotationY, out float rotationZ)
+        {
+            absolutePosition = new Vector3F(transform[0, 3], transform[1, 3], transform[2, 3]);
+            var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
+            var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
+            var sz = new Vector3F(transform[2, 0], transform[2, 1], transform[2, 2]).Length;
+            scale = new Vector3F(sx, sy, sz);
+            transform = Matrix44F.GetScale3D(new Vector3F(1f / sx, 1f / sy, 1f / sz)) * transform;
+            rotationX = new Vector2F(transform[1, 1], transform[2, 1]).Degree;
+            rotationY = new Vector2F(transform[2, 2], transform[0, 2]).Degree;
+            rotationZ = new Vector2F(transform[0, 0], transform[1, 0]).Degree;
         }
     }
 }

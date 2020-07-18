@@ -57,7 +57,7 @@ namespace Altseed2
         {
             RectangleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
 
-            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = _rectangleSize * scale;
@@ -72,7 +72,7 @@ namespace Altseed2
         {
             UpdateInheritedTransform();
 
-            MathHelper.CalcFromTransform(AbsoluteTransform, out var position, out var scale, out var angle);
+            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = _rectangleSize * scale;
