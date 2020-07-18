@@ -196,7 +196,7 @@ namespace Altseed2
             var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
             var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
             scale = new Vector2F(sx, sy);
-            transform = Matrix44F.GetScale2D(new Vector2F(1f / sx, 1f / sy)) * transform;
+            transform = Matrix44F.GetScale2D(new Vector2F(sx == 0 ? 1f : (1f / sx), sy == 0 ? 1f : (1f / sy))) * transform;
             angle = new Vector2F(transform[0, 0], transform[1, 0]).Degree;
         }
 
@@ -216,7 +216,7 @@ namespace Altseed2
             var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
             var sz = new Vector3F(transform[2, 0], transform[2, 1], transform[2, 2]).Length;
             scale = new Vector3F(sx, sy, sz);
-            transform = Matrix44F.GetScale3D(new Vector3F(1f / sx, 1f / sy, 1f / sz)) * transform;
+            transform = Matrix44F.GetScale3D(new Vector3F(sx == 0 ? 1f : (1f / sx), sy == 0 ? 1f : (1f / sy), sz == 0 ? 1f : (1f / sz))) * transform;
             rotationX = new Vector2F(transform[1, 1], transform[2, 1]).Degree;
             rotationY = new Vector2F(transform[2, 2], transform[0, 2]).Degree;
             rotationZ = new Vector2F(transform[0, 0], transform[1, 0]).Degree;
