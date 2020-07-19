@@ -97,11 +97,15 @@ namespace Altseed2.Test
             var config1 = new Configuration()
             {
                 ConsoleLoggingEnabled = true,
+                DeviceType = GraphicsDeviceType.Metal,
                 FileLoggingEnabled = false,
                 IsFullscreen = false,
+                IsGraphicsOnly = false,
                 IsResizable = true,
                 LogFileName = "Log.txt",
-                ToolEnabled = true
+                ToolEnabled = true,
+                VisibleTransformInfo = true,
+                WaitVSync = true
             };
 
             const string path = "Serialization/Configuration.bin";
@@ -114,16 +118,24 @@ namespace Altseed2.Test
 
             Assert.AreEqual(config1.ConsoleLoggingEnabled, true);
             Assert.AreEqual(config1.ConsoleLoggingEnabled, config2.ConsoleLoggingEnabled);
+            Assert.AreEqual(config1.DeviceType, GraphicsDeviceType.Metal);
+            Assert.AreEqual(config1.DeviceType, config2.DeviceType);
             Assert.AreEqual(config1.FileLoggingEnabled, false);
             Assert.AreEqual(config1.FileLoggingEnabled, config2.FileLoggingEnabled);
             Assert.AreEqual(config1.IsFullscreen, false);
             Assert.AreEqual(config1.IsFullscreen, config2.IsFullscreen);
+            Assert.AreEqual(config1.IsGraphicsOnly, false);
+            Assert.AreEqual(config1.IsGraphicsOnly, config2.IsGraphicsOnly);
             Assert.AreEqual(config1.IsResizable, true);
             Assert.AreEqual(config1.IsResizable, config2.IsResizable);
             Assert.AreEqual(config1.LogFileName, "Log.txt");
             Assert.AreEqual(config1.LogFileName, config2.LogFileName);
             Assert.AreEqual(config1.ToolEnabled, true);
             Assert.AreEqual(config1.ToolEnabled, config2.ToolEnabled);
+            Assert.AreEqual(config1.VisibleTransformInfo, true);
+            Assert.AreEqual(config1.VisibleTransformInfo, config2.VisibleTransformInfo);
+            Assert.AreEqual(config1.WaitVSync, true);
+            Assert.AreEqual(config1.WaitVSync, config2.WaitVSync);
 
             tc.End();
         }
