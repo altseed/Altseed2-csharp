@@ -21,11 +21,9 @@ namespace Altseed2.Test
             {
                 var transform = MathHelper.CalcTransform(position, default, MathHelper.DegreeToRadian(angle), scale);
                 MathHelper.CalcFromTransform2D(transform, out var p, out var s, out var a);
-                Assert.True(MathF.Abs(position.X - p.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Y - p.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.X - s.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Y - s.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(angle - a) < MathHelper.MatrixError);
+                TestValue(position, p);
+                TestValue(scale, s);
+                TestValue(angle, a);
             }
         }
 
@@ -41,35 +39,45 @@ namespace Altseed2.Test
 
             static void Calc(Vector3F position, float angle, Vector3F scale)
             {
-                var transformBase = Matrix44F.GetTranslation3D(position) * Matrix44F.GetScale3D(scale);
+                var radian = MathHelper.DegreeToRadian(angle);
+                var rotation = Matrix44F.GetRotationX(radian) * Matrix44F.GetRotationY(radian) * Matrix44F.GetRotationZ(radian);
+                var transform = Matrix44F.GetTranslation3D(position) * Matrix44F.GetScale3D(scale) * rotation;
 
-                MathHelper.CalcFromTransform3D(transformBase * Matrix44F.GetRotationX(MathHelper.DegreeToRadian(angle)), out Vector3F p, out Vector3F s, out float a, out _, out _);
-                Assert.True(MathF.Abs(position.X - p.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Y - p.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Z - p.Z) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.X - s.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Y - s.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Z - s.Z) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(angle - a) < MathHelper.MatrixError);
-
-                MathHelper.CalcFromTransform3D(transformBase * Matrix44F.GetRotationY(MathHelper.DegreeToRadian(angle)), out p, out s, out _, out a, out _);
-                Assert.True(MathF.Abs(position.X - p.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Y - p.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Z - p.Z) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.X - s.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Y - s.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Z - s.Z) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(angle - a) < MathHelper.MatrixError);
-
-                MathHelper.CalcFromTransform3D(transformBase * Matrix44F.GetRotationZ(MathHelper.DegreeToRadian(angle)), out p, out s, out _, out _, out a);
-                Assert.True(MathF.Abs(position.X - p.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Y - p.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(position.Z - p.Z) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.X - s.X) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Y - s.Y) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(scale.Z - s.Z) < MathHelper.MatrixError);
-                Assert.True(MathF.Abs(angle - a) < MathHelper.MatrixError);
+                MathHelper.CalcFromTransform3D(transform, out var p, out var s, out var r);
+                TestValue(position, p);
+                TestValue(scale, s);
+                TestValue(rotation, r);
             }
+        }
+
+        public static void TestValue(float left, float right)
+        {
+            if (MathF.Abs(left - right) >= MathHelper.MatrixError) throw new AssertionException($"left: {left}\nright: {right}");
+        }
+        public static void TestValue(Vector2F left, Vector2F right)
+        {
+            if (MathF.Abs(left.X - right.X) >= MathHelper.MatrixError) throw new AssertionException($"At X:\nleft: {left.X}\nright: {right.X}");
+            if (MathF.Abs(left.Y - right.Y) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Y}\nright: {right.Y}");
+        }
+        public static void TestValue(Vector3F left, Vector3F right)
+        {
+            if (MathF.Abs(left.X - right.X) >= MathHelper.MatrixError) throw new AssertionException($"At X:\nleft: {left.X}\nright: {right.X}");
+            if (MathF.Abs(left.Y - right.Y) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Y}\nright: {right.Y}");
+            if (MathF.Abs(left.Z - right.Z) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Z}\nright: {right.Z}");
+        }
+        public static void TestValue(Matrix33F left, Matrix33F right)
+        {
+            for (int x = 0; x < 3; x++)
+                for (int y = 0; y < 3; y++)
+                    if (MathF.Abs(left[x, y] - right[x, y]) >= MathHelper.MatrixError)
+                        throw new AssertionException($"At {x}, {y}:\nleft: {left[x, y]}\nright: {right[x, y]}");
+        }
+        public static void TestValue(Matrix44F left, Matrix44F right)
+        {
+            for (int x = 0; x < 4; x++)
+                for (int y = 0; y < 4; y++)
+                    if (MathF.Abs(left[x, y] - right[x, y]) >= MathHelper.MatrixError)
+                        throw new AssertionException($"At {x}, {y}:\nleft: {left[x, y]}\nright: {right[x, y]}");
         }
     }
 }
