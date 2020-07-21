@@ -73,12 +73,6 @@ namespace Sample
             // コライダを登録します。
             AddChildNode(colliderNode);
         }
-
-        // フレーム毎に実行されます。
-        protected override void OnUpdate()
-        {
-            colliderNode.Position = Position;
-        }
     }
 
     // 衝突時の内容を実装できるクラス
@@ -93,7 +87,7 @@ namespace Sample
         // 衝突が継続している時に実行されます。
         void ICollisionEventReceiver.OnCollisionStay(CollisionInfo info)
         {
-            Console.WriteLine("Collision is keeped.");
+            Angle++;
         }
 
         // 衝突が解除された時に実行されます。
