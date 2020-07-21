@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -46,16 +46,15 @@ namespace Altseed2
         /// <summary>
         /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        public RectangleColliderNode() : this(new RectangleCollider()) { }
+        public RectangleColliderNode() : this(null) { }
 
         /// <summary>
         /// 指定した<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.RectangleCollider"/>のインスタンス</param>
-        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
         internal RectangleColliderNode(RectangleCollider collider)
         {
-            RectangleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+            RectangleCollider = collider ?? new RectangleCollider();
 
             MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -91,16 +91,15 @@ namespace Altseed2
         /// <summary>
         /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        public CircleColliderNode() : this(new CircleCollider()) { }
+        public CircleColliderNode() : this(null) { }
 
         /// <summary>
         /// 指定した<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.CircleCollider"/>のインスタンス</param>
-        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
         internal CircleColliderNode(CircleCollider collider)
         {
-            CircleCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+            CircleCollider = collider ?? new CircleCollider();
 
             MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;

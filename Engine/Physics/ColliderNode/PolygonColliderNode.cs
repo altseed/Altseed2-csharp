@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -37,18 +37,17 @@ namespace Altseed2
         /// <summary>
         /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
-        public PolygonColliderNode() : this(new PolygonCollider()) { }
+        public PolygonColliderNode() : this(null) { }
 
         /// <summary>
         /// 指定した<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.PolygonCollider"/>のインスタンス</param>
-        /// <exception cref="ArgumentNullException"><paramref name="collider"/>がnull</exception>
         internal PolygonColliderNode(PolygonCollider collider)
         {
-            PolygonCollider = collider ?? throw new ArgumentNullException(nameof(collider), "引数がnullです");
+            PolygonCollider = collider ?? new PolygonCollider();
 
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
+            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out _, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
         }
