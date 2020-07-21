@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class PolygonColliderNode : ColliderNode
     {
-        private int version;
+        internal int Version { get; private set; }
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -29,7 +29,7 @@ namespace Altseed2
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
                 AdjustSize();
-                version++;
+                Version++;
             }
         }
         private Vector2F[] _vertexes = Array.Empty<Vector2F>();
@@ -76,44 +76,44 @@ namespace Altseed2
 
             PolygonCollider.VertexArray = array;
         }
+    }
 
-        [Serializable]
-        internal sealed class PolygonColliderVisualizeNode : ColliderVisualizeNode
+    [Serializable]
+    internal sealed class PolygonColliderVisualizeNode : ColliderVisualizeNode
+    {
+        private readonly PolygonColliderNode owner;
+        private int currentVersion;
+
+        internal PolygonColliderVisualizeNode(PolygonColliderNode owner)
         {
-            private readonly PolygonColliderNode owner;
-            private int currentVersion;
+            this.owner = owner;
+            currentVersion = owner.Version;
 
-            internal PolygonColliderVisualizeNode(PolygonColliderNode owner)
+            UpdatePolygon();
+        }
+
+        private protected override void UpdatePolygon()
+        {
+            var vertexes = owner.Vertexes;
+            MathHelper.GetMinMax(out var min, out _, vertexes);
+
+            var positions = new Vector2F[vertexes.Length];
+            for (int i = 0; i < vertexes.Length; i++) positions[i] = vertexes[i] - min;
+
+            var array = Vector2FArray.Create(vertexes.Length);
+            array.FromArray(positions);
+            RenderedPolygon.CreateVertexesByVector2F(array);
+            RenderedPolygon.OverwriteVertexesColor(AreaColor);
+        }
+
+        internal override void UpdateInheritedTransform()
+        {
+            base.UpdateInheritedTransform();
+
+            if (currentVersion != owner.Version)
             {
-                this.owner = owner;
-                currentVersion = owner.version;
-
                 UpdatePolygon();
-            }
-
-            internal override void UpdatePolygon()
-            {
-                var vertexes = owner._vertexes;
-                MathHelper.GetMinMax(out var min, out _, vertexes);
-
-                var positions = new Vector2F[vertexes.Length];
-                for (int i = 0; i < vertexes.Length; i++) positions[i] = vertexes[i] - min;
-
-                var array = Vector2FArray.Create(vertexes.Length);
-                array.FromArray(positions);
-                RenderedPolygon.CreateVertexesByVector2F(array);
-                RenderedPolygon.OverwriteVertexesColor(AreaColor);
-            }
-
-            internal override void UpdateInheritedTransform()
-            {
-                base.UpdateInheritedTransform();
-
-                if (currentVersion != owner.version)
-                {
-                    UpdatePolygon();
-                    currentVersion = owner.version;
-                }
+                currentVersion = owner.Version;
             }
         }
     }

@@ -84,7 +84,7 @@ namespace Altseed2.Test
             {
                 Radius = texture.Size.X / 2
             };
-            colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
+            colliderNode.AddChildNode(ColliderVisualizeNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -118,7 +118,7 @@ namespace Altseed2.Test
                 {
                     Radius = texture.Size.X / 2
                 };
-                node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
+                node.AddChildNode(ColliderVisualizeNode.CreateVisualizeNode(node));
                 AddChildNode(node);
             }
             protected override void OnUpdate()
@@ -186,7 +186,7 @@ namespace Altseed2.Test
             {
                 Vertexes = array
             };
-            colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
+            colliderNode.AddChildNode(ColliderVisualizeNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -222,7 +222,7 @@ namespace Altseed2.Test
                 {
                     Vertexes = array
                 };
-                node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
+                node.AddChildNode(ColliderVisualizeNode.CreateVisualizeNode(node));
                 AddChildNode(node);
             }
             //protected override void OnUpdate()
@@ -278,7 +278,7 @@ namespace Altseed2.Test
             {
                 RectangleSize = texture.Size
             };
-            colliderNode.AddChildNode(ColliderNode.CreateVisualizeNode(colliderNode));
+            colliderNode.AddChildNode(ColliderVisualizeNode.CreateVisualizeNode(colliderNode));
             comparison.AddChildNode(colliderNode);
 
             scene.AddChildNode(comparison);
@@ -312,7 +312,7 @@ namespace Altseed2.Test
                 {
                     RectangleSize = texture.Size
                 };
-                node.AddChildNode(ColliderNode.CreateVisualizeNode(node));
+                node.AddChildNode(ColliderVisualizeNode.CreateVisualizeNode(node));
                 AddChildNode(node);
             }
             protected override void OnUpdate()

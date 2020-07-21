@@ -8,6 +8,8 @@ namespace Altseed2
     [Serializable]
     public abstract class ColliderVisualizeNode : DrawnNode
     {
+        internal readonly static Color AreaColor = new Color(255, 100, 100, 100);
+
         public override Matrix44F AbsoluteTransform => RenderedPolygon.Transform;
 
         internal override int CullingId => RenderedPolygon.Id;
@@ -21,12 +23,30 @@ namespace Altseed2
 
         private protected ColliderVisualizeNode() { }
 
+        /// <summary>
+        /// 指定した<see cref="ColliderNode"/>の当たり判定領域を表示するノードを生成する
+        /// </summary>
+        /// <param name="colliderNode">使用するコライダノード</param>
+        /// <exception cref="ArgumentNullException"><paramref name="colliderNode"/>がnull</exception>
+        /// <returns><paramref name="colliderNode"/>の当たり当たり領域を表示するノード</returns>
+        public static ColliderVisualizeNode CreateVisualizeNode(ColliderNode colliderNode)
+        {
+            if (colliderNode == null) throw new ArgumentNullException(nameof(colliderNode), "引数がnullです");
+            return colliderNode switch
+            {
+                CircleColliderNode c => new CircleColliderVisualizeNode(c),
+                PolygonColliderNode p => new PolygonColliderVisualizeNode(p),
+                RectangleColliderNode r => new RectangleColliderVisualizeNode(r),
+                _ => throw new ArgumentException($"サポートされていない型です\n型：{colliderNode.GetType()}", nameof(colliderNode))
+            };
+        }
+
         internal override void Draw()
         {
             Engine.Renderer.DrawPolygon(RenderedPolygon);
         }
 
-        internal abstract void UpdatePolygon();
+        private protected abstract void UpdatePolygon();
 
         internal override void UpdateInheritedTransform()
         {

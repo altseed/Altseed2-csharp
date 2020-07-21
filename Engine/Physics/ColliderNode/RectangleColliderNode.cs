@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class RectangleColliderNode : ColliderNode
     {
-        private int version;
+        internal int Version { get; private set; }
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -26,7 +26,7 @@ namespace Altseed2
             {
                 if (_rectangleSize == value) return;
                 _rectangleSize = value;
-                version++;
+                Version++;
             }
         }
         private Vector2F _rectangleSize;
@@ -76,46 +76,46 @@ namespace Altseed2
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = _rectangleSize * scale;
         }
+    }
 
-        [Serializable]
-        internal sealed class RectangleColliderVisualizeNode : ColliderVisualizeNode
+    [Serializable]
+    internal sealed class RectangleColliderVisualizeNode : ColliderVisualizeNode
+    {
+        private readonly RectangleColliderNode owner;
+        private int currentVersion;
+
+        internal RectangleColliderVisualizeNode(RectangleColliderNode owner)
         {
-            private readonly RectangleColliderNode owner;
-            private int currentVersion;
+            this.owner = owner;
+            currentVersion = owner.Version;
 
-            internal RectangleColliderVisualizeNode(RectangleColliderNode owner)
+            UpdatePolygon();
+        }
+
+        private protected override void UpdatePolygon()
+        {
+            var positions = new Vector2F[4];
+            var Size = owner.RectangleSize;
+
+            positions[0] = new Vector2F(0.0f, 0.0f);
+            positions[1] = new Vector2F(0.0f, Size.Y);
+            positions[2] = new Vector2F(Size.X, Size.Y);
+            positions[3] = new Vector2F(Size.X, 0.0f);
+
+            var array = Vector2FArray.Create(positions.Length);
+            array.FromArray(positions);
+            RenderedPolygon.CreateVertexesByVector2F(array);
+            RenderedPolygon.OverwriteVertexesColor(AreaColor);
+        }
+
+        internal override void UpdateInheritedTransform()
+        {
+            base.UpdateInheritedTransform();
+
+            if (currentVersion != owner.Version)
             {
-                this.owner = owner;
-                currentVersion = owner.version;
-
                 UpdatePolygon();
-            }
-
-            internal override void UpdatePolygon()
-            {
-                var positions = new Vector2F[4];
-                var Size = owner._rectangleSize;
-
-                positions[0] = new Vector2F(0.0f, 0.0f);
-                positions[1] = new Vector2F(0.0f, Size.Y);
-                positions[2] = new Vector2F(Size.X, Size.Y);
-                positions[3] = new Vector2F(Size.X, 0.0f);
-
-                var array = Vector2FArray.Create(positions.Length);
-                array.FromArray(positions);
-                RenderedPolygon.CreateVertexesByVector2F(array);
-                RenderedPolygon.OverwriteVertexesColor(AreaColor);
-            }
-
-            internal override void UpdateInheritedTransform()
-            {
-                base.UpdateInheritedTransform();
-
-                if (currentVersion != owner.version)
-                {
-                    UpdatePolygon();
-                    currentVersion = owner.version;
-                }
+                currentVersion = owner.Version;
             }
         }
     }
