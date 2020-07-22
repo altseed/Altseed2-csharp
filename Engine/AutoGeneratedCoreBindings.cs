@@ -10,13 +10,15 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 using System;
-using System.Runtime.InteropServices;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace Altseed2
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     struct MemoryHandle
     {
         public IntPtr selfPtr;
@@ -512,11 +514,11 @@ namespace Altseed2
         /// <summary>
         /// 左トリガー
         /// </summary>
-        LeftTriger = 4,
+        LeftTrigger = 4,
         /// <summary>
         /// 右トリガー
         /// </summary>
-        RightTriger = 5,
+        RightTrigger = 5,
     }
     
     [Serializable]
@@ -1574,9 +1576,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Configuration>> cacheRepo = new Dictionary<IntPtr, WeakReference<Configuration>>();
         
-        internal static  Configuration TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Configuration TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -1600,76 +1604,98 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Configuration_Constructor_0();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetIsFullscreen(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetIsFullscreen(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetIsResizable(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetIsResizable(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Configuration_GetDeviceType(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetDeviceType(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetWaitVSync(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetWaitVSync(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetIsGraphicsOnly(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetIsGraphicsOnly(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetConsoleLoggingEnabled(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetConsoleLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetFileLoggingEnabled(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetFileLoggingEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Configuration_GetLogFileName(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetLogFileName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Configuration_GetToolEnabled(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetToolEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Configuration(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -1885,14 +1911,23 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsFullscreen = "S_IsFullscreen";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsResizable = "S_IsResizable";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_DeviceType = "S_DeviceType";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_WaitVSync = "S_WaitVSync";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsGraphicsOnly = "S_IsGraphicsOnly";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_ConsoleLoggingEnabled = "S_ConsoleLoggingEnabled";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_FileLoggingEnabled = "S_FileLoggingEnabled";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LogFileName = "S_LogFileName";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_ToolEnabled = "S_ToolEnabled";
         #endregion
         
@@ -1901,6 +1936,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Configuration(SerializationInfo info, StreamingContext context) : this()
         {
             IsFullscreen = info.GetBoolean(S_IsFullscreen);
@@ -1921,6 +1957,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -1943,6 +1980,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -1950,6 +1988,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -1958,6 +1997,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         #endregion
@@ -1982,9 +2022,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
         
-        internal static  Core TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Core TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2008,52 +2050,67 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Core_GetBaseObjectCount(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Core_PrintAllBaseObjectName(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_Initialize([MarshalAs(UnmanagedType.LPWStr)] string title, int width, int height, IntPtr config);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Core_DoEvent(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Core_Terminate();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Core_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Core_GetDeltaSecond(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Core_GetCurrentFPS(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Core_GetTargetFPS(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Core_SetTargetFPS(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Core_GetFramerateMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Core_SetFramerateMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Core_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Core(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -2208,9 +2265,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
         
-        internal static  Int8Array TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Int8Array TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2234,40 +2293,52 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int8Array_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int8Array_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Int8Array_GetData(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int8Array_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int8Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern byte cbg_Int8Array_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int8Array_SetAt(IntPtr selfPtr, int index, byte value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Int8Array_Create(int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Int8Array_GetCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int8Array_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Int8Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -2356,6 +2427,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Count = "S_Count";
         #endregion
         
@@ -2364,6 +2436,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Int8Array(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -2380,6 +2453,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -2394,6 +2468,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -2401,6 +2476,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -2409,11 +2485,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -2426,6 +2504,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="Int8Array.Count"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Int8Array_Unsetter_Deserialize(SerializationInfo info, out int Count)
         {
             Count = info.GetInt32(S_Count);
@@ -2433,8 +2512,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Int8Array>> ICacheKeeper<Int8Array>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Int8Array>.Self
         {
             get => selfPtr;
@@ -2444,6 +2525,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Int8Array>.Release(IntPtr native) => cbg_Int8Array_Release(native);
         
         #endregion
@@ -2471,9 +2553,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Int32Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int32Array>>();
         
-        internal static  Int32Array TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Int32Array TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2497,40 +2581,52 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int32Array_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int32Array_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Int32Array_GetData(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int32Array_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int32Array_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Int32Array_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int32Array_SetAt(IntPtr selfPtr, int index, int value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Int32Array_Create(int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Int32Array_GetCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Int32Array_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Int32Array(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -2619,6 +2715,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Count = "S_Count";
         #endregion
         
@@ -2627,6 +2724,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Int32Array(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -2643,6 +2741,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -2657,6 +2756,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -2664,6 +2764,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -2672,11 +2773,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -2689,6 +2792,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="Int32Array.Count"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Int32Array_Unsetter_Deserialize(SerializationInfo info, out int Count)
         {
             Count = info.GetInt32(S_Count);
@@ -2696,8 +2800,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Int32Array>> ICacheKeeper<Int32Array>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Int32Array>.Self
         {
             get => selfPtr;
@@ -2707,6 +2813,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Int32Array>.Release(IntPtr native) => cbg_Int32Array_Release(native);
         
         #endregion
@@ -2734,9 +2841,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<VertexArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<VertexArray>>();
         
-        internal static  VertexArray TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  VertexArray TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -2760,40 +2869,52 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_VertexArray_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_VertexArray_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_VertexArray_GetData(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_VertexArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_VertexArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vertex cbg_VertexArray_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_VertexArray_SetAt(IntPtr selfPtr, int index, Vertex value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_VertexArray_Create(int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_VertexArray_GetCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_VertexArray_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal VertexArray(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -2882,6 +3003,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Count = "S_Count";
         #endregion
         
@@ -2890,6 +3012,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private VertexArray(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -2906,6 +3029,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -2920,6 +3044,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -2927,6 +3052,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -2935,11 +3061,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -2952,6 +3080,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="VertexArray.Count"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void VertexArray_Unsetter_Deserialize(SerializationInfo info, out int Count)
         {
             Count = info.GetInt32(S_Count);
@@ -2959,8 +3088,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<VertexArray>> ICacheKeeper<VertexArray>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<VertexArray>.Self
         {
             get => selfPtr;
@@ -2970,6 +3101,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<VertexArray>.Release(IntPtr native) => cbg_VertexArray_Release(native);
         
         #endregion
@@ -2997,9 +3129,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<FloatArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<FloatArray>>();
         
-        internal static  FloatArray TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  FloatArray TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3023,40 +3157,52 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_FloatArray_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_FloatArray_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_FloatArray_GetData(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_FloatArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_FloatArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_FloatArray_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_FloatArray_SetAt(IntPtr selfPtr, int index, float value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_FloatArray_Create(int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_FloatArray_GetCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_FloatArray_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal FloatArray(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -3145,6 +3291,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Count = "S_Count";
         #endregion
         
@@ -3153,6 +3300,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private FloatArray(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -3169,6 +3317,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -3183,6 +3332,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -3190,6 +3340,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -3198,11 +3349,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -3215,6 +3368,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="FloatArray.Count"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void FloatArray_Unsetter_Deserialize(SerializationInfo info, out int Count)
         {
             Count = info.GetInt32(S_Count);
@@ -3222,8 +3376,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<FloatArray>> ICacheKeeper<FloatArray>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<FloatArray>.Self
         {
             get => selfPtr;
@@ -3233,6 +3389,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<FloatArray>.Release(IntPtr native) => cbg_FloatArray_Release(native);
         
         #endregion
@@ -3260,9 +3417,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Vector2FArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<Vector2FArray>>();
         
-        internal static  Vector2FArray TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Vector2FArray TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3286,40 +3445,52 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Vector2FArray_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Vector2FArray_Resize(IntPtr selfPtr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Vector2FArray_GetData(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Vector2FArray_Assign(IntPtr selfPtr, IntPtr ptr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Vector2FArray_CopyTo(IntPtr selfPtr, IntPtr ptr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Vector2FArray_GetAt(IntPtr selfPtr, int index);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Vector2FArray_SetAt(IntPtr selfPtr, int index, Vector2F value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Vector2FArray_Create(int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Vector2FArray_GetCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Vector2FArray_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Vector2FArray(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -3408,6 +3579,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Count = "S_Count";
         #endregion
         
@@ -3416,6 +3588,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Vector2FArray(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -3432,6 +3605,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -3446,6 +3620,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -3453,6 +3628,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -3461,11 +3637,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -3478,6 +3656,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="Vector2FArray.Count"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Vector2FArray_Unsetter_Deserialize(SerializationInfo info, out int Count)
         {
             Count = info.GetInt32(S_Count);
@@ -3485,8 +3664,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Vector2FArray>> ICacheKeeper<Vector2FArray>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Vector2FArray>.Self
         {
             get => selfPtr;
@@ -3496,6 +3677,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Vector2FArray>.Release(IntPtr native) => cbg_Vector2FArray_Release(native);
         
         #endregion
@@ -3522,9 +3704,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
         
-        internal static  Resources TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Resources TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3548,24 +3732,31 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Resources_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Resources_GetResourcesCount(IntPtr selfPtr, int type);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Resources_Clear(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Resources_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Resources_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Resources(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -3628,9 +3819,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Cursor>> cacheRepo = new Dictionary<IntPtr, WeakReference<Cursor>>();
         
-        internal static  Cursor TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Cursor TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3654,15 +3847,19 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Cursor_Create([MarshalAs(UnmanagedType.LPWStr)] string path, Vector2I hot);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Cursor_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Cursor(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -3702,9 +3899,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
         
-        internal static  Keyboard TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Keyboard TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3728,18 +3927,23 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Keyboard_GetKeyState(IntPtr selfPtr, int key);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Keyboard_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Keyboard_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Keyboard(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -3786,9 +3990,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
         
-        internal static  Mouse TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Mouse TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3812,37 +4018,48 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Mouse_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Mouse_SetCursorImage(IntPtr selfPtr, IntPtr cursor);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Mouse_GetPosition(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Mouse_SetPosition(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Mouse_GetCursorMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Mouse_SetCursorMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Mouse_GetWheel(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Mouse_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Mouse(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -3951,9 +4168,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<JoystickInfo>> cacheRepo = new Dictionary<IntPtr, WeakReference<JoystickInfo>>();
         
-        internal static  JoystickInfo TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  JoystickInfo TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -3977,57 +4196,71 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_JoystickInfo_IsJoystickType(IntPtr selfPtr, int type);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_JoystickInfo_GetName(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_JoystickInfo_GetButtonCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_JoystickInfo_GetAxisCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_JoystickInfo_GetIsGamepad(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_JoystickInfo_GetGamepadName(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_JoystickInfo_GetGUID(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_JoystickInfo_GetBustype(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_JoystickInfo_GetVendor(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_JoystickInfo_GetProduct(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_JoystickInfo_GetVersion(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_JoystickInfo_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal JoystickInfo(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -4164,9 +4397,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
         
-        internal static  Joystick TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Joystick TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -4190,38 +4425,49 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Joystick_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Joystick_IsPresent(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Joystick_GetJoystickInfo(IntPtr selfPtr, int joystickIndex);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Joystick_GetButtonStateByIndex(IntPtr selfPtr, int joystickIndex, int buttonIndex);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Joystick_GetButtonStateByType(IntPtr selfPtr, int joystickIndex, int type);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Joystick_GetAxisStateByIndex(IntPtr selfPtr, int joystickIndex, int axisIndex);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Joystick_GetAxisStateByType(IntPtr selfPtr, int joystickIndex, int type);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Joystick_GetConnectedJoystickCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Joystick_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Joystick(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -4290,9 +4536,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
         
-        internal static  Graphics TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Graphics TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -4316,38 +4564,48 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Graphics_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_BeginFrame(IntPtr selfPtr, RenderPassParameter renderPassParmeter);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_EndFrame(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Graphics_DoEvents(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Graphics_SaveScreenshot(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Graphics_GetCommandList(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Graphics_GetBuiltinShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Graphics_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Graphics(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -4446,9 +4704,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<TextureBase>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<TextureBase>>();
         
-        internal static  TextureBase TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  TextureBase TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -4472,32 +4732,41 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_TextureBase_Save(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2I cbg_TextureBase_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_TextureBase_GetWrapMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_TextureBase_SetWrapMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_TextureBase_GetFilterType(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_TextureBase_SetFilterType(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_TextureBase_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal TextureBase(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -4576,11 +4845,15 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Size = "S_Size";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_WrapMode = "S_WrapMode";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_FilterType = "S_FilterType";
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private SerializationInfo seInfo;
         
         /// <summary>
@@ -4588,6 +4861,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected TextureBase(SerializationInfo info, StreamingContext context)
         {
             seInfo = info;
@@ -4600,6 +4874,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -4617,6 +4892,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -4624,6 +4900,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -4632,11 +4909,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private virtual IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -4649,6 +4928,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Size"><see cref="TextureBase.Size"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private void TextureBase_Unsetter_Deserialize(SerializationInfo info, out Vector2I Size)
         {
             Size = info.GetValue<Vector2I>(S_Size);
@@ -4656,8 +4936,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<TextureBase>> ICacheKeeper<TextureBase>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<TextureBase>.Self
         {
             get => selfPtr;
@@ -4667,6 +4949,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<TextureBase>.Release(IntPtr native) => cbg_TextureBase_Release(native);
         
         #endregion
@@ -4677,6 +4960,7 @@ namespace Altseed2
         /// デシリアライズ時に実行
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void OnDeserialization(object sender)
         {
             if (seInfo == null) return;
@@ -4693,11 +4977,13 @@ namespace Altseed2
             
             seInfo = null;
         }
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
         /// <summary>
         /// <see cref="OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
         ~TextureBase()
@@ -4721,9 +5007,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<Texture2D>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Texture2D>>();
         
-        internal static new Texture2D TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new Texture2D TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -4748,21 +5036,26 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Texture2D_Load([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Texture2D_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Texture2D_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Texture2D_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Texture2D(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -4807,9 +5100,11 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Path = "S_Path";
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private SerializationInfo seInfo;
         
         /// <summary>
@@ -4817,6 +5112,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Texture2D(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             seInfo = info;
@@ -4829,6 +5125,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -4843,6 +5140,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -4850,6 +5148,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -4858,11 +5157,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -4875,6 +5176,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="Texture2D.Path"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Texture2D_Unsetter_Deserialize(SerializationInfo info, out string Path)
         {
             Path = info.GetString(S_Path) ?? throw new SerializationException("デシリアライズに失敗しました");
@@ -4882,8 +5184,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Texture2D>> ICacheKeeper<Texture2D>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Texture2D>.Self
         {
             get => selfPtr;
@@ -4893,6 +5197,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Texture2D>.Release(IntPtr native) => cbg_Texture2D_Release(native);
         
         #endregion
@@ -4903,6 +5208,7 @@ namespace Altseed2
         /// デシリアライズ時に実行
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnDeserialization(object sender)
         {
             if (seInfo == null) return;
@@ -4922,6 +5228,7 @@ namespace Altseed2
         /// <see cref="OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
         ~Texture2D()
@@ -4945,9 +5252,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<RenderTexture>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderTexture>>();
         
-        internal static new RenderTexture TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RenderTexture TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -4972,13 +5281,16 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderTexture_Create(Vector2I size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderTexture_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal RenderTexture(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -4996,6 +5308,7 @@ namespace Altseed2
         #region SerializeName
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private SerializationInfo seInfo;
         
         /// <summary>
@@ -5003,6 +5316,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderTexture(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             seInfo = info;
@@ -5015,6 +5329,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -5028,6 +5343,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -5035,6 +5351,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -5043,11 +5360,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -5057,8 +5376,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<RenderTexture>> ICacheKeeper<RenderTexture>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<RenderTexture>.Self
         {
             get => selfPtr;
@@ -5068,6 +5389,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderTexture>.Release(IntPtr native) => cbg_RenderTexture_Release(native);
         
         #endregion
@@ -5078,6 +5400,7 @@ namespace Altseed2
         /// デシリアライズ時に実行
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnDeserialization(object sender)
         {
             if (seInfo == null) return;
@@ -5097,6 +5420,7 @@ namespace Altseed2
         /// <see cref="OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
         ~RenderTexture()
@@ -5120,9 +5444,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Material>> cacheRepo = new Dictionary<IntPtr, WeakReference<Material>>();
         
-        internal static  Material TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Material TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -5146,45 +5472,59 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Material_Constructor_0();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector4F cbg_Material_GetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Material_SetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Vector4F value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Matrix44F cbg_Material_GetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Material_SetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Matrix44F value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Material_GetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Material_SetTexture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Material_GetShader(IntPtr selfPtr, int shaderStage);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Material_SetShader(IntPtr selfPtr, IntPtr shader);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Material_GetBlendMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Material_SetBlendMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Material_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Material(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -5224,6 +5564,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_BlendMode = "S_BlendMode";
         #endregion
         
@@ -5232,6 +5573,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Material(SerializationInfo info, StreamingContext context) : this()
         {
             var ptr = Call_GetPtr(info);
@@ -5249,6 +5591,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -5263,6 +5606,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -5270,6 +5614,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -5278,11 +5623,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -5292,8 +5639,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Material>> ICacheKeeper<Material>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Material>.Self
         {
             get => selfPtr;
@@ -5303,6 +5652,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Material>.Release(IntPtr native) => cbg_Material_Release(native);
         
         #endregion
@@ -5329,9 +5679,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Renderer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Renderer>>();
         
-        internal static  Renderer TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Renderer TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -5355,33 +5707,43 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Renderer_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_DrawSprite(IntPtr selfPtr, IntPtr sprite);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_DrawText(IntPtr selfPtr, IntPtr text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_DrawPolygon(IntPtr selfPtr, IntPtr polygon);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_SetCamera(IntPtr selfPtr, IntPtr camera);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_ResetCamera(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Renderer(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -5469,9 +5831,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<CommandList>> cacheRepo = new Dictionary<IntPtr, WeakReference<CommandList>>();
         
-        internal static  CommandList TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  CommandList TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -5495,27 +5859,35 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_CommandList_GetScreenTexture(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_RenderToRenderTexture(IntPtr selfPtr, IntPtr material, IntPtr target, RenderPassParameter renderPassparameter);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_RenderToRenderTarget(IntPtr selfPtr, IntPtr material);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_CopyTexture(IntPtr selfPtr, IntPtr src, IntPtr dst);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal CommandList(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -5570,9 +5942,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Rendered>> cacheRepo = new Dictionary<IntPtr, WeakReference<Rendered>>();
         
-        internal static  Rendered TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Rendered TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -5596,22 +5970,28 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Matrix44F cbg_Rendered_GetTransform(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Rendered_SetTransform(IntPtr selfPtr, Matrix44F value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Rendered_GetId(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Rendered_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Rendered(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -5655,6 +6035,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Transform = "S_Transform";
         #endregion
         
@@ -5663,6 +6044,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected Rendered(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -5680,6 +6062,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -5695,6 +6078,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -5702,6 +6086,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -5710,11 +6095,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private virtual IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -5724,8 +6111,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Rendered>> ICacheKeeper<Rendered>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Rendered>.Self
         {
             get => selfPtr;
@@ -5735,6 +6124,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Rendered>.Release(IntPtr native) => cbg_Rendered_Release(native);
         
         #endregion
@@ -5762,9 +6152,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<RenderedSprite>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedSprite>>();
         
-        internal static new RenderedSprite TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RenderedSprite TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -5789,43 +6181,56 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedSprite_Create();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedSprite_GetTexture(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedSprite_SetTexture(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern RectF cbg_RenderedSprite_GetSrc(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedSprite_SetSrc(IntPtr selfPtr, RectF value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedSprite_GetMaterial(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedSprite_SetMaterial(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Color cbg_RenderedSprite_GetColor(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedSprite_SetColor(IntPtr selfPtr, Color value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_RenderedSprite_GetBlendMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedSprite_SetBlendMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedSprite_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal RenderedSprite(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -5954,10 +6359,15 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Texture = "S_Texture";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Src = "S_Src";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Material = "S_Material";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Color = "S_Color";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_BlendMode = "S_BlendMode";
         #endregion
         
@@ -5966,6 +6376,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedSprite(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -5987,6 +6398,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -6005,6 +6417,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -6012,6 +6425,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -6020,11 +6434,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -6034,8 +6450,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<RenderedSprite>> ICacheKeeper<RenderedSprite>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<RenderedSprite>.Self
         {
             get => selfPtr;
@@ -6045,6 +6463,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedSprite>.Release(IntPtr native) => cbg_RenderedSprite_Release(native);
         
         #endregion
@@ -6072,9 +6491,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<RenderedText>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedText>>();
         
-        internal static new RenderedText TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RenderedText TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -6099,84 +6520,110 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedText_Create();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedText_GetMaterialGlyph(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetMaterialGlyph(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedText_GetMaterialImage(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetMaterialImage(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedText_GetText(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedText_GetFont(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetFont(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_RenderedText_GetWeight(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetWeight(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_RenderedText_GetIsEnableKerning(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetIsEnableKerning(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_RenderedText_GetWritingDirection(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetWritingDirection(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_RenderedText_GetCharacterSpace(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetCharacterSpace(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_RenderedText_GetLineGap(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetLineGap(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Color cbg_RenderedText_GetColor(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetColor(IntPtr selfPtr, Color value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_RenderedText_GetBlendMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_SetBlendMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedText_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal RenderedText(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -6449,16 +6896,27 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_MaterialGlyph = "S_MaterialGlyph";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_MaterialImage = "S_MaterialImage";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Text = "S_Text";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Font = "S_Font";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Weight = "S_Weight";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsEnableKerning = "S_IsEnableKerning";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_WritingDirection = "S_WritingDirection";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_CharacterSpace = "S_CharacterSpace";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LineGap = "S_LineGap";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Color = "S_Color";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_BlendMode = "S_BlendMode";
         #endregion
         
@@ -6467,6 +6925,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedText(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -6494,6 +6953,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -6518,6 +6978,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -6525,6 +6986,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -6533,11 +6995,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -6547,8 +7011,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<RenderedText>> ICacheKeeper<RenderedText>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<RenderedText>.Self
         {
             get => selfPtr;
@@ -6558,6 +7024,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedText>.Release(IntPtr native) => cbg_RenderedText_Release(native);
         
         #endregion
@@ -6585,9 +7052,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<RenderedPolygon>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedPolygon>>();
         
-        internal static new RenderedPolygon TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RenderedPolygon TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -6612,49 +7081,64 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedPolygon_Create();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_CreateVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_OverwriteVertexesColor(IntPtr selfPtr, Color color);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedPolygon_GetVertexes(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_SetVertexes(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedPolygon_GetTexture(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_SetTexture(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern RectF cbg_RenderedPolygon_GetSrc(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_SetSrc(IntPtr selfPtr, RectF value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedPolygon_GetMaterial(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_SetMaterial(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_RenderedPolygon_GetBlendMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_SetBlendMode(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedPolygon_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal RenderedPolygon(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -6799,10 +7283,15 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Vertexes = "S_Vertexes";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Texture = "S_Texture";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Src = "S_Src";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Material = "S_Material";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_BlendMode = "S_BlendMode";
         #endregion
         
@@ -6811,6 +7300,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedPolygon(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -6832,6 +7322,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -6850,6 +7341,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -6857,6 +7349,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -6865,11 +7358,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -6879,8 +7374,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<RenderedPolygon>> ICacheKeeper<RenderedPolygon>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<RenderedPolygon>.Self
         {
             get => selfPtr;
@@ -6890,6 +7387,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedPolygon>.Release(IntPtr native) => cbg_RenderedPolygon_Release(native);
         
         #endregion
@@ -6917,9 +7415,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
         
-        internal static new RenderedCamera TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RenderedCamera TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -6944,31 +7444,40 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedCamera_Create();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_RenderedCamera_GetCenterOffset(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedCamera_SetCenterOffset(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedCamera_GetTargetTexture(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedCamera_SetTargetTexture(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern RenderPassParameter cbg_RenderedCamera_GetRenderPassParameter(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedCamera_SetRenderPassParameter(IntPtr selfPtr, RenderPassParameter value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RenderedCamera_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal RenderedCamera(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -7053,8 +7562,11 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_CenterOffset = "S_CenterOffset";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_TargetTexture = "S_TargetTexture";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_RenderPassParameter = "S_RenderPassParameter";
         #endregion
         
@@ -7063,6 +7575,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedCamera(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -7082,6 +7595,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -7098,6 +7612,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -7105,6 +7620,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -7113,11 +7629,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -7127,8 +7645,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<RenderedCamera>> ICacheKeeper<RenderedCamera>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<RenderedCamera>.Self
         {
             get => selfPtr;
@@ -7138,6 +7658,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedCamera>.Release(IntPtr native) => cbg_RenderedCamera_Release(native);
         
         #endregion
@@ -7164,9 +7685,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<BuiltinShader>> cacheRepo = new Dictionary<IntPtr, WeakReference<BuiltinShader>>();
         
-        internal static  BuiltinShader TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  BuiltinShader TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -7190,43 +7713,54 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_Create(IntPtr selfPtr, int type);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetDownsampleShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetSepiaShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetGrayScaleShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetGaussianBlurShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetHighLuminanceShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetLightBloomShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_BuiltinShader_GetTextureMixShader(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_BuiltinShader_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal BuiltinShader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -7327,9 +7861,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Shader>> cacheRepo = new Dictionary<IntPtr, WeakReference<Shader>>();
         
-        internal static  Shader TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Shader TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -7353,27 +7889,34 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string code, int shaderStage);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Shader_GetStageType(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Shader_GetCode(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Shader_GetName(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Shader_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Shader(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -7432,8 +7975,11 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_StageType = "S_StageType";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Code = "S_Code";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Name = "S_Name";
         #endregion
         
@@ -7442,6 +7988,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Shader(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -7458,6 +8005,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -7474,6 +8022,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -7481,6 +8030,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -7489,11 +8039,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -7508,6 +8060,7 @@ namespace Altseed2
         /// <param name="StageType"><see cref="Shader.StageType"/></param>
         /// <param name="Code"><see cref="Shader.Code"/></param>
         /// <param name="Name"><see cref="Shader.Name"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Shader_Unsetter_Deserialize(SerializationInfo info, out ShaderStageType StageType, out string Code, out string Name)
         {
             StageType = info.GetValue<ShaderStageType>(S_StageType);
@@ -7517,8 +8070,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Shader>> ICacheKeeper<Shader>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Shader>.Self
         {
             get => selfPtr;
@@ -7528,6 +8083,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Shader>.Release(IntPtr native) => cbg_Shader_Release(native);
         
         #endregion
@@ -7554,9 +8110,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<Glyph>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Glyph>>();
         
-        internal static  Glyph TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Glyph TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -7580,36 +8138,45 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2I cbg_Glyph_GetTextureSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Glyph_GetTextureIndex(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2I cbg_Glyph_GetPosition(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2I cbg_Glyph_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2I cbg_Glyph_GetOffset(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Glyph_GetGlyphWidth(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Glyph_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Glyph(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -7708,9 +8275,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<Font>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Font>>();
         
-        internal static  Font TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Font TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -7734,65 +8303,83 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_LoadStaticFont([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Font_GenerateFontFile([MarshalAs(UnmanagedType.LPWStr)] string dynamicFontPath, [MarshalAs(UnmanagedType.LPWStr)] string staticFontPath, int size, [MarshalAs(UnmanagedType.LPWStr)] string characters);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_GetGlyph(IntPtr selfPtr, int character);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_GetFontTexture(IntPtr selfPtr, int index);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Font_GetKerning(IntPtr selfPtr, int c1, int c2);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_CreateImageFont(IntPtr baseFont);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Font_AddImageGlyph(IntPtr selfPtr, int character, IntPtr texture);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_GetImageGlyph(IntPtr selfPtr, int character);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Font_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Font_GetAscent(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Font_GetDescent(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Font_GetLineGap(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Font_GetIsStaticFont(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Font_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Font_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Font(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -7986,11 +8573,15 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Size = "S_Size";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsStaticFont = "S_IsStaticFont";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Path = "S_Path";
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private SerializationInfo seInfo;
         
         /// <summary>
@@ -7998,6 +8589,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Font(SerializationInfo info, StreamingContext context)
         {
             seInfo = info;
@@ -8010,6 +8602,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -8026,6 +8619,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -8033,6 +8627,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -8041,11 +8636,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -8060,6 +8657,7 @@ namespace Altseed2
         /// <param name="Size"><see cref="Font.Size"/></param>
         /// <param name="IsStaticFont"><see cref="Font.IsStaticFont"/></param>
         /// <param name="Path"><see cref="Font.Path"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Font_Unsetter_Deserialize(SerializationInfo info, out int Size, out bool IsStaticFont, out string Path)
         {
             Size = info.GetInt32(S_Size);
@@ -8069,8 +8667,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Font>> ICacheKeeper<Font>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Font>.Self
         {
             get => selfPtr;
@@ -8080,6 +8680,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Font>.Release(IntPtr native) => cbg_Font_Release(native);
         
         #endregion
@@ -8090,6 +8691,7 @@ namespace Altseed2
         /// デシリアライズ時に実行
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender)
         {
             if (seInfo == null) return;
@@ -8108,6 +8710,7 @@ namespace Altseed2
         /// <see cref="IDeserializationCallback.OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
         ~Font()
@@ -8130,9 +8733,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<CullingSystem>> cacheRepo = new Dictionary<IntPtr, WeakReference<CullingSystem>>();
         
-        internal static  CullingSystem TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  CullingSystem TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -8156,26 +8761,33 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_CullingSystem_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CullingSystem_UpdateAABB(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_CullingSystem_GetDrawingRenderedCount(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_CullingSystem_GetDrawingRenderedIds(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CullingSystem_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal CullingSystem(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -8240,9 +8852,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Tool>> cacheRepo = new Dictionary<IntPtr, WeakReference<Tool>>();
         
-        internal static  Tool TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Tool TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -8266,759 +8880,985 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_AddFontFromFileTTF(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, float sizePixels, int ranges);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Begin(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_End(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_NewFrame(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Render(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Dummy(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Text(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_TextUnformatted(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_TextWrapped(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_TextColored(IntPtr selfPtr, Color color, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_TextDisabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_BulletText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_LabelText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_CollapsingHeader(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_TreeNode(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_TreeNodeEx(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_TreePop(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextItemOpen(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool isOpen, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Button(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_CheckBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool v);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_RadioButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] bool active);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_RadioButton_2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int v, int v_button);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ArrowButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int dir);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InvisibleButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ListBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int current, [MarshalAs(UnmanagedType.LPWStr)] string items, int popupMaxHeightInItems);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Selectable(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool selected, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_InputText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_InputTextWithHint(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string hit, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_InputTextMultiline(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, Vector2F size, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputInt4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_InputFloat4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int value, float speed, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderInt4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderFloat4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr array, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SliderAngle(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float angle);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_VSliderInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [In, Out] ref int value, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_VSliderFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [In, Out] ref float value, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int value, float speed, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float value, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragIntRange2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int currentMin, [In, Out] ref int currentMax, float speed, int valueMin, int valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_DragFloatRange2(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref float currentMin, [In, Out] ref float currentMax, float speed, float valueMin, float valueMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ColorEdit3(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref Color color, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ColorEdit4(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref Color color, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_OpenPopup(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopup(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupModal(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndPopup(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginChild(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F size, [MarshalAs(UnmanagedType.Bool)] bool border, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndChild(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginMenuBar(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndMenuBar(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginMenu(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] bool enabled);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndMenu(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_MenuItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string shortcut, [MarshalAs(UnmanagedType.Bool)] bool selected, [MarshalAs(UnmanagedType.Bool)] bool enabled);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginTabBar(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndTabBar(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginTabItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndTabItem(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Indent(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Unindent(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Separator(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetTooltip(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_BeginTooltip(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndTooltip(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_NewLine(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SameLine(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushTextWrapPos(IntPtr selfPtr, float wrapLocalPosX);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopTextWrapPos(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushItemWidth(IntPtr selfPtr, float width);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopItemWidth(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushButtonRepeat(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool repeat);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopButtonRepeat(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Columns(IntPtr selfPtr, int count, [MarshalAs(UnmanagedType.Bool)] bool border);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_NextColumn(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushID(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopID(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemActive(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemHovered(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollHere(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetTextLineHeight(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetFontSize(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetWindowSize(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowSize(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsMousePosValid(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsMouseDragging(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsMouseDoubleClicked(IntPtr selfPtr, int button);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetMouseDragDelta(IntPtr selfPtr, int button);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ResetMouseDragDelta(IntPtr selfPtr, int button);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowContentSize(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowSize(IntPtr selfPtr, Vector2F size, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowPos(IntPtr selfPtr, Vector2F pos, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowAppearing(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowCollapsed(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowFocused(IntPtr selfPtr, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowHovered(IntPtr selfPtr, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetWindowPos(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowCollapsed(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowFocus(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowBgAlpha(IntPtr selfPtr, float alpha);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowPosWithCond(IntPtr selfPtr, Vector2F pos, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowSizeWithCond(IntPtr selfPtr, Vector2F pos, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowCollapsedWithCond(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowFocus(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowFontScale(IntPtr selfPtr, float scale);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowPosByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, Vector2F pos, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowSizeByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, Vector2F pos, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowCollapsedByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] bool collapsed, int cond);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetWindowFocusByName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetContentRegionMax(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetContentRegionAvail(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetWindowContentRegionMin(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetWindowContentRegionMax(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetWindowContentRegionWidth(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetScrollX(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetScrollY(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetScrollMaxX(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetScrollMaxY(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollX(IntPtr selfPtr, float scrollX);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollY(IntPtr selfPtr, float scrollY);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollHereX(IntPtr selfPtr, float centerXRatio);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollHereY(IntPtr selfPtr, float centerYRatio);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollFromPosX(IntPtr selfPtr, float localX, float centerXRatio);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetScrollFromPosY(IntPtr selfPtr, float localY, float centerYRatio);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushStyleColor(IntPtr selfPtr, int idx, Color col);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopStyleColor(IntPtr selfPtr, int count);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushStyleVarFloat(IntPtr selfPtr, int idx, float val);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushStyleVarVector2F(IntPtr selfPtr, int idx, Vector2F val);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopStyleVar(IntPtr selfPtr, int count);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Color cbg_Tool_GetStyleColor(IntPtr selfPtr, int idx);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetFontTexUvWhitePixel(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextItemWidth(IntPtr selfPtr, float itemWidth);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_CalcItemWidth(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushAllowKeyboardFocus(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool allowKeyboardFocus);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopAllowKeyboardFocus(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Spacing(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_BeginGroup(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndGroup(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetCursorPos(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetCursorPos(IntPtr selfPtr, Vector2F localPos);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetCursorStartPos(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetCursorScreenPos(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_AlignTextToFramePadding(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetTextLineHeightWithSpacing(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetFrameHeight(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetFrameHeightWithSpacing(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_SmallButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Image(IntPtr selfPtr, IntPtr texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ImageButton(IntPtr selfPtr, IntPtr texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ProgressBar(IntPtr selfPtr, float fraction, Vector2F sizeArg, [MarshalAs(UnmanagedType.LPWStr)] string overlay);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Bullet(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_BeginCombo(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string previewValue, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndCombo(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_Combo(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [In, Out] ref int current_item, [MarshalAs(UnmanagedType.LPWStr)] string items, int popupMaxHeightInItems);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ColorButton(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string descId, [In, Out] ref Color col, int flags, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetColorEditOptions(IntPtr selfPtr, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetTreeNodeToLabelSpacing(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_ListBoxHeader(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string flags, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ListBoxFooter(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PlotLines(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr values, int valuesCount, int valuesOffset, [MarshalAs(UnmanagedType.LPWStr)] string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PlotHistogram(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, IntPtr values, int valuesCount, int valuesOffset, [MarshalAs(UnmanagedType.LPWStr)] string overlayText, float scaleMin, float scaleMax, Vector2F graphSize, int stride);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ValueBool(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, [MarshalAs(UnmanagedType.Bool)] bool b);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ValueInt(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, int v);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ValueFloat(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string prefix, float v, [MarshalAs(UnmanagedType.LPWStr)] string floatFormat);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginMainMenuBar(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndMainMenuBar(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupContextItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupContextWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton, [MarshalAs(UnmanagedType.Bool)] bool alsoOverItems);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupContextVoid(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_BeginPopupModalEx(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [Out] out bool isOpen, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_OpenPopupOnItemClick(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId, int mouseButton);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsPopupOpen(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string strId);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_CloseCurrentPopup(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Tool_GetColumnIndex(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetColumnWidth(IntPtr selfPtr, int columnIndex);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetColumnWidth(IntPtr selfPtr, int columnIndex, float width);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetColumnOffset(IntPtr selfPtr, int columnIndex);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetColumnOffset(IntPtr selfPtr, int columnIndex, float offsetX);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Tool_GetColumnsCount(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetTabItemClosed(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string tabOrDockedWindowLabel);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PushClipRect(IntPtr selfPtr, Vector2F clipRectMin, Vector2F clipRectMax, [MarshalAs(UnmanagedType.Bool)] bool intersectWithCurrentClipRect);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_PopClipRect(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetItemDefaultFocus(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetKeyboardFocusHere(IntPtr selfPtr, int offset);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemHoveredWithFlags(IntPtr selfPtr, int flags);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemFocused(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemClicked(IntPtr selfPtr, int mouseButton);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemVisible(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemEdited(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemActivated(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemDeactivated(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsItemDeactivatedAfterEdit(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsAnyItemHovered(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsAnyItemActive(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsAnyItemFocused(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetItemRectMin(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetItemRectMax(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Tool_GetItemRectSize(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetItemAllowOverlap(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_IsRectVisible(IntPtr selfPtr, Vector2F size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_IsRectVisibleVector2F2(IntPtr selfPtr, Vector2F rectMin, Vector2F rectMax);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Tool_GetTime(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_GetClipboardText(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetClipboardText(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string text);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_LoadIniSettingsFromDisk(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string iniFilename);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SaveIniSettingsToDisk(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string iniFilename);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_OpenDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_OpenDialogMultiple(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_SaveDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_PickFolder(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Tool_GetToolUsage(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetToolUsage(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Tool(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -10950,9 +11790,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StreamFile>>();
         
-        internal static  StreamFile TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  StreamFile TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -10976,46 +11818,58 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_StreamFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_StreamFile_Read(IntPtr selfPtr, int size);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_StreamFile_GetTempBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_StreamFile_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_StreamFile_GetCurrentPosition(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_StreamFile_GetTempBufferSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StreamFile_GetIsInPackage(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_StreamFile_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_StreamFile_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal StreamFile(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -11129,10 +11983,13 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_CurrentPosition = "S_CurrentPosition";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Path = "S_Path";
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private SerializationInfo seInfo;
         
         /// <summary>
@@ -11140,6 +11997,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private StreamFile(SerializationInfo info, StreamingContext context)
         {
             seInfo = info;
@@ -11152,6 +12010,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -11167,6 +12026,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -11174,6 +12034,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -11182,11 +12043,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -11200,6 +12063,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="CurrentPosition"><see cref="StreamFile.CurrentPosition"/></param>
         /// <param name="Path"><see cref="StreamFile.Path"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void StreamFile_Unsetter_Deserialize(SerializationInfo info, out int CurrentPosition, out string Path)
         {
             CurrentPosition = info.GetInt32(S_CurrentPosition);
@@ -11208,8 +12072,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<StreamFile>> ICacheKeeper<StreamFile>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<StreamFile>.Self
         {
             get => selfPtr;
@@ -11219,6 +12085,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<StreamFile>.Release(IntPtr native) => cbg_StreamFile_Release(native);
         
         #endregion
@@ -11229,6 +12096,7 @@ namespace Altseed2
         /// デシリアライズ時に実行
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender)
         {
             if (seInfo == null) return;
@@ -11247,6 +12115,7 @@ namespace Altseed2
         /// <see cref="IDeserializationCallback.OnDeserialization(object)"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
         ~StreamFile()
@@ -11270,9 +12139,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StaticFile>>();
         
-        internal static  StaticFile TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  StaticFile TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -11296,35 +12167,44 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_StaticFile_Create([MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_StaticFile_GetBuffer(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_Reload(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_StaticFile_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_StaticFile_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_StaticFile_GetIsInPackage(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_StaticFile_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal StaticFile(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -11403,6 +12283,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Path = "S_Path";
         #endregion
         
@@ -11411,6 +12292,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private StaticFile(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -11427,6 +12309,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -11441,6 +12324,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -11448,6 +12332,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -11456,11 +12341,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -11473,6 +12360,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="StaticFile.Path"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void StaticFile_Unsetter_Deserialize(SerializationInfo info, out string Path)
         {
             Path = info.GetString(S_Path);
@@ -11480,8 +12368,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<StaticFile>> ICacheKeeper<StaticFile>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<StaticFile>.Self
         {
             get => selfPtr;
@@ -11491,6 +12381,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<StaticFile>.Release(IntPtr native) => cbg_StaticFile_Release(native);
         
         #endregion
@@ -11517,9 +12408,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
         
-        internal static  File TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  File TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -11543,42 +12436,53 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_File_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootDirectory(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootPackageWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] string password);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_AddRootPackage(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_File_ClearRootDirectories(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_Exists(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_Pack(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_File_PackWithPassword(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string srcPath, [MarshalAs(UnmanagedType.LPWStr)] string dstPath, [MarshalAs(UnmanagedType.LPWStr)] string password);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_File_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal File(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -11707,9 +12611,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static ConcurrentDictionary<IntPtr, WeakReference<Sound>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Sound>>();
         
-        internal static  Sound TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Sound TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -11733,47 +12639,60 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Sound_Load([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.Bool)] bool isDecompressed);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Sound_GetLoopStartingPoint(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Sound_SetLoopStartingPoint(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Sound_GetLoopEndPoint(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Sound_SetLoopEndPoint(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Sound_GetIsLoopingMode(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Sound_SetIsLoopingMode(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Sound_GetLength(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Sound_GetPath(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Sound_GetIsDecompressed(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Sound_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Sound(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -11899,10 +12818,15 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LoopStartingPoint = "S_LoopStartingPoint";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LoopEndPoint = "S_LoopEndPoint";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsLoopingMode = "S_IsLoopingMode";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Path = "S_Path";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsDecompressed = "S_IsDecompressed";
         #endregion
         
@@ -11911,6 +12835,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private Sound(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
@@ -11930,6 +12855,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -11948,6 +12874,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -11955,6 +12882,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -11963,11 +12891,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -11981,6 +12911,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="Sound.Path"/></param>
         /// <param name="IsDecompressed"><see cref="Sound.IsDecompressed"/></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Sound_Unsetter_Deserialize(SerializationInfo info, out string Path, out bool IsDecompressed)
         {
             Path = info.GetString(S_Path) ?? throw new SerializationException("デシリアライズに失敗しました");
@@ -11989,8 +12920,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Sound>> ICacheKeeper<Sound>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Sound>.Self
         {
             get => selfPtr;
@@ -12000,6 +12933,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Sound>.Release(IntPtr native) => cbg_Sound_Release(native);
         
         #endregion
@@ -12026,9 +12960,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<SoundMixer>> cacheRepo = new Dictionary<IntPtr, WeakReference<SoundMixer>>();
         
-        internal static  SoundMixer TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  SoundMixer TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -12052,74 +12988,97 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_SoundMixer_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_SoundMixer_Play(IntPtr selfPtr, IntPtr sound);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_SoundMixer_GetIsPlaying(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_StopAll(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_Stop(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_Pause(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_Resume(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_SetVolume(IntPtr selfPtr, int id, float volume);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_FadeIn(IntPtr selfPtr, int id, float second);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_FadeOut(IntPtr selfPtr, int id, float second);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_Fade(IntPtr selfPtr, int id, float second, float targetedVolume);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_SoundMixer_GetIsPlaybackSpeedEnabled(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_SetIsPlaybackSpeedEnabled(IntPtr selfPtr, int id, [MarshalAs(UnmanagedType.Bool)] bool isPlaybackSpeedEnabled);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_SoundMixer_GetPlaybackSpeed(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_SetPlaybackSpeed(IntPtr selfPtr, int id, float playbackSpeed);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_SoundMixer_GetPanningPosition(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_SetPanningPosition(IntPtr selfPtr, int id, float panningPosition);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_SoundMixer_GetPlaybackPosition(IntPtr selfPtr, int id);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_SetPlaybackPosition(IntPtr selfPtr, int id, float position);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_GetSpectrum(IntPtr selfPtr, int id, IntPtr spectrums, int window);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_SoundMixer_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal SoundMixer(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -12346,9 +13305,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Log>> cacheRepo = new Dictionary<IntPtr, WeakReference<Log>>();
         
-        internal static  Log TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Log TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -12372,39 +13333,51 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Log_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Write(IntPtr selfPtr, int category, int level, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Trace(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Debug(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Info(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Warn(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Error(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Critical(IntPtr selfPtr, int category, [MarshalAs(UnmanagedType.LPWStr)] string message);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_SetLevel(IntPtr selfPtr, int category, int level);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Log_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Log(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -12500,9 +13473,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
         
-        internal static  Window TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Window TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -12526,25 +13501,32 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Window_GetInstance();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Window_GetTitle(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Window_SetTitle(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2I cbg_Window_GetSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Window_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Window(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -12616,9 +13598,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<Collider>> cacheRepo = new Dictionary<IntPtr, WeakReference<Collider>>();
         
-        internal static  Collider TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  Collider TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -12642,31 +13626,40 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Collider_Constructor_0();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Collider_GetIsCollidedWith(IntPtr selfPtr, IntPtr collider);
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Collider_GetPosition(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Collider_SetPosition(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_Collider_GetRotation(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Collider_SetRotation(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Collider_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal Collider(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
@@ -12734,7 +13727,9 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Position = "S_Position";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Rotation = "S_Rotation";
         #endregion
         
@@ -12743,6 +13738,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected Collider(SerializationInfo info, StreamingContext context) : this()
         {
             var ptr = Call_GetPtr(info);
@@ -12761,6 +13757,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
@@ -12777,6 +13774,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -12784,6 +13782,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -12792,11 +13791,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private virtual IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -12806,8 +13807,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<Collider>> ICacheKeeper<Collider>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<Collider>.Self
         {
             get => selfPtr;
@@ -12817,6 +13820,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Collider>.Release(IntPtr native) => cbg_Collider_Release(native);
         
         #endregion
@@ -12844,9 +13848,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<CircleCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<CircleCollider>>();
         
-        internal static new CircleCollider TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new CircleCollider TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -12871,19 +13877,24 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_CircleCollider_Constructor_0();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern float cbg_CircleCollider_GetRadius(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CircleCollider_SetRadius(IntPtr selfPtr, float value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CircleCollider_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal CircleCollider(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -12920,6 +13931,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Radius = "S_Radius";
         #endregion
         
@@ -12928,6 +13940,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected CircleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -12945,6 +13958,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -12959,6 +13973,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -12966,6 +13981,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -12974,11 +13990,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -12988,8 +14006,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<CircleCollider>> ICacheKeeper<CircleCollider>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<CircleCollider>.Self
         {
             get => selfPtr;
@@ -12999,6 +14019,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<CircleCollider>.Release(IntPtr native) => cbg_CircleCollider_Release(native);
         
         #endregion
@@ -13026,9 +14047,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<RectangleCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<RectangleCollider>>();
         
-        internal static new RectangleCollider TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RectangleCollider TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -13053,25 +14076,32 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RectangleCollider_Constructor_0();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_RectangleCollider_GetSize(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RectangleCollider_SetSize(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_RectangleCollider_GetCenterPosition(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RectangleCollider_SetCenterPosition(IntPtr selfPtr, Vector2F value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_RectangleCollider_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal RectangleCollider(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -13130,7 +14160,9 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Size = "S_Size";
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_CenterPosition = "S_CenterPosition";
         #endregion
         
@@ -13139,6 +14171,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected RectangleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -13157,6 +14190,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -13172,6 +14206,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -13179,6 +14214,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -13187,11 +14223,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -13201,8 +14239,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<RectangleCollider>> ICacheKeeper<RectangleCollider>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<RectangleCollider>.Self
         {
             get => selfPtr;
@@ -13212,6 +14252,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RectangleCollider>.Release(IntPtr native) => cbg_RectangleCollider_Release(native);
         
         #endregion
@@ -13239,9 +14280,11 @@ namespace Altseed2
     {
         #region unmanaged
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static Dictionary<IntPtr, WeakReference<PolygonCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<PolygonCollider>>();
         
-        internal static new PolygonCollider TryGetFromCache(IntPtr native)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new PolygonCollider TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -13266,19 +14309,24 @@ namespace Altseed2
         }
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_PolygonCollider_Constructor_0();
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_PolygonCollider_GetVertexes(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_PolygonCollider_SetVertexes(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_PolygonCollider_Release(IntPtr selfPtr);
         
         #endregion
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         internal PolygonCollider(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
@@ -13315,6 +14363,7 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Vertexes = "S_Vertexes";
         #endregion
         
@@ -13323,6 +14372,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected PolygonCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = Call_GetPtr(info);
@@ -13340,6 +14390,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -13354,6 +14405,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -13361,6 +14413,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
@@ -13369,11 +14422,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
         /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
         /// <summary>
         /// 呼び出し禁止
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected private override IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
@@ -13383,8 +14438,10 @@ namespace Altseed2
         
         #region ICacheKeeper
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IDictionary<IntPtr, WeakReference<PolygonCollider>> ICacheKeeper<PolygonCollider>.CacheRepo => cacheRepo;
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         IntPtr ICacheKeeper<PolygonCollider>.Self
         {
             get => selfPtr;
@@ -13394,6 +14451,7 @@ namespace Altseed2
             }
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<PolygonCollider>.Release(IntPtr native) => cbg_PolygonCollider_Release(native);
         
         #endregion

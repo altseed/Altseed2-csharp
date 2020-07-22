@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Altseed2
 {
@@ -8,6 +9,7 @@ namespace Altseed2
     /// キャッシュを使用するクラス
     /// </summary>
     /// <typeparam name="TClass">クラスの型</typeparam>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     internal interface ICacheKeeper<TClass> where TClass : class
     {
         /// <summary>
@@ -28,6 +30,7 @@ namespace Altseed2
     /// <summary>
     /// キャッシュの制御を行うクラス
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     internal static class CacheHelper
     {
         /// <summary>
@@ -81,7 +84,7 @@ namespace Altseed2
             {
                 throw new ArgumentException("スレッドセーフなキャッシュ保存ディクショナリを取得できませんでした", nameof(cacheRepo));
             }
-           
+
 
             if (cacheRepo.ContainsKey(native))
             {
