@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Altseed2;
+using Altseed;
 
 namespace Sample
 {
@@ -92,19 +92,18 @@ namespace Sample
                 // スペクトル情報を区分ごとに合計し、スペクトルバーにその値を反映させます。
                 for(int i = 0; i < 16; ++i)
                 {
-                    var freqAverage = spectrum.Skip(i * 32).Take(32).Sum();
-                    var amplitude = MathF.Log2(freqAverage);
+                    var amplitude = spectrum.Skip(i * 8).Take(8).Average();
                     for(int j = 0; j < 16; ++j)
                     {
                         var color = spectrumBars[i, 15 - j].Color;
-                        color.A = (byte)((amplitude > j) ? 255 : 0);
+                        color.A = (byte)((amplitude > j * 4.5) ? 255 : 0);
                         spectrumBars[i, 15 - j].Color = color;
                     }
                 }
 
                 // スペクトル情報を全て平均し、ライトブルームの光の強さに使用します。
                 var amplitudeTotal = spectrum.Average();
-                lightBloom.Exposure = amplitudeTotal;
+                lightBloom.Exposure = amplitudeTotal * 0.5f;
 
                 // 曲の長さと再生位置を取得します。
                 var songLength = sound.Length;
