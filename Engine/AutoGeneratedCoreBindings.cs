@@ -4885,6 +4885,7 @@ namespace Altseed2
             
             OnGetObjectData(info, context);
         }
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         /// <summary>
@@ -6071,6 +6072,7 @@ namespace Altseed2
             
             OnGetObjectData(info, context);
         }
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         /// <summary>
@@ -13767,6 +13769,7 @@ namespace Altseed2
             
             OnGetObjectData(info, context);
         }
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         /// <summary>
