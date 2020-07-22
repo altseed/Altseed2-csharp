@@ -71,7 +71,11 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            Engine.AddNode(new SpriteNode() { Texture = texture });
+            Engine.AddNode(new SpriteNode()
+            {
+                Texture = texture,
+                ZOrder = 1
+            });
 
             var postEffect = new TestPostEffect();
 
@@ -94,7 +98,11 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            Engine.AddNode(new SpriteNode() { Texture = texture });
+            Engine.AddNode(new SpriteNode()
+            {
+                Texture = texture,
+                ZOrder = 1
+            });
 
             Engine.AddNode(new PostEffectGrayScaleNode());
 
@@ -115,7 +123,11 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            Engine.AddNode(new SpriteNode() { Texture = texture });
+            Engine.AddNode(new SpriteNode()
+            {
+                Texture = texture,
+                ZOrder = 1
+            });
 
             Engine.AddNode(new PostEffectSepiaNode());
 
@@ -136,7 +148,11 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            Engine.AddNode(new SpriteNode() { Texture = texture });
+            Engine.AddNode(new SpriteNode()
+            {
+                Texture = texture,
+                ZOrder = 1
+            });
 
             Engine.AddNode(new PostEffectGaussianBlurNode());
 
@@ -157,7 +173,11 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            Engine.AddNode(new SpriteNode() { Texture = texture });
+            Engine.AddNode(new SpriteNode()
+            {
+                Texture = texture,
+                ZOrder = 1
+            });
 
             Engine.AddNode(new PostEffectLightBloomNode { Threshold = 0.1f });
 

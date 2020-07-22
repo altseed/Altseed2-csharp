@@ -6,22 +6,97 @@ namespace Altseed2
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class SpriteNode : DrawnNode
+    public class SpriteNode : TransformNode, ICullableDrawn
     {
-        private readonly RenderedSprite renderedSprite;
+        private readonly RenderedSprite _RenderedSprite;
 
-        public override Matrix44F AbsoluteTransform => renderedSprite.Transform;
+        #region IDrawn
+
+        void IDrawn.Draw()
+        {
+            Engine.Renderer.DrawSprite(_RenderedSprite);
+        }
+
+        /// <summary>
+        /// カリング用ID
+        /// </summary>
+        int ICullableDrawn.CullingId => _RenderedSprite.Id;
+
+        public ulong CameraGroup
+        {
+            get => _CameraGroup; set
+            {
+                if (_CameraGroup == value) return;
+                var old = _CameraGroup;
+                _CameraGroup = value;
+                Engine.UpdateDrawnCameraGroup(this, old);
+            }
+        }
+        private ulong _CameraGroup;
+
+        public int ZOrder
+        {
+            get => _ZOrder;
+            set
+            {
+                if (value == _ZOrder) return;
+
+                var old = _ZOrder;
+                _ZOrder = value;
+
+                Engine.UpdateDrawnZOrder(this, old);
+            }
+        }
+        private int _ZOrder;
+
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsDrawn
+        {
+            get => _IsDrawn; set
+            {
+                if (_IsDrawn == value) return;
+                _IsDrawn = value;
+                this.UpdateIsDrawnActuallyOfDescendants();
+
+            }
+        }
+        private bool _IsDrawn = true;
+
+        /// <summary>
+        /// この先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+
+        public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
+        bool ICullableDrawn.IsDrawnActually { get; set; } = true;
+
+        #endregion
+
+        internal override void Registered()
+        {
+            base.Registered();
+            Engine.RegisterDrawn(this);
+        }
+
+        internal override void Unregistered()
+        {
+            base.Unregistered();
+            Engine.UnregisterDrawn(this);
+        }
+
+        public override Matrix44F AbsoluteTransform => _RenderedSprite.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => renderedSprite.Color;
+            get => _RenderedSprite.Color;
             set
             {
-                if (renderedSprite.Color == value) return;
-                renderedSprite.Color = value;
+                if (_RenderedSprite.Color == value) return;
+                _RenderedSprite.Color = value;
             }
         }
 
@@ -30,24 +105,26 @@ namespace Altseed2
         /// </summary>
         public AlphaBlendMode BlendMode
         {
-            get => renderedSprite.BlendMode;
+            get => _RenderedSprite.BlendMode;
             set
             {
-                if (renderedSprite.BlendMode == value) return;
-                renderedSprite.BlendMode = value;
+                if (_RenderedSprite.BlendMode == value) return;
+                _RenderedSprite.BlendMode = value;
             }
         }
+
+        public bool IsAutoAdjustSize { get; set; } = true;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => renderedSprite.Src;
+            get => _RenderedSprite.Src;
             set
             {
-                if (renderedSprite.Src == value) return;
-                renderedSprite.Src = value;
+                if (_RenderedSprite.Src == value) return;
+                _RenderedSprite.Src = value;
 
                 if (IsAutoAdjustSize) AdjustSize();
             }
@@ -58,11 +135,11 @@ namespace Altseed2
         /// </summary>
         public TextureBase Texture
         {
-            get => renderedSprite.Texture;
+            get => _RenderedSprite.Texture;
             set
             {
-                if (renderedSprite.Texture == value) return;
-                renderedSprite.Texture = value;
+                if (_RenderedSprite.Texture == value) return;
+                _RenderedSprite.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -74,12 +151,12 @@ namespace Altseed2
         /// </summary>
         public Material Material
         {
-            get => renderedSprite.Material;
+            get => _RenderedSprite.Material;
             set
             {
-                if (renderedSprite.Material == value) return;
+                if (_RenderedSprite.Material == value) return;
 
-                renderedSprite.Material = value;
+                _RenderedSprite.Material = value;
                 //TODO: Src
             }
         }
@@ -100,24 +177,11 @@ namespace Altseed2
         private DrawMode _Mode = DrawMode.Absolute;
 
         /// <summary>
-        /// カリング用ID
-        /// </summary>
-        internal override int CullingId => renderedSprite.Id;
-
-        /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public SpriteNode()
         {
-            renderedSprite = RenderedSprite.Create();
-        }
-
-        /// <summary>
-        /// 描画を実行します。
-        /// </summary>
-        internal override void Draw()
-        {
-            Engine.Renderer.DrawSprite(renderedSprite);
+            _RenderedSprite = RenderedSprite.Create();
         }
 
         internal override void UpdateInheritedTransform()
@@ -147,10 +211,10 @@ namespace Altseed2
                     break;
             }
 
-            renderedSprite.Transform = CalcInheritedTransform() * mat;
+            _RenderedSprite.Transform = CalcInheritedTransform() * mat;
         }
 
-        public override void AdjustSize()
+        public void AdjustSize()
         {
             Size = Src.Size;
         }

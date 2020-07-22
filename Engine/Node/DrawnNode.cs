@@ -1,6 +1,6 @@
 ﻿namespace Altseed2
 {
-    public abstract class DrawnNode : TransformNode
+    public abstract class DrawnNode : TransformNode,ICullableDrawn
     {
         /// <summary>
         /// 描画するかどうかを取得または設定します。
@@ -36,7 +36,7 @@
                 _ZOrder = value;
 
                 if (Status == RegisterStatus.Registered)
-                    Engine.UpdateDrawnNodeZOrder(this, old);
+                    Engine.UpdateDrawnZOrder(this, old);
             }
         }
         private int _ZOrder = 0;
@@ -54,7 +54,7 @@
                 _CameraGroup = value;
 
                 if (Status == RegisterStatus.Registered)
-                    Engine.UpdateDrawnNodeCameraGroup(this, old);
+                    Engine.UpdateDrawnCameraGroup(this, old);
             }
         }
         private ulong _CameraGroup = 0;
@@ -63,6 +63,15 @@
         /// カリング用ID
         /// </summary>
         internal virtual int CullingId => -1;
+
+        int ICullableDrawn.CullingId => throw new System.NotImplementedException();
+
+        bool ICullableDrawn.IsDrawn => throw new System.NotImplementedException();
+
+        bool ICullableDrawn.IsDrawnActually { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        ulong IDrawn.CameraGroup { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
+        int IDrawn.ZOrder => throw new System.NotImplementedException();
 
         /// <summary>
         /// 描画を実行します。
@@ -91,14 +100,19 @@
         {
             base.Registered();
             UpdateDescendantsIsDrawnActually();
-            Engine.RegisterDrawnNode(this);
+            Engine.RegisterDrawn(this);
         }
 
         internal override void Unregistered()
         {
             base.Unregistered();
             UpdateDescendantsIsDrawnActually();
-            Engine.UnregisterDrawnNode(this);
+            Engine.UnregisterDrawn(this);
+        }
+
+        void IDrawn.Draw()
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion

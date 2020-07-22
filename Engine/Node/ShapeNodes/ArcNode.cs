@@ -6,14 +6,9 @@ namespace Altseed2
     /// 円弧を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class ArcNode : DrawnNode
+    public class ArcNode : PolygonNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon renderedPolygon;
-
-        internal override int CullingId => renderedPolygon.Id;
-
-        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -25,7 +20,7 @@ namespace Altseed2
             {
                 if (_color == value) return;
                 _color = value;
-                renderedPolygon.OverwriteVertexesColor(value);
+                _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
@@ -44,15 +39,6 @@ namespace Altseed2
             }
         }
         private float _enddegree = 360f;
-
-        /// <summary>
-        /// 使用するマテリアルを取得または設定します。
-        /// </summary>
-        public Material Material
-        {
-            get => renderedPolygon.Material;
-            set { renderedPolygon.Material = value; }
-        }
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -86,20 +72,6 @@ namespace Altseed2
         private float _startdegree = 0.0f;
 
         /// <summary>
-        /// 描画するテクスチャを取得または設定します。
-        /// </summary>
-        public TextureBase Texture
-        {
-            get => renderedPolygon.Texture;
-            set
-            {
-                if (renderedPolygon.Texture == value) return;
-                renderedPolygon.Texture = value;
-                renderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
-            }
-        }
-
-        /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
         public int VertNum
@@ -116,27 +88,11 @@ namespace Altseed2
         private int _vertnum = 3;
 
         /// <summary>
-        /// 描画モードを取得または設定します。
-        /// </summary>
-        public DrawMode Mode
-        {
-            get => _Mode;
-            set
-            {
-                if (_Mode == value) return;
-
-                _Mode = value;
-            }
-        }
-        private DrawMode _Mode = DrawMode.Absolute;
-
-        /// <summary>
         /// <see cref="ArcNode"/>の新しいインスタンスを生成する
         /// </summary>
         public ArcNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
-            renderedPolygon.Vertexes = VertexArray.Create(_vertnum);
+            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
         }
 
         public override void AdjustSize()
@@ -144,8 +100,6 @@ namespace Altseed2
             var length = _radius * 2;
             Size = new Vector2F(length, length);
         }
-
-        internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
 
         private Vector2F GetBaseVector(float degree)
         {
@@ -179,6 +133,12 @@ namespace Altseed2
             if (max - min > 360f) max -= 360f;
         }
 
+        internal override void Update()
+        {
+            base.Update();
+            UpdateInheritedTransform();//仮
+        }
+
         internal override void UpdateInheritedTransform()
         {
             if (changed)
@@ -187,7 +147,7 @@ namespace Altseed2
                 changed = false;
             }
 
-            var array = renderedPolygon.Vertexes;
+            var array = _RenderedPolygon.Vertexes;
             MathHelper.GetMinMax(out var min, out var max, array);
             var size = max - min;
 
@@ -216,7 +176,7 @@ namespace Altseed2
                     break;
             }
 
-            renderedPolygon.Transform = CalcInheritedTransform() * mat;
+            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -247,8 +207,8 @@ namespace Altseed2
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            renderedPolygon.CreateVertexesByVector2F(array);
-            renderedPolygon.OverwriteVertexesColor(_color);
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(Color);
 
             if (IsAutoAdjustSize) AdjustSize();
         }

@@ -6,14 +6,9 @@ namespace Altseed2
     /// 円を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class CircleNode : DrawnNode
+    public class CircleNode : PolygonNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon renderedPolygon;
-
-        internal override int CullingId => renderedPolygon.Id;
-
-        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -25,15 +20,10 @@ namespace Altseed2
             {
                 if (_color == value) return;
                 _color = value;
-                renderedPolygon.OverwriteVertexesColor(value);
+                _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
-
-        /// <summary>
-        /// 使用するマテリアルを取得または設定します。
-        /// </summary>
-        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -52,20 +42,6 @@ namespace Altseed2
         private float _radius;
 
         /// <summary>
-        /// 描画するテクスチャを取得または設定します。
-        /// </summary>
-        public TextureBase Texture
-        {
-            get => renderedPolygon.Texture;
-            set
-            {
-                if (renderedPolygon.Texture == value) return;
-                renderedPolygon.Texture = value;
-                renderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
-            }
-        }
-
-        /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
         public int VertNum
@@ -82,27 +58,11 @@ namespace Altseed2
         private int _vertnum = 3;
 
         /// <summary>
-        /// 描画モードを取得または設定します。
-        /// </summary>
-        public DrawMode Mode
-        {
-            get => _Mode;
-            set
-            {
-                if (_Mode == value) return;
-
-                _Mode = value;
-            }
-        }
-        private DrawMode _Mode = DrawMode.Absolute;
-
-        /// <summary>
         /// <see cref="CircleNode"/>の新しいインスタンスを生成する
         /// </summary>
         public CircleNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
-            renderedPolygon.Vertexes = VertexArray.Create(_vertnum);
+            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
         }
 
         public override void AdjustSize()
@@ -111,7 +71,11 @@ namespace Altseed2
             Size = new Vector2F(length, length);
         }
 
-        internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+        internal override void Update()
+        {
+            base.Update();
+            UpdateInheritedTransform();//仮
+        }
 
         internal override void UpdateInheritedTransform()
         {
@@ -121,7 +85,7 @@ namespace Altseed2
                 changed = false;
             }
 
-            var array = renderedPolygon.Vertexes;
+            var array = _RenderedPolygon.Vertexes;
             MathHelper.GetMinMax(out var min, out var max, array);
             var size = max - min;
 
@@ -151,12 +115,12 @@ namespace Altseed2
             }
             mat *= Matrix44F.GetTranslation2D(-min);
 
-            renderedPolygon.Transform = CalcInheritedTransform() * mat;
+            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
         {
-            var deg = 360f / _vertnum;          
+            var deg = 360f / _vertnum;
             var positions = new Vector2F[_vertnum];
             var vec = new Vector2F(0.0f, -_radius);
 
@@ -170,9 +134,9 @@ namespace Altseed2
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            renderedPolygon.CreateVertexesByVector2F(array);
-            renderedPolygon.OverwriteVertexesColor(_color);
-         
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(_color);
+
             if (IsAutoAdjustSize) AdjustSize();
         }
     }

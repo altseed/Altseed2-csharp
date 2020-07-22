@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Altseed2
 {
-    public abstract class PostEffectNode : Node
+    public abstract class PostEffectNode : Node, IDrawn
     {
         private static Dictionary<int, RenderTextureCache> Cache;
 
@@ -44,7 +44,7 @@ namespace Altseed2
 
                 if (Status == RegisterStatus.Registered)
                 {
-                    Engine.UpdatePostEffectNodeCameraGroup(this, old);
+                    Engine.UpdateDrawnCameraGroup(this, old);
                 }
             }
         }
@@ -53,30 +53,32 @@ namespace Altseed2
         /// <summary>
         /// PostEffectNodeが描画される順番。DrawnNodeを描画した後にまとめて描画されます。
         /// </summary>
-        public int DrawingOrder
+        public int ZOrder
         {
-            get => _DrawingOrder;
+            get => _ZOrder;
             set
             {
-                if (_DrawingOrder == value) return;
-                var old = _DrawingOrder;
-                _DrawingOrder = value;
+                if (_ZOrder == value) return;
+                var old = _ZOrder;
+                _ZOrder = value;
                 if (Status == RegisterStatus.Registered)
                 {
-                    Engine.UpdatePostEffectNodeOrder(this, old);
+                    Engine.UpdateDrawnZOrder(this, old);
                 }
             }
         }
-        private int _DrawingOrder = 0;
+        private int _ZOrder = 0;
 
-        public PostEffectNode() { }
+        public PostEffectNode()
+        {
+        }
 
-        internal void CallDraw(RenderTexture src, Color clearColor)
+        void IDrawn.Draw()
         {
             // 変更されている可能性があるので初期化しておく。
-            src.WrapMode = TextureWrapMode.Repeat;
-            src.FilterType = TextureFilterType.Linear;
-            Draw(src, clearColor);
+            Engine._PostEffectBuffer.WrapMode = TextureWrapMode.Repeat;
+            Engine._PostEffectBuffer.FilterType = TextureFilterType.Linear;
+            Draw(Engine._PostEffectBuffer, Engine.ClearColor);
         }
 
         protected abstract void Draw(RenderTexture src, Color clearColor);
@@ -86,13 +88,13 @@ namespace Altseed2
         internal override void Registered()
         {
             base.Registered();
-            Engine.RegisterPostEffectNode(this);
+            Engine.RegisterDrawn(this);
         }
 
         internal override void Unregistered()
         {
             base.Unregistered();
-            Engine.UnregisterPostEffectNode(this);
+            Engine.UnregisterDrawn(this);
         }
 
         #endregion

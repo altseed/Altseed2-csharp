@@ -14,8 +14,6 @@ namespace Altseed2
         /// </summary>
         internal const int MaxCameraGroupCount = 64;
 
-        private static Configuration _Config;
-
         /// <summary>
         /// ルートノード
         /// </summary>
@@ -27,12 +25,12 @@ namespace Altseed2
         /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
         private static Node _UpdatedNode;
 
-        private static DrawnNodeCollection _DrawnNodes;
-        private static PostEffectNodeCollection _PostEffectNodes;
         private static CameraNodeCollection _CameraNodes;
         private static RenderedCamera _DefaultCamera;
+        private static DrawnCollection _DrawnCollection;
 
         private static RenderTextureCache _RenderTextureCache;
+        internal static RenderTexture _PostEffectBuffer; // TODO: 渡し方をうまくやる。
 
         /// <summary>
         /// スクリーンのクリア色を取得または設定します。
@@ -59,7 +57,7 @@ namespace Altseed2
         /// <returns>初期化に成功したらtrue、それ以外でfalse</returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
-            _Config = (config ??= new Configuration());
+            Config = (config ??= new Configuration());
             if (Core.Initialize(title, width, height, config))
             {
                 _core = Core.GetInstance();
@@ -87,11 +85,11 @@ namespace Altseed2
                 _RootNode = new RootNode();
                 _UpdatedNode = _RootNode;
 
-                _DrawnNodes = new DrawnNodeCollection();
-                _PostEffectNodes = new PostEffectNodeCollection();
+                _DrawnCollection = new DrawnCollection();
                 _CameraNodes = new CameraNodeCollection();
                 _DefaultCamera = RenderedCamera.Create();
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
+
 
                 _RenderTextureCache = new RenderTextureCache();
 
@@ -112,7 +110,7 @@ namespace Altseed2
             Graphics.DoEvents();
             if (!Core.GetInstance().DoEvent()) return false;
 
-            if (_Config.ToolEnabled)
+            if (Config.ToolEnabled)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
@@ -134,73 +132,27 @@ namespace Altseed2
             // Contextの更新
             Context.Update();
 
-            // RenderedにTransform反映
-            foreach (var node in _DrawnNodes.Nodes.SelectMany(obj => obj.Value))
-            {
-                node.UpdateInheritedTransform();
-            }
+            //// RenderedにTransform反映
+            //foreach (var node in _DrawnNodes.Nodes.SelectMany(obj => obj.Value))
+            //{
+            //    node.UpdateInheritedTransform();
+            //}
 
             // カリング用AABBの更新
             CullingSystem.UpdateAABB();
 
             // (ツール機能を使用しない場合は)描画を開始
-            if (!_Config.ToolEnabled)
+            if (!Config.ToolEnabled)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
                 if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
             }
-            
+
             if (_CameraNodes.Count == 0)
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
-                Renderer.SetCamera(_DefaultCamera);
-
-                // カリングの結果
-                var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
-                Array.Sort(cullingIds);
-
-                {
-
-                    var list = _DrawnNodes.Nodes;
-                    foreach (var z in list.Keys.OrderBy(x => x))
-                    // TODO: DrawnNodeはあらかじめ ZOrder でソートされるようなコレクションに格納する
-                    {
-                        var nodes = list[z];
-                        foreach (var node in nodes)
-                        {
-                            if (!node.IsDrawnActually) continue;
-                            // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
-
-                            if (Array.BinarySearch(cullingIds, node.CullingId) < 0) continue;
-
-                            node.Draw();
-                            node.DrawTransformInfo();
-                        }
-                    }
-
-                    Renderer.Render();
-                }
-
-                {
-                    var list = _PostEffectNodes.Nodes;
-
-                    RenderTexture buffer = null;
-
-                    foreach (var z in list.Keys.OrderBy(x => x))
-                    {
-                        foreach (var node in list[z])
-                        {
-                            if (buffer is null)
-                            {
-                                buffer = _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size);
-                            }
-
-                            Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), buffer);
-                            node.CallDraw(buffer, ClearColor);
-                        }
-                    }
-                }
+                DrawCameraGroup(_DefaultCamera, _DrawnCollection.GetDrawns());
             }
             else
             {
@@ -209,53 +161,7 @@ namespace Altseed2
                 {
                     foreach (var camera in _CameraNodes[i])
                     {
-                        Renderer.SetCamera(camera.RenderedCamera);
-
-                        // カリングの結果
-                        var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
-                        Array.Sort(cullingIds);
-
-                        {
-                            var list = _DrawnNodes[i];
-                            foreach (var z in list.Keys.OrderBy(x => x))
-                            // TODO: DrawnNodeはあらかじめ ZOrder でソートされるようなコレクションに格納する
-                            {
-                                var nodes = list[z];
-                                foreach (var node in nodes)
-                                {
-                                    if (!node.IsDrawnActually) continue;
-                                    // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
-
-                                    if (Array.BinarySearch(cullingIds, node.CullingId) < 0) continue;
-
-                                    node.Draw();
-                                    node.DrawTransformInfo();
-                                }
-                            }
-
-                            Renderer.Render();
-                        }
-
-                        {
-                            var list = _PostEffectNodes[i];
-
-                            var target = camera.TargetTexture ?? Graphics.CommandList.GetScreenTexture();
-                            RenderTexture buffer = null;
-
-                            foreach (var z in list.Keys.OrderBy(x => x))
-                            {
-                                foreach (var node in list[z])
-                                {
-                                    if (buffer is null)
-                                    {
-                                        buffer = _RenderTextureCache.GetRenderTexture(target.Size);
-                                    }
-
-                                    Graphics.CommandList.CopyTexture(target, buffer);
-                                    node.CallDraw(buffer, camera.ClearColor);
-                                }
-                            }
-                        }
+                        DrawCameraGroup(camera.RenderedCamera, _DrawnCollection[i]);
                     }
                 }
             }
@@ -264,7 +170,7 @@ namespace Altseed2
             PostEffectNode.UpdateCache();
 
             // （ツール機能を使用する場合は）ツールを描画
-            if (_Config.ToolEnabled)
+            if (Config.ToolEnabled)
             {
                 Tool.Render();
             }
@@ -272,6 +178,47 @@ namespace Altseed2
             // 描画を終了
             if (!Graphics.EndFrame()) return false;
             return true;
+        }
+
+        private static void DrawCameraGroup(RenderedCamera camera, SortedDictionary<int, HashSet<IDrawn>> drawns)
+        {
+            Renderer.SetCamera(camera);
+
+            // カリングの結果
+            var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
+            Array.Sort(cullingIds);
+
+            _PostEffectBuffer = null;
+            var requireRender = false;
+
+            foreach (var (_, znodes) in drawns)
+            {
+                foreach (var node in znodes)
+                {
+                    if (node is PostEffectNode)
+                    {
+                        if (requireRender) Renderer.Render();
+
+                        _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size);
+
+                        Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), _PostEffectBuffer);
+                        node.Draw();
+                    }
+                    else if (node is ICullableDrawn cdrawn)
+                    {
+                        if (!cdrawn.IsDrawnActually) continue;
+                        // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
+
+                        if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
+
+                        node.Draw();
+                        requireRender = true;
+                        // DrawTransformInfo();
+                    }
+                    else throw new InvalidOperationException();
+                }
+            }
+            if (requireRender) Renderer.Render();
         }
 
         /// <summary>
@@ -433,52 +380,24 @@ namespace Altseed2
         public static IEnumerable<T> FindNodes<T>(Func<T, bool> condition) where T : Node
                 => _RootNode.EnumerateDescendants(condition);
 
-        #endregion
-
-        #region DrawnNodeCollection
-
-        internal static void RegisterDrawnNode(DrawnNode node)
+        internal static void RegisterDrawn(IDrawn node)
         {
-            _DrawnNodes.AddNode(node);
+            _DrawnCollection.Register(node);
         }
 
-        internal static void UnregisterDrawnNode(DrawnNode node)
+        internal static void UnregisterDrawn(IDrawn node)
         {
-            _DrawnNodes.RemoveNode(node);
+            _DrawnCollection.Unregister(node);
         }
 
-        internal static void UpdateDrawnNodeCameraGroup(DrawnNode node, ulong oldCameraGroup)
+        internal static void UpdateDrawnCameraGroup(IDrawn node, ulong old)
         {
-            _DrawnNodes.UpdateCameraGroup(node, oldCameraGroup);
+            _DrawnCollection.UpdateCameraGroup(node, old);
         }
 
-        internal static void UpdateDrawnNodeZOrder(DrawnNode node, int oldZOrder)
+        internal static void UpdateDrawnZOrder(IDrawn node, int old)
         {
-            _DrawnNodes.UpdateOrder(node, oldZOrder);
-        }
-
-        #endregion
-
-        #region PostEffectNodeCollection
-
-        internal static void RegisterPostEffectNode(PostEffectNode node)
-        {
-            _PostEffectNodes.AddNode(node);
-        }
-
-        internal static void UnregisterPostEffectNode(PostEffectNode node)
-        {
-            _PostEffectNodes.RemoveNode(node);
-        }
-
-        internal static void UpdatePostEffectNodeCameraGroup(PostEffectNode node, ulong oldCameraGroup)
-        {
-            _PostEffectNodes.UpdateCameraGroup(node, oldCameraGroup);
-        }
-
-        internal static void UpdatePostEffectNodeOrder(PostEffectNode node, int oldOrder)
-        {
-            _PostEffectNodes.UpdateOrder(node, oldOrder);
+            _DrawnCollection.UpdateZOrder(node, old);
         }
 
         #endregion
@@ -512,7 +431,7 @@ namespace Altseed2
         /// </summary>
         public static Vector2I WindowSize => Window.Size;
 
-        internal static Configuration Config => _Config;
+        internal static Configuration Config { get; private set; }
 
         /// <summary>
         /// ウインドウのタイトルを取得または設定します。

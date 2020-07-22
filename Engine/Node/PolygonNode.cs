@@ -5,22 +5,97 @@ using System.Linq;
 namespace Altseed2
 {
     [Serializable]
-    public class PolygonNode : DrawnNode
+    public class PolygonNode : TransformNode, ICullableDrawn
     {
-        private readonly RenderedPolygon renderedPolygon;
+        protected private readonly RenderedPolygon _RenderedPolygon;
 
-        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
+        #region IDrawn
+
+        void IDrawn.Draw()
+        {
+            Engine.Renderer.DrawPolygon(_RenderedPolygon);
+        }
+
+        /// <summary>
+        /// カリング用ID
+        /// </summary>
+        int ICullableDrawn.CullingId => _RenderedPolygon.Id;
+
+        public ulong CameraGroup
+        {
+            get => _CameraGroup; set
+            {
+                if (_CameraGroup == value) return;
+                var old = _CameraGroup;
+                _CameraGroup = value;
+                Engine.UpdateDrawnCameraGroup(this, old);
+            }
+        }
+        private ulong _CameraGroup;
+
+        public int ZOrder
+        {
+            get => _ZOrder;
+            set
+            {
+                if (value == _ZOrder) return;
+
+                var old = _ZOrder;
+                _ZOrder = value;
+
+                Engine.UpdateDrawnZOrder(this, old);
+            }
+        }
+        private int _ZOrder;
+
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsDrawn
+        {
+            get => _IsDrawn; set
+            {
+                if (_IsDrawn == value) return;
+                _IsDrawn = value;
+                this.UpdateIsDrawnActuallyOfDescendants();
+
+            }
+        }
+        private bool _IsDrawn = true;
+
+        /// <summary>
+        /// この先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+
+        public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
+        bool ICullableDrawn.IsDrawnActually { get; set; } = true;
+
+        #endregion
+
+        internal override void Registered()
+        {
+            base.Registered();
+            Engine.RegisterDrawn(this);
+        }
+
+        internal override void Unregistered()
+        {
+            base.Unregistered();
+            Engine.UnregisterDrawn(this);
+        }
+
+        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
 
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
-            get => renderedPolygon.Src;
+            get => _RenderedPolygon.Src;
             set
             {
-                if (renderedPolygon.Src == value) return;
-                renderedPolygon.Src = value;
+                if (_RenderedPolygon.Src == value) return;
+                _RenderedPolygon.Src = value;
             }
         }
 
@@ -29,11 +104,11 @@ namespace Altseed2
         /// </summary>
         public TextureBase Texture
         {
-            get => renderedPolygon.Texture;
+            get => _RenderedPolygon.Texture;
             set
             {
-                if (renderedPolygon.Texture == value) return;
-                renderedPolygon.Texture = value;
+                if (_RenderedPolygon.Texture == value) return;
+                _RenderedPolygon.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -45,12 +120,12 @@ namespace Altseed2
         /// </summary>
         public Material Material
         {
-            get => renderedPolygon.Material;
+            get => _RenderedPolygon.Material;
             set
             {
-                if (renderedPolygon.Material == value) return;
+                if (_RenderedPolygon.Material == value) return;
 
-                renderedPolygon.Material = value;
+                _RenderedPolygon.Material = value;
             }
         }
 
@@ -61,13 +136,13 @@ namespace Altseed2
         {
             get
             {
-                return renderedPolygon.Vertexes?.ToArray();
+                return _RenderedPolygon.Vertexes?.ToArray();
             }
             set
             {
                 var vertexArray = VertexArray.Create(value.Length);
                 vertexArray.FromArray(value);
-                renderedPolygon.Vertexes = vertexArray;
+                _RenderedPolygon.Vertexes = vertexArray;
 
                 if (IsAutoAdjustSize) AdjustSize();
             }
@@ -78,11 +153,11 @@ namespace Altseed2
         /// </summary>
         public AlphaBlendMode BlendMode
         {
-            get => renderedPolygon.BlendMode;
+            get => _RenderedPolygon.BlendMode;
             set
             {
-                if (renderedPolygon.BlendMode == value) return;
-                renderedPolygon.BlendMode = value;
+                if (_RenderedPolygon.BlendMode == value) return;
+                _RenderedPolygon.BlendMode = value;
             }
         }
 
@@ -102,24 +177,11 @@ namespace Altseed2
         private DrawMode _Mode = DrawMode.Absolute;
 
         /// <summary>
-        /// カリング用ID
-        /// </summary>
-        internal override int CullingId => renderedPolygon.Id;
-
-        /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
         public PolygonNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
-        }
-
-        /// <summary>
-        /// 描画を実行します。
-        /// </summary>
-        internal override void Draw()
-        {
-            Engine.Renderer.DrawPolygon(renderedPolygon);
+            _RenderedPolygon = RenderedPolygon.Create();
         }
 
         /// <summary>
@@ -128,7 +190,7 @@ namespace Altseed2
         /// <param name="color">設定する色</param>
         public void OverwriteVertexColor(Color color)
         {
-            renderedPolygon.OverwriteVertexesColor(color);
+            _RenderedPolygon.OverwriteVertexesColor(color);
         }
 
         /// <summary>
@@ -156,7 +218,7 @@ namespace Altseed2
             }
             var vertexArray = VertexArray.Create(array.Length);
             vertexArray.FromArray(array);
-            renderedPolygon.Vertexes = vertexArray;
+            _RenderedPolygon.Vertexes = vertexArray;
 
             if (IsAutoAdjustSize) AdjustSize();
         }
@@ -170,7 +232,7 @@ namespace Altseed2
         public void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
-             Vector2F[] array;
+            Vector2F[] array;
             switch (vertexes)
             {
                 case Vector2F[] a:
@@ -183,18 +245,18 @@ namespace Altseed2
                 default:
                     array = vertexes.ToArray();
                     break;
-            }           
+            }
             var vertexArray = Vector2FArray.Create(array.Length);
             vertexArray.FromArray(array);
-            renderedPolygon.CreateVertexesByVector2F(vertexArray);
-            renderedPolygon.OverwriteVertexesColor(color);
+            _RenderedPolygon.CreateVertexesByVector2F(vertexArray);
+            _RenderedPolygon.OverwriteVertexesColor(color);
 
             if (IsAutoAdjustSize) AdjustSize();
         }
 
         internal override void UpdateInheritedTransform()
         {
-            var array = renderedPolygon.Vertexes;
+            var array = _RenderedPolygon.Vertexes;
             MathHelper.GetMinMax(out var min, out var max, array);
             var size = max - min;
 
@@ -224,14 +286,14 @@ namespace Altseed2
             }
             mat *= Matrix44F.GetTranslation2D(-min);
 
-            renderedPolygon.Transform = CalcInheritedTransform() * mat;
+            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         public override void AdjustSize()
         {
             if (Vertexes == null) return;
 
-            var array = renderedPolygon.Vertexes;
+            var array = _RenderedPolygon.Vertexes;
             if (array != null && array.Count > 0)
             {
                 MathHelper.GetMinMax(out var min, out var max, array);

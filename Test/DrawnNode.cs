@@ -21,9 +21,9 @@ namespace Altseed2.Test
 
             var node = new SpriteNode();
             node.Texture = texture;
-            node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
-            node.Pivot = new Vector2F(0.5f, 0.5f);
-            node.AdjustSize();
+            //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
+            //node.Pivot = new Vector2F(0.5f, 0.5f);
+            //node.AdjustSize();
             Engine.AddNode(node);
 
             tc.LoopBody(c =>

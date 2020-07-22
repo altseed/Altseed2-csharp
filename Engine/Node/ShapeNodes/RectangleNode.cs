@@ -6,15 +6,10 @@ namespace Altseed2
     /// 短形を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class RectangleNode : DrawnNode
+    public class RectangleNode : PolygonNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon renderedPolygon;
-
-        internal override int CullingId => renderedPolygon.Id;
-
-        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
-
+        
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
@@ -25,7 +20,7 @@ namespace Altseed2
             {
                 if (_color == value) return;
                 _color = value;
-                renderedPolygon.OverwriteVertexesColor(value);
+                _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
@@ -45,40 +40,6 @@ namespace Altseed2
         }
         private Vector2F _RectangleSize = new Vector2F();
 
-        /// <summary>
-        /// 使用するマテリアルを取得または設定します。
-        /// </summary>
-        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
-
-        /// <summary>
-        /// 描画するテクスチャを取得または設定します。
-        /// </summary>
-        public TextureBase Texture
-        {
-            get => renderedPolygon.Texture;
-            set
-            {
-                if (renderedPolygon.Texture == value) return;
-                renderedPolygon.Texture = value;
-                renderedPolygon.Src = new RectF(default, value?.Size ?? Vector2F.One);
-            }
-        }
-
-        /// <summary>
-        /// 描画モードを取得または設定します。
-        /// </summary>
-        public DrawMode Mode
-        {
-            get => _Mode;
-            set
-            {
-                if (_Mode == value) return;
-
-                _Mode = value;
-            }
-        }
-        private DrawMode _Mode = DrawMode.Absolute;
-
         public override void AdjustSize()
         {
             Size = RectangleSize;
@@ -89,11 +50,14 @@ namespace Altseed2
         /// </summary>
         public RectangleNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
-            renderedPolygon.Vertexes = VertexArray.Create(4);
+            _RenderedPolygon.Vertexes = VertexArray.Create(4);
         }
 
-        internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+        internal override void Update()
+        {
+            base.Update();
+            UpdateInheritedTransform();//仮
+        }
 
         internal override void UpdateInheritedTransform()
         {
@@ -103,7 +67,7 @@ namespace Altseed2
                 changed = false;
             }
 
-            var array = renderedPolygon.Vertexes;
+            var array = _RenderedPolygon.Vertexes;
             MathHelper.GetMinMax(out var min, out var max, array);
             var size = max - min;
 
@@ -133,7 +97,7 @@ namespace Altseed2
             }
             mat *= Matrix44F.GetTranslation2D(-min);
 
-            renderedPolygon.Transform = CalcInheritedTransform() * mat;
+            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -145,8 +109,8 @@ namespace Altseed2
             positions[3] = new Vector2F(RectangleSize.X, 0.0f);
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            renderedPolygon.CreateVertexesByVector2F(array);
-            renderedPolygon.OverwriteVertexesColor(_color);
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(_color);
          
             if (IsAutoAdjustSize) AdjustSize();
         }

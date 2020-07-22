@@ -6,12 +6,9 @@ namespace Altseed2
     /// 三角形を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class TriangleNode : DrawnNode
+    public class TriangleNode : PolygonNode
     {
         private bool changed = false;
-        private readonly RenderedPolygon renderedPolygon;
-
-        public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -23,12 +20,10 @@ namespace Altseed2
             {
                 if (_color == value) return;
                 _color = value;
-                renderedPolygon.OverwriteVertexesColor(value);
+                _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
         private Color _color = new Color(255, 255, 255);
-
-        internal override int CullingId => renderedPolygon.Id;
 
         /// <summary>
         /// 頂点1を取得または設定します。
@@ -75,26 +70,6 @@ namespace Altseed2
         }
         private Vector2F _point3;
 
-        /// <summary>
-        /// 使用するマテリアルを取得または設定します。
-        /// </summary>
-        public Material Material { get => renderedPolygon.Material; set { renderedPolygon.Material = value; } }
-
-        /// <summary>
-        /// 描画モードを取得または設定します。
-        /// </summary>
-        public DrawMode Mode
-        {
-            get => _Mode;
-            set
-            {
-                if (_Mode == value) return;
-
-                _Mode = value;
-            }
-        }
-        private DrawMode _Mode = DrawMode.Absolute;
-
         public override void AdjustSize()
         {
             var array = new Vector2F[3]
@@ -113,11 +88,14 @@ namespace Altseed2
         /// </summary>
         public TriangleNode()
         {
-            renderedPolygon = RenderedPolygon.Create();
-            renderedPolygon.Vertexes = VertexArray.Create(3);
+            _RenderedPolygon.Vertexes = VertexArray.Create(3);
         }
 
-        internal override void Draw() => Engine.Renderer.DrawPolygon(renderedPolygon);
+        internal override void Update()
+        {
+            base.Update();
+            UpdateInheritedTransform();//仮
+        }
 
         internal override void UpdateInheritedTransform()
         {
@@ -128,7 +106,7 @@ namespace Altseed2
                 changed = false;
             }
 
-            var array = renderedPolygon.Vertexes;
+            var array = _RenderedPolygon.Vertexes;
             MathHelper.GetMinMax(out var min, out var max, array);
             var size = max - min;
 
@@ -158,7 +136,7 @@ namespace Altseed2
             }
             mat *= Matrix44F.GetTranslation2D(-min);
 
-            renderedPolygon.Transform = CalcInheritedTransform() * mat;
+            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -170,8 +148,8 @@ namespace Altseed2
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
-            renderedPolygon.CreateVertexesByVector2F(array);
-            renderedPolygon.OverwriteVertexesColor(_color);
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(_color);
         }
     }
 }
