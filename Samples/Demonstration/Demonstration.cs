@@ -46,27 +46,29 @@ namespace Sample
                 for(int j = 0; j < 16; ++j)
                 {
                     spectrumBars[i, j] = new RectangleNode();
-                    spectrumBars[i, j].Size = new Vector2F(20.0f, 8.0f);
+                    spectrumBars[i, j].RectangleSize = new Vector2F(20.0f, 8.0f);
                     spectrumBars[i, j].Pivot = new Vector2F(0.5f, 0.5f);
                     spectrumBars[i, j].Position = new Vector2F(28.0f * i + 110.0f, 16.0f * j + 60.0f);
                     spectrumBars[i, j].Color = HSV2RGB((int)(22.5 * i), 255, 255);
-                    spectrumBars[i, j].CameraGroup = 1;
+                    spectrumBars[i, j].AdjustSize();
 
                     Engine.AddNode(spectrumBars[i, j]);
                 }
 
             // シークバーを示す図形ノードを作成し、エンジンに登録します。
-            // seekBarDot は seekBarLine の子ノードです。
             var seekBarLine = new LineNode();
             seekBarLine.Point1 = new Vector2F(0.0f, 0.0f);
             seekBarLine.Point2 = new Vector2F(500.0f, 0.0f);
             seekBarLine.Thickness = 5.0f;
             seekBarLine.Position = new Vector2F(70.0f, 400.0f);
+            seekBarLine.AdjustSize();
 
             var seekBarDot = new CircleNode();
             seekBarDot.VertNum = 360;
             seekBarDot.Radius = 12.0f;
-            seekBarDot.Position = new Vector2F(0.0f, 0.0f);
+            seekBarDot.Pivot = new Vector2F(0.5f, 0.5f);
+            seekBarDot.Position = new Vector2F(0.0f, 2.5f);
+            seekBarDot.AdjustSize();
 
             seekBarLine.AddChildNode(seekBarDot);
             Engine.AddNode(seekBarLine);
@@ -88,30 +90,29 @@ namespace Sample
             {
                 // スペクトル情報を取得します。
                 var spectrum = Engine.Sound.GetSpectrum(soundId, 1024, FFTWindow.Blackman);
-
+                
                 // スペクトル情報を区分ごとに合計し、スペクトルバーにその値を反映させます。
                 for(int i = 0; i < 16; ++i)
                 {
-                    var freqAverage = spectrum.Skip(i * 32).Take(32).Sum();
-                    var amplitude = MathF.Log2(freqAverage);
+                    var amplitude = spectrum.Skip(i * 8).Take(8).Average();
                     for(int j = 0; j < 16; ++j)
                     {
                         var color = spectrumBars[i, 15 - j].Color;
-                        color.A = (byte)((amplitude > j) ? 255 : 0);
+                        color.A = (byte)((amplitude > j * 4.5) ? 255 : 0);
                         spectrumBars[i, 15 - j].Color = color;
                     }
                 }
 
                 // スペクトル情報を全て平均し、ライトブルームの光の強さに使用します。
                 var amplitudeTotal = spectrum.Average();
-                lightBloom.Exposure = amplitudeTotal;
+                lightBloom.Exposure = amplitudeTotal * 0.5f;
 
                 // 曲の長さと再生位置を取得します。
                 var songLength = sound.Length;
                 var songPosition = Engine.Sound.GetPlaybackPosition(soundId);
 
                 // 曲の長さと再生位置を、シークバーに反映させます。
-                seekBarDot.Position = new Vector2F(songPosition / songLength * 500.0f, 0.0f);
+                seekBarDot.Position = new Vector2F(songPosition / songLength * 500.0f, 2.5f);
 
                 // Altseed を更新します。
                 Engine.Update();
