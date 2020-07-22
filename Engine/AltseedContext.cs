@@ -8,7 +8,7 @@ namespace Altseed2
     /// Altseed2における<see cref="SynchronizationContext"/>
     /// </summary>
     [Serializable]
-    public class AltseedContext : SynchronizationContext
+    internal class AltseedContext : SynchronizationContext
     {
         [Serializable]
         private readonly struct Entry
