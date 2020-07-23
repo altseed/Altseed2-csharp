@@ -10251,7 +10251,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        internal bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
+        public bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
         {
             var ret = cbg_Tool_SliderFloat(selfPtr, label, ref value, speed, valueMin, valueMax);
             return ret;
