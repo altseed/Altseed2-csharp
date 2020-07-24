@@ -425,7 +425,7 @@ namespace Altseed2
     /// ジョイスティックのボタンの種類を表します。
     /// </summary>
     [Serializable]
-    public enum JoystickButtonType : int
+    public enum JoystickButtons : int
     {
         /// <summary>
         /// 右側下ボタン
@@ -493,7 +493,7 @@ namespace Altseed2
     /// ジョイスティックの軸の種類を表します。
     /// </summary>
     [Serializable]
-    public enum JoystickAxisType : int
+    public enum JoystickAxes : int
     {
         /// <summary>
         /// 左スティック横

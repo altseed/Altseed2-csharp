@@ -43,7 +43,7 @@ namespace Sample
                         // Nameよりもわかりやすい名前を取得可能です。
                         displayText += $"ゲームパッド名: {info.GamepadName}\n";
 
-                        foreach (var buttonType in Enum.GetValues(typeof(JoystickButtonType)).Cast<JoystickButtonType>())
+                        foreach (var buttonType in Enum.GetValues(typeof(JoystickButtons)).Cast<JoystickButtons>())
                         {
                             // ジョイスティックコントローラーのボタン入力を取得します。
                             // ジョイスティックのインデックスと確認したいジョイスティックボタンを指定します。

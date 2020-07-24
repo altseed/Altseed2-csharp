@@ -123,7 +123,7 @@ namespace Altseed2.Test
                     if (info.IsGamepad)
                     {
                         var name = info.GamepadName;
-                        var state = Engine.Joystick.GetButtonState(i, JoystickButtonType.DPadUp);
+                        var state = Engine.Joystick.GetButtonState(i, JoystickButtons.DPadUp);
                         text += $"{name}: LeftUp = {state}\n";
                     }
                     else
