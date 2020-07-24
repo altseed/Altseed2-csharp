@@ -55,7 +55,12 @@ namespace Altseed2
         protected virtual void OnOpening(float progress) { }
 
         /// <summary>
-        /// ノードが入れ替わる瞬間の処理を記述します。
+        /// ノードが入れ替わる直前の処理を記述します。
+        /// </summary>
+        protected virtual void OnNodeSwapping() { }
+
+        /// <summary>
+        /// ノードが入れ替わった直後の処理を記述します。
         /// </summary>
         protected virtual void OnNodeSwapped() { }
 
@@ -65,7 +70,7 @@ namespace Altseed2
         protected virtual void OnTransitionBegin() { }
 
         /// <summary>
-        /// トランジションが終了する瞬間の処理を記述します。
+        /// トランジションが終了する直前の処理を記述します。
         /// </summary>
         protected virtual void OnTransitionEnd() { }
 
@@ -85,12 +90,16 @@ namespace Altseed2
                 yield return 0;
             }
 
+            // ノードが入れ替わる直前の処理
+            OnNodeSwapping();
+            yield return 0;
+
             // ノードの入れ替え
             var parentNode = OldNode.Parent;
             parentNode.RemoveChildNode(OldNode);
             parentNode.AddChildNode(NewNode);
 
-            // ノードが入れ替わる時の処理
+            // ノードが入れ替わった直後の処理
             OnNodeSwapped();
             yield return 0;
 
