@@ -3,7 +3,7 @@
 namespace Altseed2
 {
     [Serializable]
-    public class RuledTransitionState
+    public sealed class RuledTransitionState
     {
         public Node TargetNode { get; set; }
         public float Duration { get; set; }
