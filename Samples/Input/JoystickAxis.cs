@@ -41,7 +41,7 @@ namespace Sample
 
                         displayText += $"ゲームパッド名: {info.GamepadName}\n";
 
-                        foreach (var axisType in Enum.GetValues(typeof(JoystickAxisType)).Cast<JoystickAxisType>())
+                        foreach (var axisType in Enum.GetValues(typeof(JoystickAxes)).Cast<JoystickAxes>())
                         {
                             // ジョイスティックコントローラーの軸入力を取得します。
                             // ジョイスティックのインデックスと確認したい軸の種類を指定します。
