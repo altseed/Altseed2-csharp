@@ -27,7 +27,7 @@ namespace Altseed2
         /// <param name="oldNode">トランジションによって取り除かれるノード</param>
         /// <param name="newNode">トランジションによって追加されるノード</param>
         /// <param name="closingDuration">トランジションが始まってからノードが入れ替わるまでの期間</param>
-        /// <param name="openingDuration">トランジションが始まってからノードが入れ替わるまでの期間</param>
+        /// <param name="openingDuration">ノードが入れ替わってからトランジションが終わるまでの期間</param>
         public TransitionNode(Node oldNode, Node newNode, float closingDuration, float openingDuration)
         {
             OldNode = oldNode;
@@ -36,23 +36,31 @@ namespace Altseed2
             _Coroutine = GetCoroutine(closingDuration, openingDuration);
         }
 
-        protected override void OnUpdate()
+        internal override void Update()
         {
             _Coroutine.MoveNext();
+            base.Update();
         }
 
         /// <summary>
         /// ノードが入れ替わる前の処理を記述します。
         /// </summary>
+        /// <param name="progress">0.0f ~ 1.0fの範囲で、ノードが入れ替わるまでの進行度を受け取ります。</param>
         protected virtual void OnClosing(float progress) { }
 
         /// <summary>
         /// ノードが入れ替わった後の処理を記述します。
         /// </summary>
+        /// <param name="progress">0.0f ~ 1.0fの範囲で、ノードが入れ替わった後の進行度を受け取ります。</param>
         protected virtual void OnOpening(float progress) { }
 
         /// <summary>
-        /// ノードが入れ替わる瞬間の処理を記述します。
+        /// ノードが入れ替わる直前の処理を記述します。
+        /// </summary>
+        protected virtual void OnNodeSwapping() { }
+
+        /// <summary>
+        /// ノードが入れ替わった直後の処理を記述します。
         /// </summary>
         protected virtual void OnNodeSwapped() { }
 
@@ -62,7 +70,7 @@ namespace Altseed2
         protected virtual void OnTransitionBegin() { }
 
         /// <summary>
-        /// トランジションが終了する瞬間の処理を記述します。
+        /// トランジションが終了する直前の処理を記述します。
         /// </summary>
         protected virtual void OnTransitionEnd() { }
 
@@ -82,12 +90,16 @@ namespace Altseed2
                 yield return 0;
             }
 
+            // ノードが入れ替わる直前の処理
+            OnNodeSwapping();
+            yield return 0;
+
             // ノードの入れ替え
             var parentNode = OldNode.Parent;
             parentNode.RemoveChildNode(OldNode);
             parentNode.AddChildNode(NewNode);
 
-            // ノードが入れ替わるの処理
+            // ノードが入れ替わった直後の処理
             OnNodeSwapped();
             yield return 0;
 
