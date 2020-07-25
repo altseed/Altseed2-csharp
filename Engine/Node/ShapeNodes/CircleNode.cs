@@ -8,136 +8,82 @@ namespace Altseed2
     [Serializable]
     public class CircleNode : PolygonNode
     {
-        private bool changed = false;
+        private bool _RequireUpdateVertexes = false;
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => _color;
+            get => _Color;
             set
             {
-                if (_color == value) return;
-                _color = value;
-                _RenderedPolygon.OverwriteVertexesColor(value);
+                if (_Color == value) return;
+
+                _Color = value;
+                OverwriteVertexColor(value);
             }
         }
-        private Color _color = new Color(255, 255, 255);
+        private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 半径を取得または設定します。
         /// </summary>
         public float Radius
         {
-            get => _radius;
+            get => _Radius;
             set
             {
-                if (_radius == value) return;
-                _radius = value;
-                changed = true;
-                AdjustSize();
+                if (_Radius == value) return;
+
+                _Radius = value;
+                _RequireUpdateVertexes = true;
             }
         }
-        private float _radius;
+        private float _Radius;
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
         public int VertNum
         {
-            get => _vertnum;
+            get => _VertNum;
             set
             {
                 if (value < 3) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が3未満です\n実際の値：{value}");
-                if (_vertnum == value) return;
-                _vertnum = value;
-                changed = true;
+                if (_VertNum == value) return;
+                _VertNum = value;
+                _RequireUpdateVertexes = true;
             }
         }
-        private int _vertnum = 3;
-
-        /// <summary>
-        /// <see cref="CircleNode"/>の新しいインスタンスを生成する
-        /// </summary>
-        public CircleNode()
-        {
-            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
-        }
-
-        public override void AdjustSize()
-        {
-            var length = _radius * 2;
-            Size = new Vector2F(length, length);
-        }
-
-        internal override void Update()
-        {
-            base.Update();
-            UpdateInheritedTransform();//仮
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            if (changed)
-            {
-                UpdateVertexes();
-                changed = false;
-            }
-
-            var array = _RenderedPolygon.Vertexes;
-            MathHelper.GetMinMax(out var min, out var max, array);
-            var size = max - min;
-
-            var mat = new Matrix44F();
-            switch (Mode)
-            {
-                case DrawMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / size);
-                    break;
-                case DrawMode.KeepAspect:
-                    var scale = Size;
-
-                    if (Size.X / Size.Y > size.X / size.Y)
-                        scale.X = size.X * Size.Y / size.Y;
-                    else
-                        scale.Y = size.Y * Size.X / size.X;
-
-                    scale /= size;
-
-                    mat = Matrix44F.GetScale2D(scale);
-                    break;
-                case DrawMode.Absolute:
-                    mat = Matrix44F.Identity;
-                    break;
-                default:
-                    break;
-            }
-            mat *= Matrix44F.GetTranslation2D(-min);
-
-            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
-        }
+        private int _VertNum = 3;
 
         private void UpdateVertexes()
         {
-            var deg = 360f / _vertnum;
-            var positions = new Vector2F[_vertnum];
-            var vec = new Vector2F(0.0f, -_radius);
+            var deg = 360f / _VertNum;
+            var positions = new Vector2F[_VertNum];
+            var vec = new Vector2F(0.0f, -_Radius);
 
             var rad = new Vector2F(Radius, Radius);
-            for (int i = 0; i < _vertnum; i++)
+            for (int i = 0; i < _VertNum; i++)
             {
                 positions[i] = vec;
                 vec.Degree += deg;
                 positions[i] += rad;
             }
 
-            var array = Vector2FArray.Create(positions.Length);
-            array.FromArray(positions);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(_color);
+            SetVertexes(positions, Color);
+        }
 
-            if (IsAutoAdjustSize) AdjustSize();
+        internal override void Update()
+        {
+            if (_RequireUpdateVertexes)
+            {
+                UpdateVertexes();
+                _RequireUpdateVertexes = false;
+            }
+
+            base.Update();
         }
     }
 }

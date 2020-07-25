@@ -28,7 +28,7 @@ namespace Altseed2
                 if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
-                AdjustSize();
+                //AdjustSize();
                 Version++;
             }
         }
@@ -52,15 +52,15 @@ namespace Altseed2
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
         }
 
-        public override void AdjustSize()
-        {
-            MathHelper.GetMinMax(out var min, out var max, _vertexes);
-            base.Size = max - min;
-        }
+        //public override void AdjustSize()
+        //{
+        //    MathHelper.GetMinMax(out var min, out var max, _vertexes);
+        //    base.Size = max - min;
+        //}
 
         internal override void UpdateCollider()
         {
-            UpdateInheritedTransform();
+            //UpdateInheritedTransform();
 
             MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
@@ -106,7 +106,7 @@ namespace Altseed2
             RenderedPolygon.OverwriteVertexesColor(AreaColor);
         }
 
-        internal override void UpdateInheritedTransform()
+        internal void UpdateInheritedTransform()
         {
             base.UpdateInheritedTransform();
 

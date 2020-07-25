@@ -88,15 +88,15 @@ namespace Altseed2
 
         public void Draw()
         {
-            var mat = TransformNode.CalcInheritedTransform();
+        //    var mat = TransformNode.CalcInheritedTransform();
 
-            for (int i = 0; i < SizeBoxLines.Length; i++)
-            {
-                SizeBoxLines[i].Transform = mat;
-                Engine.Renderer.DrawPolygon(SizeBoxLines[i]);
-            }
+        //    for (int i = 0; i < SizeBoxLines.Length; i++)
+        //    {
+        //        SizeBoxLines[i].Transform = mat;
+        //        Engine.Renderer.DrawPolygon(SizeBoxLines[i]);
+        //    }
 
-            PivotBox.Transform = mat;
+        //    PivotBox.Transform = mat;
             Engine.Renderer.DrawPolygon(PivotBox);
         }
     }

@@ -96,7 +96,7 @@ namespace Altseed2
         /// <param name="max">右下の座標</param>
         /// <param name="positions">計算する座標</param>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
-        internal static void GetMinMax(out Vector2F min, out Vector2F max, IArray<Vertex> positions)
+        internal static void GetMinMax(out Vector2F min, out Vector2F max, VertexArray positions)
         {
             var min_x = float.MaxValue;
             var min_y = float.MaxValue;
@@ -128,7 +128,7 @@ namespace Altseed2
         /// <param name="max">右下の座標</param>
         /// <param name="positions">計算する座標</param>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
-        internal static void GetMinMax(out Vector2F min, out Vector2F max, IArray<Vector2F> positions)
+        internal static void GetMinMax(out Vector2F min, out Vector2F max, Vector2FArray positions)
         {
             var min_x = float.MaxValue;
             var min_y = float.MaxValue;

@@ -21,8 +21,8 @@ namespace Altseed2
             if (node == null) throw new ArgumentNullException(nameof(node));
 
             {
-                if (!_Drawns.TryGetValue(-node.ZOrder, out var set))
-                    set = _Drawns[-node.ZOrder] = new HashSet<IDrawn>();
+                if (!_Drawns.TryGetValue(node.ZOrder, out var set))
+                    set = _Drawns[node.ZOrder] = new HashSet<IDrawn>();
 
                 set.Add(node);
             }
@@ -34,8 +34,8 @@ namespace Altseed2
 
                 var group = _Sorted[i];
 
-                if (!group.TryGetValue(-node.ZOrder, out var set))
-                    set = group[-node.ZOrder] = new HashSet<IDrawn>();
+                if (!group.TryGetValue(node.ZOrder, out var set))
+                    set = group[node.ZOrder] = new HashSet<IDrawn>();
 
                 set.Add(node);
             }
@@ -45,7 +45,7 @@ namespace Altseed2
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
 
-            _Drawns[-node.ZOrder].Remove(node);
+            _Drawns[node.ZOrder].Remove(node);
 
             for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
             {
@@ -53,7 +53,7 @@ namespace Altseed2
                 if (!HasBit(node.CameraGroup, mask)) continue;
 
                 var group = _Sorted[i];
-                group[-node.ZOrder].Remove(node);
+                group[node.ZOrder].Remove(node);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Altseed2
                 if (HasBit(old, mask) && !HasBit(node.CameraGroup, mask))
                 {
                     // 削除
-                    _Sorted[i][-node.ZOrder].Remove(node);
+                    _Sorted[i][node.ZOrder].Remove(node);
                 }
 
                 if (!HasBit(old, mask) && HasBit(node.CameraGroup, mask))
@@ -76,8 +76,8 @@ namespace Altseed2
                     // 追加
                     var group = _Sorted[i];
 
-                    if (!group.TryGetValue(-node.ZOrder, out var set))
-                        set = group[-node.ZOrder] = new HashSet<IDrawn>();
+                    if (!group.TryGetValue(node.ZOrder, out var set))
+                        set = group[node.ZOrder] = new HashSet<IDrawn>();
 
                     set.Add(node);
                 }
@@ -97,7 +97,7 @@ namespace Altseed2
                 var group = _Sorted[i];
 
                 group[old].Remove(node);
-                group[-node.ZOrder].Add(node);
+                group[node.ZOrder].Add(node);
             }
         }
 

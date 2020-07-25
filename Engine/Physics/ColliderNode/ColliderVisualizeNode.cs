@@ -6,18 +6,16 @@ namespace Altseed2
     /// <see cref="ColliderNode"/>の当たり判定範囲として描画されるノードの基底クラス
     /// </summary>
     [Serializable]
-    public abstract class ColliderVisualizeNode : DrawnNode
+    public abstract class ColliderVisualizeNode : CircleNode
     {
         internal readonly static Color AreaColor = new Color(255, 100, 100, 100);
 
-        public override Matrix44F AbsoluteTransform => RenderedPolygon.Transform;
-
-        internal override int CullingId => RenderedPolygon.Id;
+        internal override Matrix44F AbsoluteTransform => RenderedPolygon.Transform;
 
         /// <summary>
         /// 描画モードを取得または設定します。
         /// </summary>
-        public DrawMode Mode { get; set; } = DrawMode.Absolute;
+        public ScalingMode Mode { get; set; } = ScalingMode.Manual;
 
         internal RenderedPolygon RenderedPolygon { get; } = RenderedPolygon.Create();
 
@@ -41,14 +39,9 @@ namespace Altseed2
             };
         }
 
-        internal override void Draw()
-        {
-            Engine.Renderer.DrawPolygon(RenderedPolygon);
-        }
-
         private protected abstract void UpdatePolygon();
 
-        internal override void UpdateInheritedTransform()
+        internal void UpdateInheritedTransform()
         {
             var array = RenderedPolygon.Vertexes;
             MathHelper.GetMinMax(out var min, out var max, array);
@@ -57,10 +50,10 @@ namespace Altseed2
             var mat = new Matrix44F();
             switch (Mode)
             {
-                case DrawMode.Fill:
+                case ScalingMode.Fill:
                     mat = Matrix44F.GetScale2D(Size / size);
                     break;
-                case DrawMode.KeepAspect:
+                case ScalingMode.KeepAspect:
                     var scale = Size;
 
                     if (Size.X / Size.Y > size.X / size.Y)
@@ -72,14 +65,13 @@ namespace Altseed2
 
                     mat = Matrix44F.GetScale2D(scale);
                     break;
-                case DrawMode.Absolute:
+                case ScalingMode.Manual:
                     mat = Matrix44F.Identity;
                     break;
                 default:
                     break;
             }
             mat *= Matrix44F.GetTranslation2D(-min);
-            RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
     }
 }

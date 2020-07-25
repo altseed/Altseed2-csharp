@@ -4,10 +4,22 @@ using System.Linq;
 
 namespace Altseed2
 {
+    /// <summary>
+    /// 図形を描画するノードを表します。
+    /// </summary>
     [Serializable]
-    public class PolygonNode : TransformNode, ICullableDrawn
+    public class PolygonNode : TransformNode, ICullableDrawn, ISized
     {
         protected private readonly RenderedPolygon _RenderedPolygon;
+
+        /// <summary>
+        /// 新しいインスタンスを生成します。
+        /// </summary>
+        public PolygonNode()
+        {
+            _RenderedPolygon = RenderedPolygon.Create();
+            _RenderedPolygon.Vertexes = VertexArray.Create(0);
+        }
 
         #region IDrawn
 
@@ -21,11 +33,16 @@ namespace Altseed2
         /// </summary>
         int ICullableDrawn.CullingId => _RenderedPolygon.Id;
 
+        /// <summary>
+        /// カメラグループを取得または設定します。
+        /// </summary>
         public ulong CameraGroup
         {
-            get => _CameraGroup; set
+            get => _CameraGroup;
+            set
             {
                 if (_CameraGroup == value) return;
+
                 var old = _CameraGroup;
                 _CameraGroup = value;
                 Engine.UpdateDrawnCameraGroup(this, old);
@@ -33,6 +50,9 @@ namespace Altseed2
         }
         private ulong _CameraGroup;
 
+        /// <summary>
+        /// 描画時の重ね順を取得または設定します。
+        /// </summary>
         public int ZOrder
         {
             get => _ZOrder;
@@ -64,13 +84,14 @@ namespace Altseed2
         private bool _IsDrawn = true;
 
         /// <summary>
-        /// この先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
+        /// 先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
-
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion
+
+        #region Node
 
         internal override void Registered()
         {
@@ -84,10 +105,25 @@ namespace Altseed2
             Engine.UnregisterDrawn(this);
         }
 
-        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
+        #endregion
+
+        #region RenderedPolygon
 
         /// <summary>
-        /// 描画範囲を取得または設定します。
+        /// ブレンドモードを取得または設定します。
+        /// </summary>
+        public AlphaBlendMode BlendMode
+        {
+            get => _RenderedPolygon.BlendMode;
+            set
+            {
+                if (_RenderedPolygon.BlendMode == value) return;
+                _RenderedPolygon.BlendMode = value;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="Texture"/>を切り出す範囲を取得または設定します。
         /// </summary>
         public RectF Src
         {
@@ -95,7 +131,9 @@ namespace Altseed2
             set
             {
                 if (_RenderedPolygon.Src == value) return;
+
                 _RenderedPolygon.Src = value;
+                _RequireCalcTransform = true;
             }
         }
 
@@ -108,10 +146,11 @@ namespace Altseed2
             set
             {
                 if (_RenderedPolygon.Texture == value) return;
-                _RenderedPolygon.Texture = value;
 
+                _RenderedPolygon.Texture = value;
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
+                _RequireCalcTransform = true;
             }
         }
 
@@ -129,60 +168,47 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// 描画に適用するマテリアルを取得または設定します。
-        /// </summary>
-        public Vertex[] Vertexes
+        internal override Matrix44F AbsoluteTransform
         {
-            get
-            {
-                return _RenderedPolygon.Vertexes?.ToArray();
-            }
+            get => _RenderedPolygon.Transform;
             set
             {
-                var vertexArray = VertexArray.Create(value.Length);
-                vertexArray.FromArray(value);
-                _RenderedPolygon.Vertexes = vertexArray;
-
-                if (IsAutoAdjustSize) AdjustSize();
+                if (_RenderedPolygon.Transform == value) return;
+                _RenderedPolygon.Transform = value;
             }
         }
 
+        #endregion
+
         /// <summary>
-        /// ブレンドモードを取得または設定します。
+        /// 描画に適用するマテリアルを取得または設定します。
         /// </summary>
-        public AlphaBlendMode BlendMode
+        public IReadOnlyList<Vertex> Vertexes
         {
-            get => _RenderedPolygon.BlendMode;
+            get => _RenderedPolygon.Vertexes?.ToArray();
             set
             {
-                if (_RenderedPolygon.BlendMode == value) return;
-                _RenderedPolygon.BlendMode = value;
+                var vertexArray = VertexArray.Create(value);
+                _RenderedPolygon.Vertexes = vertexArray;
+                _RequireCalcTransform = true;
             }
         }
 
         /// <summary>
         /// 描画モードを取得または設定します。
         /// </summary>
-        public DrawMode Mode
+        public ScalingMode ScalingMode
         {
-            get => _Mode;
+            get => _ScalingMode;
             set
             {
-                if (_Mode == value) return;
+                if (_ScalingMode == value) return;
 
-                _Mode = value;
+                _ScalingMode = value;
+                _RequireCalcTransform = true;
             }
         }
-        private DrawMode _Mode = DrawMode.Absolute;
-
-        /// <summary>
-        /// 新しいインスタンスを生成します。
-        /// </summary>
-        public PolygonNode()
-        {
-            _RenderedPolygon = RenderedPolygon.Create();
-        }
+        private ScalingMode _ScalingMode = ScalingMode.ContentSize;
 
         /// <summary>
         /// 各頂点に指定した色を設定する
@@ -202,25 +228,10 @@ namespace Altseed2
         public void SetVertexes(IEnumerable<Vertex> vertexes)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
-            Vertex[] array;
-            switch (vertexes)
-            {
-                case Vertex[] a:
-                    array = a;
-                    break;
-                case ICollection<Vertex> c:
-                    array = new Vertex[c.Count];
-                    c.CopyTo(array, 0);
-                    break;
-                default:
-                    array = vertexes.ToArray();
-                    break;
-            }
-            var vertexArray = VertexArray.Create(array.Length);
-            vertexArray.FromArray(array);
-            _RenderedPolygon.Vertexes = vertexArray;
 
-            if (IsAutoAdjustSize) AdjustSize();
+            var array = VertexArray.Create(vertexes);
+            _RenderedPolygon.Vertexes = array;
+            _RequireCalcTransform = true;
         }
 
         /// <summary>
@@ -232,74 +243,30 @@ namespace Altseed2
         public void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
-            Vector2F[] array;
-            switch (vertexes)
-            {
-                case Vector2F[] a:
-                    array = a;
-                    break;
-                case ICollection<Vector2F> c:
-                    array = new Vector2F[c.Count];
-                    c.CopyTo(array, 0);
-                    break;
-                default:
-                    array = vertexes.ToArray();
-                    break;
-            }
-            var vertexArray = Vector2FArray.Create(array.Length);
-            vertexArray.FromArray(array);
-            _RenderedPolygon.CreateVertexesByVector2F(vertexArray);
+
+            var array = Vector2FArray.Create(vertexes);
+            _RenderedPolygon.CreateVertexesByVector2F(array);
             _RenderedPolygon.OverwriteVertexesColor(color);
-
-            if (IsAutoAdjustSize) AdjustSize();
+            _RequireCalcTransform = true;
         }
 
-        internal override void UpdateInheritedTransform()
+        /// <summary>
+        /// コンテンツのサイズを取得します。
+        /// </summary>
+        public override Vector2F ContentSize
         {
-            var array = _RenderedPolygon.Vertexes;
-            MathHelper.GetMinMax(out var min, out var max, array);
-            var size = max - min;
-
-            var mat = new Matrix44F();
-            switch (Mode)
+            get
             {
-                case DrawMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / size);
-                    break;
-                case DrawMode.KeepAspect:
-                    var scale = Size;
-
-                    if (Size.X / Size.Y > size.X / size.Y)
-                        scale.X = size.X * Size.Y / size.Y;
-                    else
-                        scale.Y = size.Y * Size.X / size.X;
-
-                    scale /= size;
-
-                    mat = Matrix44F.GetScale2D(scale);
-                    break;
-                case DrawMode.Absolute:
-                    mat = Matrix44F.Identity;
-                    break;
-                default:
-                    break;
+                MathHelper.GetMinMax(out var min, out var max, _RenderedPolygon.Vertexes);
+                return max - min;
             }
-            mat *= Matrix44F.GetTranslation2D(-min);
-
-            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
-        public override void AdjustSize()
+        private protected override void CalcTransform()
         {
-            if (Vertexes == null) return;
+            CalcScale(ScalingMode);
 
-            var array = _RenderedPolygon.Vertexes;
-            if (array != null && array.Count > 0)
-            {
-                MathHelper.GetMinMax(out var min, out var max, array);
-                Size = max - min;
-            }
-            else Size = default;
+            base.CalcTransform();
         }
     }
 }

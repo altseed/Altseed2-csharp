@@ -8,22 +8,23 @@ namespace Altseed2
     [Serializable]
     public class RectangleNode : PolygonNode
     {
-        private bool changed = false;
-        
+        private bool _RequireUpdateVertexes = false;
+
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => _color;
+            get => _Color;
             set
             {
-                if (_color == value) return;
-                _color = value;
+                if (_Color == value) return;
+
+                _Color = value;
                 _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
-        private Color _color = new Color(255, 255, 255);
+        private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 短形のサイズを取得または設定します。
@@ -34,37 +35,19 @@ namespace Altseed2
             set
             {
                 if (_RectangleSize == value) return;
+
                 _RectangleSize = value;
-                changed = true;
+                _RequireUpdateVertexes = true;
             }
         }
         private Vector2F _RectangleSize = new Vector2F();
 
-        public override void AdjustSize()
+        internal void UpdateInheritedTransform()
         {
-            Size = RectangleSize;
-        }
-
-        /// <summary>
-        /// <see cref="RectangleNode"/>の新しいインスタンスを生成する
-        /// </summary>
-        public RectangleNode()
-        {
-            _RenderedPolygon.Vertexes = VertexArray.Create(4);
-        }
-
-        internal override void Update()
-        {
-            base.Update();
-            UpdateInheritedTransform();//仮
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            if (changed)
+            if (_RequireUpdateVertexes)
             {
                 UpdateVertexes();
-                changed = false;
+                _RequireUpdateVertexes = false;
             }
 
             var array = _RenderedPolygon.Vertexes;
@@ -72,12 +55,12 @@ namespace Altseed2
             var size = max - min;
 
             var mat = new Matrix44F();
-            switch (Mode)
+            switch (ScalingMode)
             {
-                case DrawMode.Fill:
+                case ScalingMode.Fill:
                     mat = Matrix44F.GetScale2D(Size / size);
                     break;
-                case DrawMode.KeepAspect:
+                case ScalingMode.KeepAspect:
                     var scale = Size;
 
                     if (Size.X / Size.Y > size.X / size.Y)
@@ -89,7 +72,7 @@ namespace Altseed2
 
                     mat = Matrix44F.GetScale2D(scale);
                     break;
-                case DrawMode.Absolute:
+                case ScalingMode.Manual:
                     mat = Matrix44F.Identity;
                     break;
                 default:
@@ -97,7 +80,6 @@ namespace Altseed2
             }
             mat *= Matrix44F.GetTranslation2D(-min);
 
-            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
@@ -107,12 +89,19 @@ namespace Altseed2
             positions[1] = new Vector2F(0.0f, RectangleSize.Y);
             positions[2] = new Vector2F(RectangleSize.X, RectangleSize.Y);
             positions[3] = new Vector2F(RectangleSize.X, 0.0f);
-            var array = Vector2FArray.Create(positions.Length);
-            array.FromArray(positions);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(_color);
-         
-            if (IsAutoAdjustSize) AdjustSize();
+
+            SetVertexes(positions, Color);
+        }
+
+        internal override void Update()
+        {
+            if (_RequireUpdateVertexes)
+            {
+                UpdateVertexes();
+                _RequireUpdateVertexes = false;
+            }
+
+            base.Update();
         }
     }
 }

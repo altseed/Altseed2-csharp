@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public abstract class ColliderNode : TransformNode
     {
-        public override Matrix44F AbsoluteTransform => _absoluteTransform;
+        internal override Matrix44F AbsoluteTransform => _absoluteTransform;
         private Matrix44F _absoluteTransform;
 
         /// <summary>
@@ -43,10 +43,5 @@ namespace Altseed2
         }
 
         internal abstract void UpdateCollider();
-
-        internal override void UpdateInheritedTransform()
-        {
-            _absoluteTransform = CalcInheritedTransform();
-        }
     }
 }

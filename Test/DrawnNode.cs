@@ -59,15 +59,12 @@ namespace Altseed2.Test
             node.Texture = texture;
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Pivot = new Vector2F(0.5f, 0.5f);
-            node.AdjustSize();
-
             Engine.AddNode(node);
 
             var node2 = new SpriteNode();
             node2.Texture = texture;
             node2.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node2.Pivot = new Vector2F(0.5f, 0.5f);
-            node2.AdjustSize();
             node2.Angle = 45;
             node2.ZOrder = 1;
 
@@ -281,7 +278,6 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             PolygonNode node = new PolygonNode()
             {
-                IsAutoAdjustSize = true,
                 Position = new Vector2F(250, 250)
             };
             Engine.AddNode(node);
@@ -309,7 +305,6 @@ float4 main(PS_INPUT input) : SV_TARGET
             Assert.NotNull(font);
 
             var rotated = new TextNode() { Font = font, Text = "中心で回転します", Position = new Vector2F(300.0f, 300.0f), Pivot = new Vector2F(0.5f, 0.5f) };
-            rotated.AdjustSize();
             Engine.AddNode(rotated);
 
             tc.LoopBody(c =>
@@ -336,32 +331,34 @@ float4 main(PS_INPUT input) : SV_TARGET
             Vector2F rectSize = texture.Size;
             var parent = new PolygonNode();
             parent.Position = new Vector2F(320, 240);
+            parent.ZOrder = 5;
+
             //parent.Pivot = new Vector2F(0.5f, 0.5f);
             parent.SetVertexes(new[] {
                         new Vector2F(0, 0),
                         new Vector2F(rectSize.X, 0),
                         new Vector2F(rectSize.X, rectSize.Y),
                         new Vector2F(0, rectSize.Y),
-                    }, new Color(255, 255, 255, 255));
-            parent.AdjustSize();
+                    }, new Color(255, 255, 200, 255));
             Engine.AddNode(parent);
 
             var child = new SpriteNode();
             child.Texture = texture;
             child.Position = new Vector2F(120, 200);
             child.Src = new RectF(new Vector2F(), texture.Size);
+            child.AnchoringEnabled = true;
             child.Pivot = new Vector2F(0.5f, 0.5f);
             child.AnchorMin = new Vector2F(0.2f, 0.0f);
             child.AnchorMax = new Vector2F(0.8f, 1f);
             child.ZOrder = 10;
-            child.Mode = DrawMode.Fill;
-            child.AdjustSize();
+            child.ScalingMode = ScalingMode.Fill;
             parent.AddChildNode(child);
 
             var childText = new TextNode();
             childText.Font = font;
             childText.Color = new Color(0, 0, 0);
             childText.Text = "あいうえお";
+            childText.AnchoringEnabled = true;
             childText.Pivot = new Vector2F(0.5f, 0.5f);
             childText.AnchorMin = new Vector2F(0.5f, 0.5f);
             childText.AnchorMax = new Vector2F(0.5f, 0.5f);
@@ -392,10 +389,75 @@ float4 main(PS_INPUT input) : SV_TARGET
                         new Vector2F(rectSize.X, 0),
                         new Vector2F(rectSize.X, rectSize.Y),
                         new Vector2F(0, rectSize.Y),
-                    }, new Color(255, 255, 255, 255));
-                parent.AdjustSize();
+                    }, new Color(255, 255, 200, 255));
 
                 text.Text = child.Size.ToString();
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Anchor2()
+        {
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
+            tc.Init();
+
+            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 30);
+            Assert.NotNull(font);
+
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Vector2F rectSize = texture.Size;
+            var parent = new SpriteNode();
+            parent.Position = new Vector2F(320, 240);
+            parent.ZOrder = 5;
+            parent.Texture = texture;
+            Engine.AddNode(parent);
+
+            var child = new SpriteNode();
+            child.Texture = texture;
+            child.Position = new Vector2F(120, 200);
+            child.Src = new RectF(new Vector2F(), texture.Size);
+            child.AnchorMin = new Vector2F(0.2f, 0.0f);
+            child.AnchorMax = new Vector2F(0.8f, 1f);
+            child.ZOrder = 10;
+            child.Size = new Vector2F(128, 128);
+            child.Pivot = new Vector2F(0.5f, 0.5f);
+            child.ScalingMode = ScalingMode.Fill;
+            child.AnchoringEnabled = true;
+            parent.AddChildNode(child);
+
+            var childText = new TextNode();
+            childText.Font = font;
+            childText.Color = new Color(255, 0, 0);
+            childText.Text = "あいうえお";
+            childText.Pivot = new Vector2F(0.5f, 0.5f);
+            childText.AnchorMin = new Vector2F(0.5f, 0.5f);
+            childText.AnchorMax = new Vector2F(0.5f, 0.5f);
+            childText.ZOrder = 15;
+            childText.HorizontalAlignment = HorizontalAlignment.Center;
+            childText.VerticalAlignment = VerticalAlignment.Center;
+            childText.AnchoringEnabled = true;
+            childText.Size = child.Size;
+            child.AddChildNode(childText);
+
+            tc.Duration = 1000;
+            tc.LoopBody(c =>
+            {
+                var psize = parent.Src;
+                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) psize.Width += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) psize.Width -= 1.5f;
+                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) psize.Height += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) psize.Height -= 1.5f;
+                parent.Src = psize;
+
+                if (Engine.Keyboard.GetKeyState(Keys.D) == ButtonState.Hold) parent.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Hold) parent.Position += new Vector2F(-1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Keys.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
+
             }, null);
 
             tc.End();
@@ -413,7 +475,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(100, 100),
                 Radius = 50f,
                 VertNum = 30,
-                IsAutoAdjustSize = true,
             };
             var arc2 = new ArcNode()
             {
@@ -421,7 +482,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(400, 200),
                 Radius = 30f,
                 VertNum = 8,
-                IsAutoAdjustSize = true,
             };
             var arc3 = new ArcNode()
             {
@@ -429,7 +489,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(50, 400),
                 Radius = 40f,
                 VertNum = 5,
-                IsAutoAdjustSize = true,
             };
             Engine.AddNode(arc1);
             Engine.AddNode(arc2);
@@ -460,7 +519,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(100, 100),
                 Radius = 50f,
                 VertNum = 30,
-                IsAutoAdjustSize = true,
             };
             var circle2 = new CircleNode()
             {
@@ -468,7 +526,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(400, 200),
                 Radius = 30f,
                 VertNum = 8,
-                IsAutoAdjustSize = true,
             };
             var circle3 = new CircleNode()
             {
@@ -476,7 +533,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(50, 400),
                 Radius = 40f,
                 VertNum = 5,
-                IsAutoAdjustSize = true,
             };
             Engine.AddNode(circle1);
             Engine.AddNode(circle2);
@@ -499,7 +555,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Point1 = new Vector2F(100f, 100f),
                 Point2 = new Vector2F(200f, 200f),
                 Thickness = 10f,
-                IsAutoAdjustSize = true
             };
             var line2 = new LineNode()
             {
@@ -507,7 +562,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Point1 = new Vector2F(50f, 450f),
                 Point2 = new Vector2F(600f, 50f),
                 Thickness = 5.0f,
-                IsAutoAdjustSize = true,
             };
             var line3 = new LineNode()
             {
@@ -515,7 +569,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Point1 = new Vector2F(100f, 150f),
                 Point2 = new Vector2F(100f, 350f),
                 Thickness = 15.0f,
-                IsAutoAdjustSize = true
             };
             Engine.AddNode(line1);
             Engine.AddNode(line2);
@@ -538,21 +591,18 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Position = new Vector2F(100f, 100f),
                 Pivot = new Vector2F(0.5f, 0.5f),
                 RectangleSize = new Vector2F(50f, 50f),
-                IsAutoAdjustSize = true,
             };
             var rectangle2 = new RectangleNode()
             {
                 Color = new Color(0, 255, 0),
                 Position = new Vector2F(400f, 200f),
                 RectangleSize = new Vector2F(200f, 100f),
-                IsAutoAdjustSize = true,
             };
             var rectangle3 = new RectangleNode()
             {
                 Color = new Color(0, 0, 255),
                 Position = new Vector2F(200f, 300f),
                 RectangleSize = new Vector2F(100f, 150f),
-                IsAutoAdjustSize = true,
             };
             Engine.AddNode(rectangle1);
             Engine.AddNode(rectangle2);
@@ -580,7 +630,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Point3 = new Vector2F(100f, 200f),
                 Position = new Vector2F(100, 100),
                 Pivot = new Vector2F(0.5f, 0.1f),
-                IsAutoAdjustSize = true,
             };
             Engine.AddNode(triangle);
 
@@ -604,7 +653,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Point1 = new Vector2F(2000f, 0f),
                 Point2 = new Vector2F(2000f, 1000f),
                 Thickness = 10f,
-                IsAutoAdjustSize = true,
             };
 
             Engine.AddNode(line1);
@@ -634,24 +682,20 @@ float4 main(PS_INPUT input) : SV_TARGET
             node.Texture = texture;
             node.Pivot = new Vector2F(0.5f, 0.5f);
             node.Position = new Vector2F(100, 100);
-            node.AdjustSize();
             Engine.AddNode(node);
 
             var node2 = new SpriteNode();
+            node2.Texture = texture;
+            node2.Pivot = new Vector2F(0.5f, 0.5f);
+            node2.Position = new Vector2F(200, 200);
+
             var node3 = new SpriteNode();
+            node3.Texture = texture;
+            node3.Pivot = new Vector2F(0.5f, 0.5f);
+            node3.Position = new Vector2F(300, 300);
 
             tc.LoopBody(c =>
             {
-                node2.Texture = texture;
-                node2.Pivot = new Vector2F(0.5f, 0.5f);
-                node2.Position = new Vector2F(200, 200);
-                node2.AdjustSize();
-
-                node3.Texture = texture;
-                node3.Pivot = new Vector2F(0.5f, 0.5f);
-                node3.Position = new Vector2F(300, 300);
-                node3.AdjustSize();
-
                 if (c == 2)
                 {
                     node.AddChildNode(node2);

@@ -8,37 +8,38 @@ namespace Altseed2
     [Serializable]
     public class ArcNode : PolygonNode
     {
-        private bool changed = false;
+        private bool _RequireUpdateVertexes = false;
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => _color;
+            get => _Color;
             set
             {
-                if (_color == value) return;
-                _color = value;
-                _RenderedPolygon.OverwriteVertexesColor(value);
+                if (_Color == value) return;
+                _Color = value;
+                OverwriteVertexColor(value);
             }
         }
-        private Color _color = new Color(255, 255, 255);
+        private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 描画を終了する角度を取得または設定します。
         /// </summary>
         public float EndDegree
         {
-            get => _enddegree;
+            get => _EndDegree;
             set
             {
-                if (_enddegree == value) return;
-                _enddegree = Math.Abs(_startdegree - value) == 360f ? value : value % 360f;
-                changed = true;
+                if (_EndDegree == value) return;
+
+                _EndDegree = Math.Abs(_StartDegree - value) == 360f ? value : value % 360f;
+                _RequireUpdateVertexes = true;
             }
         }
-        private float _enddegree = 360f;
+        private float _EndDegree = 360f;
 
         /// <summary>
         /// 半径を取得または設定します。
@@ -49,9 +50,9 @@ namespace Altseed2
             set
             {
                 if (_radius == value) return;
+
                 _radius = value;
-                changed = true;
-                AdjustSize();
+                _RequireUpdateVertexes = true;
             }
         }
         private float _radius;
@@ -61,45 +62,33 @@ namespace Altseed2
         /// </summary>
         public float StartDegree
         {
-            get => _startdegree;
+            get => _StartDegree;
             set
             {
-                if (_startdegree == value) return;
-                _startdegree = Math.Abs(_enddegree - value) == 360f ? value : value % 360f;
-                changed = true;
+                if (_StartDegree == value) return;
+
+                _StartDegree = Math.Abs(_EndDegree - value) == 360f ? value : value % 360f;
+                _RequireUpdateVertexes = true;
             }
         }
-        private float _startdegree = 0.0f;
+        private float _StartDegree = 0.0f;
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
         public int VertNum
         {
-            get => _vertnum;
+            get => _VertNum;
             set
             {
                 if (value < 3) throw new ArgumentOutOfRangeException(nameof(value), $"設定しようとした値が3未満です\n実際の値：{value}");
-                if (_vertnum == value) return;
-                _vertnum = value;
-                changed = true;
+
+                if (_VertNum == value) return;
+                _VertNum = value;
+                _RequireUpdateVertexes = true;
             }
         }
-        private int _vertnum = 3;
-
-        /// <summary>
-        /// <see cref="ArcNode"/>の新しいインスタンスを生成する
-        /// </summary>
-        public ArcNode()
-        {
-            _RenderedPolygon.Vertexes = VertexArray.Create(_vertnum);
-        }
-
-        public override void AdjustSize()
-        {
-            var length = _radius * 2;
-            Size = new Vector2F(length, length);
-        }
+        private int _VertNum = 3;
 
         private Vector2F GetBaseVector(float degree)
         {
@@ -110,22 +99,22 @@ namespace Altseed2
 
         private void GetDegrees(out float min, out float max)
         {
-            if (_startdegree == _enddegree)
+            if (_StartDegree == _EndDegree)
             {
-                min = max = _startdegree;
+                min = max = _StartDegree;
                 return;
             }
-            if (_startdegree < _enddegree)
+            if (_StartDegree < _EndDegree)
             {
-                min = _startdegree;
-                max = _enddegree;
+                min = _StartDegree;
+                max = _EndDegree;
             }
             else
             {
-                min = _enddegree;
-                max = _startdegree;
+                min = _EndDegree;
+                max = _StartDegree;
             }
-            if (min < 0 && _startdegree * _enddegree > 0)
+            if (min < 0 && _StartDegree * _EndDegree > 0)
             {
                 min += 360f;
                 max += 360f;
@@ -133,56 +122,10 @@ namespace Altseed2
             if (max - min > 360f) max -= 360f;
         }
 
-        internal override void Update()
-        {
-            base.Update();
-            UpdateInheritedTransform();//仮
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            if (changed)
-            {
-                UpdateVertexes();
-                changed = false;
-            }
-
-            var array = _RenderedPolygon.Vertexes;
-            MathHelper.GetMinMax(out var min, out var max, array);
-            var size = max - min;
-
-            var mat = new Matrix44F();
-            switch (Mode)
-            {
-                case DrawMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / size);
-                    break;
-                case DrawMode.KeepAspect:
-                    var scale = Size;
-
-                    if (Size.X / Size.Y > size.X / size.Y)
-                        scale.X = size.X * Size.Y / size.Y;
-                    else
-                        scale.Y = size.Y * Size.X / size.X;
-
-                    scale /= size;
-
-                    mat = Matrix44F.GetScale2D(scale);
-                    break;
-                case DrawMode.Absolute:
-                    mat = Matrix44F.Identity;
-                    break;
-                default:
-                    break;
-            }
-
-            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
-        }
-
         private void UpdateVertexes()
         {
             GetDegrees(out var _startdegree, out var _enddegree);
-            var deg = 360f / _vertnum;
+            var deg = 360f / _VertNum;
             var size = (int)(Math.Abs(_enddegree - _startdegree) / deg);
             var startVertexNum = (int)MathF.Ceiling(_startdegree / deg);
             var endVertexNum = (int)MathF.Floor(_enddegree / deg);
@@ -205,12 +148,18 @@ namespace Altseed2
             var rad = new Vector2F(Radius, Radius);
             for (int i = 0; i < positions.Length; i++) positions[i] += rad;
 
-            var array = Vector2FArray.Create(positions.Length);
-            array.FromArray(positions);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(Color);
+            SetVertexes(positions, Color);
+        }
 
-            if (IsAutoAdjustSize) AdjustSize();
+        internal override void Update()
+        {
+            if (_RequireUpdateVertexes)
+            {
+                UpdateVertexes();
+                _RequireUpdateVertexes = false;
+            }
+
+            base.Update();
         }
     }
 }

@@ -132,12 +132,6 @@ namespace Altseed2
             // Contextの更新
             Context.Update();
 
-            //// RenderedにTransform反映
-            //foreach (var node in _DrawnNodes.Nodes.SelectMany(obj => obj.Value))
-            //{
-            //    node.UpdateInheritedTransform();
-            //}
-
             // カリング用AABBの更新
             CullingSystem.UpdateAABB();
 

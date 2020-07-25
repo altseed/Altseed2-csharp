@@ -18,7 +18,6 @@ namespace Altseed2.Test
             var node = new SpriteNode();
             //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
-            node.AdjustSize();
             node.Position = new Vector2F(200, 200);
             node.CenterPosition = texture.Size / 2;
             node.Scale = new Vector2F(0.2f, 0.2f);
@@ -31,7 +30,6 @@ namespace Altseed2.Test
             var node2 = new SpriteNode();
             //node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node2.Texture = texture;
-            node2.AdjustSize();
             node2.Position = new Vector2F(200, 200);
             node2.CenterPosition = texture.Size / 2;
             node2.Scale = new Vector2F(0.2f, 0.2f);
@@ -79,7 +77,6 @@ namespace Altseed2.Test
                 Pivot = new Vector2F(0.5f, 0.5f),
                 Position = new Vector2F(500f, 300f)
             };
-            comparison.AdjustSize();
             var colliderNode = new CircleColliderNode()
             {
                 Radius = texture.Size.X / 2
@@ -113,7 +110,6 @@ namespace Altseed2.Test
                 Texture = texture;
                 Pivot = new Vector2F(0.5f, 0.5f);
                 Position = new Vector2F(0f, 300f);
-                AdjustSize();
                 node = new CircleColliderNode()
                 {
                     Radius = texture.Size.X / 2
@@ -181,7 +177,6 @@ namespace Altseed2.Test
                 Pivot = new Vector2F(0.5f, 0.5f),
                 Position = new Vector2F(580f, 300f)
             };
-            comparison.AdjustSize();
             var colliderNode = new PolygonColliderNode
             {
                 Vertexes = array
@@ -217,7 +212,6 @@ namespace Altseed2.Test
                 Texture = texture;
                 Pivot = new Vector2F(0.5f, 0.5f);
                 Position = new Vector2F(220f, 300f);
-                AdjustSize();
                 node = new PolygonColliderNode()
                 {
                     Vertexes = array
@@ -273,7 +267,6 @@ namespace Altseed2.Test
                 Pivot = new Vector2F(0.5f, 0.5f),
                 Position = new Vector2F(500f, 300f)
             };
-            comparison.AdjustSize();
             var colliderNode = new RectangleColliderNode()
             {
                 RectangleSize = texture.Size
@@ -307,7 +300,6 @@ namespace Altseed2.Test
                 Texture = texture;
                 Pivot = new Vector2F(0.5f, 0.5f);
                 Position = new Vector2F(0f, 300f);
-                AdjustSize();
                 node = new RectangleColliderNode()
                 {
                     RectangleSize = texture.Size

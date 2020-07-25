@@ -60,7 +60,6 @@ namespace Altseed2
             {
                 if (_radius == value) return;
                 _radius = value;
-                AdjustSize();
                 Version++;
             }
         }
@@ -72,17 +71,17 @@ namespace Altseed2
         /// <remarks>既定値：<see cref="ScaleCalcType.AbsMax"/></remarks>
         public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.AbsMax;
 
-        public override Vector2F Size
-        {
-            get => base.Size;
-            set
-            {
-                if (base.Size == value) return;
-                base.Size = value;
+        //public override Vector2F Size
+        //{
+        //    get => base.Size;
+        //    set
+        //    {
+        //        if (base.Size == value) return;
+        //        base.Size = value;
 
-                if (Radius != 0) Scale = value / Radius / 2f;
-            }
-        }
+        //        if (Radius != 0) Scale = value / Radius / 2f;
+        //    }
+        //}
 
         internal int Version { get; private set; }
 
@@ -113,15 +112,15 @@ namespace Altseed2
             });
         }
 
-        public override void AdjustSize()
-        {
-            var length = Radius * 2;
-            base.Size = new Vector2F(length, length);
-        }
+        //public override void AdjustSize()
+        //{
+        //    var length = Radius * 2;
+        //    base.Size = new Vector2F(length, length);
+        //}
 
         internal override void UpdateCollider()
         {
-            UpdateInheritedTransform();
+            //UpdateInheritedTransform();
 
             MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
@@ -174,10 +173,10 @@ namespace Altseed2
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             RenderedPolygon.CreateVertexesByVector2F(array);
-            RenderedPolygon.OverwriteVertexesColor(AreaColor);                
+            RenderedPolygon.OverwriteVertexesColor(AreaColor);
         }
 
-        internal override void UpdateInheritedTransform()
+        internal void UpdateInheritedTransform()
         {
             base.UpdateInheritedTransform();
 

@@ -259,7 +259,7 @@ namespace Altseed2
         }
 
         internal T GetAncestorSpecificNode<T>()
-            where T : Node
+            where T : class
         {
             if (Parent == null)
                 return null;

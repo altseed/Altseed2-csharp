@@ -68,8 +68,6 @@ namespace Sample
             // 中心を設定します。
             Pivot = new Vector2F(0.5f, 0.5f);
 
-            AdjustSize();
-
             // コライダを登録します。
             AddChildNode(colliderNode);
         }

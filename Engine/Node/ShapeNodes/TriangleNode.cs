@@ -8,102 +8,77 @@ namespace Altseed2
     [Serializable]
     public class TriangleNode : PolygonNode
     {
-        private bool changed = false;
+        private bool _RequireUpdateVertexes = false;
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => _color;
+            get => _Color;
             set
             {
-                if (_color == value) return;
-                _color = value;
-                _RenderedPolygon.OverwriteVertexesColor(value);
+                if (_Color == value) return;
+
+                _Color = value;
+                OverwriteVertexColor(value);
             }
         }
-        private Color _color = new Color(255, 255, 255);
+        private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 頂点1を取得または設定します。
         /// </summary>
         public Vector2F Point1
         {
-            get => _point1;
+            get => _Point1;
             set
             {
-                if (_point1 == value) return;
-                _point1 = value;
-                changed = true;
+                if (_Point1 == value) return;
+
+                _Point1 = value;
+                _RequireUpdateVertexes = true;
             }
         }
-        private Vector2F _point1;
+        private Vector2F _Point1;
 
         /// <summary>
         /// 頂点2を取得または設定します。
         /// </summary>
         public Vector2F Point2
         {
-            get => _point2;
+            get => _Point2;
             set
             {
-                if (_point2 == value) return;
-                _point2 = value;
-                changed = true;
+                if (_Point2 == value) return;
+
+                _Point2 = value;
+                _RequireUpdateVertexes = true;
             }
         }
-        private Vector2F _point2;
+        private Vector2F _Point2;
 
         /// <summary>
         /// 頂点3を取得または設定します。
         /// </summary>
         public Vector2F Point3
         {
-            get => _point3;
+            get => _Point3;
             set
             {
-                if (_point3 == value) return;
-                _point3 = value;
-                changed = true;
+                if (_Point3 == value) return;
+                _Point3 = value;
+                _RequireUpdateVertexes = true;
             }
         }
-        private Vector2F _point3;
+        private Vector2F _Point3;
 
-        public override void AdjustSize()
+        internal void UpdateInheritedTransform()
         {
-            var array = new Vector2F[3]
-            {
-                Point1,
-                Point2,
-                Point3
-            };
-
-            MathHelper.GetMinMax(out var min, out var max, array);
-            Size = max - min;
-        }
-
-        /// <summary>
-        /// <see cref="TriangleNode"/>の新しいインスタンスを生成する
-        /// </summary>
-        public TriangleNode()
-        {
-            _RenderedPolygon.Vertexes = VertexArray.Create(3);
-        }
-
-        internal override void Update()
-        {
-            base.Update();
-            UpdateInheritedTransform();//仮
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            if (changed)
+            if (_RequireUpdateVertexes)
             {
                 UpdateVertexes();
-                if (IsAutoAdjustSize) AdjustSize();
-                changed = false;
+                _RequireUpdateVertexes = false;
             }
 
             var array = _RenderedPolygon.Vertexes;
@@ -111,12 +86,12 @@ namespace Altseed2
             var size = max - min;
 
             var mat = new Matrix44F();
-            switch (Mode)
+            switch (ScalingMode)
             {
-                case DrawMode.Fill:
+                case ScalingMode.Fill:
                     mat = Matrix44F.GetScale2D(Size / size);
                     break;
-                case DrawMode.KeepAspect:
+                case ScalingMode.KeepAspect:
                     var scale = Size;
 
                     if (Size.X / Size.Y > size.X / size.Y)
@@ -128,28 +103,37 @@ namespace Altseed2
 
                     mat = Matrix44F.GetScale2D(scale);
                     break;
-                case DrawMode.Absolute:
+                case ScalingMode.Manual:
                     mat = Matrix44F.Identity;
                     break;
                 default:
                     break;
             }
             mat *= Matrix44F.GetTranslation2D(-min);
-
-            _RenderedPolygon.Transform = CalcInheritedTransform() * mat;
         }
 
         private void UpdateVertexes()
         {
             var positions = new Vector2F[3];
-            positions[0] = _point1;
-            positions[1] = _point2;
-            positions[2] = _point3;
+            positions[0] = _Point1;
+            positions[1] = _Point2;
+            positions[2] = _Point3;
 
             var array = Vector2FArray.Create(positions.Length);
             array.FromArray(positions);
             _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(_color);
+            _RenderedPolygon.OverwriteVertexesColor(_Color);
+        }
+
+        internal override void Update()
+        {
+            if (_RequireUpdateVertexes)
+            {
+                UpdateVertexes();
+                _RequireUpdateVertexes = false;
+            }
+
+            base.Update();
         }
     }
 }

@@ -11,7 +11,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>$(SolutionDir)Build/Altseed2.xml</DocumentationFile>
   </PropertyGroup>
 
   <Choose>

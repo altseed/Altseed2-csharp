@@ -31,17 +31,17 @@ namespace Altseed2
         }
         private Vector2F _rectangleSize;
 
-        public override Vector2F Size
-        {
-            get => base.Size;
-            set
-            {
-                if (base.Size == value) return;
-                base.Size = value;
+        //public override Vector2F Size
+        //{
+        //    get => base.Size;
+        //    set
+        //    {
+        //        if (base.Size == value) return;
+        //        base.Size = value;
 
-                if (_rectangleSize.X != 0 && _rectangleSize.Y != 0) Scale = value / _rectangleSize;
-            }
-        }
+        //        if (_rectangleSize.X != 0 && _rectangleSize.Y != 0) Scale = value / _rectangleSize;
+        //    }
+        //}
 
         /// <summary>
         /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
@@ -62,14 +62,14 @@ namespace Altseed2
             RectangleCollider.Size = _rectangleSize * scale;
         }
 
-        public override void AdjustSize()
-        {
-            base.Size = _rectangleSize;
-        }
+        //public override void AdjustSize()
+        //{
+        //    base.Size = _rectangleSize;
+        //}
 
         internal override void UpdateCollider()
         {
-            UpdateInheritedTransform();
+            //UpdateInheritedTransform();
 
             MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
@@ -108,7 +108,7 @@ namespace Altseed2
             RenderedPolygon.OverwriteVertexesColor(AreaColor);
         }
 
-        internal override void UpdateInheritedTransform()
+        internal void UpdateInheritedTransform()
         {
             base.UpdateInheritedTransform();
 

@@ -6,9 +6,17 @@ namespace Altseed2
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class SpriteNode : TransformNode, ICullableDrawn
+    public class SpriteNode : TransformNode, ICullableDrawn, ISized
     {
         private readonly RenderedSprite _RenderedSprite;
+
+        /// <summary>
+        /// 新しいインスタンスを生成します。
+        /// </summary>
+        public SpriteNode()
+        {
+            _RenderedSprite = RenderedSprite.Create();
+        }
 
         #region IDrawn
 
@@ -22,6 +30,9 @@ namespace Altseed2
         /// </summary>
         int ICullableDrawn.CullingId => _RenderedSprite.Id;
 
+        /// <summary>
+        /// カメラグループを取得または設定します。
+        /// </summary>
         public ulong CameraGroup
         {
             get => _CameraGroup; set
@@ -34,6 +45,9 @@ namespace Altseed2
         }
         private ulong _CameraGroup;
 
+        /// <summary>
+        /// 描画時の重ね順を取得または設定します。
+        /// </summary>
         public int ZOrder
         {
             get => _ZOrder;
@@ -65,18 +79,23 @@ namespace Altseed2
         private bool _IsDrawn = true;
 
         /// <summary>
-        /// この先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
+        /// 先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
-
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion
 
+        #region Node
+
         internal override void Registered()
         {
             base.Registered();
             Engine.RegisterDrawn(this);
+
+            CalcTransform();
+            var ancestor = GetAncestorSpecificNode<SpriteNode>();
+            PropagateTransform(this, ancestor?.AbsoluteTransform ?? Matrix44F.Identity);
         }
 
         internal override void Unregistered()
@@ -85,7 +104,9 @@ namespace Altseed2
             Engine.UnregisterDrawn(this);
         }
 
-        public override Matrix44F AbsoluteTransform => _RenderedSprite.Transform;
+        #endregion
+
+        #region RenderedSprite
 
         /// <summary>
         /// 色を取得または設定します。
@@ -113,8 +134,6 @@ namespace Altseed2
             }
         }
 
-        public bool IsAutoAdjustSize { get; set; } = true;
-
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
@@ -125,8 +144,7 @@ namespace Altseed2
             {
                 if (_RenderedSprite.Src == value) return;
                 _RenderedSprite.Src = value;
-
-                if (IsAutoAdjustSize) AdjustSize();
+                _RequireCalcTransform = true;
             }
         }
 
@@ -157,66 +175,63 @@ namespace Altseed2
                 if (_RenderedSprite.Material == value) return;
 
                 _RenderedSprite.Material = value;
-                //TODO: Src
             }
         }
 
-        /// <summary>
-        /// 描画モードを取得または設定します。
-        /// </summary>
-        public DrawMode Mode
+        internal override Matrix44F AbsoluteTransform
         {
-            get => _Mode;
+            get => _RenderedSprite.Transform;
             set
             {
-                if (_Mode == value) return;
-
-                _Mode = value;
+                if (_RenderedSprite.Transform == value) return;
+                _RenderedSprite.Transform = value;
             }
         }
-        private DrawMode _Mode = DrawMode.Absolute;
+
+        #endregion
 
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// 拡大率の自動計算方法を指定します。
         /// </summary>
-        public SpriteNode()
+        public ScalingMode ScalingMode
         {
-            _RenderedSprite = RenderedSprite.Create();
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            var mat = new Matrix44F();
-            switch (Mode)
+            get => _ScalingMode;
+            set
             {
-                case DrawMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / Src.Size);
-                    break;
-                case DrawMode.KeepAspect:
-                    var scale = Size;
+                if (_ScalingMode == value) return;
 
-                    if (Size.X / Size.Y > Src.Size.X / Src.Size.Y)
-                        scale.X = Src.Size.X * Size.Y / Src.Size.Y;
-                    else
-                        scale.Y = Src.Size.Y * Size.X / Src.Size.X;
-
-                    scale /= Src.Size;
-
-                    mat = Matrix44F.GetScale2D(scale);
-                    break;
-                case DrawMode.Absolute:
-                    mat = Matrix44F.Identity;
-                    break;
-                default:
-                    break;
+                _ScalingMode = value;
+                _RequireCalcTransform = true;
             }
+        }
+        private ScalingMode _ScalingMode = ScalingMode.ContentSize;
 
-            _RenderedSprite.Transform = CalcInheritedTransform() * mat;
+        /// <summary>
+        /// 拡大率を取得または設定します。
+        /// このプロパティを変更すると、 <see cref="ScalingMode"/> が <see cref="ScalingMode.Manual"/> に変更されます。
+        /// </summary>
+        public override Vector2F Scale
+        {
+            get => _Scale;
+            set
+            {
+                if (value == _Scale) return;
+                _Scale = value;
+                _ScalingMode = ScalingMode.Manual;
+                _RequireCalcTransform = true;
+            }
         }
 
-        public void AdjustSize()
+        /// <summary>
+        /// コンテンツのサイズを取得します。
+        /// </summary>
+        public override Vector2F ContentSize => Src.Size;
+
+        private protected override void CalcTransform()
         {
-            Size = Src.Size;
+            CalcScale(ScalingMode);
+
+            base.CalcTransform();
         }
     }
 }
