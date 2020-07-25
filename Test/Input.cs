@@ -34,7 +34,7 @@ namespace Altseed2.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
-        public void MouseButton()
+        public void MouseButtonTest()
         {
             var tc = new TestCore();
             tc.Init();
@@ -49,8 +49,8 @@ namespace Altseed2.Test
 
             tc.LoopBody(c =>
             {
-                var left = Engine.Mouse.GetMouseButtonState(MouseButtons.ButtonLeft);
-                var right = Engine.Mouse.GetMouseButtonState(MouseButtons.ButtonRight);
+                var left = Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft);
+                var right = Engine.Mouse.GetMouseButtonState(MouseButton.ButtonRight);
                 node.Text = $"左:{left}\n右{right}";
             }
             , null);
@@ -91,7 +91,7 @@ namespace Altseed2.Test
 
             tc.LoopBody(c =>
             {
-                var sp = Engine.Keyboard.GetKeyState(Keys.Space);
+                var sp = Engine.Keyboard.GetKeyState(Key.Space);
                 node.Text = $"Spaceキー：{sp}";
             }
             , null);
@@ -123,7 +123,7 @@ namespace Altseed2.Test
                     if (info.IsGamepad)
                     {
                         var name = info.GamepadName;
-                        var state = Engine.Joystick.GetButtonState(i, JoystickButtons.DPadUp);
+                        var state = Engine.Joystick.GetButtonState(i, JoystickButton.DPadUp);
                         text += $"{name}: LeftUp = {state}\n";
                     }
                     else

@@ -88,7 +88,7 @@ namespace Altseed2.Test
 
             tc.LoopBody(null, x =>
             {
-                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
                 if (x == 10)
                 {
                     Assert.True(manager.ContainsCollider(colliderNode));
@@ -120,12 +120,12 @@ namespace Altseed2.Test
             protected override void OnUpdate()
             {
                 Position += new Vector2F(5f, 0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Num1) == ButtonState.Hold) Angle++;
-                //if (Engine.Keyboard.GetKeyState(Keys.Num2) == ButtonState.Hold) Angle--;
+                //if (Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Num1) == ButtonState.Hold) Angle++;
+                //if (Engine.Keyboard.GetKeyState(Key.Num2) == ButtonState.Hold) Angle--;
             }
             void ICollisionEventReceiver.OnCollisionEnter(CollisionInfo info)
             {
@@ -190,7 +190,7 @@ namespace Altseed2.Test
             {
                 player.Angle++;
                 comparison.Angle++;
-                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
                 if (x == 10)
                 {
                     Assert.True(manager.ContainsCollider(colliderNode));
@@ -221,12 +221,12 @@ namespace Altseed2.Test
             }
             //protected override void OnUpdate()
             //{
-            //    if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
-            //    if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
-            //    if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
-            //    if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
-            //    if (Engine.Keyboard.GetKeyState(Keys.Num1) == ButtonState.Hold) Angle++;
-            //    if (Engine.Keyboard.GetKeyState(Keys.Num2) == ButtonState.Hold) Angle--;
+            //    if (Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
+            //    if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
+            //    if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
+            //    if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
+            //    if (Engine.Keyboard.GetKeyState(Key.Num1) == ButtonState.Hold) Angle++;
+            //    if (Engine.Keyboard.GetKeyState(Key.Num2) == ButtonState.Hold) Angle--;
             //}
             void ICollisionEventReceiver.OnCollisionEnter(CollisionInfo info)
             {
@@ -278,7 +278,7 @@ namespace Altseed2.Test
 
             tc.LoopBody(null, x =>
             {
-                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
                 if (x == 10)
                 {
                     Assert.True(manager.ContainsCollider(colliderNode));
@@ -310,12 +310,12 @@ namespace Altseed2.Test
             protected override void OnUpdate()
             {
                 Position += new Vector2F(5f, 0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
-                //if (Engine.Keyboard.GetKeyState(Keys.Num1) == ButtonState.Hold) Angle++;
-                //if (Engine.Keyboard.GetKeyState(Keys.Num2) == ButtonState.Hold) Angle--;
+                //if (Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold) Position += new Vector2F(0.0f, -2.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) Position += new Vector2F(0.0f, 2.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) Position += new Vector2F(-2.0f, 0.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) Position += new Vector2F(2.0f, 0.0f);
+                //if (Engine.Keyboard.GetKeyState(Key.Num1) == ButtonState.Hold) Angle++;
+                //if (Engine.Keyboard.GetKeyState(Key.Num2) == ButtonState.Hold) Angle--;
             }
             void ICollisionEventReceiver.OnCollisionEnter(CollisionInfo info)
             {

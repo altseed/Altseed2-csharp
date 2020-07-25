@@ -16,13 +16,13 @@ namespace Altseed2.Tool.FilePackageGenerator
             {
                 if (Engine.Tool.BeginFullScreen(0))
                 {
-                    var tmp = Engine.Tool.InputText("Input Directory", input, 2048, ToolInputText.None);
+                    var tmp = Engine.Tool.InputText("Input Directory", input, 2048, ToolInputTextFlags.None);
                     if (tmp != null) input = tmp;
 
                     if (Engine.Tool.SmallButton("Open Directory"))
                         input = Engine.Tool.PickFolder("");
 
-                    tmp = Engine.Tool.InputText("Input Password", password, 128, ToolInputText.None);
+                    tmp = Engine.Tool.InputText("Input Password", password, 128, ToolInputTextFlags.None);
                     if (tmp != null) password = tmp;
 
                     if (Engine.Tool.Button("Pack", new Vector2F()))

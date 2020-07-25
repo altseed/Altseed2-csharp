@@ -101,7 +101,7 @@ namespace Altseed2
     /// キーボードのキーの種類を表します。
     /// </summary>
     [Serializable]
-    public enum Keys : int
+    public enum Key : int
     {
         /// <summary>
         /// 未知のキー
@@ -325,7 +325,7 @@ namespace Altseed2
     /// マウスのボタンの種類を表します。
     /// </summary>
     [Serializable]
-    public enum MouseButtons : int
+    public enum MouseButton : int
     {
         /// <summary>
         /// 左ボタン
@@ -425,7 +425,7 @@ namespace Altseed2
     /// ジョイスティックのボタンの種類を表します。
     /// </summary>
     [Serializable]
-    public enum JoystickButtons : int
+    public enum JoystickButton : int
     {
         /// <summary>
         /// 右側下ボタン
@@ -493,7 +493,7 @@ namespace Altseed2
     /// ジョイスティックの軸の種類を表します。
     /// </summary>
     [Serializable]
-    public enum JoystickAxes : int
+    public enum JoystickAxis : int
     {
         /// <summary>
         /// 左スティック横
@@ -657,7 +657,7 @@ namespace Altseed2
     }
     
     [Serializable]
-    public enum ToolTreeNode : int
+    public enum ToolTreeNodeFlags : int
     {
         None = 0,
         /// <summary>
@@ -723,7 +723,7 @@ namespace Altseed2
     /// ツール機能においてインプットされるテキストの設定を表します
     /// </summary>
     [Serializable]
-    public enum ToolInputText : int
+    public enum ToolInputTextFlags : int
     {
         None = 0,
         /// <summary>
@@ -808,7 +808,7 @@ namespace Altseed2
     /// ツール機能における色の設定を表します
     /// </summary>
     [Serializable]
-    public enum ToolColorEdit : int
+    public enum ToolColorEditFlags : int
     {
         None = 0,
         /// <summary>
@@ -906,7 +906,7 @@ namespace Altseed2
     }
     
     [Serializable]
-    public enum ToolSelectable : int
+    public enum ToolSelectableFlags : int
     {
         /// <summary>
         /// 
@@ -938,7 +938,7 @@ namespace Altseed2
     /// ツール機能のウィンドウにおける設定を表します
     /// </summary>
     [Serializable]
-    public enum ToolWindow : int
+    public enum ToolWindowFlags : int
     {
         None = 0,
         /// <summary>
@@ -1030,7 +1030,7 @@ namespace Altseed2
     /// ツール機能のタブバーにおける設定を表します
     /// </summary>
     [Serializable]
-    public enum ToolTabBar : int
+    public enum ToolTabBarFlags : int
     {
         None = 0,
         /// <summary>
@@ -1073,7 +1073,7 @@ namespace Altseed2
     /// ツール機能を使ってフォントを読み込む際の範囲を指定します。ビット演算は行わないでください。
     /// </summary>
     [Serializable]
-    public enum ToolGlyphRanges : int
+    public enum ToolGlyphRange : int
     {
         Default,
         /// <summary>
@@ -1439,7 +1439,7 @@ namespace Altseed2
     /// 
     /// </summary>
     [Serializable]
-    public enum ToolCombo : int
+    public enum ToolComboFlags : int
     {
         /// <summary>
         /// 
@@ -1483,7 +1483,7 @@ namespace Altseed2
     /// 
     /// </summary>
     [Serializable]
-    public enum ToolHovered : int
+    public enum ToolHoveredFlags : int
     {
         /// <summary>
         /// 
@@ -3954,7 +3954,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="key">キー</param>
         /// <returns>ボタンの押下状態</returns>
-        public ButtonState GetKeyState(Keys key)
+        public ButtonState GetKeyState(Key key)
         {
             var ret = cbg_Keyboard_GetKeyState(selfPtr, (int)key);
             return (ButtonState)ret;
@@ -4136,7 +4136,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="button">状態を取得するマウスのボタン</param>
         /// <returns>マウスボタンの状態</returns>
-        public ButtonState GetMouseButtonState(MouseButtons button)
+        public ButtonState GetMouseButtonState(MouseButton button)
         {
             var ret = cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
             return (ButtonState)ret;
@@ -9897,7 +9897,7 @@ namespace Altseed2
         /// <summary>
         /// パスからフォントを読み込みます。パックされたファイルは非対応です。
         /// </summary>
-        public bool AddFontFromFileTTF(string path, float sizePixels, ToolGlyphRanges ranges)
+        public bool AddFontFromFileTTF(string path, float sizePixels, ToolGlyphRange ranges)
         {
             var ret = cbg_Tool_AddFontFromFileTTF(selfPtr, path, sizePixels, (int)ranges);
             return ret;
@@ -9906,7 +9906,7 @@ namespace Altseed2
         /// <summary>
         /// `End()` を呼び出してください。
         /// </summary>
-        public bool Begin(string name, ToolWindow flags)
+        public bool Begin(string name, ToolWindowFlags flags)
         {
             var ret = cbg_Tool_Begin(selfPtr, name, (int)flags);
             return ret;
@@ -10003,7 +10003,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool CollapsingHeader(string label, ToolTreeNode flags)
+        public bool CollapsingHeader(string label, ToolTreeNodeFlags flags)
         {
             var ret = cbg_Tool_CollapsingHeader(selfPtr, label, (int)flags);
             return ret;
@@ -10021,7 +10021,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool TreeNodeEx(string label, ToolTreeNode flags)
+        public bool TreeNodeEx(string label, ToolTreeNodeFlags flags)
         {
             var ret = cbg_Tool_TreeNodeEx(selfPtr, label, (int)flags);
             return ret;
@@ -10107,7 +10107,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool Selectable(string label, ref bool selected, ToolSelectable flags)
+        public bool Selectable(string label, ref bool selected, ToolSelectableFlags flags)
         {
             var ret = cbg_Tool_Selectable(selfPtr, label, ref selected, (int)flags);
             return ret;
@@ -10116,7 +10116,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public string InputText(string label, string input, int maxLength, ToolInputText flags)
+        public string InputText(string label, string input, int maxLength, ToolInputTextFlags flags)
         {
             var ret = cbg_Tool_InputText(selfPtr, label, input, maxLength, (int)flags);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
@@ -10125,7 +10125,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public string InputTextWithHint(string label, string hit, string input, int maxLength, ToolInputText flags)
+        public string InputTextWithHint(string label, string hit, string input, int maxLength, ToolInputTextFlags flags)
         {
             var ret = cbg_Tool_InputTextWithHint(selfPtr, label, hit, input, maxLength, (int)flags);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
@@ -10134,7 +10134,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public string InputTextMultiline(string label, string input, int maxLength, Vector2F size, ToolInputText flags)
+        public string InputTextMultiline(string label, string input, int maxLength, Vector2F size, ToolInputTextFlags flags)
         {
             var ret = cbg_Tool_InputTextMultiline(selfPtr, label, input, maxLength, size, (int)flags);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
@@ -10350,7 +10350,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool ColorEdit3(string label, ref Color color, ToolColorEdit flags)
+        public bool ColorEdit3(string label, ref Color color, ToolColorEditFlags flags)
         {
             var ret = cbg_Tool_ColorEdit3(selfPtr, label, ref color, (int)flags);
             return ret;
@@ -10359,7 +10359,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool ColorEdit4(string label, ref Color color, ToolColorEdit flags)
+        public bool ColorEdit4(string label, ref Color color, ToolColorEditFlags flags)
         {
             var ret = cbg_Tool_ColorEdit4(selfPtr, label, ref color, (int)flags);
             return ret;
@@ -10402,7 +10402,7 @@ namespace Altseed2
         /// <summary>
         /// `EndChild()` を呼び出してください
         /// </summary>
-        public bool BeginChild(string label, Vector2F size, bool border, ToolWindow flags)
+        public bool BeginChild(string label, Vector2F size, bool border, ToolWindowFlags flags)
         {
             var ret = cbg_Tool_BeginChild(selfPtr, label, size, border, (int)flags);
             return ret;
@@ -10462,7 +10462,7 @@ namespace Altseed2
         /// <summary>
         /// `EndTabBar()` を呼び出してください
         /// </summary>
-        public bool BeginTabBar(string label, ToolTabBar flags)
+        public bool BeginTabBar(string label, ToolTabBarFlags flags)
         {
             var ret = cbg_Tool_BeginTabBar(selfPtr, label, (int)flags);
             return ret;
@@ -11266,7 +11266,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public void BeginCombo(string label, string previewValue, ToolCombo flags)
+        public void BeginCombo(string label, string previewValue, ToolComboFlags flags)
         {
             cbg_Tool_BeginCombo(selfPtr, label, previewValue, (int)flags);
         }
@@ -11292,7 +11292,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool ColorButton(string descId, ref Color col, ToolColorEdit flags, Vector2F size)
+        public bool ColorButton(string descId, ref Color col, ToolColorEditFlags flags, Vector2F size)
         {
             var ret = cbg_Tool_ColorButton(selfPtr, descId, ref col, (int)flags, size);
             return ret;
@@ -11301,7 +11301,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public void SetColorEditOptions(ToolColorEdit flags)
+        public void SetColorEditOptions(ToolColorEditFlags flags)
         {
             cbg_Tool_SetColorEditOptions(selfPtr, (int)flags);
         }
@@ -11419,7 +11419,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool BeginPopupModalEx(string name, out bool isOpen, ToolWindow flags)
+        public bool BeginPopupModalEx(string name, out bool isOpen, ToolWindowFlags flags)
         {
             var ret = cbg_Tool_BeginPopupModalEx(selfPtr, name, out isOpen, (int)flags);
             return ret;
@@ -11546,7 +11546,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public bool IsItemHoveredWithFlags(ToolHovered flags)
+        public bool IsItemHoveredWithFlags(ToolHoveredFlags flags)
         {
             var ret = cbg_Tool_IsItemHoveredWithFlags(selfPtr, (int)flags);
             return ret;

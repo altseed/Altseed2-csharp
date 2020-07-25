@@ -28,18 +28,18 @@ namespace Altseed2.Test
 
             tc.LoopBody(c =>
             {
-                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) node.Position += new Vector2F(1.5f, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) node.Position -= new Vector2F(1.5f, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) node.Position += new Vector2F(0, 1.5f);
-                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) node.Position -= new Vector2F(0, 1.5f);
-                if (Engine.Keyboard.GetKeyState(Keys.B) == ButtonState.Hold) node.Scale += new Vector2F(0.01f, 0.01f);
-                if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) node.Scale -= new Vector2F(0.01f, 0.01f);
-                if (Engine.Keyboard.GetKeyState(Keys.R) == ButtonState.Hold) node.Angle += 3;
-                if (Engine.Keyboard.GetKeyState(Keys.L) == ButtonState.Hold) node.Angle -= 3;
-                if (Engine.Keyboard.GetKeyState(Keys.X) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width - 2.0f, node.Src.Height - 2.0f);
-                if (Engine.Keyboard.GetKeyState(Keys.Z) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width + 2.0f, node.Src.Height + 2.0f);
-                if (Engine.Keyboard.GetKeyState(Keys.C) == ButtonState.Hold) node.Src = new RectF(node.Src.X - 2.0f, node.Src.Y - 2.0f, node.Src.Width, node.Src.Height);
-                if (Engine.Keyboard.GetKeyState(Keys.V) == ButtonState.Hold) node.Src = new RectF(node.Src.X + 2.0f, node.Src.Y + 2.0f, node.Src.Width, node.Src.Height);
+                if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) node.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) node.Position -= new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) node.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold) node.Position -= new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Key.B) == ButtonState.Hold) node.Scale += new Vector2F(0.01f, 0.01f);
+                if (Engine.Keyboard.GetKeyState(Key.S) == ButtonState.Hold) node.Scale -= new Vector2F(0.01f, 0.01f);
+                if (Engine.Keyboard.GetKeyState(Key.R) == ButtonState.Hold) node.Angle += 3;
+                if (Engine.Keyboard.GetKeyState(Key.L) == ButtonState.Hold) node.Angle -= 3;
+                if (Engine.Keyboard.GetKeyState(Key.X) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width - 2.0f, node.Src.Height - 2.0f);
+                if (Engine.Keyboard.GetKeyState(Key.Z) == ButtonState.Hold) node.Src = new RectF(node.Src.X, node.Src.Y, node.Src.Width + 2.0f, node.Src.Height + 2.0f);
+                if (Engine.Keyboard.GetKeyState(Key.C) == ButtonState.Hold) node.Src = new RectF(node.Src.X - 2.0f, node.Src.Y - 2.0f, node.Src.Width, node.Src.Height);
+                if (Engine.Keyboard.GetKeyState(Key.V) == ButtonState.Hold) node.Src = new RectF(node.Src.X + 2.0f, node.Src.Y + 2.0f, node.Src.Width, node.Src.Height);
             }
             , null);
 
@@ -374,15 +374,15 @@ float4 main(PS_INPUT input) : SV_TARGET
             tc.Duration = 1000;
             tc.LoopBody(c =>
             {
-                if (Engine.Keyboard.GetKeyState(Keys.Right) == ButtonState.Hold) rectSize.X += 1.5f;
-                if (Engine.Keyboard.GetKeyState(Keys.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
-                if (Engine.Keyboard.GetKeyState(Keys.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
-                if (Engine.Keyboard.GetKeyState(Keys.Up) == ButtonState.Hold) rectSize.Y -= 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) rectSize.X += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold) rectSize.Y -= 1.5f;
 
-                if (Engine.Keyboard.GetKeyState(Keys.D) == ButtonState.Hold) parent.Position += new Vector2F(1.5f, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.A) == ButtonState.Hold) parent.Position += new Vector2F(-1.5f, 0);
-                if (Engine.Keyboard.GetKeyState(Keys.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
-                if (Engine.Keyboard.GetKeyState(Keys.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
+                if (Engine.Keyboard.GetKeyState(Key.D) == ButtonState.Hold) parent.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.A) == ButtonState.Hold) parent.Position += new Vector2F(-1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Key.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
 
                 parent.SetVertexes(new[] {
                         new Vector2F(0, 0),
