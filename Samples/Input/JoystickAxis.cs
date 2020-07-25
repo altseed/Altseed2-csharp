@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Sample
 {
-    class JoystickAxis
+    class JoystickAxisSample
     {
         static void Main(string[] args)
         {
@@ -41,7 +41,7 @@ namespace Sample
 
                         displayText += $"ゲームパッド名: {info.GamepadName}\n";
 
-                        foreach (var axisType in Enum.GetValues(typeof(JoystickAxes)).Cast<JoystickAxes>())
+                        foreach (var axisType in Enum.GetValues(typeof(JoystickAxis)).Cast<JoystickAxis>())
                         {
                             // ジョイスティックコントローラーの軸入力を取得します。
                             // ジョイスティックのインデックスと確認したい軸の種類を指定します。

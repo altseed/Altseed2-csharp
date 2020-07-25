@@ -18,7 +18,7 @@ namespace Sample
 
             while (Engine.DoEvents())
             {
-                var zState = Engine.Keyboard.GetKeyState(Keys.Z);
+                var zState = Engine.Keyboard.GetKeyState(Key.Z);
 
                 // Zキーが押されているかどうかを取得します。
                 if (zState == ButtonState.Free)

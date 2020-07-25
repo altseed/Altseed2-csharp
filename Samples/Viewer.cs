@@ -32,8 +32,8 @@ namespace Sample
             Samples.Add(new Sample("MouseCursor", "マウスカーソル設定のサンプルです。", typeof(MouseCursor)));
             Samples.Add(new Sample("Collision", "衝突の実装を行います。", typeof(Collision)));
             Samples.Add(new Sample("CollisionVisualizer", "衝突範囲の描画を行います。", typeof(ColliderVisualization)));
-            Samples.Add(new Sample("JoystickAxis", "ジョイスティックのアナログ入力を行います。", typeof(JoystickAxis)));
-            Samples.Add(new Sample("JoystickButton", "ジョイスティックのボタン入力を行います。", typeof(JoystickButton)));
+            Samples.Add(new Sample("JoystickAxisSample", "ジョイスティックのアナログ入力を行います。", typeof(JoystickAxisSample)));
+            Samples.Add(new Sample("JoystickButtonSample", "ジョイスティックのボタン入力を行います。", typeof(JoystickButtonSample)));
             // Samples.Add(new Sample("JoystickVibrate", "ジョイスティックの振動を行います。", typeof(JoystickVibrate)));
             Samples.Add(new Sample("Keyboard", "キーボード入力を行います。", typeof(Keyboard)));
             Samples.Add(new Sample("Mouse", "マウス入力を行います。", typeof(Mouse)));
@@ -65,7 +65,7 @@ namespace Sample
             };
             if (!Engine.Initialize("Altseed2 サンプルビュワー", 640, 480, config)) return;
 
-            Engine.Tool.AddFontFromFileTTF(@"mplus-1m-regular.ttf", 20, ToolGlyphRanges.Japanese);
+            Engine.Tool.AddFontFromFileTTF(@"mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
 
             while (Engine.DoEvents())
             {

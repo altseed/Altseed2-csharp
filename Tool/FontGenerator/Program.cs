@@ -17,7 +17,7 @@ namespace Altseed2.Tool.FontGenerator
             {
                 if (Engine.Tool.BeginFullScreen(0))
                 {
-                    var tmp = Engine.Tool.InputText("Input TTF File", input, 2048, ToolInputText.None);
+                    var tmp = Engine.Tool.InputText("Input TTF File", input, 2048, ToolInputTextFlags.None);
                     if (tmp != null) input = tmp;
 
                     if (Engine.Tool.SmallButton("Open TTF File"))
@@ -25,7 +25,7 @@ namespace Altseed2.Tool.FontGenerator
 
                     Engine.Tool.SliderInt("Font Size", ref size, 1, 1, 1024);
 
-                    tmp = Engine.Tool.InputText("Characters Text File", charactersTextFilePath, 2048, ToolInputText.None);
+                    tmp = Engine.Tool.InputText("Characters Text File", charactersTextFilePath, 2048, ToolInputTextFlags.None);
                     if (tmp != null) charactersTextFilePath = tmp;
 
                     if (Engine.Tool.SmallButton("Open Characters Text File"))

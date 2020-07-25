@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Sample
 {
-    class JoystickButton
+    class JoystickButtonSample
     {
         static void Main(string[] args)
         {
@@ -43,7 +43,7 @@ namespace Sample
                         // Nameよりもわかりやすい名前を取得可能です。
                         displayText += $"ゲームパッド名: {info.GamepadName}\n";
 
-                        foreach (var buttonType in Enum.GetValues(typeof(JoystickButtons)).Cast<JoystickButtons>())
+                        foreach (var buttonType in Enum.GetValues(typeof(JoystickButton)).Cast<JoystickButton>())
                         {
                             // ジョイスティックコントローラーのボタン入力を取得します。
                             // ジョイスティックのインデックスと確認したいジョイスティックボタンを指定します。
