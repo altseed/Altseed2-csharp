@@ -191,7 +191,11 @@ namespace Altseed2
                 {
                     if (node is PostEffectNode)
                     {
-                        if (requireRender) Renderer.Render();
+                        if (requireRender)
+                        {
+                            Renderer.Render();
+                            requireRender = false;
+                        }
 
                         _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size);
 
@@ -212,7 +216,11 @@ namespace Altseed2
                     else throw new InvalidOperationException();
                 }
             }
-            if (requireRender) Renderer.Render();
+            if (requireRender)
+            {
+                Renderer.Render();
+                requireRender = false;
+            }
         }
 
         /// <summary>
