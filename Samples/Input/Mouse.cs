@@ -20,7 +20,7 @@ namespace Sample
             while (Engine.DoEvents())
             {
                 // マウスの左ボタンが押されているかどうかを取得します。
-                if (Engine.Mouse.GetMouseButtonState(MouseButtons.ButtonLeft) == ButtonState.Hold)
+                if (Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Hold)
                 {
                     textNode.Text = "左ボタンが押されています。";
                 }

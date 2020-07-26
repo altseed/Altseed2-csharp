@@ -17,7 +17,7 @@ namespace Altseed2.Test
 
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindow.None))
+                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
                 {
                     Engine.Tool.End();
                 }
@@ -32,7 +32,7 @@ namespace Altseed2.Test
         {
             var tc = new TestCore(new Configuration { ToolEnabled = true });
             tc.Init();
-            Engine.Tool.AddFontFromFileTTF("../Core/TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRanges.Japanese);
+            Engine.Tool.AddFontFromFileTTF("../Core/TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
             string str0 = "";
             string str1 = "";
             string str2 = "";
@@ -40,15 +40,15 @@ namespace Altseed2.Test
             float[] floatArray = new float[] { 0, 1, 2, 3, 4 };
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindow.None))
+                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
                 {
-                    var tmp = Engine.Tool.InputText("InputText", str0, 1024, ToolInputText.None);
+                    var tmp = Engine.Tool.InputText("InputText", str0, 1024, ToolInputTextFlags.None);
                     if (tmp != null) str0 = tmp;
 
-                    tmp = Engine.Tool.InputTextMultiline("InputTextMultiline", str1, 1024, new Vector2F(), ToolInputText.None);
+                    tmp = Engine.Tool.InputTextMultiline("InputTextMultiline", str1, 1024, new Vector2F(), ToolInputTextFlags.None);
                     if (tmp != null) str1 = tmp;
 
-                    tmp = Engine.Tool.InputTextWithHint("InputTextWithHint", "hint", str2, 1024, ToolInputText.None);
+                    tmp = Engine.Tool.InputTextWithHint("InputTextWithHint", "hint", str2, 1024, ToolInputTextFlags.None);
                     if (tmp != null) str2 = tmp;
 
                     Engine.Tool.InputInt2("InputInt2", intArray);
@@ -93,12 +93,12 @@ namespace Altseed2.Test
             Color col2 = new Color(10, 20, 50, 100);
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindow.None))
+                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
                 {
-                    Engine.Tool.ColorEdit3("Color1", ref col1, ToolColorEdit.None);  // RGB
-                    Engine.Tool.ColorEdit4("Color2", ref col2, ToolColorEdit.None);  // RGBAのアルファ付き
+                    Engine.Tool.ColorEdit3("Color1", ref col1, ToolColorEditFlags.None);  // RGB
+                    Engine.Tool.ColorEdit4("Color2", ref col2, ToolColorEditFlags.None);  // RGBAのアルファ付き
 
-                    var flag = ToolColorEdit.Float | ToolColorEdit.NoInputs | ToolColorEdit.NoLabel;
+                    var flag = ToolColorEditFlags.Float | ToolColorEditFlags.NoInputs | ToolColorEditFlags.NoLabel;
 
                     Engine.Tool.ColorEdit3("Color ID", ref col1, flag);
                     Engine.Tool.End();
@@ -120,7 +120,7 @@ namespace Altseed2.Test
             int current = 1;
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindow.None))
+                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
                 {
                     List<string> items = new List<string>() { "Apple", "Banana", "Cherry", "Kiwi", "Mango", "Orange", "Pineapple", "Strawberry", "Watermelon" };
 

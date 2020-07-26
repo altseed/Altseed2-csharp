@@ -22,7 +22,7 @@
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索するボタンの種類</param>
         /// <returns>指定種類のボタンの状態</returns>
-        public ButtonState GetButtonState(int joystickIndex, JoystickButtons type)
+        public ButtonState GetButtonState(int joystickIndex, JoystickButton type)
             => (ButtonState)cbg_Joystick_GetButtonStateByType(selfPtr, joystickIndex, (int)type);
 
         /// <summary>
@@ -40,7 +40,7 @@
         /// <param name="joystickIndex">検索するジョイスティックのインデックス</param>
         /// <param name="type">状態を検索する軸の種類</param>
         /// <returns>指定種類の軸の状態</returns>
-        public float GetAxisState(int joystickIndex, JoystickAxes type)
+        public float GetAxisState(int joystickIndex, JoystickAxis type)
             => cbg_Joystick_GetAxisStateByType(selfPtr, joystickIndex, (int)type);
     }
 }

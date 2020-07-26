@@ -275,7 +275,7 @@ namespace Altseed2.Test
 
             tc.LoopBody(null, c =>
             {
-                if (Engine.Keyboard.GetKeyState(Keys.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
             });
 
             tc.End();

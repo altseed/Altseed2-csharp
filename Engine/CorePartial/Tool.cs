@@ -16,9 +16,9 @@ namespace Altseed2
             SetNextWindowSize(size, ToolCond.None);
             SetNextWindowPos(pos, ToolCond.None);
 
-            var flags = ToolWindow.NoMove | ToolWindow.NoBringToFrontOnFocus
-                | ToolWindow.NoResize | ToolWindow.NoScrollbar
-                | ToolWindow.NoScrollbar | ToolWindow.NoTitleBar;
+            var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
+                | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
+                | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoTitleBar;
 
             //const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;
             var visible = Begin(" ", flags);
