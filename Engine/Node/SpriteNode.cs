@@ -191,22 +191,6 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// 拡大率の自動計算方法を指定します。
-        /// </summary>
-        public ScalingMode ScalingMode
-        {
-            get => _ScalingMode;
-            set
-            {
-                if (_ScalingMode == value) return;
-
-                _ScalingMode = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private ScalingMode _ScalingMode = ScalingMode.ContentSize;
-
-        /// <summary>
         /// 拡大率を取得または設定します。
         /// このプロパティを変更すると、 <see cref="ScalingMode"/> が <see cref="ScalingMode.Manual"/> に変更されます。
         /// </summary>
@@ -217,7 +201,7 @@ namespace Altseed2
             {
                 if (value == _Scale) return;
                 _Scale = value;
-                _ScalingMode = ScalingMode.Manual;
+                ScalingMode = ScalingMode.Manual;
                 _RequireCalcTransform = true;
             }
         }
@@ -226,12 +210,5 @@ namespace Altseed2
         /// コンテンツのサイズを取得します。
         /// </summary>
         public override Vector2F ContentSize => Src.Size;
-
-        private protected override void CalcTransform()
-        {
-            CalcScale(ScalingMode);
-
-            base.CalcTransform();
-        }
     }
 }

@@ -195,22 +195,6 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 描画モードを取得または設定します。
-        /// </summary>
-        public ScalingMode ScalingMode
-        {
-            get => _ScalingMode;
-            set
-            {
-                if (_ScalingMode == value) return;
-
-                _ScalingMode = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private ScalingMode _ScalingMode = ScalingMode.ContentSize;
-
-        /// <summary>
         /// 各頂点に指定した色を設定する
         /// </summary>
         /// <param name="color">設定する色</param>
@@ -260,13 +244,6 @@ namespace Altseed2
                 MathHelper.GetMinMax(out var min, out var max, _RenderedPolygon.Vertexes);
                 return max - min;
             }
-        }
-
-        private protected override void CalcTransform()
-        {
-            CalcScale(ScalingMode);
-
-            base.CalcTransform();
         }
     }
 }

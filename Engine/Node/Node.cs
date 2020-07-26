@@ -264,7 +264,7 @@ namespace Altseed2
             if (Parent == null)
                 return null;
 
-            for (var n = Parent; !(n is RootNode || n == null); n = n.Parent)
+            for (var n = Parent; n != null; n = n.Parent)
             {
                 if (n is T t)
                     return t;

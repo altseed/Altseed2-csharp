@@ -241,7 +241,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        private Vector2F _AnchorMax = new Vector2F(0f, 0f);
+        private Vector2F _AnchorMax = new Vector2F(1f, 1f);
 
         /// <summary>
         /// 中心座標を取得または設定します。
@@ -254,6 +254,26 @@ namespace Altseed2
                 CenterPosition = value * Size;
             }
         }
+
+        /// <summary>
+        /// レイアウト自動計算の方法を指定します。
+        /// </summary>
+        public ScalingMode ScalingMode
+        {
+            get => _ScalingMode;
+            set
+            {
+                if (_ScalingMode == value) return;
+
+                _ScalingMode = value;
+                _RequireCalcTransform = true;
+            }
+        }
+        private ScalingMode _ScalingMode = ScalingMode.ContentSize;
+
+        #region Anchor
+
+        #endregion
 
         internal override void Update()
         {
@@ -273,12 +293,13 @@ namespace Altseed2
         /// </summary>
         private protected virtual void CalcTransform()
         {
+            CalcScale();
             if (AnchoringEnabled) ApplyAnchors();
-            _TransformNodeInfo?.Update();
 
             var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
             Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
 
+            _TransformNodeInfo?.Update();
             _RequireCalcTransform = false;
         }
 
@@ -331,14 +352,13 @@ namespace Altseed2
             if (AnchorMax.Y == AnchorMin.Y)
                 _Size.Y = old.Y;
 
-            _CenterPosition *= _Size / old;
-
-            _Position = Size * Pivot - _LeftTop;
+            _Position = ancestorSize * AnchorMin + Size * Pivot - _LeftTop;
+            _CenterPosition = Size * Pivot;
         }
 
-        private protected void CalcScale(ScalingMode scalingMode)
+        private protected void CalcScale()
         {
-            switch (scalingMode)
+            switch (ScalingMode)
             {
                 case ScalingMode.Fill:
                     Scale = Size / ContentSize;
