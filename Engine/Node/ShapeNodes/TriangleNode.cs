@@ -73,45 +73,6 @@ namespace Altseed2
         }
         private Vector2F _Point3;
 
-        internal void UpdateInheritedTransform()
-        {
-            if (_RequireUpdateVertexes)
-            {
-                UpdateVertexes();
-                _RequireUpdateVertexes = false;
-            }
-
-            var array = _RenderedPolygon.Vertexes;
-            MathHelper.GetMinMax(out var min, out var max, array);
-            var size = max - min;
-
-            var mat = new Matrix44F();
-            switch (ScalingMode)
-            {
-                case ScalingMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / size);
-                    break;
-                case ScalingMode.KeepAspect:
-                    var scale = Size;
-
-                    if (Size.X / Size.Y > size.X / size.Y)
-                        scale.X = size.X * Size.Y / size.Y;
-                    else
-                        scale.Y = size.Y * Size.X / size.X;
-
-                    scale /= size;
-
-                    mat = Matrix44F.GetScale2D(scale);
-                    break;
-                case ScalingMode.Manual:
-                    mat = Matrix44F.Identity;
-                    break;
-                default:
-                    break;
-            }
-            mat *= Matrix44F.GetTranslation2D(-min);
-        }
-
         private void UpdateVertexes()
         {
             var positions = new Vector2F[3];

@@ -18,7 +18,7 @@ namespace Altseed2
         public PolygonNode()
         {
             _RenderedPolygon = RenderedPolygon.Create();
-            _RenderedPolygon.Vertexes = VertexArray.Create(0);
+            _RenderedPolygon.Vertexes = VertexArray.Create(0); //TODO: Core の更新で不要になる。
         }
 
         #region IDrawn

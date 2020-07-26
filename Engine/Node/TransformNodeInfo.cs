@@ -1,44 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Altseed2
+﻿namespace Altseed2
 {
     class TransformNodeInfo
     {
-        TransformNode TransformNode { get; }
+        private TransformNode _TransformNode;
 
         /// <summary>
         /// <see cref="TransformNode.Size"/>の領域を表示する
         /// </summary>
-        RenderedPolygon[] SizeBoxLines { get; }
+        private RenderedPolygon[] _SizeBoxLines;
 
         /// <summary>
         /// <see cref="TransformNode.Pivot"/>の領域を表示する
         /// </summary>
-        RenderedPolygon PivotBox { get; }
+        private RenderedPolygon _PivotBox;
 
-        public TransformNodeInfo(TransformNode transformNode)
+        internal TransformNodeInfo(TransformNode transformNode)
         {
-            TransformNode = transformNode;
-            SizeBoxLines = new RenderedPolygon[4];
-            for (int i = 0; i < SizeBoxLines.Length; i++)
+            _TransformNode = transformNode;
+            _SizeBoxLines = new RenderedPolygon[4];
+            for (int i = 0; i < _SizeBoxLines.Length; i++)
             {
-                SizeBoxLines[i] = RenderedPolygon.Create();
-                SizeBoxLines[i].Vertexes = VertexArray.Create(4);
+                _SizeBoxLines[i] = RenderedPolygon.Create();
+                _SizeBoxLines[i].Vertexes = VertexArray.Create(4); //TODO: Core の更新で不要になる。
             }
 
-            PivotBox = RenderedPolygon.Create();
-            PivotBox.Vertexes = VertexArray.Create(4);
+            _PivotBox = RenderedPolygon.Create();
+            _PivotBox.Vertexes = VertexArray.Create(4); //TODO: Core の更新で不要になる。
         }
 
-        internal void UpdateSize()
+        internal void Update()
+        {
+            UpdateSizeBox();
+            UpdatePivotBox();
+        }
+
+        private void UpdateSizeBox()
         {
             var points = new Vector2F[4];
             points[0] = new Vector2F();
-            points[1] = new Vector2F(TransformNode.Size.X, 0);
-            points[2] = TransformNode.Size;
-            points[3] = new Vector2F(0, TransformNode.Size.Y);
+            points[1] = new Vector2F(_TransformNode.Size.X, 0);
+            points[2] = _TransformNode.Size;
+            points[3] = new Vector2F(0, _TransformNode.Size.Y);
 
             for (int i = 0; i < points.Length; i++)
             {
@@ -46,33 +48,25 @@ namespace Altseed2
                 var point2 = points[points.Length == i + 1 ? 0 : i + 1];
 
                 var positions = new Vector2F[4];
-                var sub = point2 - point1;
-                var degree = sub.Degree;
-                var x = new Vector2F(sub.Length, 0.0f)
-                {
-                    Degree = degree
-                };
-                var y = new Vector2F(0.0f, 2.0f / 2)
-                {
-                    Degree = degree + 90
-                };
-                positions[0] = point1 - y;
-                positions[1] = point1 + y;
-                positions[2] = point1 + x + y;
-                positions[3] = point1 + x - y;
+                var vec = point2 - point1;
+
+                var side = new Vector2F(vec.Y, -vec.X).Normal;
+
+                positions[0] = point1 - side;
+                positions[1] = point1 + side;
+                positions[2] = point2 + side;
+                positions[3] = point2 - side;
 
                 var array = Vector2FArray.Create(positions.Length);
                 array.FromArray(positions);
-                SizeBoxLines[i].CreateVertexesByVector2F(array);
-                SizeBoxLines[i].OverwriteVertexesColor(new Color(200, 200, 200));
+                _SizeBoxLines[i].CreateVertexesByVector2F(array);
+                _SizeBoxLines[i].OverwriteVertexesColor(new Color(200, 200, 200));
             }
-
-            UpdatePivot();
         }
 
-        internal void UpdatePivot()
+        private void UpdatePivotBox()
         {
-            var pos = TransformNode.CenterPosition;
+            var pos = _TransformNode.CenterPosition;
             var points = new Vector2F[4];
             points[0] = pos + new Vector2F(-3, -3);
             points[1] = pos + new Vector2F(3, -3);
@@ -81,23 +75,22 @@ namespace Altseed2
 
             var array = Vector2FArray.Create(4);
             array.FromArray(points);
-            PivotBox.CreateVertexesByVector2F(array);
-            PivotBox.OverwriteVertexesColor(new Color(0, 0, 255));
+            _PivotBox.CreateVertexesByVector2F(array);
+            _PivotBox.OverwriteVertexesColor(new Color(0, 0, 255));
         }
 
-
-        public void Draw()
+        internal void Draw()
         {
-        //    var mat = TransformNode.CalcInheritedTransform();
+            var mat = _TransformNode.AbsoluteTransform;
 
-        //    for (int i = 0; i < SizeBoxLines.Length; i++)
-        //    {
-        //        SizeBoxLines[i].Transform = mat;
-        //        Engine.Renderer.DrawPolygon(SizeBoxLines[i]);
-        //    }
+            for (int i = 0; i < _SizeBoxLines.Length; i++)
+            {
+                _SizeBoxLines[i].Transform = mat;
+                Engine.Renderer.DrawPolygon(_SizeBoxLines[i]);
+            }
 
-        //    PivotBox.Transform = mat;
-            Engine.Renderer.DrawPolygon(PivotBox);
+            _PivotBox.Transform = mat;
+            Engine.Renderer.DrawPolygon(_PivotBox);
         }
     }
 }

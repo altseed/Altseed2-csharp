@@ -46,7 +46,7 @@ namespace Altseed2
         public TransformNode()
         {
             if (Engine.Config.VisibleTransformInfo)
-                TransformNodeInfo = new TransformNodeInfo(this);
+                _TransformNodeInfo = new TransformNodeInfo(this);
         }
 
         internal Matrix44F Transform
@@ -106,6 +106,7 @@ namespace Altseed2
             set
             {
                 if (_CenterPosition == value) return;
+
                 _CenterPosition = value;
                 _RequireCalcTransform = true;
                 UpdateMargin();
@@ -115,7 +116,6 @@ namespace Altseed2
 
         /// <summary>
         /// 拡大率を取得または設定します。
-        /// このプロパティを変更すると、 <see cref="ScalingMode"/> が <see cref="ScalingMode.Manual"/> に変更されます。
         /// </summary>
         public virtual Vector2F Scale
         {
@@ -123,6 +123,7 @@ namespace Altseed2
             set
             {
                 if (value == _Scale) return;
+
                 _Scale = value;
                 _RequireCalcTransform = true;
             }
@@ -141,9 +142,6 @@ namespace Altseed2
                 _Size = value;
                 _RequireCalcTransform = true;
                 UpdateMargin();
-
-                //TransformNodeInfo?.UpdateSize();
-                //TransformNodeInfo?.UpdatePivot();
             }
         }
         private Vector2F _Size = new Vector2F(1f, 1f);
@@ -253,7 +251,6 @@ namespace Altseed2
             get => CenterPosition / Size;
             set
             {
-
                 CenterPosition = value * Size;
             }
         }
@@ -276,29 +273,11 @@ namespace Altseed2
         /// </summary>
         private protected virtual void CalcTransform()
         {
-            var ancestorSize = GetAncestorSpecificNode<ISized>()?.Size ?? new Vector2F();
-            var anchorDiff = ancestorSize * (AnchorMax - AnchorMin);
-
-            var position = Position;
-
-            if (AnchoringEnabled)
-            {
-                _Position = CenterPosition - _LeftTop;
-
-                var oldSize = Size;
-                _Size = anchorDiff + _LeftTop - _RightBottom;
-                if (AnchorMax.X == AnchorMin.X)
-                    _Size.X = oldSize.X;
-                if (AnchorMax.Y == AnchorMin.Y)
-                    _Size.Y = oldSize.Y;
-                _CenterPosition *= _Size / oldSize;
-
-                position += AnchorMin * ancestorSize;
-            }
+            if (AnchoringEnabled) ApplyAnchors();
+            _TransformNodeInfo?.Update();
 
             var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
-
-            Transform = MathHelper.CalcTransform(position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
+            Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
 
             _RequireCalcTransform = false;
         }
@@ -323,6 +302,10 @@ namespace Altseed2
             }
         }
 
+        /// <summary>
+        /// <see cref="Position"/>, <see cref="CenterPosition"/>, <see cref="Size"/>に応じて
+        /// <see cref="_LeftTop"/>と<see cref="_RightBottom"/>を再計算します。
+        /// </summary>
         private void UpdateMargin()
         {
             var ancestorSize = GetAncestorSpecificNode<ISized>()?.Size ?? new Vector2F();
@@ -333,13 +316,24 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 変形に関する情報
+        /// <see cref="_LeftTop"/>と<see cref="_RightBottom"/>に応じて
+        /// <see cref="Position"/>, <see cref="CenterPosition"/>, <see cref="Size"/>を再計算します。
         /// </summary>
-        TransformNodeInfo TransformNodeInfo { get; }
-
-        internal void DrawTransformInfo()
+        private void ApplyAnchors()
         {
-            TransformNodeInfo?.Draw();
+            var ancestorSize = GetAncestorSpecificNode<ISized>()?.Size ?? new Vector2F();
+            var anchorDiff = ancestorSize * (AnchorMax - AnchorMin);
+
+            var old = Size;
+            _Size = anchorDiff + _LeftTop - _RightBottom;
+            if (AnchorMax.X == AnchorMin.X)
+                _Size.X = old.X;
+            if (AnchorMax.Y == AnchorMin.Y)
+                _Size.Y = old.Y;
+
+            _CenterPosition *= _Size / old;
+
+            _Position = Size * Pivot - _LeftTop;
         }
 
         private protected void CalcScale(ScalingMode scalingMode)
@@ -347,7 +341,7 @@ namespace Altseed2
             switch (scalingMode)
             {
                 case ScalingMode.Fill:
-                    _Scale = Size / ContentSize;
+                    Scale = ContentSize / Size;
                     break;
 
                 case ScalingMode.KeepAspect:
@@ -358,17 +352,27 @@ namespace Altseed2
                     else
                         scale.Y = ContentSize.Y * Size.X / ContentSize.X;
 
-                    _Scale = scale / ContentSize;
+                    Scale = scale / ContentSize;
                     break;
 
                 case ScalingMode.ContentSize:
-                    _Size = ContentSize;
+                    Size = ContentSize;
                     break;
 
                 case ScalingMode.Manual:
                     // 何もしない
                     break;
             }
+        }
+
+        /// <summary>
+        /// 変形に関する情報
+        /// </summary>
+        private TransformNodeInfo _TransformNodeInfo { get; }
+
+        internal void DrawTransformInfo()
+        {
+            _TransformNodeInfo?.Draw();
         }
     }
 }
