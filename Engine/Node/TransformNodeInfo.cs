@@ -37,10 +37,12 @@
         private void UpdateSizeBox()
         {
             var points = new Vector2F[4];
-            points[0] = new Vector2F();
-            points[1] = new Vector2F(_TransformNode.Size.X, 0);
-            points[2] = _TransformNode.Size;
-            points[3] = new Vector2F(0, _TransformNode.Size.Y);
+            var org = _TransformNode.Position - _TransformNode.CenterPosition;
+
+            points[0] = org + new Vector2F();
+            points[1] = org + new Vector2F(_TransformNode.Size.X, 0);
+            points[2] = org + _TransformNode.Size;
+            points[3] = org + new Vector2F(0, _TransformNode.Size.Y);
 
             for (int i = 0; i < points.Length; i++)
             {
@@ -66,7 +68,7 @@
 
         private void UpdatePivotBox()
         {
-            var pos = _TransformNode.CenterPosition;
+            var pos = _TransformNode.Position;
             var points = new Vector2F[4];
             points[0] = pos + new Vector2F(-3, -3);
             points[1] = pos + new Vector2F(3, -3);
@@ -81,7 +83,8 @@
 
         internal void Draw()
         {
-            var mat = _TransformNode.AbsoluteTransform;
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?
+                .AbsoluteTransform ?? Matrix44F.Identity;
 
             for (int i = 0; i < _SizeBoxLines.Length; i++)
             {

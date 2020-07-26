@@ -341,7 +341,7 @@ namespace Altseed2
             switch (scalingMode)
             {
                 case ScalingMode.Fill:
-                    Scale = ContentSize / Size;
+                    Scale = Size / ContentSize;
                     break;
 
                 case ScalingMode.KeepAspect:

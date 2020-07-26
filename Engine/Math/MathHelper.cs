@@ -85,7 +85,7 @@ namespace Altseed2
             var matRotate = Matrix44F.GetRotationZ(angle);
             var matScale = Matrix44F.GetScale2D(scale);
 
-            return matPosition * matScale * matRotate * matCenterPosition;
+            return matPosition * matRotate * matScale * matCenterPosition;
             // NOTE: 一気に計算したほうがよさそう
         }
 
