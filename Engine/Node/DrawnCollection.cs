@@ -97,7 +97,11 @@ namespace Altseed2
                 var group = _Sorted[i];
 
                 group[old].Remove(node);
-                group[node.ZOrder].Add(node);
+
+                if (!group.TryGetValue(node.ZOrder, out var set))
+                    set = group[node.ZOrder] = new HashSet<IDrawn>();
+
+                set.Add(node);
             }
         }
 

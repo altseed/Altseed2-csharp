@@ -77,7 +77,10 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 ZOrder = 1
             });
 
-            var postEffect = new TestPostEffect();
+            var postEffect = new TestPostEffect()
+            {
+                ZOrder = 2
+            };
 
             Engine.AddNode(postEffect);
 
@@ -104,7 +107,10 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 ZOrder = 1
             });
 
-            Engine.AddNode(new PostEffectGrayScaleNode());
+            Engine.AddNode(new PostEffectGrayScaleNode()
+            {
+                ZOrder = 2
+            });
 
             tc.LoopBody(c =>
             {
@@ -129,7 +135,10 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 ZOrder = 1
             });
 
-            Engine.AddNode(new PostEffectSepiaNode());
+            Engine.AddNode(new PostEffectSepiaNode()
+            {
+                ZOrder = 2
+            });
 
             tc.LoopBody(c =>
             {
@@ -154,7 +163,10 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 ZOrder = 1
             });
 
-            Engine.AddNode(new PostEffectGaussianBlurNode());
+            Engine.AddNode(new PostEffectGaussianBlurNode()
+            {
+                ZOrder = 2
+            });
 
             tc.LoopBody(c =>
             {
@@ -179,7 +191,11 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
                 ZOrder = 1
             });
 
-            Engine.AddNode(new PostEffectLightBloomNode { Threshold = 0.1f });
+            Engine.AddNode(new PostEffectLightBloomNode
+            {
+                Threshold = 0.1f,
+                ZOrder = 2
+            });
 
             tc.LoopBody(c =>
             {
