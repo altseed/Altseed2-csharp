@@ -57,7 +57,7 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public virtual Matrix44F AbsoluteTransform { get; internal set; }
+        public virtual Matrix44F AbsoluteTransform { get; internal set; } = Matrix44F.Identity;
 
         /// <summary>
         /// 角度(度数法)を取得または設定します。
@@ -285,8 +285,8 @@ namespace Altseed2
 
         internal override void Added(Node owner)
         {
-            UpdateMargin();
-            CalcTransform();
+            if (AnchorMode != AnchorMode.Disabled) UpdateMargin();
+            UpdateTransform();
 
             base.Added(owner);
         }
@@ -294,14 +294,22 @@ namespace Altseed2
         internal override void Update()
         {
             if (_RequireCalcTransform)
-            {
-                CalcTransform();
-
-                var ancestor = GetAncestorSpecificNode<TransformNode>();
-                PropagateTransform(this, ancestor?.AbsoluteTransform ?? Matrix44F.Identity);
-            }
+                UpdateTransform();
 
             base.Update();
+        }
+
+        /// <summary>
+        /// <see cref="AbsoluteTransform"/>を再計算します。
+        /// 直近先祖の<see cref="AbsoluteTransform"/>も考慮した上で最終的な変形を計算し、
+        /// 既存の子孫ノードにも伝播します。
+        /// </summary>
+        private void UpdateTransform()
+        {
+            CalcTransform();
+
+            var ancestor = GetAncestorSpecificNode<TransformNode>();
+            PropagateTransform(this, ancestor?.AbsoluteTransform ?? Matrix44F.Identity);
         }
 
         /// <summary>
@@ -310,9 +318,14 @@ namespace Altseed2
         private protected virtual void CalcTransform()
         {
             var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
-            var scale2 = CalcScale();
 
-            Transform = scale2 * MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
+            if (AnchorMode != AnchorMode.Disabled)
+            {
+                var scale2 = CalcScale();
+                Transform = scale2 * MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
+            }
+            else
+                Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
 
             _TransformNodeInfo?.Update();
             _RequireCalcTransform = false;
