@@ -8,9 +8,6 @@ namespace Altseed2
     [Serializable]
     public abstract class ColliderNode : TransformNode
     {
-        internal override Matrix44F AbsoluteTransform => _absoluteTransform;
-        private Matrix44F _absoluteTransform;
-
         /// <summary>
         /// コライダを取得する
         /// </summary>

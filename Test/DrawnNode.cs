@@ -332,33 +332,33 @@ float4 main(PS_INPUT input) : SV_TARGET
             var parent = new PolygonNode();
             parent.Position = new Vector2F(320, 240);
             parent.ZOrder = 5;
-
-            //parent.Pivot = new Vector2F(0.5f, 0.5f);
+            parent.CenterPosition = new Vector2F(0.5f, 0.5f);
             parent.SetVertexes(new[] {
                         new Vector2F(0, 0),
                         new Vector2F(rectSize.X, 0),
                         new Vector2F(rectSize.X, rectSize.Y),
                         new Vector2F(0, rectSize.Y),
                     }, new Color(255, 255, 200, 255));
+            parent.AnchorMode = AnchorMode.Disabled;
             Engine.AddNode(parent);
 
             var child = new SpriteNode();
             child.Texture = texture;
             child.Position = new Vector2F(120, 200);
             child.Src = new RectF(new Vector2F(), texture.Size);
-            child.AnchoringEnabled = true;
             child.Pivot = new Vector2F(0.5f, 0.5f);
             child.AnchorMin = new Vector2F(0.2f, 0.0f);
             child.AnchorMax = new Vector2F(0.8f, 1f);
             child.ZOrder = 10;
-            child.ScalingMode = ScalingMode.Fill;
+            child.AnchorMode = AnchorMode.Fill;
+            child.Size = texture.Size / 2;
+            child.LeftTop = new Vector2F(50, 40);
             parent.AddChildNode(child);
 
             var childText = new TextNode();
             childText.Font = font;
             childText.Color = new Color(0, 0, 0);
             childText.Text = "あいうえお";
-            childText.AnchoringEnabled = true;
             childText.Pivot = new Vector2F(0.5f, 0.5f);
             childText.AnchorMin = new Vector2F(0.5f, 0.5f);
             childText.AnchorMax = new Vector2F(0.5f, 0.5f);
@@ -366,6 +366,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             childText.HorizontalAlignment = HorizontalAlignment.Center;
             childText.VerticalAlignment = VerticalAlignment.Center;
             childText.Size = child.Size;
+            child.AnchorMode = AnchorMode.KeepAspect;
             child.AddChildNode(childText);
 
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
@@ -390,8 +391,17 @@ float4 main(PS_INPUT input) : SV_TARGET
                         new Vector2F(rectSize.X, rectSize.Y),
                         new Vector2F(0, rectSize.Y),
                     }, new Color(255, 255, 200, 255));
+                parent.Size = rectSize;
 
-                text.Text = child.Size.ToString();
+                var n = child;
+                text.Text =
+                $"ContentSize:{n.ContentSize}\n" +
+                $"Scale:{n.Scale}\n" +
+                $"Position:{n.Position}\n" +
+                $"Pivot:{n.Pivot}\n" +
+                $"CenterPosition:{n.CenterPosition}\n" +
+                $"Size:{n.Size}";
+
             }, null);
 
             tc.End();

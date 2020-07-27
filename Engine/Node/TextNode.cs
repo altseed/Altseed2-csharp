@@ -155,10 +155,13 @@ namespace Altseed2
             Engine.UnregisterDrawn(this);
         }
 
-        internal override Matrix44F AbsoluteTransform
+        /// <summary>
+        /// 先祖の変形を加味した変形行列を取得します。
+        /// </summary>
+        public sealed override Matrix44F AbsoluteTransform
         {
             get => _RenderedText.Transform;
-            set
+            internal set
             {
                 if (_RenderedText.Transform == value) return;
                 _RenderedText.Transform = value;

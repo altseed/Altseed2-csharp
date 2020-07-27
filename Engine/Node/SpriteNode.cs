@@ -94,8 +94,6 @@ namespace Altseed2
             Engine.RegisterDrawn(this);
 
             CalcTransform();
-            var ancestor = GetAncestorSpecificNode<SpriteNode>();
-            PropagateTransform(this, ancestor?.AbsoluteTransform ?? Matrix44F.Identity);
         }
 
         internal override void Unregistered()
@@ -178,10 +176,13 @@ namespace Altseed2
             }
         }
 
-        internal override Matrix44F AbsoluteTransform
+        /// <summary>
+        /// 先祖の変形を加味した変形行列を取得します。
+        /// </summary>
+        public sealed override Matrix44F AbsoluteTransform
         {
             get => _RenderedSprite.Transform;
-            set
+            internal set
             {
                 if (_RenderedSprite.Transform == value) return;
                 _RenderedSprite.Transform = value;
@@ -189,22 +190,6 @@ namespace Altseed2
         }
 
         #endregion
-
-        /// <summary>
-        /// 拡大率を取得または設定します。
-        /// このプロパティを変更すると、 <see cref="ScalingMode"/> が <see cref="ScalingMode.Manual"/> に変更されます。
-        /// </summary>
-        public override Vector2F Scale
-        {
-            get => _Scale;
-            set
-            {
-                if (value == _Scale) return;
-                _Scale = value;
-                ScalingMode = ScalingMode.Manual;
-                _RequireCalcTransform = true;
-            }
-        }
 
         /// <summary>
         /// コンテンツのサイズを取得します。

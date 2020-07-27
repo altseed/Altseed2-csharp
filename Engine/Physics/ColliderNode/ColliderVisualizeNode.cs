@@ -10,12 +10,12 @@ namespace Altseed2
     {
         internal readonly static Color AreaColor = new Color(255, 100, 100, 100);
 
-        internal override Matrix44F AbsoluteTransform => RenderedPolygon.Transform;
+        //internal override Matrix44F AbsoluteTransform => RenderedPolygon.Transform;
 
         /// <summary>
         /// 描画モードを取得または設定します。
         /// </summary>
-        public ScalingMode Mode { get; set; } = ScalingMode.Manual;
+        public AnchorMode Mode { get; set; } = AnchorMode.Disabled;
 
         internal RenderedPolygon RenderedPolygon { get; } = RenderedPolygon.Create();
 
@@ -27,7 +27,7 @@ namespace Altseed2
         /// <param name="colliderNode">使用するコライダノード</param>
         /// <exception cref="ArgumentNullException"><paramref name="colliderNode"/>がnull</exception>
         /// <returns><paramref name="colliderNode"/>の当たり当たり領域を表示するノード</returns>
-        public static ColliderVisualizeNode CreateVisualizeNode(ColliderNode colliderNode)
+        public static ColliderVisualizeNode Create(ColliderNode colliderNode)
         {
             if (colliderNode == null) throw new ArgumentNullException(nameof(colliderNode), "引数がnullです");
             return colliderNode switch
@@ -50,10 +50,10 @@ namespace Altseed2
             var mat = new Matrix44F();
             switch (Mode)
             {
-                case ScalingMode.Fill:
+                case AnchorMode.Fill:
                     mat = Matrix44F.GetScale2D(Size / size);
                     break;
-                case ScalingMode.KeepAspect:
+                case AnchorMode.KeepAspect:
                     var scale = Size;
 
                     if (Size.X / Size.Y > size.X / size.Y)
@@ -65,7 +65,7 @@ namespace Altseed2
 
                     mat = Matrix44F.GetScale2D(scale);
                     break;
-                case ScalingMode.Manual:
+                case AnchorMode.Disabled:
                     mat = Matrix44F.Identity;
                     break;
                 default:
