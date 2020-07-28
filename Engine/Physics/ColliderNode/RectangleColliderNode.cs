@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class RectangleColliderNode : ColliderNode
     {
-        internal int Version { get; private set; }
+        internal int _Version { get; private set; }
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -21,27 +21,15 @@ namespace Altseed2
         /// </summary>
         public Vector2F RectangleSize
         {
-            get => _rectangleSize;
+            get => _RectangleSize;
             set
             {
-                if (_rectangleSize == value) return;
-                _rectangleSize = value;
-                Version++;
+                if (_RectangleSize == value) return;
+                _RectangleSize = value;
+                _Version++;
             }
         }
-        private Vector2F _rectangleSize;
-
-        //public override Vector2F Size
-        //{
-        //    get => base.Size;
-        //    set
-        //    {
-        //        if (base.Size == value) return;
-        //        base.Size = value;
-
-        //        if (_rectangleSize.X != 0 && _rectangleSize.Y != 0) Scale = value / _rectangleSize;
-        //    }
-        //}
+        private Vector2F _RectangleSize;
 
         /// <summary>
         /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
@@ -59,64 +47,45 @@ namespace Altseed2
             MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            RectangleCollider.Size = _rectangleSize * scale;
+            RectangleCollider.Size = _RectangleSize * scale;
         }
-
-        //public override void AdjustSize()
-        //{
-        //    base.Size = _rectangleSize;
-        //}
 
         internal override void UpdateCollider()
         {
-            //UpdateInheritedTransform();
-
             MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            RectangleCollider.Size = _rectangleSize * scale;
+            RectangleCollider.Size = _RectangleSize * scale;
         }
     }
 
     [Serializable]
-    internal sealed class RectangleColliderVisualizeNode : ColliderVisualizeNode
+    internal sealed class RectangleColliderVisualizeNode : RectangleNode
     {
-        private readonly RectangleColliderNode owner;
-        private int currentVersion;
+        private readonly RectangleColliderNode _Owner;
+        private int _CurrentVersion;
 
         internal RectangleColliderVisualizeNode(RectangleColliderNode owner)
         {
-            this.owner = owner;
-            currentVersion = owner.Version;
-
-            UpdatePolygon();
+            Color = ColliderVisualizeNodeFactory.AreaColor;
+            _Owner = owner;
+            _CurrentVersion = owner._Version;
+            UpdateRectangle();
         }
 
-        private protected override void UpdatePolygon()
+        internal override void Update()
         {
-            var positions = new Vector2F[4];
-            var Size = owner.RectangleSize;
+            if (_CurrentVersion != _Owner._Version)
+                UpdateRectangle();
 
-            positions[0] = new Vector2F(0.0f, 0.0f);
-            positions[1] = new Vector2F(0.0f, Size.Y);
-            positions[2] = new Vector2F(Size.X, Size.Y);
-            positions[3] = new Vector2F(Size.X, 0.0f);
-
-            var array = Vector2FArray.Create(positions.Length);
-            array.FromArray(positions);
-            RenderedPolygon.CreateVertexesByVector2F(array);
-            RenderedPolygon.OverwriteVertexesColor(AreaColor);
+            base.Update();
         }
 
-        internal void UpdateInheritedTransform()
+        private void UpdateRectangle()
         {
-            base.UpdateInheritedTransform();
+            RectangleSize = _Owner.RectangleSize;
 
-            if (currentVersion != owner.Version)
-            {
-                UpdatePolygon();
-                currentVersion = owner.Version;
-            }
+            _CurrentVersion = _Owner._Version;
         }
     }
 }

@@ -289,12 +289,10 @@ namespace Altseed2
 
         #endregion
 
-        internal override void Added(Node owner)
+        internal override void Registered()
         {
-            if (AnchorMode != AnchorMode.Disabled) UpdateMargin();
             UpdateTransform();
-
-            base.Added(owner);
+            base.Registered();
         }
 
         internal override void Update()
@@ -317,7 +315,6 @@ namespace Altseed2
             var ancestor = GetAncestorSpecificNode<TransformNode>();
             PropagateTransform(this, ancestor?.InheritedTransform ?? Matrix44F.Identity);
         }
-
 
         /// <summary>
         /// <see cref="Transform"/> を再計算します。

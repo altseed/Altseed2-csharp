@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class PolygonColliderNode : ColliderNode
     {
-        internal int Version { get; private set; }
+        internal int _Version { get; private set; }
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -20,7 +20,7 @@ namespace Altseed2
         /// 頂点情報の配列を取得または設定する
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        public Vector2F[] Vertexes
+        internal Vector2F[] Vertexes
         {
             get => _vertexes;
             set
@@ -28,8 +28,7 @@ namespace Altseed2
                 if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
-                //AdjustSize();
-                Version++;
+                _Version++;
             }
         }
         private Vector2F[] _vertexes = Array.Empty<Vector2F>();
@@ -52,16 +51,8 @@ namespace Altseed2
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
         }
 
-        //public override void AdjustSize()
-        //{
-        //    MathHelper.GetMinMax(out var min, out var max, _vertexes);
-        //    base.Size = max - min;
-        //}
-
         internal override void UpdateCollider()
         {
-            //UpdateInheritedTransform();
-
             MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
@@ -75,46 +66,44 @@ namespace Altseed2
             }
 
             PolygonCollider.VertexArray = array;
+
+            _Version++;
         }
     }
 
     [Serializable]
-    internal sealed class PolygonColliderVisualizeNode : ColliderVisualizeNode
+    internal sealed class PolygonColliderVisualizeNode : PolygonNode
     {
-        private readonly PolygonColliderNode owner;
-        private int currentVersion;
+        private readonly PolygonColliderNode _Owner;
+        private int _CurrentVersion;
 
         internal PolygonColliderVisualizeNode(PolygonColliderNode owner)
         {
-            this.owner = owner;
-            currentVersion = owner.Version;
+            _Owner = owner;
+            _CurrentVersion = owner._Version;
 
             UpdatePolygon();
         }
 
-        private protected override void UpdatePolygon()
+        internal override void Update()
         {
-            var vertexes = owner.Vertexes;
+            if (_CurrentVersion != _Owner._Version)
+                UpdatePolygon();
+
+            base.Update();
+        }
+
+        private void UpdatePolygon()
+        {
+            var vertexes = _Owner.Vertexes;
             MathHelper.GetMinMax(out var min, out _, vertexes);
 
             var positions = new Vector2F[vertexes.Length];
             for (int i = 0; i < vertexes.Length; i++) positions[i] = vertexes[i] - min;
 
-            var array = Vector2FArray.Create(vertexes.Length);
-            array.FromArray(positions);
-            RenderedPolygon.CreateVertexesByVector2F(array);
-            RenderedPolygon.OverwriteVertexesColor(AreaColor);
-        }
+            SetVertexes(positions, ColliderVisualizeNodeFactory.AreaColor);
 
-        internal void UpdateInheritedTransform()
-        {
-            base.UpdateInheritedTransform();
-
-            if (currentVersion != owner.Version)
-            {
-                UpdatePolygon();
-                currentVersion = owner.Version;
-            }
+            _CurrentVersion = _Owner._Version;
         }
     }
 }
