@@ -57,7 +57,13 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public virtual Matrix44F AbsoluteTransform { get; internal set; } = Matrix44F.Identity;
+        public virtual Matrix44F InheritedTransform { get; internal set; }
+        private protected Matrix44F _InheritedTransform = Matrix44F.Identity;
+
+        /// <summary>
+        /// 先祖の変形および<see cref="CenterPosition"/>を加味した最終的な変形行列を取得します。
+        /// </summary>
+        public virtual Matrix44F AbsoluteTransform { get; }
 
         /// <summary>
         /// 角度(度数法)を取得または設定します。
@@ -300,8 +306,8 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// <see cref="AbsoluteTransform"/>を再計算します。
-        /// 直近先祖の<see cref="AbsoluteTransform"/>も考慮した上で最終的な変形を計算し、
+        /// <see cref="InheritedTransform"/>を再計算します。
+        /// 直近先祖の<see cref="InheritedTransform"/>も考慮した上で最終的な変形を計算し、
         /// 既存の子孫ノードにも伝播します。
         /// </summary>
         private void UpdateTransform()
@@ -309,8 +315,9 @@ namespace Altseed2
             CalcTransform();
 
             var ancestor = GetAncestorSpecificNode<TransformNode>();
-            PropagateTransform(this, ancestor?.AbsoluteTransform ?? Matrix44F.Identity);
+            PropagateTransform(this, ancestor?.InheritedTransform ?? Matrix44F.Identity);
         }
+
 
         /// <summary>
         /// <see cref="Transform"/> を再計算します。
@@ -319,13 +326,7 @@ namespace Altseed2
         {
             var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
 
-            if (AnchorMode != AnchorMode.Disabled)
-            {
-                var scale2 = CalcScale();
-                Transform = scale2 * MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
-            }
-            else
-                Transform = MathHelper.CalcTransform(Position, CenterPosition, MathHelper.DegreeToRadian(Angle), scale);
+            Transform = MathHelper.CalcTransform(Position, MathHelper.DegreeToRadian(Angle), scale);
 
             _TransformNodeInfo?.Update();
             _RequireCalcTransform = false;
@@ -339,7 +340,7 @@ namespace Altseed2
             if (node is TransformNode s)
             {
                 matrix = matrix * s.Transform;
-                s.AbsoluteTransform = matrix;
+                s.InheritedTransform = matrix;
             }
 
             foreach (var child in node.Children)

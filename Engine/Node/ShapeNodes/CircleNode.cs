@@ -62,14 +62,10 @@ namespace Altseed2
         {
             var deg = 360f / _VertNum;
             var positions = new Vector2F[_VertNum];
-            var vec = new Vector2F(0.0f, -_Radius);
 
-            var rad = new Vector2F(Radius, Radius);
             for (int i = 0; i < _VertNum; i++)
             {
-                positions[i] = vec;
-                vec.Degree += deg;
-                positions[i] += rad;
+                positions[i] = new Vector2F(MathF.Cos(deg * i), MathF.Sin(deg * i)) * Radius;
             }
 
             SetVertexes(positions, Color);

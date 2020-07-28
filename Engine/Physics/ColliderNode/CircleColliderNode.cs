@@ -98,7 +98,7 @@ namespace Altseed2
         {
             CircleCollider = collider ?? new CircleCollider();
 
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
+            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             CircleCollider.Radius = Radius * (ScaleType switch
@@ -122,7 +122,7 @@ namespace Altseed2
         {
             //UpdateInheritedTransform();
 
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
+            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             CircleCollider.Radius = Radius * (ScaleType switch

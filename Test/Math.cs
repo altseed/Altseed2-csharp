@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+
 using System;
 using System.Threading;
 
@@ -19,7 +20,7 @@ namespace Altseed2.Test
 
             static void Calc(Vector2F position, float angle, Vector2F scale)
             {
-                var transform = MathHelper.CalcTransform(position, default, MathHelper.DegreeToRadian(angle), scale);
+                var transform = MathHelper.CalcTransform(position, MathHelper.DegreeToRadian(angle), scale);
                 MathHelper.CalcFromTransform2D(transform, out var p, out var s, out var a);
                 TestValue(position, p);
                 TestValue(scale, s);

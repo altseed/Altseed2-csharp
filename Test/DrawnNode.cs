@@ -295,6 +295,37 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void CenterPosition()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Texture = texture;
+            node.CenterPosition = texture.Size / 2;
+            node.Position = Engine.WindowSize / 2;
+            Engine.AddNode(node);
+
+            var child = new SpriteNode();
+            child.Texture = texture;
+            child.CenterPosition = texture.Size / 2;
+            child.Position = new Vector2F(200, 200);
+            node.AddChildNode(child);
+
+            tc.LoopBody(c =>
+            {
+                node.Angle += 1.0f;
+                child.Angle += 1.0f;
+            }
+            , null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void Pivot()
         {
             var tc = new TestCore();
@@ -372,9 +403,27 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
+            var player = new SpriteNode();
+            player.Texture = texture;
+            player.Src = new RectF(200, 200, 50, 50);
+            player.CenterPosition = new Vector2F(25, 25);
+            player.Position = Engine.WindowSize.To2F() * 0.5f;
+            player.ZOrder = 100;
+
+            Engine.AddNode(player);
+            var bit = new SpriteNode();
+            bit.Texture = texture;
+            bit.Src = new RectF(190, 200, 20, 20);
+            bit.CenterPosition = new Vector2F(10, 10);
+            //bit.Position = new Vector2F();
+            bit.ZOrder = 110;
+            player.AddChildNode(bit);
+
             tc.Duration = 1000;
             tc.LoopBody(c =>
             {
+                bit.Position = new Vector2F();
+
                 if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) rectSize.X += 1.5f;
                 if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
                 if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) rectSize.Y += 1.5f;

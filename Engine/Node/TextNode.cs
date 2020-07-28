@@ -158,13 +158,14 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public sealed override Matrix44F AbsoluteTransform
+        public sealed override Matrix44F InheritedTransform
         {
-            get => _RenderedText.Transform;
+            get => _InheritedTransform;
             internal set
             {
-                if (_RenderedText.Transform == value) return;
-                _RenderedText.Transform = value;
+                if (_InheritedTransform == value) return;
+                _InheritedTransform = value;
+                _RenderedText.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }
         }
 
@@ -412,5 +413,10 @@ namespace Altseed2
             CalcCenterPosition();
             base.CalcTransform();
         }
+
+        /// <summary>
+        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
+        /// </summary>
+        public override Matrix44F AbsoluteTransform => _RenderedText.Transform;
     }
 }

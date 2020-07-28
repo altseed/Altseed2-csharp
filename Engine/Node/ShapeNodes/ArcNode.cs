@@ -145,9 +145,6 @@ namespace Altseed2
 
             if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
 
-            var rad = new Vector2F(Radius, Radius);
-            for (int i = 0; i < positions.Length; i++) positions[i] += rad;
-
             SetVertexes(positions, Color);
         }
 

@@ -171,13 +171,14 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public sealed override Matrix44F AbsoluteTransform
+        public sealed override Matrix44F InheritedTransform
         {
-            get => _RenderedPolygon.Transform;
+            get => _InheritedTransform;
             internal set
             {
-                if (_RenderedPolygon.Transform == value) return;
-                _RenderedPolygon.Transform = value;
+                if (_InheritedTransform == value) return;
+                _InheritedTransform = value;
+                _RenderedPolygon.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }
         }
 
@@ -248,5 +249,10 @@ namespace Altseed2
                 return max - min;
             }
         }
+
+        /// <summary>
+        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
+        /// </summary>
+        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
     }
 }

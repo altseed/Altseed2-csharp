@@ -47,7 +47,7 @@ namespace Altseed2
         {
             PolygonCollider = collider ?? new PolygonCollider();
 
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out _, out var angle);
+            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out _, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
         }
@@ -62,7 +62,7 @@ namespace Altseed2
         {
             //UpdateInheritedTransform();
 
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
+            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
             Collider.Position = position;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
 

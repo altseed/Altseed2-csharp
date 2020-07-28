@@ -135,7 +135,7 @@
         internal void Draw()
         {
             var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?
-                .AbsoluteTransform ?? Matrix44F.Identity;
+                .InheritedTransform ?? Matrix44F.Identity;
 
             void draw(RenderedPolygon renderedPolygon)
             {
