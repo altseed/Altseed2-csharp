@@ -31,7 +31,7 @@ namespace Sample
             };
 
             // colliderの衝突判定を視覚化できるノードを生成します。
-            var visualizer = ColliderVisualizeNode.Create(collider);
+            var visualizer = ColliderVisualizeNodeFactory.Create(collider);
 
             // エンジンにノードを追加します。
             scene.AddChildNode(sprite);
