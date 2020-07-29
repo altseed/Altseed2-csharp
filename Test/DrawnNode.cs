@@ -360,16 +360,11 @@ float4 main(PS_INPUT input) : SV_TARGET
             Assert.NotNull(texture);
 
             Vector2F rectSize = texture.Size;
-            var parent = new PolygonNode();
-            parent.Position = new Vector2F(320, 240);
+            var parent = new RectangleNode();
+            parent.Position = new Vector2F(100f, 100f);
             parent.ZOrder = 5;
-            parent.CenterPosition = new Vector2F(0.5f, 0.5f);
-            parent.SetVertexes(new[] {
-                        new Vector2F(0, 0),
-                        new Vector2F(rectSize.X, 0),
-                        new Vector2F(rectSize.X, rectSize.Y),
-                        new Vector2F(0, rectSize.Y),
-                    }, new Color(255, 255, 200, 255));
+            parent.Pivot = new Vector2F(0.5f, 0.5f);
+            parent.RectangleSize = rectSize;
             parent.AnchorMode = AnchorMode.Disabled;
             Engine.AddNode(parent);
 
@@ -403,27 +398,10 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
-            var player = new SpriteNode();
-            player.Texture = texture;
-            player.Src = new RectF(200, 200, 50, 50);
-            player.CenterPosition = new Vector2F(25, 25);
-            player.Position = Engine.WindowSize.To2F() * 0.5f;
-            player.ZOrder = 100;
-
-            Engine.AddNode(player);
-            var bit = new SpriteNode();
-            bit.Texture = texture;
-            bit.Src = new RectF(190, 200, 20, 20);
-            bit.CenterPosition = new Vector2F(10, 10);
-            //bit.Position = new Vector2F();
-            bit.ZOrder = 110;
-            player.AddChildNode(bit);
-
             tc.Duration = 1000;
             tc.LoopBody(c =>
             {
-                bit.Position = new Vector2F();
-
+                text.Size = text.ContentSize;
                 if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) rectSize.X += 1.5f;
                 if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
                 if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
@@ -434,12 +412,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 if (Engine.Keyboard.GetKeyState(Key.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
                 if (Engine.Keyboard.GetKeyState(Key.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
 
-                parent.SetVertexes(new[] {
-                        new Vector2F(0, 0),
-                        new Vector2F(rectSize.X, 0),
-                        new Vector2F(rectSize.X, rectSize.Y),
-                        new Vector2F(0, rectSize.Y),
-                    }, new Color(255, 255, 200, 255));
+                parent.RectangleSize = rectSize;
                 parent.Size = rectSize;
 
                 var n = child;

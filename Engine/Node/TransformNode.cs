@@ -24,7 +24,7 @@ namespace Altseed2
         KeepAspect,
 
         /// <summary>
-        /// 拡大率を自動計算しません。
+        /// アンカー機能を使用しません。
         /// </summary>
         Disabled,
     }

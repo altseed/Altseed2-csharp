@@ -6,7 +6,7 @@ namespace Altseed2
     /// 直線を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class LineNode : PolygonNode
+    public class LineNode : ShapeNode
     {
         private bool _RequireUpdateVertexes = false;
 

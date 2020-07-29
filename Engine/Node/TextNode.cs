@@ -372,7 +372,7 @@ namespace Altseed2
         /// <summary>
         /// コンテンツのサイズを取得します。
         /// </summary>
-        public override Vector2F ContentSize => _RenderedText.TextureSize;
+        public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
 
         internal void CalcCenterPosition()
         {

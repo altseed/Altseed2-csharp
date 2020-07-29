@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Altseed2
 {
@@ -185,7 +184,7 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// 描画に適用するマテリアルを取得または設定します。
+        /// 頂点情報のコレクションを取得または設定します。
         /// </summary>
         public IReadOnlyList<Vertex> Vertexes
         {
@@ -241,7 +240,7 @@ namespace Altseed2
         /// <summary>
         /// コンテンツのサイズを取得します。
         /// </summary>
-        public override Vector2F ContentSize
+        public sealed override Vector2F ContentSize
         {
             get
             {
@@ -253,6 +252,6 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
         /// </summary>
-        public override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
+        public sealed override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
     }
 }

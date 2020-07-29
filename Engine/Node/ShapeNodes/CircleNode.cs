@@ -6,7 +6,7 @@ namespace Altseed2
     /// 円を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class CircleNode : PolygonNode
+    public class CircleNode : ShapeNode
     {
         private bool _RequireUpdateVertexes = false;
 

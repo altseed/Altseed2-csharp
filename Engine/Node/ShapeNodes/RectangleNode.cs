@@ -6,7 +6,7 @@ namespace Altseed2
     /// 短形を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class RectangleNode : PolygonNode
+    public class RectangleNode : ShapeNode
     {
         private bool _RequireUpdateVertexes = false;
 

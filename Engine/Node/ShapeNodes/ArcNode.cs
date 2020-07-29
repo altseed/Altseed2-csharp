@@ -6,7 +6,7 @@ namespace Altseed2
     /// 円弧を描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class ArcNode : PolygonNode
+    public class ArcNode : ShapeNode
     {
         private bool _RequireUpdateVertexes = false;
 

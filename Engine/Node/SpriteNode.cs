@@ -195,11 +195,11 @@ namespace Altseed2
         /// <summary>
         /// コンテンツのサイズを取得します。
         /// </summary>
-        public override Vector2F ContentSize => Src.Size;
+        public sealed override Vector2F ContentSize => Src.Size;
 
         /// <summary>
         /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
         /// </summary>
-        public override Matrix44F AbsoluteTransform => _RenderedSprite.Transform;
+        public sealed override Matrix44F AbsoluteTransform => _RenderedSprite.Transform;
     }
 }
