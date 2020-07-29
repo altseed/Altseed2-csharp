@@ -16,7 +16,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="colliderNode">使用するコライダノード</param>
         /// <exception cref="ArgumentNullException"><paramref name="colliderNode"/>がnull</exception>
-        /// <returns><paramref name="colliderNode"/>の当たり当たり領域を表示するノード</returns>
+        /// <returns><paramref name="colliderNode"/>の当たり領域を表示するノード</returns>
         public static Node Create(ColliderNode colliderNode)
         {
             if (colliderNode == null) throw new ArgumentNullException(nameof(colliderNode), "引数がnullです");

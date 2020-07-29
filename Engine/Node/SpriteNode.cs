@@ -79,7 +79,7 @@ namespace Altseed2
         private bool _IsDrawn = true;
 
         /// <summary>
-        /// 先祖の<see cref="IsDrawn">を考慮して、このノードを描画するかどうかを取得します。
+        /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
