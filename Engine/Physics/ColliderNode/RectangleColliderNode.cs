@@ -43,17 +43,12 @@ namespace Altseed2
         internal RectangleColliderNode(RectangleCollider collider)
         {
             RectangleCollider = collider ?? new RectangleCollider();
-
-            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            RectangleCollider.Size = _RectangleSize * scale;
         }
 
         internal override void UpdateCollider()
         {
             MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
+            Collider.Position = position - CenterPosition;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = _RectangleSize * scale;
         }
@@ -83,7 +78,8 @@ namespace Altseed2
 
         private void UpdateRectangle()
         {
-            RectangleSize = _Owner.RectangleSize;
+            RectangleSize = _Owner.RectangleSize * _Owner.Scale;
+            CenterPosition = _Owner.CenterPosition;
 
             _CurrentVersion = _Owner._Version;
         }

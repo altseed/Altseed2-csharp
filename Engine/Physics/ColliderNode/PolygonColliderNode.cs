@@ -45,26 +45,16 @@ namespace Altseed2
         internal PolygonColliderNode(PolygonCollider collider)
         {
             PolygonCollider = collider ?? new PolygonCollider();
-
-            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out _, out var angle);
-            Collider.Position = position;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
         }
 
         internal override void UpdateCollider()
         {
             MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
+            Collider.Position = position ;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
 
-            var count = _vertexes.Length;
-            var array = new Vector2F[count];
-            if (array.Length > 0)
-            {
-                MathHelper.GetMinMax(out var min, out _, _vertexes);
-                for (int i = 0; i < count; i++) array[i] = _vertexes[i] * scale - min;
-            }
-
+            var array = new Vector2F[_vertexes.Length];
+            for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
             PolygonCollider.VertexArray = array;
 
             _Version++;
@@ -95,14 +85,9 @@ namespace Altseed2
 
         private void UpdatePolygon()
         {
-            var vertexes = _Owner.Vertexes;
-            MathHelper.GetMinMax(out var min, out _, vertexes);
-
-            var positions = new Vector2F[vertexes.Length];
-            for (int i = 0; i < vertexes.Length; i++) positions[i] = vertexes[i] - min;
-
-            SetVertexes(positions, ColliderVisualizeNodeFactory.AreaColor);
-
+            var vertexes = new Vector2F[_Owner.Vertexes.Length];
+            SetVertexes(_Owner.Vertexes, ColliderVisualizeNodeFactory.AreaColor);
+            CenterPosition = _Owner.CenterPosition;
             _CurrentVersion = _Owner._Version;
         }
     }

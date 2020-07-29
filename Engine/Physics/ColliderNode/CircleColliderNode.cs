@@ -90,7 +90,7 @@ namespace Altseed2
         internal override void UpdateCollider()
         {
             MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
+            Collider.Position = position - CenterPosition;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             CircleCollider.Radius = Radius * (ScaleType switch
             {
@@ -135,7 +135,6 @@ namespace Altseed2
         {
             Radius = _Owner.Radius;
             CenterPosition = _Owner.CenterPosition;
-            Angle = _Owner.Angle;
 
             _CurrentVersion = _Owner._Version;
         }
