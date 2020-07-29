@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+
 using NUnit.Framework;
 
 namespace Altseed2.Test
@@ -48,6 +49,29 @@ namespace Altseed2.Test
             {
                 Angle++;
             }
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void RemovingNodeCauseCrash()
+        {
+            var tc = new TestCore(new Configuration() { WaitVSync = false });
+            tc.Init();
+            Engine.TargetFPS = 10000;
+            SpriteNode node = null;
+            tc.Duration = 100000;
+            tc.LoopBody(c =>
+            {
+                if (node != null) Engine.RemoveNode(node);
+
+                node = new SpriteNode();
+                node.Texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+                node.CenterPosition = node.Texture.Size / 2;
+                node.Position = new Vector2F(200, 200);
+                Engine.AddNode(node);
+            }
+            , null);
+
+            tc.End();
         }
     }
 }
