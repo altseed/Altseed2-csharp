@@ -210,8 +210,8 @@ namespace Altseed2
                         if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
-                        if (node is TransformNode t)
-                            t.DrawTransformInfo();
+                        //if (node is TransformNode t)
+                        //    t.DrawTransformInfo();
                         requireRender = true;
                     }
                     else throw new InvalidOperationException();

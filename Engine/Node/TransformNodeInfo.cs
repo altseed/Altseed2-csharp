@@ -38,58 +38,58 @@
             _AnchorMax = RenderedPolygon.Create();
         }
 
-        internal void Update()
-        {
-            var origin = _TransformNode.Position - _TransformNode.CenterPosition * _TransformNode.Scale;
+        //internal void Update()
+        //{
+        //    var origin = _TransformNode.Position;
 
-            UpdateSizeBox(origin);
-            UpdatePivot();
-            UpdateMargin(origin);
-            UpdateAnchors();
-        }
+        //    UpdateSizeBox(origin);
+        //    UpdatePivot();
+        //    UpdateMargin(origin);
+        //    UpdateAnchors();
+        //}
 
-        private void UpdateSizeBox(Vector2F origin)
-        {
-            var points = new Vector2F[4];
+        //private void UpdateSizeBox(Vector2F origin)
+        //{
+        //    var points = new Vector2F[4];
 
-            points[0] = origin + new Vector2F();
-            points[1] = origin + new Vector2F(_TransformNode.Size.X, 0);
-            points[2] = origin + _TransformNode.Size;
-            points[3] = origin + new Vector2F(0, _TransformNode.Size.Y);
+        //    points[0] = origin + new Vector2F();
+        //    points[1] = origin + new Vector2F(_TransformNode.Size.X, 0);
+        //    points[2] = origin + _TransformNode.Size;
+        //    points[3] = origin + new Vector2F(0, _TransformNode.Size.Y);
 
-            for (int i = 0; i < points.Length; i++)
-            {
-                var point1 = points[i];
-                var point2 = points[(i + 1) % points.Length];
+        //    for (int i = 0; i < points.Length; i++)
+        //    {
+        //        var point1 = points[i];
+        //        var point2 = points[(i + 1) % points.Length];
 
-                SetLine(_SizeBoxLines[i], point1, point2, new Color(255, 128, 0));
-            }
-        }
+        //        SetLine(_SizeBoxLines[i], point1, point2, new Color(255, 128, 0));
+        //    }
+        //}
 
-        private void UpdatePivot()
-        {
-            SetPoint(_PivotBox, _TransformNode.Position, 5f, new Color(255, 128, 0));
-        }
+        //private void UpdatePivot()
+        //{
+        //    SetPoint(_PivotBox, _TransformNode.Position, 5f, new Color(255, 128, 0));
+        //}
 
-        private void UpdateMargin(Vector2F origin)
-        {
-            var ancestorSize = GetAncestorSize();
+        //private void UpdateMargin(Vector2F origin)
+        //{
+        //    var ancestorSize = GetAncestorSize();
 
-            SetLine(_LeftTop,
-                ancestorSize * _TransformNode.AnchorMin,
-                origin, new Color(255, 100, 100));
-            SetLine(_RightBottom,
-                ancestorSize * _TransformNode.AnchorMax,
-                origin + _TransformNode.Size, new Color(100, 100, 255));
-        }
+        //    SetLine(_LeftTop,
+        //        ancestorSize * _TransformNode.AnchorMin,
+        //        origin, new Color(255, 100, 100));
+        //    SetLine(_RightBottom,
+        //        ancestorSize * _TransformNode.AnchorMax,
+        //        origin + _TransformNode.Size, new Color(100, 100, 255));
+        //}
 
-        private void UpdateAnchors()
-        {
-            var ancestorSize = GetAncestorSize();
+        //private void UpdateAnchors()
+        //{
+        //    var ancestorSize = GetAncestorSize();
 
-            SetPoint(_AnchorMin, ancestorSize * _TransformNode.AnchorMin, 4, new Color(255, 0, 0));
-            SetPoint(_AnchorMax, ancestorSize * _TransformNode.AnchorMax, 4, new Color(0, 0, 255));
-        }
+        //    SetPoint(_AnchorMin, ancestorSize * _TransformNode.AnchorMin, 4, new Color(255, 0, 0));
+        //    SetPoint(_AnchorMax, ancestorSize * _TransformNode.AnchorMax, 4, new Color(0, 0, 255));
+        //}
 
         private void SetLine(RenderedPolygon renderedPolygon, Vector2F point1, Vector2F point2, Color color)
         {
@@ -121,16 +121,16 @@
             renderedPolygon.OverwriteVertexesColor(color);
         }
 
-        private Vector2F GetAncestorSize()
-        {
-            var ancestor = _TransformNode.GetAncestorSpecificNode<ISized>();
-            return ancestor switch
-            {
-                TransformNode t => t.Size / t.Scale,
-                ISized s => s.Size,
-                _ => new Vector2F()
-            };
-        }
+        //private Vector2F GetAncestorSize()
+        //{
+        //    var ancestor = _TransformNode.GetAncestorSpecificNode<ISized>();
+        //    return ancestor switch
+        //    {
+        //        TransformNode t => t.Size / t.Scale,
+        //        ISized s => s.Size,
+        //        _ => new Vector2F()
+        //    };
+        //}
 
         internal void Draw()
         {

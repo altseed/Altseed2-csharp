@@ -58,13 +58,13 @@ namespace Altseed2.Test
             var node = new SpriteNode();
             node.Texture = texture;
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
-            node.Pivot = new Vector2F(0.5f, 0.5f);
+            node.CenterPosition = new Vector2F(100, 100);
             Engine.AddNode(node);
 
             var node2 = new SpriteNode();
             node2.Texture = texture;
             node2.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
-            node2.Pivot = new Vector2F(0.5f, 0.5f);
+            node2.CenterPosition = new Vector2F(100, 100);
             node2.Angle = 45;
             node2.ZOrder = 1;
 
@@ -144,7 +144,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             TextNode node = new TextNode() { Font = font2, Text = "Hello, world! こんにちは カーニングあるよ！！", IsEnableKerning = false, Color = new Color(255, 0, 0, 200) };
             Engine.AddNode(node);
             Engine.AddNode(new TextNode() { Font = font2, Text = "Hello, world! こんにちは カーニングないです", Color = new Color(0, 255, 0, 200) });
-            Engine.AddNode(new TextNode() { Font = font, Text = node.Size.ToString(), Position = new Vector2F(0.0f, 50.0f) });
+            Engine.AddNode(new TextNode() { Font = font, Text = node.ContentSize.ToString(), Position = new Vector2F(0.0f, 50.0f) });
             Engine.AddNode(new TextNode() { Font = font, Text = "字間5です。\n行間標準です。", CharacterSpace = 10, Position = new Vector2F(0.0f, 150.0f) });
             Engine.AddNode(new TextNode() { Font = font, Text = "字間10です。\n行間70です。", CharacterSpace = 50, LineGap = 200, Position = new Vector2F(0.0f, 250.0f) });
             tc.LoopBody(c =>
@@ -312,19 +312,27 @@ float4 main(PS_INPUT input) : SV_TARGET
             var child = new SpriteNode();
             child.Texture = texture;
             child.CenterPosition = texture.Size / 2;
-            child.Position = new Vector2F(200, 200);
+            //child.Position = texture.Size / 2;
             node.AddChildNode(child);
+
+            var child2 = new SpriteNode();
+            child2.Texture = texture;
+            child2.CenterPosition = texture.Size / 2;
+            child2.Position = texture.Size / 2;
+            node.AddChildNode(child2);
 
             tc.LoopBody(c =>
             {
                 node.Angle += 1.0f;
                 child.Angle += 1.0f;
+                child2.Angle += 1.0f;
             }
             , null);
 
             tc.End();
         }
 
+        /*
         [Test, Apartment(ApartmentState.STA)]
         public void Pivot()
         {
@@ -361,24 +369,25 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             Vector2F rectSize = texture.Size;
             var parent = new RectangleNode();
-            parent.Position = new Vector2F(100f, 100f);
+            parent.Position = Engine.WindowSize / 2;
             parent.ZOrder = 5;
-            parent.Pivot = new Vector2F(0.5f, 0.5f);
+            parent.Size = rectSize / 2;
+            //parent.Pivot = new Vector2F(0.5f, 0.5f);
             parent.RectangleSize = rectSize;
             parent.AnchorMode = AnchorMode.Disabled;
             Engine.AddNode(parent);
 
             var child = new SpriteNode();
             child.Texture = texture;
-            child.Position = new Vector2F(120, 200);
+            child.Position = new Vector2F(40, 80);
             child.Src = new RectF(new Vector2F(), texture.Size);
             child.Pivot = new Vector2F(0.5f, 0.5f);
             child.AnchorMin = new Vector2F(0.2f, 0.0f);
             child.AnchorMax = new Vector2F(0.8f, 1f);
             child.ZOrder = 10;
             child.AnchorMode = AnchorMode.Fill;
-            child.Size = texture.Size / 2;
-            child.LeftTop = new Vector2F(50, 40);
+            child.LeftTop = new Vector2F(50, 60);
+            child.RightBottom = new Vector2F(70, 80);
             parent.AddChildNode(child);
 
             var childText = new TextNode();
@@ -393,15 +402,36 @@ float4 main(PS_INPUT input) : SV_TARGET
             childText.VerticalAlignment = VerticalAlignment.Center;
             childText.Size = child.Size;
             child.AnchorMode = AnchorMode.KeepAspect;
-            child.AddChildNode(childText);
+            //child.AddChildNode(childText);
 
-            var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
+            var text = new TextNode()
+            {
+                Font = font,
+                Text = "",
+                ZOrder = 10,
+                Scale = new Vector2F(0.8f, 0.8f),
+                Color = new Color(255, 128, 0)
+            };
+            text.DrawTransformInfoEnabled = false;
             Engine.AddNode(text);
 
-            tc.Duration = 1000;
+            tc.Duration = 10000;
+
+            string infoText(TransformNode n) =>
+                    $"ContentSize:{n.ContentSize}\n" +
+                    $"Scale:{n.Scale}\n" +
+                    $"Position:{n.Position}\n" +
+                    $"Pivot:{n.Pivot}\n" +
+                    $"CenterPosition:{n.CenterPosition}\n" +
+                    $"Size:{n.Size}\n" +
+                    $"Margin: LT:{n.LeftTop} RB:{n.RightBottom}\n" +
+                    $"Anchor: {n.AnchorMin} {n.AnchorMax}\n";
+
             tc.LoopBody(c =>
             {
-                text.Size = text.ContentSize;
+                child.LeftTop = new Vector2F(50, 60);
+                child.RightBottom = new Vector2F(70, 80);
+
                 if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) rectSize.X += 1.5f;
                 if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
                 if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
@@ -412,22 +442,14 @@ float4 main(PS_INPUT input) : SV_TARGET
                 if (Engine.Keyboard.GetKeyState(Key.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
                 if (Engine.Keyboard.GetKeyState(Key.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
 
-                parent.RectangleSize = rectSize;
                 parent.Size = rectSize;
 
-                var n = child;
-                text.Text =
-                $"ContentSize:{n.ContentSize}\n" +
-                $"Scale:{n.Scale}\n" +
-                $"Position:{n.Position}\n" +
-                $"Pivot:{n.Pivot}\n" +
-                $"CenterPosition:{n.CenterPosition}\n" +
-                $"Size:{n.Size}";
-
+                text.Text = infoText(parent) + '\n' + infoText(child);
             }, null);
 
             tc.End();
         }
+        */
 
         [Test, Apartment(ApartmentState.STA)]
         public void IsDrawn()
@@ -440,18 +462,18 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             var node = new SpriteNode();
             node.Texture = texture;
-            node.Pivot = new Vector2F(0.5f, 0.5f);
+            node.CenterPosition = texture.Size / 2;
             node.Position = new Vector2F(100, 100);
             Engine.AddNode(node);
 
             var node2 = new SpriteNode();
             node2.Texture = texture;
-            node2.Pivot = new Vector2F(0.5f, 0.5f);
+            node2.CenterPosition = texture.Size / 2;
             node2.Position = new Vector2F(200, 200);
 
             var node3 = new SpriteNode();
             node3.Texture = texture;
-            node3.Pivot = new Vector2F(0.5f, 0.5f);
+            node3.CenterPosition = texture.Size / 2;
             node3.Position = new Vector2F(300, 300);
 
             tc.LoopBody(c =>

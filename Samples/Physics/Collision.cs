@@ -66,7 +66,7 @@ namespace Sample
             colliderNode.Radius = Texture.Size.X / 2;
 
             // 中心を設定します。
-            Pivot = new Vector2F(0.5f, 0.5f);
+            CenterPosition = Texture.Size / 2;
 
             // コライダを登録します。
             AddChildNode(colliderNode);

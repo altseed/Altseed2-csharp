@@ -43,7 +43,7 @@ namespace Sample
             {
                 Color = new Color(255, 255, 100),
                 Position = new Vector2F(300f, 400f),
-                Size = new Vector2F(50f, 50f)
+                RectangleSize = new Vector2F(50f, 50f)
             };
 
             // 三角形を描画するノード

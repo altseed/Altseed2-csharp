@@ -21,7 +21,7 @@ namespace Altseed2.Test
             var node = new SpriteNode();
             node.Src = new RectF(new Vector2F(100, 100), new Vector2F(200, 200));
             node.Texture = texture;
-            node.Pivot = texture.Size / 2;
+            node.CenterPosition = texture.Size / 2;
             node.CameraGroup = 1 << 0;
             Engine.AddNode(node);
 

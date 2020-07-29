@@ -35,7 +35,7 @@ namespace Sample
             var title = new TextNode();
             title.Font = Font.LoadDynamicFont("Courier.ttf", 48);
             title.Text = Engine.WindowTitle;
-            title.Pivot = new Vector2F(0.5f, 0.5f);
+            title.CenterPosition = title.ContentSize / 2;
             title.Position = new Vector2F(320.0f, 80.0f);
             Engine.AddNode(title);
 
@@ -46,7 +46,7 @@ namespace Sample
                 {
                     spectrumBars[i, j] = new RectangleNode();
                     spectrumBars[i, j].RectangleSize = new Vector2F(20.0f, 8.0f);
-                    spectrumBars[i, j].Pivot = new Vector2F(0.5f, 0.5f);
+                    spectrumBars[i, j].CenterPosition = new Vector2F(10.0f, 4.0f);
                     spectrumBars[i, j].Position = new Vector2F(28.0f * i + 110.0f, 16.0f * j + 60.0f);
                     spectrumBars[i, j].Color = HSV2RGB((int)(22.5 * i), 255, 255);
 
@@ -63,7 +63,6 @@ namespace Sample
             var seekBarDot = new CircleNode();
             seekBarDot.VertNum = 360;
             seekBarDot.Radius = 12.0f;
-            seekBarDot.Pivot = new Vector2F(0.5f, 0.5f);
             seekBarDot.Position = new Vector2F(0.0f, 2.5f);
 
             seekBarLine.AddChildNode(seekBarDot);

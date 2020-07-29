@@ -81,6 +81,7 @@ namespace Altseed2.Test
             var colliderNode = new CircleColliderNode()
             {
                 Radius = texture.Size.X / 2,
+                CenterPosition = new Vector2F(100, 100),
             };
             comparison.AddChildNode(colliderNode);
             colliderNode.AddChildNode(ColliderVisualizeNodeFactory.Create(colliderNode));
@@ -88,7 +89,6 @@ namespace Altseed2.Test
 
             tc.LoopBody(null, x =>
             {
-                //comparison.Position = new Vector2F(400f, 100f);
                 if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
                 if (x == 10)
                 {
@@ -185,13 +185,14 @@ namespace Altseed2.Test
             var comparison = new SpriteNode()
             {
                 Texture = texture,
-                Pivot = new Vector2F(0.5f, 0.5f),
+                CenterPosition = texture.Size / 2,
                 Position = new Vector2F(580f, 300f),
                 Scale = new Vector2F(0.8f, 0.8f),
             };
             var colliderNode = new PolygonColliderNode
             {
-                Vertexes = array
+                Vertexes = array,
+                CenterPosition = texture.Size.To2F()*0.2f,
             };
             colliderNode.AddChildNode(ColliderVisualizeNodeFactory.Create(colliderNode));
             comparison.AddChildNode(colliderNode);
@@ -216,13 +217,15 @@ namespace Altseed2.Test
             private readonly PolygonColliderNode node;
             private readonly TextNode text = new TextNode()
             {
-                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40)
+                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40),
+                Position = new Vector2F(0, 0),
+                Color = new Color(255, 255, 255, 255),
             };
             public Player_Polygon(Texture2D texture)
             {
                 Engine.AddNode(text);
                 Texture = texture;
-                Pivot = new Vector2F(0.5f, 0.5f);
+                CenterPosition = texture.Size / 2;
                 Position = new Vector2F(220f, 300f);
                 node = new PolygonColliderNode()
                 {
@@ -276,13 +279,14 @@ namespace Altseed2.Test
             var comparison = new SpriteNode()
             {
                 Texture = texture,
-                Pivot = new Vector2F(0.5f, 0.5f),
+                CenterPosition = texture.Size / 2,
                 Position = new Vector2F(500f, 200f),
                 Scale = new Vector2F(0.8f, 0.8f),
             };
             var colliderNode = new RectangleColliderNode()
             {
-                RectangleSize = texture.Size
+                RectangleSize = texture.Size,
+                CenterPosition = texture.Size / 2,
             };
             colliderNode.AddChildNode(ColliderVisualizeNodeFactory.Create(colliderNode));
             comparison.AddChildNode(colliderNode);
@@ -311,11 +315,12 @@ namespace Altseed2.Test
             {
                 Engine.AddNode(text);
                 Texture = texture;
-                Pivot = new Vector2F(0.5f, 0.5f);
+                CenterPosition = texture.Size / 2;
                 Position = new Vector2F(0f, 300f);
                 node = new RectangleColliderNode()
                 {
-                    RectangleSize = texture.Size
+                    RectangleSize = texture.Size,
+                    CenterPosition = texture.Size / 2,
                 };
                 node.AddChildNode(ColliderVisualizeNodeFactory.Create(node));
                 AddChildNode(node);

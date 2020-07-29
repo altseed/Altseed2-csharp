@@ -7,7 +7,7 @@ namespace Altseed2
     /// 図形を描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class PolygonNode : TransformNode, ICullableDrawn, ISized
+    public class PolygonNode : TransformNode, ICullableDrawn/*, ISized*/
     {
         protected private readonly RenderedPolygon _RenderedPolygon;
 

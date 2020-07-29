@@ -136,7 +136,7 @@ namespace Altseed2.Test
             {
                 Color = new Color(255, 0, 0),
                 Position = new Vector2F(100f, 100f),
-                Pivot = new Vector2F(0.5f, 0.5f),
+                CenterPosition = new Vector2F(25f, 25f),
                 RectangleSize = new Vector2F(50f, 50f),
             };
             var rectangle2 = new RectangleNode()
@@ -176,7 +176,6 @@ namespace Altseed2.Test
                 Point2 = new Vector2F(200f, 200f),
                 Point3 = new Vector2F(100f, 200f),
                 Position = new Vector2F(100, 100),
-                Pivot = new Vector2F(0.5f, 0.1f),
             };
             Engine.AddNode(triangle);
 

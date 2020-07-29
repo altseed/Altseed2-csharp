@@ -6,7 +6,7 @@ namespace Altseed2
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class SpriteNode : TransformNode, ICullableDrawn, ISized
+    public class SpriteNode : TransformNode, ICullableDrawn/*, ISized*/
     {
         private readonly RenderedSprite _RenderedSprite;
 
@@ -92,8 +92,6 @@ namespace Altseed2
         {
             base.Registered();
             Engine.RegisterDrawn(this);
-
-            CalcTransform();
         }
 
         internal override void Unregistered()

@@ -383,10 +383,10 @@ namespace Altseed2
                     centerPosition.X = 0;
                     break;
                 case HorizontalAlignment.Center:
-                    centerPosition.X = (Size.X - _RenderedText.TextureSize.X) / 2f;
+                    centerPosition.X = (ContentSize.X - _RenderedText.TextureSize.X) / 2f;
                     break;
                 case HorizontalAlignment.Right:
-                    centerPosition.X = Size.X - _RenderedText.TextureSize.X;
+                    centerPosition.X = ContentSize.X - _RenderedText.TextureSize.X;
                     break;
                 default:
                     break;
@@ -398,10 +398,10 @@ namespace Altseed2
                     centerPosition.Y = 0;
                     break;
                 case VerticalAlignment.Center:
-                    centerPosition.Y = (Size.Y - _RenderedText.TextureSize.Y) / 2f;
+                    centerPosition.Y = (ContentSize.Y - _RenderedText.TextureSize.Y) / 2f;
                     break;
                 case VerticalAlignment.Bottom:
-                    centerPosition.Y = Size.Y - _RenderedText.TextureSize.Y;
+                    centerPosition.Y = ContentSize.Y - _RenderedText.TextureSize.Y;
                     break;
                 default:
                     break;

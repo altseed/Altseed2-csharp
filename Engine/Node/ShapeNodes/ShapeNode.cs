@@ -7,7 +7,7 @@ namespace Altseed2
     /// 基本的な図形を描画するノードの中小クラスを表します。
     /// </summary>
     [Serializable]
-    public abstract class ShapeNode : TransformNode, ICullableDrawn, ISized
+    public abstract class ShapeNode : TransformNode, ICullableDrawn/*, ISized*/
     {
         protected private readonly RenderedPolygon _RenderedPolygon;
 
