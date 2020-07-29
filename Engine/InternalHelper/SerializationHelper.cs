@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Altseed2
 {
-    internal static class SerrializationHelper
+    internal static class SerializationHelper
     {
         internal static T GetValue<T>(this SerializationInfo info, string name)
         {
