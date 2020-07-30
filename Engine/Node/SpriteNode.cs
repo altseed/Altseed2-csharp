@@ -182,7 +182,6 @@ namespace Altseed2
             get => _InheritedTransform;
             internal set
             {
-                if (_InheritedTransform == value) return;
                 _InheritedTransform = value;
                 _RenderedSprite.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }

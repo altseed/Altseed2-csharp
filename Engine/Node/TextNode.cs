@@ -2,6 +2,7 @@
 
 namespace Altseed2
 {
+    /*
     /// <summary>
     /// 水平方向の配置
     /// </summary>
@@ -55,6 +56,7 @@ namespace Altseed2
         /// </summary>
         Manual,
     }
+    */
 
     /// <summary>
     /// テキストを描画するノードのクラス
@@ -163,7 +165,6 @@ namespace Altseed2
             get => _InheritedTransform;
             internal set
             {
-                if (_InheritedTransform == value) return;
                 _InheritedTransform = value;
                 _RenderedText.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }
@@ -334,6 +335,7 @@ namespace Altseed2
             }
         }
 
+        /*
         /// <summary>
         /// 水平方向の配置
         /// </summary>
@@ -366,6 +368,7 @@ namespace Altseed2
             }
         }
         private VerticalAlignment _VerticalAlignment = VerticalAlignment.Top;
+        */
 
         #endregion
 
@@ -374,6 +377,7 @@ namespace Altseed2
         /// </summary>
         public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
 
+        /*
         internal void CalcCenterPosition()
         {
             var centerPosition = CenterPosition;
@@ -413,6 +417,7 @@ namespace Altseed2
             CalcCenterPosition();
             base.CalcTransform();
         }
+        */
 
         /// <summary>
         /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。

@@ -47,7 +47,10 @@ namespace Altseed2
         internal Matrix44F Transform
         {
             get => _Transform;
-            set { _Transform = value; }
+            set
+            {
+                _Transform = value;
+            }
         }
         [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
@@ -57,7 +60,14 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public virtual Matrix44F InheritedTransform { get; internal set; }
+        public virtual Matrix44F InheritedTransform
+        {
+            get => _InheritedTransform;
+            internal set
+            {
+                _InheritedTransform = value;
+            }
+        }
         private protected Matrix44F _InheritedTransform = Matrix44F.Identity;
 
         /// <summary>
@@ -410,7 +420,7 @@ namespace Altseed2
         /// <summary>
         /// 子孫ノードのうち<see cref="TransformNode"/>に対して変換行列を伝播させます。
         /// </summary>
-        private protected static void PropagateTransform(Node node, Matrix44F matrix)
+        private void PropagateTransform(Node node, Matrix44F matrix)
         {
             if (node is TransformNode s)
             {

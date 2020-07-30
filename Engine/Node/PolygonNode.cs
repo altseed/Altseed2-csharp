@@ -175,7 +175,6 @@ namespace Altseed2
             get => _InheritedTransform;
             internal set
             {
-                if (_InheritedTransform == value) return;
                 _InheritedTransform = value;
                 _RenderedPolygon.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }
