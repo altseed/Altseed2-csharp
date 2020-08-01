@@ -9,6 +9,8 @@ namespace Altseed2
     {
         private readonly RenderedPolygon renderedPolygon;
 
+        private bool _IsValid;
+
         public override Matrix44F AbsoluteTransform => renderedPolygon.Transform;
 
         /// <summary>
@@ -65,6 +67,25 @@ namespace Altseed2
             }
             set
             {
+                if (value.Length < 3)
+                {
+                    Engine.Log.Warn(LogCategory.Engine, "Polygon whose number of vertexes is less than 3 will not be drawn.");
+                    _IsValid = false;
+                }
+                else
+                {
+                    for(int i = 0; i < value.Length; ++i)
+                        for(int j = i + 1; j < value.Length; ++j)
+                            if (value[i] == value[j])
+                            {
+                                Engine.Log.Warn(LogCategory.Engine, "Polygon which has same vertexes will not be drawn.");
+                                _IsValid = false;
+                                return;
+                            }
+
+                    _IsValid = true;
+                }
+
                 var vertexArray = VertexArray.Create(value.Length);
                 vertexArray.FromArray(value);
                 renderedPolygon.Vertexes = vertexArray;
@@ -119,7 +140,7 @@ namespace Altseed2
         /// </summary>
         internal override void Draw()
         {
-            Engine.Renderer.DrawPolygon(renderedPolygon);
+            if(_IsValid) Engine.Renderer.DrawPolygon(renderedPolygon);
         }
 
         /// <summary>
