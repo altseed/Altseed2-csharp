@@ -119,6 +119,16 @@ namespace Altseed2
         /// </summary>
         internal override void Draw()
         {
+            if(Vertexes.Length < 3)
+            {
+                Engine.Log.Warn(LogCategory.Engine, "Polygon whose number of vertexes is less than 3 will not be drawn.");
+                return;
+            }
+            if(Vertexes.Distinct().Count() != Vertexes.Length)
+            {
+                Engine.Log.Warn(LogCategory.Engine, "Polygon which has same vertexes will not be drawn.");
+                return;
+            }
             Engine.Renderer.DrawPolygon(renderedPolygon);
         }
 
