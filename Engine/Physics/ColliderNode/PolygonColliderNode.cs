@@ -44,7 +44,7 @@ namespace Altseed2
         /// <param name="collider">使用する<see cref="Altseed2.PolygonCollider"/>のインスタンス</param>
         internal PolygonColliderNode(PolygonCollider collider)
         {
-            PolygonCollider = collider ?? new PolygonCollider();
+            PolygonCollider = collider ?? PolygonCollider.Create();
         }
 
         internal override void UpdateCollider()

@@ -8,7 +8,7 @@ namespace Altseed2
 
         public PostEffectSepiaNode()
         {
-            material = new Material();
+            material = Material.Create();
             var shader = Shader.Create("Sepia", Engine.Graphics.BuiltinShader.SepiaShader, ShaderStageType.Pixel);
             material.SetShader(shader);
         }

@@ -101,7 +101,7 @@ namespace Altseed2.Test
                 node.Texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
                 node.CenterPosition = node.Texture.Size / 2;
                 node.Position = new Vector2F(200, 200);
-                node.Material = new Material();
+                node.Material = Material.Create();
                 var psCode = @"
 Texture2D mainTex : register(t0);
 SamplerState mainSamp : register(s0);

@@ -57,12 +57,12 @@ namespace Altseed2
 
         public PostEffectLightBloomNode()
         {
-            _HighColorMaterial = new Material();
-            _HighLuminanceMaterial = new Material();
-            _DownSampler = new Material();
-            _BlurXMaterial = new Material();
-            _BlurYMaterial = new Material();
-            _TextureMixer = new Material();
+            _HighColorMaterial = Material.Create();
+            _HighLuminanceMaterial = Material.Create();
+            _DownSampler = Material.Create();
+            _BlurXMaterial = Material.Create();
+            _BlurYMaterial = Material.Create();
+            _TextureMixer = Material.Create();
 
             var highLuminanceShaderCode = Engine.Graphics.BuiltinShader.HighLuminanceShader;
             _HighColorMaterial.SetShader(Shader.Create("HighLuminance", highLuminanceShaderCode, ShaderStageType.Pixel));
@@ -90,7 +90,7 @@ namespace Altseed2
 
             for (int i = 0; i < DownSampleCount; ++i)
             {
-                downTexture[i] = GetBuffer(0, src.Size / (int)Math.Pow(2, i));
+                downTexture[i] = GetBuffer(0, src.Size / (int)Math.Pow(2, i), src.Format);
                 downTexture[i].WrapMode = TextureWrapMode.Clamp;
                 downTexture[i].FilterType = TextureFilterType.Linear;
             }
@@ -120,7 +120,7 @@ namespace Altseed2
             // ガウスぼかし
             for (int i = DownSampleCount - 3; i < DownSampleCount; ++i)
             {
-                var tmpTexture = GetBuffer(1, downTexture[i].Size);
+                var tmpTexture = GetBuffer(1, downTexture[i].Size, src.Format);
                 tmpTexture.WrapMode = TextureWrapMode.Clamp;
                 tmpTexture.FilterType = TextureFilterType.Linear;
 
@@ -135,7 +135,7 @@ namespace Altseed2
 
             // テクスチャ合成
             var inBuffer = src;
-            var outBuffer = GetBuffer(1, src.Size);
+            var outBuffer = GetBuffer(1, src.Size, src.Format);
             var weight = 1.0f;
             for (int i = DownSampleCount - 3; i < DownSampleCount; ++i)
             {

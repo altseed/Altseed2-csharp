@@ -190,13 +190,13 @@ namespace Altseed2
         /// <summary>
         /// ブレンドモードを取得または設定します。
         /// </summary>
-        public AlphaBlendMode BlendMode
+        public AlphaBlend AlphaBlend
         {
-            get => _RenderedText.BlendMode;
+            get => _RenderedText.AlphaBlend;
             set
             {
-                if (_RenderedText.BlendMode == value) return;
-                _RenderedText.BlendMode = value;
+                if (_RenderedText.AlphaBlend == value) return;
+                _RenderedText.AlphaBlend = value;
             }
         }
 

@@ -42,7 +42,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
 
             // マテリアルを作成します。
-            var material = new Material();
+            var material = Material.Create();
 
             // マテリアルに使用するシェーダを作成します。
             var shader = Shader.Create("Negative", _HlslCode, ShaderStageType.Pixel);

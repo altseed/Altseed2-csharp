@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Altseed2;
 
@@ -116,7 +116,7 @@ namespace Sample
             var shader = Shader.Create("Transition", shaderCode, ShaderStageType.Pixel);
 
             // ポストエフェクトに使用するマテリアルを作成します。
-            Material = new Material();
+            Material = Material.Create();
 
             // マテリアルにシェーダを登録します。
             Material.SetShader(shader);

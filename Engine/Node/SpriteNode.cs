@@ -35,7 +35,8 @@ namespace Altseed2
         /// </summary>
         public ulong CameraGroup
         {
-            get => _CameraGroup; set
+            get => _CameraGroup;
+            set
             {
                 if (_CameraGroup == value) return;
                 var old = _CameraGroup;
@@ -120,13 +121,13 @@ namespace Altseed2
         /// <summary>
         /// ブレンドモードを取得または設定します。
         /// </summary>
-        public AlphaBlendMode BlendMode
+        public AlphaBlend AlphaBlend
         {
-            get => _RenderedSprite.BlendMode;
+            get => _RenderedSprite.AlphaBlend;
             set
             {
-                if (_RenderedSprite.BlendMode == value) return;
-                _RenderedSprite.BlendMode = value;
+                if (_RenderedSprite.AlphaBlend == value) return;
+                _RenderedSprite.AlphaBlend = value;
             }
         }
 

@@ -68,10 +68,9 @@ namespace Altseed2.Test
             node2.Angle = 45;
             node2.ZOrder = 1;
 
-            node2.Material = new Material()
-            {
-                BlendMode = AlphaBlendMode.Multiply,
-            };
+            node2.Material = Material.Create();
+            node2.Material.AlphaBlend = AlphaBlend.Multiply;
+
             var psCode = @"
 Texture2D mainTex : register(t0);
 SamplerState mainSamp : register(s0);

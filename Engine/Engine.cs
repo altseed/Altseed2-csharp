@@ -197,7 +197,7 @@ namespace Altseed2
                             requireRender = false;
                         }
 
-                        _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size);
+                        _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size, Graphics.CommandList.ScreenTextureFormat);
 
                         Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), _PostEffectBuffer);
                         node.Draw();

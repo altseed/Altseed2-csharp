@@ -84,7 +84,7 @@ namespace Altseed2
         /// <param name="collider">使用する<see cref="Altseed2.CircleCollider"/>のインスタンス</param>
         internal CircleColliderNode(CircleCollider collider)
         {
-            CircleCollider = collider ?? new CircleCollider();
+            CircleCollider = collider ?? CircleCollider.Create();
         }
 
         internal override void UpdateCollider()

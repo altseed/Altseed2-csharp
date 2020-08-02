@@ -8,10 +8,11 @@ namespace Altseed2
         private struct CacheKey : IEquatable<CacheKey>
         {
             public Vector2I size;
+            public TextureFormatType format;
 
             public readonly override int GetHashCode()
             {
-                return HashCode.Combine(size);
+                return HashCode.Combine(size, format);
             }
 
             public readonly override bool Equals(object obj)
@@ -21,7 +22,7 @@ namespace Altseed2
 
             public readonly bool Equals(CacheKey other)
             {
-                return size == other.size;
+                return size == other.size && format == other.format;
             }
 
             public static bool operator ==(CacheKey a, CacheKey b)
@@ -50,9 +51,9 @@ namespace Altseed2
             removeKeys = new List<CacheKey>();
         }
 
-        public RenderTexture GetRenderTexture(Vector2I size)
+        public RenderTexture GetRenderTexture(Vector2I size, TextureFormatType format)
         {
-            var key = new CacheKey { size = size };
+            var key = new CacheKey { size = size, format = format };
 
             if (cache.TryGetValue(key, out var result))
             {
@@ -61,7 +62,7 @@ namespace Altseed2
             }
             else
             {
-                var res = RenderTexture.Create(size);
+                var res = RenderTexture.Create(size, format);
                 cache.Add(key, new CacheValue { life = 5, stored = res });
                 return res;
             }

@@ -113,13 +113,13 @@ namespace Altseed2
         /// <summary>
         /// ブレンドモードを取得または設定します。
         /// </summary>
-        public AlphaBlendMode BlendMode
+        public AlphaBlend AlphaBlend
         {
-            get => _RenderedPolygon.BlendMode;
+            get => _RenderedPolygon.AlphaBlend;
             set
             {
-                if (_RenderedPolygon.BlendMode == value) return;
-                _RenderedPolygon.BlendMode = value;
+                if (_RenderedPolygon.AlphaBlend == value) return;
+                _RenderedPolygon.AlphaBlend = value;
             }
         }
 

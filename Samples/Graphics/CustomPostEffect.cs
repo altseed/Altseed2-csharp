@@ -73,7 +73,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 var shader = Shader.Create("Negative", _HlslCode, ShaderStageType.Pixel);
 
                 // スプライトを描画するノードを作成します。
-                _Material = new Material();
+                _Material = Material.Create();
 
                 // マテリアルにシェーダを割り当てます。
                 _Material.SetShader(shader);

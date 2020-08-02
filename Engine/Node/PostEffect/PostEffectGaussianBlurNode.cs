@@ -44,8 +44,8 @@ namespace Altseed2
 
         public PostEffectGaussianBlurNode()
         {
-            materialX = new Material();
-            materialY = new Material();
+            materialX = Material.Create();
+            materialY = Material.Create();
 
             var baseCode = Engine.Graphics.BuiltinShader.GaussianBlurShader;
 
@@ -59,7 +59,7 @@ namespace Altseed2
         {
             src.WrapMode = TextureWrapMode.Clamp;
 
-            var buffer = GetBuffer(0, src.Size);
+            var buffer = GetBuffer(0, src.Size, src.Format);
             buffer.WrapMode = TextureWrapMode.Clamp;
             buffer.FilterType = TextureFilterType.Linear;
 

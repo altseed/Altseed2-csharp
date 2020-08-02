@@ -7,14 +7,14 @@ namespace Altseed2
     {
         private static Dictionary<int, RenderTextureCache> Cache;
 
-        protected static RenderTexture GetBuffer(int identifier, Vector2I size)
+        protected static RenderTexture GetBuffer(int identifier, Vector2I size, TextureFormatType format)
         {
             if (!Cache.ContainsKey(identifier))
             {
                 Cache[identifier] = new RenderTextureCache();
             }
 
-            return Cache[identifier].GetRenderTexture(size);
+            return Cache[identifier].GetRenderTexture(size, format);
         }
 
         internal static void InitializeCache()
