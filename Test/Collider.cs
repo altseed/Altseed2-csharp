@@ -24,7 +24,7 @@ namespace Altseed2.Test
             node.Scale = new Vector2F(0.2f, 0.2f);
             Engine.AddNode(node);
 
-            var col = new CircleCollider();
+            var col = CircleCollider.Create();
             col.Radius = 200 * 0.2f;
             col.Position = node.Position;
 
@@ -35,7 +35,7 @@ namespace Altseed2.Test
             node2.CenterPosition = texture.Size / 2;
             node2.Scale = new Vector2F(0.2f, 0.2f);
             Engine.AddNode(node2);
-            var col2 = new CircleCollider();
+            var col2 = CircleCollider.Create();
             col2.Radius = 200 * 0.2f;
             col2.Position = node.Position;
 

@@ -7,7 +7,7 @@ namespace Altseed2
     {
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_CircleCollider_Constructor_0();
+            ptr = cbg_CircleCollider_Create();
         }
     }
 
@@ -15,7 +15,7 @@ namespace Altseed2
     {
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_RectangleCollider_Constructor_0();
+            ptr = cbg_RectangleCollider_Create();
         }
     }
 
@@ -43,7 +43,7 @@ namespace Altseed2
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_PolygonCollider_Constructor_0();
+            ptr = cbg_PolygonCollider_Create();
         }
     }
 }

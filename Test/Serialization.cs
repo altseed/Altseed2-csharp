@@ -289,7 +289,7 @@ namespace Altseed2.Test
             tc.Init();
 
             var size = new Vector2I(100, 100);
-            var texture1 = Altseed2.RenderTexture.Create(size);
+            var texture1 = Altseed2.RenderTexture.Create(size, TextureFormatType.R8G8B8A8_UNORM);
 
             Assert.NotNull(texture1);
 
@@ -515,7 +515,7 @@ namespace Altseed2.Test
 
             Assert.AreEqual(sprite1.Color, sprite2.Color);
             Assert.AreEqual(sprite1.Material, sprite2.Material);
-            Assert.AreEqual(sprite1.BlendMode, sprite2.BlendMode);
+            Assert.AreEqual(sprite1.AlphaBlend, sprite2.AlphaBlend);
             Assert.AreEqual(sprite1.Src, sprite2.Src);
             Assert.AreEqual((sprite1.Texture as Texture2D).Path, (sprite1.Texture as Texture2D).Path);
             Assert.AreEqual(sprite1.Texture.Size, sprite2.Texture.Size);
@@ -551,7 +551,7 @@ namespace Altseed2.Test
             Assert.NotNull(text2);
 
             Assert.AreEqual(text1.Color, text2.Color);
-            Assert.AreEqual(text1.BlendMode, text2.BlendMode);
+            Assert.AreEqual(text1.AlphaBlend, text2.AlphaBlend);
             Assert.AreEqual(text1.MaterialGlyph, text2.MaterialGlyph);
             Assert.AreEqual(text1.MaterialImage, text2.MaterialImage);
             Assert.AreEqual(text1.Font.Path, text2.Font.Path);
@@ -597,7 +597,7 @@ namespace Altseed2.Test
             Assert.NotNull(polygon2);
 
             Assert.AreEqual(polygon1.Material, polygon2.Material);
-            Assert.AreEqual(polygon1.BlendMode, polygon2.BlendMode);
+            Assert.AreEqual(polygon1.AlphaBlend, polygon2.AlphaBlend);
             Assert.AreEqual(polygon1.Src, polygon2.Src);
             Assert.AreEqual(polygon1.Texture.Size, polygon2.Texture.Size);
             Assert.AreEqual(polygon1.Transform, polygon2.Transform);
@@ -612,7 +612,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed2.RenderTexture.Create(new Vector2I(100, 100));
+            var texture = Altseed2.RenderTexture.Create(new Vector2I(100, 100), TextureFormatType.R8G8B8A8_UNORM);
 
             Assert.NotNull(texture);
 
@@ -644,12 +644,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var collider1 = new CircleCollider
-            {
-                Position = new Vector2F(30f, 30f),
-                Rotation = 10.0f,
-                Radius = 30.0f
-            };
+            var collider1 = Altseed2.CircleCollider.Create();
+            
+            collider1.Position = new Vector2F(30f, 30f);
+            collider1.Rotation = 10.0f;
+            collider1.Radius = 30.0f;
+            
 
             const string path = "Serialization/CircleCollider.bin";
 
@@ -672,11 +672,10 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var collider1 = new PolygonCollider
-            {
-                Position = new Vector2F(30f, 30f),
-                Rotation = 10.0f,
-            };
+            var collider1 = Altseed2.PolygonCollider.Create();
+            collider1.Position = new Vector2F(30f, 30f);
+            collider1.Rotation = 10.0f;
+            
 
             var array_g = new Vertex[]
             {
@@ -712,13 +711,13 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var collider1 = new RectangleCollider
-            {
-                CenterPosition = new Vector2F(15f, 15f),
-                Position = new Vector2F(30f, 30f),
-                Rotation = 10.0f,
-                Size = new Vector2F(20f, 20f)
-            };
+            var collider1 = Altseed2.RectangleCollider.Create();
+
+            collider1.CenterPosition = new Vector2F(15f, 15f);
+            collider1.Position = new Vector2F(30f, 30f);
+            collider1.Rotation = 10.0f;
+            collider1.Size = new Vector2F(20f, 20f);
+            
 
             const string path = "Serialization/RectangleCollider.bin";
 

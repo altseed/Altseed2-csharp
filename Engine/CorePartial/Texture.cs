@@ -45,11 +45,12 @@ namespace Altseed2
     {
         #region SerializeName
         private const string S_Size = "S_Size";
+        private const string S_Format = "S_Format";
         #endregion
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_RenderTexture_Create(info.GetValue<Vector2I>(S_Size));
+            ptr = cbg_RenderTexture_Create(info.GetValue<Vector2I>(S_Size), info.GetValue<int>(S_Format));
         }
     }
 }

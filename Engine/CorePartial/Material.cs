@@ -162,7 +162,7 @@ namespace Altseed2
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_Material_Constructor_0();
+            ptr = cbg_Material_Create();
         }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)

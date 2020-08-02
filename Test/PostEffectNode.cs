@@ -40,7 +40,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
     return float4(tex.xyz, 1.0);
 }
 ";
-            Material material = new Material();
+            Material material = Material.Create();
 
             int count = 0;
 

@@ -161,7 +161,7 @@ namespace Altseed2
 
         public RuledTransitionEffectNode()
         {
-            _Material = new Material();
+            _Material = Material.Create();
             _Material.SetShader(Shader.Create("Transition", _ShaderCode, ShaderStageType.Pixel));
         }
 
@@ -169,7 +169,7 @@ namespace Altseed2
         {
             if (UseCaptionAsMaskTexture && MaskTexture == null)
             {
-                var maskTexture = RenderTexture.Create(src.Size);
+                var maskTexture = RenderTexture.Create(src.Size, src.Format);
                 Engine.Graphics.CommandList.CopyTexture(src, maskTexture);
                 MaskTexture = maskTexture;
             }

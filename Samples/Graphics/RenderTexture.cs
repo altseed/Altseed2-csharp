@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Altseed2;
 
@@ -24,7 +24,7 @@ namespace Sample
             Engine.AddNode(sprite);
 
             // スクリーンのように描画先にできるテクスチャを作成します。
-            var renderTexture = RenderTexture.Create(new Vector2I(200, 200));
+            var renderTexture = RenderTexture.Create(new Vector2I(200, 200), TextureFormatType.R8G8B8A8_UNORM);
 
             // sprite を写してrenderTexture に出力する CameraNode を作成します。
             // 詳しくは CameraNode のサンプルを参照してください。

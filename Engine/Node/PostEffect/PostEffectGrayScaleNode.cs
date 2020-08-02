@@ -8,7 +8,7 @@ namespace Altseed2
 
         public PostEffectGrayScaleNode()
         {
-            material = new Material();
+            material = Material.Create();
             var shader = Shader.Create("GrayScale", Engine.Graphics.BuiltinShader.GrayScaleShader, ShaderStageType.Pixel);
             material.SetShader(shader);
         }

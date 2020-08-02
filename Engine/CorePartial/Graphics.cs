@@ -221,6 +221,114 @@ namespace Altseed2
         public static bool operator !=(RenderPassParameter left, RenderPassParameter right) => !(left == right);
     }
 
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct AlphaBlend : IEquatable<AlphaBlend>
+    {
+        [MarshalAs(UnmanagedType.Bool)]
+        public bool IsBlendEnabled;
+        public BlendFuncType BlendSrcFunc;
+        public BlendFuncType BlendDstFunc;
+        public BlendFuncType BlendSrcFuncAlpha;
+        public BlendFuncType BlendDstFuncAlpha;
+        public BlendEquationType BlendEquationRGB;
+        public BlendEquationType BlendEquationAlpha;
+
+        /// <summary>
+        /// もう一つの<see cref="AlphaBlend"/>との間の等価性を判定する
+        /// </summary>
+        /// <param name="other">等価線を判定する<see cref="AlphaBlend"/>のインスタンス</param>
+        /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly bool Equals(AlphaBlend other)
+        {
+            return BlendSrcFunc == other.BlendSrcFunc
+                && BlendDstFunc == other.BlendDstFunc
+                && BlendSrcFuncAlpha == other.BlendSrcFuncAlpha
+                && BlendDstFuncAlpha == other.BlendDstFuncAlpha
+                && BlendEquationRGB == other.BlendEquationRGB
+                && BlendEquationAlpha == other.BlendEquationAlpha
+            ;
+        }
+
+        /// <summary>
+        /// オブジェクトとの等価性を判定する
+        /// </summary>
+        /// <param name="obj">等価性を判定するオブジェクト</param>
+        /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
+        public readonly override bool Equals(object obj) => obj is AlphaBlend p && Equals(p);
+
+        /// <summary>
+        /// このインスタンスのハッシュコードを返す
+        /// </summary>
+        /// <returns>このインスタンスのハッシュコード</returns>
+        public readonly override int GetHashCode()
+        {
+            return HashCode.Combine(IsBlendEnabled, BlendDstFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha, BlendEquationRGB, BlendEquationAlpha);
+        }
+
+        public static bool operator ==(AlphaBlend left, AlphaBlend right) => left.Equals(right);
+        public static bool operator !=(AlphaBlend left, AlphaBlend right) => !(left == right);
+
+        public static AlphaBlend Normal =>
+            new AlphaBlend {
+                IsBlendEnabled = true,
+                BlendSrcFunc = BlendFuncType.SrcAlpha,
+                BlendDstFunc = BlendFuncType.OneMinusSrcAlpha,
+                BlendSrcFuncAlpha = BlendFuncType.One,
+                BlendDstFuncAlpha = BlendFuncType.One,
+                BlendEquationRGB = BlendEquationType.Add,
+                BlendEquationAlpha = BlendEquationType.Max
+            };
+
+        public static AlphaBlend Add =>
+            new AlphaBlend
+            {
+                IsBlendEnabled = true,
+                BlendSrcFunc = BlendFuncType.SrcAlpha,
+                BlendDstFunc = BlendFuncType.One,
+                BlendSrcFuncAlpha = BlendFuncType.One,
+                BlendDstFuncAlpha = BlendFuncType.One,
+                BlendEquationRGB = BlendEquationType.Add,
+                BlendEquationAlpha = BlendEquationType.Max
+            };
+
+        public static AlphaBlend Opacity =>
+            new AlphaBlend
+            {
+                IsBlendEnabled = false,
+                BlendSrcFunc = BlendFuncType.One,
+                BlendDstFunc = BlendFuncType.Zero,
+                BlendSrcFuncAlpha = BlendFuncType.One,
+                BlendDstFuncAlpha = BlendFuncType.One,
+                BlendEquationRGB = BlendEquationType.Add,
+                BlendEquationAlpha = BlendEquationType.Max
+            };
+        
+        public static AlphaBlend Substract =>
+            new AlphaBlend
+            {
+                IsBlendEnabled = true,
+                BlendSrcFunc = BlendFuncType.SrcAlpha,
+                BlendDstFunc = BlendFuncType.One,
+                BlendSrcFuncAlpha = BlendFuncType.One,
+                BlendDstFuncAlpha = BlendFuncType.One,
+                BlendEquationRGB = BlendEquationType.ReverseSub,
+                BlendEquationAlpha = BlendEquationType.Max
+            };
+
+        public static AlphaBlend Multiply =>
+            new AlphaBlend
+            {
+                IsBlendEnabled = true,
+                BlendSrcFunc = BlendFuncType.Zero,
+                BlendDstFunc = BlendFuncType.SrcColor,
+                BlendSrcFuncAlpha = BlendFuncType.One,
+                BlendDstFuncAlpha = BlendFuncType.One,
+                BlendEquationRGB = BlendEquationType.Add,
+                BlendEquationAlpha = BlendEquationType.Max
+            };
+    }
+
     public partial class Shader
     {
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
