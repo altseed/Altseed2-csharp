@@ -80,8 +80,20 @@ namespace Altseed2
             get => _Camera.Transform;
             set
             {
-                if (value == _Camera.Transform) return;
+                if (_Camera.Transform == value) return;
+
                 _Camera.Transform = value;
+            }
+        }
+
+        public Vector2F CenterPosition
+        {
+            get => _Camera.CenterOffset;
+            set
+            {
+                if (_Camera.CenterOffset == value) return;
+
+                _Camera.CenterOffset = value;
             }
         }
 
