@@ -19,7 +19,7 @@ namespace Sample
             var path = "SerializeSample.bin";
 
             // StaticFileを生成。
-            var file1 = StaticFile.Create(@"TestData\IO\test.txt");
+            var file1 = StaticFile.Create(@"TestData/IO/test.txt");
 
             // fileをシリアライズします。
             Serialize(path, file1);

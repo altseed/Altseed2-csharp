@@ -14,7 +14,7 @@ namespace Sample
             if (!Engine.Initialize("StaticFile", 640, 480)) return;
 
             // ファイルを読み込みます。
-            var streamFile = StreamFile.Create(@"TestData\IO\test.txt");
+            var streamFile = StreamFile.Create(@"TestData/IO/test.txt");
 
             // メインループ。
             // Altseed のウインドウが閉じられると終了します。
