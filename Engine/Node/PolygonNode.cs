@@ -11,6 +11,8 @@ namespace Altseed2
     {
         protected private readonly RenderedPolygon _RenderedPolygon;
 
+        private bool _IsValid;
+
         /// <summary>
         /// 新しいインスタンスを生成します。
         /// </summary>
@@ -24,7 +26,7 @@ namespace Altseed2
 
         void IDrawn.Draw()
         {
-            Engine.Renderer.DrawPolygon(_RenderedPolygon);
+            if(_IsValid) Engine.Renderer.DrawPolygon(_RenderedPolygon);
         }
 
         /// <summary>
@@ -190,6 +192,26 @@ namespace Altseed2
             get => _RenderedPolygon.Vertexes?.ToArray();
             set
             {
+                if (value.Count < 3)
+                {
+                    Engine.Log.Warn(LogCategory.Engine, "Polygon whose number of vertexes is less than 3 will not be drawn.");
+                    _IsValid = false;
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < value.Count; ++i)
+                        for (int j = i + 1; j < value.Count; ++j)
+                            if (value[i] == value[j])
+                            {
+                                Engine.Log.Warn(LogCategory.Engine, "Polygon which has same vertexes will not be drawn.");
+                                _IsValid = false;
+                                return;
+                            }
+
+                    _IsValid = true;
+                }
+
                 var vertexArray = VertexArray.Create(value);
                 _RenderedPolygon.Vertexes = vertexArray;
                 _RequireCalcTransform = true;
