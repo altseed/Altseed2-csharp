@@ -80,8 +80,23 @@ namespace Altseed2
             get => _Camera.Transform;
             set
             {
-                if (value == _Camera.Transform) return;
+                if (_Camera.Transform == value) return;
+
                 _Camera.Transform = value;
+            }
+        }
+
+        /// <summary>
+        /// 描画領域のオフセットを取得または設定します。
+        /// </summary>
+        public Vector2F CenterOffset
+        {
+            get => _Camera.CenterOffset;
+            set
+            {
+                if (_Camera.CenterOffset == value) return;
+
+                _Camera.CenterOffset = value;
             }
         }
 
