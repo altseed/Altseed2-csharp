@@ -15,23 +15,25 @@ namespace Sample
             // コライダを自動処理するノードをシーンに登録します。
             scene.AddChildNode(new CollisionManagerNode());
 
+
             // 衝突判定を持つSpriteNodeを生成します。
+            var texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
             var sprite = new SpriteNode()
             {
-                Pivot = new Vector2F(0.5f, 0.5f),
                 Position = new Vector2F(200f, 200f),
                 Scale = new Vector2F(0.5f, 0.5f),
-                Texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png")
+                Texture = texture,
+                CenterPosition = texture.Size / 2,
             };
 
             // 円形コライダノードを生成します。
             var collider = new CircleColliderNode()
             {
-                Radius = sprite.Texture.Size.X / 2
+                Radius = texture.Size.X / 2,
             };
 
             // colliderの衝突判定を視覚化できるノードを生成します。
-            var visualizer = ColliderVisualizeNode.CreateVisualizeNode(collider);
+            var visualizer = ColliderVisualizeNodeFactory.Create(collider);
 
             // エンジンにノードを追加します。
             scene.AddChildNode(sprite);

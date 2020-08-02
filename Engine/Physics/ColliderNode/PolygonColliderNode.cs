@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class PolygonColliderNode : ColliderNode
     {
-        internal int Version { get; private set; }
+        internal int _Version { get; private set; }
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -20,7 +20,7 @@ namespace Altseed2
         /// 頂点情報の配列を取得または設定する
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        public Vector2F[] Vertexes
+        internal Vector2F[] Vertexes
         {
             get => _vertexes;
             set
@@ -28,8 +28,7 @@ namespace Altseed2
                 if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
-                AdjustSize();
-                Version++;
+                _Version++;
             }
         }
         private Vector2F[] _vertexes = Array.Empty<Vector2F>();
@@ -46,75 +45,50 @@ namespace Altseed2
         internal PolygonColliderNode(PolygonCollider collider)
         {
             PolygonCollider = collider ?? new PolygonCollider();
-
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out _, out var angle);
-            Collider.Position = position;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
-        }
-
-        public override void AdjustSize()
-        {
-            MathHelper.GetMinMax(out var min, out var max, _vertexes);
-            base.Size = max - min;
         }
 
         internal override void UpdateCollider()
         {
-            UpdateInheritedTransform();
-
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
+            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
+            Collider.Position = position ;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
 
-            var count = _vertexes.Length;
-            var array = new Vector2F[count];
-            if (array.Length > 0)
-            {
-                MathHelper.GetMinMax(out var min, out _, _vertexes);
-                for (int i = 0; i < count; i++) array[i] = _vertexes[i] * scale - min;
-            }
-
+            var array = new Vector2F[_vertexes.Length];
+            for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
             PolygonCollider.VertexArray = array;
+
+            _Version++;
         }
     }
 
     [Serializable]
-    internal sealed class PolygonColliderVisualizeNode : ColliderVisualizeNode
+    internal sealed class PolygonColliderVisualizeNode : PolygonNode
     {
-        private readonly PolygonColliderNode owner;
-        private int currentVersion;
+        private readonly PolygonColliderNode _Owner;
+        private int _CurrentVersion;
 
         internal PolygonColliderVisualizeNode(PolygonColliderNode owner)
         {
-            this.owner = owner;
-            currentVersion = owner.Version;
+            _Owner = owner;
+            _CurrentVersion = owner._Version;
 
             UpdatePolygon();
         }
 
-        private protected override void UpdatePolygon()
+        internal override void Update()
         {
-            var vertexes = owner.Vertexes;
-            MathHelper.GetMinMax(out var min, out _, vertexes);
+            if (_CurrentVersion != _Owner._Version)
+                UpdatePolygon();
 
-            var positions = new Vector2F[vertexes.Length];
-            for (int i = 0; i < vertexes.Length; i++) positions[i] = vertexes[i] - min;
-
-            var array = Vector2FArray.Create(vertexes.Length);
-            array.FromArray(positions);
-            RenderedPolygon.CreateVertexesByVector2F(array);
-            RenderedPolygon.OverwriteVertexesColor(AreaColor);
+            base.Update();
         }
 
-        internal override void UpdateInheritedTransform()
+        private void UpdatePolygon()
         {
-            base.UpdateInheritedTransform();
-
-            if (currentVersion != owner.Version)
-            {
-                UpdatePolygon();
-                currentVersion = owner.Version;
-            }
+            var vertexes = new Vector2F[_Owner.Vertexes.Length];
+            SetVertexes(_Owner.Vertexes, ColliderVisualizeNodeFactory.AreaColor);
+            CenterPosition = _Owner.CenterPosition;
+            _CurrentVersion = _Owner._Version;
         }
     }
 }

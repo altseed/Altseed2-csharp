@@ -6,22 +6,114 @@ namespace Altseed2
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class SpriteNode : DrawnNode
+    public class SpriteNode : TransformNode, ICullableDrawn/*, ISized*/
     {
-        private readonly RenderedSprite renderedSprite;
+        private readonly RenderedSprite _RenderedSprite;
 
-        public override Matrix44F AbsoluteTransform => renderedSprite.Transform;
+        /// <summary>
+        /// 新しいインスタンスを生成します。
+        /// </summary>
+        public SpriteNode()
+        {
+            _RenderedSprite = RenderedSprite.Create();
+        }
+
+        #region IDrawn
+
+        void IDrawn.Draw()
+        {
+            Engine.Renderer.DrawSprite(_RenderedSprite);
+        }
+
+        /// <summary>
+        /// カリング用ID
+        /// </summary>
+        int ICullableDrawn.CullingId => _RenderedSprite.Id;
+
+        /// <summary>
+        /// カメラグループを取得または設定します。
+        /// </summary>
+        public ulong CameraGroup
+        {
+            get => _CameraGroup; set
+            {
+                if (_CameraGroup == value) return;
+                var old = _CameraGroup;
+                _CameraGroup = value;
+                Engine.UpdateDrawnCameraGroup(this, old);
+            }
+        }
+        private ulong _CameraGroup;
+
+        /// <summary>
+        /// 描画時の重ね順を取得または設定します。
+        /// </summary>
+        public int ZOrder
+        {
+            get => _ZOrder;
+            set
+            {
+                if (value == _ZOrder) return;
+
+                var old = _ZOrder;
+                _ZOrder = value;
+
+                Engine.UpdateDrawnZOrder(this, old);
+            }
+        }
+        private int _ZOrder;
+
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsDrawn
+        {
+            get => _IsDrawn; set
+            {
+                if (_IsDrawn == value) return;
+                _IsDrawn = value;
+                this.UpdateIsDrawnActuallyOfDescendants();
+
+            }
+        }
+        private bool _IsDrawn = true;
+
+        /// <summary>
+        /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+        public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
+        bool ICullableDrawn.IsDrawnActually { get; set; } = true;
+
+        #endregion
+
+        #region Node
+
+        internal override void Registered()
+        {
+            base.Registered();
+            Engine.RegisterDrawn(this);
+        }
+
+        internal override void Unregistered()
+        {
+            base.Unregistered();
+            Engine.UnregisterDrawn(this);
+        }
+
+        #endregion
+
+        #region RenderedSprite
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => renderedSprite.Color;
+            get => _RenderedSprite.Color;
             set
             {
-                if (renderedSprite.Color == value) return;
-                renderedSprite.Color = value;
+                if (_RenderedSprite.Color == value) return;
+                _RenderedSprite.Color = value;
             }
         }
 
@@ -30,11 +122,11 @@ namespace Altseed2
         /// </summary>
         public AlphaBlendMode BlendMode
         {
-            get => renderedSprite.BlendMode;
+            get => _RenderedSprite.BlendMode;
             set
             {
-                if (renderedSprite.BlendMode == value) return;
-                renderedSprite.BlendMode = value;
+                if (_RenderedSprite.BlendMode == value) return;
+                _RenderedSprite.BlendMode = value;
             }
         }
 
@@ -43,13 +135,12 @@ namespace Altseed2
         /// </summary>
         public RectF Src
         {
-            get => renderedSprite.Src;
+            get => _RenderedSprite.Src;
             set
             {
-                if (renderedSprite.Src == value) return;
-                renderedSprite.Src = value;
-
-                if (IsAutoAdjustSize) AdjustSize();
+                if (_RenderedSprite.Src == value) return;
+                _RenderedSprite.Src = value;
+                _RequireCalcTransform = true;
             }
         }
 
@@ -58,11 +149,11 @@ namespace Altseed2
         /// </summary>
         public TextureBase Texture
         {
-            get => renderedSprite.Texture;
+            get => _RenderedSprite.Texture;
             set
             {
-                if (renderedSprite.Texture == value) return;
-                renderedSprite.Texture = value;
+                if (_RenderedSprite.Texture == value) return;
+                _RenderedSprite.Texture = value;
 
                 if (value != null)
                     Src = new RectF(0, 0, value.Size.X, value.Size.Y);
@@ -74,85 +165,38 @@ namespace Altseed2
         /// </summary>
         public Material Material
         {
-            get => renderedSprite.Material;
+            get => _RenderedSprite.Material;
             set
             {
-                if (renderedSprite.Material == value) return;
+                if (_RenderedSprite.Material == value) return;
 
-                renderedSprite.Material = value;
-                //TODO: Src
+                _RenderedSprite.Material = value;
             }
         }
 
         /// <summary>
-        /// 描画モードを取得または設定します。
+        /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public DrawMode Mode
+        public sealed override Matrix44F InheritedTransform
         {
-            get => _Mode;
-            set
+            get => _InheritedTransform;
+            internal set
             {
-                if (_Mode == value) return;
-
-                _Mode = value;
+                _InheritedTransform = value;
+                _RenderedSprite.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }
         }
-        private DrawMode _Mode = DrawMode.Absolute;
+
+        #endregion
 
         /// <summary>
-        /// カリング用ID
+        /// コンテンツのサイズを取得します。
         /// </summary>
-        internal override int CullingId => renderedSprite.Id;
+        public sealed override Vector2F ContentSize => Src.Size;
 
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
         /// </summary>
-        public SpriteNode()
-        {
-            renderedSprite = RenderedSprite.Create();
-        }
-
-        /// <summary>
-        /// 描画を実行します。
-        /// </summary>
-        internal override void Draw()
-        {
-            Engine.Renderer.DrawSprite(renderedSprite);
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            var mat = new Matrix44F();
-            switch (Mode)
-            {
-                case DrawMode.Fill:
-                    mat = Matrix44F.GetScale2D(Size / Src.Size);
-                    break;
-                case DrawMode.KeepAspect:
-                    var scale = Size;
-
-                    if (Size.X / Size.Y > Src.Size.X / Src.Size.Y)
-                        scale.X = Src.Size.X * Size.Y / Src.Size.Y;
-                    else
-                        scale.Y = Src.Size.Y * Size.X / Src.Size.X;
-
-                    scale /= Src.Size;
-
-                    mat = Matrix44F.GetScale2D(scale);
-                    break;
-                case DrawMode.Absolute:
-                    mat = Matrix44F.Identity;
-                    break;
-                default:
-                    break;
-            }
-
-            renderedSprite.Transform = CalcInheritedTransform() * mat;
-        }
-
-        public override void AdjustSize()
-        {
-            Size = Src.Size;
-        }
+        public sealed override Matrix44F AbsoluteTransform => _RenderedSprite.Transform;
     }
 }

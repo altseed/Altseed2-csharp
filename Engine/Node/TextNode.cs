@@ -2,6 +2,7 @@
 
 namespace Altseed2
 {
+    /*
     /// <summary>
     /// 水平方向の配置
     /// </summary>
@@ -12,14 +13,21 @@ namespace Altseed2
         /// 左揃え
         /// </summary>
         Left,
+
         /// <summary>
         /// 中央揃え
         /// </summary>
         Center,
+
         /// <summary>
         /// 右揃え
         /// </summary>
-        Right
+        Right,
+
+        /// <summary>
+        /// 手動
+        /// </summary>
+        Manual,
     }
 
     /// <summary>
@@ -32,138 +40,150 @@ namespace Altseed2
         /// 上揃え
         /// </summary>
         Top,
+
         /// <summary>
         /// 中央揃え
         /// </summary>
         Center,
+
         /// <summary>
         /// 下揃え
         /// </summary>
-        Bottom
+        Bottom,
+
+        /// <summary>
+        /// 手動
+        /// </summary>
+        Manual,
     }
+    */
 
     /// <summary>
     /// テキストを描画するノードのクラス
     /// </summary>
     [Serializable]
-    public class TextNode : DrawnNode
+    public class TextNode : TransformNode, ICullableDrawn
     {
-        private readonly RenderedText renderedText;
-
-        public override Matrix44F AbsoluteTransform => renderedText.Transform;
+        private readonly RenderedText _RenderedText;
 
         /// <summary>
-        /// 描画する文字列を取得または設定します。
+        /// 新しいインスタンスを生成します。
         /// </summary>
-        public string Text
+        public TextNode()
         {
-            get => renderedText.Text;
-            set
-            {
-                if (renderedText.Text == value) return;
-                renderedText.Text = value;
+            _RenderedText = RenderedText.Create();
+        }
 
-                if (IsAutoAdjustSize) AdjustSize();
-            }
+        #region IDrawn
+
+        void IDrawn.Draw()
+        {
+            Engine.Renderer.DrawText(_RenderedText);
         }
 
         /// <summary>
-        /// 文字列の描画に使用するフォントを取得または設定します。
+        /// カリング用ID
         /// </summary>
-        public Font Font
+        int ICullableDrawn.CullingId => _RenderedText.Id;
+
+        /// <summary>
+        /// カメラグループを取得または設定します。
+        /// </summary>
+        public ulong CameraGroup
         {
-            get => renderedText.Font;
+            get => _CameraGroup; set
+            {
+                if (_CameraGroup == value) return;
+                var old = _CameraGroup;
+                _CameraGroup = value;
+                Engine.UpdateDrawnCameraGroup(this, old);
+            }
+        }
+        private ulong _CameraGroup;
+
+        /// <summary>
+        /// 描画時の重ね順を取得または設定します。
+        /// </summary>
+        public int ZOrder
+        {
+            get => _ZOrder;
             set
             {
-                if (renderedText.Font == value) return;
-                renderedText.Font = value;
+                if (value == _ZOrder) return;
 
-                if (IsAutoAdjustSize) AdjustSize();
+                var old = _ZOrder;
+                _ZOrder = value;
+
+                Engine.UpdateDrawnZOrder(this, old);
             }
+        }
+        private int _ZOrder;
+
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsDrawn
+        {
+            get => _IsDrawn;
+            set
+            {
+                if (_IsDrawn == value) return;
+                _IsDrawn = value;
+                this.UpdateIsDrawnActuallyOfDescendants();
+
+            }
+        }
+        private bool _IsDrawn = true;
+
+        /// <summary>
+        /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+        public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
+        bool ICullableDrawn.IsDrawnActually { get; set; } = true;
+
+        #endregion
+
+        #region Node
+
+        internal override void Registered()
+        {
+            base.Registered();
+            Engine.RegisterDrawn(this);
+        }
+
+        internal override void Unregistered()
+        {
+            base.Unregistered();
+            Engine.UnregisterDrawn(this);
         }
 
         /// <summary>
-        /// 文字の描画に使用するマテリアルを取得または設定します。
+        /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
-        public Material MaterialGlyph
+        public sealed override Matrix44F InheritedTransform
         {
-            get => renderedText.MaterialGlyph;
-            set
+            get => _InheritedTransform;
+            internal set
             {
-                if (renderedText.MaterialGlyph == value) return;
-                renderedText.MaterialGlyph = value;
+                _InheritedTransform = value;
+                _RenderedText.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
             }
         }
 
-        /// <summary>
-        /// 文字テクスチャの描画に使用するマテリアルを取得または設定します。
-        /// </summary>
-        public Material MaterialImage
-        {
-            get => renderedText.MaterialImage;
-            set
-            {
-                if (renderedText.MaterialImage == value) return;
-                renderedText.MaterialImage = value;
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// 文字の太さを取得または設定します。
-        /// </summary>
-        public float Weight
-        {
-            get => renderedText.Weight;
-            set
-            {
-                if (renderedText.Weight == value) return;
-                renderedText.Weight = value;
-            }
-        }
-
-        /// <summary>
-        /// 字間をピクセル単位で取得または設定します。
-        /// </summary>
-        public float CharacterSpace
-        {
-            get => renderedText.CharacterSpace;
-            set
-            {
-                if (renderedText.CharacterSpace == value) return;
-                renderedText.CharacterSpace = value;
-
-                if (IsAutoAdjustSize) AdjustSize();
-            }
-        }
-
-        /// <summary>
-        /// 行間をピクセル単位で取得または設定します。
-        /// Nullの時、フォント標準の行間を指定します。
-        /// </summary>
-        public float? LineGap
-        {
-            get => _LineGap;
-            set
-            {
-                if (_LineGap == value) return;
-                _LineGap = value;
-                renderedText.LineGap = value ?? Font?.LineGap ?? 0;
-
-                if (IsAutoAdjustSize) AdjustSize();
-            }
-        }
-        private float? _LineGap = null;
+        #region RenderedText
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
         {
-            get => renderedText.Color;
+            get => _RenderedText.Color;
             set
             {
-                if (renderedText.Color == value) return;
-                renderedText.Color = value;
+                if (_RenderedText.Color == value) return;
+                _RenderedText.Color = value;
             }
         }
 
@@ -172,26 +192,131 @@ namespace Altseed2
         /// </summary>
         public AlphaBlendMode BlendMode
         {
-            get => renderedText.BlendMode;
+            get => _RenderedText.BlendMode;
             set
             {
-                if (renderedText.BlendMode == value) return;
-                renderedText.BlendMode = value;
+                if (_RenderedText.BlendMode == value) return;
+                _RenderedText.BlendMode = value;
             }
         }
+
+        /// <summary>
+        /// 描画する文字列を取得または設定します。
+        /// </summary>
+        public string Text
+        {
+            get => _RenderedText.Text;
+            set
+            {
+                if (_RenderedText.Text == value) return;
+
+                _RenderedText.Text = value;
+                _RequireCalcTransform = true;
+            }
+        }
+
+        /// <summary>
+        /// 文字列の描画に使用するフォントを取得または設定します。
+        /// </summary>
+        public Font Font
+        {
+            get => _RenderedText.Font;
+            set
+            {
+                if (_RenderedText.Font == value) return;
+
+                _RenderedText.Font = value;
+                _RequireCalcTransform = true;
+            }
+        }
+
+        /// <summary>
+        /// 文字の描画に使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material MaterialGlyph
+        {
+            get => _RenderedText.MaterialGlyph;
+            set
+            {
+                if (_RenderedText.MaterialGlyph == value) return;
+                _RenderedText.MaterialGlyph = value;
+            }
+        }
+
+        /// <summary>
+        /// 文字テクスチャの描画に使用するマテリアルを取得または設定します。
+        /// </summary>
+        public Material MaterialImage
+        {
+            get => _RenderedText.MaterialImage;
+            set
+            {
+                if (_RenderedText.MaterialImage == value) return;
+                _RenderedText.MaterialImage = value;
+            }
+        }
+
+        /// <summary>
+        /// 文字の太さを取得または設定します。
+        /// </summary>
+        public float Weight
+        {
+            get => _RenderedText.Weight;
+            set
+            {
+                if (_RenderedText.Weight == value) return;
+
+                _RenderedText.Weight = value;
+                _RequireCalcTransform = true;
+            }
+        }
+
+        /// <summary>
+        /// 字間をピクセル単位で取得または設定します。
+        /// </summary>
+        public float CharacterSpace
+        {
+            get => _RenderedText.CharacterSpace;
+            set
+            {
+                if (_RenderedText.CharacterSpace == value) return;
+
+                _RenderedText.CharacterSpace = value;
+                _RequireCalcTransform = true;
+            }
+        }
+
+        /// <summary>
+        /// 行間をピクセル単位で取得または設定します。
+        /// Nullを指定するとフォント標準の行間を使用します。
+        /// </summary>
+        public float? LineGap
+        {
+            get => _LineGap;
+            set
+            {
+                if (_LineGap == value) return;
+
+                var gap = value ?? Font?.LineGap ?? 0;
+                _LineGap = gap;
+                _RenderedText.LineGap = gap;
+                _RequireCalcTransform = true;
+            }
+        }
+        private float? _LineGap = null;
 
         /// <summary>
         /// カーニングの有無を取得または設定します。
         /// </summary>
         public bool IsEnableKerning
         {
-            get => renderedText.IsEnableKerning;
+            get => _RenderedText.IsEnableKerning;
             set
             {
-                if (renderedText.IsEnableKerning == value) return;
-                renderedText.IsEnableKerning = value;
-                
-                if (IsAutoAdjustSize) AdjustSize();
+                if (_RenderedText.IsEnableKerning == value) return;
+
+                _RenderedText.IsEnableKerning = value;
+                _RequireCalcTransform = true;
             }
         }
 
@@ -200,16 +325,17 @@ namespace Altseed2
         /// </summary>
         public WritingDirection WritingDirection
         {
-            get => renderedText.WritingDirection;
+            get => _RenderedText.WritingDirection;
             set
             {
-                if (renderedText.WritingDirection == value) return;
-                renderedText.WritingDirection = value;
+                if (_RenderedText.WritingDirection == value) return;
 
-                if (IsAutoAdjustSize) AdjustSize();
+                _RenderedText.WritingDirection = value;
+                _RequireCalcTransform = true;
             }
         }
 
+        /*
         /// <summary>
         /// 水平方向の配置
         /// </summary>
@@ -218,10 +344,10 @@ namespace Altseed2
             get => _HorizontalAlignment;
             set
             {
-                if (value == _HorizontalAlignment)
-                    return;
+                if (value == _HorizontalAlignment) return;
 
                 _HorizontalAlignment = value;
+                _RequireCalcTransform = true;
             }
         }
         private HorizontalAlignment _HorizontalAlignment = HorizontalAlignment.Left;
@@ -238,43 +364,33 @@ namespace Altseed2
                     return;
 
                 _VerticalAlignment = value;
+                _RequireCalcTransform = true;
             }
         }
         private VerticalAlignment _VerticalAlignment = VerticalAlignment.Top;
+        */
+
+        #endregion
 
         /// <summary>
-        /// カリング用ID
+        /// コンテンツのサイズを取得します。
         /// </summary>
-        internal override int CullingId => renderedText.Id;
+        public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
 
-        /// <summary>
-        /// 新しいインスタンスを生成します。
-        /// </summary>
-        public TextNode()
+        /*
+        internal void CalcCenterPosition()
         {
-            renderedText = RenderedText.Create();
-        }
-
-        /// <summary>
-        /// 描画を実行します。
-        /// </summary>
-        internal override void Draw()
-        {
-            Engine.Renderer.DrawText(renderedText);
-        }
-
-        internal override void UpdateInheritedTransform()
-        {
-            var mat = Matrix44F.Identity;
+            var centerPosition = CenterPosition;
             switch (HorizontalAlignment)
             {
                 case HorizontalAlignment.Left:
+                    centerPosition.X = 0;
                     break;
                 case HorizontalAlignment.Center:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F((Size.X - renderedText.TextureSize.X) / 2, 0));
+                    centerPosition.X = (ContentSize.X - _RenderedText.TextureSize.X) / 2f;
                     break;
                 case HorizontalAlignment.Right:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F(Size.X - renderedText.TextureSize.X, 0));
+                    centerPosition.X = ContentSize.X - _RenderedText.TextureSize.X;
                     break;
                 default:
                     break;
@@ -283,23 +399,29 @@ namespace Altseed2
             switch (VerticalAlignment)
             {
                 case VerticalAlignment.Top:
+                    centerPosition.Y = 0;
                     break;
                 case VerticalAlignment.Center:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, (Size.Y - renderedText.TextureSize.Y) / 2));
+                    centerPosition.Y = (ContentSize.Y - _RenderedText.TextureSize.Y) / 2f;
                     break;
                 case VerticalAlignment.Bottom:
-                    mat *= Matrix44F.GetTranslation2D(new Vector2F(0, Size.Y - renderedText.TextureSize.Y));
+                    centerPosition.Y = ContentSize.Y - _RenderedText.TextureSize.Y;
                     break;
                 default:
                     break;
             }
-
-            renderedText.Transform = CalcInheritedTransform() * mat;
         }
 
-        public override void AdjustSize()
+        private protected override void CalcTransform()
         {
-            Size = renderedText.TextureSize;
+            CalcCenterPosition();
+            base.CalcTransform();
         }
+        */
+
+        /// <summary>
+        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
+        /// </summary>
+        public override Matrix44F AbsoluteTransform => _RenderedText.Transform;
     }
 }

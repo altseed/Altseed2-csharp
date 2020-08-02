@@ -171,7 +171,7 @@ namespace Altseed2.Test
                 var t = RenderedText.Create();
                 t.Font = font;
                 t.Text = "Hello, world! こんにちは";
-                t.Transform = MathHelper.CalcTransform(new Vector2F(), new Vector2F(), 0, new Vector2F(1, 1));
+                t.Transform = MathHelper.CalcTransform(new Vector2F(), 0, new Vector2F(1, 1));
                 texts.Add(t);
             }
 
@@ -180,7 +180,7 @@ namespace Altseed2.Test
                 t.Font = font;
                 t.Text = "色を指定する。";
                 t.Color = new Color(0, 0, 255, 255);
-                t.Transform = MathHelper.CalcTransform(new Vector2F(0, 100), new Vector2F(), 0, new Vector2F(1, 1));
+                t.Transform = MathHelper.CalcTransform(new Vector2F(0, 100), 0, new Vector2F(1, 1));
                 texts.Add(t);
             }
 
@@ -188,7 +188,7 @@ namespace Altseed2.Test
                 var t = RenderedText.Create();
                 t.Font = font2;
                 t.Text = "𠀋 𡈽 𡌛 𡑮 𡢽 𠮟 𡚴 𡸴 𣇄 𣗄 𣜿 𣝣 𣳾 𤟱 𥒎 𥔎 𥝱 𥧄 𥶡 𦫿 𦹀 𧃴 𧚄 𨉷";
-                t.Transform = MathHelper.CalcTransform(new Vector2F(0, 200), new Vector2F(), 0, new Vector2F(1, 1));
+                t.Transform = MathHelper.CalcTransform(new Vector2F(0, 200), 0, new Vector2F(1, 1));
                 texts.Add(t);
             }
 
@@ -203,7 +203,7 @@ namespace Altseed2.Test
                 var imageFontText = RenderedText.Create();
                 imageFontText.Font = imageFont;
                 imageFontText.Text = "Altseed〇Altseed";
-                imageFontText.Transform = MathHelper.CalcTransform(new Vector2F(0, 300), new Vector2F(), 0, new Vector2F(1, 1));
+                imageFontText.Transform = MathHelper.CalcTransform(new Vector2F(0, 300), 0, new Vector2F(1, 1));
                 texts.Add(imageFontText);
             }
 
@@ -212,7 +212,7 @@ namespace Altseed2.Test
             while (Engine.DoEvents() && count++ < 300)
             {
                 Assert.True(Engine.Graphics.BeginFrame(new RenderPassParameter(Engine.ClearColor, true, true)));
-                rotatedText.Transform = MathHelper.CalcTransform(new Vector2F(0, 300), new Vector2F(), count, new Vector2F(1, 1));
+                rotatedText.Transform = MathHelper.CalcTransform(new Vector2F(0, 300), count, new Vector2F(1, 1));
 
                 foreach (var item in texts)
                 {

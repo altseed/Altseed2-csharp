@@ -104,7 +104,7 @@ namespace Altseed2.Test
             sprite.Position = new Vector2F(300, 300);
             sprite.Texture = tasks[0].Result;
             sprite.Src = new RectF(new Vector2F(), tasks[0].Result.Size);
-            sprite.Pivot = sprite.Texture.Size / 2;
+            sprite.CenterPosition = sprite.Texture.Size / 2;
             sprite.CameraGroup = 1 << 0;
             Engine.AddNode(sprite);
 

@@ -42,7 +42,17 @@ namespace Altseed2
         [NonSerialized]
         private Node _parent;
 
-        public override RegisterStatus Status { get => _status; internal set { _status = value; } }
+        /// <summary>
+        /// このノードの登録状況を取得または設定します。
+        /// </summary>
+        public override RegisterStatus Status
+        {
+            get => _status;
+            internal set
+            {
+                _status = value;
+            }
+        }
         [NonSerialized]
         private RegisterStatus _status;
 
@@ -124,8 +134,10 @@ namespace Altseed2
         /// 子要素を追加します。
         /// </summary>
         /// <param name="node">追加する要素</param>
+        /// <exception cref="ArgumentNullException"><paramref name="node"/>がnull</exception>
         public void AddChildNode(Node node)
         {
+            if (node == null) throw new ArgumentNullException(nameof(node));
             if (node.Status == RegisterStatus.WaitRemoved && node.Parent == this)
                 node.Status = RegisterStatus.Registered;
 
@@ -137,8 +149,10 @@ namespace Altseed2
         /// 子要素を削除します。
         /// </summary>
         /// <param name="node">削除する要素</param>
+        /// <exception cref="ArgumentNullException"><paramref name="node"/>がnull</exception>
         public void RemoveChildNode(Node node)
         {
+            if (node == null) throw new ArgumentNullException(nameof(node));
             if (node.Status == RegisterStatus.WaitAdded && node._ParentReserved == this)
                 node.Status = RegisterStatus.Registered;
 
@@ -259,12 +273,12 @@ namespace Altseed2
         }
 
         internal T GetAncestorSpecificNode<T>()
-            where T : Node
+            where T : class
         {
             if (Parent == null)
                 return null;
 
-            for (var n = Parent; !(n is RootNode || n == null); n = n.Parent)
+            for (var n = Parent; n != null; n = n.Parent)
             {
                 if (n is T t)
                     return t;

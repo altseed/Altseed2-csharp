@@ -35,9 +35,8 @@ namespace Sample
             var title = new TextNode();
             title.Font = Font.LoadDynamicFont("Courier.ttf", 48);
             title.Text = Engine.WindowTitle;
-            title.Pivot = new Vector2F(0.5f, 0.5f);
+            title.CenterPosition = title.ContentSize / 2;
             title.Position = new Vector2F(320.0f, 80.0f);
-            title.AdjustSize();
             Engine.AddNode(title);
 
             // スペクトルバーを示す図形ノードを作成し、エンジンに登録します。
@@ -47,10 +46,9 @@ namespace Sample
                 {
                     spectrumBars[i, j] = new RectangleNode();
                     spectrumBars[i, j].RectangleSize = new Vector2F(20.0f, 8.0f);
-                    spectrumBars[i, j].Pivot = new Vector2F(0.5f, 0.5f);
+                    spectrumBars[i, j].CenterPosition = new Vector2F(10.0f, 4.0f);
                     spectrumBars[i, j].Position = new Vector2F(28.0f * i + 110.0f, 16.0f * j + 60.0f);
                     spectrumBars[i, j].Color = HSV2RGB((int)(22.5 * i), 255, 255);
-                    spectrumBars[i, j].AdjustSize();
 
                     Engine.AddNode(spectrumBars[i, j]);
                 }
@@ -61,14 +59,11 @@ namespace Sample
             seekBarLine.Point2 = new Vector2F(500.0f, 0.0f);
             seekBarLine.Thickness = 5.0f;
             seekBarLine.Position = new Vector2F(70.0f, 400.0f);
-            seekBarLine.AdjustSize();
 
             var seekBarDot = new CircleNode();
             seekBarDot.VertNum = 360;
             seekBarDot.Radius = 12.0f;
-            seekBarDot.Pivot = new Vector2F(0.5f, 0.5f);
             seekBarDot.Position = new Vector2F(0.0f, 2.5f);
-            seekBarDot.AdjustSize();
 
             seekBarLine.AddChildNode(seekBarDot);
             Engine.AddNode(seekBarLine);

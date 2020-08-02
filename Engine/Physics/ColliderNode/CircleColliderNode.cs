@@ -60,8 +60,7 @@ namespace Altseed2
             {
                 if (_radius == value) return;
                 _radius = value;
-                AdjustSize();
-                Version++;
+                _Version++;
             }
         }
         private float _radius;
@@ -72,19 +71,7 @@ namespace Altseed2
         /// <remarks>既定値：<see cref="ScaleCalcType.AbsMax"/></remarks>
         public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.AbsMax;
 
-        public override Vector2F Size
-        {
-            get => base.Size;
-            set
-            {
-                if (base.Size == value) return;
-                base.Size = value;
-
-                if (Radius != 0) Scale = value / Radius / 2f;
-            }
-        }
-
-        internal int Version { get; private set; }
+        internal int _Version { get; private set; }
 
         /// <summary>
         /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
@@ -98,33 +85,12 @@ namespace Altseed2
         internal CircleColliderNode(CircleCollider collider)
         {
             CircleCollider = collider ?? new CircleCollider();
-
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
-            CircleCollider.Radius = Radius * (ScaleType switch
-            {
-                ScaleCalcType.X => scale.X,
-                ScaleCalcType.Y => scale.Y,
-                ScaleCalcType.Length => scale.Length,
-                ScaleCalcType.AbsMin => Math.Min(scale.X, scale.Y),
-                ScaleCalcType.AbsMax => Math.Max(scale.X, scale.Y),
-                _ => 1.0f
-            });
-        }
-
-        public override void AdjustSize()
-        {
-            var length = Radius * 2;
-            base.Size = new Vector2F(length, length);
         }
 
         internal override void UpdateCollider()
         {
-            UpdateInheritedTransform();
-
-            MathHelper.CalcFromTransform2D(AbsoluteTransform, out var position, out var scale, out var angle);
-            Collider.Position = position;
+            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
+            Collider.Position = position - CenterPosition;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             CircleCollider.Radius = Radius * (ScaleType switch
             {
@@ -137,55 +103,40 @@ namespace Altseed2
                 ScaleCalcType.AbsMax => Math.Max(Math.Abs(scale.X), Math.Abs(scale.Y)),
                 _ => 1.0f
             });
+            _Version++;
         }
     }
 
     [Serializable]
-    internal sealed class CircleColliderVisualizeNode : ColliderVisualizeNode
+    internal sealed class CircleColliderVisualizeNode : CircleNode
     {
-        internal const int VisualizerVertNum = 100;
-
-        private readonly CircleColliderNode owner;
-        private int currentVersion;
+        private readonly CircleColliderNode _Owner;
+        private int _CurrentVersion;
 
         internal CircleColliderVisualizeNode(CircleColliderNode owner)
         {
-            this.owner = owner;
-            currentVersion = owner.Version;
+            VertNum = ColliderVisualizeNodeFactory.VertNum;
+            Color = ColliderVisualizeNodeFactory.AreaColor;
+            _Owner = owner;
+            _CurrentVersion = owner._Version;
 
-            UpdatePolygon();
+            UpdateCircle();
         }
 
-        private protected override void UpdatePolygon()
+        internal override void Update()
         {
-            const float deg = 360f / VisualizerVertNum;
-            var positions = new Vector2F[VisualizerVertNum];
-            var radius = owner.Radius;
-            var vec = new Vector2F(0.0f, -radius);
+            if (_CurrentVersion != _Owner._Version)
+                UpdateCircle();
 
-            var rad = new Vector2F(radius, radius);
-            for (int i = 0; i < VisualizerVertNum; i++)
-            {
-                positions[i] = vec;
-                vec.Degree += deg;
-                positions[i] += rad;
-            }
-
-            var array = Vector2FArray.Create(positions.Length);
-            array.FromArray(positions);
-            RenderedPolygon.CreateVertexesByVector2F(array);
-            RenderedPolygon.OverwriteVertexesColor(AreaColor);                
+            base.Update();
         }
 
-        internal override void UpdateInheritedTransform()
+        private void UpdateCircle()
         {
-            base.UpdateInheritedTransform();
+            Radius = _Owner.Radius;
+            CenterPosition = _Owner.CenterPosition;
 
-            if (currentVersion != owner.Version)
-            {
-                UpdatePolygon();
-                currentVersion = owner.Version;
-            }
+            _CurrentVersion = _Owner._Version;
         }
     }
 }

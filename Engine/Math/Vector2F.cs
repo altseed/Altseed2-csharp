@@ -22,6 +22,8 @@ namespace Altseed2
         [MarshalAs(UnmanagedType.R4)]
         public float Y;
 
+        internal static readonly Vector2F Zero = new Vector2F(0.0f, 0.0f);
+
         internal static readonly Vector2F One = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
