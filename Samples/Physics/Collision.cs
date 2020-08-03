@@ -60,7 +60,7 @@ namespace Sample
         public CollidableSprite()
         {
             // テクスチャを読み込みます。
-            Texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
+            Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
 
             // 半径を設定します。
             colliderNode.Radius = Texture.Size.X / 2;

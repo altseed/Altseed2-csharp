@@ -18,7 +18,7 @@ namespace Sample
             // 詳しくは SpriteNode のサンプルを参照してください。
             var sprite = new SpriteNode();
             // テクスチャを設定します。
-            sprite.Texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
+            sprite.Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
             sprite.CameraGroup = 1u << cameraGroup;
             Engine.AddNode(sprite);
             

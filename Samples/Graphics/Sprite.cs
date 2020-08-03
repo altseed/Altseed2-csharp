@@ -13,7 +13,7 @@ namespace Sample
             if (!Engine.Initialize("SpriteNode", 640, 480)) return;
 
             // テクスチャを読み込みます。
-            var texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
 
             // スプライトを描画するノードを作成します。
             var node = new SpriteNode();

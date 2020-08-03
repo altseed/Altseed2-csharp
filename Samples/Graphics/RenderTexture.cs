@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Altseed2;
 
@@ -18,7 +18,7 @@ namespace Sample
             // SpriteNode を作成します。
             // 詳しくは SpriteNode のサンプルを参照してください。
             var sprite = new SpriteNode();
-            sprite.Texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
+            sprite.Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
             sprite.CameraGroup = 1u << cameraGroup;
             sprite.Scale = new Vector2F(200, 200) / sprite.Texture.Size;
             Engine.AddNode(sprite);

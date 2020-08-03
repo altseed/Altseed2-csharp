@@ -17,7 +17,7 @@ namespace Sample
 
 
             // 衝突判定を持つSpriteNodeを生成します。
-            var texture = Texture2D.Load(@"TestData\IO\AltseedPink256.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
             var sprite = new SpriteNode()
             {
                 Position = new Vector2F(200f, 200f),
