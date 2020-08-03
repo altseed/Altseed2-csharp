@@ -426,9 +426,13 @@ namespace Altseed2
         internal static AltseedContext Context { get; private set; }
 
         /// <summary>
-        /// ウィンドウのサイズを取得する
+        /// ウィンドウのサイズを取得または設定します。
         /// </summary>
-        public static Vector2I WindowSize => Window.Size;
+        public static Vector2I WindowSize
+        {
+            get => Window.Size;
+            set { Window.Size = value; }
+        }
 
         internal static Configuration Config { get; private set; }
 

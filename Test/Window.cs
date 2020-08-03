@@ -29,5 +29,20 @@ namespace Altseed2.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void ReSize()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            tc.LoopBody(null, x =>
+            {
+                if (x < 100) Engine.Window.Size += new Vector2I(1, 1);
+                else Engine.Window.Size -= new Vector2I(1, 1);
+            });
+
+            tc.End();
+        }
     }
 }
