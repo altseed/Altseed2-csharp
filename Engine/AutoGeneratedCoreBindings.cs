@@ -7500,7 +7500,7 @@ namespace Altseed2
     /// カメラのクラス
     /// </summary>
     [Serializable]
-    internal sealed partial class RenderedCamera : Rendered, ISerializable, ICacheKeeper<RenderedCamera>
+    internal sealed partial class RenderedCamera : ISerializable, ICacheKeeper<RenderedCamera>
     {
         #region unmanaged
         
@@ -7508,7 +7508,7 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-                internal static new RenderedCamera TryGetFromCache(IntPtr native)
+                internal static  RenderedCamera TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -7532,16 +7532,18 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedCamera_Create();
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern Vector2F cbg_RenderedCamera_GetCenterOffset(IntPtr selfPtr);
+        private static extern Matrix44F cbg_RenderedCamera_GetViewMatrix(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RenderedCamera_SetCenterOffset(IntPtr selfPtr, Vector2F value);
+        private static extern void cbg_RenderedCamera_SetViewMatrix(IntPtr selfPtr, Matrix44F value);
         
         
         [DllImport("Altseed2_Core")]
@@ -7567,32 +7569,32 @@ namespace Altseed2
         #endregion
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal RenderedCamera(MemoryHandle handle) : base(handle)
+        internal RenderedCamera(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
         }
         
         /// <summary>
-        /// CenterOffsetを取得または設定します。
+        /// RenderPassParameterを取得または設定します。
         /// </summary>
-        public Vector2F CenterOffset
+        internal Matrix44F ViewMatrix
         {
             get
             {
-                if (_CenterOffset != null)
+                if (_ViewMatrix != null)
                 {
-                    return _CenterOffset.Value;
+                    return _ViewMatrix.Value;
                 }
-                var ret = cbg_RenderedCamera_GetCenterOffset(selfPtr);
+                var ret = cbg_RenderedCamera_GetViewMatrix(selfPtr);
                 return ret;
             }
             set
             {
-                _CenterOffset = value;
-                cbg_RenderedCamera_SetCenterOffset(selfPtr, value);
+                _ViewMatrix = value;
+                cbg_RenderedCamera_SetViewMatrix(selfPtr, value);
             }
         }
-        private Vector2F? _CenterOffset;
+        private Matrix44F? _ViewMatrix;
         
         /// <summary>
         /// TargetTextureを取得または設定します。
@@ -7652,7 +7654,7 @@ namespace Altseed2
         
         #region SerializeName
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_CenterOffset = "S_CenterOffset";
+        private const string S_ViewMatrix = "S_ViewMatrix";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_TargetTexture = "S_TargetTexture";
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -7665,14 +7667,14 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private RenderedCamera(SerializationInfo info, StreamingContext context) : base(info, context)
+        private RenderedCamera(SerializationInfo info, StreamingContext context)
         {
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            CenterOffset = info.GetValue<Vector2F>(S_CenterOffset);
+            ViewMatrix = info.GetValue<Matrix44F>(S_ViewMatrix);
             TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
             RenderPassParameter = info.GetValue<RenderPassParameter>(S_RenderPassParameter);
             
@@ -7685,11 +7687,11 @@ namespace Altseed2
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            base.GetObjectData(info, context);
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
-            info.AddValue(S_CenterOffset, CenterOffset);
+            info.AddValue(S_ViewMatrix, ViewMatrix);
             info.AddValue(S_TargetTexture, TargetTexture);
             info.AddValue(S_RenderPassParameter, RenderPassParameter);
             
@@ -7697,7 +7699,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -7725,7 +7727,7 @@ namespace Altseed2
         /// 呼び出し禁止
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
             Deserialize_GetPtr(ref ptr, info);
@@ -13773,6 +13775,14 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Matrix44F cbg_Collider_GetTransform(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Collider_SetTransform(IntPtr selfPtr, Matrix44F value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Collider_Release(IntPtr selfPtr);
         
         #endregion
@@ -13784,48 +13794,26 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// コライダの位置情報を取得または設定します。
+        /// 変形行列を取得または設定します。
         /// </summary>
-        public Vector2F Position
+        public Matrix44F Transform
         {
             get
             {
-                if (_Position != null)
+                if (_Transform != null)
                 {
-                    return _Position.Value;
+                    return _Transform.Value;
                 }
-                var ret = cbg_Collider_GetPosition(selfPtr);
+                var ret = cbg_Collider_GetTransform(selfPtr);
                 return ret;
             }
             set
             {
-                _Position = value;
-                cbg_Collider_SetPosition(selfPtr, value);
+                _Transform = value;
+                cbg_Collider_SetTransform(selfPtr, value);
             }
         }
-        private Vector2F? _Position;
-        
-        /// <summary>
-        /// コライダの回転情報を取得または設定します。
-        /// </summary>
-        public float Rotation
-        {
-            get
-            {
-                if (_Rotation != null)
-                {
-                    return _Rotation.Value;
-                }
-                var ret = cbg_Collider_GetRotation(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _Rotation = value;
-                cbg_Collider_SetRotation(selfPtr, value);
-            }
-        }
-        private float? _Rotation;
+        private Matrix44F? _Transform;
         
         /// <summary>
         /// 指定したコライダとの衝突判定を行います。
@@ -13841,9 +13829,7 @@ namespace Altseed2
         
         #region SerializeName
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Position = "S_Position";
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Rotation = "S_Rotation";
+        private const string S_Transform = "S_Transform";
         #endregion
         
         /// <summary>
@@ -13859,8 +13845,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Position = info.GetValue<Vector2F>(S_Position);
-            Rotation = info.GetSingle(S_Rotation);
+            Transform = info.GetValue<Matrix44F>(S_Transform);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -13875,8 +13860,7 @@ namespace Altseed2
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
-            info.AddValue(S_Position, Position);
-            info.AddValue(S_Rotation, Rotation);
+            info.AddValue(S_Transform, Transform);
             
             OnGetObjectData(info, context);
         }
