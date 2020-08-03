@@ -3,7 +3,7 @@
 namespace Altseed2
 {
     /// <summary>
-    /// <see cref="ColliderNode"/>の当たり判定範囲として描画されるノードの基底クラス
+    /// <see cref="ColliderNode"/>の当たり判定範囲として描画されるノードを提供するクラス
     /// </summary>
     [Serializable]
     public static class ColliderVisualizeNodeFactory
