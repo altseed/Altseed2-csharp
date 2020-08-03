@@ -22,6 +22,11 @@ namespace Altseed2
             Cache = new Dictionary<int, RenderTextureCache>();
         }
 
+        internal static void TerminateCache()
+        {
+            Cache = null;
+        }
+
         internal static void UpdateCache()
         {
             foreach (var cache in Cache)

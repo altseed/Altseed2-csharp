@@ -225,6 +225,8 @@ namespace Altseed2
         /// </summary>
         public static void Terminate()
         {
+            _RenderTextureCache = null;
+            PostEffectNode.TerminateCache();
             Core.Terminate();
             isActive = false;
         }
