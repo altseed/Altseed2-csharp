@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -55,7 +55,7 @@ namespace Altseed2
             for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
             PolygonCollider.VertexArray = array;
 
-            UpdateCollider();
+            UpdateVersion();
         }
     }
 
