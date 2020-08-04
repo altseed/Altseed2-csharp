@@ -81,7 +81,6 @@ namespace Altseed2.Test
             var colliderNode = new CircleColliderNode()
             {
                 Radius = texture.Size.X / 2,
-                CenterPosition = new Vector2F(100, 100),
             };
             comparison.AddChildNode(colliderNode);
             colliderNode.AddChildNode(ColliderVisualizeNodeFactory.Create(colliderNode));
@@ -92,8 +91,8 @@ namespace Altseed2.Test
                 if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
                 if (x == 10)
                 {
-                    //Assert.True(manager.ContainsCollider(colliderNode));
-                    //Assert.AreEqual(manager.ColliderCount, 2);
+                    Assert.True(manager.ContainsCollider(colliderNode));
+                    Assert.AreEqual(manager.ColliderCount, 2);
                 }
             });
             tc.End();
@@ -158,7 +157,7 @@ namespace Altseed2.Test
             new Vector2F(0f, -225f), new Vector2F(75f, -75f),
             new Vector2F(225f, 0f), new Vector2F(75f, 75f),
             new Vector2F(0f, 225f), new Vector2F(-75f, 75f),
-            new Vector2F(-225f, 0f), default
+            new Vector2F(-225f + MathHelper.MatrixError, 0f), new Vector2F(MathHelper.MatrixError, 0f)
         };
 
         [Test, Apartment(ApartmentState.STA)]
@@ -187,12 +186,10 @@ namespace Altseed2.Test
                 Texture = texture,
                 CenterPosition = texture.Size / 2,
                 Position = new Vector2F(580f, 300f),
-                Scale = new Vector2F(0.8f, 0.8f),
             };
             var colliderNode = new PolygonColliderNode
             {
                 Vertexes = array,
-                CenterPosition = texture.Size.To2F()*0.2f,
             };
             colliderNode.AddChildNode(ColliderVisualizeNodeFactory.Create(colliderNode));
             comparison.AddChildNode(colliderNode);
