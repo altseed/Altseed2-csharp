@@ -95,7 +95,7 @@ namespace Altseed2
                 isActive = true;
 
                 _DefaultCamera = RenderedCamera.Create();
-                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize);
+                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
                 return true;
@@ -437,7 +437,7 @@ namespace Altseed2
             set
             {
                 Window.Size = value;
-                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-value);
+                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-value / 2);
             }
         }
 
