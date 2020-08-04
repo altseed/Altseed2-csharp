@@ -8,6 +8,9 @@ namespace Altseed2
     [Serializable]
     public abstract class ColliderNode : TransformNode
     {
+        /// <inheritdoc/>
+        public sealed override Matrix44F AbsoluteTransform => Collider.Transform;
+
         /// <summary>
         /// コライダを取得する
         /// </summary>
@@ -33,6 +36,13 @@ namespace Altseed2
         {
             base.Added(owner);
             SearchManagerFromChildren(owner.Parent)?.AddCollider(this);
+        }
+
+        private protected static Vector2F CalcScale(Matrix44F transform)
+        {
+            var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
+            var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
+            return new Vector2F(sx, sy);
         }
 
         internal override void Removed()
