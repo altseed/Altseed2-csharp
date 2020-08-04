@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -12,6 +12,8 @@ namespace Altseed2
         /// コライダを取得する
         /// </summary>
         internal abstract Collider Collider { get; }
+
+        internal int _Version { get; private set; }
 
         /// <summary>
         /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
@@ -40,5 +42,10 @@ namespace Altseed2
         }
 
         internal abstract void UpdateCollider();
+
+        private protected void UpdateVersion()
+        {
+            _Version++;
+        }
     }
 }

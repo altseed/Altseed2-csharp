@@ -60,7 +60,7 @@ namespace Altseed2
             {
                 if (_radius == value) return;
                 _radius = value;
-                _Version++;
+                UpdateVersion();
             }
         }
         private float _radius;
@@ -70,8 +70,6 @@ namespace Altseed2
         /// </summary>
         /// <remarks>既定値：<see cref="ScaleCalcType.AbsMax"/></remarks>
         public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.AbsMax;
-
-        internal int _Version { get; private set; }
 
         /// <summary>
         /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
@@ -103,7 +101,7 @@ namespace Altseed2
                 ScaleCalcType.AbsMax => Math.Max(Math.Abs(scale.X), Math.Abs(scale.Y)),
                 _ => 1.0f
             });
-            _Version++;
+            UpdateVersion();
         }
     }
 

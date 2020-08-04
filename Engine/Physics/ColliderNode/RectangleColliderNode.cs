@@ -8,8 +8,6 @@ namespace Altseed2
     [Serializable]
     public class RectangleColliderNode : ColliderNode
     {
-        internal int _Version { get; private set; }
-
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
@@ -26,7 +24,7 @@ namespace Altseed2
             {
                 if (_RectangleSize == value) return;
                 _RectangleSize = value;
-                _Version++;
+                UpdateVersion();
             }
         }
         private Vector2F _RectangleSize;
@@ -51,6 +49,8 @@ namespace Altseed2
             Collider.Position = position - CenterPosition;
             Collider.Rotation = MathHelper.DegreeToRadian(angle);
             RectangleCollider.Size = _RectangleSize * scale;
+
+            UpdateVersion();
         }
     }
 

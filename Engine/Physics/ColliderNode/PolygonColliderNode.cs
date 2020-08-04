@@ -8,8 +8,6 @@ namespace Altseed2
     [Serializable]
     public class PolygonColliderNode : ColliderNode
     {
-        internal int _Version { get; private set; }
-
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
@@ -28,7 +26,7 @@ namespace Altseed2
                 if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
-                _Version++;
+                UpdateVersion();
             }
         }
         private Vector2F[] _vertexes = Array.Empty<Vector2F>();
@@ -57,7 +55,7 @@ namespace Altseed2
             for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
             PolygonCollider.VertexArray = array;
 
-            _Version++;
+            UpdateCollider();
         }
     }
 
