@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Altseed2
 {
@@ -8,10 +8,15 @@ namespace Altseed2
     [Serializable]
     public abstract class ColliderNode : TransformNode
     {
+        /// <inheritdoc/>
+        public sealed override Matrix44F AbsoluteTransform => Collider.Transform;
+
         /// <summary>
         /// コライダを取得する
         /// </summary>
         internal abstract Collider Collider { get; }
+
+        internal int _Version { get; private set; }
 
         /// <summary>
         /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
@@ -33,6 +38,13 @@ namespace Altseed2
             SearchManagerFromChildren(owner.Parent)?.AddCollider(this);
         }
 
+        private protected static Vector2F CalcScale(Matrix44F transform)
+        {
+            var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
+            var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
+            return new Vector2F(sx, sy);
+        }
+
         internal override void Removed()
         {
             SearchManagerFromChildren(Parent.Parent)?.RemoveCollider(this);
@@ -40,5 +52,10 @@ namespace Altseed2
         }
 
         internal abstract void UpdateCollider();
+
+        private protected void UpdateVersion()
+        {
+            _Version++;
+        }
     }
 }

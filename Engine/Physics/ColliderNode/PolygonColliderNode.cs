@@ -8,13 +8,36 @@ namespace Altseed2
     [Serializable]
     public class PolygonColliderNode : ColliderNode
     {
-        internal int _Version { get; private set; }
+        private bool requireUpdate = true;
+
+        /// <inheritdoc/>
+        public sealed override Vector2F ContentSize
+        {
+            get
+            {
+                MathHelper.GetMinMax(out var min, out var max, _vertexes);
+                return max - min;
+            }
+        }
 
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
         internal PolygonCollider PolygonCollider { get; }
         internal override Collider Collider => PolygonCollider;
+
+        /// <inheritdoc/>
+        public sealed override Matrix44F InheritedTransform
+        {
+            get => _InheritedTransform;
+            internal set
+            {
+                if (_InheritedTransform == value) return;
+                _InheritedTransform = value;
+                requireUpdate = true;
+                Collider.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+            }
+        }
 
         /// <summary>
         /// 頂点情報の配列を取得または設定する
@@ -28,7 +51,7 @@ namespace Altseed2
                 if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
                 if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
                 _vertexes = value;
-                _Version++;
+                requireUpdate = true;
             }
         }
         private Vector2F[] _vertexes = Array.Empty<Vector2F>();
@@ -49,15 +72,16 @@ namespace Altseed2
 
         internal override void UpdateCollider()
         {
-            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position ;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+            if (!requireUpdate) return;
+
+            var scale = CalcScale(InheritedTransform);
 
             var array = new Vector2F[_vertexes.Length];
             for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
             PolygonCollider.VertexArray = array;
 
-            _Version++;
+            UpdateVersion();
+            requireUpdate = false;
         }
     }
 
@@ -85,9 +109,9 @@ namespace Altseed2
 
         private void UpdatePolygon()
         {
-            var vertexes = new Vector2F[_Owner.Vertexes.Length];
             SetVertexes(_Owner.Vertexes, ColliderVisualizeNodeFactory.AreaColor);
             CenterPosition = _Owner.CenterPosition;
+
             _CurrentVersion = _Owner._Version;
         }
     }
