@@ -44,11 +44,29 @@ namespace Altseed2
             AbsMax
         }
 
+        private bool requireUpdate = true;
+
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
         internal CircleCollider CircleCollider { get; }
         internal override Collider Collider => CircleCollider;
+
+        /// <inheritdoc/>
+        public sealed override Vector2F ContentSize => new Vector2F(Radius * 2, Radius * 2);
+
+        /// <inheritdoc/>
+        public sealed override Matrix44F InheritedTransform
+        {
+            get => _InheritedTransform;
+            internal set
+            {
+                if (_InheritedTransform == value) return;
+                _InheritedTransform = value;
+                Collider.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                requireUpdate = true;
+            }
+        }
 
         /// <summary>
         /// 衝突半径を取得または設定する
@@ -60,7 +78,7 @@ namespace Altseed2
             {
                 if (_radius == value) return;
                 _radius = value;
-                _Version++;
+                requireUpdate = true;
             }
         }
         private float _radius;
@@ -70,8 +88,6 @@ namespace Altseed2
         /// </summary>
         /// <remarks>既定値：<see cref="ScaleCalcType.AbsMax"/></remarks>
         public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.AbsMax;
-
-        internal int _Version { get; private set; }
 
         /// <summary>
         /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
@@ -89,9 +105,8 @@ namespace Altseed2
 
         internal override void UpdateCollider()
         {
-            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position - CenterPosition;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+            if (!requireUpdate) return;
+            var scale = CalcScale(InheritedTransform);
             CircleCollider.Radius = Radius * (ScaleType switch
             {
                 ScaleCalcType.X => scale.X,
@@ -103,7 +118,9 @@ namespace Altseed2
                 ScaleCalcType.AbsMax => Math.Max(Math.Abs(scale.X), Math.Abs(scale.Y)),
                 _ => 1.0f
             });
-            _Version++;
+
+            UpdateVersion();
+            requireUpdate = false;
         }
     }
 

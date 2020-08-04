@@ -21,7 +21,7 @@ namespace Sample
             sprite.Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
             sprite.CameraGroup = 1u << cameraGroup;
             Engine.AddNode(sprite);
-            
+
             // sprite の座標を設定します。
             sprite.Position = new Vector2F(100, 100);
 
@@ -32,7 +32,7 @@ namespace Sample
             camera.Group = cameraGroup;
 
             // カメラが映す箇所の座標を設定します。
-            camera.Transform = Matrix44F.GetTranslation2D(new Vector2F(100, 100));
+            camera.Position = new Vector2F(100, 100);
 
             // カメラノードを登録します。
             Engine.AddNode(camera);

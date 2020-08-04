@@ -87,15 +87,16 @@ namespace Altseed2
 
                 _DrawnCollection = new DrawnCollection();
                 _CameraNodes = new CameraNodeCollection();
-                _DefaultCamera = RenderedCamera.Create();
-                _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
-
 
                 _RenderTextureCache = new RenderTextureCache();
 
                 PostEffectNode.InitializeCache();
 
                 isActive = true;
+
+                _DefaultCamera = RenderedCamera.Create();
+                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
+                _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
                 return true;
             }
@@ -207,7 +208,7 @@ namespace Altseed2
                         if (!cdrawn.IsDrawnActually) continue;
                         // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
-                        if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
+                        //if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
                         //if (node is TransformNode t)
@@ -433,7 +434,11 @@ namespace Altseed2
         public static Vector2I WindowSize
         {
             get => Window.Size;
-            set { Window.Size = value; }
+            set
+            {
+                Window.Size = value;
+                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-value / 2);
+            }
         }
 
         internal static Configuration Config { get; private set; }
@@ -444,7 +449,10 @@ namespace Altseed2
         public static string WindowTitle
         {
             get => Window.Title;
-            set { Window.Title = value; }
+            set
+            {
+                Window.Title = value;
+            }
         }
 
         #region FPS制御

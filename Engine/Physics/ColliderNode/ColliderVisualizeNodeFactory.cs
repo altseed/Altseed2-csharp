@@ -3,7 +3,7 @@
 namespace Altseed2
 {
     /// <summary>
-    /// <see cref="ColliderNode"/>の当たり判定範囲として描画されるノードの基底クラス
+    /// <see cref="ColliderNode"/>の当たり判定範囲として描画されるノードを提供するクラス
     /// </summary>
     [Serializable]
     public static class ColliderVisualizeNodeFactory
@@ -15,6 +15,10 @@ namespace Altseed2
         /// 指定した<see cref="ColliderNode"/>の当たり判定領域を表示するノードを生成する
         /// </summary>
         /// <param name="colliderNode">使用するコライダノード</param>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="colliderNode"/>の型がサポートされていない型である
+        /// (<see cref="CircleColliderNode"/>，<see cref="PolygonColliderNode"/>，<see cref="RectangleColliderNode"/>若しくはそれらから派生した型ではない)
+        /// </exception>
         /// <exception cref="ArgumentNullException"><paramref name="colliderNode"/>がnull</exception>
         /// <returns><paramref name="colliderNode"/>の当たり領域を表示するノード</returns>
         public static Node Create(ColliderNode colliderNode)

@@ -8,7 +8,23 @@ namespace Altseed2
     [Serializable]
     public class RectangleColliderNode : ColliderNode
     {
-        internal int _Version { get; private set; }
+        private bool requireUpdate = true;
+
+        /// <inheritdoc/>
+        public sealed override Vector2F ContentSize => RectangleSize;
+
+        /// <inheritdoc/>
+        public sealed override Matrix44F InheritedTransform
+        {
+            get => _InheritedTransform;
+            internal set
+            {
+                if (_InheritedTransform == value) return;
+                _InheritedTransform = value;
+                requireUpdate = true;
+                Collider.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+            }
+        }
 
         /// <summary>
         /// 使用するコライダを取得する
@@ -26,7 +42,7 @@ namespace Altseed2
             {
                 if (_RectangleSize == value) return;
                 _RectangleSize = value;
-                _Version++;
+                requireUpdate = true;
             }
         }
         private Vector2F _RectangleSize;
@@ -47,10 +63,12 @@ namespace Altseed2
 
         internal override void UpdateCollider()
         {
-            MathHelper.CalcFromTransform2D(InheritedTransform, out var position, out var scale, out var angle);
-            Collider.Position = position - CenterPosition;
-            Collider.Rotation = MathHelper.DegreeToRadian(angle);
+            if (!requireUpdate) return;
+            var scale = CalcScale(InheritedTransform);
             RectangleCollider.Size = _RectangleSize * scale;
+
+            UpdateVersion();
+            requireUpdate = false;
         }
     }
 

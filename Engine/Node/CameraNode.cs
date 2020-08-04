@@ -11,6 +11,8 @@ namespace Altseed2
         private readonly RenderedCamera _Camera;
         internal RenderedCamera RenderedCamera => _Camera;
 
+        private bool _RequireCalcTransform = true;
+
         /// <summary>
         /// 描画対象とする <see cref="DrawnNode"/> のグループを取得または設定します。
         /// </summary>
@@ -49,6 +51,9 @@ namespace Altseed2
         }
         private Color _ClearColor;
 
+        /// <summary>
+        /// 描画開始時に<see cref="ClearColor"/>で描画先を塗りつぶすかどうかを取得または設定します。
+        /// </summary>
         public bool IsColorCleared
         {
             get => _IsColorCleared;
@@ -73,43 +78,68 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 変形行列を取得または設定します。
+        /// 描画領域の回転角（度数法）を取得または設定します。
         /// </summary>
-        public Matrix44F Transform
+        public float Angle
         {
-            get => _Camera.Transform;
+            get => _Angle;
             set
             {
-                if (_Camera.Transform == value) return;
+                if (_Angle == value) return;
 
-                _Camera.Transform = value;
+                _Angle = value;
+                _RequireCalcTransform = true;
             }
         }
-
-        public Vector2F CenterPosition
-        {
-            get => _Camera.CenterOffset;
-            set
-            {
-                if (_Camera.CenterOffset == value) return;
-
-                _Camera.CenterOffset = value;
-            }
-        }
+        private float _Angle = 0.0f;
 
         /// <summary>
-        /// 描画領域のオフセットを取得または設定します。
+        /// 描画領域の座標を取得または設定します。
         /// </summary>
-        public Vector2F CenterOffset
+        public Vector2F Position
         {
-            get => _Camera.CenterOffset;
+            get => _Position;
             set
             {
-                if (_Camera.CenterOffset == value) return;
+                if (_Position == value) return;
 
-                _Camera.CenterOffset = value;
+                _Position = value;
+                _RequireCalcTransform = true;
             }
         }
+        private Vector2F _Position = new Vector2F();
+
+        /// <summary>
+        /// 描画領域の中心座標をピクセル単位で取得または設定します。
+        /// </summary>
+        public Vector2F CenterPosition
+        {
+            get => _CenterPosition;
+            set
+            {
+                if (_CenterPosition == value) return;
+
+                _CenterPosition = value;
+                _RequireCalcTransform = true;
+            }
+        }
+        private Vector2F _CenterPosition;
+
+        /// <summary>
+        /// 描画領域の拡大率を取得または設定します。
+        /// </summary>
+        public Vector2F Scale
+        {
+            get => _Scale;
+            set
+            {
+                if (value == _Scale) return;
+
+                _Scale = value;
+                _RequireCalcTransform = true;
+            }
+        }
+        private protected Vector2F _Scale = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
         /// 描画先のテクスチャを取得または設定します。
@@ -122,6 +152,25 @@ namespace Altseed2
                 if (value == _Camera.TargetTexture) return;
                 _Camera.TargetTexture = value;
             }
+        }
+
+        internal override void Update()
+        {
+            if (_RequireCalcTransform)
+            {
+                var targetSize = (TargetTexture?.Size ?? Engine.WindowSize);
+
+                RenderedCamera.ViewMatrix =
+                Matrix44F.GetTranslation2D(CenterPosition - targetSize / 2)
+                * Matrix44F.GetScale2D(new Vector2F(1f, 1f) / Scale)
+                * Matrix44F.GetRotationZ(-Angle)
+                * Matrix44F.GetTranslation2D(-Position);
+                // NOTE: DrawnNodeのTransformとは逆
+
+                _RequireCalcTransform = false;
+            }
+
+            base.Update();
         }
 
         #region Node
