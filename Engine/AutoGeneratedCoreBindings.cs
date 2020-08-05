@@ -7945,6 +7945,102 @@ namespace Altseed2
     }
     
     /// <summary>
+    /// シェーダのコンパイル結果を表すクラス
+    /// </summary>
+    internal sealed partial class ShaderCompileResult
+    {
+        #region unmanaged
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<ShaderCompileResult>> cacheRepo = new Dictionary<IntPtr, WeakReference<ShaderCompileResult>>();
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static  ShaderCompileResult TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                ShaderCompileResult cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_ShaderCompileResult_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new ShaderCompileResult(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<ShaderCompileResult>(newObject);
+            return newObject;
+        }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_ShaderCompileResult_GetValue(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_ShaderCompileResult_GetMessage(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_ShaderCompileResult_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal ShaderCompileResult(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// コンパイルに失敗した場合はnull
+        /// </summary>
+        public Shader Value
+        {
+            get
+            {
+                var ret = cbg_ShaderCompileResult_GetValue(selfPtr);
+                return Shader.TryGetFromCache(ret);
+            }
+        }
+        
+        /// <summary>
+        /// コンパイル結果のメッセージ
+        /// </summary>
+        public string Message
+        {
+            get
+            {
+                var ret = cbg_ShaderCompileResult_GetMessage(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+        }
+        
+        ~ShaderCompileResult()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_ShaderCompileResult_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// シェーダ
     /// </summary>
     [Serializable]
@@ -7984,11 +8080,11 @@ namespace Altseed2
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Shader_Create([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string code, int shaderStage);
+        private static extern IntPtr cbg_Shader_Compile([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string code, int shaderStage);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Shader_CreateFromFile([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string path, int shaderStage);
+        private static extern IntPtr cbg_Shader_CompileFromFile([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string path, int shaderStage);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -8058,12 +8154,12 @@ namespace Altseed2
         /// <param name="shaderStage"></param>
         /// <exception cref="ArgumentNullException"><paramref name="name"/>, <paramref name="code"/>のいずれかがnull</exception>
         /// <returns>コンパイルの結果生成されたシェーダ</returns>
-        public static Shader Create(string name, string code, ShaderStageType shaderStage)
+        internal static ShaderCompileResult Compile(string name, string code, ShaderStageType shaderStage)
         {
             if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
             if (code == null) throw new ArgumentNullException(nameof(code), "引数がnullです");
-            var ret = cbg_Shader_Create(name, code, (int)shaderStage);
-            return Shader.TryGetFromCache(ret);
+            var ret = cbg_Shader_Compile(name, code, (int)shaderStage);
+            return ShaderCompileResult.TryGetFromCache(ret);
         }
         
         /// <summary>
@@ -8074,12 +8170,12 @@ namespace Altseed2
         /// <param name="shaderStage"></param>
         /// <exception cref="ArgumentNullException"><paramref name="name"/>, <paramref name="path"/>のいずれかがnull</exception>
         /// <returns>コンパイルの結果生成されたシェーダ</returns>
-        public static Shader CreateFromFile(string name, string path, ShaderStageType shaderStage)
+        internal static ShaderCompileResult CompileFromFile(string name, string path, ShaderStageType shaderStage)
         {
             if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
             if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
-            var ret = cbg_Shader_CreateFromFile(name, path, (int)shaderStage);
-            return Shader.TryGetFromCache(ret);
+            var ret = cbg_Shader_CompileFromFile(name, path, (int)shaderStage);
+            return ShaderCompileResult.TryGetFromCache(ret);
         }
         
         
@@ -8880,6 +8976,14 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CullingSystem_Register(IntPtr selfPtr, IntPtr rendered);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CullingSystem_Unregister(IntPtr selfPtr, IntPtr rendered);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CullingSystem_UpdateAABB(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
@@ -8936,6 +9040,24 @@ namespace Altseed2
         {
             var ret = cbg_CullingSystem_GetInstance();
             return CullingSystem.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// Renderedをカリングシステムに登録します
+        /// </summary>
+        /// <param name="rendered">登録するRendered</param>
+        internal void Register(Rendered rendered)
+        {
+            cbg_CullingSystem_Register(selfPtr, rendered != null ? rendered.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// Renderedをカリングシステムから登録解除します
+        /// </summary>
+        /// <param name="rendered">登録解除するRendered</param>
+        internal void Unregister(Rendered rendered)
+        {
+            cbg_CullingSystem_Unregister(selfPtr, rendered != null ? rendered.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>

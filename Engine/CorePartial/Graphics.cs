@@ -334,7 +334,7 @@ namespace Altseed2
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
-            ptr = cbg_Shader_Create(name, code, (int)stage);
+            ptr = cbg_Shader_Compile(name, code, (int)stage);
         }
     }
 }
