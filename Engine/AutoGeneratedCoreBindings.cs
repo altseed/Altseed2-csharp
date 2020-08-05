@@ -773,7 +773,7 @@ namespace Altseed2
         /// </summary>
         AutoSelectAll = 16,
         /// <summary>
-        /// （値が変更されるたびにではなく）Enterが押されたときに `true` を返します。 `IsItemDeactivatedAfterEdit()` 関数を調べることを検討してください。
+        /// （値が変更されるたびにではなく）Enterが押されたときに 'true' を返します。 'IsItemDeactivatedAfterEdit()' 関数を調べることを検討してください。
         /// </summary>
         EnterReturnsTrue = 32,
         /// <summary>
@@ -839,59 +839,59 @@ namespace Altseed2
     {
         None = 0,
         /// <summary>
-        /// `ColorEdit, ColorPicker, ColorButton`: Alphaコンポーネントを無視します（入力ポインターから3つのコンポーネントのみを読み取ります）。
+        /// 'ColorEdit, ColorPicker, ColorButton': Alphaコンポーネントを無視します（入力ポインターから3つのコンポーネントのみを読み取ります）。
         /// </summary>
         NoAlpha = 2,
         /// <summary>
-        /// `ColorEdit`: 色付きの正方形をクリックしたときにピッカーを無効にします。
+        /// 'ColorEdit': 色付きの正方形をクリックしたときにピッカーを無効にします。
         /// </summary>
         NoPicker = 4,
         /// <summary>
-        /// `ColorEdit`: 入力/小さなプレビューを右クリックしたときのオプションメニューの切り替えを無効にします。
+        /// 'ColorEdit': 入力/小さなプレビューを右クリックしたときのオプションメニューの切り替えを無効にします。
         /// </summary>
         NoOptions = 8,
         /// <summary>
-        /// `ColorEdit, ColorPicker`: 入力の横にある色付きの正方形プレビューを無効にします。 （例：入力のみを表示する）
+        /// 'ColorEdit, ColorPicker': 入力の横にある色付きの正方形プレビューを無効にします。 （例：入力のみを表示する）
         /// </summary>
         NoSmallPreview = 16,
         /// <summary>
-        /// `ColorEdit, ColorPicker: 入力スライダー/テキストウィジェットを無効にします（たとえば、小さなプレビューの色付きの四角形のみを表示します）。
+        /// 'ColorEdit, ColorPicker: 入力スライダー/テキストウィジェットを無効にします（たとえば、小さなプレビューの色付きの四角形のみを表示します）。
         /// </summary>
         NoInputs = 32,
         /// <summary>
-        /// `ColorEdit, ColorPicker, ColorButton`: プレビューをホバーするときにツールチップを無効にします。
+        /// 'ColorEdit, ColorPicker, ColorButton': プレビューをホバーするときにツールチップを無効にします。
         /// </summary>
         NoTooltip = 64,
         /// <summary>
-        /// `ColorEdit, ColorPicker`: インラインテキストラベルの表示を無効にします（ラベルは引き続きツールチップとピッカーに転送されます）。
+        /// 'ColorEdit, ColorPicker': インラインテキストラベルの表示を無効にします（ラベルは引き続きツールチップとピッカーに転送されます）。
         /// </summary>
         NoLabel = 128,
         /// <summary>
-        /// `ColorPicker`: ピッカーの右側の大きなカラープレビューを無効にし、代わりに小さな色付きの正方形プレビューを使用します。
+        /// 'ColorPicker': ピッカーの右側の大きなカラープレビューを無効にし、代わりに小さな色付きの正方形プレビューを使用します。
         /// </summary>
         NoSidePreview = 256,
         /// <summary>
-        /// `ColorEdit`: ドラッグアンドドロップターゲットを無効にします。 `ColorButton`: ドラッグアンドドロップソースを無効にします。
+        /// 'ColorEdit': ドラッグアンドドロップターゲットを無効にします。 'ColorButton': ドラッグアンドドロップソースを無効にします。
         /// </summary>
         NoDragDrop = 512,
         /// <summary>
-        /// `ColorEdit, ColorPicker`: ピッカーに垂直アルファバー/グラデーションを表示します。
+        /// 'ColorEdit, ColorPicker': ピッカーに垂直アルファバー/グラデーションを表示します。
         /// </summary>
         AlphaBar = 65536,
         /// <summary>
-        /// `ColorEdit, ColorPicker, ColorButton`: プレビューを不透明ではなく、チェッカーボード上の透明色として表示します。
+        /// 'ColorEdit, ColorPicker, ColorButton': プレビューを不透明ではなく、チェッカーボード上の透明色として表示します。
         /// </summary>
         AlphaPreview = 131072,
         /// <summary>
-        /// `ColorEdit, ColorPicker, ColorButton`: 不透明ではなく、半不透明/半市松模様を表示します。
+        /// 'ColorEdit, ColorPicker, ColorButton': 不透明ではなく、半不透明/半市松模様を表示します。
         /// </summary>
         AlphaPreviewHalf = 262144,
         /// <summary>
-        /// `(WIP) ColorEdit`: 現在、RGBAエディションで0.0f..1.0fの制限のみを無効にします（注：おそらくFloatフラグも使用したいでしょう）。
+        /// '(WIP) ColorEdit': 現在、RGBAエディションで0.0f..1.0fの制限のみを無効にします（注：おそらくFloatフラグも使用したいでしょう）。
         /// </summary>
         HDR = 524288,
         /// <summary>
-        /// `ColorEdit`: RGB/HSV/Hexの_display_タイプをオーバーライドします。 `ColorPicker`: 1つ以上のRGB/HSV/Hexを使用して任意の組み合わせを選択します。
+        /// 'ColorEdit': RGB/HSV/Hexの_display_タイプをオーバーライドします。 'ColorPicker': 1つ以上のRGB/HSV/Hexを使用して任意の組み合わせを選択します。
         /// </summary>
         DisplayRGB = 1048576,
         /// <summary>
@@ -903,31 +903,31 @@ namespace Altseed2
         /// </summary>
         DisplayHex = 4194304,
         /// <summary>
-        /// `ColorEdit, ColorPicker, ColorButton`: 0..255としてフォーマットされた_display_値。
+        /// 'ColorEdit, ColorPicker, ColorButton': 0..255としてフォーマットされた_display_値。
         /// </summary>
         Uint8 = 8388608,
         /// <summary>
-        /// `ColorEdit, ColorPicker, ColorButton`: _display_値は、0..255整数ではなく0.0f..1.0f浮動小数点としてフォーマットされます。 整数による値の往復はありません。
+        /// 'ColorEdit, ColorPicker, ColorButton': _display_値は、0..255整数ではなく0.0f..1.0f浮動小数点としてフォーマットされます。 整数による値の往復はありません。
         /// </summary>
         Float = 16777216,
         /// <summary>
-        /// `ColorPicker`: Hueのバー、Sat/Valueの長方形。
+        /// 'ColorPicker': Hueのバー、Sat/Valueの長方形。
         /// </summary>
         PickerHueBar = 33554432,
         /// <summary>
-        /// `ColorPicker`: Hueのホイール、Sat/Valueの三角形。
+        /// 'ColorPicker': Hueのホイール、Sat/Valueの三角形。
         /// </summary>
         PickerHueWheel = 67108864,
         /// <summary>
-        /// `ColorEdit, ColorPicker`: RGB形式の入出力データ
+        /// 'ColorEdit, ColorPicker': RGB形式の入出力データ
         /// </summary>
         InputRGB = 134217728,
         /// <summary>
-        /// `ColorEdit, ColorPicker`: HSV形式の入力および出力データ。
+        /// 'ColorEdit, ColorPicker': HSV形式の入力および出力データ。
         /// </summary>
         InputHSV = 268435456,
         /// <summary>
-        /// デフォルトオプション。 `SetColorEditOptions()` を使用して、アプリケーションのデフォルトを設定できます。 意図はおそらくあなたの呼び出しのほとんどでそれらをオーバーライドしたくないことです。 ユーザーがオプションメニューから選択できるようにするか、起動時に`SetColorEditOptions()`を1回呼び出します。
+        /// デフォルトオプション。 'SetColorEditOptions()' を使用して、アプリケーションのデフォルトを設定できます。 意図はおそらくあなたの呼び出しのほとんどでそれらをオーバーライドしたくないことです。 ユーザーがオプションメニューから選択できるようにするか、起動時に'SetColorEditOptions()'を1回呼び出します。
         /// </summary>
         OptionsDefault = 177209344,
     }
@@ -999,7 +999,7 @@ namespace Altseed2
         /// </summary>
         AlwaysAutoResize = 64,
         /// <summary>
-        /// 描画背景色(`WindowBg`など)および外枠を無効にします。 `SetNextWindowBgAlpha(0.0f)`を使用する場合と同様です。
+        /// 描画背景色('WindowBg'など)および外枠を無効にします。 'SetNextWindowBgAlpha(0.0f)'を使用する場合と同様です。
         /// </summary>
         NoBackground = 128,
         /// <summary>
@@ -1015,7 +1015,7 @@ namespace Altseed2
         /// </summary>
         MenuBar = 1024,
         /// <summary>
-        /// 水平スクロールバーの表示を許可します（デフォルトではオフ）。 `Begin()`を呼び出す前に、`SetNextWindowContentSize(Vector2F(width, 0.0f));`を使用して幅を指定できます。
+        /// 水平スクロールバーの表示を許可します（デフォルトではオフ）。 'Begin()'を呼び出す前に、'SetNextWindowContentSize(Vector2F(width, 0.0f));'を使用して幅を指定できます。
         /// </summary>
         HorizontalScrollbar = 2048,
         /// <summary>
@@ -1027,15 +1027,15 @@ namespace Altseed2
         /// </summary>
         NoBringToFrontOnFocus = 8192,
         /// <summary>
-        /// 常に垂直スクロールバーを表示します（`ContentSize.Y < Size.Y`の場合でも）
+        /// 常に垂直スクロールバーを表示します（'ContentSize.Y &lt; Size.Y'の場合でも）
         /// </summary>
         AlwaysVerticalScrollbar = 16384,
         /// <summary>
-        /// 常に水平スクロールバーを表示します（`ContentSize.x < Size.x`であっても）
+        /// 常に水平スクロールバーを表示します（'ContentSize.x &lt; Size.x'であっても）
         /// </summary>
         AlwaysHorizontalScrollbar = 32768,
         /// <summary>
-        /// 境界線のない子ウィンドウが`style.WindowPadding`を使用するようにします（境界線のない子ウィンドウではデフォルトで無視されるため、より便利です）
+        /// 境界線のない子ウィンドウが'style.WindowPadding'を使用するようにします（境界線のない子ウィンドウではデフォルトで無視されるため、より便利です）
         /// </summary>
         AlwaysUseWindowPadding = 65536,
         /// <summary>
@@ -1076,11 +1076,11 @@ namespace Altseed2
         /// </summary>
         TabListPopupButton = 4,
         /// <summary>
-        /// マウスの中ボタンでタブを閉じる（p_open！= NULLで送信される）動作を無効にします。 `if（IsItemHovered（）&& IsMouseClicked（2））* p_open = false`を使用すると、ユーザー側でこの動作を再現できます。
+        /// マウスの中ボタンでタブを閉じる（p_open！= NULLで送信される）動作を無効にします。 'if（IsItemHovered（）&amp;&amp; IsMouseClicked（2））* p_open = false'を使用すると、ユーザー側でこの動作を再現できます。
         /// </summary>
         NoCloseWithMiddleMouseButton = 8,
         /// <summary>
-        /// スクロールボタンを無効にする（フィッティングポリシーが`FittingPolicyScroll`の場合に適用）
+        /// スクロールボタンを無効にする（フィッティングポリシーが'FittingPolicyScroll'の場合に適用）
         /// </summary>
         NoTabListScrollingButtons = 16,
         /// <summary>
@@ -2027,8 +2027,8 @@ namespace Altseed2
         /// <see cref="Configuration(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -2515,8 +2515,8 @@ namespace Altseed2
         /// <see cref="Int8Array(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -2803,8 +2803,8 @@ namespace Altseed2
         /// <see cref="Int32Array(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -3091,8 +3091,8 @@ namespace Altseed2
         /// <see cref="VertexArray(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -3379,8 +3379,8 @@ namespace Altseed2
         /// <see cref="FloatArray(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -3667,8 +3667,8 @@ namespace Altseed2
         /// <see cref="Vector2FArray(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -4957,11 +4957,11 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -4977,7 +4977,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Size"><see cref="TextureBase.Size"/></param>
@@ -5035,7 +5035,7 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5207,11 +5207,11 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -5227,7 +5227,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="Texture2D.Path"/></param>
@@ -5280,7 +5280,7 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5410,11 +5410,11 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -5472,7 +5472,7 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5677,8 +5677,8 @@ namespace Altseed2
         /// <see cref="Material(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -6177,8 +6177,8 @@ namespace Altseed2
         /// <see cref="Rendered(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -6516,8 +6516,8 @@ namespace Altseed2
         /// <see cref="RenderedSprite(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -7077,8 +7077,8 @@ namespace Altseed2
         /// <see cref="RenderedText(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -7440,8 +7440,8 @@ namespace Altseed2
         /// <see cref="RenderedPolygon(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -7713,8 +7713,8 @@ namespace Altseed2
         /// <see cref="RenderedCamera(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -8239,8 +8239,8 @@ namespace Altseed2
         /// <see cref="Shader(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -8833,11 +8833,11 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -8853,7 +8853,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Size"><see cref="Font.Size"/></param>
@@ -8909,7 +8909,7 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -10130,7 +10130,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `End()` を呼び出してください。
+        /// 'End()' を呼び出してください。
         /// </summary>
         public bool Begin(string name, ToolWindowFlags flags)
         {
@@ -10600,7 +10600,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndPopup()` を呼び出してください
+        /// 'EndPopup()' を呼び出してください
         /// </summary>
         public bool BeginPopup(string label)
         {
@@ -10609,7 +10609,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndPopup()` を呼び出してください
+        /// 'EndPopup()' を呼び出してください
         /// </summary>
         public bool BeginPopupModal(string label)
         {
@@ -10626,7 +10626,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndChild()` を呼び出してください
+        /// 'EndChild()' を呼び出してください
         /// </summary>
         public bool BeginChild(string label, Vector2F size, bool border, ToolWindowFlags flags)
         {
@@ -10643,7 +10643,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndMenuBar()` を呼び出してください
+        /// 'EndMenuBar()' を呼び出してください
         /// </summary>
         public bool BeginMenuBar()
         {
@@ -10660,7 +10660,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndMenu()` を呼び出してください
+        /// 'EndMenu()' を呼び出してください
         /// </summary>
         public bool BeginMenu(string label, bool enabled)
         {
@@ -10686,7 +10686,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndTabBar()` を呼び出してください
+        /// 'EndTabBar()' を呼び出してください
         /// </summary>
         public bool BeginTabBar(string label, ToolTabBarFlags flags)
         {
@@ -10703,7 +10703,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndTabItem()` を呼び出してください
+        /// 'EndTabItem()' を呼び出してください
         /// </summary>
         public bool BeginTabItem(string label)
         {
@@ -10752,7 +10752,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// `EndTooltip()` を呼び出してください
+        /// 'EndTooltip()' を呼び出してください
         /// </summary>
         public void BeginTooltip()
         {
@@ -12266,11 +12266,11 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -12286,7 +12286,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="OnDeserialization(object)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="CurrentPosition"><see cref="StreamFile.CurrentPosition"/></param>
@@ -12340,7 +12340,7 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization(object)"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -12567,8 +12567,8 @@ namespace Altseed2
         /// <see cref="StaticFile(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -13117,8 +13117,8 @@ namespace Altseed2
         /// <see cref="Sound(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -13653,7 +13653,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="LogLevel.Warning"/>でログを出力します。
+        /// <see cref="LogLevel.Warn"/>でログを出力します。
         /// </summary>
         public void Warn(LogCategory category, string message)
         {
@@ -14004,8 +14004,8 @@ namespace Altseed2
         /// <see cref="Collider(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -14207,8 +14207,8 @@ namespace Altseed2
         /// <see cref="CircleCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -14444,8 +14444,8 @@ namespace Altseed2
         /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
@@ -14647,8 +14647,8 @@ namespace Altseed2
         /// <see cref="PolygonCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
-        /// <param name="ptr"/>selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる
-        /// <param name="info"/>シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
         
