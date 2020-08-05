@@ -7,7 +7,7 @@ namespace Altseed2
     {
         private static Dictionary<int, RenderTextureCache> Cache;
 
-        protected static RenderTexture GetBuffer(int identifier, Vector2I size, TextureFormatType format)
+        protected static RenderTexture GetBuffer(int identifier, Vector2I size, TextureFormat format)
         {
             if (!Cache.ContainsKey(identifier))
             {
@@ -82,7 +82,7 @@ namespace Altseed2
         {
             // 変更されている可能性があるので初期化しておく。
             Engine._PostEffectBuffer.WrapMode = TextureWrapMode.Repeat;
-            Engine._PostEffectBuffer.FilterType = TextureFilterType.Linear;
+            Engine._PostEffectBuffer.FilterType = TextureFilter.Linear;
             Draw(Engine._PostEffectBuffer, Engine.ClearColor);
         }
 

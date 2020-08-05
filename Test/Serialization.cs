@@ -98,7 +98,7 @@ namespace Altseed2.Test
             var config1 = new Configuration()
             {
                 ConsoleLoggingEnabled = true,
-                DeviceType = GraphicsDeviceType.Metal,
+                DeviceType = GraphicsDevice.Metal,
                 FileLoggingEnabled = false,
                 IsFullscreen = false,
                 IsGraphicsOnly = false,
@@ -119,7 +119,7 @@ namespace Altseed2.Test
 
             Assert.AreEqual(config1.ConsoleLoggingEnabled, true);
             Assert.AreEqual(config1.ConsoleLoggingEnabled, config2.ConsoleLoggingEnabled);
-            Assert.AreEqual(config1.DeviceType, GraphicsDeviceType.Metal);
+            Assert.AreEqual(config1.DeviceType, GraphicsDevice.Metal);
             Assert.AreEqual(config1.DeviceType, config2.DeviceType);
             Assert.AreEqual(config1.FileLoggingEnabled, false);
             Assert.AreEqual(config1.FileLoggingEnabled, config2.FileLoggingEnabled);
@@ -290,7 +290,7 @@ namespace Altseed2.Test
             tc.Init();
 
             var size = new Vector2I(100, 100);
-            var texture1 = Altseed2.RenderTexture.Create(size, TextureFormatType.R8G8B8A8_UNORM);
+            var texture1 = Altseed2.RenderTexture.Create(size, TextureFormat.R8G8B8A8_UNORM);
 
             Assert.NotNull(texture1);
 
@@ -613,7 +613,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Altseed2.RenderTexture.Create(new Vector2I(100, 100), TextureFormatType.R8G8B8A8_UNORM);
+            var texture = Altseed2.RenderTexture.Create(new Vector2I(100, 100), TextureFormat.R8G8B8A8_UNORM);
 
             Assert.NotNull(texture);
 
@@ -740,7 +740,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var shader1 = Altseed2.Shader.Create("ShaderTest", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel);
+            var shader1 = Altseed2.Shader.Create("ShaderTest", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStage.Pixel);
             Assert.NotNull(shader1);
 
             const string path = "Serialization/Shader.bin";

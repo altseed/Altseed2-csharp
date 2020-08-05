@@ -70,7 +70,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             public MyPostEffectNode()
             {
                 // マテリアルに使用するシェーダを作成します。
-                var shader = Shader.Create("Negative", _HlslCode, ShaderStageType.Pixel);
+                var shader = Shader.Create("Negative", _HlslCode, ShaderStage.Pixel);
 
                 // スプライトを描画するノードを作成します。
                 _Material = Material.Create();

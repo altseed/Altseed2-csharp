@@ -45,7 +45,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var material = Material.Create();
 
             // マテリアルに使用するシェーダを作成します。
-            var shader = Shader.Create("Negative", _HlslCode, ShaderStageType.Pixel);
+            var shader = Shader.Create("Negative", _HlslCode, ShaderStage.Pixel);
 
             // マテリアルにシェーダを割り当てます。
             material.SetShader(shader);

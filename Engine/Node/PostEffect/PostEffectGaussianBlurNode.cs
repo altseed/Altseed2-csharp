@@ -49,8 +49,8 @@ namespace Altseed2
 
             var baseCode = Engine.Graphics.BuiltinShader.GaussianBlurShader;
 
-            materialX.SetShader(Shader.Create("GaussianBlurX", "#define BLUR_X\n" + baseCode, ShaderStageType.Pixel));
-            materialY.SetShader(Shader.Create("GaussianBlurY", "#define BLUR_Y\n" + baseCode, ShaderStageType.Pixel));
+            materialX.SetShader(Shader.Create("GaussianBlurX", "#define BLUR_X\n" + baseCode, ShaderStage.Pixel));
+            materialY.SetShader(Shader.Create("GaussianBlurY", "#define BLUR_Y\n" + baseCode, ShaderStage.Pixel));
 
             Intensity = 5.0f;
         }
@@ -61,7 +61,7 @@ namespace Altseed2
 
             var buffer = GetBuffer(0, src.Size, src.Format);
             buffer.WrapMode = TextureWrapMode.Clamp;
-            buffer.FilterType = TextureFilterType.Linear;
+            buffer.FilterType = TextureFilter.Linear;
 
             materialX.SetTexture("mainTex", src);
             Engine.Graphics.CommandList.RenderToRenderTexture(materialX, buffer, new RenderPassParameter(clearColor, true, true));

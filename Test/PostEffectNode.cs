@@ -46,7 +46,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
 
             protected override void OnAdded()
             {
-                var ps = Shader.Create("postEffectTest", Code, ShaderStageType.Pixel);
+                var ps = Shader.Create("postEffectTest", Code, ShaderStage.Pixel);
 
                 material.SetShader(ps);
             }

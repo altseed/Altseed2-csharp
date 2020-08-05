@@ -32,7 +32,7 @@ namespace Altseed2
     /// 描画方法を表します。
     /// </summary>
     [Serializable]
-    public enum GraphicsDeviceType : int
+    public enum GraphicsDevice : int
     {
         /// <summary>
         /// 実行環境をもとに自動選択
@@ -522,12 +522,7 @@ namespace Altseed2
     }
     
     [Serializable]
-    public enum DeviceType : int
-    {
-    }
-    
-    [Serializable]
-    public enum ShaderStageType : int
+    public enum ShaderStage : int
     {
         Vertex,
         Pixel,
@@ -564,7 +559,7 @@ namespace Altseed2
     /// テクスチャをフィルタリングする方法を表します。
     /// </summary>
     [Serializable]
-    public enum TextureFilterType : int
+    public enum TextureFilter : int
     {
         Nearest,
         Linear,
@@ -581,7 +576,7 @@ namespace Altseed2
     }
     
     [Serializable]
-    public enum TextureFormatType : int
+    public enum TextureFormat : int
     {
         R8G8B8A8_UNORM = 0,
         R16G16B16A16_FLOAT = 1,
@@ -595,7 +590,7 @@ namespace Altseed2
     }
     
     [Serializable]
-    public enum BlendEquationType : int
+    public enum BlendEquation : int
     {
         Add,
         Sub,
@@ -605,7 +600,7 @@ namespace Altseed2
     }
     
     [Serializable]
-    public enum BlendFuncType : int
+    public enum BlendFunction : int
     {
         Zero,
         One,
@@ -1785,7 +1780,7 @@ namespace Altseed2
         /// <summary>
         /// 描画方法を取得または設定します。
         /// </summary>
-        public GraphicsDeviceType DeviceType
+        public GraphicsDevice DeviceType
         {
             get
             {
@@ -1794,7 +1789,7 @@ namespace Altseed2
                     return _DeviceType.Value;
                 }
                 var ret = cbg_Configuration_GetDeviceType(selfPtr);
-                return (GraphicsDeviceType)ret;
+                return (GraphicsDevice)ret;
             }
             set
             {
@@ -1802,7 +1797,7 @@ namespace Altseed2
                 cbg_Configuration_SetDeviceType(selfPtr, (int)value);
             }
         }
-        private GraphicsDeviceType? _DeviceType;
+        private GraphicsDevice? _DeviceType;
         
         /// <summary>
         /// 垂直同期信号を待つかどうかを取得または設定します。
@@ -1978,7 +1973,7 @@ namespace Altseed2
         {
             IsFullscreen = info.GetBoolean(S_IsFullscreen);
             IsResizable = info.GetBoolean(S_IsResizable);
-            DeviceType = info.GetValue<GraphicsDeviceType>(S_DeviceType);
+            DeviceType = info.GetValue<GraphicsDevice>(S_DeviceType);
             WaitVSync = info.GetBoolean(S_WaitVSync);
             IsGraphicsOnly = info.GetBoolean(S_IsGraphicsOnly);
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
@@ -4851,7 +4846,7 @@ namespace Altseed2
         /// <summary>
         /// テクスチャをフィルタリングする方法を取得または設定します。
         /// </summary>
-        public TextureFilterType FilterType
+        public TextureFilter FilterType
         {
             get
             {
@@ -4860,7 +4855,7 @@ namespace Altseed2
                     return _FilterType.Value;
                 }
                 var ret = cbg_TextureBase_GetFilterType(selfPtr);
-                return (TextureFilterType)ret;
+                return (TextureFilter)ret;
             }
             set
             {
@@ -4868,17 +4863,17 @@ namespace Altseed2
                 cbg_TextureBase_SetFilterType(selfPtr, (int)value);
             }
         }
-        private TextureFilterType? _FilterType;
+        private TextureFilter? _FilterType;
         
         /// <summary>
         /// テクスチャのフォーマットを取得します。
         /// </summary>
-        public TextureFormatType Format
+        public TextureFormat Format
         {
             get
             {
                 var ret = cbg_TextureBase_GetFormat(selfPtr);
-                return (TextureFormatType)ret;
+                return (TextureFormat)ret;
             }
         }
         
@@ -4988,10 +4983,10 @@ namespace Altseed2
         /// <param name="Size"><see cref="TextureBase.Size"/></param>
         /// <param name="Format"><see cref="TextureBase.Format"/></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected private void TextureBase_Unsetter_Deserialize(SerializationInfo info, out Vector2I Size, out TextureFormatType Format)
+        protected private void TextureBase_Unsetter_Deserialize(SerializationInfo info, out Vector2I Size, out TextureFormat Format)
         {
             Size = info.GetValue<Vector2I>(S_Size);
-            Format = info.GetValue<TextureFormatType>(S_Format);
+            Format = info.GetValue<TextureFormat>(S_Format);
         }
         
         #region ICacheKeeper
@@ -5031,7 +5026,7 @@ namespace Altseed2
             CacheHelper.CacheHandlingConcurrent(this, ptr);
             
             WrapMode = seInfo.GetValue<TextureWrapMode>(S_WrapMode);
-            FilterType = seInfo.GetValue<TextureFilterType>(S_FilterType);
+            FilterType = seInfo.GetValue<TextureFilter>(S_FilterType);
             
             OnDeserialize_Method(sender);
             
@@ -5356,7 +5351,7 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
-        public static RenderTexture Create(Vector2I size, TextureFormatType format)
+        public static RenderTexture Create(Vector2I size, TextureFormat format)
         {
             var ret = cbg_RenderTexture_Create(size, (int)format);
             return RenderTexture.TryGetFromCache(ret);
@@ -5962,7 +5957,7 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
-        public TextureFormatType ScreenTextureFormat
+        public TextureFormat ScreenTextureFormat
         {
             get
             {
@@ -5971,7 +5966,7 @@ namespace Altseed2
                     return _ScreenTextureFormat.Value;
                 }
                 var ret = cbg_CommandList_GetScreenTextureFormat(selfPtr);
-                return (TextureFormatType)ret;
+                return (TextureFormat)ret;
             }
             set
             {
@@ -5979,7 +5974,7 @@ namespace Altseed2
                 cbg_CommandList_SetScreenTextureFormat(selfPtr, (int)value);
             }
         }
-        private TextureFormatType? _ScreenTextureFormat;
+        private TextureFormat? _ScreenTextureFormat;
         
         public RenderTexture GetScreenTexture()
         {
@@ -8113,12 +8108,12 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
-        public ShaderStageType StageType
+        public ShaderStage StageType
         {
             get
             {
                 var ret = cbg_Shader_GetStageType(selfPtr);
-                return (ShaderStageType)ret;
+                return (ShaderStage)ret;
             }
         }
         
@@ -8154,7 +8149,7 @@ namespace Altseed2
         /// <param name="shaderStage"></param>
         /// <exception cref="ArgumentNullException"><paramref name="name"/>, <paramref name="code"/>のいずれかがnull</exception>
         /// <returns>コンパイルの結果生成されたシェーダ</returns>
-        internal static ShaderCompileResult Compile(string name, string code, ShaderStageType shaderStage)
+        internal static ShaderCompileResult Compile(string name, string code, ShaderStage shaderStage)
         {
             if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
             if (code == null) throw new ArgumentNullException(nameof(code), "引数がnullです");
@@ -8170,7 +8165,7 @@ namespace Altseed2
         /// <param name="shaderStage"></param>
         /// <exception cref="ArgumentNullException"><paramref name="name"/>, <paramref name="path"/>のいずれかがnull</exception>
         /// <returns>コンパイルの結果生成されたシェーダ</returns>
-        internal static ShaderCompileResult CompileFromFile(string name, string path, ShaderStageType shaderStage)
+        internal static ShaderCompileResult CompileFromFile(string name, string path, ShaderStage shaderStage)
         {
             if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
             if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
@@ -8268,9 +8263,9 @@ namespace Altseed2
         /// <param name="Code"><see cref="Shader.Code"/></param>
         /// <param name="Name"><see cref="Shader.Name"/></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private void Shader_Unsetter_Deserialize(SerializationInfo info, out ShaderStageType StageType, out string Code, out string Name)
+        private void Shader_Unsetter_Deserialize(SerializationInfo info, out ShaderStage StageType, out string Code, out string Name)
         {
-            StageType = info.GetValue<ShaderStageType>(S_StageType);
+            StageType = info.GetValue<ShaderStage>(S_StageType);
             Code = info.GetString(S_Code);
             Name = info.GetString(S_Name);
         }

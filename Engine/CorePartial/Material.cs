@@ -14,7 +14,7 @@ namespace Altseed2
         #endregion
 
         private Dictionary<string, Matrix44F> matrixes = new Dictionary<string, Matrix44F>();
-        private Dictionary<ShaderStageType, Shader> shaders = new Dictionary<ShaderStageType, Shader>();
+        private Dictionary<ShaderStage, Shader> shaders = new Dictionary<ShaderStage, Shader>();
         private Dictionary<string, TextureBase> textures = new Dictionary<string, TextureBase>();
         private Dictionary<string, Vector4F> vectors = new Dictionary<string, Vector4F>();
 
@@ -36,7 +36,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="shaderStage">検索するシェーダのタイプ</param>
         /// <returns><paramref name="shaderStage"/>に一致するタイプのシェーダ</returns>
-        public Shader GetShader(ShaderStageType shaderStage)
+        public Shader GetShader(ShaderStage shaderStage)
         {
             if (!shaders.TryGetValue(shaderStage, out var result))
             {
@@ -150,7 +150,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             matrixes = info.GetValue<Dictionary<string, Matrix44F>>(S_Matrixes);
-            shaders = info.GetValue<Dictionary<ShaderStageType, Shader>>(S_Shaders);
+            shaders = info.GetValue<Dictionary<ShaderStage, Shader>>(S_Shaders);
             textures = info.GetValue<Dictionary<string, TextureBase>>(S_Textures);
             vectors = info.GetValue<Dictionary<string, Vector4F>>(S_Vectors);
 

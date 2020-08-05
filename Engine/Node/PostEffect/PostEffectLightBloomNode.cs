@@ -65,16 +65,16 @@ namespace Altseed2
             _TextureMixer = Material.Create();
 
             var highLuminanceShaderCode = Engine.Graphics.BuiltinShader.HighLuminanceShader;
-            _HighColorMaterial.SetShader(Shader.Create("HighLuminance", highLuminanceShaderCode, ShaderStageType.Pixel));
-            _HighLuminanceMaterial.SetShader(Shader.Create("HighLuminance", "#define LUM_MODE\n" + highLuminanceShaderCode, ShaderStageType.Pixel));
+            _HighColorMaterial.SetShader(Shader.Create("HighLuminance", highLuminanceShaderCode, ShaderStage.Pixel));
+            _HighLuminanceMaterial.SetShader(Shader.Create("HighLuminance", "#define LUM_MODE\n" + highLuminanceShaderCode, ShaderStage.Pixel));
 
-            _DownSampler.SetShader(Shader.Create("DownSample", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStageType.Pixel));
+            _DownSampler.SetShader(Shader.Create("DownSample", Engine.Graphics.BuiltinShader.DownsampleShader, ShaderStage.Pixel));
 
             var blurShaderCode = Engine.Graphics.BuiltinShader.LightBloomShader;
-            _BlurXMaterial.SetShader(Shader.Create("XBLur", "#define BLUR_X\n" + blurShaderCode, ShaderStageType.Pixel));
-            _BlurYMaterial.SetShader(Shader.Create("YBLur", "#define BLUR_Y\n" + blurShaderCode, ShaderStageType.Pixel));
+            _BlurXMaterial.SetShader(Shader.Create("XBLur", "#define BLUR_X\n" + blurShaderCode, ShaderStage.Pixel));
+            _BlurYMaterial.SetShader(Shader.Create("YBLur", "#define BLUR_Y\n" + blurShaderCode, ShaderStage.Pixel));
 
-            _TextureMixer.SetShader(Shader.Create("Mixer", Engine.Graphics.BuiltinShader.TextureMixShader, ShaderStageType.Pixel));
+            _TextureMixer.SetShader(Shader.Create("Mixer", Engine.Graphics.BuiltinShader.TextureMixShader, ShaderStage.Pixel));
 
             Intensity = 5;
             Threshold = 1;
@@ -92,7 +92,7 @@ namespace Altseed2
             {
                 downTexture[i] = GetBuffer(0, src.Size / (int)Math.Pow(2, i), src.Format);
                 downTexture[i].WrapMode = TextureWrapMode.Clamp;
-                downTexture[i].FilterType = TextureFilterType.Linear;
+                downTexture[i].FilterType = TextureFilter.Linear;
             }
 
             var renderParameter = new RenderPassParameter(clearColor, true, true);
@@ -122,7 +122,7 @@ namespace Altseed2
             {
                 var tmpTexture = GetBuffer(1, downTexture[i].Size, src.Format);
                 tmpTexture.WrapMode = TextureWrapMode.Clamp;
-                tmpTexture.FilterType = TextureFilterType.Linear;
+                tmpTexture.FilterType = TextureFilter.Linear;
 
                 _BlurXMaterial.SetTexture("mainTex", downTexture[i]);
                 _BlurXMaterial.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));

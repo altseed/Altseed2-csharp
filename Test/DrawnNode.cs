@@ -87,7 +87,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     c = mainTex.Sample(mainSamp, input.UV1) * input.Color;
     return c;
 }";
-            node2.Material.SetShader(Shader.Create("ps", psCode, ShaderStageType.Pixel));
+            node2.Material.SetShader(Shader.Create("ps", psCode, ShaderStage.Pixel));
             node2.Material.SetTexture("mainTex", texture);
             Engine.AddNode(node2);
 

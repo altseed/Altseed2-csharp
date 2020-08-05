@@ -8,7 +8,7 @@ namespace Altseed2
         private struct CacheKey : IEquatable<CacheKey>
         {
             public Vector2I size;
-            public TextureFormatType format;
+            public TextureFormat format;
 
             public readonly override int GetHashCode()
             {
@@ -51,7 +51,7 @@ namespace Altseed2
             removeKeys = new List<CacheKey>();
         }
 
-        public RenderTexture GetRenderTexture(Vector2I size, TextureFormatType format)
+        public RenderTexture GetRenderTexture(Vector2I size, TextureFormat format)
         {
             var key = new CacheKey { size = size, format = format };
 

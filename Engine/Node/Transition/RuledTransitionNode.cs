@@ -162,7 +162,7 @@ namespace Altseed2
         public RuledTransitionEffectNode()
         {
             _Material = Material.Create();
-            _Material.SetShader(Shader.Create("Transition", _ShaderCode, ShaderStageType.Pixel));
+            _Material.SetShader(Shader.Create("Transition", _ShaderCode, ShaderStage.Pixel));
         }
 
         protected override void Draw(RenderTexture src, Color clearColor)

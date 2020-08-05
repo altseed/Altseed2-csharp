@@ -56,7 +56,7 @@ namespace Altseed2.Test
             node.CameraGroup = 1 << 0;
             Engine.AddNode(node);
 
-            var renderTexture = RenderTexture.Create(new Vector2I(200, 200), TextureFormatType.R8G8B8A8_UNORM);
+            var renderTexture = RenderTexture.Create(new Vector2I(200, 200), TextureFormat.R8G8B8A8_UNORM);
             var camera = new CameraNode();
             camera.Group = 0;
             camera.TargetTexture = renderTexture;

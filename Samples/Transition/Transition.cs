@@ -113,7 +113,7 @@ namespace Sample
             ";
 
             // ポストエフェクトに使用するシェーダを作成します。
-            var shader = Shader.Create("Transition", shaderCode, ShaderStageType.Pixel);
+            var shader = Shader.Create("Transition", shaderCode, ShaderStage.Pixel);
 
             // ポストエフェクトに使用するマテリアルを作成します。
             Material = Material.Create();

@@ -227,12 +227,12 @@ namespace Altseed2
     {
         [MarshalAs(UnmanagedType.Bool)]
         public bool IsBlendEnabled;
-        public BlendFuncType BlendSrcFunc;
-        public BlendFuncType BlendDstFunc;
-        public BlendFuncType BlendSrcFuncAlpha;
-        public BlendFuncType BlendDstFuncAlpha;
-        public BlendEquationType BlendEquationRGB;
-        public BlendEquationType BlendEquationAlpha;
+        public BlendFunction BlendSrcFunc;
+        public BlendFunction BlendDstFunc;
+        public BlendFunction BlendSrcFuncAlpha;
+        public BlendFunction BlendDstFuncAlpha;
+        public BlendEquation BlendEquationRGB;
+        public BlendEquation BlendEquationAlpha;
 
         /// <summary>
         /// もう一つの<see cref="AlphaBlend"/>との間の等価性を判定する
@@ -272,60 +272,60 @@ namespace Altseed2
         public static AlphaBlend Normal =>
             new AlphaBlend {
                 IsBlendEnabled = true,
-                BlendSrcFunc = BlendFuncType.SrcAlpha,
-                BlendDstFunc = BlendFuncType.OneMinusSrcAlpha,
-                BlendSrcFuncAlpha = BlendFuncType.One,
-                BlendDstFuncAlpha = BlendFuncType.One,
-                BlendEquationRGB = BlendEquationType.Add,
-                BlendEquationAlpha = BlendEquationType.Max
+                BlendSrcFunc = BlendFunction.SrcAlpha,
+                BlendDstFunc = BlendFunction.OneMinusSrcAlpha,
+                BlendSrcFuncAlpha = BlendFunction.One,
+                BlendDstFuncAlpha = BlendFunction.One,
+                BlendEquationRGB = BlendEquation.Add,
+                BlendEquationAlpha = BlendEquation.Max
             };
 
         public static AlphaBlend Add =>
             new AlphaBlend
             {
                 IsBlendEnabled = true,
-                BlendSrcFunc = BlendFuncType.SrcAlpha,
-                BlendDstFunc = BlendFuncType.One,
-                BlendSrcFuncAlpha = BlendFuncType.One,
-                BlendDstFuncAlpha = BlendFuncType.One,
-                BlendEquationRGB = BlendEquationType.Add,
-                BlendEquationAlpha = BlendEquationType.Max
+                BlendSrcFunc = BlendFunction.SrcAlpha,
+                BlendDstFunc = BlendFunction.One,
+                BlendSrcFuncAlpha = BlendFunction.One,
+                BlendDstFuncAlpha = BlendFunction.One,
+                BlendEquationRGB = BlendEquation.Add,
+                BlendEquationAlpha = BlendEquation.Max
             };
 
         public static AlphaBlend Opacity =>
             new AlphaBlend
             {
                 IsBlendEnabled = false,
-                BlendSrcFunc = BlendFuncType.One,
-                BlendDstFunc = BlendFuncType.Zero,
-                BlendSrcFuncAlpha = BlendFuncType.One,
-                BlendDstFuncAlpha = BlendFuncType.One,
-                BlendEquationRGB = BlendEquationType.Add,
-                BlendEquationAlpha = BlendEquationType.Max
+                BlendSrcFunc = BlendFunction.One,
+                BlendDstFunc = BlendFunction.Zero,
+                BlendSrcFuncAlpha = BlendFunction.One,
+                BlendDstFuncAlpha = BlendFunction.One,
+                BlendEquationRGB = BlendEquation.Add,
+                BlendEquationAlpha = BlendEquation.Max
             };
         
         public static AlphaBlend Substract =>
             new AlphaBlend
             {
                 IsBlendEnabled = true,
-                BlendSrcFunc = BlendFuncType.SrcAlpha,
-                BlendDstFunc = BlendFuncType.One,
-                BlendSrcFuncAlpha = BlendFuncType.One,
-                BlendDstFuncAlpha = BlendFuncType.One,
-                BlendEquationRGB = BlendEquationType.ReverseSub,
-                BlendEquationAlpha = BlendEquationType.Max
+                BlendSrcFunc = BlendFunction.SrcAlpha,
+                BlendDstFunc = BlendFunction.One,
+                BlendSrcFuncAlpha = BlendFunction.One,
+                BlendDstFuncAlpha = BlendFunction.One,
+                BlendEquationRGB = BlendEquation.ReverseSub,
+                BlendEquationAlpha = BlendEquation.Max
             };
 
         public static AlphaBlend Multiply =>
             new AlphaBlend
             {
                 IsBlendEnabled = true,
-                BlendSrcFunc = BlendFuncType.Zero,
-                BlendDstFunc = BlendFuncType.SrcColor,
-                BlendSrcFuncAlpha = BlendFuncType.One,
-                BlendDstFuncAlpha = BlendFuncType.One,
-                BlendEquationRGB = BlendEquationType.Add,
-                BlendEquationAlpha = BlendEquationType.Max
+                BlendSrcFunc = BlendFunction.Zero,
+                BlendDstFunc = BlendFunction.SrcColor,
+                BlendSrcFuncAlpha = BlendFunction.One,
+                BlendDstFuncAlpha = BlendFunction.One,
+                BlendEquationRGB = BlendEquation.Add,
+                BlendEquationAlpha = BlendEquation.Max
             };
     }
 
