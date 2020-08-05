@@ -208,7 +208,7 @@ namespace Altseed2
                         if (!cdrawn.IsDrawnActually) continue;
                         // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
-                        //if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
+                        if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
                         //if (node is TransformNode t)

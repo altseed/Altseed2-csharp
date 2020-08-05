@@ -147,12 +147,14 @@ namespace Altseed2
 
         internal override void Registered()
         {
+            Engine.CullingSystem.Register(_RenderedText);
             base.Registered();
             Engine.RegisterDrawn(this);
         }
 
         internal override void Unregistered()
         {
+            Engine.CullingSystem.Unregister(_RenderedText);
             base.Unregistered();
             Engine.UnregisterDrawn(this);
         }
