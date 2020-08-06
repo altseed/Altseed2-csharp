@@ -71,7 +71,7 @@ jobs:
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
         wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.135-bionic.list http://packages.lunarg.com/vulkan/1.2.135/lunarg-vulkan-1.2.135-bionic.list
+        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.1.121-bionic.list http://packages.lunarg.com/vulkan/1.1.121/lunarg-vulkan-1.1.121-bionic.list
         sudo apt update
         sudo apt install vulkan-sdk
         sudo apt -y install libx11-dev libxrandr-dev libxi-dev libxinerama-dev libxcursor-dev libudev-dev
