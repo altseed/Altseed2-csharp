@@ -645,7 +645,9 @@ namespace Altseed2.Test
 
             Assert.NotNull(camera2);
 
-            Assert.AreEqual(camera1.RenderPassParameter, camera2.RenderPassParameter);
+            Assert.AreEqual(camera1.RenderPassParameter.ClearColor, camera2.RenderPassParameter.ClearColor);
+            Assert.AreEqual(camera1.RenderPassParameter.IsColorCleared, camera2.RenderPassParameter.IsColorCleared);
+            Assert.AreEqual(camera1.RenderPassParameter.IsDepthCleared, camera2.RenderPassParameter.IsDepthCleared);
             Assert.AreEqual(camera1.TargetTexture.Size, camera2.TargetTexture.Size);
             Assert.AreEqual(camera1.ViewMatrix, camera2.ViewMatrix);
 
