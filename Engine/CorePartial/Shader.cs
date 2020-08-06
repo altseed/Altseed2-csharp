@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Altseed2
+﻿namespace Altseed2
 {
     public partial class Shader
     {
@@ -10,7 +6,7 @@ namespace Altseed2
             => Compile(name, code, shaderStage).Value;
 
         public static Shader CreateFromFile(string name, string path, ShaderStage shaderStage)
-            => Compile(name, path, shaderStage).Value;
+            => CompileFromFile(name, path, shaderStage).Value;
 
         public static string TryCreate(string name, string code, ShaderStage shaderStage, out Shader shader)
         {
@@ -21,7 +17,7 @@ namespace Altseed2
 
         public static string TryCreateFromFile(string name, string code, ShaderStage shaderStage, out Shader shader)
         {
-            var result = Compile(name, code, shaderStage);
+            var result = CompileFromFile(name, code, shaderStage);
             shader = result.Value;
             return result.Message;
         }
