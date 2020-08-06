@@ -661,9 +661,8 @@ namespace Altseed2.Test
             var collider1 = Altseed2.CircleCollider.Create();
 
             collider1.Position = new Vector2F(30f, 30f);
-            collider1.Rotation = 10.0f;
+            collider1.Rotation = MathHelper.DegreeToRadian(10.0f);
             collider1.Radius = 30.0f;
-
 
             const string path = "Serialization/CircleCollider.bin";
 
@@ -688,7 +687,7 @@ namespace Altseed2.Test
 
             var collider1 = Altseed2.PolygonCollider.Create();
             collider1.Position = new Vector2F(30f, 30f);
-            collider1.Rotation = 10.0f;
+            collider1.Rotation = MathHelper.DegreeToRadian(10.0f);
 
 
             var array_g = new Vertex[]
@@ -729,7 +728,7 @@ namespace Altseed2.Test
 
             collider1.CenterPosition = new Vector2F(15f, 15f);
             collider1.Position = new Vector2F(30f, 30f);
-            collider1.Rotation = 10.0f;
+            collider1.Rotation = MathHelper.DegreeToRadian(10.0f);
             collider1.Size = new Vector2F(20f, 20f);
 
 
