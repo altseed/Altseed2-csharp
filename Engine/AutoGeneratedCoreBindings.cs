@@ -5268,7 +5268,8 @@ namespace Altseed2
         {
             if (seInfo == null) return;
             
-            var ptr = Call_GetPtr(seInfo);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingConcurrent(this, ptr);
@@ -5460,7 +5461,8 @@ namespace Altseed2
         {
             if (seInfo == null) return;
             
-            var ptr = Call_GetPtr(seInfo);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -6463,7 +6465,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedSprite(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -7012,7 +7015,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedText(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -7387,7 +7391,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedPolygon(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -14140,7 +14145,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected CircleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -14375,7 +14381,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected RectangleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -14580,7 +14587,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected PolygonCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
