@@ -10,18 +10,49 @@ namespace Altseed2
         /// </summary>
         public Vector2F Position
         {
-            get => cbg_Collider_GetPosition(selfPtr);
-            set => cbg_Collider_SetPosition(selfPtr, value);
+            get => _position ??= cbg_Collider_GetPosition(selfPtr);
+            set
+            {
+                if (_position == value) return;
+                _position = value;
+                cbg_Collider_SetPosition(selfPtr, value);
+                _transform = null;
+            }
         }
+        private Vector2F? _position;
 
         /// <summary>
         /// 回転(弧度法)を取得または設定します。
         /// </summary>
         public float Rotation
         {
-            get => cbg_Collider_GetRotation(selfPtr);
-            set => cbg_Collider_SetRotation(selfPtr, value);
+            get => _rotation ??= cbg_Collider_GetRotation(selfPtr);
+            set
+            {
+                if (_rotation == value) return;
+                _rotation = value;
+                cbg_Collider_SetRotation(selfPtr, value);
+                _transform = null;
+            }
         }
+        private float? _rotation;
+
+        /// <summary>
+        /// 変形行列を取得または設定します。
+        /// </summary>
+        public Matrix44F Transform
+        {
+            get => _transform ??= cbg_Collider_GetTransform(selfPtr);
+            set
+            {
+                if (_transform == value) return;
+                _transform = value;
+                cbg_Collider_SetTransform(selfPtr, value);
+                _position = null;
+                _rotation = null;
+            }
+        }
+        private Matrix44F? _transform;
     }
 
     public partial class CircleCollider
