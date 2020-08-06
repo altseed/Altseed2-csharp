@@ -166,6 +166,7 @@ namespace Altseed2.Test
             Assert.AreEqual(font1.Descent, font2.Descent);
             Assert.AreEqual(font1.LineGap, font2.LineGap);
             Assert.AreEqual(font1.Size, font2.Size);
+            Assert.AreEqual(font1.IsStaticFont, font2.IsStaticFont);
 
             var obj1 = new TextNode()
             {
@@ -214,6 +215,7 @@ namespace Altseed2.Test
             Assert.AreEqual(font1.Descent, font2.Descent);
             Assert.AreEqual(font1.LineGap, font2.LineGap);
             Assert.AreEqual(font1.Size, font2.Size);
+            Assert.AreEqual(font1.IsStaticFont, font2.IsStaticFont);
 
             var obj1 = new TextNode()
             {
@@ -259,6 +261,9 @@ namespace Altseed2.Test
 
             Assert.AreEqual(texture1.Size, texture2.Size);
             Assert.AreEqual(texture1.Path, texture2.Path);
+            Assert.AreEqual(texture1.FilterType, texture2.FilterType);
+            Assert.AreEqual(texture1.Format, texture2.Format);
+            Assert.AreEqual(texture1.WrapMode, texture2.WrapMode);
 
             var obj1 = new SpriteNode()
             {
@@ -305,6 +310,9 @@ namespace Altseed2.Test
             Assert.NotNull(texture2);
 
             Assert.AreEqual(texture1.Size, texture2.Size);
+            Assert.AreEqual(texture1.FilterType, texture2.FilterType);
+            Assert.AreEqual(texture1.Format, texture2.Format);
+            Assert.AreEqual(texture1.WrapMode, texture2.WrapMode);
 
             tc.End();
         }
@@ -551,15 +559,20 @@ namespace Altseed2.Test
 
             Assert.NotNull(text2);
 
-            Assert.AreEqual(text1.Color, text2.Color);
             Assert.AreEqual(text1.AlphaBlend, text2.AlphaBlend);
-            Assert.AreEqual(text1.MaterialGlyph, text2.MaterialGlyph);
-            Assert.AreEqual(text1.MaterialImage, text2.MaterialImage);
+            Assert.AreEqual(text1.CharacterSpace, text2.CharacterSpace);
+            Assert.AreEqual(text1.Color, text2.Color);
             Assert.AreEqual(text1.Font.Path, text2.Font.Path);
             Assert.AreEqual(text1.Font.Size, text2.Font.Size);
+            Assert.AreEqual(text1.IsEnableKerning, text2.IsEnableKerning);
+            Assert.AreEqual(text1.LineGap, text2.LineGap);
+            Assert.AreEqual(text1.MaterialGlyph, text2.MaterialGlyph);
+            Assert.AreEqual(text1.MaterialImage, text2.MaterialImage);
             Assert.AreEqual(text1.Text, text2.Text);
+            Assert.AreEqual(text1.TextureSize, text2.TextureSize);
             Assert.AreEqual(text1.Transform, text2.Transform);
             Assert.AreEqual(text1.Weight, text2.Weight);
+            Assert.AreEqual(text1.WritingDirection, text2.WritingDirection);
 
             tc.End();
         }
@@ -632,7 +645,9 @@ namespace Altseed2.Test
 
             Assert.NotNull(camera2);
 
+            Assert.AreEqual(camera1.RenderPassParameter, camera2.RenderPassParameter);
             Assert.AreEqual(camera1.TargetTexture.Size, camera2.TargetTexture.Size);
+            Assert.AreEqual(camera1.ViewMatrix, camera2.ViewMatrix);
 
             tc.End();
         }
