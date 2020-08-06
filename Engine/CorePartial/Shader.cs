@@ -1,4 +1,7 @@
-﻿namespace Altseed2
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace Altseed2
 {
     public partial class Shader
     {
@@ -20,6 +23,12 @@
             var result = CompileFromFile(name, code, shaderStage);
             shader = result.Value;
             return result.Message;
+        }
+
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
+            ptr = cbg_Shader_Compile(name, code, (int)stage);
         }
     }
 }
