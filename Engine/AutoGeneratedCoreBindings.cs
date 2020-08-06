@@ -13911,28 +13911,6 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 変形行列を取得または設定します。
-        /// </summary>
-        public Matrix44F Transform
-        {
-            get
-            {
-                if (_Transform != null)
-                {
-                    return _Transform.Value;
-                }
-                var ret = cbg_Collider_GetTransform(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _Transform = value;
-                cbg_Collider_SetTransform(selfPtr, value);
-            }
-        }
-        private Matrix44F? _Transform;
-        
-        /// <summary>
         /// 指定したコライダとの衝突判定を行います。
         /// </summary>
         public bool GetIsCollidedWith(Collider collider)
