@@ -50,6 +50,9 @@ float4 main(PS_INPUT input) : SV_TARGET
             // マテリアルにシェーダを割り当てます。
             material.SetShader(shader);
 
+            // 必要な場合、アルファブレンドの種類を割り当てます。
+            material.AlphaBlend = AlphaBlend.Normal;
+
             // スプライトを描画するノードを作成します。
             var node = new SpriteNode();
 
