@@ -6471,7 +6471,9 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Texture = info.GetValue<TextureBase>(S_Texture);
+            var Texture = info.GetValue<TextureBase>(S_Texture);
+            ((IDeserializationCallback)Texture).OnDeserialization(null);
+            this.Texture = Texture;
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             Color = info.GetValue<Color>(S_Color);
@@ -7024,7 +7026,9 @@ namespace Altseed2
             MaterialGlyph = info.GetValue<Material>(S_MaterialGlyph);
             MaterialImage = info.GetValue<Material>(S_MaterialImage);
             Text = info.GetString(S_Text);
-            Font = info.GetValue<Font>(S_Font);
+            var Font = info.GetValue<Font>(S_Font);
+            ((IDeserializationCallback)Font).OnDeserialization(null);
+            this.Font = Font;
             Weight = info.GetSingle(S_Weight);
             IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
             WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
@@ -7398,7 +7402,9 @@ namespace Altseed2
             CacheHelper.CacheHandling(this, ptr);
             
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
-            Texture = info.GetValue<TextureBase>(S_Texture);
+            var Texture = info.GetValue<TextureBase>(S_Texture);
+            ((IDeserializationCallback)Texture).OnDeserialization(null);
+            this.Texture = Texture;
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             AlphaBlend = info.GetValue<AlphaBlend>(S_AlphaBlend);
@@ -7675,7 +7681,9 @@ namespace Altseed2
             CacheHelper.CacheHandling(this, ptr);
             
             ViewMatrix = info.GetValue<Matrix44F>(S_ViewMatrix);
-            TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
+            var TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
+            ((IDeserializationCallback)TargetTexture).OnDeserialization(null);
+            this.TargetTexture = TargetTexture;
             RenderPassParameter = info.GetValue<RenderPassParameter>(S_RenderPassParameter);
             
             OnDeserialize_Constructor(info, context);
