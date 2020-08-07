@@ -96,12 +96,14 @@ namespace Altseed2
         {
             base.Registered();
             Engine.RegisterDrawn(this);
+            Engine.CullingSystem.Register(_RenderedPolygon);
         }
 
         internal override void Unregistered()
         {
             base.Unregistered();
             Engine.UnregisterDrawn(this);
+            Engine.CullingSystem.Unregister(_RenderedPolygon);
         }
 
         #endregion
