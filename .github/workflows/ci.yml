@@ -199,10 +199,12 @@ jobs:
         run: |
           wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O nuget.exe
           mkdir package/
+          mkdir package/licenses
           mkdir result/
           mv Nuget/* package/
           mv Altseed2-${{ github.sha }}/* package/
           cd package
+          mv LICENSE licenses/LICENSE.txt
           ..\nuget.exe pack Altseed2.nuspec -OutputDirectory ../result
         shell: powershell
         
