@@ -9,12 +9,12 @@ namespace Altseed2
         /// <summary>
         /// トランジションによって取り除かれるノード
         /// </summary>
-        protected readonly Node OldNode;
+        protected readonly Node _OldNode;
 
         /// <summary>
         /// トランジションによって追加されるノード
         /// </summary>
-        protected readonly Node NewNode;
+        protected readonly Node _NewNode;
 
         /// <summary>
         /// トランジションを行うコルーチン
@@ -30,8 +30,8 @@ namespace Altseed2
         /// <param name="openingDuration">ノードが入れ替わってからトランジションが終わるまでの期間</param>
         public TransitionNode(Node oldNode, Node newNode, float closingDuration, float openingDuration)
         {
-            OldNode = oldNode;
-            NewNode = newNode;
+            _OldNode = oldNode;
+            _NewNode = newNode;
 
             _Coroutine = GetCoroutine(closingDuration, openingDuration);
         }
@@ -95,9 +95,9 @@ namespace Altseed2
             yield return 0;
 
             // ノードの入れ替え
-            var parentNode = OldNode.Parent;
-            parentNode.RemoveChildNode(OldNode);
-            parentNode.AddChildNode(NewNode);
+            var parentNode = _OldNode.Parent;
+            parentNode.RemoveChildNode(_OldNode);
+            parentNode.AddChildNode(_NewNode);
 
             // ノードが入れ替わった直後の処理
             OnNodeSwapped();

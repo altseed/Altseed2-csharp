@@ -22,7 +22,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定パスからファイルを読み込む
+        /// 指定パスからファイルを読み込みます。失敗した場合、例外が発生します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる、または使用出来ない文字を含んでいる</exception>
@@ -90,7 +90,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定パスからファイルを読み込む
+        /// 指定パスからファイルを読み込みます。失敗した場合、例外が発生します。
         /// </summary>
         /// <param name="path">読み込むファイルのパス</param>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる、または使用出来ない文字を含んでいる</exception>

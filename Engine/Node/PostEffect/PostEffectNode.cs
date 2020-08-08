@@ -5,31 +5,31 @@ namespace Altseed2
 {
     public abstract class PostEffectNode : Node, IDrawn
     {
-        private static Dictionary<int, RenderTextureCache> Cache;
+        private static Dictionary<int, RenderTextureCache> _Cache;
 
         protected static RenderTexture GetBuffer(int identifier, Vector2I size, TextureFormat format)
         {
-            if (!Cache.ContainsKey(identifier))
+            if (!_Cache.ContainsKey(identifier))
             {
-                Cache[identifier] = new RenderTextureCache();
+                _Cache[identifier] = new RenderTextureCache();
             }
 
-            return Cache[identifier].GetRenderTexture(size, format);
+            return _Cache[identifier].GetRenderTexture(size, format);
         }
 
         internal static void InitializeCache()
         {
-            Cache = new Dictionary<int, RenderTextureCache>();
+            _Cache = new Dictionary<int, RenderTextureCache>();
         }
 
         internal static void TerminateCache()
         {
-            Cache = null;
+            _Cache = null;
         }
 
         internal static void UpdateCache()
         {
-            foreach (var cache in Cache)
+            foreach (var cache in _Cache)
             {
                 cache.Value.Update();
             }

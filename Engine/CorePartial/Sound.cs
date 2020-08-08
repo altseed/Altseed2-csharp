@@ -13,10 +13,10 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定パスから音源を読み込む
+        /// 指定パスから音源を読み込みます。失敗した場合、例外が発生します。
         /// </summary>
         /// <param name="path">読み込む音源のパス</param>
-        /// <param name="isDecompressed">一気に解凍するかどうか</param>
+        /// <param name="isDecompressed">音をロード時に全て解凍しておくかどうか</param>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる、または使用出来ない文字を含んでいる</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定された音源が見つからない</exception>
@@ -40,9 +40,9 @@ namespace Altseed2
         /// <param name="id">音のID</param>
         /// <param name="dataNum">音のスペクトル情報を格納するための配列の容量</param>
         /// <param name="window">フーリエ変換に用いる窓関数</param>
-        public float[] GetSpectrum(int id,　int dataNum, FFTWindow window)
+        public float[] GetSpectrum(int id, int dataNum, FFTWindow window)
         {
-            if((dataNum & (dataNum - 1)) != 0) return null;
+            if ((dataNum & (dataNum - 1)) != 0) return null;
             var fa = FloatArray.Create(dataNum);
             GetSpectrum(id, fa, window);
             return fa.ToArray();
