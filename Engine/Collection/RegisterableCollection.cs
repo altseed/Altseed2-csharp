@@ -40,14 +40,14 @@ namespace Altseed2
                 Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
                 return;
             }
-            if (obj.Status != RegisterStatus.Free)
+            if (obj.Status != RegisteredStatus.Free)
             {
                 Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
                 return;
             }
 
             AddQueue.Enqueue(obj);
-            obj.Status = RegisterStatus.WaitAdded;
+            obj.Status = RegisteredStatus.WaitingAdded;
         }
 
         /// <summary>
@@ -66,14 +66,14 @@ namespace Altseed2
                 Engine.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素が含まれていません。");
                 return;
             }
-            if (obj.Status != RegisterStatus.Registered)
+            if (obj.Status != RegisteredStatus.Registered)
             {
                 Engine.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素の状態が無効です。");
                 return;
             }
 
             RemoveQueue.Enqueue(obj);
-            obj.Status = RegisterStatus.WaitRemoved;
+            obj.Status = RegisteredStatus.WaitingRemoved;
         }
 
         /// <summary>
@@ -84,18 +84,18 @@ namespace Altseed2
             while (RemoveQueue.Count > 0)
             {
                 var obj = RemoveQueue.Dequeue();
-                if (obj.Status != RegisterStatus.WaitRemoved) continue;
+                if (obj.Status != RegisteredStatus.WaitingRemoved) continue;
                 CurrentCollection.Remove(obj);
-                obj.Status = RegisterStatus.Free;
+                obj.Status = RegisteredStatus.Free;
                 obj.Removed();
             }
 
             while (AddQueue.Count > 0)
             {
                 var obj = AddQueue.Dequeue();
-                if (obj.Status != RegisterStatus.WaitAdded) continue;
+                if (obj.Status != RegisteredStatus.WaitingAdded) continue;
                 CurrentCollection.Add(obj);
-                obj.Status = RegisterStatus.Registered;
+                obj.Status = RegisteredStatus.Registered;
                 obj.Added(Owner);
             }
         }
@@ -113,10 +113,10 @@ namespace Altseed2
         /// </summary>
         internal void Clear()
         {
-            foreach (var current in CurrentCollection) current.Status = RegisterStatus.Free;
+            foreach (var current in CurrentCollection) current.Status = RegisteredStatus.Free;
             CurrentCollection.Clear();
-            while (AddQueue.TryDequeue(out var current)) current.Status = RegisterStatus.Free;
-            while (RemoveQueue.TryDequeue(out var current)) current.Status = RegisterStatus.Free;
+            while (AddQueue.TryDequeue(out var current)) current.Status = RegisteredStatus.Free;
+            while (RemoveQueue.TryDequeue(out var current)) current.Status = RegisteredStatus.Free;
         }
 
         /// <summary>
@@ -143,14 +143,14 @@ namespace Altseed2
                 Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
                 return;
             }
-            if (obj.Status != RegisterStatus.Free)
+            if (obj.Status != RegisteredStatus.Free)
             {
                 Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
                 return;
             }
 
             CurrentCollection.Add(obj);
-            obj.Status = RegisterStatus.Registered;
+            obj.Status = RegisteredStatus.Registered;
             obj.Added(Owner);
         }
 

@@ -29,7 +29,7 @@ namespace Altseed2
                 var old = _Group;
                 _Group = value;
 
-                if (Status == RegisterStatus.Registered)
+                if (Status == RegisteredStatus.Registered)
                     Engine.UpdateCameraNodeGroup(this, old);
 
             }

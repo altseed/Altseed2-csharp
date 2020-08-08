@@ -47,7 +47,7 @@ namespace Altseed2
                 var old = _CameraGroup;
                 _CameraGroup = value;
 
-                if (Status == RegisterStatus.Registered)
+                if (Status == RegisteredStatus.Registered)
                 {
                     Engine.UpdateDrawnCameraGroup(this, old);
                 }
@@ -66,7 +66,7 @@ namespace Altseed2
                 if (_ZOrder == value) return;
                 var old = _ZOrder;
                 _ZOrder = value;
-                if (Status == RegisterStatus.Registered)
+                if (Status == RegisteredStatus.Registered)
                 {
                     Engine.UpdateDrawnZOrder(this, old);
                 }

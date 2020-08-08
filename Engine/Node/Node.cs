@@ -45,7 +45,7 @@ namespace Altseed2
         /// <summary>
         /// このノードの登録状況を取得または設定します。
         /// </summary>
-        public sealed override RegisterStatus Status
+        public sealed override RegisteredStatus Status
         {
             get => _status;
             internal set
@@ -54,7 +54,7 @@ namespace Altseed2
             }
         }
         [NonSerialized]
-        private RegisterStatus _status;
+        private RegisteredStatus _status;
 
         [NonSerialized]
         private Node _ParentReserved;
@@ -138,8 +138,8 @@ namespace Altseed2
         public void AddChildNode(Node node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Status == RegisterStatus.WaitRemoved && node.Parent == this)
-                node.Status = RegisterStatus.Registered;
+            if (node.Status == RegisteredStatus.WaitingRemoved && node.Parent == this)
+                node.Status = RegisteredStatus.Registered;
 
             _Children.Add(node);
             node._ParentReserved = this;
@@ -153,8 +153,8 @@ namespace Altseed2
         public void RemoveChildNode(Node node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Status == RegisterStatus.WaitAdded && node._ParentReserved == this)
-                node.Status = RegisterStatus.Registered;
+            if (node.Status == RegisteredStatus.WaitingAdded && node._ParentReserved == this)
+                node.Status = RegisteredStatus.Registered;
 
             _Children.Remove(node);
             node._ParentReserved = null;
@@ -195,7 +195,7 @@ namespace Altseed2
 
         private Node serialization_Parent;
         private Node serialization_ParentReserved;
-        private RegisterStatus serialization_Status;
+        private RegisteredStatus serialization_Status;
         private bool isRootChild;
         private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行うのを止める
 
@@ -211,7 +211,7 @@ namespace Altseed2
                 isRootChild = true;
                 serialization_Parent = null;
                 serialization_ParentReserved = null;
-                serialization_Status = RegisterStatus.Free;
+                serialization_Status = RegisteredStatus.Free;
                 surpressing = true;
             }
             else
