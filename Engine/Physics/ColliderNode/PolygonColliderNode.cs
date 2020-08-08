@@ -16,7 +16,7 @@ namespace Altseed2
         {
             get
             {
-                MathHelper.GetMinMax(out var min, out var max, _vertexes);
+                MathHelper.GetMinMax(out var min, out var max, PolygonCollider.VertexesInternal);
                 return max - min;
             }
         }
@@ -44,18 +44,16 @@ namespace Altseed2
         /// 頂点情報の配列を取得または設定する
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        public Vector2F[] Vertexes
+        public IReadOnlyList<Vector2F> Vertexes
         {
-            get => _vertexes;
+            get => PolygonCollider.Vertexes;
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
-                if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
-                _vertexes = value;
+                var vertexArray = Vector2FArray.Create(value);
+                PolygonCollider.VertexesInternal = vertexArray;
                 requireUpdate = true;
             }
         }
-        private Vector2F[] _vertexes = Array.Empty<Vector2F>();
 
         /// <summary>
         /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
@@ -78,28 +76,15 @@ namespace Altseed2
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
         public void SetVertexes(IEnumerable<Vector2F> positions) => Vertexes = ArrayExtension.ConvertToArray(positions);
 
-        /// <summary>
-        /// 指定した座標に頂点を設定する
-        /// </summary>
-        /// <param name="vertexes">頂点に設定する座標を持つ頂点</param>
-        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
-        public void SetVertexes(IEnumerable<Vertex> vertexes)
-        {
-            var vertexArray = ArrayExtension.ConvertToArray(vertexes);
-            var array = new Vector2F[vertexArray.Length];
-            for (int i = 0; i < array.Length; i++) array[i] = new Vector2F(vertexArray[i].Position.X, vertexArray[i].Position.Y);
-            Vertexes = array;
-        }
-
         internal override void UpdateCollider()
         {
             if (!requireUpdate) return;
 
             var scale = CalcScale(InheritedTransform);
 
-            var array = new Vector2F[_vertexes.Length];
-            for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
-            PolygonCollider.VertexArray = array;
+            var array = new Vector2F[Vertexes.Count];
+            for (int i = 0; i < Vertexes.Count; i++) array[i] = Vertexes[i] * scale - CenterPosition;
+            PolygonCollider.Vertexes = array;
 
             UpdateVersion();
             requireUpdate = false;

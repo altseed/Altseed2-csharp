@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Altseed2
@@ -73,29 +74,59 @@ namespace Altseed2
 
     public partial class PolygonCollider
     {
+        #region SerializeName
+        private const string S_Vertexes = "S_Vertexes";
+        #endregion
         /// <summary>
-        /// 頂点情報の配列を取得または設定します。
+        /// 頂点情報のコレクションを取得または設定します。
         /// </summary>
-        public Vector2F[] VertexArray
+        public IReadOnlyList<Vector2F> Vertexes
         {
-            get => Vertexes?.ToArray();
+            get => VertexesInternal?.ToArray();
             set
             {
                 if (value is null)
                 {
-                    Vertexes = null;
+                    VertexesInternal = null;
                     return;
                 }
 
-                var array = Vector2FArray.Create(value.Length);
-                array.FromArray(value);
-                Vertexes = array;
+                VertexesInternal = Vector2FArray.Create(value);
             }
         }
+
+        internal Vector2FArray VertexesInternal
+        {
+            get => _vertexesInternal ??= Vector2FArray.TryGetFromCache(cbg_PolygonCollider_GetVertexes(selfPtr));
+            set
+            {
+                if (_vertexesInternal == value) return;
+                _vertexesInternal = value;
+                cbg_PolygonCollider_SetVertexes(selfPtr, value?.selfPtr ?? IntPtr.Zero);
+            }
+        }
+        private Vector2FArray _vertexesInternal;
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_PolygonCollider_Create();
         }
+
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
+        {
+            VertexesInternal = info.GetValue<Vector2FArray>(S_Vertexes);
+        }
+
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(S_Vertexes, VertexesInternal);            
+        }
+
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        public void SetVertexes(IEnumerable<Vector2F> positions) => Vertexes = ArrayExtension.ConvertToArray(positions);
     }
 }
