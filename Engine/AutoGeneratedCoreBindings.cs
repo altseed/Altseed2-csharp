@@ -5268,7 +5268,8 @@ namespace Altseed2
         {
             if (seInfo == null) return;
             
-            var ptr = Call_GetPtr(seInfo);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingConcurrent(this, ptr);
@@ -5460,7 +5461,8 @@ namespace Altseed2
         {
             if (seInfo == null) return;
             
-            var ptr = Call_GetPtr(seInfo);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -6463,12 +6465,15 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedSprite(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Texture = info.GetValue<TextureBase>(S_Texture);
+            var Texture = info.GetValue<TextureBase>(S_Texture);
+            ((IDeserializationCallback)Texture).OnDeserialization(null);
+            this.Texture = Texture;
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             Color = info.GetValue<Color>(S_Color);
@@ -7012,7 +7017,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedText(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -7020,7 +7026,9 @@ namespace Altseed2
             MaterialGlyph = info.GetValue<Material>(S_MaterialGlyph);
             MaterialImage = info.GetValue<Material>(S_MaterialImage);
             Text = info.GetString(S_Text);
-            Font = info.GetValue<Font>(S_Font);
+            var Font = info.GetValue<Font>(S_Font);
+            ((IDeserializationCallback)Font).OnDeserialization(null);
+            this.Font = Font;
             Weight = info.GetSingle(S_Weight);
             IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
             WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
@@ -7387,13 +7395,16 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private RenderedPolygon(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
-            Texture = info.GetValue<TextureBase>(S_Texture);
+            var Texture = info.GetValue<TextureBase>(S_Texture);
+            ((IDeserializationCallback)Texture).OnDeserialization(null);
+            this.Texture = Texture;
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
             AlphaBlend = info.GetValue<AlphaBlend>(S_AlphaBlend);
@@ -7670,7 +7681,9 @@ namespace Altseed2
             CacheHelper.CacheHandling(this, ptr);
             
             ViewMatrix = info.GetValue<Matrix44F>(S_ViewMatrix);
-            TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
+            var TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
+            ((IDeserializationCallback)TargetTexture).OnDeserialization(null);
+            this.TargetTexture = TargetTexture;
             RenderPassParameter = info.GetValue<RenderPassParameter>(S_RenderPassParameter);
             
             OnDeserialize_Constructor(info, context);
@@ -14140,7 +14153,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected CircleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -14375,7 +14389,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected RectangleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
@@ -14580,7 +14595,8 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected PolygonCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            var ptr = Call_GetPtr(info);
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
