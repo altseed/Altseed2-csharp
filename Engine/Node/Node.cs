@@ -45,7 +45,7 @@ namespace Altseed2
         /// <summary>
         /// このノードの登録状況を取得または設定します。
         /// </summary>
-        public override RegisterStatus Status
+        public sealed override RegisterStatus Status
         {
             get => _status;
             internal set
