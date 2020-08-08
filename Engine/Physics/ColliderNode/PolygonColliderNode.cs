@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Altseed2
 {
@@ -43,7 +44,7 @@ namespace Altseed2
         /// 頂点情報の配列を取得または設定する
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        internal Vector2F[] Vertexes
+        public Vector2F[] Vertexes
         {
             get => _vertexes;
             set
@@ -68,6 +69,26 @@ namespace Altseed2
         internal PolygonColliderNode(PolygonCollider collider)
         {
             PolygonCollider = collider ?? PolygonCollider.Create();
+        }
+
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        public void SetVertexes(IEnumerable<Vector2F> positions) => Vertexes = ArrayExtension.ConvertToArray(positions);
+
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="vertexes">頂点に設定する座標を持つ頂点</param>
+        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
+        public void SetVertexes(IEnumerable<Vertex> vertexes)
+        {
+            var vertexArray = ArrayExtension.ConvertToArray(vertexes);
+            var array = new Vector2F[vertexArray.Length];
+            for (int i = 0; i < array.Length; i++) array[i] = new Vector2F(vertexArray[i].Position.X, vertexArray[i].Position.Y);
+            Vertexes = array;
         }
 
         internal override void UpdateCollider()
