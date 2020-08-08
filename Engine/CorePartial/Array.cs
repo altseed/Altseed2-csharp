@@ -376,9 +376,10 @@ namespace Altseed2
                 case TElement[] a:
                     return a;
 
-                case ICollection<TElement> c:
+                case IReadOnlyCollection<TElement> c:
                     var array = new TElement[c.Count];
-                    c.CopyTo(array, 0);
+                    var i = 0;
+                    foreach (var current in c) array[i++] = current;
                     return array;
 
                 default:
