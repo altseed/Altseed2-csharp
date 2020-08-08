@@ -14,7 +14,7 @@ namespace Altseed2
         private bool _RequireCalcTransform = true;
 
         /// <summary>
-        /// 描画対象とする <see cref="DrawnNode"/> のグループを取得または設定します。
+        /// 描画対象のグループを取得または設定します。
         /// </summary>
         public int Group
         {
