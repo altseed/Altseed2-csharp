@@ -25,6 +25,11 @@ namespace Altseed2
         }
         private bool _VisibleTransformInfo　= false;
 
+        public Configuration()
+        {
+            selfPtr = cbg_Configuration_Create();
+        }
+
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             VisibleTransformInfo = info.GetBoolean(S_VisibleTransformInfo);
