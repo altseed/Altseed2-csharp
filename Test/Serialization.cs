@@ -48,7 +48,8 @@ namespace Altseed2.Test
             Assert.True(System.IO.File.Exists(path));
 
             var file2 = Deserialize<StaticFile>(path);
-            file2.Save("Serialization/StaticFile.txt");
+            using var stream = new FileStream("Serialization/StaticFile.txt", FileMode.Create);
+            stream.Write(file2.Buffer, 0, file2.Size);
 
             Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
             Debug.WriteLine(file1.Path);
@@ -76,7 +77,8 @@ namespace Altseed2.Test
             Assert.True(System.IO.File.Exists(path));
 
             var file2 = Deserialize<StreamFile>(path);
-            file2.Save("Serialization/StreamFile.txt");
+            using var stream = new FileStream("Serialization/StreamFile.txt", FileMode.Create);
+            stream.Write(file2.TempBuffer, 0, file2.TempBufferSize);
 
             Assert.AreEqual(file1.Path, file2.Path);
             Assert.AreEqual(file1.IsInPackage, file2.IsInPackage);
