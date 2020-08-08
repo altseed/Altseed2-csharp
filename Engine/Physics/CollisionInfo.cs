@@ -11,17 +11,17 @@ namespace Altseed2
         /// <summary>
         /// 衝突の種類を取得する
         /// </summary>
-        public CollisionType CollisionType { get; }
+        public readonly CollisionType CollisionType;
 
         /// <summary>
         /// 自身の<see cref="ColliderNode"/>を取得する
         /// </summary>
-        public ColliderNode SelfCollider { get; }
+        public readonly ColliderNode SelfCollider;
 
         /// <summary>
         /// 衝突相手の<see cref="ColliderNode"/>を取得する
         /// </summary>
-        public ColliderNode TheirsCollider { get; }
+        public readonly ColliderNode TheirsCollider;
 
         internal CollisionInfo(ColliderNode selfCollider, ColliderNode theirsCollider, CollisionType type)
         {

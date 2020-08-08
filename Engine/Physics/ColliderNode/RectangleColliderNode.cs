@@ -29,7 +29,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
-        internal RectangleCollider RectangleCollider { get; }
+        internal readonly RectangleCollider RectangleCollider;
         internal override Collider Collider => RectangleCollider;
 
         /// <summary>

@@ -5,7 +5,7 @@
         /// <summary>
         /// ジョイスティックの最大同時接続数を取得します。
         /// </summary>
-        public int MaxCount { get; } = 16;
+        public readonly int MaxCount = 16;
 
         /// <summary>
         /// ボタンの状態をインデックスで取得します。

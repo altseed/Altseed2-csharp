@@ -23,7 +23,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
-        internal PolygonCollider PolygonCollider { get; }
+        internal readonly PolygonCollider PolygonCollider;
         internal override Collider Collider => PolygonCollider;
 
         /// <inheritdoc/>

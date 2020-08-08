@@ -49,7 +49,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するコライダを取得する
         /// </summary>
-        internal CircleCollider CircleCollider { get; }
+        internal readonly CircleCollider CircleCollider;
         internal override Collider Collider => CircleCollider;
 
         /// <inheritdoc/>
