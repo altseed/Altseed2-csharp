@@ -1640,7 +1640,7 @@ namespace Altseed2
         internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Configuration_Constructor_0();
+        private static extern IntPtr cbg_Configuration_Create();
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1931,14 +1931,6 @@ namespace Altseed2
         }
         private bool? _ToolEnabled;
         
-        /// <summary>
-        /// 新しいインスタンスを生成します。
-        /// </summary>
-        public Configuration()
-        {
-            selfPtr = cbg_Configuration_Constructor_0();
-        }
-        
         
         #region ISerialiable
         
@@ -1969,7 +1961,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Configuration(SerializationInfo info, StreamingContext context) : this()
+        private Configuration(SerializationInfo info, StreamingContext context)
         {
             IsFullscreen = info.GetBoolean(S_IsFullscreen);
             IsResizable = info.GetBoolean(S_IsResizable);
