@@ -2,7 +2,7 @@
 
 namespace Collider
 {
-    class ColliderDemonstration
+    class CollisionDemonstration
     {
         static void Main(string[] args)
         {
