@@ -34,9 +34,15 @@ namespace Altseed2
         [MarshalAs(UnmanagedType.I4)]
         public int Height;
 
-        public Vector2I Position => new Vector2I(X, Y);
+        /// <summary>
+        /// 左上の座標を取得します。
+        /// </summary>
+        public readonly Vector2I Position => new Vector2I(X, Y);
 
-        public Vector2I Size => new Vector2I(Width, Height);
+        /// <summary>
+        /// サイズを取得します。
+        /// </summary>
+        public readonly Vector2I Size => new Vector2I(Width, Height);
 
         /// <summary>
         /// 新しいインスタンスを生成する
@@ -59,6 +65,34 @@ namespace Altseed2
         /// <param name="position">左上の座標</param>
         /// <param name="size">サイズ</param>
         public RectI(Vector2I position, Vector2I size) : this(position.X, position.Y, size.X, size.Y) { }
+
+        /// <summary>
+        /// このインスタンスから要素を取り出します。
+        /// </summary>
+        /// <param name="position"><see cref="Position"/></param>
+        /// <param name="size"><see cref="Size"/></param>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public readonly void Deconstruct(out Vector2I position, out Vector2I size)
+        {
+            position = Position;
+            size = Size;
+        }
+
+        /// <summary>
+        /// このインスタンスから要素を取り出します。
+        /// </summary>
+        /// <param name="x"><see cref="X"/></param>
+        /// <param name="y"><see cref="Y"/></param>
+        /// <param name="width"><see cref="Width"/></param>
+        /// <param name="height"><see cref="Height"/></param>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public readonly void Deconstruct(out int x, out int y, out int width, out int height)
+        {
+            x = X;
+            y = Y;
+            width = Width;
+            height = Height;
+        }
 
         /// <summary>
         /// 2つの<see cref="RectI"/>間の等価性を判定します。

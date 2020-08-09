@@ -76,6 +76,20 @@ namespace Altseed2
         #endregion
 
         /// <summary>
+        /// このインスタンスから要素を取り出します。
+        /// </summary>
+        /// <param name="x"><see cref="X"/></param>
+        /// <param name="y"><see cref="Y"/></param>
+        /// <param name="z"><see cref="Z"/></param>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public readonly void Deconstruct(out int x, out int y, out int z)
+        {
+            x = X;
+            y = Y;
+            z = Z;
+        }
+
+        /// <summary>
         /// このベクトルを表す文字列取得します。
         /// </summary>
         /// <returns>このベクトルを表す文字列取得します。</returns>
