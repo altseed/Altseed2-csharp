@@ -88,6 +88,7 @@ namespace Altseed2
                 for (int i = 0; i < Vertexes.Count; i++) array[i] = Vertexes[i] * scale - CenterPosition;
                 PolygonCollider.Vertexes = array;
             }
+            else PolygonCollider.Vertexes = Array.Empty<Vector2F>();
 
             UpdateVersion();
             requireUpdate = false;
