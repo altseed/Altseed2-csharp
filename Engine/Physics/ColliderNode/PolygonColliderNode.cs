@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Altseed2
 {
@@ -15,7 +16,7 @@ namespace Altseed2
         {
             get
             {
-                MathHelper.GetMinMax(out var min, out var max, _vertexes);
+                MathHelper.GetMinMax(out var min, out var max, PolygonCollider.VertexesInternal);
                 return max - min;
             }
         }
@@ -43,18 +44,16 @@ namespace Altseed2
         /// 頂点情報の配列を取得または設定する
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        internal Vector2F[] Vertexes
+        public IReadOnlyList<Vector2F> Vertexes
         {
-            get => _vertexes;
+            get => PolygonCollider.Vertexes;
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value), "引数がnullです");
-                if (value == _vertexes || (_vertexes.Length == 0 && value.Length == 0)) return;
-                _vertexes = value;
+                var vertexArray = Vector2FArray.Create(value);
+                PolygonCollider.VertexesInternal = vertexArray;
                 requireUpdate = true;
             }
         }
-        private Vector2F[] _vertexes = Array.Empty<Vector2F>();
 
         /// <summary>
         /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
@@ -70,15 +69,26 @@ namespace Altseed2
             PolygonCollider = collider ?? PolygonCollider.Create();
         }
 
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        public void SetVertexes(IEnumerable<Vector2F> positions) => Vertexes = ArrayExtension.ConvertToArray(positions);
+
         internal override void UpdateCollider()
         {
             if (!requireUpdate) return;
 
             var scale = CalcScale(InheritedTransform);
 
-            var array = new Vector2F[_vertexes.Length];
-            for (int i = 0; i < _vertexes.Length; i++) array[i] = _vertexes[i] * scale - CenterPosition;
-            PolygonCollider.VertexArray = array;
+            if (Vertexes != null)
+            {
+                var array = new Vector2F[Vertexes.Count];
+                for (int i = 0; i < Vertexes.Count; i++) array[i] = Vertexes[i] * scale - CenterPosition;
+                PolygonCollider.Vertexes = array;
+            }
+            else PolygonCollider.Vertexes = Array.Empty<Vector2F>();
 
             UpdateVersion();
             requireUpdate = false;
@@ -109,7 +119,7 @@ namespace Altseed2
 
         private void UpdatePolygon()
         {
-            SetVertexes(_Owner.Vertexes, ColliderVisualizeNodeFactory.AreaColor);
+            SetVertexes(_Owner.Vertexes ?? Array.Empty<Vector2F>(), ColliderVisualizeNodeFactory.AreaColor);
             CenterPosition = _Owner.CenterPosition;
 
             _CurrentVersion = _Owner._Version;

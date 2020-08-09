@@ -14541,28 +14541,6 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 多角形コライダの頂点の座標を取得または設定します
-        /// </summary>
-        internal Vector2FArray Vertexes
-        {
-            get
-            {
-                if (_Vertexes != null)
-                {
-                    return _Vertexes;
-                }
-                var ret = cbg_PolygonCollider_GetVertexes(selfPtr);
-                return Vector2FArray.TryGetFromCache(ret);
-            }
-            set
-            {
-                _Vertexes = value;
-                cbg_PolygonCollider_SetVertexes(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
-            }
-        }
-        private Vector2FArray _Vertexes;
-        
-        /// <summary>
         /// 多角形コライダを作成します。
         /// </summary>
         public static PolygonCollider Create()
@@ -14575,8 +14553,6 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Vertexes = "S_Vertexes";
         #endregion
         
         /// <summary>
@@ -14593,7 +14569,6 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandling(this, ptr);
             
-            Vertexes = info.GetValue<Vector2FArray>(S_Vertexes);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -14608,7 +14583,6 @@ namespace Altseed2
         {
             base.GetObjectData(info, context);
             
-            info.AddValue(S_Vertexes, Vertexes);
             
             OnGetObjectData(info, context);
         }
