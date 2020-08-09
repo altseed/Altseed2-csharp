@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 
 namespace Altseed2
 {
@@ -136,6 +135,36 @@ namespace Altseed2
             if (value < 0) return 0;
             if (value > 255) return 255;
             return (byte)value;
+        }
+
+        /// <summary>
+        /// このインスタンスから要素を取り出します。
+        /// </summary>
+        /// <param name="r"><see cref="R"/></param>
+        /// <param name="g"><see cref="G"/></param>
+        /// <param name="b"><see cref="B"/></param>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public readonly void Deconstruct(out byte r, out byte g, out byte b)
+        {
+            r = R;
+            g = G;
+            b = B;
+        }
+
+        /// <summary>
+        /// このインスタンスから要素を取り出します。
+        /// </summary>
+        /// <param name="r"><see cref="R"/></param>
+        /// <param name="g"><see cref="G"/></param>
+        /// <param name="b"><see cref="B"/></param>
+        /// <param name="a"><see cref="A"/></param>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public readonly void Deconstruct(out byte r, out byte g, out byte b, out byte a)
+        {
+            r = R;
+            g = G;
+            b = B;
+            a = A;
         }
 
         /// <summary>

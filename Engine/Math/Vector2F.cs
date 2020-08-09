@@ -122,6 +122,18 @@ namespace Altseed2
         #endregion
 
         /// <summary>
+        /// このインスタンスから要素を取り出します。
+        /// </summary>
+        /// <param name="x"><see cref="X"/></param>
+        /// <param name="y"><see cref="Y"/></param>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public readonly void Deconstruct(out float x, out float y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        /// <summary>
         /// 単位ベクトル化します。
         /// </summary>
         public void Normalize()
