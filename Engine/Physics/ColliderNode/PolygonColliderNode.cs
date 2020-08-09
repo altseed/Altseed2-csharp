@@ -82,9 +82,12 @@ namespace Altseed2
 
             var scale = CalcScale(InheritedTransform);
 
-            var array = new Vector2F[Vertexes.Count];
-            for (int i = 0; i < Vertexes.Count; i++) array[i] = Vertexes[i] * scale - CenterPosition;
-            PolygonCollider.Vertexes = array;
+            if (Vertexes != null)
+            {
+                var array = new Vector2F[Vertexes.Count];
+                for (int i = 0; i < Vertexes.Count; i++) array[i] = Vertexes[i] * scale - CenterPosition;
+                PolygonCollider.Vertexes = array;
+            }
 
             UpdateVersion();
             requireUpdate = false;
@@ -115,7 +118,7 @@ namespace Altseed2
 
         private void UpdatePolygon()
         {
-            SetVertexes(_Owner.Vertexes, ColliderVisualizeNodeFactory.AreaColor);
+            SetVertexes(_Owner.Vertexes ?? Array.Empty<Vector2F>(), ColliderVisualizeNodeFactory.AreaColor);
             CenterPosition = _Owner.CenterPosition;
 
             _CurrentVersion = _Owner._Version;
