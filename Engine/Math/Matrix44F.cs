@@ -18,7 +18,7 @@ namespace Altseed2
         private fixed float Values[16];
 
         /// <summary>
-        /// 単位行列を取得する
+        /// 単位行列を取得します。
         /// </summary>
         public static Matrix44F Identity
         {
@@ -37,7 +37,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 逆行列を取得する
+        /// 逆行列を取得します。
         /// </summary>
         public readonly Matrix44F Inverse
         {
@@ -110,7 +110,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 転置行列を取得する
+        /// 転置行列を取得します。
         /// </summary>
         public readonly Matrix44F Transposed
         {
@@ -131,7 +131,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した位置の値を取得または設定する
+        /// 指定した位置の値を取得または設定します。
         /// </summary>
         /// <param name="x">取得する要素の位置</param>
         /// <param name="y">取得する要素の位置</param>
@@ -154,7 +154,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// カメラ行列(右手系)を取得する
+        /// カメラ行列(右手系)を取得します。
         /// </summary>
         /// <param name="eye">カメラの位置</param>
         /// <param name="at">カメラの注視点</param>
@@ -188,7 +188,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// カメラ行列(左手系)を取得する
+        /// カメラ行列(左手系)を取得します。
         /// </summary>
         /// <param name="eye">カメラの位置</param>
         /// <param name="at">カメラの注視点</param>
@@ -223,7 +223,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 正射影行列(左手系)を取得する
+        /// 正射影行列(左手系)を取得します。
         /// </summary>
         /// <param name="width">横幅</param>
         /// <param name="height">縦幅</param>
@@ -242,7 +242,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 正射影行列(右手系)を取得する
+        /// 正射影行列(右手系)を取得します。
         /// </summary>
         /// <param name="width">横幅</param>
         /// <param name="height">縦幅</param>
@@ -262,7 +262,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 射影行列(左手系)を取得する
+        /// 射影行列(左手系)を取得します。
         /// </summary>
         /// <param name="ovY">Y方向への視野角(度数法)</param>
         /// <param name="aspect">画面のアスペクト比</param>
@@ -286,7 +286,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 射影行列(右手系)を取得する
+        /// 射影行列(右手系)を取得します。
         /// </summary>
         /// <param name="ovY">Y方向への視野角(弧度法)</param>
         /// <param name="aspect">画面のアスペクト比</param>
@@ -309,7 +309,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// OpenGL用射影行列(右手系)を取得する
+        /// OpenGL用射影行列(右手系)を取得します。
         /// </summary>
         /// <param name="ovY">Y方向への視野角(弧度法)</param>
         /// <param name="aspect">画面のアスペクト比</param>
@@ -333,7 +333,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// クオータニオンを元に回転行列(右手)を取得する
+        /// クオータニオンを元に回転行列(右手)を取得します。
         /// </summary>
         /// <param name="quaternion">使用するクオータニオン</param>
         public static Matrix44F GetQuaternion(Vector4F quaternion)
@@ -364,7 +364,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 任意軸の反時計回転行列(右手)を取得する
+        /// 任意軸の反時計回転行列(右手)を取得します。
         /// </summary>
         /// <param name="axis">軸</param>
         /// <param name="radian">回転量(弧度法)</param>
@@ -392,7 +392,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した角度分のX軸回転(右手)を表す行列を取得する
+        /// 指定した角度分のX軸回転(右手)を表す行列を取得します。
         /// </summary>
         /// <param name="radian">X軸回転させる角度(弧度法)</param>
         /// <returns><paramref name="radian"/>のX軸回転分を表す行列</returns>
@@ -411,7 +411,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した角度分のY軸回転(右手)を表す行列を取得する
+        /// 指定した角度分のY軸回転(右手)を表す行列を取得します。
         /// </summary>
         /// <param name="radian">Y軸回転させる角度(弧度法)</param>
         /// <returns><paramref name="radian"/>のY軸回転分を表す行列</returns>
@@ -430,7 +430,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した角度分のZ軸回転(右手)を表す行列を取得する
+        /// 指定した角度分のZ軸回転(右手)を表す行列を取得します。
         /// </summary>
         /// <param name="radian">Z軸回転させる角度(弧度法)</param>
         /// <returns><paramref name="radian"/>のZ軸回転分を表す行列</returns>
@@ -449,14 +449,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2D座標の拡大率を表す行列を取得する
+        /// 2D座標の拡大率を表す行列を取得します。
         /// </summary>
         /// <param name="scale2D">設定する拡大率</param>
         /// <returns><paramref name="scale2D"/>分の拡大/縮小を表す行列</returns>
         public static Matrix44F GetScale2D(Vector2F scale2D) => GetScale3D(new Vector3F(scale2D.X, scale2D.Y, 1.0f));
 
         /// <summary>
-        /// 3D座標の拡大率を表す行列を取得する
+        /// 3D座標の拡大率を表す行列を取得します。
         /// </summary>
         /// <param name="scale3D">設定する拡大率</param>
         /// <returns><paramref name="scale3D"/>分の拡大/縮小を表す行列</returns>
@@ -471,14 +471,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2D座標の平行移動分を表す行列を取得する
+        /// 2D座標の平行移動分を表す行列を取得します。
         /// </summary>
         /// <param name="position2D">平行移動する座標</param>
         /// <returns><paramref name="position2D"/>分の平行移動を表す行列</returns>
         public static Matrix44F GetTranslation2D(Vector2F position2D) => GetTranslation3D(new Vector3F(position2D.X, position2D.Y, 0.0f));
 
         /// <summary>
-        /// 3D座標の平行移動分を表す行列を取得する
+        /// 3D座標の平行移動分を表す行列を取得します。
         /// </summary>
         /// <param name="position3D">平行移動する座標</param>
         /// <returns><paramref name="position3D"/>分の平行移動を表す行列</returns>
@@ -535,7 +535,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 加算を行う
+        /// 加算を行います。
         /// </summary>
         /// <param name="left">加算する要素</param>
         /// <param name="right">加算される要素</param>
@@ -548,14 +548,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 符合を逆転する
+        /// 符合を逆転します。
         /// </summary>
         /// <param name="matrix">符合を逆転する行列</param>
         /// <returns>符合が逆転された行列</returns>
         public static Matrix44F operator -(Matrix44F matrix) => -1 * matrix;
 
         /// <summary>
-        /// 減算を行う
+        /// 減算を行います。
         /// </summary>
         /// <param name="left">減算する要素</param>
         /// <param name="right">減算される要素</param>
@@ -568,7 +568,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 行列の各値を定数倍にする
+        /// 行列の各値を定数倍にします。
         /// </summary>
         /// <param name="matrix">定数倍される行列</param>
         /// <param name="scalar">乗算する定数</param>
@@ -581,7 +581,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 行列の各値を定数倍にする
+        /// 行列の各値を定数倍にします。
         /// </summary>
         /// <param name="scalar">乗算する定数</param>
         /// <param name="matrix">定数倍される行列</param>
@@ -589,7 +589,7 @@ namespace Altseed2
         public static Matrix44F operator *(float scalar, Matrix44F matrix) => matrix * scalar;
 
         /// <summary>
-        /// 行列の各値を定数倍で除算する
+        /// 行列の各値を定数倍で除算します。
         /// </summary>
         /// <param name="matrix">除算される行列</param>
         /// <param name="scalar">除算する定数</param>
@@ -602,7 +602,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 乗算を行う
+        /// 乗算を行います。
         /// </summary>
         /// <param name="left">乗算する要素</param>
         /// <param name="right">乗算される要素</param>
@@ -619,7 +619,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 乗算を行う
+        /// 乗算を行います。
         /// </summary>
         /// <param name="left">乗算する要素</param>
         /// <param name="right">乗算される要素</param>
@@ -628,7 +628,7 @@ namespace Altseed2
 
         #region IEquatable
         /// <summary>
-        /// 2つの<see cref="Matrix44F"/>間の等価性を判定する
+        /// 2つの<see cref="Matrix44F"/>間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
@@ -642,14 +642,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is Matrix44F m && Equals(m);
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public readonly override int GetHashCode()
@@ -662,14 +662,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 二つの<see cref="Matrix44F"/>の間の等価性を判定する
+        /// 二つの<see cref="Matrix44F"/>の間の等価性を判定します。
         /// </summary>
         /// <param name="m1">等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
         /// <param name="m2">等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
         /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Matrix44F m1, Matrix44F m2) => m1.Equals(m2);
         /// <summary>
-        /// 二つの<see cref="Matrix44F"/>の間の非等価性を判定する
+        /// 二つの<see cref="Matrix44F"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="m1">非等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
         /// <param name="m2">非等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
@@ -678,7 +678,7 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// このインスタンスの複製を作成する
+        /// このインスタンスの複製を作成します。
         /// </summary>
         /// <returns>このインスタンスの複製</returns>
         public readonly Matrix44F Clone()

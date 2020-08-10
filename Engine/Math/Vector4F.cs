@@ -105,7 +105,7 @@ namespace Altseed2
         public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         /// <summary>
-        /// 二つの<see cref="Vector4F"/>の間の等価性を判定する
+        /// 二つの<see cref="Vector4F"/>の間の等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定する<see cref="Vector4F"/>のインスタンス</param>
         /// <param name="v2">等価性を判定する<see cref="Vector4F"/>のインスタンス</param>
@@ -113,7 +113,7 @@ namespace Altseed2
         public static bool operator ==(Vector4F v1, Vector4F v2) => Equals(v1, v2);
 
         /// <summary>
-        /// 二つの<see cref="Vector4F"/>の間の非等価性を判定する
+        /// 二つの<see cref="Vector4F"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="v1">非等価性を判定する<see cref="Vector4F"/>のインスタンス</param>
         /// <param name="v2">非等価性を判定する<see cref="Vector4F"/>のインスタンス</param>
@@ -257,12 +257,12 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// <see cref="Vector4I"/>から<see cref="Vector4F"/>に型変換する
+        /// <see cref="Vector4I"/>から<see cref="Vector4F"/>に型変換します。
         /// </summary>
         /// <param name="v">変換する<see cref="Vector4I"/>のインスタンス</param>
         public static implicit operator Vector4F(Vector4I v) => v.To4F();
         /// <summary>
-        /// <see cref="Vector4F"/>から<see cref="Vector4I"/>に型変換する
+        /// <see cref="Vector4F"/>から<see cref="Vector4I"/>に型変換します。
         /// </summary>
         /// <param name="v">変換する<see cref="Vector4F"/>のインスタンス</param>
         public static explicit operator Vector4I(Vector4F v) => v.To4I();

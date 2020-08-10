@@ -12,7 +12,7 @@ namespace Altseed2
         internal readonly static Color AreaColor = new Color(255, 100, 100, 100);
 
         /// <summary>
-        /// 指定した<see cref="ColliderNode"/>の当たり判定領域を表示するノードを生成する
+        /// 指定した<see cref="ColliderNode"/>の当たり判定領域を表示するノードを生成します。
         /// </summary>
         /// <param name="colliderNode">使用するコライダノード</param>
         /// <exception cref="ArgumentException">

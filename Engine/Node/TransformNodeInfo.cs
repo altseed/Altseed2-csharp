@@ -5,12 +5,12 @@
         private TransformNode _TransformNode;
 
         /// <summary>
-        /// <see cref="TransformNode.Size"/>の領域を表示する
+        /// <see cref="TransformNode.Size"/>の領域を表示します。
         /// </summary>
         private RenderedPolygon[] _SizeBoxLines;
 
         /// <summary>
-        /// <see cref="TransformNode.Pivot"/>の領域を表示する
+        /// <see cref="TransformNode.Pivot"/>の領域を表示します。
         /// </summary>
         private RenderedPolygon _PivotBox;
 

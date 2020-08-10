@@ -17,7 +17,7 @@ namespace Altseed2
         private fixed int Values[16];
 
         /// <summary>
-        /// 単位行列を取得する
+        /// 単位行列を取得します。
         /// </summary>
         public static Matrix44I Identity
         {
@@ -37,7 +37,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 転置行列を取得する
+        /// 転置行列を取得します。
         /// </summary>
         public readonly Matrix44I TransPosition
         {
@@ -58,7 +58,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した位置の値を取得または設定する
+        /// 指定した位置の値を取得または設定します。
         /// </summary>
         /// <param name="x">取得する要素の位置</param>
         /// <param name="y">取得する要素の位置</param>
@@ -81,7 +81,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// クオータニオンを元に回転行列(右手)を取得する
+        /// クオータニオンを元に回転行列(右手)を取得します。
         /// </summary>
         /// <param name="quaternion">使用するクオータニオン</param>
         public static Matrix44I GetQuaternion(Vector4I quaternion)
@@ -112,14 +112,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2D座標の拡大率を表す行列を取得する
+        /// 2D座標の拡大率を表す行列を取得します。
         /// </summary>
         /// <param name="scale2D">設定する拡大率</param>
         /// <returns><paramref name="scale2D"/>分の拡大/縮小を表す行列</returns>
         public static Matrix44I GetScale2D(Vector2I scale2D) => GetScale3D(new Vector3I(scale2D.X, scale2D.Y, 1));
 
         /// <summary>
-        /// 3D座標の拡大率を表す行列を取得する
+        /// 3D座標の拡大率を表す行列を取得します。
         /// </summary>
         /// <param name="scale3D">設定する拡大率</param>
         /// <returns><paramref name="scale3D"/>分の拡大/縮小を表す行列</returns>
@@ -134,14 +134,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2D座標の平行移動分を表す行列を取得する
+        /// 2D座標の平行移動分を表す行列を取得します。
         /// </summary>
         /// <param name="position2D">平行移動する座標</param>
         /// <returns><paramref name="position2D"/>分の平行移動を表す行列</returns>
         public static Matrix44I GetTranslation2D(Vector2I position2D) => GetTranslation3D(new Vector3I(position2D.X, position2D.Y, 0));
 
         /// <summary>
-        /// 3D座標の平行移動分を表す行列を取得する
+        /// 3D座標の平行移動分を表す行列を取得します。
         /// </summary>
         /// <param name="position3D">平行移動する座標</param>
         /// <returns><paramref name="position3D"/>分の平行移動を表す行列</returns>
@@ -198,7 +198,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 加算を行う
+        /// 加算を行います。
         /// </summary>
         /// <param name="left">加算する要素</param>
         /// <param name="right">加算される要素</param>
@@ -211,14 +211,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 符合を逆転する
+        /// 符合を逆転します。
         /// </summary>
         /// <param name="matrix">符合を逆転する行列</param>
         /// <returns>符合が逆転された行列</returns>
         public static Matrix44I operator -(Matrix44I matrix) => -1 * matrix;
 
         /// <summary>
-        /// 減算を行う
+        /// 減算を行います。
         /// </summary>
         /// <param name="left">減算する要素</param>
         /// <param name="right">減算される要素</param>
@@ -231,7 +231,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 行列の各値を定数倍にする
+        /// 行列の各値を定数倍にします。
         /// </summary>
         /// <param name="matrix">定数倍される行列</param>
         /// <param name="scalar">乗算する定数</param>
@@ -244,7 +244,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 行列の各値を定数倍にする
+        /// 行列の各値を定数倍にします。
         /// </summary>
         /// <param name="scalar">乗算する定数</param>
         /// <param name="matrix">定数倍される行列</param>
@@ -252,7 +252,7 @@ namespace Altseed2
         public static Matrix44I operator *(int scalar, Matrix44I matrix) => matrix * scalar;
 
         /// <summary>
-        /// 行列の各値を定数倍で除算する
+        /// 行列の各値を定数倍で除算します。
         /// </summary>
         /// <param name="matrix">除算される行列</param>
         /// <param name="scalar">除算する定数</param>
@@ -267,7 +267,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 乗算を行う
+        /// 乗算を行います。
         /// </summary>
         /// <param name="left">乗算する要素</param>
         /// <param name="right">乗算される要素</param>
@@ -284,7 +284,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 乗算を行う
+        /// 乗算を行います。
         /// </summary>
         /// <param name="left">乗算する要素</param>
         /// <param name="right">乗算される要素</param>
@@ -293,7 +293,7 @@ namespace Altseed2
 
         #region IEquatable
         /// <summary>
-        /// 2つの<see cref="Matrix44I"/>間の等価性を判定する
+        /// 2つの<see cref="Matrix44I"/>間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価性を判定する<see cref="Matrix44I"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
@@ -306,14 +306,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is Matrix44I m && Equals(m);
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public readonly override int GetHashCode()
@@ -324,14 +324,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 二つの<see cref="Matrix44I"/>の間の等価性を判定する
+        /// 二つの<see cref="Matrix44I"/>の間の等価性を判定します。
         /// </summary>
         /// <param name="m1">等価性を判定する<see cref="Matrix44I"/>のインスタンス</param>
         /// <param name="m2">等価性を判定する<see cref="Matrix44I"/>のインスタンス</param>
         /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Matrix44I m1, Matrix44I m2) => m1.Equals(m2);
         /// <summary>
-        /// 二つの<see cref="Matrix44I"/>の間の非等価性を判定する
+        /// 二つの<see cref="Matrix44I"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="m1">非等価性を判定する<see cref="Matrix44I"/>のインスタンス</param>
         /// <param name="m2">非等価性を判定する<see cref="Matrix44I"/>のインスタンス</param>
@@ -340,7 +340,7 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// このインスタンスの複製を作成する
+        /// このインスタンスの複製を作成します。
         /// </summary>
         /// <returns>このインスタンスの複製</returns>
         public readonly Matrix44I Clone()

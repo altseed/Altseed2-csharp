@@ -13,12 +13,12 @@ namespace Altseed2
         where T : unmanaged
     {
         /// <summary>
-        /// 格納されている要素数を取得する
+        /// 格納されている要素数を取得します。
         /// </summary>
         int Count { get; }
 
         /// <summary>
-        /// 指定したインデックスの要素を取得または設定する
+        /// 指定したインデックスの要素を取得または設定します。
         /// </summary>
         /// <param name="index">検索する要素のインデックス</param>
         /// <returns><paramref name="index"/>に該当する要素</returns>
@@ -26,13 +26,13 @@ namespace Altseed2
         T this[int index] { get; set; }
 
         /// <summary>
-        /// サイズを変更する
+        /// サイズを変更します。
         /// </summary>
         /// <param name="size">変更先のサイズ</param>
         void Resize(int size);
 
         /// <summary>
-        /// データを指定したポインターにコピーする
+        /// データを指定したポインターにコピーします。
         /// </summary>
         /// <param name="ptr">コピー先のポインター</param>
         void CopyTo(IntPtr ptr);
@@ -291,7 +291,7 @@ namespace Altseed2
     internal static class ArrayExtension
     {
         /// <summary>
-        /// このインスタンスと同じデータを持った<typeparamref name="TElement"/>型の配列の新しいインスタンスを生成する
+        /// このインスタンスと同じデータを持った<typeparamref name="TElement"/>型の配列の新しいインスタンスを生成します。
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">配列のもとになるCore接続用配列クラスのインスタンス</param>
@@ -316,7 +316,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// Core接続配列に指定した配列のデータを設定する
+        /// Core接続配列に指定した配列のデータを設定します。
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>
@@ -340,7 +340,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// コレクションを配列に変換する（もしかして単にLINQのToArrayするだけでよかったりする？）
+        /// コレクションを配列に変換します。（もしかして単にLINQのToArrayするだけでよかったりする？）
         /// </summary>
         /// <typeparam name="TElement">変換する配列の要素の型</typeparam>
         /// <param name="collection">変換するコレクション</param>
@@ -367,7 +367,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// Core接続配列に指定した配列のデータを設定する
+        /// Core接続配列に指定した配列のデータを設定します。
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>

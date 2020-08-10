@@ -44,7 +44,7 @@ namespace Altseed2
         /// <summary>
         /// 要素が<paramref name="owner"/>に登録されたとき実行します。
         /// </summary>
-        /// <param name="owner">自身を登録された親</param>
+        /// <param name="owner">新たなオーナー</param>
         internal abstract void Added(T owner);
 
         /// <summary>

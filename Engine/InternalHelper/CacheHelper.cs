@@ -13,15 +13,15 @@ namespace Altseed2
     internal interface ICacheKeeper<TClass> where TClass : class
     {
         /// <summary>
-        /// キャッシュをためておくディクショナリを取得する
+        /// キャッシュをためておくディクショナリを取得します。
         /// </summary>
         internal IDictionary<IntPtr, WeakReference<TClass>> CacheRepo { get; }
         /// <summary>
-        /// 自身のポインタを取得または設定する
+        /// 自身のポインタを取得または設定します。
         /// </summary>
         internal IntPtr Self { get; set; }
         /// <summary>
-        /// キャッシュを開放する
+        /// キャッシュを開放します。
         /// </summary>
         /// <param name="native">開放するオブジェクトのポインタ</param>
         internal void Release(IntPtr native);
@@ -34,7 +34,7 @@ namespace Altseed2
     internal static class CacheHelper
     {
         /// <summary>
-        /// キャッシュ制御を行う
+        /// キャッシュ制御を行います。
         /// </summary>
         /// <typeparam name="TClass">キャッシュ制御を行うクラス</typeparam>
         /// <param name="obj">キャッシュ制御を行うクラスのインスタンス</param>

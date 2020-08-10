@@ -32,7 +32,7 @@ namespace Altseed2
         /// <summary>
         /// 要素の追加を予約します。
         /// </summary>
-        /// <param name="obj">追加される要素</param>
+        /// <param name="obj">追加する要素</param>
         internal void Add(T obj)
         {
             if (obj == null)
@@ -83,7 +83,7 @@ namespace Altseed2
         /// <summary>
         /// 要素の削除を予約します。
         /// </summary>
-        /// <param name="obj">削除される要素</param>
+        /// <param name="obj">削除する要素</param>
         internal void Remove(T obj)
         {
             if (obj == null)
@@ -218,7 +218,7 @@ namespace Altseed2
         /// <summary>
         /// 直ちに要素を追加します。
         /// </summary>
-        /// <param name="obj">追加される要素</param>
+        /// <param name="obj">追加する要素</param>
         /// <remarks>列挙中に呼び出さないこと</remarks>
         internal void AddImmediately(T obj)
         {
@@ -246,7 +246,7 @@ namespace Altseed2
         /// <summary>
         /// 直ちに要素を追加します。
         /// </summary>
-        /// <param name="objs">追加される要素のコレクション</param>
+        /// <param name="objs">追加する要素のコレクション</param>
         /// <exception cref="ArgumentNullException"><paramref name="objs"/>がnull</exception>
         /// <remarks>列挙中に呼び出さないこと</remarks>
         internal void AddImmediately(IEnumerable<T> objs)

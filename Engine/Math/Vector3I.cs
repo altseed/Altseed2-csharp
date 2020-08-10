@@ -71,7 +71,7 @@ namespace Altseed2
         public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
         /// <summary>
-        /// 二つの<see cref="Vector3I"/>の間の等価性を判定する
+        /// 二つの<see cref="Vector3I"/>の間の等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
         /// <param name="v2">等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
@@ -79,7 +79,7 @@ namespace Altseed2
         public static bool operator ==(Vector3I v1, Vector3I v2) => Equals(v1, v2);
 
         /// <summary>
-        /// 二つの<see cref="Vector3I"/>の間の非等価性を判定する
+        /// 二つの<see cref="Vector3I"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="v1">非等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
         /// <param name="v2">非等価性を判定する<see cref="Vector3I"/>のインスタンス</param>

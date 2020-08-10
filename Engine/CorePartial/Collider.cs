@@ -124,7 +124,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した座標に頂点を設定する
+        /// 指定した座標に頂点を設定します。
         /// </summary>
         /// <param name="positions">設定する座標</param>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>

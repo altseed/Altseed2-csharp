@@ -20,7 +20,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 更新
+        /// 更新を行います。　
         /// </summary>
         internal virtual void Update()
         {
@@ -55,9 +55,9 @@ namespace Altseed2
         private RegisteredStatus _status;
 
         /// <summary>
-        /// <paramref name="owner"/> に登録された際の処理
+        /// <paramref name="owner"/>に登録された際の処理を行います。
         /// </summary>
-        /// <param name="owner"></param>
+        /// <param name="owner">新たなオーナー</param>
         internal override void Added(Node owner)
         {
             for (var n = Parent; ; n = n.Parent)
@@ -69,7 +69,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 親要素から削除されたときの処理
+        /// 親要素から削除されたときの処理を行います。
         /// </summary>
         internal override void Removed()
         {
@@ -77,7 +77,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// エンジンに登録され、木を辿って<see cref="RootNode"/> にたどり着けるようになったとき実行
+        /// エンジンに登録され、木を辿って<see cref="RootNode"/> にたどり着けるようになったとき実行します。
         /// </summary>
         internal virtual void Registered()
         {
@@ -96,7 +96,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// エンジンから削除され、木を辿って<see cref="RootNode"/> にたどり着けなくなったとき実行
+        /// エンジンから削除され、木を辿って<see cref="RootNode"/> にたどり着けなくなったとき実行します。
         /// </summary>
         internal virtual void Unregistered()
         {
@@ -156,7 +156,7 @@ namespace Altseed2
         protected virtual void OnAdded() { }
 
         /// <summary>
-        /// エンジンから削除された時に実行
+        /// エンジンから削除された時に実行します。
         /// </summary>
         /// <remarks>
         /// 自身もしくは親ノードがEngineにから削除されたあとのUpdateの際に実行されます。
@@ -164,7 +164,7 @@ namespace Altseed2
         protected virtual void OnRemoved() { }
 
         /// <summary>
-        /// 自身が更新された時に実行
+        /// 自身が更新された時に実行します。
         /// </summary>
         protected virtual void OnUpdate() { }
 
@@ -180,10 +180,10 @@ namespace Altseed2
         private Node serialization_ParentReserved;
         private RegisteredStatus serialization_Status;
         private bool isRootChild;
-        private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行うのを止める
+        private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行います。のを止める
 
         /// <summary>
-        /// シリアライズ時に実行
+        /// シリアライズ時に実行します。
         /// </summary>
         /// <param name="context">送信先の情報</param>
         [OnSerializing]
@@ -207,7 +207,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// シリアライズ終了時に実行
+        /// シリアライズ終了時に実行します。
         /// </summary>
         /// <param name="context">送信先の情報</param>
         [OnSerializing]
@@ -218,7 +218,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// デシリアライズ時に実行
+        /// デシリアライズ時に実行します。
         /// </summary>
         /// <param name="context">送信元の情報</param>
         [OnDeserialized]

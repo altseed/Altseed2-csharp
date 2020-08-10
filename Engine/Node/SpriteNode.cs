@@ -164,7 +164,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 使用するマテリアルを取得または設定します
+        /// 使用するマテリアルを取得または設定します。
         /// </summary>
         public Material Material
         {

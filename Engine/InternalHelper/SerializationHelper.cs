@@ -6,7 +6,7 @@ namespace Altseed2
     internal static class SerializationHelper
     {
         /// <summary>
-        /// <see cref="SerializationInfo"/>から指定した名前を持つ要素を取得する
+        /// <see cref="SerializationInfo"/>から指定した名前を持つ要素を取得します。
         /// </summary>
         /// <typeparam name="T">取得する要素の型</typeparam>
         /// <param name="info">要素を取り出す<see cref="SerializationInfo"/>のインスタンス</param>

@@ -12,14 +12,14 @@ namespace Altseed2
         public sealed override Matrix44F AbsoluteTransform => Collider.Transform;
 
         /// <summary>
-        /// コライダを取得する
+        /// コライダを取得します。
         /// </summary>
         internal abstract Collider Collider { get; }
 
         internal int _Version { get; private set; }
 
         /// <summary>
-        /// <see cref="ColliderNode"/>の新しいインスタンスを生成する
+        /// <see cref="ColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         private protected ColliderNode() { }
 

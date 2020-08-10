@@ -207,7 +207,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 頂点情報が有効かどうかを判定する
+        /// 頂点情報が有効かどうかを判定します。
         /// </summary>
         /// <param name="vertexes">頂点情報</param>
         private bool CheckIsValid(VertexArray vertexes)
@@ -224,9 +224,9 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 頂点情報が有効かどうかを判定する
+        /// 頂点情報が有効かどうかを判定します。
         /// </summary>
-        /// <param name="vertexes">Vector2Fで表された頂点情報</param>
+        /// <param name="vertexes"><see cref="Vector2F"/>で表された頂点情報</param>
         private bool CheckIsValid(Vector2FArray vertexes)
         {
             if (vertexes.Count < 3) return false;
@@ -241,7 +241,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 各頂点に指定した色を設定する
+        /// 各頂点に指定した色を設定します。
         /// </summary>
         /// <param name="color">設定する色</param>
         public void OverwriteVertexColor(Color color)
@@ -253,8 +253,7 @@ namespace Altseed2
         /// 座標をもとに頂点情報を設定します。
         /// </summary>
         /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="vertexes"/>がnull</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
         /// <remarks>
         /// 色は白(255, 255, 255)に設定されます。
         /// </remarks>
@@ -280,8 +279,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
         /// <param name="color">各頂点に設定する色</param>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="vertexes"/>がnull</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
         public void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");

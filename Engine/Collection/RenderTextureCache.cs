@@ -58,7 +58,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定したサイズとフォーマットの<see cref="RenderTexture"/>をキャッシュから検索する
+        /// 指定したサイズとフォーマットの<see cref="RenderTexture"/>をキャッシュから検索します。
         /// </summary>
         /// <param name="size">検索する<see cref="RenderTexture"/>のサイズ</param>
         /// <param name="format">検索する<see cref="RenderTexture"/>のフォーマット</param>
@@ -81,7 +81,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// キャッシュの整理を行う
+        /// キャッシュの整理を行います。
         /// </summary>
         public void Update()
         {

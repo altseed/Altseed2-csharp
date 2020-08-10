@@ -27,7 +27,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 使用するコライダを取得する
+        /// 使用するコライダを取得します。
         /// </summary>
         internal RectangleCollider RectangleCollider { get; }
         internal override Collider Collider => RectangleCollider;
@@ -48,12 +48,12 @@ namespace Altseed2
         private Vector2F _RectangleSize;
 
         /// <summary>
-        /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
+        /// 既定の<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public RectangleColliderNode() : this(null) { }
 
         /// <summary>
-        /// 指定した<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成する
+        /// 指定した<see cref="Altseed2.RectangleCollider"/>を使用して<see cref="RectangleColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.RectangleCollider"/>のインスタンス</param>
         internal RectangleColliderNode(RectangleCollider collider)

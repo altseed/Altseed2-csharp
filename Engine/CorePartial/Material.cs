@@ -19,7 +19,7 @@ namespace Altseed2
         private Dictionary<string, Vector4F> vectors = new Dictionary<string, Vector4F>();
 
         /// <summary>
-        /// 指定した名前を持つ<see cref="Matrix44F"/>のインスタンスを取得する
+        /// 指定した名前を持つ<see cref="Matrix44F"/>のインスタンスを取得します。
         /// </summary>
         /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
@@ -32,7 +32,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した種類のシェーダを取得する
+        /// 指定した種類のシェーダを取得します。
         /// </summary>
         /// <param name="shaderStage">検索するシェーダのタイプ</param>
         /// <returns><paramref name="shaderStage"/>に一致するタイプのシェーダ</returns>
@@ -47,7 +47,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した名前を持つ<see cref="TextureBase"/>のインスタンスを取得する
+        /// 指定した名前を持つ<see cref="TextureBase"/>のインスタンスを取得します。
         /// </summary>
         /// <param name="key">検索する<see cref="TextureBase"/>のインスタンスの名前</param>
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
@@ -64,7 +64,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した名前を持つ<see cref="Vector4F"/>のインスタンスを取得する
+        /// 指定した名前を持つ<see cref="Vector4F"/>のインスタンスを取得します。
         /// </summary>
         /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
         /// <exception cref="ArgumentNullException"><paramref name="key"/>がnull</exception>
@@ -77,7 +77,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した名前を持つ<see cref="Matrix44F"/>の値を設定する
+        /// 指定した名前を持つ<see cref="Matrix44F"/>の値を設定します。
         /// </summary>
         /// <param name="key">検索する<see cref="Matrix44F"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Matrix44F"/>のインスタンスの値</param>
@@ -95,7 +95,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// シェーダを設定する
+        /// シェーダを設定します。
         /// </summary>
         /// <param name="shader">設定するシェーダ</param>
         /// <exception cref="ArgumentNullException"><paramref name="shader"/>がnull</exception>
@@ -112,7 +112,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した名前を持つ<see cref="TextureBase"/>の値を設定する
+        /// 指定した名前を持つ<see cref="TextureBase"/>の値を設定します。
         /// </summary>
         /// <param name="key">検索する<see cref="TextureBase"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="TextureBase"/>のインスタンスの値</param>
@@ -130,7 +130,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した名前を持つ<see cref="Vector4F"/>の値を設定する
+        /// 指定した名前を持つ<see cref="Vector4F"/>の値を設定します。
         /// </summary>
         /// <param name="key">検索する<see cref="Vector4F"/>のインスタンスの名前</param>
         /// <param name="value">設定する<see cref="Vector4F"/>のインスタンスの値</param>

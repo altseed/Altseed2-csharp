@@ -9,7 +9,7 @@ namespace Altseed2
         FloatArray floatArray = FloatArray.Create(0);
 
         /// <summary>
-        /// フルスクリーンでツールウィンドウを開始する
+        /// フルスクリーンでツールウィンドウを開始します。
         /// </summary>
         /// <param name="offset"></param>
         /// <returns>処理に成功したらtrue，それ以外でfalse</returns>
@@ -31,7 +31,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// ボタンを生成する
+        /// ボタンを生成します。
         /// </summary>
         /// <param name="label">ボタンに表示される文字列</param>
         /// <returns>クリックされた時にtrue，それ以外でfalse</returns>
@@ -41,7 +41,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// リストボックスを生成する
+        /// リストボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="current">選択されている要素のインデックス -1で何も選択していない事を表す</param>
@@ -54,7 +54,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// コンボボックスを生成する
+        /// コンボボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="current">選択されている要素のインデックス -1で何も選択していない事を表す</param>
@@ -67,7 +67,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2つの整数を入力するボックスを生成する
+        /// 2つの整数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">それぞれのボックスの値を格納する配列</param>
@@ -90,7 +90,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 3つの整数を入力するボックスを生成する
+        /// 3つの整数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">それぞれのボックスの値を格納する配列</param>
@@ -113,7 +113,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 4つの整数を入力するボックスを生成する
+        /// 4つの整数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">それぞれのボックスの値を格納する配列</param>
@@ -136,7 +136,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2つの小数を入力するボックスを生成する
+        /// 2つの小数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">それぞれのボックスの値を格納する配列</param>
@@ -159,7 +159,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 3つの小数を入力するボックスを生成する
+        /// 3つの小数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">それぞれのボックスの値を格納する配列</param>
@@ -182,7 +182,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 4つの小数を入力するボックスを生成する
+        /// 4つの小数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">それぞれのボックスの値を格納する配列</param>
@@ -205,7 +205,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2つのスライドで値を増減するバーを生成する
+        /// 2つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">各バーの値を格納する配列</param>
@@ -231,7 +231,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 3つのスライドで値を増減するバーを生成する
+        /// 3つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">各バーの値を格納する配列</param>
@@ -257,7 +257,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 4つのスライドで値を増減するバーを生成する
+        /// 4つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">各バーの値を格納する配列</param>
@@ -283,7 +283,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2つのスライドで値を増減するバーを生成する
+        /// 2つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">各バーの値を格納する配列</param>
@@ -309,7 +309,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 3つのスライドで値を増減するバーを生成する
+        /// 3つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">各バーの値を格納する配列</param>
@@ -335,7 +335,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 4つのスライドで値を増減するバーを生成する
+        /// 4つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="array">各バーの値を格納する配列</param>
@@ -361,7 +361,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// ラジオボタンを生成する
+        /// ラジオボタンを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="v">選択されているボタンのインデックス</param>
