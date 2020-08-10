@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Altseed2
 {
@@ -28,6 +29,11 @@ namespace Altseed2
         public Configuration()
         {
             selfPtr = cbg_Configuration_Create();
+        }
+
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_Configuration_Create();
         }
 
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)

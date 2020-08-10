@@ -94,7 +94,6 @@ namespace Altseed2
         /// <see cref="Altseed2.Sound"/>を表す
         /// </summary>
         Sound,
-        MAX,
     }
     
     /// <summary>
@@ -294,7 +293,6 @@ namespace Altseed2
         RightWin,
         Menu,
         Last,
-        MAX,
     }
     
     /// <summary>
@@ -1961,8 +1959,11 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Configuration(SerializationInfo info, StreamingContext context)
+        private Configuration(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
+            selfPtr = Call_GetPtr(info);
+            if (selfPtr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            
             IsFullscreen = info.GetBoolean(S_IsFullscreen);
             IsResizable = info.GetBoolean(S_IsResizable);
             DeviceType = info.GetValue<GraphicsDevice>(S_DeviceType);
@@ -2023,6 +2024,18 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
         
         #endregion
         
@@ -2461,7 +2474,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Int8Array(SerializationInfo info, StreamingContext context)
+        private Int8Array(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -2749,7 +2762,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Int32Array(SerializationInfo info, StreamingContext context)
+        private Int32Array(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -3037,7 +3050,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private VertexArray(SerializationInfo info, StreamingContext context)
+        private VertexArray(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -3325,7 +3338,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private FloatArray(SerializationInfo info, StreamingContext context)
+        private FloatArray(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -3613,7 +3626,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Vector2FArray(SerializationInfo info, StreamingContext context)
+        private Vector2FArray(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -4905,7 +4918,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected TextureBase(SerializationInfo info, StreamingContext context)
+        protected TextureBase(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             seInfo = info;
             
@@ -5624,7 +5637,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Material(SerializationInfo info, StreamingContext context)
+        private Material(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -6122,7 +6135,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected Rendered(SerializationInfo info, StreamingContext context)
+        protected Rendered(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -7665,7 +7678,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private RenderedCamera(SerializationInfo info, StreamingContext context)
+        private RenderedCamera(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -8196,7 +8209,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Shader(SerializationInfo info, StreamingContext context)
+        private Shader(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -8797,7 +8810,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Font(SerializationInfo info, StreamingContext context)
+        private Font(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             seInfo = info;
             
@@ -12231,7 +12244,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private StreamFile(SerializationInfo info, StreamingContext context)
+        private StreamFile(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             seInfo = info;
             
@@ -12526,7 +12539,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private StaticFile(SerializationInfo info, StreamingContext context)
+        private StaticFile(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -13069,7 +13082,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private Sound(SerializationInfo info, StreamingContext context)
+        private Sound(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
@@ -13938,7 +13951,7 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected Collider(SerializationInfo info, StreamingContext context)
+        protected Collider(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
             var ptr = Call_GetPtr(info);
             
