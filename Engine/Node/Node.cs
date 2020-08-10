@@ -16,7 +16,7 @@ namespace Altseed2
         /// </summary>
         public Node()
         {
-            _Children = new RegisterableCollection<Node, Node>(this);
+            _Children = new RegisterableCollection<Node>(this);
         }
 
         /// <summary>
@@ -38,9 +38,7 @@ namespace Altseed2
         /// <summary>
         /// 親ノードを取得または設定します。
         /// </summary>
-        public Node Parent { get => _parent; private set { _parent = value; } }
-        [NonSerialized]
-        private Node _parent;
+        public Node Parent => _Parent;
 
         /// <summary>
         /// このノードの登録状況を取得または設定します。
@@ -56,17 +54,12 @@ namespace Altseed2
         [NonSerialized]
         private RegisteredStatus _status;
 
-        [NonSerialized]
-        private Node _ParentReserved;
-
         /// <summary>
         /// <paramref name="owner"/> に登録された際の処理
         /// </summary>
         /// <param name="owner"></param>
         internal override void Added(Node owner)
         {
-            Parent = owner;
-
             for (var n = Parent; ; n = n.Parent)
             {
                 if (n == null) return;
@@ -80,8 +73,6 @@ namespace Altseed2
         /// </summary>
         internal override void Removed()
         {
-            Parent = null;
-
             Unregistered();
         }
 
@@ -121,7 +112,7 @@ namespace Altseed2
 
         #region Registerable (親として)
 
-        private readonly RegisterableCollection<Node, Node> _Children;
+        private readonly RegisterableCollection<Node> _Children;
 
         /// <summary>
         /// 子要素のコレクションを取得します。
@@ -134,13 +125,9 @@ namespace Altseed2
         /// 子要素を追加します。
         /// </summary>
         /// <param name="node">追加する要素</param>
-        /// <exception cref="ArgumentNullException"><paramref name="node"/>がnull</exception>
         public void AddChildNode(Node node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Status == RegisteredStatus.WaitingRemoved && node.Parent == this)
-                node.Status = RegisteredStatus.Registered;
-
+            // NOTE: null を食わせてもおｋ
             _Children.Add(node);
             node._ParentReserved = this;
         }
@@ -149,13 +136,9 @@ namespace Altseed2
         /// 子要素を削除します。
         /// </summary>
         /// <param name="node">削除する要素</param>
-        /// <exception cref="ArgumentNullException"><paramref name="node"/>がnull</exception>
         public void RemoveChildNode(Node node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Status == RegisteredStatus.WaitingAdded && node._ParentReserved == this)
-                node.Status = RegisteredStatus.Registered;
-
+            // NOTE: null を食わせてもおｋ
             _Children.Remove(node);
             node._ParentReserved = null;
         }
@@ -217,7 +200,6 @@ namespace Altseed2
             else
             {
                 isRootChild = false;
-                serialization_Parent = _parent;
                 serialization_Parent = _ParentReserved;
                 serialization_Status = Status;
                 surpressing = false;
@@ -246,7 +228,6 @@ namespace Altseed2
             if (isRootChild) Engine.AddNode(this);
             else
             {
-                _parent = serialization_Parent;
                 _ParentReserved = serialization_ParentReserved;
             }
             ResetSerializationField();

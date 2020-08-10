@@ -30,15 +30,16 @@ namespace Altseed2
     }
 
     /// <summary>
-    /// <see cref="RegisterableCollection{TElement, TOwner}"/>に登録や削除が可能な要素であることを表します。
+    /// <see cref="RegisterableCollection{T}"/>に登録や削除が可能な要素であることを表します。
     /// </summary>
     [Serializable]
-    public abstract class Registerable<TOwner>
+    public abstract class Registerable<T>
+        where T : Registerable<T>
     {
         /// <summary>
         /// 要素が<paramref name="owner"/>に登録されたとき実行します。
         /// </summary>
-        internal abstract void Added(TOwner owner);
+        internal abstract void Added(T owner);
 
         /// <summary>
         /// 要素が親要素から削除されたときに実行します。
@@ -49,5 +50,14 @@ namespace Altseed2
         /// 登録状況を取得します。
         /// </summary>
         public virtual RegisteredStatus Status { get; internal set; } = RegisteredStatus.Free;
+
+        /// <summary>
+        /// 親要素
+        /// </summary>
+        [NonSerialized]
+        internal T _Parent;
+
+        [NonSerialized]
+        internal T _ParentReserved;
     }
 }
