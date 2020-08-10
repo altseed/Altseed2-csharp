@@ -141,7 +141,7 @@ namespace Altseed2
                     // 削除予約状態で他のオブジェクトに登録した場合、こちらのコレクションからの削除だけ行う。
                     CurrentCollection.Remove(obj);
                     obj.Removed();
-                    return;
+                    continue;
                 }
 
                 if (obj.Status == RegisteredStatus.WaitingRemoved && obj._Parent == Owner)
@@ -151,7 +151,7 @@ namespace Altseed2
                     obj._Parent = null;
                     obj._ParentReserved = null;
                     obj.Removed();
-                    return;
+                    continue;
                 }
 
                 Engine.Log.Error(LogCategory.Engine, "Error on flushing RemoveQueue!");
@@ -162,6 +162,7 @@ namespace Altseed2
                 if (obj.Status == RegisteredStatus.Free && obj._ParentReserved == Owner)
                 {
                     obj._Parent = null;
+                    continue;
                 }
 
                 if (obj.Status == RegisteredStatus.WaitingAdded && obj._ParentReserved == Owner)
@@ -171,7 +172,7 @@ namespace Altseed2
                     obj._Parent = Owner;
                     obj._ParentReserved = null;
                     obj.Added(Owner);
-                    return;
+                    continue;
                 }
 
                 Engine.Log.Error(LogCategory.Engine, "Error on flushing AddQueue!");

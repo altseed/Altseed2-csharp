@@ -112,7 +112,7 @@ namespace Altseed2
 
         #region Registerable (親として)
 
-        private readonly RegisterableCollection<Node> _Children;
+        internal readonly RegisterableCollection<Node> _Children;
 
         /// <summary>
         /// 子要素のコレクションを取得します。
