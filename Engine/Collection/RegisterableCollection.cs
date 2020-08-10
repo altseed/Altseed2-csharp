@@ -8,19 +8,22 @@ namespace Altseed2
     /// 追加および削除を予約できるコレクションを表します。
     /// </summary>
     [Serializable]
-    internal class RegisterableCollection<TElement, TOwner>
-        where TElement : Registerable<TOwner>
+    internal class RegisterableCollection<T>
+        where T : Registerable<T>
     {
-        private readonly List<TElement> CurrentCollection = new List<TElement>();
-        private readonly Queue<TElement> AddQueue = new Queue<TElement>();
-        private readonly Queue<TElement> RemoveQueue = new Queue<TElement>();
+        private readonly List<T> CurrentCollection = new List<T>();
+        private readonly Queue<T> AddQueue = new Queue<T>();
+        private readonly Queue<T> RemoveQueue = new Queue<T>();
 
-        private readonly TOwner Owner;
+        /// <summary>
+        /// このコレクションを持っているオブジェクト
+        /// </summary>
+        private readonly T Owner;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        internal RegisterableCollection(TOwner owner)
+        internal RegisterableCollection(T owner)
         {
             Owner = owner;
         }
@@ -28,52 +31,102 @@ namespace Altseed2
         /// <summary>
         /// 要素の追加を予約します。
         /// </summary>
-        internal void Add(TElement obj)
+        internal void Add(T obj)
         {
             if (obj == null)
             {
-                Engine.Log.Info(LogCategory.Engine, $"null を追加しようとしました。");
-                return;
-            }
-            if (CurrentCollection.Contains(obj))
-            {
-                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に含まれています。");
-                return;
-            }
-            if (obj.Status != RegisteredStatus.Free)
-            {
-                Engine.Log.Info(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素の状態が無効です。");
+                Engine.Log.Warn(LogCategory.Engine, $"null を追加しようとしました。");
                 return;
             }
 
-            AddQueue.Enqueue(obj);
-            obj.Status = RegisteredStatus.WaitingAdded;
+            if (obj == Owner)
+            {
+                Engine.Log.Warn(LogCategory.Engine, $"自身を追加することはできません。");
+                return;
+            }
+
+            switch (obj.Status)
+            {
+                case RegisteredStatus.Free:
+                    AddQueue.Enqueue(obj);
+                    obj.Status = RegisteredStatus.WaitingAdded;
+                    obj._ParentReserved = Owner;
+                    return;
+
+                case RegisteredStatus.WaitingAdded:
+                case RegisteredStatus.Registered:
+                    Engine.Log.Warn(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に追加されています。");
+                    return;
+
+                case RegisteredStatus.WaitingRemoved:
+                    // 削除待ちのときに登録しようとした場合：
+                    // NOTE: どちらも削除時の扱いに注意
+                    if (obj._Parent == Owner)
+                    {
+                        // 同じ親に再登録しようとした場合は状態を登録済みに戻すだけ。
+                        obj.Status = RegisteredStatus.Registered;
+                        return;
+                    }
+                    else
+                    {
+                        // 異なる親に再登録しようとした場合は登録キューに入れる。
+                        obj.Status = RegisteredStatus.WaitingAdded;
+                        obj._ParentReserved = Owner;
+                        AddQueue.Enqueue(obj);
+                        return;
+                    }
+            }
         }
 
         /// <summary>
         /// 要素の削除を予約します。
         /// </summary>
         /// <param name="obj"></param>
-        internal void Remove(TElement obj)
+        internal void Remove(T obj)
         {
             if (obj == null)
             {
-                Engine.Log.Info(LogCategory.Engine, $"null を削除しようとしました。");
-                return;
-            }
-            if (!CurrentCollection.Contains(obj))
-            {
-                Engine.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素が含まれていません。");
-                return;
-            }
-            if (obj.Status != RegisteredStatus.Registered)
-            {
-                Engine.Log.Info(LogCategory.Engine, $"削除しようとした {obj.GetType()} 要素の状態が無効です。");
+                Engine.Log.Warn(LogCategory.Engine, $"null を削除しようとしました。");
                 return;
             }
 
-            RemoveQueue.Enqueue(obj);
-            obj.Status = RegisteredStatus.WaitingRemoved;
+            switch (obj.Status)
+            {
+                case RegisteredStatus.Free:
+                case RegisteredStatus.WaitingRemoved:
+                    Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} 要素は登録されていません。");
+                    return;
+
+                case RegisteredStatus.WaitingAdded:
+                    // 追加待ちの場合
+                    if (obj._ParentReserved == Owner)
+                    {
+                        // 同じ親から削除しようとした場合は状態を未登録に戻すだけ。
+                        obj.Status = RegisteredStatus.Free;
+                        return;
+                    }
+                    else
+                    {
+                        // 親が異なる場合は削除しない。
+                        Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} 要素は他の{typeof(T)} 要素に登録されています。");
+                        return;
+                    }
+                case RegisteredStatus.Registered:
+                    if (obj._Parent == Owner)
+                    {
+                        // 同じ親から削除しようとした場合は削除を予約。
+                        RemoveQueue.Enqueue(obj);
+                        obj.Status = RegisteredStatus.WaitingRemoved;
+                    }
+                    else
+                    {
+                        // 親が異なる場合は削除しない。
+                        Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} 要素は他の{typeof(T)} 要素に登録されています。");
+                        return;
+                    }
+
+                    return;
+            }
         }
 
         /// <summary>
@@ -81,31 +134,48 @@ namespace Altseed2
         /// </summary>
         internal void Update()
         {
-            while (RemoveQueue.Count > 0)
+            while (RemoveQueue.TryDequeue(out var obj))
             {
-                var obj = RemoveQueue.Dequeue();
-                if (obj.Status != RegisteredStatus.WaitingRemoved) continue;
-                CurrentCollection.Remove(obj);
-                obj.Status = RegisteredStatus.Free;
-                obj.Removed();
+                if (obj.Status == RegisteredStatus.Free && obj._ParentReserved == Owner)
+                {
+                    // 削除予約状態で他のオブジェクトに登録した場合、こちらのコレクションからの削除だけ行う。
+                    CurrentCollection.Remove(obj);
+                    obj.Removed();
+                    return;
+                }
+
+                if (obj.Status == RegisteredStatus.WaitingRemoved && obj._Parent == Owner)
+                {
+                    CurrentCollection.Remove(obj);
+                    obj.Status = RegisteredStatus.Free;
+                    obj._Parent = null;
+                    obj._ParentReserved = null;
+                    obj.Removed();
+                    return;
+                }
+
+                Engine.Log.Error(LogCategory.Engine, "Error on flushing RemoveQueue!");
             }
 
-            while (AddQueue.Count > 0)
+            while (AddQueue.TryDequeue(out var obj))
             {
-                var obj = AddQueue.Dequeue();
-                if (obj.Status != RegisteredStatus.WaitingAdded) continue;
-                CurrentCollection.Add(obj);
-                obj.Status = RegisteredStatus.Registered;
-                obj.Added(Owner);
-            }
-        }
+                if (obj.Status == RegisteredStatus.Free && obj._ParentReserved == Owner)
+                {
+                    obj._Parent = null;
+                }
 
-        /// <summary>
-        /// 指定した比較子を使用して、コレクションをソートします。
-        /// </summary>
-        internal void Sort(IComparer<TElement> comparer)
-        {
-            CurrentCollection.Sort(comparer);
+                if (obj.Status == RegisteredStatus.WaitingAdded && obj._ParentReserved == Owner)
+                {
+                    CurrentCollection.Add(obj);
+                    obj.Status = RegisteredStatus.Registered;
+                    obj._Parent = Owner;
+                    obj._ParentReserved = null;
+                    obj.Added(Owner);
+                    return;
+                }
+
+                Engine.Log.Error(LogCategory.Engine, "Error on flushing AddQueue!");
+            }
         }
 
         /// <summary>
@@ -113,25 +183,40 @@ namespace Altseed2
         /// </summary>
         internal void Clear()
         {
-            foreach (var current in CurrentCollection) current.Status = RegisteredStatus.Free;
+            foreach (var current in CurrentCollection)
+            {
+                current.Status = RegisteredStatus.Free;
+                current._Parent = null;
+                current.Removed();
+            }
             CurrentCollection.Clear();
-            while (AddQueue.TryDequeue(out var current)) current.Status = RegisteredStatus.Free;
-            while (RemoveQueue.TryDequeue(out var current)) current.Status = RegisteredStatus.Free;
+            while (AddQueue.TryDequeue(out var current))
+            {
+                current.Status = RegisteredStatus.Free;
+                current._Parent = null;
+                current.Removed();
+            }
+            while (RemoveQueue.TryDequeue(out var current))
+            {
+                current.Status = RegisteredStatus.Free;
+                current._Parent = null;
+                current.Removed();
+            }
         }
 
         /// <summary>
         /// 現在の要素の読み取り専用なコレクションを返します。
         /// </summary>
-        internal ReadOnlyCollection<TElement> AsReadOnly()
+        internal ReadOnlyCollection<T> AsReadOnly()
         {
-            return new ReadOnlyCollection<TElement>(CurrentCollection);
+            return new ReadOnlyCollection<T>(CurrentCollection);
         }
 
         /// <summary>
         /// 直ちに要素を追加します。
         /// </summary>
         /// <remarks>列挙中に呼び出さないこと</remarks>
-        internal void AddImmediately(TElement obj)
+        internal void AddImmediately(T obj)
         {
             if (obj == null)
             {
@@ -159,7 +244,7 @@ namespace Altseed2
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="objs"/>がnull</exception>
         /// <remarks>列挙中に呼び出さないこと</remarks>
-        internal void AddImmediately(IEnumerable<TElement> objs)
+        internal void AddImmediately(IEnumerable<T> objs)
         {
             if (objs == null) throw new ArgumentNullException(nameof(objs), "引数がnullです");
             foreach (var o in objs)
