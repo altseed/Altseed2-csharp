@@ -44,7 +44,7 @@ namespace Collider
         public CollidableSprite()
         {
             // テクスチャ・大きさ・中心位置を設定します。
-            Texture = Texture2D.Load(@"AltseedPink256.png");
+            Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
             Scale = new Vector2F(0.4f, 0.4f);
             CenterPosition = Texture.Size.To2F() * 0.5f;
 
