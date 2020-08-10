@@ -26,7 +26,7 @@ namespace Altseed2
 
         void IDrawn.Draw()
         {
-            if(_IsValid) Engine.Renderer.DrawPolygon(_RenderedPolygon);
+            if (_IsValid) Engine.Renderer.DrawPolygon(_RenderedPolygon);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Altseed2
             {
                 var vertexArray = VertexArray.Create(value);
                 _IsValid = CheckIsValid(vertexArray);
-                if(_IsValid)
+                if (_IsValid)
                 {
                     _RenderedPolygon.Vertexes = vertexArray;
                     _RequireCalcTransform = true;
@@ -255,8 +255,11 @@ namespace Altseed2
         /// 座標をもとに頂点情報を設定します。
         /// </summary>
         /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
-        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
-        /// <remarks>色は白(255, 255, 255)に設定されます。</remarks>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="vertexes"/>がnull</exception>
+        /// <remarks>
+        /// 色は白(255, 255, 255)に設定されます。
+        /// </remarks>
         public void SetVertexes(IEnumerable<Vertex> vertexes)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
@@ -279,7 +282,8 @@ namespace Altseed2
         /// </summary>
         /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
         /// <param name="color">各頂点に設定する色</param>
-        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="vertexes"/>がnull</exception>
         public void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");

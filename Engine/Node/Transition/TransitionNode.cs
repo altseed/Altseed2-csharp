@@ -84,7 +84,7 @@ namespace Altseed2
             yield return 0;
 
             // ノードが入れ替わる前の処理
-            for(float time = 0.0f;  time < closingDuration; time += Engine.DeltaSecond)
+            for (float time = 0.0f; time < closingDuration; time += Engine.DeltaSecond)
             {
                 OnClosing(MathF.Min(1.0f, time / closingDuration));
                 yield return 0;
@@ -104,7 +104,7 @@ namespace Altseed2
             yield return 0;
 
             // ノードが入れ替わった後の処理
-            for(float time = 0.0f; time < openingDuration; time += Engine.DeltaSecond)
+            for (float time = 0.0f; time < openingDuration; time += Engine.DeltaSecond)
             {
                 OnOpening(MathF.Min(1.0f, time / openingDuration));
                 yield return 0;

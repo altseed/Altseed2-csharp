@@ -25,7 +25,7 @@ namespace Altseed2
                     float total = 0.0f;
                     float dispersion = intensity * intensity;
 
-                    float* ws = stackalloc float [3];
+                    float* ws = stackalloc float[3];
 
                     for (int i = 0; i < 3; i++)
                     {

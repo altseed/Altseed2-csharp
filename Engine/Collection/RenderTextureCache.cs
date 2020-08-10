@@ -70,16 +70,16 @@ namespace Altseed2
 
         public void Update()
         {
-            foreach(var x in cache)
+            foreach (var x in cache)
             {
                 x.Value.life--;
-                if(x.Value.life == 0)
+                if (x.Value.life == 0)
                 {
                     removeKeys.Add(x.Key);
                 }
             }
 
-            foreach(var key in removeKeys)
+            foreach (var key in removeKeys)
             {
                 cache.Remove(key);
             }

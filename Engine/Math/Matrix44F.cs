@@ -137,7 +137,7 @@ namespace Altseed2
         /// <param name="y">取得する要素の位置</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または4以上</exception>
         /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
-        public float this[int x ,int y]
+        public float this[int x, int y]
         {
             readonly get
             {
@@ -573,7 +573,7 @@ namespace Altseed2
                 for (int j = 0; j < 4; j++)
                     for (int k = 0; k < 4; k++)
                         result.Values[i * 4 + j] += left.Values[i * 4 + k] * right.Values[k * 4 + j];
-               
+
             return result;
         }
 

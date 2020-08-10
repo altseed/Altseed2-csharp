@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+
 using NUnit.Framework;
 
 namespace Altseed2.Test

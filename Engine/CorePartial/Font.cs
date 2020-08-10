@@ -21,13 +21,13 @@ namespace Altseed2
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(S_Textures, textures);  
+            info.AddValue(S_Textures, textures);
         }
 
         partial void OnDeserialize_Method(object sender)
         {
             textures = seInfo.GetValue<Dictionary<int, Texture2D>>(S_Textures);
-            foreach (var t in textures) AddImageGlyph(t.Key, t.Value);            
+            foreach (var t in textures) AddImageGlyph(t.Key, t.Value);
         }
 
         /// <summary>

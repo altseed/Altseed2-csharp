@@ -52,7 +52,7 @@ namespace Altseed2.Tool.FilePackageGenerator
                         }
                     }
 
-                fail:
+                    fail:
                     Engine.Tool.Text(msg);
                     Engine.Tool.End();
                 }

@@ -26,7 +26,7 @@ namespace Sample
 
                 // 指定したインデックスのジョイスティックが接続しているかどうかを確認します。
                 // Joystick.IsPresentも利用できます。(こちらの方が高速)
-                if(info is null)
+                if (info is null)
                 {
                     displayText = "コントローラーが接続されていません。\n";
                 }
@@ -36,7 +36,7 @@ namespace Sample
                     displayText += $"プロダクトID: {info.Product}\n";
                     displayText += $"ベンダーID: {info.Vendor}\n";
 
-                    if(info.IsGamepad)
+                    if (info.IsGamepad)
                     {
                         // ゲームパッドとして登録されているJoystickの場合
 
@@ -52,7 +52,8 @@ namespace Sample
                             var state = Engine.Joystick.GetButtonState(0, buttonType);
                             var buttonName = buttonType.ToString();
 
-                            displayText += state switch {
+                            displayText += state switch
+                            {
                                 ButtonState.Free => $"{buttonName}が離されています\n",
                                 ButtonState.Hold => $"{buttonName}が押されています\n",
                                 ButtonState.Release => $"{buttonName}が離されました！\n",
@@ -74,7 +75,8 @@ namespace Sample
                             //     第二引数: ジョイスティックのボタンのインデックス
                             var state = Engine.Joystick.GetButtonState(0, buttonIndex);
 
-                            displayText += state switch {
+                            displayText += state switch
+                            {
                                 ButtonState.Free => $"{buttonIndex}番目のボタンが離されています\n",
                                 ButtonState.Hold => $"{buttonIndex}番目のボタンが押されています\n",
                                 ButtonState.Release => $"{buttonIndex}番目のボタンが離されました！\n",

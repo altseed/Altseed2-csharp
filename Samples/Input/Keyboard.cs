@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Altseed2;
 
 namespace Sample

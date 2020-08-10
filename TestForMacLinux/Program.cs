@@ -35,7 +35,7 @@ namespace Altseed2.TestForMacLinux
                 var instance = Activator.CreateInstance(classType);
                 foreach (var method in classType.GetMethods()
                     .Where(obj => Attribute.GetCustomAttribute(obj, typeof(TestAttribute)) != null &&
-                         (options.Filter.Count() == 0 || 
+                         (options.Filter.Count() == 0 ||
                          options.Filter.Where(cond => cond.FirstOrDefault() != '-').All(cond => (classType.Name + "." + obj.Name).Contains(cond)) &&
                          options.Filter.Where(cond => cond.FirstOrDefault() == '-').All(cond => !(classType.Name + "." + obj.Name).Contains(cond.TrimStart('-'))))))
                 {

@@ -26,7 +26,7 @@ namespace Sample
 
                 var info = Engine.Joystick.GetJoystickInfo(0);
 
-                if(info is null)
+                if (info is null)
                 {
                     displayText = "コントローラーが接続されていません。\n";
                 }
@@ -36,7 +36,8 @@ namespace Sample
                     displayText += $"プロダクトID: {info.Product}\n";
                     displayText += $"ベンダーID: {info.Vendor}\n";
 
-                    if(info.IsGamepad) {
+                    if (info.IsGamepad)
+                    {
                         // ゲームパッドとして登録されているJoystickの場合
 
                         displayText += $"ゲームパッド名: {info.GamepadName}\n";

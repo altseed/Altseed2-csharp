@@ -61,7 +61,7 @@ namespace Altseed2.Tool.FontGenerator
                         }
                     }
 
-                fail:
+                    fail:
                     Engine.Tool.Text(msg);
                     Engine.Tool.End();
                 }

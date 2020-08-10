@@ -33,7 +33,7 @@ namespace Sample
             var line = new LineNode()
             {
                 Color = new Color(100, 100, 255),
-                Point1 = new Vector2F(200f,150f),
+                Point1 = new Vector2F(200f, 150f),
                 Point2 = new Vector2F(400f, 350f),
                 Thickness = 5f
             };

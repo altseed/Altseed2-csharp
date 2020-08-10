@@ -23,7 +23,7 @@ namespace Altseed2
                 _VisibleTransformInfo = value;
             }
         }
-        private bool _VisibleTransformInfo　= false;
+        private bool _VisibleTransformInfo = false;
 
         public Configuration()
         {

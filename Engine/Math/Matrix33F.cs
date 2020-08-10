@@ -42,7 +42,7 @@ namespace Altseed2
             get
             {
                 var result = Identity;
-                
+
                 var a11 = result.Values[0 * 3 + 0];
                 var a12 = result.Values[0 * 3 + 1];
                 var a13 = result.Values[0 * 3 + 2];
@@ -81,7 +81,7 @@ namespace Altseed2
                 result.Values[2 * 3 + 0] = b31 * InvDet;
                 result.Values[2 * 3 + 1] = b32 * InvDet;
                 result.Values[2 * 3 + 2] = b33 * InvDet;
-                
+
                 return result;
             }
         }
@@ -257,7 +257,7 @@ namespace Altseed2
                 for (int j = 0; j < 3; ++j)
                     for (int k = 0; k < 3; ++k)
                         result[i, j] += left[i, k] * right[k, j];
-                
+
 
             return result;
         }

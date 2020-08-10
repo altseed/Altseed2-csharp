@@ -299,7 +299,8 @@ namespace Altseed2
         public static bool operator !=(AlphaBlend left, AlphaBlend right) => !(left == right);
 
         public static AlphaBlend Normal =>
-            new AlphaBlend {
+            new AlphaBlend
+            {
                 IsBlendEnabled = true,
                 BlendSrcFunc = BlendFunction.SrcAlpha,
                 BlendDstFunc = BlendFunction.OneMinusSrcAlpha,
@@ -332,7 +333,7 @@ namespace Altseed2
                 BlendEquationRGB = BlendEquation.Add,
                 BlendEquationAlpha = BlendEquation.Max
             };
-        
+
         public static AlphaBlend Substract =>
             new AlphaBlend
             {

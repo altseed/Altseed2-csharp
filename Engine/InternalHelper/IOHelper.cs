@@ -21,7 +21,7 @@ namespace Altseed2
             if (IsTooLongPath(path)) return new PathTooLongException("パスが長すぎます");
             if (!Engine.File.Exists(path)) return new FileNotFoundException($"指定したパスのファイルが見つかりませんでした\nパス：{path}", path);
             return null;
-        } 
+        }
         /// <summary>
         /// <see cref="ArgumentException"/>
         /// <see cref="ArgumentNullException"/>
@@ -36,7 +36,7 @@ namespace Altseed2
             if (IsTooLongPath(path)) return new PathTooLongException("パスが長すぎます");
             if (!Directory.Exists(Path.GetDirectoryName(path))) return new DirectoryNotFoundException($"指定したパスのディレクトリが見つかりませんでした\nディレクトリ：{Path.GetDirectoryName(path)}");
             return null;
-        } 
+        }
         internal static bool ContainsInvalidChar(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using Altseed2;
 
 namespace Sample
@@ -14,12 +15,12 @@ namespace Sample
             int min = (int)(value * ((255.0 - saturation) / 255.0));
             int mid = (int)((1.0 - Math.Abs(1.0 - (hue % 120) / 60.0)) * (max - min) + min);
 
-            if(0 <= hue && hue < 60) return new Color(max, mid, min, 255);
-            if(60 <= hue && hue < 120) return new Color(mid, max, min, 255);
-            if(120 <= hue && hue < 180) return new Color(min, max, mid, 255);
-            if(180 <= hue && hue < 240) return new Color(min, mid, max, 255);
-            if(240 <= hue && hue < 300) return new Color(mid, min, max, 255);
-            if(300 <= hue && hue < 360) return new Color(max, min, mid, 255);
+            if (0 <= hue && hue < 60) return new Color(max, mid, min, 255);
+            if (60 <= hue && hue < 120) return new Color(mid, max, min, 255);
+            if (120 <= hue && hue < 180) return new Color(min, max, mid, 255);
+            if (180 <= hue && hue < 240) return new Color(min, mid, max, 255);
+            if (240 <= hue && hue < 300) return new Color(mid, min, max, 255);
+            if (300 <= hue && hue < 360) return new Color(max, min, mid, 255);
 
             throw new Exception();
         }
@@ -41,8 +42,8 @@ namespace Sample
 
             // スペクトルバーを示す図形ノードを作成し、エンジンに登録します。
             var spectrumBars = new RectangleNode[16, 16];
-            for(int i = 0; i < 16; ++i)
-                for(int j = 0; j < 16; ++j)
+            for (int i = 0; i < 16; ++i)
+                for (int j = 0; j < 16; ++j)
                 {
                     spectrumBars[i, j] = new RectangleNode();
                     spectrumBars[i, j].RectangleSize = new Vector2F(20.0f, 8.0f);
@@ -81,16 +82,16 @@ namespace Sample
 
             // メインループ。
             // Altseed のウインドウが閉じられると終了します。
-            while(Engine.DoEvents())
+            while (Engine.DoEvents())
             {
                 // スペクトル情報を取得します。
                 var spectrum = Engine.Sound.GetSpectrum(soundId, 1024, FFTWindow.Blackman);
-                
+
                 // スペクトル情報を区分ごとに合計し、スペクトルバーにその値を反映させます。
-                for(int i = 0; i < 16; ++i)
+                for (int i = 0; i < 16; ++i)
                 {
                     var amplitude = spectrum.Skip(i * 8).Take(8).Average();
-                    for(int j = 0; j < 16; ++j)
+                    for (int j = 0; j < 16; ++j)
                     {
                         var color = spectrumBars[i, 15 - j].Color;
                         color.A = (byte)((amplitude > j * 4.5) ? 255 : 0);
@@ -113,7 +114,7 @@ namespace Sample
                 Engine.Update();
 
                 // 音が止まっていたらメインループを終了します。
-                if(!Engine.Sound.GetIsPlaying(soundId)) break;
+                if (!Engine.Sound.GetIsPlaying(soundId)) break;
             }
 
             // Altseed の終了処理をします。

@@ -119,7 +119,7 @@ namespace Altseed2
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(S_Vertexes, VertexesInternal);            
+            info.AddValue(S_Vertexes, VertexesInternal);
         }
 
         /// <summary>

@@ -127,7 +127,7 @@ namespace Altseed2
                 _BlurXMaterial.SetTexture("mainTex", downTexture[i]);
                 _BlurXMaterial.SetVector4F("imageSize", new Vector4F(downTexture[i].Size.X, downTexture[i].Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_BlurXMaterial, tmpTexture, renderParameter);
-                
+
                 _BlurYMaterial.SetTexture("mainTex", tmpTexture);
                 _BlurYMaterial.SetVector4F("imageSize", new Vector4F(tmpTexture.Size.X, tmpTexture.Size.Y, 0, 0));
                 Engine.Graphics.CommandList.RenderToRenderTexture(_BlurYMaterial, downTexture[i], renderParameter);

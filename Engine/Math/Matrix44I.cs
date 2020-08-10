@@ -200,7 +200,7 @@ namespace Altseed2
         public static Matrix44I operator +(Matrix44I left, Matrix44I right)
         {
             var result = new Matrix44I();
-            for (int i = 0; i < 16; i++) result.Values[i] = left.Values[i] + right.Values[i]; 
+            for (int i = 0; i < 16; i++) result.Values[i] = left.Values[i] + right.Values[i];
             return result;
         }
 
