@@ -90,6 +90,11 @@ namespace Altseed2
         }
         private int _VertNum = 3;
 
+        /// <summary>
+        /// <see cref="ArcNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public ArcNode() { }
+
         private Vector2F GetBaseVector(float degree)
         {
             var result = new Vector2F(0.0f, -_radius);

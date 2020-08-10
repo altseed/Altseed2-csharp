@@ -146,6 +146,12 @@ namespace Altseed2
             return new Vector3I(values[0], values[1], values[2]);
         }
 
+        /// <summary>
+        /// 加算を行う
+        /// </summary>
+        /// <param name="left">加算する要素</param>
+        /// <param name="right">加算される要素</param>
+        /// <returns>加算の結果</returns>
         public static Matrix33I operator +(Matrix33I left, Matrix33I right)
         {
             var result = new Matrix33I();
@@ -153,8 +159,19 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 符合を逆転する
+        /// </summary>
+        /// <param name="matrix">符合を逆転する行列</param>
+        /// <returns>符合が逆転された行列</returns>
         public static Matrix33I operator -(Matrix33I matrix) => -1 * matrix;
 
+        /// <summary>
+        /// 減算を行う
+        /// </summary>
+        /// <param name="left">減算する要素</param>
+        /// <param name="right">減算される要素</param>
+        /// <returns>減算の結果</returns>
         public static Matrix33I operator -(Matrix33I left, Matrix33I right)
         {
             var result = new Matrix33I();
@@ -162,6 +179,12 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 行列の各値を定数倍にする
+        /// </summary>
+        /// <param name="matrix">定数倍される行列</param>
+        /// <param name="scalar">乗算する定数</param>
+        /// <returns>各値が定数倍された行列</returns>
         public static Matrix33I operator *(Matrix33I matrix, int scalar)
         {
             var result = new Matrix33I();
@@ -169,8 +192,20 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 行列の各値を定数倍にする
+        /// </summary>
+        /// <param name="scalar">乗算する定数</param>
+        /// <param name="matrix">定数倍される行列</param>
+        /// <returns>各値が定数倍された行列</returns>
         public static Matrix33I operator *(int scalar, Matrix33I matrix) => matrix * scalar;
 
+        /// <summary>
+        /// 行列の各値を定数倍で除算する
+        /// </summary>
+        /// <param name="matrix">除算される行列</param>
+        /// <param name="scalar">除算する定数</param>
+        /// <returns>各値が定数で除算された行列</returns>
         public static Matrix33I operator /(Matrix33I matrix, int scalar)
         {
             var result = new Matrix33I();
@@ -178,6 +213,12 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 乗算を行う
+        /// </summary>
+        /// <param name="left">乗算する要素</param>
+        /// <param name="right">乗算される要素</param>
+        /// <returns>乗算の結果</returns>
         public static Matrix33I operator *(Matrix33I left, Matrix33I right)
         {
             var result = new Matrix33I();
@@ -190,6 +231,12 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 乗算を行う
+        /// </summary>
+        /// <param name="left">乗算する要素</param>
+        /// <param name="right">乗算される要素</param>
+        /// <returns>乗算の結果</returns>
         public static Vector3I operator *(Matrix33I left, Vector3I right) => left.Transform3D(right);
 
         #region IEquatable
@@ -224,7 +271,19 @@ namespace Altseed2
             return hash.ToHashCode();
         }
 
+        /// <summary>
+        /// 二つの<see cref="Matrix33I"/>の間の等価性を判定する
+        /// </summary>
+        /// <param name="m1">等価性を判定する<see cref="Matrix33I"/>のインスタンス</param>
+        /// <param name="m2">等価性を判定する<see cref="Matrix33I"/>のインスタンス</param>
+        /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Matrix33I m1, Matrix33I m2) => m1.Equals(m2);
+        /// <summary>
+        /// 二つの<see cref="Matrix33I"/>の間の非等価性を判定する
+        /// </summary>
+        /// <param name="m1">非等価性を判定する<see cref="Matrix33I"/>のインスタンス</param>
+        /// <param name="m2">非等価性を判定する<see cref="Matrix33I"/>のインスタンス</param>
+        /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Matrix33I m1, Matrix33I m2) => !m1.Equals(m2);
         #endregion
 

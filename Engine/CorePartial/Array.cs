@@ -46,12 +46,7 @@ namespace Altseed2
         private const string S_Array = "S_Array";
         #endregion
 
-        /// <summary>
-        /// 指定したインデックスの要素を取得または設定する
-        /// </summary>
-        /// <param name="index">検索する要素のインデックス</param>
-        /// <returns><paramref name="index"/>に該当する要素</returns>
-        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        /// <inheritdoc/>
         public byte this[int index]
         {
             get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
@@ -100,12 +95,7 @@ namespace Altseed2
         private const string S_Array = "S_Array";
         #endregion
 
-        /// <summary>
-        /// 指定したインデックスの要素を取得または設定する
-        /// </summary>
-        /// <param name="index">検索する要素のインデックス</param>
-        /// <returns><paramref name="index"/>に該当する要素</returns>
-        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        /// <inheritdoc/>
         public int this[int index]
         {
             get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
@@ -154,12 +144,7 @@ namespace Altseed2
         private const string S_Array = "S_Array";
         #endregion
 
-        /// <summary>
-        /// 指定したインデックスの要素を取得または設定する
-        /// </summary>
-        /// <param name="index">検索する要素のインデックス</param>
-        /// <returns><paramref name="index"/>に該当する要素</returns>
-        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        /// <inheritdoc/>
         public Vertex this[int index]
         {
             get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
@@ -208,12 +193,7 @@ namespace Altseed2
         private const string S_Array = "S_Array";
         #endregion
 
-        /// <summary>
-        /// 指定したインデックスの要素を取得または設定する
-        /// </summary>
-        /// <param name="index">検索する要素のインデックス</param>
-        /// <returns><paramref name="index"/>に該当する要素</returns>
-        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        /// <inheritdoc/>
         public float this[int index]
         {
             get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
@@ -262,12 +242,7 @@ namespace Altseed2
         private const string S_Array = "S_Array";
         #endregion
 
-        /// <summary>
-        /// 指定したインデックスの要素を取得または設定する
-        /// </summary>
-        /// <param name="index">検索する要素のインデックス</param>
-        /// <returns><paramref name="index"/>に該当する要素</returns>
-        /// <exception cref="IndexOutOfRangeException"><paramref name="index"/>の値が0未満または<see cref="Count"/>以上</exception>
+        /// <inheritdoc/>
         public Vector2F this[int index]
         {
             get { return (0 <= index && index < Count) ? GetAt(index) : throw new IndexOutOfRangeException($"インデックスが無効です\n許容される値：0～{Count - 1}\n実際の値：{index}"); }
@@ -367,6 +342,10 @@ namespace Altseed2
         /// <summary>
         /// コレクションを配列に変換する（もしかして単にLINQのToArrayするだけでよかったりする？）
         /// </summary>
+        /// <typeparam name="TElement">変換する配列の要素の型</typeparam>
+        /// <param name="collection">変換するコレクション</param>
+        /// <exception cref="ArgumentNullException"><paramref name="collection"/>がnull</exception>
+        /// <returns><paramref name="collection"/>と同じ要素を持つ配列</returns>
         internal static TElement[] ConvertToArray<TElement>(IEnumerable<TElement> collection)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection), "引数がnullです");
@@ -392,8 +371,8 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>
-        /// <param name="array">設定するデータとなる配列</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="array"/>がnull</exception>
+        /// <param name="collection">設定するデータとなる配列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
         internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> collection)
             where TElement : unmanaged
         {

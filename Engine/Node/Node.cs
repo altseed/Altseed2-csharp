@@ -12,7 +12,7 @@ namespace Altseed2
     public class Node : Registerable<Node>
     {
         /// <summary>
-        /// コンストラクタ
+        /// <see cref="Node"/>の新しいインスタンスを生成します。
         /// </summary>
         public Node()
         {

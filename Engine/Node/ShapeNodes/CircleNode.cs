@@ -58,6 +58,11 @@ namespace Altseed2
         }
         private int _VertNum = 3;
 
+        /// <summary>
+        /// <see cref="CircleNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public CircleNode() { }
+
         private void UpdateVertexes()
         {
             var deg = MathF.PI * 2f / _VertNum;

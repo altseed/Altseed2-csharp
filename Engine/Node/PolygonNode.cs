@@ -14,7 +14,7 @@ namespace Altseed2
         private bool _IsValid;
 
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// <see cref="PolygonNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public PolygonNode()
         {
@@ -171,9 +171,7 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// 先祖の変形を加味した変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
             get => _InheritedTransform;
@@ -302,9 +300,7 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// コンテンツのサイズを取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Vector2F ContentSize
         {
             get
@@ -314,9 +310,7 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
     }
 }

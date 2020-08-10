@@ -67,7 +67,7 @@ namespace Altseed2
         private bool _IsColorCleared;
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="CameraNode"/>新しいインスタンスを生成します。
         /// </summary>
         public CameraNode()
         {

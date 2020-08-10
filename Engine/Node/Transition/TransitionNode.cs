@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Altseed2
 {
+    /// <summary>
+    /// 画面遷移を行うノードのクラス
+    /// </summary>
     [Serializable]
     public class TransitionNode : Node
     {
@@ -22,7 +25,7 @@ namespace Altseed2
         private readonly IEnumerator<int> _Coroutine;
 
         /// <summary>
-        /// 新しいインスタンスを作成します。
+        /// <see cref="TransitionNode"/>の新しいインスタンスを作成します。
         /// </summary>
         /// <param name="oldNode">トランジションによって取り除かれるノード</param>
         /// <param name="newNode">トランジションによって追加されるノード</param>

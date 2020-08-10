@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Altseed2
 {
     /// <summary>
-    /// 基本的な図形を描画するノードの中小クラスを表します。
+    /// 基本的な図形を描画するノードの基底クラスを表します。
     /// </summary>
     [Serializable]
     public abstract class ShapeNode : TransformNode, ICullableDrawn/*, ISized*/
@@ -12,9 +12,9 @@ namespace Altseed2
         protected private readonly RenderedPolygon _RenderedPolygon;
 
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// <see cref="ShapeNode"/>の新しいインスタンスを生成します。
         /// </summary>
-        public ShapeNode()
+        protected ShapeNode()
         {
             _RenderedPolygon = RenderedPolygon.Create();
             _RenderedPolygon.Vertexes = VertexArray.Create(0); //TODO: Core の更新で不要になる。
@@ -169,9 +169,7 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// 先祖の変形を加味した変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
             get => _InheritedTransform;
@@ -185,7 +183,7 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// 頂点情報のコレクションを取得または設定します。
+        /// 頂点情報のコレクションを取得します。
         /// </summary>
         public IReadOnlyList<Vertex> Vertexes
         {
@@ -223,9 +221,7 @@ namespace Altseed2
             _RequireCalcTransform = true;
         }
 
-        /// <summary>
-        /// コンテンツのサイズを取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Vector2F ContentSize
         {
             get
@@ -235,9 +231,7 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
     }
 }

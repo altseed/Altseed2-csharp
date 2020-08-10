@@ -54,7 +54,7 @@ namespace Altseed2
         public readonly float SquaredLength => X * X + Y * Y + Z * Z;
 
         /// <summary>
-        /// コンストラクタ
+        /// <see cref="Vector3F"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="x">X成分</param>
         /// <param name="y">Y成分</param>
@@ -95,8 +95,20 @@ namespace Altseed2
         /// <returns>このオブジェクトのハッシュコード</returns>
         public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
+        /// <summary>
+        /// 二つの<see cref="Vector3F"/>の間の等価性を判定する
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="Vector3F"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="Vector3F"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Vector3F v1, Vector3F v2) => Equals(v1, v2);
 
+        /// <summary>
+        /// 二つの<see cref="Vector3F"/>の間の非等価性を判定する
+        /// </summary>
+        /// <param name="v1">非等価性を判定する<see cref="Vector3F"/>のインスタンス</param>
+        /// <param name="v2">非等価性を判定する<see cref="Vector3F"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Vector3F v1, Vector3F v2) => !Equals(v1, v2);
         #endregion
 
@@ -252,7 +264,15 @@ namespace Altseed2
         public static Vector3F operator /(Vector3F vector, float scalar) => new Vector3F(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
         #endregion
 
+        /// <summary>
+        /// <see cref="Vector3I"/>から<see cref="Vector3F"/>に型変換する
+        /// </summary>
+        /// <param name="v">変換する<see cref="Vector3I"/>のインスタンス</param>
         public static implicit operator Vector3F(Vector3I v) => v.To3F();
+        /// <summary>
+        /// <see cref="Vector3F"/>から<see cref="Vector3I"/>に型変換する
+        /// </summary>
+        /// <param name="v">変換する<see cref="Vector3F"/>のインスタンス</param>
         public static explicit operator Vector3I(Vector3F v) => v.To3I();
     }
 }

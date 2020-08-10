@@ -1,11 +1,15 @@
-using System;
-
 namespace Altseed2
 {
+    /// <summary>
+    /// 白黒化を実装するポストエフェクトのクラス
+    /// </summary>
     public sealed class PostEffectGrayScaleNode : PostEffectNode
     {
         readonly Material material;
 
+        /// <summary>
+        /// <see cref="PostEffectGrayScaleNode"/>の新しいインスタンスを生成します。
+        /// </summary>
         public PostEffectGrayScaleNode()
         {
             material = Material.Create();
@@ -13,6 +17,7 @@ namespace Altseed2
             material.SetShader(shader);
         }
 
+        /// <inheritdoc/>
         protected override void Draw(RenderTexture src, Color clearColor)
         {
             material.SetTexture("mainTex", src);

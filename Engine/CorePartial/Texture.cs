@@ -7,6 +7,12 @@ namespace Altseed2
 {
     public partial class Texture2D
     {
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            Texture2D_Unsetter_Deserialize(info, out var path);
+            ptr = cbg_Texture2D_Load(path);
+        }
+
         /// <summary>
         /// 指定パスからテクスチャを読み込む
         /// </summary>
@@ -23,11 +29,6 @@ namespace Altseed2
             if (ex != null) throw ex;
 
             return Load(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
-        }
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
-        {
-            Texture2D_Unsetter_Deserialize(info, out var path);
-            ptr = cbg_Texture2D_Load(path);
         }
 
         /// <summary>

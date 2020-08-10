@@ -45,7 +45,7 @@ namespace Altseed2
         public readonly Vector2I Size => new Vector2I(Width, Height);
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="RectI"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="x">X座標</param>
         /// <param name="y">Y座標</param>
@@ -60,7 +60,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="RectI"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="position">左上の座標</param>
         /// <param name="size">サイズ</param>
@@ -128,8 +128,20 @@ namespace Altseed2
         /// <returns>同じ値を持つ<see cref="RectF"/>の新しいインスタンス</returns>
         public readonly RectF ToF() => new RectF(X, Y, Width, Height);
 
+        /// <summary>
+        /// 二つの<see cref="RectI"/>の間の等価性を判定する
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="RectI"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="RectI"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(RectI v1, RectI v2) => Equals(v1, v2);
 
+        /// <summary>
+        /// 二つの<see cref="RectI"/>の間の非等価性を判定する
+        /// </summary>
+        /// <param name="v1">非等価性を判定する<see cref="RectI"/>のインスタンス</param>
+        /// <param name="v2">非等価性を判定する<see cref="RectI"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(RectI v1, RectI v2) => !Equals(v1, v2);
     }
 }

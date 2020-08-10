@@ -77,6 +77,7 @@ namespace Altseed2
         #region SerializeName
         private const string S_Vertexes = "S_Vertexes";
         #endregion
+
         /// <summary>
         /// 頂点情報のコレクションを取得または設定します。
         /// </summary>

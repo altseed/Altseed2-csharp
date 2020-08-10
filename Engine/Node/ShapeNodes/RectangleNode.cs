@@ -42,6 +42,11 @@ namespace Altseed2
         }
         private Vector2F _RectangleSize = new Vector2F();
 
+        /// <summary>
+        /// <see cref="RectangleNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public RectangleNode() { }
+
         private void UpdateVertexes()
         {
             var positions = new Vector2F[4];

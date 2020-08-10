@@ -159,9 +159,7 @@ namespace Altseed2
             Engine.UnregisterDrawn(this);
         }
 
-        /// <summary>
-        /// 先祖の変形を加味した変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
             get => _InheritedTransform;
@@ -374,9 +372,7 @@ namespace Altseed2
 
         #endregion
 
-        /// <summary>
-        /// コンテンツのサイズを取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
 
         /*
@@ -421,9 +417,7 @@ namespace Altseed2
         }
         */
 
-        /// <summary>
-        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public override Matrix44F AbsoluteTransform => _RenderedText.Transform;
     }
 }
