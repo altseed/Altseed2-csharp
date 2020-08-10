@@ -4,7 +4,7 @@ using Altseed2;
 
 namespace Sample
 {
-    class Demonstration
+    class AudioVisualizerDemonstration
     {
         // HSV を RGB に変換します。
         private static Color HSV2RGB(int hue, int saturation, int value)
