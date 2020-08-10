@@ -21,7 +21,7 @@ namespace Altseed2
         private readonly T Owner;
 
         /// <summary>
-        /// <see cref="RegisterableCollection{TElement, TOwner}"/>の新しいインスタンスを生成します。
+        /// <see cref="RegisterableCollection{T}"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="owner">自身のオーナー</param>
         internal RegisterableCollection(T owner)
