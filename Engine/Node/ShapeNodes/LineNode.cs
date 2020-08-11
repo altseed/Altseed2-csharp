@@ -67,7 +67,6 @@ namespace Altseed2
             get => _Thickness;
             set
             {
-                if (value <= 0.0f) throw new ArgumentException(nameof(value), $"設定しようとした値が小さすぎます。");
                 if (_Thickness == value) return;
 
                 _Thickness = value;

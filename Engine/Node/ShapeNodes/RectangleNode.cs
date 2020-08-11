@@ -35,15 +35,13 @@ namespace Altseed2
             get => _RectangleSize;
             set
             {
-                if (value.X <= 0.0f || value.Y <= 0.0f)
-                    throw new ArgumentException(nameof(value), $"設定しようとした値が小さすぎます。");
                 if (_RectangleSize == value) return;
 
                 _RectangleSize = value;
                 _RequireUpdateVertexes = true;
             }
         }
-        private Vector2F _RectangleSize = new Vector2F(1, 1);
+        private Vector2F _RectangleSize = new Vector2F();
 
         /// <summary>
         /// <see cref="RectangleNode"/>の新しいインスタンスを生成します。

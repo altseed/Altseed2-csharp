@@ -35,7 +35,6 @@ namespace Altseed2
             get => _Radius;
             set
             {
-                if (value <= 0.0f) throw new ArgumentException(nameof(value), $"設定しようとした値が小さすぎます。");
                 if (_Radius == value) return;
 
                 _Radius = value;
