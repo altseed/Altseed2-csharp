@@ -59,7 +59,10 @@ namespace Altseed2
                 var old = _ZOrder;
                 _ZOrder = value;
 
-                Engine.UpdateDrawnZOrder(this, old);
+                if (Status == RegisteredStatus.Registered)
+                {
+                    Engine.UpdateDrawnZOrder(this, old);
+                }
             }
         }
         private int _ZOrder;
