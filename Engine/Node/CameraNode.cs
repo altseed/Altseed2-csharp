@@ -154,14 +154,16 @@ namespace Altseed2
             }
         }
 
+        private Vector2I _TargetSize = default;
+
         internal override void Update()
         {
-            if (_RequireCalcTransform)
+            if (_RequireCalcTransform || _TargetSize != (TargetTexture?.Size ?? Engine.WindowSize))
             {
-                var targetSize = (TargetTexture?.Size ?? Engine.WindowSize);
+                _TargetSize = (TargetTexture?.Size ?? Engine.WindowSize);
 
                 RenderedCamera.ViewMatrix =
-                Matrix44F.GetTranslation2D(CenterPosition - targetSize / 2)
+                Matrix44F.GetTranslation2D(CenterPosition - _TargetSize / 2)
                 * Matrix44F.GetScale2D(new Vector2F(1f, 1f) / Scale)
                 * Matrix44F.GetRotationZ(-Angle)
                 * Matrix44F.GetTranslation2D(-Position);
