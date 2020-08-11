@@ -17,7 +17,6 @@ namespace Altseed2
         protected ShapeNode()
         {
             _RenderedPolygon = RenderedPolygon.Create();
-            _RenderedPolygon.Vertexes = VertexArray.Create(0); //TODO: Core の更新で不要になる。
         }
 
         #region IDrawn
@@ -186,20 +185,6 @@ namespace Altseed2
         #endregion
 
         /// <summary>
-        /// 頂点情報のコレクションを取得します。
-        /// </summary>
-        public IReadOnlyList<Vertex> Vertexes
-        {
-            get => _RenderedPolygon.Vertexes?.ToArray();
-            private protected set
-            {
-                var vertexArray = VertexArray.Create(value);
-                _RenderedPolygon.Vertexes = vertexArray;
-                _RequireCalcTransform = true;
-            }
-        }
-
-        /// <summary>
         /// 各頂点に指定した色を設定する
         /// </summary>
         /// <param name="color">設定する色</param>
@@ -221,6 +206,7 @@ namespace Altseed2
             var array = Vector2FArray.Create(vertexes);
             _RenderedPolygon.CreateVertexesByVector2F(array);
             _RenderedPolygon.OverwriteVertexesColor(color);
+
             _RequireCalcTransform = true;
         }
 

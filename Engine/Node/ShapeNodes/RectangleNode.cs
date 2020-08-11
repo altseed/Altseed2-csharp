@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class RectangleNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
 
         /// <summary>
         /// 色を取得または設定します。

@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class ArcNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -55,7 +55,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        private float _radius;
+        private float _radius = 1.0f;
 
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。

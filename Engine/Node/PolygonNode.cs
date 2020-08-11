@@ -11,7 +11,7 @@ namespace Altseed2
     {
         protected private readonly RenderedPolygon _RenderedPolygon;
 
-        private bool _IsValid;
+        private bool _IsValid = false;
 
         /// <summary>
         /// <see cref="PolygonNode"/>の新しいインスタンスを生成します。
@@ -19,7 +19,6 @@ namespace Altseed2
         public PolygonNode()
         {
             _RenderedPolygon = RenderedPolygon.Create();
-            _RenderedPolygon.Vertexes = VertexArray.Create(0); //TODO: Core の更新で不要になる。
         }
 
         #region IDrawn
@@ -196,16 +195,10 @@ namespace Altseed2
             set
             {
                 var vertexArray = VertexArray.Create(value);
-                _IsValid = CheckIsValid(vertexArray);
-                if (_IsValid)
-                {
-                    _RenderedPolygon.Vertexes = vertexArray;
-                    _RequireCalcTransform = true;
-                }
-                else
-                {
-                    Engine.Log.Warn(LogCategory.Engine, "無効な頂点が登録されました。");
-                }
+                _RenderedPolygon.Vertexes = vertexArray;
+
+                _IsValid = Validate(vertexArray);
+                _RequireCalcTransform = true;
             }
         }
 
@@ -213,34 +206,44 @@ namespace Altseed2
         /// 頂点情報が有効かどうかを判定します。
         /// </summary>
         /// <param name="vertexes">頂点情報</param>
-        private bool CheckIsValid(VertexArray vertexes)
+        private bool Validate(VertexArray vertexes)
         {
-            if (vertexes.Count < 3) return false;
-            else
+            if (vertexes.Count < 3)
             {
-                for (int i = 0; i < vertexes.Count; ++i)
-                    for (int j = i + 1; j < vertexes.Count; ++j)
-                        if (vertexes[i].Position == vertexes[j].Position) return false;
-
-                return true;
+                Engine.Log.Info(LogCategory.Engine, $"{GetType()} に設定された頂点が 3 個未満のためこのノードは描画されません。");
+                return false;
             }
+
+            //for (int i = 0; i < vertexes.Count; ++i)
+            //    for (int j = i + 1; j < vertexes.Count; ++j)
+            //        if (vertexes[i].Position == vertexes[j].Position)
+            //        {
+            //            Engine.Log.Info(LogCategory.Engine, $"{GetType()} に設定された頂点に重複があるためこのノードは描画されません。");
+            //            return false;
+            //        }
+            return true;
         }
 
         /// <summary>
         /// 頂点情報が有効かどうかを判定します。
         /// </summary>
-        /// <param name="vertexes"><see cref="Vector2F"/>で表された頂点情報</param>
-        private bool CheckIsValid(Vector2FArray vertexes)
+        /// <param name="vertexes">頂点情報</param>
+        private bool Validate(Vector2FArray vertexes)
         {
-            if (vertexes.Count < 3) return false;
-            else
+            if (vertexes.Count < 3)
             {
-                for (int i = 0; i < vertexes.Count; ++i)
-                    for (int j = i + 1; j < vertexes.Count; ++j)
-                        if (vertexes[i] == vertexes[j]) return false;
-
-                return true;
+                Engine.Log.Info(LogCategory.Engine, $"{GetType()} に設定された頂点が 3 個未満のためこのノードは描画されません。");
+                return false;
             }
+
+            //for (int i = 0; i < vertexes.Count; ++i)
+            //    for (int j = i + 1; j < vertexes.Count; ++j)
+            //        if (vertexes[i] == vertexes[j])
+            //        {
+            //            Engine.Log.Info(LogCategory.Engine, $"{GetType()} に設定された頂点に重複があるためこのノードは描画されません。");
+            //            return false;
+            //        }
+            return true;
         }
 
         /// <summary>
@@ -262,19 +265,13 @@ namespace Altseed2
         /// </remarks>
         public void SetVertexes(IEnumerable<Vertex> vertexes)
         {
-            if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
+            if (vertexes == null) throw new ArgumentNullException(nameof(vertexes));
 
             var array = VertexArray.Create(vertexes);
-            _IsValid = CheckIsValid(array);
-            if (_IsValid)
-            {
-                _RenderedPolygon.Vertexes = array;
-                _RequireCalcTransform = true;
-            }
-            else
-            {
-                Engine.Log.Warn(LogCategory.Engine, "無効な頂点が登録されました。");
-            }
+            _RenderedPolygon.Vertexes = array;
+
+            _IsValid = Validate(array);
+            _RequireCalcTransform = true;
         }
 
         /// <summary>
@@ -288,17 +285,11 @@ namespace Altseed2
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
 
             var array = Vector2FArray.Create(vertexes);
-            _IsValid = CheckIsValid(array);
-            if (_IsValid)
-            {
-                _RenderedPolygon.CreateVertexesByVector2F(array);
-                _RenderedPolygon.OverwriteVertexesColor(color);
-                _RequireCalcTransform = true;
-            }
-            else
-            {
-                Engine.Log.Warn(LogCategory.Engine, "無効な頂点が登録されました。");
-            }
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(color);
+
+            _IsValid = Validate(array);
+            _RequireCalcTransform = true;
         }
 
         /// <inheritdoc/>

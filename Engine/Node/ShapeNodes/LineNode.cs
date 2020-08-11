@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class LineNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -72,7 +72,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        private float _Thickness;
+        private float _Thickness = 1.0f;
 
         /// <summary>
         /// <see cref="LineNode"/>の新しいインスタンスを生成します。

@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class CircleNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -40,11 +40,12 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        private float _Radius;
+        private float _Radius = 1.0f;
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
+        /// <exception cref="ArgumentException">設定しようとした値が 3 未満</exception>
         public int VertNum
         {
             get => _VertNum;
