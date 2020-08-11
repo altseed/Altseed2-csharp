@@ -93,7 +93,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="v1">等価性を判定するベクトル1</param>
         /// <param name="v2">等価性を判定するベクトル2</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間に等価性が認められたらtrue、それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/> と <paramref name="v2"/> の間に等価性が認められたらtrue、それ以外でfalse</returns>
         public static bool Equals(Vector2F v1, Vector2F v2) => v1.Equals(v2);
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="v1">等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
         /// <param name="v2">等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/> と <paramref name="v2"/> の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Vector2F v1, Vector2F v2) => Equals(v1, v2);
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="v1">非等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
         /// <param name="v2">非等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/> と <paramref name="v2"/> の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Vector2F v1, Vector2F v2) => !Equals(v1, v2);
         #endregion
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
@@ -666,14 +666,14 @@ namespace Altseed2
         /// </summary>
         /// <param name="m1">等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
         /// <param name="m2">等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
-        /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="m1"/> と <paramref name="m2"/> の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Matrix44F m1, Matrix44F m2) => m1.Equals(m2);
         /// <summary>
         /// 二つの<see cref="Matrix44F"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="m1">非等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
         /// <param name="m2">非等価性を判定する<see cref="Matrix44F"/>のインスタンス</param>
-        /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="m1"/> と <paramref name="m2"/> の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Matrix44F m1, Matrix44F m2) => !m1.Equals(m2);
         #endregion
 

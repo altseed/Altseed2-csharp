@@ -67,14 +67,14 @@ namespace Altseed2
         /// </summary>
         /// <param name="v1">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
         /// <param name="v2">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/> と <paramref name="v2"/> の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Vertex v1, Vertex v2) => v1.Equals(v2);
         /// <summary>
         /// 二つの<see cref="Vertex"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="v1">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
         /// <param name="v2">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
-        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="v1"/> と <paramref name="v2"/> の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Vertex v1, Vertex v2) => !v1.Equals(v2);
     };
 
@@ -210,14 +210,14 @@ namespace Altseed2
         /// </summary>
         /// <param name="c1">等価性を判定する<see cref="Color"/>のインスタンス</param>
         /// <param name="c2">等価性を判定する<see cref="Color"/>のインスタンス</param>
-        /// <returns><paramref name="c1"/>と<paramref name="c2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="c1"/> と <paramref name="c2"/> の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Color c1, Color c2) => c1.Equals(c2);
         /// <summary>
         /// 二つの<see cref="Color"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="c1">非等価性を判定する<see cref="Color"/>のインスタンス</param>
         /// <param name="c2">非等価性を判定する<see cref="Color"/>のインスタンス</param>
-        /// <returns><paramref name="c1"/>と<paramref name="c2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="c1"/> と <paramref name="c2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Color c1, Color c2) => !c1.Equals(c2);
         /// <summary>
         /// 加算を行います。
@@ -310,14 +310,14 @@ namespace Altseed2
         /// </summary>
         /// <param name="left">等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
         /// <param name="right">等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
-        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(RenderPassParameter left, RenderPassParameter right) => left.Equals(right);
         /// <summary>
         /// 二つの<see cref="RenderPassParameter"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="left">非等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
         /// <param name="right">非等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
-        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(RenderPassParameter left, RenderPassParameter right) => !(left == right);
     }
 
@@ -374,14 +374,14 @@ namespace Altseed2
         /// </summary>
         /// <param name="left">等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
         /// <param name="right">等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
-        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(AlphaBlend left, AlphaBlend right) => left.Equals(right);
         /// <summary>
         /// 二つの<see cref="AlphaBlend"/>の間の非等価性を判定します。
         /// </summary>
         /// <param name="left">非等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
         /// <param name="right">非等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
-        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
+        /// <returns><paramref name="left"/> と <paramref name="right"/> の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(AlphaBlend left, AlphaBlend right) => !(left == right);
 
         /// <summary>
