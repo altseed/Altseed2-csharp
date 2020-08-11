@@ -31,17 +31,17 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 動的にフォントを読み込みます。
+        /// フォントファイルを読み込んで<see cref="Font"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
         /// <param name="size">フォントサイズ</param>
-        /// <returns>動的に生成されるフォント</returns>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は使用できない文字を含む</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/>が0以下</exception>
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定したファイルが見つからない</exception>
         /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
+        /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         public static Font LoadDynamicFontStrict(string path, int size)
         {
             if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), $"サイズは正の値にしてください\n実際の値：{size}");
@@ -51,15 +51,15 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 静的にフォントを読み込みます。
+        /// FontGeneratorで生成したフォントを読み込んでFontの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
-        /// <returns>静的に生成されるフォント</returns>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は使用できない文字を含む</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定したファイルが見つからない</exception>
         /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
+        /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
         public static Font LoadStaticFontStrict(string path)
         {
             var ex = IOHelper.CheckLoadPath(path);
