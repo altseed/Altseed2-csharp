@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class LineNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -61,18 +61,20 @@ namespace Altseed2
         /// <summary>
         /// 直線の太さを取得または設定します。
         /// </summary>
+        /// <exception cref="ArgumentException">設定しようとした値が 0 以下</exception>
         public float Thickness
         {
             get => _Thickness;
             set
             {
+                if (value <= 0.0f) throw new ArgumentException(nameof(value), $"設定しようとした値が小さすぎます。");
                 if (_Thickness == value) return;
 
                 _Thickness = value;
                 _RequireUpdateVertexes = true;
             }
         }
-        private float _Thickness;
+        private float _Thickness = 1.0f;
 
         /// <summary>
         /// <see cref="LineNode"/>の新しいインスタンスを生成します。

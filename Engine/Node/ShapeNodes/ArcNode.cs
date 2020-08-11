@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class ArcNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
 
         /// <summary>
         /// 色を取得または設定します。
@@ -44,18 +44,20 @@ namespace Altseed2
         /// <summary>
         /// 半径を取得または設定します。
         /// </summary>
+        /// <exception cref="ArgumentException">設定しようとした値が 0 以下</exception>
         public float Radius
         {
             get => _radius;
             set
             {
+                if (value <= 0.0f) throw new ArgumentException(nameof(value), $"設定しようとした値が小さすぎます。");
                 if (_radius == value) return;
 
                 _radius = value;
                 _RequireUpdateVertexes = true;
             }
         }
-        private float _radius;
+        private float _radius = 1.0f;
 
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。

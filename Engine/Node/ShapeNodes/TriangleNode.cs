@@ -8,7 +8,7 @@ namespace Altseed2
     [Serializable]
     public class TriangleNode : ShapeNode
     {
-        private bool _RequireUpdateVertexes = false;
+        private bool _RequireUpdateVertexes = true;
         private Vector2F[] _Points;
 
         /// <summary>
