@@ -25,6 +25,11 @@ namespace Altseed2
         /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
         private static Node _UpdatedNode;
 
+        /// <summary>
+        /// ポーズ中か否かによらず更新対象となる<see cref="Node"/>部分木の根を取得します。
+        /// </summary>
+        internal static Node UpdatedTreeRoot => _UpdatedNode;
+
         private static CameraNodeCollection _CameraNodes;
         private static RenderedCamera _DefaultCamera;
         private static DrawnCollection _DrawnCollection;

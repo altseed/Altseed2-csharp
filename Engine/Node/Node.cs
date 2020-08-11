@@ -63,7 +63,7 @@ namespace Altseed2
             for (var n = Parent; ; n = n.Parent)
             {
                 if (n == null) return;
-                if (n is RootNode) break;
+                if (n == Engine.UpdatedTreeRoot) break;
             }
             Registered();
         }
