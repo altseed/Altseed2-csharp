@@ -3,7 +3,7 @@
 namespace Altseed2
 {
     /// <summary>
-    /// 画面ボケを実装するポストエフェクトのクラス
+    /// ガウスぼかしを適用するポストエフェクトのクラス
     /// </summary>
     public sealed class PostEffectGaussianBlurNode : PostEffectNode
     {

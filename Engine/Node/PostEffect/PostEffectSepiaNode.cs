@@ -1,7 +1,7 @@
 ﻿namespace Altseed2
 {
     /// <summary>
-    /// セピア補正のポストエフェクトのクラス
+    /// セピア調にするポストエフェクトのクラス
     /// </summary>
     public sealed class PostEffectSepiaNode : PostEffectNode
     {
