@@ -9,37 +9,37 @@ namespace Altseed2
     public class CircleColliderNode : ColliderNode
     {
         /// <summary>
-        /// 拡大率を適用する方法を表す
+        /// 拡大率を適用する方法を表します。
         /// </summary>
         [Serializable]
         public enum ScaleCalcType
         {
             /// <summary>
-            /// Scale.Xで計算する
+            /// Scale.Xで計算します。
             /// </summary>
             X,
             /// <summary>
-            /// Scale.Yで計算する
+            /// Scale.Yで計算します。
             /// </summary>
             Y,
             /// <summary>
-            /// Scale.Lengthで計算する
+            /// Scale.Lengthで計算します。
             /// </summary>
             Length,
             /// <summary>
-            /// X，Yの最小値で計算する
+            /// X，Yの最小値で計算します。
             /// </summary>
             Min,
             /// <summary>
-            /// X，Yの最大値で計算する
+            /// X，Yの最大値で計算します。
             /// </summary>
             Max,
             /// <summary>
-            /// X，Yの絶対値の最小値で計算する
+            /// X，Yの絶対値の最小値で計算します。
             /// </summary>
             AbsMin,
             /// <summary>
-            /// X，Yの絶対値の最大値で計算する
+            /// X，Yの絶対値の最大値で計算します。
             /// </summary>
             AbsMax
         }
@@ -47,7 +47,7 @@ namespace Altseed2
         private bool requireUpdate = true;
 
         /// <summary>
-        /// 使用するコライダを取得する
+        /// 使用するコライダを取得します。
         /// </summary>
         internal CircleCollider CircleCollider { get; }
         internal override Collider Collider => CircleCollider;
@@ -69,7 +69,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 衝突半径を取得または設定する
+        /// 衝突半径を取得または設定します。
         /// </summary>
         public float Radius
         {
@@ -90,12 +90,12 @@ namespace Altseed2
         public ScaleCalcType ScaleType { get; set; } = ScaleCalcType.AbsMax;
 
         /// <summary>
-        /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
+        /// 既定の<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public CircleColliderNode() : this(null) { }
 
         /// <summary>
-        /// 指定した<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成する
+        /// 指定した<see cref="Altseed2.CircleCollider"/>を使用して<see cref="CircleColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.CircleCollider"/>のインスタンス</param>
         internal CircleColliderNode(CircleCollider collider)

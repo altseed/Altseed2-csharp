@@ -74,6 +74,11 @@ namespace Altseed2
         }
         private float _Thickness;
 
+        /// <summary>
+        /// <see cref="LineNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public LineNode() { }
+
         private void UpdateVertexes()
         {
             var positions = new Vector2F[4];

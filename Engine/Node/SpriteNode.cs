@@ -11,7 +11,7 @@ namespace Altseed2
         private readonly RenderedSprite _RenderedSprite;
 
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// <see cref="SpriteNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public SpriteNode()
         {
@@ -164,7 +164,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 使用するマテリアルを取得または設定します
+        /// 使用するマテリアルを取得または設定します。
         /// </summary>
         public Material Material
         {
@@ -177,9 +177,7 @@ namespace Altseed2
             }
         }
 
-        /// <summary>
-        /// 先祖の変形を加味した変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
             get => _InheritedTransform;
@@ -192,14 +190,10 @@ namespace Altseed2
 
         #endregion
 
-        /// <summary>
-        /// コンテンツのサイズを取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Vector2F ContentSize => Src.Size;
 
-        /// <summary>
-        /// 先祖の変形および<see cref="TransformNode.CenterPosition"/>を加味した最終的な変形行列を取得します。
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override Matrix44F AbsoluteTransform => _RenderedSprite.Transform;
     }
 }

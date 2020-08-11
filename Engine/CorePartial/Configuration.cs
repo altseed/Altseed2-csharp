@@ -26,6 +26,9 @@ namespace Altseed2
         }
         private bool _VisibleTransformInfo = false;
 
+        /// <summary>
+        /// <see cref="Configuration"/>の新しいインスタンスを生成します。
+        /// </summary>
         public Configuration()
         {
             selfPtr = cbg_Configuration_Create();

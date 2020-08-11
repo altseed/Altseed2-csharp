@@ -2,6 +2,9 @@
 
 namespace Altseed2
 {
+    /// <summary>
+    /// 画面の光輝を実装するポストエフェクトのクラス
+    /// </summary>
     public sealed class PostEffectLightBloomNode : PostEffectNode
     {
         private readonly Material _HighColorMaterial;
@@ -12,8 +15,9 @@ namespace Altseed2
         private readonly Material _TextureMixer;
 
         /// <summary>
-        /// ぼけの強さ。値が大きいほど光がぼけます。
+        /// ぼけの強さを取得または設定します。
         /// </summary>
+        /// <remarks>値が大きいほど光がぼけます。</remarks>
         public float Intensity
         {
             get => _BlurXMaterial.GetVector4F("intensity").X;
@@ -25,8 +29,9 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// この値を超えた画素がぼかされます。255を1.0とした数値を指定します。
+        /// ぼかす画素の閾値を取得または設定します。
         /// </summary>
+        /// <remarks>255を1.0とした数値を指定します。</remarks>
         public float Threshold
         {
             get => _BlurXMaterial.GetVector4F("threshold").X;
@@ -38,8 +43,9 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 露光の強さ。この値が大きいほど、ぼけた光が強くなります。
+        /// 露光の強さを取得または設定します。
         /// </summary>
+        /// <remarks>この値が大きいほど、ぼけた光が強くなります。</remarks>
         public float Exposure
         {
             get => _BlurXMaterial.GetVector4F("exposure").X;
@@ -51,10 +57,13 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// RGBではなく、輝度を参照してぼかす色を決定します。
+        /// RGBではなく、輝度を参照してぼかす色を決定するかどうかを取得または設定します。
         /// </summary>
         public bool IsLuminanceMode { get; set; }
 
+        /// <summary>
+        /// <see cref="PostEffectLightBloomNode"/>の新しいインスタンスを生成します。
+        /// </summary>
         public PostEffectLightBloomNode()
         {
             _HighColorMaterial = Material.Create();
@@ -84,6 +93,7 @@ namespace Altseed2
         private const int DownSampleCount = 6;
         private readonly RenderTexture[] downTexture = new RenderTexture[DownSampleCount];
 
+        /// <inheritdoc/>
         protected override void Draw(RenderTexture src, Color clearColor)
         {
             src.WrapMode = TextureWrapMode.Clamp;

@@ -15,7 +15,7 @@ namespace Altseed2
         internal const float MatrixError = 0.00001f;
 
         /// <summary>
-        /// 指定した値を決められた範囲に丸める
+        /// 指定した値を決められた範囲に丸めます。
         /// </summary>
         /// <param name="v">丸める値</param>
         /// <param name="max">最大値</param>
@@ -29,7 +29,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した値を決められた範囲に丸める
+        /// 指定した値を決められた範囲に丸めます。
         /// </summary>
         /// <param name="v">丸める値</param>
         /// <param name="max">最大値</param>
@@ -43,7 +43,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した値を決められた範囲に丸める
+        /// 指定した値を決められた範囲に丸めます。
         /// </summary>
         /// <param name="v">丸める値</param>
         /// <param name="max">最大値</param>
@@ -57,14 +57,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 度数法の値を弧度法の値に変換する
+        /// 度数法の値を弧度法の値に変換します。
         /// </summary>
         /// <param name="degree">変換したい度数法の値</param>
         /// <returns>弧度法としての<paramref name="degree"/>の値</returns>
         public static float DegreeToRadian(float degree) => degree * PiPer180;
 
         /// <summary>
-        /// 弧度法の値を度数法の値に変換する
+        /// 弧度法の値を度数法の値に変換します。
         /// </summary>
         /// <param name="radian">変換したい弧度法の値</param>
         /// <returns>度数法としての<paramref name="radian"/>の値</returns>
@@ -88,7 +88,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 左上と右下の座標を割り出す
+        /// 左上と右下の座標を割り出します。
         /// </summary>
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
@@ -120,7 +120,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 左上と右下の座標を割り出す
+        /// 左上と右下の座標を割り出します。
         /// </summary>
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
@@ -152,7 +152,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 左上と右下の座標を割り出す
+        /// 左上と右下の座標を割り出します。
         /// </summary>
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
@@ -182,7 +182,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// <see cref="Matrix44F"/>から2次元座標，拡大率，角度を算出する
+        /// <see cref="Matrix44F"/>から2次元座標，拡大率，角度を算出します。
         /// </summary>
         /// <param name="transform">計算元となる4x4行列</param>
         /// <param name="absolutePosition">出力される座標</param>
@@ -199,7 +199,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// <see cref="Matrix44F"/>から3次元座標，拡大率，角度を算出する
+        /// <see cref="Matrix44F"/>から3次元座標，拡大率，角度を算出します。
         /// </summary>
         /// <param name="transform">計算元となる4x4行列</param>
         /// <param name="absolutePosition">出力される座標</param>

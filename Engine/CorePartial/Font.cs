@@ -31,7 +31,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 動的にフォントを読み込む
+        /// 動的にフォントを読み込みます。
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
         /// <param name="size">フォントサイズ</param>
@@ -51,7 +51,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 静的にフォントを読み込む
+        /// 静的にフォントを読み込みます。
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
         /// <returns>静的に生成されるフォント</returns>
@@ -68,7 +68,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// テクスチャ文字を追加する
+        /// テクスチャ文字を追加します。
         /// </summary>
         /// <param name="character">文字</param>
         /// <param name="texture">テクスチャ</param>

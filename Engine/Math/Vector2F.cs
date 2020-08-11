@@ -77,7 +77,7 @@ namespace Altseed2
         public readonly float SquaredLength => X * X + Y * Y;
 
         /// <summary>
-        /// コンストラクタ
+        /// <see cref="Vector2F"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="x">X座標</param>
         /// <param name="y">Y座標</param>
@@ -116,8 +116,20 @@ namespace Altseed2
         /// <returns>このオブジェクトのハッシュコード</returns>
         public readonly override int GetHashCode() => HashCode.Combine(X, Y);
 
+        /// <summary>
+        /// 二つの<see cref="Vector2F"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Vector2F v1, Vector2F v2) => Equals(v1, v2);
 
+        /// <summary>
+        /// 二つの<see cref="Vector2F"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="v1">非等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
+        /// <param name="v2">非等価性を判定する<see cref="Vector2F"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Vector2F v1, Vector2F v2) => !Equals(v1, v2);
         #endregion
 
@@ -256,7 +268,15 @@ namespace Altseed2
         public static Vector2F operator /(Vector2F vector, float scalar) => new Vector2F(vector.X / scalar, vector.Y / scalar);
         #endregion
 
+        /// <summary>
+        /// <see cref="Vector2F"/>から<see cref="Vector2I"/>に型変換します。
+        /// </summary>
+        /// <param name="f">変換する<see cref="Vector2F"/>のインスタンス</param>
         public static explicit operator Vector2I(Vector2F f) => f.To2I();
+        /// <summary>
+        /// <see cref="Vector2I"/>から<see cref="Vector2F"/>に型変換します。
+        /// </summary>
+        /// <param name="i">変換する<see cref="Vector2I"/>のインスタンス</param>
 
         public static implicit operator Vector2F(Vector2I i) => i.To2F();
     }

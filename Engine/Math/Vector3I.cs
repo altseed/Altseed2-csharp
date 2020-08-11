@@ -29,7 +29,7 @@ namespace Altseed2
         public int Z;
 
         /// <summary>
-        /// コンストラクタ
+        /// <see cref="Vector3I"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="x">X成分</param>
         /// <param name="y">Y成分</param>
@@ -70,8 +70,20 @@ namespace Altseed2
         /// <returns>このオブジェクトのハッシュコード</returns>
         public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
+        /// <summary>
+        /// 二つの<see cref="Vector3I"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Vector3I v1, Vector3I v2) => Equals(v1, v2);
 
+        /// <summary>
+        /// 二つの<see cref="Vector3I"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="v1">非等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
+        /// <param name="v2">非等価性を判定する<see cref="Vector3I"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Vector3I v1, Vector3I v2) => !Equals(v1, v2);
         #endregion
 

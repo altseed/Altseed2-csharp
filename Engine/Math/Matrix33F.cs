@@ -17,7 +17,7 @@ namespace Altseed2
         private fixed float Values[9];
 
         /// <summary>
-        /// 単位行列を取得する
+        /// 単位行列を取得します。
         /// </summary>
         public static Matrix33F Identity
         {
@@ -35,7 +35,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 逆行列を取得する
+        /// 逆行列を取得します。
         /// </summary>
         public readonly Matrix33F Inversion
         {
@@ -87,7 +87,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 転置行列を取得する
+        /// 転置行列を取得します。
         /// </summary>
         public readonly Matrix33F TransPosition
         {
@@ -108,7 +108,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した位置の値を取得または設定する
+        /// 指定した位置の値を取得または設定します。
         /// </summary>
         /// <param name="x">取得する要素の位置</param>
         /// <param name="y">取得する要素の位置</param>
@@ -131,7 +131,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した角度分の回転を表す行列を取得する
+        /// 指定した角度分の回転を表す行列を取得します。
         /// </summary>
         /// <param name="radian">回転させる角度(弧度法)</param>
         /// <returns><paramref name="radian"/>の回転分を表す行列</returns>
@@ -150,7 +150,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2D座標の拡大率を表す行列を取得する
+        /// 2D座標の拡大率を表す行列を取得します。
         /// </summary>
         /// <param name="scale">設定する拡大率</param>
         /// <returns><paramref name="scale"/>分の拡大/縮小を表す行列</returns>
@@ -164,7 +164,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 2D座標の平行移動分を表す行列を取得する
+        /// 2D座標の平行移動分を表す行列を取得します。
         /// </summary>
         /// <param name="position">平行移動する座標</param>
         /// <returns><paramref name="position"/>分の平行移動を表す行列</returns>
@@ -217,6 +217,12 @@ namespace Altseed2
             return new Vector3F(values[0], values[1], values[2]);
         }
 
+        /// <summary>
+        /// 加算を行います。
+        /// </summary>
+        /// <param name="left">加算する要素</param>
+        /// <param name="right">加算される要素</param>
+        /// <returns>加算の結果</returns>
         public static Matrix33F operator +(Matrix33F left, Matrix33F right)
         {
             var result = new Matrix33F();
@@ -224,8 +230,19 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 符合を逆転します。
+        /// </summary>
+        /// <param name="matrix">符合を逆転する行列</param>
+        /// <returns>符合が逆転された行列</returns>
         public static Matrix33F operator -(Matrix33F matrix) => -1 * matrix;
 
+        /// <summary>
+        /// 減算を行います。
+        /// </summary>
+        /// <param name="left">減算する要素</param>
+        /// <param name="right">減算される要素</param>
+        /// <returns>減算の結果</returns>
         public static Matrix33F operator -(Matrix33F left, Matrix33F right)
         {
             var result = new Matrix33F();
@@ -233,6 +250,12 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 行列の各値を定数倍にします。
+        /// </summary>
+        /// <param name="matrix">定数倍される行列</param>
+        /// <param name="scalar">乗算する定数</param>
+        /// <returns>各値が定数倍された行列</returns>
         public static Matrix33F operator *(Matrix33F matrix, float scalar)
         {
             var result = new Matrix33F();
@@ -240,8 +263,20 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 行列の各値を定数倍にします。
+        /// </summary>
+        /// <param name="scalar">乗算する定数</param>
+        /// <param name="matrix">定数倍される行列</param>
+        /// <returns>各値が定数倍された行列</returns>
         public static Matrix33F operator *(float scalar, Matrix33F matrix) => matrix * scalar;
 
+        /// <summary>
+        /// 行列の各値を定数倍で除算します。
+        /// </summary>
+        /// <param name="matrix">除算される行列</param>
+        /// <param name="scalar">除算する定数</param>
+        /// <returns>各値が定数で除算された行列</returns>
         public static Matrix33F operator /(Matrix33F matrix, float scalar)
         {
             var result = new Matrix33F();
@@ -249,6 +284,12 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 乗算を行います。
+        /// </summary>
+        /// <param name="left">乗算する要素</param>
+        /// <param name="right">乗算される要素</param>
+        /// <returns>乗算の結果</returns>
         public static Matrix33F operator *(Matrix33F left, Matrix33F right)
         {
             var result = new Matrix33F();
@@ -262,11 +303,17 @@ namespace Altseed2
             return result;
         }
 
+        /// <summary>
+        /// 乗算を行います。
+        /// </summary>
+        /// <param name="left">乗算する要素</param>
+        /// <param name="right">乗算される要素</param>
+        /// <returns>乗算の結果</returns>
         public static Vector3F operator *(Matrix33F left, Vector3F right) => left.Transform3D(right);
 
         #region IEquatable
         /// <summary>
-        /// 2つの<see cref="Matrix33F"/>間の等価性を判定する
+        /// 2つの<see cref="Matrix33F"/>間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価性を判定する<see cref="Matrix33F"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間に等価性が認められたらtrue，それ以外でfalse</returns>
@@ -279,14 +326,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定したオブジェクトとの等価性を判定する
+        /// 指定したオブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間の等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is Matrix33F m && Equals(m);
 
         /// <summary>
-        /// このオブジェクトのハッシュコードを返す
+        /// このオブジェクトのハッシュコードを返します。
         /// </summary>
         /// <returns>このオブジェクトのハッシュコード</returns>
         public readonly override int GetHashCode()
@@ -296,12 +343,24 @@ namespace Altseed2
             return hash.ToHashCode();
         }
 
+        /// <summary>
+        /// 二つの<see cref="Matrix33F"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="m1">等価性を判定する<see cref="Matrix33F"/>のインスタンス</param>
+        /// <param name="m2">等価性を判定する<see cref="Matrix33F"/>のインスタンス</param>
+        /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Matrix33F m1, Matrix33F m2) => m1.Equals(m2);
+        /// <summary>
+        /// 二つの<see cref="Matrix33F"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="m1">非等価性を判定する<see cref="Matrix33F"/>のインスタンス</param>
+        /// <param name="m2">非等価性を判定する<see cref="Matrix33F"/>のインスタンス</param>
+        /// <returns><paramref name="m1"/>と<paramref name="m2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Matrix33F m1, Matrix33F m2) => !m1.Equals(m2);
         #endregion
 
         /// <summary>
-        /// このインスタンスの複製を作成する
+        /// このインスタンスの複製を作成します。
         /// </summary>
         /// <returns>このインスタンスの複製</returns>
         public readonly Matrix33F Clone()

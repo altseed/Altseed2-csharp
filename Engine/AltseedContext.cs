@@ -31,12 +31,12 @@ namespace Altseed2
         private readonly ConcurrentQueue<Entry> actions = new ConcurrentQueue<Entry>();
 
         /// <summary>
-        /// 溜められた処理の個数を取得する
+        /// 溜められた処理の個数を取得します。
         /// </summary>
         public int Count => actions.Count;
 
         /// <summary>
-        /// 更新されるかどうかを取得または設定する
+        /// 更新されるかどうかを取得または設定します。
         /// </summary>
         public bool IsUpdated { get; set; } = true;
 
@@ -46,7 +46,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 溜められた処理の実行を行う
+        /// 溜められた処理の実行を行います。
         /// </summary>
         public void Update()
         {

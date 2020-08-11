@@ -22,7 +22,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 使用するコライダを取得する
+        /// 使用するコライダを取得します。
         /// </summary>
         internal PolygonCollider PolygonCollider { get; }
         internal override Collider Collider => PolygonCollider;
@@ -41,7 +41,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 頂点情報の配列を取得または設定する
+        /// 頂点情報の配列を取得または設定します。
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
         public IReadOnlyList<Vector2F> Vertexes
@@ -56,12 +56,12 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
+        /// 既定の<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public PolygonColliderNode() : this(null) { }
 
         /// <summary>
-        /// 指定した<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成する
+        /// 指定した<see cref="Altseed2.PolygonCollider"/>を使用して<see cref="PolygonColliderNode"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="collider">使用する<see cref="Altseed2.PolygonCollider"/>のインスタンス</param>
         internal PolygonColliderNode(PolygonCollider collider)
@@ -70,7 +70,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した座標に頂点を設定する
+        /// 指定した座標に頂点を設定します。
         /// </summary>
         /// <param name="positions">設定する座標</param>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>

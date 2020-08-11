@@ -8,7 +8,7 @@ namespace Altseed2
     public partial class StaticFile
     {
         /// <summary>
-        /// 読み込まれたデータを取得する
+        /// 読み込まれたデータを取得します。
         /// </summary>
         public byte[] Buffer
         {
@@ -40,7 +40,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 非同期読み込みを行う
+        /// 非同期読み込みを行います。
         /// </summary>
         /// <param name="path">読み込むパス</param>
         /// <returns></returns>
@@ -53,7 +53,7 @@ namespace Altseed2
     public partial class StreamFile
     {
         /// <summary>
-        /// 現在読み込まれているデータを取得する
+        /// 現在読み込まれているデータを取得します。
         /// </summary>
         public byte[] TempBuffer
         {

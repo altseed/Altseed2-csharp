@@ -37,8 +37,14 @@ namespace Altseed2
         where T : Registerable<T>
     {
         /// <summary>
+        /// <see cref="Registerable{TOwner}"/>の新しいインスタンスを生成します。
+        /// </summary>
+        protected Registerable() { }
+
+        /// <summary>
         /// 要素が<paramref name="owner"/>に登録されたとき実行します。
         /// </summary>
+        /// <param name="owner">新たなオーナー</param>
         internal abstract void Added(T owner);
 
         /// <summary>

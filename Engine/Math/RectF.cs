@@ -45,7 +45,7 @@ namespace Altseed2
         public readonly Vector2F Size => new Vector2F(Width, Height);
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="RectF"/>新しいインスタンスを生成します。
         /// </summary>
         /// <param name="x">X座標</param>
         /// <param name="y">Y座標</param>
@@ -60,7 +60,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="RectF"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="position">左上の座標</param>
         /// <param name="size">サイズ</param>
@@ -123,16 +123,36 @@ namespace Altseed2
         public readonly override int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
 
         /// <summary>
-        /// 同じ値を持つ<see cref="RectI"/>の新しいインスタンスを生成する
+        /// 同じ値を持つ<see cref="RectI"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <returns>同じ値を持つ<see cref="RectI"/>の新しいインスタンス</returns>
         public readonly RectI ToI() => new RectI((int)X, (int)Y, (int)Width, (int)Height);
 
+        /// <summary>
+        /// 二つの<see cref="RectF"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="RectF"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="RectF"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(RectF v1, RectF v2) => Equals(v1, v2);
 
+        /// <summary>
+        /// 二つの<see cref="RectF"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="v1">非等価性を判定する<see cref="RectF"/>のインスタンス</param>
+        /// <param name="v2">非等価性を判定する<see cref="RectF"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(RectF v1, RectF v2) => !Equals(v1, v2);
 
+        /// <summary>
+        /// <see cref="RectI"/>から<see cref="RectF"/>に型変換します。
+        /// </summary>
+        /// <param name="rect">変換する<see cref="RectI"/>のインスタンス</param>
         public static implicit operator RectF(RectI rect) => rect.ToF();
+        /// <summary>
+        /// <see cref="RectF"/>から<see cref="RectI"/>に型変換します。
+        /// </summary>
+        /// <param name="rect">変換する<see cref="RectF"/>のインスタンス</param>
         public static explicit operator RectI(RectF rect) => rect.ToI();
     }
 }

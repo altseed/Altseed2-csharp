@@ -2,6 +2,9 @@
 
 namespace Altseed2
 {
+    /// <summary>
+    /// 画面ボケを実装するポストエフェクトのクラス
+    /// </summary>
     public sealed class PostEffectGaussianBlurNode : PostEffectNode
     {
         private readonly Material materialX;
@@ -10,8 +13,9 @@ namespace Altseed2
         private float intensity;
 
         /// <summary>
-        /// ぼけの強さ。値が大きいほど画面がぼけます。
+        /// ぼけの強さを取得または設定します。
         /// </summary>
+        /// <remarks>値が大きいほど画面がぼけます。</remarks>
         public float Intensity
         {
             get => intensity;
@@ -42,6 +46,9 @@ namespace Altseed2
             }
         }
 
+        /// <summary>
+        /// <see cref="PostEffectGaussianBlurNode"/>の新しいインスタンスを生成します。
+        /// </summary>
         public PostEffectGaussianBlurNode()
         {
             materialX = Material.Create();
@@ -55,6 +62,7 @@ namespace Altseed2
             Intensity = 5.0f;
         }
 
+        /// <inheritdoc/>
         protected override void Draw(RenderTexture src, Color clearColor)
         {
             src.WrapMode = TextureWrapMode.Clamp;

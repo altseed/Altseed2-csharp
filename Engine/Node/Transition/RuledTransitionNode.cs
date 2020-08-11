@@ -2,15 +2,31 @@
 
 namespace Altseed2
 {
+    /// <summary>
+    /// <see cref="RuledTransitionNode"/>の制御用いる設定のクラス
+    /// </summary>
     [Serializable]
     public sealed class RuledTransitionState
     {
+        /// <summary>
+        /// この設定を適用するノードを取得または設定します。
+        /// </summary>
         public Node TargetNode { get; set; }
+        /// <summary>
+        /// 遷移に掛かる時間を取得または設定します。
+        /// </summary>
         public float Duration { get; set; }
         public Texture2D RuleTexture { get; set; }
         public float Softness { get; set; }
+        /// <summary>
+        /// <see cref="RuledTransitionState"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public RuledTransitionState() { }
     }
 
+    /// <summary>
+    /// パラメータ制御可能な<see cref="TransitionNode"/>のクラス
+    /// </summary>
     [Serializable]
     public class RuledTransitionNode : TransitionNode
     {
@@ -19,6 +35,12 @@ namespace Altseed2
         private readonly RuledTransitionState _ClosingState;
         private readonly RuledTransitionState _OpeningState;
 
+        /// <summary>
+        /// 指定したマスクテクスチャを用いて<see cref="RuledTransitionNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="closingState">遷移元のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
+        /// <param name="openingState">遷移先のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
+        /// <param name="maskTexture">使用するマスクテクスチャ</param>
         public RuledTransitionNode(RuledTransitionState closingState, RuledTransitionState openingState, Texture2D maskTexture)
             : base(closingState.TargetNode, openingState.TargetNode, closingState.Duration, openingState.Duration)
         {
@@ -35,6 +57,11 @@ namespace Altseed2
             };
         }
 
+        /// <summary>
+        /// 既定のマスクテクスチャを用いて<see cref="RuledTransitionNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="closingState">遷移元のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
+        /// <param name="openingState">遷移先のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
         public RuledTransitionNode(RuledTransitionState closingState, RuledTransitionState openingState)
             : base(closingState.TargetNode, openingState.TargetNode, closingState.Duration, openingState.Duration)
         {
@@ -51,16 +78,22 @@ namespace Altseed2
             };
         }
 
+        /// <inheritdoc/>
+        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
         protected override void OnTransitionBegin()
         {
             AddChildNode(_TransitionEffectNode);
         }
 
+        /// <inheritdoc/>
+        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
         protected override void OnClosing(float progress)
         {
             _TransitionEffectNode.MixRate = progress;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
         protected override void OnNodeSwapped()
         {
             _TransitionEffectNode.RuleTexture = _OpeningState.RuleTexture;
@@ -68,6 +101,8 @@ namespace Altseed2
             _TransitionEffectNode.MixRate = 1.0f;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
         protected override void OnOpening(float progress)
         {
             _TransitionEffectNode.MixRate = 1.0f - progress;

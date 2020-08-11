@@ -7,8 +7,14 @@ namespace Altseed2
 {
     public partial class Texture2D
     {
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            Texture2D_Unsetter_Deserialize(info, out var path);
+            ptr = cbg_Texture2D_Load(path);
+        }
+
         /// <summary>
-        /// 指定パスからテクスチャを読み込む
+        /// 指定パスからテクスチャを読み込みます。
         /// </summary>
         /// <param name="path">読み込むテクスチャのパス</param>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる、または使用出来ない文字を含んでいる</exception>
@@ -24,17 +30,13 @@ namespace Altseed2
 
             return Load(path) ?? throw new SystemException("ファイルが破損していたまたは読み込みに失敗しました");
         }
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
-        {
-            Texture2D_Unsetter_Deserialize(info, out var path);
-            ptr = cbg_Texture2D_Load(path);
-        }
 
         /// <summary>
-        /// 非同期読み込みを行う
+        /// 非同期読み込みを行います。
         /// </summary>
         /// <param name="path">読み込むパス</param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        /// <returns><paramref name="path"/>のファイルから読み込まれたテクスチャ</returns>
         public static async Task<Texture2D> LoadAsync(string path)
         {
             return await Task.Run(() => Load(path));

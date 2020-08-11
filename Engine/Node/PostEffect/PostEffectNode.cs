@@ -1,12 +1,21 @@
-using System;
 using System.Collections.Generic;
 
 namespace Altseed2
 {
+    /// <summary>
+    /// ポストエフェクトを扱うノードの基底クラス
+    /// </summary>
     public abstract class PostEffectNode : Node, IDrawn
     {
         private static Dictionary<int, RenderTextureCache> _Cache;
 
+        /// <summary>
+        /// 指定したIDとサイズ，フォーマットを持つ<see cref="RenderTexture"/>のインスタンスをキャッシュから検索し，取得します。
+        /// </summary>
+        /// <param name="identifier">検索する<see cref="RenderTexture"/>のID</param>
+        /// <param name="size">検索する<see cref="RenderTexture"/>の大きさ</param>
+        /// <param name="format">検索する<see cref="RenderTexture"/>のフォーマット</param>
+        /// <returns><paramref name="identifier"/>，<paramref name="size"/>，<paramref name="format"/>を持つ<see cref="RenderTexture"/>のインスタンス</returns>
         protected static RenderTexture GetBuffer(int identifier, Vector2I size, TextureFormat format)
         {
             if (!_Cache.ContainsKey(identifier))
@@ -74,9 +83,10 @@ namespace Altseed2
         }
         private int _ZOrder = 0;
 
-        public PostEffectNode()
-        {
-        }
+        /// <summary>
+        /// <see cref="PostEffectNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        protected PostEffectNode() { }
 
         void IDrawn.Draw()
         {
@@ -86,6 +96,11 @@ namespace Altseed2
             Draw(Engine._PostEffectBuffer, Engine.ClearColor);
         }
 
+        /// <summary>
+        /// 描画を実行します。
+        /// </summary>
+        /// <param name="src">描画先の<see cref="RenderTexture"/>のインスタンス</param>
+        /// <param name="clearColor">描画されないピクセルを埋めるときの色</param>
         protected abstract void Draw(RenderTexture src, Color clearColor);
 
         #region Node

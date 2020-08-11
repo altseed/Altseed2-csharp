@@ -15,7 +15,7 @@ namespace Altseed2
         private int version = 0;
 
         /// <summary>
-        /// 格納されている<see cref="ColliderNode"/>の個数を取得する
+        /// 格納されている<see cref="ColliderNode"/>の個数を取得します。
         /// </summary>
         internal int Count
         {
@@ -28,7 +28,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定したコライダを追加する
+        /// 指定したコライダを追加します。
         /// </summary>
         /// <param name="node">追加するコライダのノード</param>
         /// <exception cref="ArgumentException"><paramref name="node"/>が親に存在しない</exception>
@@ -54,7 +54,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 全ての要素を削除する
+        /// 全ての要素を削除します。
         /// </summary>
         internal void Clear()
         {
@@ -63,7 +63,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した<see cref="ColliderNode"/>が格納されているかどうかを返す
+        /// 指定した<see cref="ColliderNode"/>が格納されているかどうかを返します。
         /// </summary>
         /// <param name="node">検索する<see cref="ColliderNode"/></param>
         /// <returns><paramref name="node"/>が格納されていたらtrue，それ以外でfalse</returns>
@@ -74,7 +74,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 列挙をサポートする構造体を返す
+        /// 列挙をサポートする構造体を返します。
         /// </summary>
         /// <returns><see cref="Enumerator"/>の新しいインスタンス</returns>
         public Enumerator GetEnumerator() => new Enumerator(this);
@@ -82,7 +82,7 @@ namespace Altseed2
         IEnumerator<ColliderNode> IEnumerable<ColliderNode>.GetEnumerator() => GetEnumerator();
 
         /// <summary>
-        /// 指定したコライダを削除する
+        /// 指定したコライダを削除します。
         /// </summary>
         /// <param name="node">削除するコライダのノード</param>
         /// <exception cref="ArgumentException"><paramref name="node"/>が親に存在しない</exception>
@@ -102,7 +102,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 衝突判定を実施する
+        /// 衝突判定を実施します。
         /// </summary>
         internal void Update()
         {
@@ -191,7 +191,7 @@ namespace Altseed2
             private HashSet<ColliderNode> set;
             private readonly int version;
             /// <summary>
-            /// 現在列挙されている要素を取得する
+            /// 現在列挙されている要素を取得します。
             /// </summary>
             public ColliderNode Current { get; private set; }
             readonly object IEnumerator.Current
@@ -203,7 +203,7 @@ namespace Altseed2
                 }
             }
             /// <summary>
-            /// <see cref="Enumerator"/>の新しいインスタンスを生成する
+            /// <see cref="Enumerator"/>の新しいインスタンスを生成します。
             /// </summary>
             /// <param name="collection">使用する<see cref="CollisionCollection"/>のインスタンス</param>
             /// <exception cref="ArgumentNullException"><paramref name="collection"/>がnull</exception>
@@ -218,7 +218,7 @@ namespace Altseed2
                 version = collection.version;
             }
             /// <summary>
-            /// このインスタンスを破棄する
+            /// このインスタンスを破棄します。
             /// </summary>
             public void Dispose()
             {
@@ -227,7 +227,7 @@ namespace Altseed2
                 set = null;
             }
             /// <summary>
-            /// 列挙を次に進める
+            /// 列挙を次に進めます。
             /// </summary>
             /// <exception cref="InvalidOperationException">列挙中にコレクションが変更された</exception>
             /// <returns>列挙を次に進められたらtrue，それ以外でfalse</returns>

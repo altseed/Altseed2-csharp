@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Altseed2
 {
     /// <summary>
-    /// 衝突判定を制御ノード
+    /// 衝突判定を制御するノード
     /// </summary>
     [Serializable]
     public class CollisionManagerNode : Node
@@ -12,22 +12,22 @@ namespace Altseed2
         private readonly CollisionCollection collisionCollection = new CollisionCollection();
 
         /// <summary>
-        /// 格納されているコライダの個数を取得する
+        /// 格納されているコライダの個数を取得します。
         /// </summary>
         public int ColliderCount => collisionCollection.Count;
 
         /// <summary>
-        /// 登録されているコライダを取得する
+        /// 登録されているコライダを取得します。
         /// </summary>
         public IEnumerable<ColliderNode> Colliders => collisionCollection;
 
         /// <summary>
-        /// <see cref="CollisionManagerNode"/>の新しいインスタンスを生成する
+        /// <see cref="CollisionManagerNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public CollisionManagerNode() { }
 
         /// <summary>
-        /// 指定した<see cref="ColliderNode"/>が格納されているかどうかを返す
+        /// 指定した<see cref="ColliderNode"/>が格納されているかどうかを返します。
         /// </summary>
         /// <param name="node">検索する<see cref="ColliderNode"/></param>
         /// <returns><paramref name="node"/>が格納されていたらtrue，それ以外でfalse</returns>

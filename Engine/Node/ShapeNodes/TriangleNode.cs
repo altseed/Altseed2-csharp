@@ -72,7 +72,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 三角形を描画するノードの新しいインスタンスを生成します。
+        /// <see cref="TriangleNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public TriangleNode()
         {

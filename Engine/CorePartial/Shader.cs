@@ -5,12 +5,37 @@ namespace Altseed2
 {
     public partial class Shader
     {
+        /// <summary>
+        /// コードをコンパイルして<see cref="Shader"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="name">シェーダにつける名前</param>
+        /// <param name="code">シェーダのコード</param>
+        /// <param name="shaderStage">シェーダの種類</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>または<paramref name="code"/>がnull</exception>
+        /// <returns><paramref name="code"/>をコンパイルしてできる<see cref="Shader"/>の新しいインスタンス コンパイルに失敗した場合はnull</returns>
         public static Shader Create(string name, string code, ShaderStage shaderStage)
             => Compile(name, code, shaderStage).Value;
 
+        /// <summary>
+        /// ファイルに書かれたコードをコンパイルして<see cref="Shader"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="name">シェーダにつける名前</param>
+        /// <param name="path">シェーダのコードが書かれたファイルのパス</param>
+        /// <param name="shaderStage">シェーダの種類</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>または<paramref name="path"/>がnull</exception>
+        /// <returns><paramref name="path"/>に書かれたコードをコンパイルしてできる<see cref="Shader"/>の新しいインスタンス コンパイルに失敗した場合はnull</returns>
         public static Shader CreateFromFile(string name, string path, ShaderStage shaderStage)
             => CompileFromFile(name, path, shaderStage).Value;
 
+        /// <summary>
+        /// コードをコンパイルして<see cref="Shader"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="name">シェーダにつける名前</param>
+        /// <param name="code">シェーダのコード</param>
+        /// <param name="shaderStage">シェーダの種類</param>
+        /// <param name="shader"><paramref name="code"/>をコンパイルしてできる<see cref="Shader"/>の新しいインスタンス コンパイルに失敗した場合はnull</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>または<paramref name="code"/>がnull</exception>
+        /// <returns><paramref name="code"/>をコンパイルした際のメッセージ</returns>
         public static string TryCreate(string name, string code, ShaderStage shaderStage, out Shader shader)
         {
             var result = Compile(name, code, shaderStage);
@@ -18,9 +43,18 @@ namespace Altseed2
             return result.Message;
         }
 
-        public static string TryCreateFromFile(string name, string code, ShaderStage shaderStage, out Shader shader)
+        /// <summary>
+        /// ファイルに書かれたコードをコンパイルして<see cref="Shader"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="name">シェーダにつける名前</param>
+        /// <param name="path">シェーダのコードが書かれたファイルのパス</param>
+        /// <param name="shaderStage">シェーダの種類</param>
+        /// <param name="shader"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>に書かれたコードをコンパイルしてできる<see cref="Shader"/>の新しいインスタンス コンパイルに失敗した場合はnull<paramref name="name"/>または<paramref name="path"/>がnull</exception>
+        /// <returns><paramref name="path"/>に書かれたコードをコンパイルした際のメッセージ</returns>
+        public static string TryCreateFromFile(string name, string path, ShaderStage shaderStage, out Shader shader)
         {
-            var result = CompileFromFile(name, code, shaderStage);
+            var result = CompileFromFile(name, path, shaderStage);
             shader = result.Value;
             return result.Message;
         }

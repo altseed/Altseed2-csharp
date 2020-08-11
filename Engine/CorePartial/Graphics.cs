@@ -28,7 +28,7 @@ namespace Altseed2
         public Vector2F UV2;
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="Vertex"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="position">座標</param>
         /// <param name="color">色</param>
@@ -43,26 +43,38 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// もう一つの<see cref="Vertex"/>との間の等価性を判定する
+        /// もう一つの<see cref="Vertex"/>との間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価線を判定する<see cref="Vertex"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Vertex other) => Position == other.Position && Color == other.Color && UV1 == other.UV1 && UV2 == other.UV2;
 
         /// <summary>
-        /// オブジェクトとの等価性を判定する
+        /// オブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is Vertex v && Equals(v);
 
         /// <summary>
-        /// このインスタンスのハッシュコードを返す
+        /// このインスタンスのハッシュコードを返します。
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
         public readonly override int GetHashCode() => HashCode.Combine(Position, Color, UV1, UV2);
 
+        /// <summary>
+        /// 二つの<see cref="Vertex"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Vertex v1, Vertex v2) => v1.Equals(v2);
+        /// <summary>
+        /// 二つの<see cref="Vertex"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="v1">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
+        /// <param name="v2">等価性を判定する<see cref="Vertex"/>のインスタンス</param>
+        /// <returns><paramref name="v1"/>と<paramref name="v2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Vertex v1, Vertex v2) => !v1.Equals(v2);
     };
 
@@ -95,7 +107,7 @@ namespace Altseed2
         public byte A;
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="Color"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="r">R値</param>
         /// <param name="g">G値</param>
@@ -109,7 +121,7 @@ namespace Altseed2
             A = a;
         }
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="Color"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="r">R値</param>
         /// <param name="g">G値</param>
@@ -123,7 +135,7 @@ namespace Altseed2
             A = Convert(a);
         }
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="Color"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="r">R値</param>
         /// <param name="g">G値</param>
@@ -168,21 +180,21 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// もう一つの<see cref="Color"/>との間の等価性を判定する
+        /// もう一つの<see cref="Color"/>との間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価線を判定する<see cref="Color"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(Color other) => R == other.R && G == other.G && B == other.B && A == other.A;
 
         /// <summary>
-        /// オブジェクトとの等価性を判定する
+        /// オブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is Color c && Equals(c);
 
         /// <summary>
-        /// このインスタンスのハッシュコードを返す
+        /// このインスタンスのハッシュコードを返します。
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
         public readonly override int GetHashCode() => HashCode.Combine(R, G, B, A);
@@ -193,12 +205,59 @@ namespace Altseed2
         /// <returns>このインスタンスを表す文字列</returns>
         public readonly override string ToString() => $"({R}, {G}, {B}, {A})";
 
+        /// <summary>
+        /// 二つの<see cref="Color"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="c1">等価性を判定する<see cref="Color"/>のインスタンス</param>
+        /// <param name="c2">等価性を判定する<see cref="Color"/>のインスタンス</param>
+        /// <returns><paramref name="c1"/>と<paramref name="c2"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(Color c1, Color c2) => c1.Equals(c2);
+        /// <summary>
+        /// 二つの<see cref="Color"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="c1">非等価性を判定する<see cref="Color"/>のインスタンス</param>
+        /// <param name="c2">非等価性を判定する<see cref="Color"/>のインスタンス</param>
+        /// <returns><paramref name="c1"/>と<paramref name="c2"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(Color c1, Color c2) => !c1.Equals(c2);
+        /// <summary>
+        /// 加算を行います。
+        /// </summary>
+        /// <param name="c1">加算する要素</param>
+        /// <param name="c2">加算される要素</param>
+        /// <remarks>オーバーフロー，アンダーフローは起きず0-255の間に修正される</remarks>
+        /// <returns><paramref name="c1"/>と<paramref name="c2"/>を加算した結果</returns>
         public static Color operator +(Color c1, Color c2) => new Color(c1.R + c2.R, c1.G + c2.G, c1.B + c2.B, c1.A + c2.A);
+        /// <summary>
+        /// 減算を行います。
+        /// </summary>
+        /// <param name="c1">減算する要素</param>
+        /// <param name="c2">減算される要素</param>
+        /// <remarks>オーバーフロー，アンダーフローは起きず0-255の間に修正される</remarks>
+        /// <returns><paramref name="c1"/>から<paramref name="c2"/>を減算した結果</returns>
         public static Color operator -(Color c1, Color c2) => new Color(c1.R - c2.R, c1.G - c2.G, c1.B - c2.B, c1.A - c2.A);
+        /// <summary>
+        /// 乗算を行います。
+        /// </summary>
+        /// <param name="color">定数倍される色</param>
+        /// <param name="value">乗算する値</param>
+        /// <remarks>オーバーフロー，アンダーフローは起きず0-255の間に修正される</remarks>
+        /// <returns><paramref name="color"/>に<paramref name="value"/>を乗算した結果</returns>
         public static Color operator *(Color color, byte value) => new Color(color.R * value, color.G * value, color.B * value, color.A * value);
+        /// <summary>
+        /// 乗算を行います。
+        /// </summary>
+        /// <param name="value">乗算する値</param>
+        /// <param name="color">定数倍される色</param>
+        /// <remarks>オーバーフロー，アンダーフローは起きず0-255の間に修正される</remarks>
+        /// <returns><paramref name="color"/>に<paramref name="value"/>を乗算した結果</returns>
         public static Color operator *(byte value, Color color) => new Color(color.R * value, color.G * value, color.B * value, color.A * value);
+        /// <summary>
+        /// 除算を行います。
+        /// </summary>
+        /// <param name="color">定数倍される色</param>
+        /// <param name="value">除算する値</param>
+        /// <remarks>オーバーフロー，アンダーフローは起きず0-255の間に修正される</remarks>
+        /// <returns><paramref name="color"/>を<paramref name="value"/>で除算した結果</returns>
         public static Color operator /(Color color, byte value) => new Color(color.R / value, color.G / value, color.B / value, color.A / value);
     }
 
@@ -215,7 +274,7 @@ namespace Altseed2
         public bool IsDepthCleared;
 
         /// <summary>
-        /// 新しいインスタンスを生成する
+        /// <see cref="RenderPassParameter"/>新しいインスタンスを生成します。
         /// </summary>
         /// <param name="clearColor"></param>
         /// <param name="isColorCleared"></param>
@@ -228,28 +287,43 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// もう一つの<see cref="RenderPassParameter"/>との間の等価性を判定する
+        /// もう一つの<see cref="RenderPassParameter"/>との間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価線を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly bool Equals(RenderPassParameter other) => ClearColor == other.ClearColor && IsColorCleared == other.IsColorCleared && IsDepthCleared == other.IsDepthCleared;
         /// <summary>
-        /// オブジェクトとの等価性を判定する
+        /// オブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is RenderPassParameter p && Equals(p);
 
         /// <summary>
-        /// このインスタンスのハッシュコードを返す
+        /// このインスタンスのハッシュコードを返します。
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
         public readonly override int GetHashCode() => HashCode.Combine(ClearColor, IsColorCleared, IsDepthCleared);
 
+        /// <summary>
+        /// 二つの<see cref="RenderPassParameter"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="left">等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
+        /// <param name="right">等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
+        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(RenderPassParameter left, RenderPassParameter right) => left.Equals(right);
+        /// <summary>
+        /// 二つの<see cref="RenderPassParameter"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="left">非等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
+        /// <param name="right">非等価性を判定する<see cref="RenderPassParameter"/>のインスタンス</param>
+        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(RenderPassParameter left, RenderPassParameter right) => !(left == right);
     }
 
+    /// <summary>
+    /// アルファブレンドの方法を表す構造体
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct AlphaBlend : IEquatable<AlphaBlend>
@@ -264,7 +338,7 @@ namespace Altseed2
         public BlendEquation BlendEquationAlpha;
 
         /// <summary>
-        /// もう一つの<see cref="AlphaBlend"/>との間の等価性を判定する
+        /// もう一つの<see cref="AlphaBlend"/>との間の等価性を判定します。
         /// </summary>
         /// <param name="other">等価線を判定する<see cref="AlphaBlend"/>のインスタンス</param>
         /// <returns><paramref name="other"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
@@ -280,14 +354,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// オブジェクトとの等価性を判定する
+        /// オブジェクトとの等価性を判定します。
         /// </summary>
         /// <param name="obj">等価性を判定するオブジェクト</param>
         /// <returns><paramref name="obj"/>との間との等価性が認められたらtrue，それ以外でfalse</returns>
         public readonly override bool Equals(object obj) => obj is AlphaBlend p && Equals(p);
 
         /// <summary>
-        /// このインスタンスのハッシュコードを返す
+        /// このインスタンスのハッシュコードを返します。
         /// </summary>
         /// <returns>このインスタンスのハッシュコード</returns>
         public readonly override int GetHashCode()
@@ -295,9 +369,24 @@ namespace Altseed2
             return HashCode.Combine(IsBlendEnabled, BlendDstFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha, BlendEquationRGB, BlendEquationAlpha);
         }
 
+        /// <summary>
+        /// 二つの<see cref="AlphaBlend"/>の間の等価性を判定します。
+        /// </summary>
+        /// <param name="left">等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
+        /// <param name="right">等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
+        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator ==(AlphaBlend left, AlphaBlend right) => left.Equals(right);
+        /// <summary>
+        /// 二つの<see cref="AlphaBlend"/>の間の非等価性を判定します。
+        /// </summary>
+        /// <param name="left">非等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
+        /// <param name="right">非等価性を判定する<see cref="AlphaBlend"/>のインスタンス</param>
+        /// <returns><paramref name="left"/>と<paramref name="right"/>の間との非等価性が認められたらtrue，それ以外でfalse</returns>
         public static bool operator !=(AlphaBlend left, AlphaBlend right) => !(left == right);
 
+        /// <summary>
+        /// 通常のアルファブレンドを表すインスタンスを取得します。
+        /// </summary>
         public static AlphaBlend Normal =>
             new AlphaBlend
             {
@@ -310,6 +399,9 @@ namespace Altseed2
                 BlendEquationAlpha = BlendEquation.Max
             };
 
+        /// <summary>
+        /// 加算のアルファブレンドを表すインスタンスを取得します。
+        /// </summary>
         public static AlphaBlend Add =>
             new AlphaBlend
             {
@@ -322,6 +414,9 @@ namespace Altseed2
                 BlendEquationAlpha = BlendEquation.Max
             };
 
+        /// <summary>
+        /// 不透明のアルファブレンドを表すインスタンスを取得します。
+        /// </summary>
         public static AlphaBlend Opacity =>
             new AlphaBlend
             {
@@ -334,6 +429,9 @@ namespace Altseed2
                 BlendEquationAlpha = BlendEquation.Max
             };
 
+        /// <summary>
+        /// 減算のアルファブレンドを表すインスタンスを取得します。
+        /// </summary>
         public static AlphaBlend Substract =>
             new AlphaBlend
             {
@@ -346,6 +444,9 @@ namespace Altseed2
                 BlendEquationAlpha = BlendEquation.Max
             };
 
+        /// <summary>
+        /// 乗算のアルファブレンドを表すインスタンスを取得します。
+        /// </summary>
         public static AlphaBlend Multiply =>
             new AlphaBlend
             {

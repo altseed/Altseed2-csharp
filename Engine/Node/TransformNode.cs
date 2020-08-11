@@ -36,7 +36,7 @@ namespace Altseed2
     public class TransformNode : Node
     {
         /// <summary>
-        /// 新しいインスタンスを生成します。
+        /// <see cref="TransformNode"/>の新しいインスタンスを生成します。
         /// </summary>
         public TransformNode()
         {
