@@ -5,14 +5,20 @@ namespace Altseed2
 {
     public class RenderTextureCache
     {
-        private struct CacheKey : IEquatable<CacheKey>
+        private readonly struct CacheKey : IEquatable<CacheKey>
         {
-            public Vector2I size;
-            public TextureFormat format;
+            public readonly Vector2I Size;
+            public readonly TextureFormat Format;
+
+            public CacheKey(Vector2I size, TextureFormat format)
+            {
+                Size = size;
+                Format = format;
+            }
 
             public readonly override int GetHashCode()
             {
-                return HashCode.Combine(size, format);
+                return HashCode.Combine(Size, Format);
             }
 
             public readonly override bool Equals(object obj)
@@ -22,7 +28,7 @@ namespace Altseed2
 
             public readonly bool Equals(CacheKey other)
             {
-                return size == other.size && format == other.format;
+                return Size == other.Size && Format == other.Format;
             }
 
             public static bool operator ==(CacheKey a, CacheKey b)
@@ -36,10 +42,10 @@ namespace Altseed2
             }
         }
 
-        private class CacheValue
+        private sealed class CacheValue
         {
-            public int life;
-            public RenderTexture stored;
+            public int Life;
+            public RenderTexture Stored;
         }
 
         private readonly Dictionary<CacheKey, CacheValue> cache;
@@ -53,17 +59,17 @@ namespace Altseed2
 
         public RenderTexture GetRenderTexture(Vector2I size, TextureFormat format)
         {
-            var key = new CacheKey { size = size, format = format };
+            var key = new CacheKey(size, format);
 
             if (cache.TryGetValue(key, out var result))
             {
-                result.life = 5;
-                return result.stored;
+                result.Life = 5;
+                return result.Stored;
             }
             else
             {
                 var res = RenderTexture.Create(size, format);
-                cache.Add(key, new CacheValue { life = 5, stored = res });
+                cache.Add(key, new CacheValue { Life = 5, Stored = res });
                 return res;
             }
         }
@@ -72,8 +78,8 @@ namespace Altseed2
         {
             foreach (var x in cache)
             {
-                x.Value.life--;
-                if (x.Value.life == 0)
+                x.Value.Life--;
+                if (x.Value.Life == 0)
                 {
                     removeKeys.Add(x.Key);
                 }
