@@ -29,7 +29,6 @@ namespace Altseed2
         /// <summary>
         /// 短形のサイズを取得または設定します。
         /// </summary>
-        /// <exception cref="ArgumentException">設定しようとした値が 0 以下</exception>
         public Vector2F RectangleSize
         {
             get => _RectangleSize;
