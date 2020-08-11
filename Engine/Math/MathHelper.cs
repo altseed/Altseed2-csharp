@@ -88,7 +88,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 左上と右下の座標を割り出します。
+        /// 指定した頂点を全て含む長方形のうち左上と右下の座標を割り出します。
         /// </summary>
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
@@ -120,7 +120,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 左上と右下の座標を割り出します。
+        /// 指定した頂点を全て含む長方形のうち左上と右下の座標を割り出します。
         /// </summary>
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
@@ -152,7 +152,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 左上と右下の座標を割り出します。
+        /// 指定した頂点を全て含む長方形のうち左上と右下の座標を割り出します。
         /// </summary>
         /// <param name="min">左上の座標</param>
         /// <param name="max">右下の座標</param>
