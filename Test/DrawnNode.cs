@@ -515,5 +515,46 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void ZOrder()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Texture = texture;
+            node.CenterPosition = texture.Size / 2;
+            node.Position = new Vector2F(100, 100);
+            node.Color = new Color(255, 0, 0);
+            node.ZOrder = 300;
+            Engine.AddNode(node);
+
+            var node2 = new SpriteNode();
+            node2.Texture = texture;
+            node2.CenterPosition = texture.Size / 2;
+            node2.Position = new Vector2F(200, 200);
+            node2.ZOrder = 200;
+            node2.Color = new Color(0, 0, 255);
+            Engine.AddNode(node2);
+
+            var node3 = new SpriteNode();
+            node3.Texture = texture;
+            node3.CenterPosition = texture.Size / 2;
+            node3.Position = new Vector2F(300, 300);
+            node3.ZOrder = 150;
+            node3.Color = new Color(0, 255, 0);
+            Engine.AddNode(node3);
+
+            tc.LoopBody(c =>
+            {
+                node3.ZOrder++;
+            }, null);
+
+            tc.End();
+        }
     }
 }

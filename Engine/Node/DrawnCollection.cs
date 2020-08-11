@@ -88,6 +88,15 @@ namespace Altseed2
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
 
+            {
+                _Drawns[old].Remove(node);
+                
+                if(!_Drawns.TryGetValue(node.ZOrder, out var set))
+                    set = _Drawns[node.ZOrder] = new HashSet<IDrawn>();
+
+                set.Add(node);
+            }
+
             for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
             {
                 var mask = 1u << i;
