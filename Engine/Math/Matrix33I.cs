@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
@@ -56,10 +56,10 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 指定した位置の値を取得または設定します。
+        /// 指定したX，Y成分の値を取得または設定します。
         /// </summary>
-        /// <param name="x">取得する要素の位置</param>
-        /// <param name="y">取得する要素の位置</param>
+        /// <param name="x">取得する値のX成分</param>
+        /// <param name="y">取得する値のY成分</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="x"/>または<paramref name="y"/>が0未満または3以上</exception>
         /// <returns><paramref name="x"/>と<paramref name="y"/>に対応する値</returns>
         public int this[int x, int y]
