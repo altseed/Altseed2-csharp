@@ -140,39 +140,19 @@ namespace Altseed2
             if (!startMatched) size++;
             if (!endMatched) size++;
 
-            void setVertexes(Span<Vector2F> positions)
+            Span<Vector2F> positions = size + 2 <= Engine.MaxStackalloclLength ? stackalloc Vector2F[size + 2] : Engine.Vector2FBuffer.Get(size + 2);
+            var currentIndex = 1;
+            if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
+            var vec = GetBaseVector(deg * startVertexNum);
+            for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
             {
-                var currentIndex = 1;
-                if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
-                var vec = GetBaseVector(deg * startVertexNum);
-                for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
-                {
-                    positions[currentIndex] = vec;
-                    vec.Degree += deg;
-                }
-
-                if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
-
-                SetVertexes(positions, Color);
+                positions[currentIndex] = vec;
+                vec.Degree += deg;
             }
 
-            if (size + 2 <= Engine.MaxStackalloclLength)
-            {
-                Span<Vector2F> positions = stackalloc Vector2F[size + 2];
-                setVertexes(positions);
-            }
-            else
-            {
-                var buffer = ArrayPool<Vector2F>.Shared.Rent(size + 2);
-                try
-                {
-                    setVertexes(buffer);
-                }
-                finally
-                {
-                    ArrayPool<Vector2F>.Shared.Return(buffer);
-                }
-            }
+            if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
+
+            SetVertexes(positions, Color);
         }
 
         internal override void Update()

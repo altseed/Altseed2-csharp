@@ -35,6 +35,12 @@ namespace Altseed2
         private static RenderTextureCache _RenderTextureCache;
         internal static RenderTexture _PostEffectBuffer; // TODO: 渡し方をうまくやる。
 
+        // cullingの結果を格納するためのBuffer
+        private static ArrayBuffer<int> _DrawingRenderedIdsBuffer;
+
+        // ShapeNodeのSetVertexesで利用するBuffer。
+        internal static ArrayBuffer<Vector2F> Vector2FBuffer { get; private set; }
+
         // CreateVertexesByVector2F時に一時的なArrayを生成せずに使い回すためのキャッシュ。
         internal static Vector2FArray Vector2FArrayCache { get; private set; }
 
@@ -104,6 +110,8 @@ namespace Altseed2
                 _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
+                _DrawingRenderedIdsBuffer = new ArrayBuffer<int>();
+                Vector2FBuffer = new ArrayBuffer<Vector2F>(MaxStackalloclLength * 2);
                 Vector2FArrayCache = Vector2FArray.Create(0);
 
                 return true;
@@ -189,54 +197,46 @@ namespace Altseed2
 
             // カリングの結果
             var cullingIdsCount = CullingSystem.DrawingRenderedIds.Count;
-            var drawingRenderedIdsBuffer = ArrayPool<int>.Shared.Rent(cullingIdsCount);
-            CullingSystem.DrawingRenderedIds.CopyTo(drawingRenderedIdsBuffer);
-            Array.Sort(drawingRenderedIdsBuffer, 0, cullingIdsCount);
-            Span<int> cullingIds = new Span<int>(drawingRenderedIdsBuffer, 0, cullingIdsCount);
+            var buffer = _DrawingRenderedIdsBuffer.Get(cullingIdsCount);
+            CullingSystem.DrawingRenderedIds.CopyTo(buffer);
+            Array.Sort(buffer, 0, cullingIdsCount);
+            Span<int> cullingIds = new Span<int>(buffer, 0, cullingIdsCount);
 
             var requireRender = false;
 
-            try
-            {
-                _PostEffectBuffer = null;
+            _PostEffectBuffer = null;
 
-                foreach (var (_, znodes) in drawns)
+            foreach (var (_, znodes) in drawns)
+            {
+                foreach (var node in znodes)
                 {
-                    foreach (var node in znodes)
+                    if (node is PostEffectNode)
                     {
-                        if (node is PostEffectNode)
+                        if (requireRender)
                         {
-                            if (requireRender)
-                            {
-                                Renderer.Render();
-                                requireRender = false;
-                            }
-
-                            _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size, Graphics.CommandList.ScreenTextureFormat);
-
-                            Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), _PostEffectBuffer);
-                            node.Draw();
+                            Renderer.Render();
+                            requireRender = false;
                         }
-                        else if (node is ICullableDrawn cdrawn)
-                        {
-                            if (!cdrawn.IsDrawnActually) continue;
-                            // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
-                            if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
+                        _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size, Graphics.CommandList.ScreenTextureFormat);
 
-                            node.Draw();
-                            //if (node is TransformNode t)
-                            //    t.DrawTransformInfo();
-                            requireRender = true;
-                        }
-                        else throw new InvalidOperationException();
+                        Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), _PostEffectBuffer);
+                        node.Draw();
                     }
-                }
+                    else if (node is ICullableDrawn cdrawn)
+                    {
+                        if (!cdrawn.IsDrawnActually) continue;
+                        // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
-            }
-            finally
-            {
-                ArrayPool<int>.Shared.Return(drawingRenderedIdsBuffer);
+                        if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
+
+                        node.Draw();
+                        //if (node is TransformNode t)
+                        //    t.DrawTransformInfo();
+                        requireRender = true;
+                    }
+                    else throw new InvalidOperationException();
+                }
             }
 
             if (requireRender) Renderer.Render();
@@ -254,6 +254,8 @@ namespace Altseed2
             PostEffectNode.TerminateCache();
             Core.Terminate();
 
+            _DrawingRenderedIdsBuffer = null;
+            Vector2FBuffer = null;
             Vector2FArrayCache = null;
 
             isActive = false;

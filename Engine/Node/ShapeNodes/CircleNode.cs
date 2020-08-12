@@ -69,36 +69,13 @@ namespace Altseed2
         {
             var deg = MathF.PI * 2f / _VertNum;
 
-            void setVertexes(Span<Vector2F> positions)
+            Span<Vector2F> positions = _VertNum <= Engine.MaxStackalloclLength ? stackalloc Vector2F[_VertNum] : Engine.Vector2FBuffer.Get(_VertNum);
+            for (int i = 0; i < _VertNum; i++)
             {
-                for (int i = 0; i < _VertNum; i++)
-                {
-                    positions[i] = new Vector2F(MathF.Cos(deg * i), MathF.Sin(deg * i)) * Radius;
-                }
-
-                SetVertexes(positions, Color);
+                positions[i] = new Vector2F(MathF.Cos(deg * i), MathF.Sin(deg * i)) * Radius;
             }
 
-            if (_VertNum <= Engine.MaxStackalloclLength)
-            {
-                Span<Vector2F> positions = stackalloc Vector2F[_VertNum];
-                setVertexes(positions);
-            }
-            else
-            {
-                var buffer = ArrayPool<Vector2F>.Shared.Rent(_VertNum);
-
-                try
-                {
-                    setVertexes(buffer);
-                }
-                finally
-                {
-                    ArrayPool<Vector2F>.Shared.Return(buffer);
-                }
-            }
-
-
+            SetVertexes(positions, Color);
         }
 
         internal override void Update()
