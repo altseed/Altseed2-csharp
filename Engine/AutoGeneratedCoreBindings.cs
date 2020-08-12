@@ -678,6 +678,9 @@ namespace Altseed2
         Appearing = 8,
     }
     
+    /// <summary>
+    /// ツール機能のTreeNodeに適用する設定を表します。
+    /// </summary>
     [Flags]
     [Serializable]
     public enum ToolTreeNodeFlags : int
@@ -930,6 +933,9 @@ namespace Altseed2
         OptionsDefault = 177209344,
     }
     
+    /// <summary>
+    /// ツール機能のSelectableに適用する設定を表します。
+    /// </summary>
     [Flags]
     [Serializable]
     public enum ToolSelectableFlags : int
@@ -1464,7 +1470,7 @@ namespace Altseed2
     }
     
     /// <summary>
-    /// 
+    /// ツール機能のBeginComboに適用する設定を表します。
     /// </summary>
     [Flags]
     [Serializable]
@@ -1954,7 +1960,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Configuration"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Configuration"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -2001,7 +2007,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -2009,7 +2015,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Configuration(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Configuration(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -2039,6 +2045,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Configuration"/>のインスタンスを削除します。
+        /// </summary>
         ~Configuration()
         {
             lock (this) 
@@ -2281,6 +2290,9 @@ namespace Altseed2
             return Core.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// <see cref="Core"/>のインスタンスを削除します。
+        /// </summary>
         ~Core()
         {
             lock (this) 
@@ -2469,7 +2481,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Int8Array"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Int8Array"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -2501,7 +2513,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -2509,7 +2521,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Int8Array(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Int8Array(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -2537,7 +2549,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="Int8Array(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="Int8Array(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="Int8Array.Count"/></param>
@@ -2569,6 +2581,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Int8Array"/>のインスタンスを削除します。
+        /// </summary>
         ~Int8Array()
         {
             lock (this) 
@@ -2757,7 +2772,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Int32Array"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Int32Array"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -2789,7 +2804,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -2797,7 +2812,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Int32Array(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Int32Array(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -2825,7 +2840,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="Int32Array(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="Int32Array(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="Int32Array.Count"/></param>
@@ -2857,6 +2872,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Int32Array"/>のインスタンスを削除します。
+        /// </summary>
         ~Int32Array()
         {
             lock (this) 
@@ -3045,7 +3063,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="VertexArray"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="VertexArray"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -3077,7 +3095,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -3085,7 +3103,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="VertexArray(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="VertexArray(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -3113,7 +3131,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="VertexArray(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="VertexArray(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="VertexArray.Count"/></param>
@@ -3145,6 +3163,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="VertexArray"/>のインスタンスを削除します。
+        /// </summary>
         ~VertexArray()
         {
             lock (this) 
@@ -3333,7 +3354,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="FloatArray"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="FloatArray"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -3365,7 +3386,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -3373,7 +3394,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="FloatArray(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="FloatArray(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -3401,7 +3422,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="FloatArray(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="FloatArray(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="FloatArray.Count"/></param>
@@ -3433,6 +3454,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="FloatArray"/>のインスタンスを削除します。
+        /// </summary>
         ~FloatArray()
         {
             lock (this) 
@@ -3621,7 +3645,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Vector2FArray"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Vector2FArray"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -3653,7 +3677,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -3661,7 +3685,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Vector2FArray(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Vector2FArray(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -3689,7 +3713,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="Vector2FArray(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="Vector2FArray(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Count"><see cref="Vector2FArray.Count"/></param>
@@ -3721,6 +3745,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Vector2FArray"/>のインスタンスを削除します。
+        /// </summary>
         ~Vector2FArray()
         {
             lock (this) 
@@ -3836,6 +3863,9 @@ namespace Altseed2
             cbg_Resources_Reload(selfPtr);
         }
         
+        /// <summary>
+        /// <see cref="Resources"/>のインスタンスを削除します。
+        /// </summary>
         ~Resources()
         {
             lock (this) 
@@ -3916,6 +3946,9 @@ namespace Altseed2
             return Cursor.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// <see cref="Cursor"/>のインスタンスを削除します。
+        /// </summary>
         ~Cursor()
         {
             lock (this) 
@@ -4007,6 +4040,9 @@ namespace Altseed2
             return Keyboard.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// <see cref="Keyboard"/>のインスタンスを削除します。
+        /// </summary>
         ~Keyboard()
         {
             lock (this) 
@@ -4188,6 +4224,9 @@ namespace Altseed2
             cbg_Mouse_SetCursorImage(selfPtr, cursor != null ? cursor.selfPtr : IntPtr.Zero);
         }
         
+        /// <summary>
+        /// <see cref="Mouse"/>のインスタンスを削除します。
+        /// </summary>
         ~Mouse()
         {
             lock (this) 
@@ -4201,6 +4240,9 @@ namespace Altseed2
         }
     }
     
+    /// <summary>
+    /// ジョイスティックコントローラを表します。
+    /// </summary>
     public partial class JoystickInfo
     {
         #region unmanaged
@@ -4303,6 +4345,9 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// ジョイスティックの名前を取得します。
+        /// </summary>
         public string Name
         {
             get
@@ -4396,6 +4441,9 @@ namespace Altseed2
             }
         }
         
+        /// <summary>
+        /// ジョイスティックのバージョンを取得します。
+        /// </summary>
         public int Version
         {
             get
@@ -4414,6 +4462,9 @@ namespace Altseed2
             return ret;
         }
         
+        /// <summary>
+        /// <see cref="JoystickInfo"/>のインスタンスを削除します。
+        /// </summary>
         ~JoystickInfo()
         {
             lock (this) 
@@ -4553,6 +4604,9 @@ namespace Altseed2
             return JoystickInfo.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// <see cref="Joystick"/>のインスタンスを削除します。
+        /// </summary>
         ~Joystick()
         {
             lock (this) 
@@ -4648,6 +4702,9 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// コマンドリストを取得します。
+        /// </summary>
         public CommandList CommandList
         {
             get
@@ -4720,6 +4777,9 @@ namespace Altseed2
             cbg_Graphics_SaveScreenshot(selfPtr, path);
         }
         
+        /// <summary>
+        /// <see cref="Graphics"/>のインスタンスを削除します。
+        /// </summary>
         ~Graphics()
         {
             lock (this) 
@@ -4883,11 +4943,11 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// png画像として保存します
+        /// png画像として保存します。
         /// </summary>
         /// <param name="path">保存先</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
-        /// <returns>成功したか否か</returns>
+        /// <returns>処理に成功したらtrue，それ以外でfalse</returns>
         public bool Save(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
@@ -4913,7 +4973,7 @@ namespace Altseed2
         private SerializationInfo seInfo;
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="TextureBase"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="TextureBase"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -4946,7 +5006,7 @@ namespace Altseed2
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -4954,7 +5014,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="TextureBase(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="TextureBase(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -4962,7 +5022,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出されます。
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
         /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
@@ -4982,7 +5042,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Size"><see cref="TextureBase.Size"/></param>
@@ -5019,7 +5079,7 @@ namespace Altseed2
         /// <summary>
         /// デシリアライズ時に実行
         /// </summary>
-        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        /// <param name="sender">現在はサポートされていない 常にnullを返します。</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected virtual void OnDeserialization(object sender)
         {
@@ -5040,12 +5100,15 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender) => OnDeserialization(sender);
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行されます。
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
+        /// <summary>
+        /// <see cref="TextureBase"/>のインスタンスを削除します。
+        /// </summary>
         ~TextureBase()
         {
             lock (this) 
@@ -5168,7 +5231,7 @@ namespace Altseed2
         private SerializationInfo seInfo;
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Texture2D"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Texture2D"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -5196,7 +5259,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -5204,7 +5267,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Texture2D(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Texture2D(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -5212,7 +5275,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出されます。
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
         /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
@@ -5232,7 +5295,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="Texture2D.Path"/></param>
@@ -5267,7 +5330,7 @@ namespace Altseed2
         /// <summary>
         /// デシリアライズ時に実行
         /// </summary>
-        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        /// <param name="sender">現在はサポートされていない 常にnullを返します。</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnDeserialization(object sender)
         {
@@ -5286,12 +5349,15 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行されます。
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
+        /// <summary>
+        /// <see cref="Texture2D"/>のインスタンスを削除します。
+        /// </summary>
         ~Texture2D()
         {
             lock (this) 
@@ -5357,6 +5423,12 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 指定したサイズとフォーマットを持つRenderTextureの新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="size">サイズ</param>
+        /// <param name="format">テクスチャのフォーマット</param>
+        /// <returns>sizeとformatを持つRenderTextureの新しいインスタンス</returns>
         public static RenderTexture Create(Vector2I size, TextureFormat format)
         {
             var ret = cbg_RenderTexture_Create(size, (int)format);
@@ -5373,7 +5445,7 @@ namespace Altseed2
         private SerializationInfo seInfo;
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RenderTexture"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="RenderTexture"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -5400,7 +5472,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -5408,7 +5480,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RenderTexture(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="RenderTexture(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -5416,7 +5488,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出されます。
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
         /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
@@ -5460,7 +5532,7 @@ namespace Altseed2
         /// <summary>
         /// デシリアライズ時に実行
         /// </summary>
-        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        /// <param name="sender">現在はサポートされていない 常にnullを返します。</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnDeserialization(object sender)
         {
@@ -5479,12 +5551,15 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行されます。
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
+        /// <summary>
+        /// <see cref="RenderTexture"/>のインスタンスを削除します。
+        /// </summary>
         ~RenderTexture()
         {
             lock (this) 
@@ -5632,7 +5707,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Material"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Material"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -5665,7 +5740,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -5673,7 +5748,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Material(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Material(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -5722,6 +5797,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Material"/>のインスタンスを削除します。
+        /// </summary>
         ~Material()
         {
             lock (this) 
@@ -5874,6 +5952,9 @@ namespace Altseed2
             cbg_Renderer_ResetCamera(selfPtr);
         }
         
+        /// <summary>
+        /// <see cref="Renderer"/>のインスタンスを削除します。
+        /// </summary>
         ~Renderer()
         {
             lock (this) 
@@ -5964,6 +6045,9 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// GetScreenTextureで取得するテクスチャのフォーマットを取得または設定します。
+        /// </summary>
         public TextureFormat ScreenTextureFormat
         {
             get
@@ -5983,27 +6067,52 @@ namespace Altseed2
         }
         private TextureFormat? _ScreenTextureFormat;
         
+        /// <summary>
+        /// スクリーンに表示されている内容をテクスチャとして取得します。
+        /// </summary>
+        /// <returns>スクリーンに表示されている内容を反映したテクスチャ</returns>
         public RenderTexture GetScreenTexture()
         {
             var ret = cbg_CommandList_GetScreenTexture(selfPtr);
             return RenderTexture.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// 描画する対象のテクスチャを設定します。
+        /// </summary>
+        /// <param name="target">描画先のテクスチャ</param>
+        /// <param name="renderPassParameter">描画に使用する設定</param>
         public void SetRenderTarget(RenderTexture target, RenderPassParameter renderPassParameter)
         {
             cbg_CommandList_SetRenderTarget(selfPtr, target != null ? target.selfPtr : IntPtr.Zero, renderPassParameter);
         }
         
+        /// <summary>
+        /// 指定したテクスチャに描画を行います。
+        /// </summary>
+        /// <param name="material">描画に使用するマテリアル</param>
+        /// <param name="target">描画先のテクスチャ</param>
+        /// <param name="renderPassparameter">描画に使用する設定</param>
         public void RenderToRenderTexture(Material material, RenderTexture target, RenderPassParameter renderPassparameter)
         {
             cbg_CommandList_RenderToRenderTexture(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, target != null ? target.selfPtr : IntPtr.Zero, renderPassparameter);
         }
         
+        /// <summary>
+        /// 設定されたターゲットに描画を行います。
+        /// </summary>
+        /// <param name="material">描画に使用するマテリアル</param>
         public void RenderToRenderTarget(Material material)
         {
             cbg_CommandList_RenderToRenderTarget(selfPtr, material != null ? material.selfPtr : IntPtr.Zero);
         }
         
+        /// <summary>
+        /// テクスチャの内容をコピーします。
+        /// </summary>
+        /// <param name="src">コピーするテクスチャ</param>
+        /// <param name="dst">コピー先のテクスチャ</param>
+        /// <exception cref="ArgumentNullException"><paramref name="src"/>, <paramref name="dst"/>のいずれかがnull</exception>
         public void CopyTexture(RenderTexture src, RenderTexture dst)
         {
             if (src == null) throw new ArgumentNullException(nameof(src), "引数がnullです");
@@ -6011,6 +6120,9 @@ namespace Altseed2
             cbg_CommandList_CopyTexture(selfPtr, src != null ? src.selfPtr : IntPtr.Zero, dst != null ? dst.selfPtr : IntPtr.Zero);
         }
         
+        /// <summary>
+        /// <see cref="CommandList"/>のインスタンスを削除します。
+        /// </summary>
         ~CommandList()
         {
             lock (this) 
@@ -6110,7 +6222,7 @@ namespace Altseed2
         private Matrix44F? _Transform;
         
         /// <summary>
-        /// BaseObjectのIdを取得します
+        /// BaseObjectのIdを取得します。
         /// </summary>
         public int Id
         {
@@ -6130,7 +6242,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Rendered"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Rendered"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -6165,7 +6277,7 @@ namespace Altseed2
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -6173,7 +6285,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Rendered(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Rendered(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -6222,6 +6334,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Rendered"/>のインスタンスを削除します。
+        /// </summary>
         ~Rendered()
         {
             lock (this) 
@@ -6463,7 +6578,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RenderedSprite"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="RenderedSprite"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -6507,7 +6622,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -6515,7 +6630,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RenderedSprite(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="RenderedSprite(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -6564,6 +6679,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="RenderedSprite"/>のインスタンスを削除します。
+        /// </summary>
         ~RenderedSprite()
         {
             lock (this) 
@@ -7015,7 +7133,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RenderedText"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="RenderedText"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -7071,7 +7189,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -7079,7 +7197,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RenderedText(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="RenderedText(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -7128,6 +7246,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="RenderedText"/>のインスタンスを削除します。
+        /// </summary>
         ~RenderedText()
         {
             lock (this) 
@@ -7393,7 +7514,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RenderedPolygon"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="RenderedPolygon"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -7437,7 +7558,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -7445,7 +7566,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RenderedPolygon(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="RenderedPolygon(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -7494,6 +7615,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="RenderedPolygon"/>のインスタンスを削除します。
+        /// </summary>
         ~RenderedPolygon()
         {
             lock (this) 
@@ -7673,7 +7797,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RenderedCamera"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="RenderedCamera"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -7712,7 +7836,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -7720,7 +7844,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RenderedCamera(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="RenderedCamera(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -7769,6 +7893,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="RenderedCamera"/>のインスタンスを削除します。
+        /// </summary>
         ~RenderedCamera()
         {
             lock (this) 
@@ -7944,6 +8071,9 @@ namespace Altseed2
             return Shader.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// <see cref="BuiltinShader"/>のインスタンスを削除します。
+        /// </summary>
         ~BuiltinShader()
         {
             lock (this) 
@@ -8040,6 +8170,9 @@ namespace Altseed2
             }
         }
         
+        /// <summary>
+        /// <see cref="ShaderCompileResult"/>のインスタンスを削除します。
+        /// </summary>
         ~ShaderCompileResult()
         {
             lock (this) 
@@ -8126,6 +8259,9 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// シェーダの種類を取得します。
+        /// </summary>
         public ShaderStage StageType
         {
             get
@@ -8136,7 +8272,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// インスタンス生成に使用したコードを取得します
+        /// インスタンス生成に使用したコードを取得します。
         /// </summary>
         public string Code
         {
@@ -8148,7 +8284,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 名前を取得します
+        /// 名前を取得します。
         /// </summary>
         public string Name
         {
@@ -8160,7 +8296,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// コードをコンパイルしてシェーダを生成する
+        /// コードをコンパイルしてシェーダを生成します。
         /// </summary>
         /// <param name="name">シェーダの名前</param>
         /// <param name="code">コンパイルするコード</param>
@@ -8176,7 +8312,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// ファイルからコードをコンパイルしてシェーダを生成する
+        /// ファイルからコードをコンパイルしてシェーダを生成します。
         /// </summary>
         /// <param name="name">シェーダの名前</param>
         /// <param name="path">コンパイルするコードのパス</param>
@@ -8204,7 +8340,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Shader"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Shader"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -8238,7 +8374,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -8246,7 +8382,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Shader(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Shader(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -8274,7 +8410,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="Shader(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="Shader(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="StageType"><see cref="Shader.StageType"/></param>
@@ -8310,6 +8446,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Shader"/>のインスタンスを削除します。
+        /// </summary>
         ~Shader()
         {
             lock (this) 
@@ -8403,7 +8542,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字テクスチャのサイズを取得する
+        /// 文字テクスチャのサイズを取得します。
         /// </summary>
         public Vector2I TextureSize
         {
@@ -8415,7 +8554,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字テクスチャのインデックスを取得する
+        /// 文字テクスチャのインデックスを取得します。
         /// </summary>
         public int TextureIndex
         {
@@ -8427,7 +8566,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字の座標を取得する
+        /// 文字の座標を取得します。
         /// </summary>
         public Vector2I Position
         {
@@ -8439,7 +8578,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字のサイズを取得する
+        /// 文字のサイズを取得します。
         /// </summary>
         public Vector2I Size
         {
@@ -8451,7 +8590,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字のオフセットを取得する
+        /// 文字のオフセットを取得します。
         /// </summary>
         public Vector2I Offset
         {
@@ -8463,7 +8602,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字の幅を取得する
+        /// 文字の幅を取得します。
         /// </summary>
         public int GlyphWidth
         {
@@ -8474,6 +8613,9 @@ namespace Altseed2
             }
         }
         
+        /// <summary>
+        /// <see cref="Glyph"/>のインスタンスを削除します。
+        /// </summary>
         ~Glyph()
         {
             lock (this) 
@@ -8606,7 +8748,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// フォントのサイズを取得する
+        /// フォントのサイズを取得します。
         /// </summary>
         public int Size
         {
@@ -8618,7 +8760,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// フォントのベースラインからトップラインまでの距離を取得する
+        /// フォントのベースラインからトップラインまでの距離を取得します。
         /// </summary>
         public int Ascent
         {
@@ -8630,7 +8772,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// フォントのベースラインからボトムラインまでの距離を取得する
+        /// フォントのベースラインからボトムラインまでの距離を取得します。
         /// </summary>
         public int Descent
         {
@@ -8642,7 +8784,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// フォントの行間の距離を取得する
+        /// フォントの行間の距離を取得します。
         /// </summary>
         public int LineGap
         {
@@ -8654,7 +8796,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// StaticFontか否か
+        /// StaticFontかどうかを取得します。
         /// </summary>
         public bool IsStaticFont
         {
@@ -8678,7 +8820,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 動的にフォントを生成します
+        /// フォントファイルを読み込んでFontの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
@@ -8692,7 +8834,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 静的にフォントを生成します
+        /// FontGeneratorで生成したフォントを読み込んでFontの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
@@ -8705,14 +8847,14 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// a2fフォントを生成します
+        /// a2fフォントを生成します。
         /// </summary>
         /// <param name="dynamicFontPath">読み込むtruetypeフォントのパス</param>
         /// <param name="staticFontPath">生成するa2fフォントのパス</param>
         /// <param name="size">フォントのサイズ</param>
         /// <param name="characters">フォント化させる文字列</param>
         /// <exception cref="ArgumentNullException"><paramref name="dynamicFontPath"/>, <paramref name="staticFontPath"/>のいずれかがnull</exception>
-        /// <returns>生成できたか否か</returns>
+        /// <returns>生成できたらtrue，それ以外でfalse</returns>
         public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int size, string characters)
         {
             if (dynamicFontPath == null) throw new ArgumentNullException(nameof(dynamicFontPath), "引数がnullです");
@@ -8722,7 +8864,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字情報を取得する
+        /// 文字情報を取得します。
         /// </summary>
         /// <param name="character">文字</param>
         /// <returns>文字</returns>
@@ -8733,7 +8875,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 文字列テクスチャを得る
+        /// 指定した文字のテクスチャを取得します。
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <returns>テクスチャ</returns>
@@ -8744,7 +8886,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// カーニングを得る
+        /// カーニングを取得します。
         /// </summary>
         /// <param name="c1">文字1</param>
         /// <param name="c2">文字2</param>
@@ -8756,7 +8898,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// テクスチャ追加対応フォントを生成します
+        /// テクスチャ追加対応フォントを生成します。
         /// </summary>
         /// <param name="baseFont">ベースとなるフォント</param>
         /// <exception cref="ArgumentNullException"><paramref name="baseFont"/>がnull</exception>
@@ -8769,7 +8911,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// テクスチャ文字を追加する
+        /// テクスチャ文字を追加します。
         /// </summary>
         /// <param name="character">文字</param>
         /// <param name="texture">テクスチャ</param>
@@ -8779,7 +8921,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// テクスチャ文字を取得する
+        /// テクスチャ文字を取得します。
         /// </summary>
         /// <param name="character">文字</param>
         /// <returns>テクスチャ文字</returns>
@@ -8805,7 +8947,7 @@ namespace Altseed2
         private SerializationInfo seInfo;
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Font"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Font"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -8835,7 +8977,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -8843,7 +8985,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Font(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Font(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -8851,7 +8993,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出されます。
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
         /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
@@ -8871,7 +9013,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Size"><see cref="Font.Size"/></param>
@@ -8910,7 +9052,7 @@ namespace Altseed2
         /// <summary>
         /// デシリアライズ時に実行
         /// </summary>
-        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        /// <param name="sender">現在はサポートされていない 常にnullを返します。</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender)
         {
@@ -8927,12 +9069,15 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行されます。
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
+        /// <summary>
+        /// <see cref="Font"/>のインスタンスを削除します。
+        /// </summary>
         ~Font()
         {
             lock (this) 
@@ -9022,7 +9167,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 描画されているRenderedの個数を取得する
+        /// 描画されているRenderedの個数を取得します。
         /// </summary>
         public int DrawingRenderedCount
         {
@@ -9034,7 +9179,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 描画されているRenderedのIdの配列を取得する
+        /// 描画されているRenderedのIdの配列を取得します。
         /// </summary>
         public Int32Array DrawingRenderedIds
         {
@@ -9056,7 +9201,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// Renderedをカリングシステムに登録します
+        /// Renderedをカリングシステムに登録します。
         /// </summary>
         /// <param name="rendered">登録するRendered</param>
         internal void Register(Rendered rendered)
@@ -9065,7 +9210,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// Renderedをカリングシステムから登録解除します
+        /// Renderedをカリングシステムから登録解除します。
         /// </summary>
         /// <param name="rendered">登録解除するRendered</param>
         internal void Unregister(Rendered rendered)
@@ -9074,13 +9219,16 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// RenderedのAABBを更新します
+        /// RenderedのAABBを更新します。
         /// </summary>
         internal void UpdateAABB()
         {
             cbg_CullingSystem_UpdateAABB(selfPtr);
         }
         
+        /// <summary>
+        /// <see cref="CullingSystem"/>のインスタンスを削除します。
+        /// </summary>
         ~CullingSystem()
         {
             lock (this) 
@@ -9094,6 +9242,9 @@ namespace Altseed2
         }
     }
     
+    /// <summary>
+    /// imguiのツール処理を行うクラス
+    /// </summary>
     public sealed partial class Tool
     {
         #region unmanaged
@@ -9217,7 +9368,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_CheckBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool v);
+        private static extern bool cbg_Tool_CheckBox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool isChecked);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -9255,7 +9406,7 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Tool_InputTextWithHint(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string hit, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
+        private static extern IntPtr cbg_Tool_InputTextWithHint(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string hint, [MarshalAs(UnmanagedType.LPWStr)] string input, int maxLength, int flags);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -10132,6 +10283,9 @@ namespace Altseed2
         }
         private ToolUsage? _ToolUsage;
         
+        /// <summary>
+        /// インスタンスを取得します。
+        /// </summary>
         internal static Tool GetInstance()
         {
             var ret = cbg_Tool_GetInstance();
@@ -10181,98 +10335,137 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 空白を生成します。
         /// </summary>
+        /// <param name="size">空白のサイズ</param>
         public void Dummy(Vector2F size)
         {
             cbg_Tool_Dummy(selfPtr, size);
         }
         
         /// <summary>
-        /// 
+        /// テキストを生成します。
         /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/>がnull</exception>
         public void Text(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_Text(selfPtr, text);
         }
         
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/>がnull</exception>
         public void TextUnformatted(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_TextUnformatted(selfPtr, text);
         }
         
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/>がnull</exception>
         public void TextWrapped(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_TextWrapped(selfPtr, text);
         }
         
         /// <summary>
-        /// 
+        /// 色付きテキストを生成します。
         /// </summary>
+        /// <param name="color">テキストの色</param>
+        /// <param name="text">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/>がnull</exception>
         public void TextColored(Color color, string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_TextColored(selfPtr, color, text);
         }
         
         /// <summary>
-        /// 
+        /// 灰字のテキストを生成します。
         /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/>がnull</exception>
         public void TextDisabled(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_TextDisabled(selfPtr, text);
         }
         
         /// <summary>
-        /// 
+        /// 箇条書きテキストを生成します。
         /// </summary>
+        /// <param name="text">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="text"/>がnull</exception>
         public void BulletText(string text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_BulletText(selfPtr, text);
         }
         
         /// <summary>
-        /// 
+        /// 横にラベルの付いたテキストを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <param name="text">横に表示するラベルのテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>, <paramref name="text"/>のいずれかがnull</exception>
         public void LabelText(string label, string text)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            if (text == null) throw new ArgumentNullException(nameof(text), "引数がnullです");
             cbg_Tool_LabelText(selfPtr, label, text);
         }
         
         /// <summary>
-        /// 
+        /// 折り畳み式のヘッダを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool CollapsingHeader(string label, ToolTreeNodeFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_CollapsingHeader(selfPtr, label, (int)flags);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// ツリーのノードを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool TreeNode(string label)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_TreeNode(selfPtr, label);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// ツリーのノードを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool TreeNodeEx(string label, ToolTreeNodeFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_TreeNodeEx(selfPtr, label, (int)flags);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// TreeNodeのツリーを開きます。
         /// </summary>
         public void TreePop()
         {
@@ -10288,28 +10481,43 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// ボタンを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <param name="size">サイズ</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool Button(string label, Vector2F size)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_Button(selfPtr, label, size);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// チェックボックスを生成します。
         /// </summary>
-        public bool CheckBox(string label, ref bool v)
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="isChecked">チェックされているかどうか</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
+        public bool CheckBox(string label, ref bool isChecked)
         {
-            var ret = cbg_Tool_CheckBox(selfPtr, label, ref v);
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            var ret = cbg_Tool_CheckBox(selfPtr, label, ref isChecked);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// ラジオボタンを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="active">チェックが入っているかどうか</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool RadioButton(string label, bool active)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_RadioButton(selfPtr, label, active);
             return ret;
         }
@@ -10321,146 +10529,240 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 矢印ボタンを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="dir">矢印の向き</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool ArrowButton(string label, ToolDir dir)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_ArrowButton(selfPtr, label, (int)dir);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 見えないボタンを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <param name="size">サイズ</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool InvisibleButton(string label, Vector2F size)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InvisibleButton(selfPtr, label, size);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// リストボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="current">選択中のアイテムのインデックス -1で選択無し</param>
         /// <param name="items">タブ文字を用いて分割したアイテム</param>
+        /// <param name="popupMaxHeightInItems">一度に表示されるアイテムの個数</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>アイテムがクリックされたらtrue，それ以外でfalse</returns>
         public bool ListBox(string label, ref int current, string items, int popupMaxHeightInItems)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_ListBox(selfPtr, label, ref current, items, popupMaxHeightInItems);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 選択式のテキストを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <param name="selected">選択されているかどうか</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool Selectable(string label, ref bool selected, ToolSelectableFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_Selectable(selfPtr, label, ref selected, (int)flags);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// テキストを入力するボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="input">入力するテキスト</param>
+        /// <param name="maxLength">処理するテキストの最大長</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>, <paramref name="input"/>のいずれかがnull</exception>
+        /// <returns>入力されたテキスト</returns>
         public string InputText(string label, string input, int maxLength, ToolInputTextFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            if (input == null) throw new ArgumentNullException(nameof(input), "引数がnullです");
             var ret = cbg_Tool_InputText(selfPtr, label, input, maxLength, (int)flags);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
-        /// 
+        /// ヒント付きのテキスト入力ボックスを生成します。
         /// </summary>
-        public string InputTextWithHint(string label, string hit, string input, int maxLength, ToolInputTextFlags flags)
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="hint">インプットされている文字列長が0の時に表示されるヒント</param>
+        /// <param name="input">入力するテキスト</param>
+        /// <param name="maxLength">処理するテキストの最大長</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>, <paramref name="hint"/>, <paramref name="input"/>のいずれかがnull</exception>
+        /// <returns>入力されたテキスト</returns>
+        public string InputTextWithHint(string label, string hint, string input, int maxLength, ToolInputTextFlags flags)
         {
-            var ret = cbg_Tool_InputTextWithHint(selfPtr, label, hit, input, maxLength, (int)flags);
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            if (hint == null) throw new ArgumentNullException(nameof(hint), "引数がnullです");
+            if (input == null) throw new ArgumentNullException(nameof(input), "引数がnullです");
+            var ret = cbg_Tool_InputTextWithHint(selfPtr, label, hint, input, maxLength, (int)flags);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
-        /// 
+        /// 複数行のテキストが入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="input">入力するテキスト</param>
+        /// <param name="maxLength">処理するテキストの最大長</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>, <paramref name="input"/>のいずれかがnull</exception>
+        /// <returns>入力されたテキスト</returns>
         public string InputTextMultiline(string label, string input, int maxLength, Vector2F size, ToolInputTextFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            if (input == null) throw new ArgumentNullException(nameof(input), "引数がnullです");
             var ret = cbg_Tool_InputTextMultiline(selfPtr, label, input, maxLength, size, (int)flags);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
-        /// 
+        /// 1つの整数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="value">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool InputInt(string label, ref int value)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputInt(selfPtr, label, ref value);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 2つの整数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="array">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         internal bool InputInt2(string label, Int32Array array)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputInt2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 3つの整数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="array">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         internal bool InputInt3(string label, Int32Array array)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputInt3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 4つの整数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="array">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         internal bool InputInt4(string label, Int32Array array)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputInt4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 1つの小数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="value">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool InputFloat(string label, ref float value)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputFloat(selfPtr, label, ref value);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 2つの小数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="array">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
         internal bool InputFloat2(string label, FloatArray array)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputFloat2(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 3つの小数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="array">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
         internal bool InputFloat3(string label, FloatArray array)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputFloat3(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 4つの小数が入力可能なボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="array">扱う値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
         internal bool InputFloat4(string label, FloatArray array)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_InputFloat4(selfPtr, label, array != null ? array.selfPtr : IntPtr.Zero);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 1つのスライドで値が増減するバーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="value">扱う値</param>
+        /// <param name="speed">スライドで増減する値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool SliderInt(string label, ref int value, float speed, int valueMin, int valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_SliderInt(selfPtr, label, ref value, speed, valueMin, valueMax);
             return ret;
         }
@@ -10493,10 +10795,18 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 1つのスライドで値が増減するバーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="value">扱う値</param>
+        /// <param name="speed">スライドで増減する値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool SliderFloat(string label, ref float value, float speed, float valueMin, float valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_SliderFloat(selfPtr, label, ref value, speed, valueMin, valueMax);
             return ret;
         }
@@ -10529,82 +10839,149 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// スライドで値が増減する，角度を扱うバーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="angle">扱う角度の値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool SliderAngle(string label, ref float angle)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_SliderAngle(selfPtr, label, ref angle);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// スライドで値が増減する縦バーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="value">扱う値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool VSliderInt(string label, Vector2F size, ref int value, int valueMin, int valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_VSliderInt(selfPtr, label, size, ref value, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// スライドで値が増減する縦バーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="value">扱う値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool VSliderFloat(string label, Vector2F size, ref float value, float valueMin, float valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_VSliderFloat(selfPtr, label, size, ref value, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 1つのドラッグで値が増減するバーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="value">扱う値</param>
+        /// <param name="speed">ドラッグで増減する値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool DragInt(string label, ref int value, float speed, int valueMin, int valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_DragInt(selfPtr, label, ref value, speed, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 1つのドラッグで値が増減するバーを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="value">扱う値</param>
+        /// <param name="speed">ドラッグで増減する値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool DragFloat(string label, ref float value, float speed, float valueMin, float valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_DragFloat(selfPtr, label, ref value, speed, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 2つのドラッグで値が増減するバーを生成します
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="currentMin">扱う値のうち小さい方</param>
+        /// <param name="currentMax">扱う値のうち大きい方</param>
+        /// <param name="speed">ドラッグで増減する値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool DragIntRange2(string label, ref int currentMin, ref int currentMax, float speed, int valueMin, int valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_DragIntRange2(selfPtr, label, ref currentMin, ref currentMax, speed, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 2つのドラッグで値が増減するバーを生成します
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="currentMin">扱う値のうち小さい方</param>
+        /// <param name="currentMax">扱う値のうち大きい方</param>
+        /// <param name="speed">ドラッグで増減する値</param>
+        /// <param name="valueMin">最小値</param>
+        /// <param name="valueMax">最大値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool DragFloatRange2(string label, ref float currentMin, ref float currentMax, float speed, float valueMin, float valueMax)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_DragFloatRange2(selfPtr, label, ref currentMin, ref currentMax, speed, valueMin, valueMax);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 色を入力するツールを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="color">扱う色</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool ColorEdit3(string label, ref Color color, ToolColorEditFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_ColorEdit3(selfPtr, label, ref color, (int)flags);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 色を入力するツールを生成します。
         /// </summary>
+        /// <param name="label">横に表示するラベルのテキスト</param>
+        /// <param name="color">扱う色</param>
+        /// <param name="flags">適用する設定</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
         public bool ColorEdit4(string label, ref Color color, ToolColorEditFlags flags)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_ColorEdit4(selfPtr, label, ref color, (int)flags);
             return ret;
         }
@@ -10738,7 +11115,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 次の要素を右にずらします。
         /// </summary>
         public void Indent()
         {
@@ -10746,7 +11123,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 右にずらすインデントを1つ分打消します。
         /// </summary>
         public void Unindent()
         {
@@ -10754,7 +11131,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 仕切りを生成します。
         /// </summary>
         public void Separator()
         {
@@ -11466,25 +11843,43 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 小さなボタンを生成します。
         /// </summary>
+        /// <param name="label">表示するテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool SmallButton(string label)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_SmallButton(selfPtr, label);
             return ret;
         }
         
         /// <summary>
-        /// 
+        /// 画像表示ボックスを生成します。
         /// </summary>
+        /// <param name="texture">表示するテクスチャ</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="uv0">テクスチャのUV値(0~1)</param>
+        /// <param name="uv1">テクスチャのUV値(0~1)</param>
+        /// <param name="tintColor">テクスチャの色</param>
+        /// <param name="borderColor">縁の色</param>
         public void Image(TextureBase texture, Vector2F size, Vector2F uv0, Vector2F uv1, Color tintColor, Color borderColor)
         {
             cbg_Tool_Image(selfPtr, texture != null ? texture.selfPtr : IntPtr.Zero, size, uv0, uv1, tintColor, borderColor);
         }
         
         /// <summary>
-        /// 
+        /// ボタンとして機能する画像表示ボックスを生成します。
         /// </summary>
+        /// <param name="texture">表示するテクスチャ</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="uv0">テクスチャのUV値(0~1)</param>
+        /// <param name="uv1">テクスチャのUV値(0~1)</param>
+        /// <param name="framePadding">縁の太さ</param>
+        /// <param name="tintColor">テクスチャの色</param>
+        /// <param name="borderColor">縁の色</param>
+        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
         public bool ImageButton(TextureBase texture, Vector2F size, Vector2F uv0, Vector2F uv1, int framePadding, Color tintColor, Color borderColor)
         {
             var ret = cbg_Tool_ImageButton(selfPtr, texture != null ? texture.selfPtr : IntPtr.Zero, size, uv0, uv1, framePadding, tintColor, borderColor);
@@ -11492,15 +11887,20 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// プログレスバーを生成します。
         /// </summary>
+        /// <param name="fraction">進行度(0.0~1.0)</param>
+        /// <param name="sizeArg">サイズ</param>
+        /// <param name="overlay">表示されるテキスト</param>
+        /// <exception cref="ArgumentNullException"><paramref name="overlay"/>がnull</exception>
         public void ProgressBar(float fraction, Vector2F sizeArg, string overlay)
         {
+            if (overlay == null) throw new ArgumentNullException(nameof(overlay), "引数がnullです");
             cbg_Tool_ProgressBar(selfPtr, fraction, sizeArg, overlay);
         }
         
         /// <summary>
-        /// 
+        /// 点を生成します。
         /// </summary>
         public void Bullet()
         {
@@ -11524,11 +11924,17 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// コンボボックスを生成します。
         /// </summary>
+        /// <param name="label">横に表示されるラベルのテキスト</param>
+        /// <param name="current_item">選択されているアイテムのインデックス -1で選択無し</param>
         /// <param name="items">タブ文字を用いて分割したアイテム</param>
+        /// <param name="popupMaxHeightInItems">一度に表示する最大アイテム数</param>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        /// <returns>いずれかのアイテムがクリックされたらtrue，それ以外でfalse</returns>
         public bool Combo(string label, ref int current_item, string items, int popupMaxHeightInItems)
         {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
             var ret = cbg_Tool_Combo(selfPtr, label, ref current_item, items, popupMaxHeightInItems);
             return ret;
         }
@@ -11593,26 +11999,40 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// boolの値を表示する
         /// </summary>
+        /// <param name="prefix">表示するテキスト</param>
+        /// <param name="b">表示するboolの値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="prefix"/>がnull</exception>
         public void ValueBool(string prefix, bool b)
         {
+            if (prefix == null) throw new ArgumentNullException(nameof(prefix), "引数がnullです");
             cbg_Tool_ValueBool(selfPtr, prefix, b);
         }
         
         /// <summary>
-        /// 
+        /// intの値を表示する
         /// </summary>
+        /// <param name="prefix">表示するテキスト</param>
+        /// <param name="v">表示するintの値</param>
+        /// <exception cref="ArgumentNullException"><paramref name="prefix"/>がnull</exception>
         public void ValueInt(string prefix, int v)
         {
+            if (prefix == null) throw new ArgumentNullException(nameof(prefix), "引数がnullです");
             cbg_Tool_ValueInt(selfPtr, prefix, v);
         }
         
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="prefix">表示するテキスト</param>
+        /// <param name="v">表示するfloatの値</param>
+        /// <param name="floatFormat">使用するフォーマット</param>
+        /// <exception cref="ArgumentNullException"><paramref name="prefix"/>, <paramref name="floatFormat"/>のいずれかがnull</exception>
         public void ValueFloat(string prefix, float v, string floatFormat)
         {
+            if (prefix == null) throw new ArgumentNullException(nameof(prefix), "引数がnullです");
+            if (floatFormat == null) throw new ArgumentNullException(nameof(floatFormat), "引数がnullです");
             cbg_Tool_ValueFloat(selfPtr, prefix, v, floatFormat);
         }
         
@@ -11980,41 +12400,66 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 
+        /// 1つの開くファイルを選択するダイアログを開きます。
         /// </summary>
+        /// <param name="filter">読み込むファイルの拡張子のフィルタ</param>
+        /// <param name="defaultPath">ファイルダイアログの初期位置のパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="filter"/>, <paramref name="defaultPath"/>のいずれかがnull</exception>
+        /// <returns>読み込むファイルのパス</returns>
         public string OpenDialog(string filter, string defaultPath)
         {
+            if (filter == null) throw new ArgumentNullException(nameof(filter), "引数がnullです");
+            if (defaultPath == null) throw new ArgumentNullException(nameof(defaultPath), "引数がnullです");
             var ret = cbg_Tool_OpenDialog(selfPtr, filter, defaultPath);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
-        /// 
+        /// 複数の開くファイルを選択するダイアログを開きます。
         /// </summary>
+        /// <param name="filter">読み込むファイルの拡張子のフィルタ</param>
+        /// <param name="defaultPath">ファイルダイアログの初期位置のパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="filter"/>, <paramref name="defaultPath"/>のいずれかがnull</exception>
+        /// <returns>読み込むファイルのパス</returns>
         public string OpenDialogMultiple(string filter, string defaultPath)
         {
+            if (filter == null) throw new ArgumentNullException(nameof(filter), "引数がnullです");
+            if (defaultPath == null) throw new ArgumentNullException(nameof(defaultPath), "引数がnullです");
             var ret = cbg_Tool_OpenDialogMultiple(selfPtr, filter, defaultPath);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
-        /// 
+        /// 保存するファイルを選択するダイアログを開きます。
         /// </summary>
+        /// <param name="filter">保存するファイルの拡張子のフィルタ</param>
+        /// <param name="defaultPath">ファイルダイアログの初期位置のパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="filter"/>, <paramref name="defaultPath"/>のいずれかがnull</exception>
+        /// <returns>保存するファイルのパス</returns>
         public string SaveDialog(string filter, string defaultPath)
         {
+            if (filter == null) throw new ArgumentNullException(nameof(filter), "引数がnullです");
+            if (defaultPath == null) throw new ArgumentNullException(nameof(defaultPath), "引数がnullです");
             var ret = cbg_Tool_SaveDialog(selfPtr, filter, defaultPath);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
         /// <summary>
-        /// 
+        /// フォルダを選択するダイアログを開きます。
         /// </summary>
+        /// <param name="defaultPath">ファイルダイアログの初期位置のパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="defaultPath"/>がnull</exception>
+        /// <returns>選択するフォルダのパス</returns>
         public string PickFolder(string defaultPath)
         {
+            if (defaultPath == null) throw new ArgumentNullException(nameof(defaultPath), "引数がnullです");
             var ret = cbg_Tool_PickFolder(selfPtr, defaultPath);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
+        /// <summary>
+        /// <see cref="Tool"/>のインスタンスを削除します。
+        /// </summary>
         ~Tool()
         {
             lock (this) 
@@ -12195,7 +12640,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 指定した分ファイルを読み込む
+        /// 指定した分ファイルを読み込みます。
         /// </summary>
         /// <param name="size">この処理で読み込むデータサイズ</param>
         /// <returns>読み込まれたデータサイズ</returns>
@@ -12239,7 +12684,7 @@ namespace Altseed2
         private SerializationInfo seInfo;
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="StreamFile"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="StreamFile"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -12268,7 +12713,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -12276,7 +12721,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="StreamFile(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="StreamFile(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -12284,7 +12729,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>内で呼び出されます。
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
         /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
@@ -12304,7 +12749,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="CurrentPosition"><see cref="StreamFile.CurrentPosition"/></param>
@@ -12341,7 +12786,7 @@ namespace Altseed2
         /// <summary>
         /// デシリアライズ時に実行
         /// </summary>
-        /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
+        /// <param name="sender">現在はサポートされていない 常にnullを返します。</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         void IDeserializationCallback.OnDeserialization(object sender)
         {
@@ -12358,12 +12803,15 @@ namespace Altseed2
             seInfo = null;
         }
         /// <summary>
-        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行される
+        /// <see cref="IDeserializationCallback.OnDeserialization"/>中で実行されます。
         /// </summary>
         /// <param name="sender">現在はサポートされていない 常にnullを返す</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         partial void OnDeserialize_Method(object sender);
         
+        /// <summary>
+        /// <see cref="StreamFile"/>のインスタンスを削除します。
+        /// </summary>
         ~StreamFile()
         {
             lock (this) 
@@ -12534,7 +12982,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="StaticFile"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="StaticFile"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -12566,7 +13014,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -12574,7 +13022,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="StaticFile(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="StaticFile(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -12602,7 +13050,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="StaticFile(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="StaticFile(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="StaticFile.Path"/></param>
@@ -12634,6 +13082,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="StaticFile"/>のインスタンスを削除します。
+        /// </summary>
         ~StaticFile()
         {
             lock (this) 
@@ -12758,7 +13209,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// ファイルパッケージをパスワード有りで読み込む
+        /// ファイルパッケージをパスワード有りで読み込みます。
         /// </summary>
         /// <param name="path">読み込むファイルパッケージのパス</param>
         /// <param name="password">読み込むファイルパッケージのパスワード</param>
@@ -12773,7 +13224,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// ファイルパッケージをパスワード無しで読み込む
+        /// ファイルパッケージをパスワード無しで読み込みます。
         /// </summary>
         /// <param name="path">読み込むファイルパッケージのパス</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
@@ -12805,7 +13256,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 指定したディレクトリのファイルをパックする
+        /// 指定したディレクトリのファイルをパックします。
         /// </summary>
         /// <param name="srcPath">パックするファイルのディレクトリ</param>
         /// <param name="dstPath">パックされたファイル名</param>
@@ -12820,7 +13271,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 指定したディレクトリのファイルをパスワード付きでパックする
+        /// 指定したディレクトリのファイルをパスワード付きでパックします。
         /// </summary>
         /// <param name="srcPath">パックするファイルのディレクトリ</param>
         /// <param name="dstPath">パックされたファイル名</param>
@@ -12836,6 +13287,9 @@ namespace Altseed2
             return ret;
         }
         
+        /// <summary>
+        /// <see cref="File"/>のインスタンスを削除します。
+        /// </summary>
         ~File()
         {
             lock (this) 
@@ -13035,9 +13489,9 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 音源を解凍するかどうかを取得する
+        /// 音源が解凍されているかどうかを取得します。
         /// </summary>
-        internal bool IsDecompressed
+        public bool IsDecompressed
         {
             get
             {
@@ -13050,7 +13504,7 @@ namespace Altseed2
         /// 音声ファイルを読み込みます。
         /// </summary>
         /// <param name="path">読み込む音声ファイルのパス</param>
-        /// <param name="isDecompressed">音を再生する前にデータを全て解凍するか?</param>
+        /// <param name="isDecompressed">ロード時に全て解凍しておくかどうか</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
         /// <returns>読み込んだ音源データ</returns>
         public static Sound Load(string path, bool isDecompressed)
@@ -13077,7 +13531,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Sound"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Sound"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -13116,7 +13570,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -13124,7 +13578,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Sound(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Sound(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -13152,7 +13606,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="Sound(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出す
+        /// <see cref="Sound(SerializationInfo, StreamingContext)"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="Path"><see cref="Sound.Path"/></param>
@@ -13186,6 +13640,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Sound"/>のインスタンスを削除します。
+        /// </summary>
         ~Sound()
         {
             lock (this) 
@@ -13353,7 +13810,7 @@ namespace Altseed2
         /// 指定した音が再生中であるかを取得します。
         /// </summary>
         /// <param name="id">音のID</param>
-        /// <returns>IDに対応する音が再生中であるか?</returns>
+        /// <returns>IDに対応する音が再生中であるかどうか</returns>
         public bool GetIsPlaying(int id)
         {
             var ret = cbg_SoundMixer_GetIsPlaying(selfPtr, id);
@@ -13406,7 +13863,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 指定した音をフェードインさせる
+        /// 指定した音をフェードインさせます。
         /// </summary>
         /// <param name="id"></param>
         /// <param name="second">フェードインに使用する時間(秒)</param>
@@ -13416,7 +13873,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// 指定した音をフェードアウトさせる
+        /// 指定した音をフェードアウトさせます。
         /// </summary>
         /// <param name="id">音のID</param>
         /// <param name="second">フェードアウトに使用する時間(秒)</param>
@@ -13440,7 +13897,7 @@ namespace Altseed2
         /// 再生速度を変更するかを取得します。
         /// </summary>
         /// <param name="id">音のID</param>
-        /// <returns>再生速度を変更するか?</returns>
+        /// <returns>再生速度を変更するかどうか</returns>
         public bool GetIsPlaybackSpeedEnabled(int id)
         {
             var ret = cbg_SoundMixer_GetIsPlaybackSpeedEnabled(selfPtr, id);
@@ -13451,7 +13908,7 @@ namespace Altseed2
         /// 再生速度を変更するかを設定します。
         /// </summary>
         /// <param name="id">音のID</param>
-        /// <param name="isPlaybackSpeedEnabled">再生速度を変更するか?</param>
+        /// <param name="isPlaybackSpeedEnabled">再生速度を変更するかどうか</param>
         public void SetIsPlaybackSpeedEnabled(int id, bool isPlaybackSpeedEnabled)
         {
             cbg_SoundMixer_SetIsPlaybackSpeedEnabled(selfPtr, id, isPlaybackSpeedEnabled);
@@ -13461,7 +13918,7 @@ namespace Altseed2
         /// 再生速度を取得します。
         /// </summary>
         /// <param name="id">音のID</param>
-        /// <returns>本来の速度の何倍で再生されているか?</returns>
+        /// <returns>本来の速度の何倍で再生されているかどうか</returns>
         public float GetPlaybackSpeed(int id)
         {
             var ret = cbg_SoundMixer_GetPlaybackSpeed(selfPtr, id);
@@ -13531,6 +13988,9 @@ namespace Altseed2
             cbg_SoundMixer_GetSpectrum(selfPtr, id, spectrums != null ? spectrums.selfPtr : IntPtr.Zero, (int)window);
         }
         
+        /// <summary>
+        /// <see cref="SoundMixer"/>のインスタンスを削除します。
+        /// </summary>
         ~SoundMixer()
         {
             lock (this) 
@@ -13702,6 +14162,9 @@ namespace Altseed2
             cbg_Log_SetLevel(selfPtr, (int)category, (int)level);
         }
         
+        /// <summary>
+        /// <see cref="Log"/>のインスタンスを削除します。
+        /// </summary>
         ~Log()
         {
             lock (this) 
@@ -13836,6 +14299,9 @@ namespace Altseed2
             return Window.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// <see cref="Window"/>のインスタンスを削除します。
+        /// </summary>
         ~Window()
         {
             lock (this) 
@@ -13946,7 +14412,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="Collider"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="Collider"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -13981,7 +14447,7 @@ namespace Altseed2
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -13989,7 +14455,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="Collider(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="Collider(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14038,6 +14504,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="Collider"/>のインスタンスを削除します。
+        /// </summary>
         ~Collider()
         {
             lock (this) 
@@ -14151,7 +14620,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="CircleCollider"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="CircleCollider"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14185,7 +14654,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -14193,7 +14662,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="CircleCollider(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="CircleCollider(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14242,6 +14711,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="CircleCollider"/>のインスタンスを削除します。
+        /// </summary>
         ~CircleCollider()
         {
             lock (this) 
@@ -14387,7 +14859,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RectangleCollider"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="RectangleCollider"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14423,7 +14895,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -14431,7 +14903,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14480,6 +14952,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="RectangleCollider"/>のインスタンスを削除します。
+        /// </summary>
         ~RectangleCollider()
         {
             lock (this) 
@@ -14569,7 +15044,7 @@ namespace Altseed2
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="PolygonCollider"/>のインスタンスを生成する
+        /// シリアライズされたデータをもとに<see cref="PolygonCollider"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14601,7 +15076,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -14609,7 +15084,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="PolygonCollider(SerializationInfo, StreamingContext)"/>内で実行
+        /// <see cref="PolygonCollider(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14658,6 +15133,9 @@ namespace Altseed2
         
         #endregion
         
+        /// <summary>
+        /// <see cref="PolygonCollider"/>のインスタンスを削除します。
+        /// </summary>
         ~PolygonCollider()
         {
             lock (this) 
