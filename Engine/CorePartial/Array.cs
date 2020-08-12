@@ -417,35 +417,17 @@ namespace Altseed2
                     break;
                 // countは外部から与えるので、ICollection<TElement>の型スイッチは不要だった
                 default:
-                    static void writeToSpan<T>(IEnumerable<T> e, int c, Span<T> s)
+                    // TODO: ArrayPoolの利用を検討する
                     {
+                        Span<TElement> span = count <= Engine.MaxStackalloclLength ? stackalloc TElement[count] : new TElement[count];
                         int i = 0;
-                        foreach (var x in e)
+                        foreach (var x in elements)
                         {
-                            if (i >= c) break;
-                            s[i] = x;
+                            if (i >= count) break;
+                            span[i] = x;
                             i++;
                         }
-                    }
-
-                    if (count <= Engine.MaxStackalloclLength)
-                    {
-                        Span<TElement> span = stackalloc TElement[count];
-                        writeToSpan(elements, count, span);
                         obj.FromSpan(span);
-                    }
-                    else
-                    {
-                        var buffer = ArrayPool<TElement>.Shared.Rent(count);
-                        try
-                        {
-                            writeToSpan(elements, count, buffer);
-                            obj.FromSpan(buffer.AsSpan(0, count));
-                        }
-                        finally
-                        {
-                            ArrayPool<TElement>.Shared.Return(buffer);
-                        }
                     }
                     break;
             }
