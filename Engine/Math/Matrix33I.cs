@@ -113,7 +113,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector2I Transform2D(Vector2I in_)
         {
-            var values = new int[3];
+            Span<int> values = stackalloc int[3];
 
             for (int i = 0; i < 2; i++)
             {
@@ -133,7 +133,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3I Transform3D(Vector3I in_)
         {
-            var values = new int[3];
+            Span<int> values = stackalloc int[3];
 
             for (int i = 0; i < 3; i++)
             {
@@ -302,7 +302,7 @@ namespace Altseed2
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
-            var array = new int[9];
+            Span<int> array = stackalloc int[9];
             for (int i = 0; i < 9; i++) array[i] = Values[i];
             info.AddValue(S_Array, array);
         }

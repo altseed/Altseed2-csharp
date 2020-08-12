@@ -184,7 +184,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector2F Transform2D(Vector2F in_)
         {
-            var values = new float[3];
+            Span<float> values = stackalloc float[3];
 
             for (int i = 0; i < 2; i++)
             {
@@ -204,7 +204,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3F Transform3D(Vector3F in_)
         {
-            var values = new float[3];
+            Span<float> values = stackalloc float[3];
 
             for (int i = 0; i < 3; i++)
             {
