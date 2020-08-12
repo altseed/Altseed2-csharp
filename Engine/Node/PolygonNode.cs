@@ -260,7 +260,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 各頂点に指定した色を設定する
+        /// 各頂点に指定した色を設定します。
         /// </summary>
         /// <param name="color">設定する色</param>
         public void OverwriteVertexColor(Color color)
