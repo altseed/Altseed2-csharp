@@ -180,7 +180,7 @@ namespace Altseed2
         private Node serialization_ParentReserved;
         private RegisteredStatus serialization_Status;
         private bool isRootChild;
-        private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行います。のを止める
+        private bool surpressing; // デシリアライズ時にEngine.AddNodeをした時Registered内の処理を行うのを止める
 
         /// <summary>
         /// シリアライズ時に実行します。

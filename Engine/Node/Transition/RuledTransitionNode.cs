@@ -3,7 +3,7 @@
 namespace Altseed2
 {
     /// <summary>
-    /// <see cref="RuledTransitionNode"/>の制御用いる設定のクラス
+    /// <see cref="RuledTransitionNode"/>の制御に用いる設定のクラス
     /// </summary>
     [Serializable]
     public sealed class RuledTransitionState

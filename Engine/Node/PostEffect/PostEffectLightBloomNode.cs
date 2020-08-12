@@ -3,7 +3,7 @@
 namespace Altseed2
 {
     /// <summary>
-    /// 画面の光輝を実装するポストエフェクトのクラス
+    /// ライトブルームを適用するポストエフェクトのクラス
     /// </summary>
     public sealed class PostEffectLightBloomNode : PostEffectNode
     {
