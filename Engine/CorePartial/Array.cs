@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -406,31 +407,36 @@ namespace Altseed2
                 case TElement[] array:
                     obj.FromSpan(array);
                     break;
-                case IReadOnlyCollection<TElement> collection:
+                default:
+                    static void writeToSpan<T>(IEnumerable<T> e, int c, Span<T> s)
                     {
-                        Span<TElement> span = stackalloc TElement[count];
                         int i = 0;
-                        foreach(var c in collection)
+                        foreach (var x in e)
                         {
-                            if (i >= count) break;
-                            span[i] = c;
+                            if (i >= c) break;
+                            s[i] = x;
                             i++;
                         }
+                    }
+
+                    if (count <= Engine.MaxStackalloclLength)
+                    {
+                        Span<TElement> span = stackalloc TElement[count];
+                        writeToSpan(elements, count, span);
                         obj.FromSpan(span);
                     }
-                    break;
-                default:
+                    else
                     {
-
-                        Span<TElement> span = stackalloc TElement[count];
-                        int i = 0;
-                        foreach(var x in elements)
+                        var buffer = ArrayPool<TElement>.Shared.Rent(count);
+                        try
                         {
-                            if (i >= count) break;
-                            span[i] = x;
-                            i++;
+                            writeToSpan(elements, count, buffer);
+                            obj.FromSpan(buffer.AsSpan(0, count));
                         }
-                        obj.FromSpan(span);
+                        finally
+                        {
+                            ArrayPool<TElement>.Shared.Return(buffer);
+                        }
                     }
                     break;
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 
 namespace Altseed2
 {
@@ -138,19 +139,40 @@ namespace Altseed2
             var endMatched = endVertexNum * deg == _enddegree;
             if (!startMatched) size++;
             if (!endMatched) size++;
-            Span<Vector2F> positions = stackalloc Vector2F[size + 2];
-            var currentIndex = 1;
-            if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
-            var vec = GetBaseVector(deg * startVertexNum);
-            for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
+
+            void setVertexes(Span<Vector2F> positions)
             {
-                positions[currentIndex] = vec;
-                vec.Degree += deg;
+                var currentIndex = 1;
+                if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
+                var vec = GetBaseVector(deg * startVertexNum);
+                for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
+                {
+                    positions[currentIndex] = vec;
+                    vec.Degree += deg;
+                }
+
+                if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
+
+                SetVertexes(positions, Color);
             }
 
-            if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
-
-            SetVertexes(positions, Color);
+            if (size + 2 <= Engine.MaxStackalloclLength)
+            {
+                Span<Vector2F> positions = stackalloc Vector2F[size + 2];
+                setVertexes(positions);
+            }
+            else
+            {
+                var buffer = ArrayPool<Vector2F>.Shared.Rent(size + 2);
+                try
+                {
+                    setVertexes(buffer);
+                }
+                finally
+                {
+                    ArrayPool<Vector2F>.Shared.Return(buffer);
+                }
+            }
         }
 
         internal override void Update()

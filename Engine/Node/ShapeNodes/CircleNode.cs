@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 
 namespace Altseed2
 {
@@ -67,14 +68,37 @@ namespace Altseed2
         private void UpdateVertexes()
         {
             var deg = MathF.PI * 2f / _VertNum;
-            Span<Vector2F> positions = stackalloc Vector2F[_VertNum];
 
-            for (int i = 0; i < _VertNum; i++)
+            void setVertexes(Span<Vector2F> positions)
             {
-                positions[i] = new Vector2F(MathF.Cos(deg * i), MathF.Sin(deg * i)) * Radius;
+                for (int i = 0; i < _VertNum; i++)
+                {
+                    positions[i] = new Vector2F(MathF.Cos(deg * i), MathF.Sin(deg * i)) * Radius;
+                }
+
+                SetVertexes(positions, Color);
             }
 
-            SetVertexes(positions, Color);
+            if (_VertNum <= Engine.MaxStackalloclLength)
+            {
+                Span<Vector2F> positions = stackalloc Vector2F[_VertNum];
+                setVertexes(positions);
+            }
+            else
+            {
+                var buffer = ArrayPool<Vector2F>.Shared.Rent(_VertNum);
+
+                try
+                {
+                    setVertexes(buffer);
+                }
+                finally
+                {
+                    ArrayPool<Vector2F>.Shared.Return(buffer);
+                }
+            }
+
+
         }
 
         internal override void Update()
