@@ -34,6 +34,8 @@ namespace Altseed2
 
     public partial class SoundMixer
     {
+        private FloatArray _InternalArray;
+
         /// <summary>
         /// 再生中の音のスペクトル情報を取得します。
         /// </summary>
@@ -43,9 +45,34 @@ namespace Altseed2
         public float[] GetSpectrum(int id, int dataNum, FFTWindow window)
         {
             if ((dataNum & (dataNum - 1)) != 0) return null;
-            var fa = FloatArray.Create(dataNum);
-            GetSpectrum(id, fa, window);
-            return fa.ToArray();
+            var array = new float[dataNum];
+
+            GetSpectrum(id, dataNum, window, array);
+            return array;
+        }
+
+        /// <summary>
+        /// 再生中の音のスペクトル情報を取得します。
+        /// </summary>
+        /// <param name="id">音のID</param>
+        /// <param name="dataNum">音のスペクトル情報を格納するための配列の容量</param>
+        /// <param name="window">フーリエ変換に用いる窓関数</param>
+        /// <param name="span">結果を書き込むSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の長さが<paramref name="dataNum"/>未満。</exception>
+        public void GetSpectrum(int id, int dataNum, FFTWindow window, Span<float> span)
+        {
+            if (dataNum > span.Length) throw new ArgumentException(nameof(span), $"Spanの長さが{dataNum}未満です。");
+            if ((dataNum & (dataNum - 1)) != 0) return;
+            if (_InternalArray is null)
+            {
+                _InternalArray = FloatArray.Create(dataNum);
+            }
+            else
+            {
+                _InternalArray.Resize(dataNum);
+            }
+            GetSpectrum(id, _InternalArray, window);
+            _InternalArray.CopyTo(span);
         }
     }
 }

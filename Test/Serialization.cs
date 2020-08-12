@@ -357,9 +357,8 @@ namespace Altseed2.Test
 
             var netArray1 = new byte[] { 1, 2, 3, 4, 5 };
 
-            var array1 = Altseed2.Int8Array.Create(netArray1.Length);
+            var array1 = Altseed2.Int8Array.Create(netArray1.AsSpan());
             Assert.NotNull(array1);
-            array1.FromArray(netArray1);
 
             const string path = "Serialization/Int8Array.bin";
 
@@ -385,9 +384,8 @@ namespace Altseed2.Test
 
             var netArray1 = new int[] { 1, 2, 3, 4, 5 };
 
-            var array1 = Altseed2.Int32Array.Create(netArray1.Length);
+            var array1 = Altseed2.Int32Array.Create(netArray1.AsSpan());
             Assert.NotNull(array1);
-            array1.FromArray(netArray1);
 
             const string path = "Serialization/Int32Array.bin";
 
@@ -418,9 +416,8 @@ namespace Altseed2.Test
                 new Vertex(new Vector3F(30, 30, 30), new Color(30, 30, 30, 30), new Vector2F(30, 30), new Vector2F(30, 30))
             };
 
-            var array1 = Altseed2.VertexArray.Create(netArray1.Length);
+            var array1 = Altseed2.VertexArray.Create(netArray1.AsSpan());
             Assert.NotNull(array1);
-            array1.FromArray(netArray1);
 
             const string path = "Serialization/VertexArray.bin";
 
@@ -446,9 +443,8 @@ namespace Altseed2.Test
 
             var netArray1 = new float[] { 1, 2, 3, 4, 5 };
 
-            var array1 = Altseed2.FloatArray.Create(netArray1.Length);
+            var array1 = Altseed2.FloatArray.Create(netArray1.AsSpan());
             Assert.NotNull(array1);
-            array1.FromArray(netArray1);
 
             const string path = "Serialization/FloatArray.bin";
 
@@ -479,9 +475,8 @@ namespace Altseed2.Test
                 new Vector2F(30, 30)
             };
 
-            var array1 = Altseed2.Vector2FArray.Create(netArray1.Length);
+            var array1 = Altseed2.Vector2FArray.Create(netArray1.AsSpan());
             Assert.NotNull(array1);
-            array1.FromArray(netArray1);
 
             const string path = "Serialization/Vector2FArray.bin";
 
@@ -600,8 +595,7 @@ namespace Altseed2.Test
 
             polygon1.Src = new RectF(100, 100, 200, 200);
             polygon1.Texture = texture;
-            var v_array = Altseed2.Vector2FArray.Create(array.Length);
-            v_array.FromArray(array);
+            var v_array = Altseed2.Vector2FArray.Create(array.AsSpan());
             polygon1.CreateVertexesByVector2F(v_array);
 
             const string path = "Serialization/RenderedPolygon.bin";
@@ -693,18 +687,14 @@ namespace Altseed2.Test
             collider1.Position = new Vector2F(30f, 30f);
             collider1.Rotation = MathHelper.DegreeToRadian(10.0f);
 
-
-            var array_g = new Vertex[]
+            Span<Vector2F> array = stackalloc Vector2F[]
             {
-                new Vertex(new Vector3F(10f, 10f, 10f), new Color(100, 100, 100, 100), new Vector2F(10f, 10f), new Vector2F(100f, 100f)),
-                new Vertex(new Vector3F(20f, 20f, 20f), new Color(200, 200, 200, 200), new Vector2F(20f, 20f), new Vector2F(200f, 200f)),
-                new Vertex(new Vector3F(30f, 30f, 30f), new Color(300, 300, 300, 300), new Vector2F(30f, 30f), new Vector2F(300f, 300f)),
+                new Vector2F(10f, 10f),
+                new Vector2F(20f, 20f),
+                new Vector2F(30f, 30f),
             };
 
-            var array_a = Altseed2.Vector2FArray.Create(array_g.Select(v => new Vector2F(v.Position.X, v.Position.Y)).ToArray());
-            Assert.NotNull(array_a);
-
-            collider1.VertexesInternal = array_a;
+            collider1.SetVertexes(array);
 
             const string path = "Serialization/PolygonCollider.bin";
 
@@ -716,7 +706,7 @@ namespace Altseed2.Test
 
             Assert.AreEqual(collider1.Position, collider2.Position);
             Assert.AreEqual(collider1.Rotation, collider2.Rotation);
-            Assert.True(Enumerable.SequenceEqual(collider1.Vertexes.ToArray(), collider2.Vertexes.ToArray()));
+            Assert.True(Enumerable.SequenceEqual(collider1.Vertexes, collider2.Vertexes));
 
             tc.End();
         }

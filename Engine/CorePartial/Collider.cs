@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -86,27 +87,19 @@ namespace Altseed2
             get => VertexesInternal?.ToArray();
             set
             {
-                if (value is null)
-                {
-                    VertexesInternal = null;
-                    return;
-                }
-
-                VertexesInternal = Vector2FArray.Create(value);
+                SetVertexes(value);
             }
         }
 
         internal Vector2FArray VertexesInternal
         {
-            get => _vertexesInternal ??= Vector2FArray.TryGetFromCache(cbg_PolygonCollider_GetVertexes(selfPtr));
-            set
+            get => Vector2FArray.TryGetFromCache(cbg_PolygonCollider_GetVertexes(selfPtr));
+            private set
             {
-                if (_vertexesInternal == value) return;
-                _vertexesInternal = value;
                 cbg_PolygonCollider_SetVertexes(selfPtr, value?.selfPtr ?? IntPtr.Zero);
             }
         }
-        private Vector2FArray _vertexesInternal;
+        private Vector2FArray _vertexesInternalCache;
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
@@ -127,7 +120,47 @@ namespace Altseed2
         /// 指定した座標に頂点を設定します。
         /// </summary>
         /// <param name="positions">設定する座標</param>
-        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
-        public void SetVertexes(IEnumerable<Vector2F> positions) => Vertexes = ArrayExtension.ConvertToArray(positions);
+        public void SetVertexes(IEnumerable<Vector2F> positions)
+        {
+            if (positions is null)
+            {
+                VertexesInternal = null;
+                return;
+            }
+
+            if (_vertexesInternalCache is null)
+            {
+                _vertexesInternalCache = Vector2FArray.Create(positions);
+            }
+            else
+            {
+                _vertexesInternalCache.FromEnumerable(positions, positions.Count());
+            }
+            VertexesInternal = _vertexesInternalCache;
+        }
+
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        public void SetVertexes(ReadOnlySpan<Vector2F> positions)
+        {
+            if (positions.Length == 0)
+            {
+                VertexesInternal = null;
+                return;
+            }
+
+            if (_vertexesInternalCache is null)
+            {
+                _vertexesInternalCache = Vector2FArray.Create(positions);
+            }
+            else
+            {
+                _vertexesInternalCache.FromSpan(positions);
+            }
+
+            VertexesInternal = _vertexesInternalCache;
+        }
     }
 }

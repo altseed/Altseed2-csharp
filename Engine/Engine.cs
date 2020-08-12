@@ -32,6 +32,11 @@ namespace Altseed2
         private static RenderTextureCache _RenderTextureCache;
         internal static RenderTexture _PostEffectBuffer; // TODO: 渡し方をうまくやる。
 
+        private static int[] _DrawingRenderedIdsBuffer;
+
+        // CreateVertexesByVector2F時に一時的なArrayを生成せずに使い回すためのキャッシュ。
+        internal static Vector2FArray Vector2FArrayCache { get; private set; }
+
         /// <summary>
         /// スクリーンのクリア色を取得または設定します。
         /// </summary>
@@ -97,6 +102,8 @@ namespace Altseed2
                 _DefaultCamera = RenderedCamera.Create();
                 _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
+
+                Vector2FArrayCache = Vector2FArray.Create(0);
 
                 return true;
             }
@@ -179,9 +186,21 @@ namespace Altseed2
         {
             Renderer.SetCamera(camera);
 
+            var cullingIdsCount = CullingSystem.DrawingRenderedIds.Count;
+
+            if (_DrawingRenderedIdsBuffer is null || _DrawingRenderedIdsBuffer.Length * 2 < cullingIdsCount)
+            {
+                _DrawingRenderedIdsBuffer = new int[cullingIdsCount];
+            }
+            else if (_DrawingRenderedIdsBuffer.Length < cullingIdsCount)
+            {
+                _DrawingRenderedIdsBuffer = new int[_DrawingRenderedIdsBuffer.Length * 2];
+            }
             // カリングの結果
-            var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
-            Array.Sort(cullingIds);
+            CullingSystem.DrawingRenderedIds.CopyTo(_DrawingRenderedIdsBuffer);
+            Array.Sort(_DrawingRenderedIdsBuffer, 0, cullingIdsCount);
+            Span<int> cullingIds = new Span<int>(_DrawingRenderedIdsBuffer, 0, cullingIdsCount);
+
 
             _PostEffectBuffer = null;
             var requireRender = false;
@@ -208,7 +227,7 @@ namespace Altseed2
                         if (!cdrawn.IsDrawnActually) continue;
                         // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
-                        if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
+                        if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
                         //if (node is TransformNode t)
@@ -232,6 +251,9 @@ namespace Altseed2
             _RenderTextureCache = null;
             PostEffectNode.TerminateCache();
             Core.Terminate();
+
+            Vector2FArrayCache = null;
+
             isActive = false;
         }
 

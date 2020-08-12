@@ -196,15 +196,12 @@ namespace Altseed2
         /// <summary>
         /// 座標をもとに頂点情報を設定します。
         /// </summary>
-        /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
+        /// <param name="vertexes">設定する各頂点の座標を格納する<see cref="ReadOnlySpan{Vector2F}"/></param>
         /// <param name="color">各頂点に設定する色</param>
-        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
-        private protected void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
+        private protected void SetVertexes(ReadOnlySpan<Vector2F> vertexes, Color color)
         {
-            if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
-
-            var array = Vector2FArray.Create(vertexes);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
+            Engine.Vector2FArrayCache.FromSpan(vertexes);
+            _RenderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
             _RenderedPolygon.OverwriteVertexesColor(color);
 
             _RequireCalcTransform = true;

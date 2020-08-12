@@ -49,7 +49,7 @@ namespace Altseed2
 
         private void UpdateVertexes()
         {
-            var positions = new Vector2F[4];
+            Span<Vector2F> positions = stackalloc Vector2F[4];
             positions[0] = new Vector2F(0.0f, 0.0f);
             positions[1] = new Vector2F(0.0f, RectangleSize.Y);
             positions[2] = new Vector2F(RectangleSize.X, RectangleSize.Y);

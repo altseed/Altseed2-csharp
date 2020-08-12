@@ -67,7 +67,7 @@ namespace Altseed2
         private void UpdateVertexes()
         {
             var deg = MathF.PI * 2f / _VertNum;
-            var positions = new Vector2F[_VertNum];
+            Span<Vector2F> positions = stackalloc Vector2F[_VertNum];
 
             for (int i = 0; i < _VertNum; i++)
             {

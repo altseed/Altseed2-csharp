@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -49,8 +50,7 @@ namespace Altseed2
             get => PolygonCollider.Vertexes;
             set
             {
-                var vertexArray = Vector2FArray.Create(value);
-                PolygonCollider.VertexesInternal = vertexArray;
+                PolygonCollider.SetVertexes(value);
                 requireUpdate = true;
             }
         }
@@ -74,7 +74,21 @@ namespace Altseed2
         /// </summary>
         /// <param name="positions">設定する座標</param>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
-        public void SetVertexes(IEnumerable<Vector2F> positions) => Vertexes = ArrayExtension.ConvertToArray(positions);
+        public void SetVertexes(IEnumerable<Vector2F> positions)
+        {
+            PolygonCollider.SetVertexes(positions);
+            requireUpdate = true;
+        }
+
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        public void SetVertexes(Span<Vector2F> positions)
+        {
+            PolygonCollider.SetVertexes(positions);
+            requireUpdate = true;
+        }
 
         internal override void UpdateCollider()
         {
@@ -119,7 +133,16 @@ namespace Altseed2
 
         private void UpdatePolygon()
         {
-            SetVertexes(_Owner.Vertexes ?? Array.Empty<Vector2F>(), ColliderVisualizeNodeFactory.AreaColor);
+            if (_Owner.PolygonCollider.VertexesInternal is Vector2FArray array)
+            {
+
+                SetVertexesFromPositions(array, ColliderVisualizeNodeFactory.AreaColor);
+            }
+            else
+            {
+                Span<Vector2F> span = stackalloc Vector2F[0];
+                SetVertexes(span, ColliderVisualizeNodeFactory.AreaColor);
+            }
             CenterPosition = _Owner.CenterPosition;
 
             _CurrentVersion = _Owner._Version;

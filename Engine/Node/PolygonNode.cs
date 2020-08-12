@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -194,11 +195,8 @@ namespace Altseed2
             get => _RenderedPolygon.Vertexes?.ToArray();
             set
             {
-                var vertexArray = VertexArray.Create(value);
-                _RenderedPolygon.Vertexes = vertexArray;
-
-                _IsValid = Validate(vertexArray);
-                _RequireCalcTransform = true;
+                _RenderedPolygon.Vertexes.FromEnumerable(value, value.Count);
+                SetVertexes(_RenderedPolygon.Vertexes);
             }
         }
 
@@ -246,8 +244,23 @@ namespace Altseed2
             return true;
         }
 
+        internal void SetVertexes(VertexArray array)
+        {
+            _RenderedPolygon.Vertexes = array;
+            _IsValid = Validate(array);
+            _RequireCalcTransform = true;
+        }
+
+        internal void SetVertexesFromPositions(Vector2FArray array, Color color)
+        {
+            _RenderedPolygon.CreateVertexesByVector2F(array);
+            _RenderedPolygon.OverwriteVertexesColor(color);
+            _IsValid = Validate(array);
+            _RequireCalcTransform = true;
+        }
+
         /// <summary>
-        /// 各頂点に指定した色を設定します。
+        /// 各頂点に指定した色を設定する
         /// </summary>
         /// <param name="color">設定する色</param>
         public void OverwriteVertexColor(Color color)
@@ -258,38 +271,53 @@ namespace Altseed2
         /// <summary>
         /// 座標をもとに頂点情報を設定します。
         /// </summary>
-        /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
-        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
+        /// <param name="vertexes">設定する各頂点の座標を格納する<see cref="Span{Vertex}" /></param>
         /// <remarks>
         /// 色は白(255, 255, 255)に設定されます。
         /// </remarks>
-        public void SetVertexes(IEnumerable<Vertex> vertexes)
+        public void SetVertexes(ReadOnlySpan<Vertex> vertexes)
         {
-            if (vertexes == null) throw new ArgumentNullException(nameof(vertexes));
-
-            var array = VertexArray.Create(vertexes);
-            _RenderedPolygon.Vertexes = array;
-
-            _IsValid = Validate(array);
-            _RequireCalcTransform = true;
+            _RenderedPolygon.Vertexes.FromSpan(vertexes);
+            SetVertexes(_RenderedPolygon.Vertexes);
         }
 
         /// <summary>
         /// 座標をもとに頂点情報を設定します。
         /// </summary>
-        /// <param name="vertexes">設定する各頂点の座標を格納するコレクション</param>
+        /// <param name="vertexes">設定する各頂点の座標を格納する<see cref="IEnumerable{Vertex}" /></param>
+        /// <remarks>
+        /// 色は白(255, 255, 255)に設定されます。
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnullです。</exception>
+        public void SetVertexes(IEnumerable<Vertex> vertexes)
+        {
+            if (vertexes is null) throw new ArgumentNullException(nameof(vertexes));
+            _RenderedPolygon.Vertexes.FromEnumerable(vertexes, vertexes.Count());
+            SetVertexes(_RenderedPolygon.Vertexes);
+        }
+
+        /// <summary>
+        /// 座標をもとに頂点情報を設定します。
+        /// </summary>
+        /// <param name="vertexes">設定する各頂点の座標を格納する<see cref="Span{Vector2F}" /></param>
         /// <param name="color">各頂点に設定する色</param>
-        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnull</exception>
+        public void SetVertexes(ReadOnlySpan<Vector2F> vertexes, Color color)
+        {
+            Engine.Vector2FArrayCache.FromSpan(vertexes);
+            SetVertexesFromPositions(Engine.Vector2FArrayCache, color);
+        }
+
+        /// <summary>
+        /// 座標をもとに頂点情報を設定します。
+        /// </summary>
+        /// <param name="vertexes">設定する各頂点の座標を格納する<see cref="IEnumerable{Vector2F}" /></param>
+        /// <param name="color">各頂点に設定する色</param>
+        /// <exception cref="ArgumentNullException"><paramref name="vertexes"/>がnullです。</exception>
         public void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
         {
-            if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
-
-            var array = Vector2FArray.Create(vertexes);
-            _RenderedPolygon.CreateVertexesByVector2F(array);
-            _RenderedPolygon.OverwriteVertexesColor(color);
-
-            _IsValid = Validate(array);
-            _RequireCalcTransform = true;
+            if (vertexes is null) throw new ArgumentNullException(nameof(vertexes));
+            Engine.Vector2FArrayCache.FromEnumerable(vertexes, vertexes.Count());
+            SetVertexesFromPositions(Engine.Vector2FArrayCache, color);
         }
 
         /// <inheritdoc/>

@@ -258,12 +258,14 @@ float4 main(PS_INPUT input) : SV_TARGET
                 var sin = MathF.Sin(MathHelper.DegreeToRadian(c)) * 50;
                 var cos = MathF.Cos(MathHelper.DegreeToRadian(c)) * 50;
 
-                node.SetVertexes(new[] {
+                Span<Vector2F> span = stackalloc Vector2F[] {
                     new Vector2F(100 + cos, 100 - sin),
                     new Vector2F(100 - sin, 100 - cos),
                     new Vector2F(100 - cos, 100 + sin),
                     new Vector2F(100 + sin, 100 + cos),
-                }, new Color(255, c % 255, 255, 255));
+                };
+
+                node.SetVertexes(span, new Color(255, c % 255, 255, 255));
             }, null);
 
             tc.End();
@@ -281,12 +283,15 @@ float4 main(PS_INPUT input) : SV_TARGET
             };
             Engine.AddNode(node);
 
-            node.SetVertexes(new[] {
+            Span<Vector2F> span = stackalloc Vector2F[]
+            {
                 new Vector2F(-100 , -100),
                 new Vector2F(100, -100),
                 new Vector2F(100, 100),
                 new Vector2F(-100, 100),
-            }, new Color(255, 0, 0));
+            };
+
+            node.SetVertexes(span, new Color(255, 0, 0));
 
             tc.LoopBody(c => { }, null);
 
