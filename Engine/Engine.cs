@@ -60,26 +60,21 @@ namespace Altseed2
             Config = (config ??= new Configuration());
             if (Core.Initialize(title, width, height, config))
             {
+                Context = new AltseedContext();
+                System.Threading.SynchronizationContext.SetSynchronizationContext(Context);
+
                 _core = Core.GetInstance();
                 _log = Log.GetInstance();
-
                 _keyboard = Keyboard.GetInstance();
                 _mouse = Mouse.GetInstance();
                 _joystick = Joystick.GetInstance();
-
                 _file = File.GetInstance();
                 _resources = Resources.GetInstance();
-
                 _window = Window.GetInstance();
                 _graphics = Graphics.GetInstance();
                 _renderer = Renderer.GetInstance();
                 _cullingSystem = CullingSystem.GetInstance();
-
-                Context = new AltseedContext();
-                System.Threading.SynchronizationContext.SetSynchronizationContext(Context);
-
                 if (config.ToolEnabled) _tool = Tool.GetInstance();
-
                 _sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
@@ -87,17 +82,14 @@ namespace Altseed2
 
                 _DrawnCollection = new DrawnCollection();
                 _CameraNodes = new CameraNodeCollection();
-
                 _RenderTextureCache = new RenderTextureCache();
-
-                PostEffectNode.InitializeCache();
-
-                isActive = true;
 
                 _DefaultCamera = RenderedCamera.Create();
                 _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
+                PostEffectNode.InitializeCache();
+                isActive = true;
                 return true;
             }
             return false;
@@ -226,12 +218,36 @@ namespace Altseed2
         /// </summary>
         public static void Terminate()
         {
+            if (!isActive) return;
+
             // RootNode直下のNodeをEngineからRemove(CullingSystemから削除するため)
             _RootNode._Children.Clear();
+
 
             _RenderTextureCache = null;
             PostEffectNode.TerminateCache();
             Core.Terminate();
+
+            Config = null;
+            _core = null;
+            _log = null;
+            _keyboard = null;
+            _mouse = null;
+            _joystick = null;
+            _file = null;
+            _resources = null;
+            _window = null;
+            _graphics = null;
+            _renderer = null;
+            _cullingSystem = null;
+            _tool = null;
+            _sound = null;
+            _RootNode = null;
+            _UpdatedNode = null;
+            _DrawnCollection = null;
+            _CameraNodes = null;
+            _DefaultCamera = null;
+
             isActive = false;
         }
 
@@ -255,91 +271,91 @@ namespace Altseed2
         #region Modules
         private static bool isActive;
 
-        internal static Core Core => isActive ? _core : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Core Core => _core ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Core _core;
 
         /// <summary>
         /// ファイルを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static File File => isActive ? _file : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static File File => _file ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static File _file;
 
         /// <summary>
         /// キーボードを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Keyboard Keyboard => isActive ? _keyboard : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Keyboard Keyboard => _keyboard ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Keyboard _keyboard;
 
         /// <summary>
         /// マウスを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Mouse Mouse => isActive ? _mouse : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Mouse Mouse => _mouse ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Mouse _mouse;
 
         /// <summary>
         /// ジョイスティックを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Joystick Joystick => isActive ? _joystick : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Joystick Joystick => _joystick ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Joystick _joystick;
 
         /// <summary>
         /// グラフィックのクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Graphics Graphics => isActive ? _graphics : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Graphics Graphics => _graphics ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Graphics _graphics;
 
         /// <summary>
         /// ログを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Log Log => isActive ? _log : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Log Log => _log ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Log _log;
 
         /// <summary>
         /// レンダラのクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Renderer Renderer => isActive ? _renderer : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Renderer Renderer => _renderer ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Renderer _renderer;
 
         /// <summary>
         /// カリングのクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static CullingSystem CullingSystem => isActive ? _cullingSystem : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static CullingSystem CullingSystem => _cullingSystem ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static CullingSystem _cullingSystem;
 
         /// <summary>
         /// 音を管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static SoundMixer Sound => isActive ? _sound : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static SoundMixer Sound => _sound ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static SoundMixer _sound;
 
         /// <summary>
         /// リソースを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Resources Resources => isActive ? _resources : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Resources Resources => _resources ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Resources _resources;
 
         /// <summary>
         /// ウインドウを表すクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Window Window => isActive ? _window : throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Window Window => _window ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Window _window;
 
         /// <summary>
         /// ツールを管理するクラスを取得します。
         /// </summary>
         /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Tool Tool => isActive ? _tool : throw new InvalidOperationException("現在その操作は許可されていません");
+        public static Tool Tool => _tool ?? throw new InvalidOperationException("現在その操作は許可されていません");
         private static Tool _tool;
 
         #endregion
