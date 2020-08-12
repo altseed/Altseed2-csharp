@@ -197,10 +197,10 @@ namespace Altseed2
 
             // カリングの結果
             var cullingIdsCount = CullingSystem.DrawingRenderedIds.Count;
-            var buffer = _DrawingRenderedIdsBuffer.Get(cullingIdsCount);
+            var buffer = _DrawingRenderedIdsBuffer.GetAsArray(cullingIdsCount);
             CullingSystem.DrawingRenderedIds.CopyTo(buffer);
             Array.Sort(buffer, 0, cullingIdsCount);
-            Span<int> cullingIds = new Span<int>(buffer, 0, cullingIdsCount);
+            Span<int> cullingIds = buffer.AsSpan(0, cullingIdsCount);
 
             var requireRender = false;
 

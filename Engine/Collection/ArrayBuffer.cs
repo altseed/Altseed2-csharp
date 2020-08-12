@@ -12,11 +12,11 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 長さ<paramref name="length"/>以上のSpanを返す。
+        /// 長さ<paramref name="length"/>以上の配列を返す。
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public T[] Get(int length)
+        public T[] GetAsArray(int length)
         {
             if (length < 1)
             {
@@ -37,6 +37,16 @@ namespace Altseed2
             }
 
             return _Array;
+        }
+
+        /// <summary>
+        /// 長さ<paramref name="length"/>のSpanを返す。
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Span<T> GetAsSpan(int length)
+        {
+            return GetAsArray(length).AsSpan(0, Math.Max(length, 0));
         }
     }
 }

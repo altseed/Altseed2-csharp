@@ -140,7 +140,7 @@ namespace Altseed2
             if (!startMatched) size++;
             if (!endMatched) size++;
 
-            Span<Vector2F> positions = size + 2 <= Engine.MaxStackalloclLength ? stackalloc Vector2F[size + 2] : Engine.Vector2FBuffer.Get(size + 2);
+            Span<Vector2F> positions = size + 2 <= Engine.MaxStackalloclLength ? stackalloc Vector2F[size + 2] : Engine.Vector2FBuffer.GetAsSpan(size + 2);
             var currentIndex = 1;
             if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
             var vec = GetBaseVector(deg * startVertexNum);
