@@ -330,6 +330,8 @@ namespace Altseed2
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
             if (obj.Count > span.Length) throw new ArgumentException(nameof(span), $"Spanの長さが{obj.Count}未満です。");
 
+            if (obj.Count == 0) return;
+
             unsafe
             {
                 fixed (TElement* ptr = span)
@@ -379,6 +381,8 @@ namespace Altseed2
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
             obj.Resize(span.Length);
 
+            if (span.Length == 0) return;
+
             unsafe
             {
                 fixed (TElement* ptr = span)
@@ -395,18 +399,23 @@ namespace Altseed2
         /// <param name="obj">データを設定するCore接続配列のインスタンス</param>
         /// <param name="collection">設定するデータとなる<see cref="IEnumerable{TElement}"/></param>
         /// <param name="count">指定した個数まで値を設定する</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/>が0未満</exception>
         internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> elements, int count)
             where TElement : unmanaged
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
             if (elements == null) throw new ArgumentNullException(nameof(elements), "引数がnullです");
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), "countが0未満です");
+
+            if (count == 0) return;
 
             switch(elements)
             {
                 case TElement[] array:
-                    obj.FromSpan(array);
+                    obj.FromSpan(array.AsSpan(0, count));
                     break;
+                // countは外部から与えるので、ICollection<TElement>の型スイッチは不要だった
                 default:
                     static void writeToSpan<T>(IEnumerable<T> e, int c, Span<T> s)
                     {
