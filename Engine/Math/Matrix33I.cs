@@ -302,7 +302,7 @@ namespace Altseed2
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
-            Span<int> array = stackalloc int[9];
+            var array = new int[9];
             for (int i = 0; i < 9; i++) array[i] = Values[i];
             info.AddValue(S_Array, array);
         }
