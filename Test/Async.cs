@@ -32,9 +32,19 @@ namespace Altseed2.Test
             var node = new TextNode() { Font = font, Text = "" };
             Engine.AddNode(node);
 
+            // TODO : improve performance
+            int itemnum = 100;
+            bool dogc = true;
+
             var tasks = new List<Task<StaticFile>>();
-            foreach (var i in Enumerable.Range(0, 1000))
+            foreach (var i in Enumerable.Range(0, itemnum))
             {
+                if(i % 10 == 0 && dogc)
+				{
+                    Thread.Sleep(10);
+                    Assert.True(Engine.Update());
+                }
+
                 tasks.Add(StaticFile.CreateAsync("tmp/test" + i + ".txt"));
             }
 
@@ -47,7 +57,7 @@ namespace Altseed2.Test
                     break;
             }
 
-            foreach (var i in Enumerable.Range(0, 1000))
+            foreach (var i in Enumerable.Range(0, itemnum))
             {
                 Assert.AreEqual(tasks[0].Result.Size, tasks[i].Result.Size);
             }
