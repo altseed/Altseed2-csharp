@@ -47,37 +47,16 @@ namespace Altseed2
                 return;
             }
 
-            switch (obj.Status)
+            if (obj.Status != RegisteredStatus.Free)
             {
-                case RegisteredStatus.Free:
-                    AddQueue.Enqueue(obj);
-                    obj.Status = RegisteredStatus.WaitingAdded;
-                    obj._ParentReserved = Owner;
-                    return;
-
-                case RegisteredStatus.WaitingAdded:
-                case RegisteredStatus.Registered:
-                    Engine.Log.Warn(LogCategory.Engine, $"追加しようとした {obj.GetType()} 要素が既に追加されています。");
-                    return;
-
-                case RegisteredStatus.WaitingRemoved:
-                    // 削除待ちのときに登録しようとした場合：
-                    // NOTE: どちらも削除時の扱いに注意
-                    if (obj._Parent == Owner)
-                    {
-                        // 同じ親に再登録しようとした場合は状態を登録済みに戻すだけ。
-                        obj.Status = RegisteredStatus.Registered;
-                        return;
-                    }
-                    else
-                    {
-                        // 異なる親に再登録しようとした場合は登録キューに入れる。
-                        obj.Status = RegisteredStatus.WaitingAdded;
-                        obj._ParentReserved = Owner;
-                        AddQueue.Enqueue(obj);
-                        return;
-                    }
+                Engine.Log.Warn(LogCategory.Engine, $"既に登録されている {typeof(T)} を追加することはできません。");
+                return;
             }
+
+            // Status == Free のときのみ追加予約できる。
+            AddQueue.Enqueue(obj);
+            obj.Status = RegisteredStatus.WaitingAdded;
+            obj._ParentReserved = Owner;
         }
 
         /// <summary>
@@ -92,43 +71,15 @@ namespace Altseed2
                 return;
             }
 
-            switch (obj.Status)
+            if (obj.Status != RegisteredStatus.Registered || obj._Parent != Owner)
             {
-                case RegisteredStatus.Free:
-                case RegisteredStatus.WaitingRemoved:
-                    Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} 要素は登録されていません。");
-                    return;
-
-                case RegisteredStatus.WaitingAdded:
-                    // 追加待ちの場合
-                    if (obj._ParentReserved == Owner)
-                    {
-                        // 同じ親から削除しようとした場合は状態を未登録に戻すだけ。
-                        obj.Status = RegisteredStatus.Free;
-                        return;
-                    }
-                    else
-                    {
-                        // 親が異なる場合は削除しない。
-                        Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} 要素は他の{typeof(T)} 要素に登録されています。");
-                        return;
-                    }
-                case RegisteredStatus.Registered:
-                    if (obj._Parent == Owner)
-                    {
-                        // 同じ親から削除しようとした場合は削除を予約。
-                        RemoveQueue.Enqueue(obj);
-                        obj.Status = RegisteredStatus.WaitingRemoved;
-                    }
-                    else
-                    {
-                        // 親が異なる場合は削除しない。
-                        Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} 要素は他の{typeof(T)} 要素に登録されています。");
-                        return;
-                    }
-
-                    return;
+                Engine.Log.Warn(LogCategory.Engine, $"削除しようとした {typeof(T)} は登録されていません。");
+                return;
             }
+
+            // Status == Registered かつ 現在の親からの削除のみ削除予約できる。
+            RemoveQueue.Enqueue(obj);
+            obj.Status = RegisteredStatus.WaitingRemoved;
         }
 
         /// <summary>
@@ -138,46 +89,19 @@ namespace Altseed2
         {
             while (RemoveQueue.TryDequeue(out var obj))
             {
-                if (obj.Status == RegisteredStatus.Free && obj._ParentReserved == Owner)
-                {
-                    // 削除予約状態で他のオブジェクトに登録した場合、こちらのコレクションからの削除だけ行う。
-                    CurrentCollection.Remove(obj);
-                    obj.Removed();
-                    continue;
-                }
-
-                if (obj.Status == RegisteredStatus.WaitingRemoved && obj._Parent == Owner)
-                {
-                    CurrentCollection.Remove(obj);
-                    obj.Status = RegisteredStatus.Free;
-                    obj._Parent = null;
-                    obj._ParentReserved = null;
-                    obj.Removed();
-                    continue;
-                }
-
-                Engine.Log.Error(LogCategory.Engine, "Error on flushing RemoveQueue!");
+                CurrentCollection.Remove(obj);
+                obj.Status = RegisteredStatus.Free;
+                obj._Parent = null;
+                obj.Removed();
             }
 
             while (AddQueue.TryDequeue(out var obj))
             {
-                if (obj.Status == RegisteredStatus.Free && obj._ParentReserved == Owner)
-                {
-                    obj._Parent = null;
-                    continue;
-                }
-
-                if (obj.Status == RegisteredStatus.WaitingAdded && obj._ParentReserved == Owner)
-                {
-                    CurrentCollection.Add(obj);
-                    obj.Status = RegisteredStatus.Registered;
-                    obj._Parent = Owner;
-                    obj._ParentReserved = null;
-                    obj.Added(Owner);
-                    continue;
-                }
-
-                Engine.Log.Error(LogCategory.Engine, "Error on flushing AddQueue!");
+                CurrentCollection.Add(obj);
+                obj.Status = RegisteredStatus.Registered;
+                obj._Parent = Owner;
+                obj._ParentReserved = null;
+                obj.Added(Owner);
             }
         }
 

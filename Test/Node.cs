@@ -106,5 +106,63 @@ namespace Altseed2.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Reusable()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            Assert.NotNull(t1);
+
+            var s = new SpriteNode();
+            s.Texture = t1;
+            s.Position = new Vector2F(100, 100);
+
+            var s2 = new SpriteNode();
+            s2.Texture = t1;
+            s2.Position = new Vector2F(200, 200);
+            s.AddChildNode(s2);
+            Engine.AddNode(s);
+
+            var n = new Node();
+
+            tc.Duration = 5;
+            tc.LoopBody(c =>
+            {
+                switch (c)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Assert.True(s2.Parent == s);
+                        break;
+
+                    case 3:
+                        Engine.RemoveNode(s);
+                        break;
+
+                    case 4:
+                        Assert.Null(s.Parent);
+                        Assert.True(s.Status == RegisteredStatus.Free);
+                        break;
+
+                    case 5:
+                        s.RemoveChildNode(s2);
+                        Assert.True(s2.Status == RegisteredStatus.WaitingRemoved);
+                        s.FlushQueue();
+                        Assert.Null(s2.Parent);
+                        Assert.True(s2.Status == RegisteredStatus.Free);
+                        Assert.AreEqual(s.Children.Count, 0);
+                        break;
+                }
+            }, null);
+
+            tc.End();
+        }
+
     }
 }

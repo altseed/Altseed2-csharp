@@ -24,6 +24,8 @@ namespace Altseed2
         /// </summary>
         internal virtual void Update()
         {
+            _IsUpdating = true;
+
             OnUpdate();
 
             _Children.Update();
@@ -31,6 +33,8 @@ namespace Altseed2
             {
                 c.Update();
             }
+
+            _IsUpdating = false;
         }
 
         #region Registerable (子として)
@@ -65,6 +69,7 @@ namespace Altseed2
                 if (n == null) return;
                 if (n is RootNode) break;
             }
+            _Children.Update();
             Registered();
         }
 
@@ -73,6 +78,7 @@ namespace Altseed2
         /// </summary>
         internal override void Removed()
         {
+            _Children.Update();
             Unregistered();
         }
 
@@ -114,6 +120,8 @@ namespace Altseed2
 
         internal readonly RegisterableCollection<Node> _Children;
 
+        private bool _IsUpdating = false;
+
         /// <summary>
         /// 子要素のコレクションを取得します。
         /// </summary>
@@ -129,7 +137,6 @@ namespace Altseed2
         {
             // NOTE: null を食わせてもおｋ
             _Children.Add(node);
-            node._ParentReserved = this;
         }
 
         /// <summary>
@@ -140,7 +147,21 @@ namespace Altseed2
         {
             // NOTE: null を食わせてもおｋ
             _Children.Remove(node);
-            node._ParentReserved = null;
+        }
+
+        /// <summary>
+        /// 予約されている追加・削除を直ちに実行します。
+        /// </summary>
+        /// <remarks>この<see cref="Node"/>自身の更新中に実行することはできません。</remarks>
+        public void FlushQueue()
+        {
+            if (_IsUpdating)
+            {
+                Engine.Log.Warn(LogCategory.Engine, $"この{GetType()}自身の更新中、直ちに追加・削除を実行することはできません。");
+                return;
+            }
+
+            _Children.Update();
         }
 
         #endregion
