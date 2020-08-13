@@ -67,9 +67,8 @@ namespace Altseed2
 
         public static Int8Array Create(IEnumerable<byte> src)
         {
-            var count = src.Count();
-            var dst = Create(count);
-            dst.FromEnumerable(src, count);
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -116,9 +115,8 @@ namespace Altseed2
 
         public static Int32Array Create(IEnumerable<int> src)
         {
-            var count = src.Count();
-            var dst = Create(count);
-            dst.FromEnumerable(src, count);
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -165,9 +163,8 @@ namespace Altseed2
 
         public static VertexArray Create(IEnumerable<Vertex> src)
         {
-            var count = src.Count();
-            var dst = Create(count);
-            dst.FromEnumerable(src, count);
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -214,9 +211,8 @@ namespace Altseed2
 
         public static FloatArray Create(IEnumerable<float> src)
         {
-            var count = src.Count();
-            var dst = Create(count);
-            dst.FromEnumerable(src, count);
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -263,9 +259,8 @@ namespace Altseed2
 
         public static Vector2FArray Create(IEnumerable<Vector2F> src)
         {
-            var count = src.Count();
-            var dst = Create(count);
-            dst.FromEnumerable(src, count);
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -401,36 +396,19 @@ namespace Altseed2
         /// <param name="count">指定した個数まで値を設定する</param>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/>が0未満</exception>
-        internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> elements, int count)
+        internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> elements)
             where TElement : unmanaged
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
             if (elements == null) throw new ArgumentNullException(nameof(elements), "引数がnullです");
-            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), "countが0未満です");
 
-            if (count == 0) return;
-
-            switch(elements)
+            obj.FromSpan(elements switch
             {
-                case TElement[] array:
-                    obj.FromSpan(array.AsSpan(0, count));
-                    break;
-                // countは外部から与えるので、ICollection<TElement>の型スイッチは不要だった
-                default:
-                    // TODO: ArrayPoolの利用を検討する
-                    {
-                        Span<TElement> span = count <= Engine.MaxStackalloclLength ? stackalloc TElement[count] : new TElement[count];
-                        int i = 0;
-                        foreach (var x in elements)
-                        {
-                            if (i >= count) break;
-                            span[i] = x;
-                            i++;
-                        }
-                        obj.FromSpan(span);
-                    }
-                    break;
-            }
+                TElement[] array => array,
+                // TODO: System.LinqのToArrayを利用する
+                // https://github.com/altseed/Altseed2/issues/580
+                _ => ConvertToArray(elements)
+            });
         }
     }
 }

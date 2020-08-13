@@ -134,7 +134,7 @@ namespace Altseed2
             }
             else
             {
-                _vertexesInternalCache.FromEnumerable(positions, positions.Count());
+                _vertexesInternalCache.FromEnumerable(positions);
             }
             VertexesInternal = _vertexesInternalCache;
         }

@@ -195,7 +195,7 @@ namespace Altseed2
             get => _RenderedPolygon.Vertexes?.ToArray();
             set
             {
-                _RenderedPolygon.Vertexes.FromEnumerable(value, value.Count);
+                _RenderedPolygon.Vertexes.FromEnumerable(value);
                 SetVertexes(_RenderedPolygon.Vertexes);
             }
         }
@@ -292,7 +292,7 @@ namespace Altseed2
         public void SetVertexes(IEnumerable<Vertex> vertexes)
         {
             if (vertexes is null) throw new ArgumentNullException(nameof(vertexes));
-            _RenderedPolygon.Vertexes.FromEnumerable(vertexes, vertexes.Count());
+            _RenderedPolygon.Vertexes.FromEnumerable(vertexes);
             SetVertexes(_RenderedPolygon.Vertexes);
         }
 
@@ -316,7 +316,7 @@ namespace Altseed2
         public void SetVertexes(IEnumerable<Vector2F> vertexes, Color color)
         {
             if (vertexes is null) throw new ArgumentNullException(nameof(vertexes));
-            Engine.Vector2FArrayCache.FromEnumerable(vertexes, vertexes.Count());
+            Engine.Vector2FArrayCache.FromEnumerable(vertexes);
             SetVertexesFromPositions(Engine.Vector2FArrayCache, color);
         }
 
