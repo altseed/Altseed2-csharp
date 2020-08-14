@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
@@ -218,18 +218,19 @@ namespace Altseed2
         [OnSerializing]
         private void OnSerializing(StreamingContext context)
         {
-            if (_ParentReserved is RootNode)
+            if (_ParentReserved is RootNode || _Parent is RootNode)
             {
-                isRootChild = true;
+                isRootChild = Status != RegisteredStatus.WaitingRemoved;
                 serialization_Parent = null;
                 serialization_ParentReserved = null;
                 serialization_Status = RegisteredStatus.Free;
-                surpressing = true;
+                surpressing = Status != RegisteredStatus.WaitingRemoved;
             }
             else
             {
                 isRootChild = false;
-                serialization_Parent = _ParentReserved;
+                serialization_Parent = _Parent;
+                serialization_ParentReserved = _ParentReserved;
                 serialization_Status = Status;
                 surpressing = false;
             }
@@ -257,6 +258,7 @@ namespace Altseed2
             if (isRootChild) Engine.AddNode(this);
             else
             {
+                _Parent = serialization_Parent;
                 _ParentReserved = serialization_ParentReserved;
             }
             ResetSerializationField();
