@@ -42,7 +42,7 @@ namespace Altseed2.Test
             {
                 var radian = MathHelper.DegreeToRadian(angle);
                 var rotation = Matrix44F.GetRotationX(radian) * Matrix44F.GetRotationY(radian) * Matrix44F.GetRotationZ(radian);
-                var transform = Matrix44F.GetTranslation3D(position) * Matrix44F.GetScale3D(scale) * rotation;
+                var transform = Matrix44F.GetTranslation3D(position) * rotation * Matrix44F.GetScale3D(scale);
 
                 MathHelper.CalcFromTransform3D(transform, out var p, out var s, out var r);
                 TestValue(position, p);

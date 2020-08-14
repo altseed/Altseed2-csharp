@@ -191,10 +191,10 @@ namespace Altseed2
         public static void CalcFromTransform2D(Matrix44F transform, out Vector2F absolutePosition, out Vector2F scale, out float angle)
         {
             absolutePosition = new Vector2F(transform[0, 3], transform[1, 3]);
-            var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
-            var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
+            var sx = new Vector3F(transform[0, 0], transform[1, 0], transform[2, 0]).Length;
+            var sy = new Vector3F(transform[0, 1], transform[1, 1], transform[2, 1]).Length;
             scale = new Vector2F(sx, sy);
-            transform = Matrix44F.GetScale2D(new Vector2F(sx == 0 ? 1f : (1f / sx), sy == 0 ? 1f : (1f / sy))) * transform;
+            transform *= Matrix44F.GetScale2D(new Vector2F(sx == 0 ? 1f : (1f / sx), sy == 0 ? 1f : (1f / sy)));
             angle = new Vector2F(transform[0, 0], transform[1, 0]).Degree;
         }
 
@@ -208,12 +208,12 @@ namespace Altseed2
         public static void CalcFromTransform3D(Matrix44F transform, out Vector3F absolutePosition, out Vector3F scale, out Matrix44F rotation)
         {
             absolutePosition = new Vector3F(transform[0, 3], transform[1, 3], transform[2, 3]);
-            var sx = new Vector3F(transform[0, 0], transform[0, 1], transform[0, 2]).Length;
-            var sy = new Vector3F(transform[1, 0], transform[1, 1], transform[1, 2]).Length;
-            var sz = new Vector3F(transform[2, 0], transform[2, 1], transform[2, 2]).Length;
+            var sx = new Vector3F(transform[0, 0], transform[1, 0], transform[2, 0]).Length;
+            var sy = new Vector3F(transform[0, 1], transform[1, 1], transform[2, 1]).Length;
+            var sz = new Vector3F(transform[0, 2], transform[1, 2], transform[2, 2]).Length;
             scale = new Vector3F(sx, sy, sz);
             transform = Matrix44F.GetTranslation3D(-absolutePosition) * transform;
-            rotation = Matrix44F.GetScale3D(new Vector3F(sx == 0 ? 1f : (1f / sx), sy == 0 ? 1f : (1f / sy), sz == 0 ? 1f : (1f / sz))) * transform;
+            rotation = transform * Matrix44F.GetScale3D(new Vector3F(sx == 0 ? 1f : (1f / sx), sy == 0 ? 1f : (1f / sy), sz == 0 ? 1f : (1f / sz)));
         }
     }
 }
