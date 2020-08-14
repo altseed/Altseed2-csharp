@@ -78,34 +78,30 @@ namespace Altseed2
             };
         }
 
-        /// <inheritdoc/>
-        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
-        protected override void OnTransitionBegin()
+        internal override void TransitionBegin()
         {
             AddChildNode(_TransitionEffectNode);
+            base.TransitionBegin();
         }
 
-        /// <inheritdoc/>
-        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
-        protected override void OnClosing(float progress)
+        internal override void Closing(float progress)
         {
             _TransitionEffectNode.MixRate = progress;
+            base.OnClosing(progress);
         }
 
-        /// <inheritdoc/>
-        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
-        protected override void OnNodeSwapped()
+        internal override void NodeSwapped()
         {
             _TransitionEffectNode.RuleTexture = _OpeningState.RuleTexture;
             _TransitionEffectNode.Softness = _OpeningState.Softness;
             _TransitionEffectNode.MixRate = 1.0f;
+            base.NodeSwapped();
         }
 
-        /// <inheritdoc/>
-        /// <remarks>オーバーライドするときは上書きせず呼び出す事</remarks>
-        protected override void OnOpening(float progress)
+        internal override void Opening(float progress)
         {
             _TransitionEffectNode.MixRate = 1.0f - progress;
+            base.Opening(progress);
         }
     }
 
