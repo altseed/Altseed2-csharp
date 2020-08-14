@@ -337,33 +337,6 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// コレクションを配列に変換します。（もしかして単にLINQのToArrayするだけでよかったりする？）
-        /// </summary>
-        /// <typeparam name="TElement">変換する配列の要素の型</typeparam>
-        /// <param name="collection">変換するコレクション</param>
-        /// <exception cref="ArgumentNullException"><paramref name="collection"/>がnull</exception>
-        /// <returns><paramref name="collection"/>と同じ要素を持つ配列</returns>
-        internal static TElement[] ConvertToArray<TElement>(IEnumerable<TElement> collection)
-        {
-            if (collection == null) throw new ArgumentNullException(nameof(collection), "引数がnullです");
-
-            switch (collection)
-            {
-                case TElement[] a:
-                    return a;
-
-                case IReadOnlyCollection<TElement> c:
-                    var array = new TElement[c.Count];
-                    var i = 0;
-                    foreach (var current in c) array[i++] = current;
-                    return array;
-
-                default:
-                    return collection.ToArray();
-            }
-        }
-
-        /// <summary>
         /// Core接続配列に指定した配列のデータを設定します。
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
@@ -405,9 +378,7 @@ namespace Altseed2
             obj.FromSpan(elements switch
             {
                 TElement[] array => array,
-                // TODO: System.LinqのToArrayを利用する
-                // https://github.com/altseed/Altseed2/issues/580
-                _ => ConvertToArray(elements)
+                _ => elements.ToArray(),
             });
         }
     }
