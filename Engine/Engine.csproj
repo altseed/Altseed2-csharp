@@ -14,6 +14,14 @@
     <DocumentationFile>$(SolutionDir)Build/Altseed2.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AssemblyTitle>Altseed2</AssemblyTitle>
+    <Copyright>Copyright © 2020 Altseed</Copyright>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <InformationalVersion>2.0.0-beta1</InformationalVersion>
+  </PropertyGroup>
+
   <Choose>
     <When Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
