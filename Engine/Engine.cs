@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,8 @@ namespace Altseed2
         /// カメラグループの個数の最大値
         /// </summary>
         internal const int MaxCameraGroupCount = 64;
+
+        internal const int MaxStackalloclLength = 16;
 
         /// <summary>
         /// ルートノード
@@ -31,6 +34,15 @@ namespace Altseed2
 
         private static RenderTextureCache _RenderTextureCache;
         internal static RenderTexture _PostEffectBuffer; // TODO: 渡し方をうまくやる。
+
+        // cullingの結果を格納するためのBuffer
+        private static ArrayBuffer<int> _DrawingRenderedIdsBuffer;
+
+        // ShapeNodeのSetVertexesで利用するBuffer。
+        internal static ArrayBuffer<Vector2F> Vector2FBuffer { get; private set; }
+
+        // CreateVertexesByVector2F時に一時的なArrayを生成せずに使い回すためのキャッシュ。
+        internal static Vector2FArray Vector2FArrayCache { get; private set; }
 
         /// <summary>
         /// スクリーンのクリア色を取得または設定します。
@@ -88,8 +100,13 @@ namespace Altseed2
                 _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
+                _DrawingRenderedIdsBuffer = new ArrayBuffer<int>();
+                Vector2FBuffer = new ArrayBuffer<Vector2F>(MaxStackalloclLength * 2);
+                Vector2FArrayCache = Vector2FArray.Create(0);
+
                 PostEffectNode.InitializeCache();
                 isActive = true;
+
                 return true;
             }
             return false;
@@ -172,11 +189,15 @@ namespace Altseed2
             Renderer.SetCamera(camera);
 
             // カリングの結果
-            var cullingIds = CullingSystem.DrawingRenderedIds.ToArray();
-            Array.Sort(cullingIds);
+            var cullingIdsCount = CullingSystem.DrawingRenderedIds.Count;
+            var buffer = _DrawingRenderedIdsBuffer.GetAsArray(cullingIdsCount);
+            CullingSystem.DrawingRenderedIds.CopyTo(buffer);
+            Array.Sort(buffer, 0, cullingIdsCount);
+            Span<int> cullingIds = buffer.AsSpan(0, cullingIdsCount);
+
+            var requireRender = false;
 
             _PostEffectBuffer = null;
-            var requireRender = false;
 
             foreach (var (_, znodes) in drawns)
             {
@@ -200,7 +221,7 @@ namespace Altseed2
                         if (!cdrawn.IsDrawnActually) continue;
                         // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
-                        if (Array.BinarySearch(cullingIds, cdrawn.CullingId) < 0) continue;
+                        if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
                         //if (node is TransformNode t)
@@ -210,6 +231,7 @@ namespace Altseed2
                     else throw new InvalidOperationException();
                 }
             }
+
             if (requireRender) Renderer.Render();
         }
 
@@ -227,6 +249,11 @@ namespace Altseed2
             _RenderTextureCache = null;
             PostEffectNode.TerminateCache();
             Core.Terminate();
+
+
+            _DrawingRenderedIdsBuffer = null;
+            Vector2FBuffer = null;
+            Vector2FArrayCache = null;
 
             Config = null;
             _core = null;

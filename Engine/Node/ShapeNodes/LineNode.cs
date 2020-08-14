@@ -81,7 +81,7 @@ namespace Altseed2
 
         private void UpdateVertexes()
         {
-            var positions = new Vector2F[4];
+            Span<Vector2F> positions = stackalloc Vector2F[4];
             var vec = _Point2 - _Point1;
 
             var side = new Vector2F(vec.Y, -vec.X).Normal * Thickness / 2f;

@@ -1,4 +1,6 @@
-﻿namespace Altseed2
+﻿using System;
+
+namespace Altseed2
 {
     class TransformNodeInfo
     {
@@ -93,7 +95,7 @@
 
         private void SetLine(RenderedPolygon renderedPolygon, Vector2F point1, Vector2F point2, Color color)
         {
-            var positions = new Vector2F[4];
+            Span<Vector2F> positions = stackalloc Vector2F[4];
             var vec = point2 - point1;
 
             var side = new Vector2F(vec.Y, -vec.X).Normal;
@@ -110,7 +112,7 @@
 
         private void SetPoint(RenderedPolygon renderedPolygon, Vector2F point, float size, Color color)
         {
-            var points = new Vector2F[4];
+            Span<Vector2F> points = stackalloc Vector2F[4];
             points[0] = point + new Vector2F(-1f, -1f) * size / 2f;
             points[1] = point + new Vector2F(1f, -1f) * size / 2f;
             points[2] = point + new Vector2F(1f, 1f) * size / 2f;

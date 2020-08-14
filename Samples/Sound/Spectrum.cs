@@ -25,11 +25,12 @@ namespace Sample
                 // ※ 640 / 1024 = 0.625
                 var spectrumBar = new PolygonNode();
                 spectrumBar.Position = new Vector2F(i * 0.625f, 1.0f);
-                var vertexes = new Vector2F[4];
-                vertexes[0] = new Vector2F(0.0f, 480.0f);
-                vertexes[1] = new Vector2F(0.0f, 480.0f);
-                vertexes[2] = new Vector2F(0.625f, 480.0f);
-                vertexes[3] = new Vector2F(0.625f, 480.0f);
+                Span<Vector2F> vertexes = stackalloc Vector2F[4] {
+                    new Vector2F(0.0f, 480.0f),
+                    new Vector2F(0.0f, 480.0f),
+                    new Vector2F(0.625f, 480.0f),
+                    new Vector2F(0.625f, 480.0f),
+                };
                 spectrumBar.SetVertexes(vertexes, new Color(255, 255, 255));
                 spectrumBars[i] = spectrumBar;
                 Engine.AddNode(spectrumBar);
@@ -49,11 +50,13 @@ namespace Sample
                 // 取得したスペクトル情報をスペクトルバーに反映させます。
                 for (int i = 0; i < 1024; ++i)
                 {
-                    var vertexes = new Vector2F[4];
-                    vertexes[0] = new Vector2F(0.0f, 480.0f);
-                    vertexes[1] = new Vector2F(0.0f, 480.0f - spectrum[i]);
-                    vertexes[2] = new Vector2F(0.625f, 480.0f - spectrum[i]);
-                    vertexes[3] = new Vector2F(0.625f, 480.0f);
+                    Span<Vector2F> vertexes = stackalloc Vector2F[]
+                    {
+                        new Vector2F(0.0f, 480.0f),
+                        new Vector2F(0.0f, 480.0f - spectrum[i]),
+                        new Vector2F(0.625f, 480.0f - spectrum[i]),
+                        new Vector2F(0.625f, 480.0f),
+                    };
                     spectrumBars[i].SetVertexes(vertexes, new Color(255, 255, 255));
                 }
 

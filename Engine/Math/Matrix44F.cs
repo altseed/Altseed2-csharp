@@ -499,7 +499,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3F Transform3D(Vector3F vector)
         {
-            var vec = new float[4];
+            Span<float> vec = stackalloc float[4];
 
             for (int i = 0; i < 4; i++)
             {
@@ -520,7 +520,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector4F Transform4D(Vector4F vector)
         {
-            var vec = new float[4];
+            Span<float> vec = stackalloc float[4];
 
             for (int i = 0; i < 4; i++)
             {

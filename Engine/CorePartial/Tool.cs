@@ -5,8 +5,8 @@ namespace Altseed2
 {
     public partial class Tool
     {
-        Int32Array int32Array = Int32Array.Create(0);
-        FloatArray floatArray = FloatArray.Create(0);
+        readonly Int32Array int32Array = Int32Array.Create(4);
+        readonly FloatArray floatArray = FloatArray.Create(4);
 
         /// <summary>
         /// フルスクリーンでツールウィンドウを開始します。
@@ -70,21 +70,20 @@ namespace Altseed2
         /// 2つの整数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">それぞれのボックスの値を格納する配列</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputInt2(string label, int[] array)
+        public bool InputInt2(string label, Span<int> span)
         {
-            if (array.Length < 2)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 2)
+                throw new ArgumentException("Spanの長さが2未満です。");
 
-            int32Array.FromArray(array);
+            int32Array.FromSpan(span);
             bool res = InputInt2(label, int32Array);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = int32Array.GetAt(i);
+                for (int i = 0; i < 2; i++)
+                    span[i] = int32Array.GetAt(i);
 
             return res;
         }
@@ -93,21 +92,20 @@ namespace Altseed2
         /// 3つの整数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">それぞれのボックスの値を格納する配列</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが3未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputInt3(string label, int[] array)
+        public bool InputInt3(string label, Span<int> span)
         {
-            if (array.Length < 3)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 3)
+                throw new ArgumentException("Spanの長さが3未満です。");
 
-            int32Array.FromArray(array);
+            int32Array.FromSpan(span);
             bool res = InputInt3(label, int32Array);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = int32Array.GetAt(i);
+                for (int i = 0; i < 3; i++)
+                    span[i] = int32Array.GetAt(i);
 
             return res;
         }
@@ -116,21 +114,20 @@ namespace Altseed2
         /// 4つの整数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">それぞれのボックスの値を格納する配列</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが4未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputInt4(string label, int[] array)
+        public bool InputInt4(string label, Span<int> span)
         {
-            if (array.Length < 4)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 4)
+                throw new ArgumentException("Spanの長さが4未満です。");
 
-            int32Array.FromArray(array);
+            int32Array.FromSpan(span);
             bool res = InputInt4(label, int32Array);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = int32Array.GetAt(i);
+                for (int i = 0; i < 4; i++)
+                    span[i] = int32Array.GetAt(i);
 
             return res;
         }
@@ -139,21 +136,20 @@ namespace Altseed2
         /// 2つの小数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">それぞれのボックスの値を格納する配列</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputFloat2(string label, float[] array)
+        public bool InputFloat2(string label, Span<float> span)
         {
-            if (array.Length < 2)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 2)
+                throw new ArgumentException("Spanの長さが2未満です。");
 
-            floatArray.FromArray(array);
+            floatArray.FromSpan(span);
             bool res = InputFloat2(label, floatArray);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = floatArray.GetAt(i);
+                for (int i = 0; i < 2; i++)
+                    span[i] = floatArray.GetAt(i);
 
             return res;
         }
@@ -162,21 +158,20 @@ namespace Altseed2
         /// 3つの小数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">それぞれのボックスの値を格納する配列</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが3未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputFloat3(string label, float[] array)
+        public bool InputFloat3(string label, Span<float> span)
         {
-            if (array.Length < 3)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 3)
+                throw new ArgumentException("Spanの長さが3未満です。");
 
-            floatArray.FromArray(array);
+            floatArray.FromSpan(span);
             bool res = InputFloat3(label, floatArray);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = floatArray.GetAt(i);
+                for (int i = 0; i < 3; i++)
+                    span[i] = floatArray.GetAt(i);
 
             return res;
         }
@@ -185,21 +180,20 @@ namespace Altseed2
         /// 4つの小数を入力するボックスを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">それぞれのボックスの値を格納する配列</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが4未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputFloat4(string label, float[] array)
+        public bool InputFloat4(string label, Span<float> span)
         {
-            if (array.Length < 4)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 4)
+                throw new ArgumentException("Spanの長さが4未満です。");
 
-            floatArray.FromArray(array);
+            floatArray.FromSpan(span);
             bool res = InputFloat4(label, floatArray);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = floatArray.GetAt(i);
+                for (int i = 0; i < 4; i++)
+                    span[i] = floatArray.GetAt(i);
 
             return res;
         }
@@ -208,24 +202,23 @@ namespace Altseed2
         /// 2つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">各バーの値を格納する配列</param>
+        /// <param name="span">各バーの値を格納するSpan</param>
         /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderInt2(string label, int[] array, float speed, int vMin, int vMax)
+        public bool SliderInt2(string label, Span<int> span, float speed, int vMin, int vMax)
         {
-            if (array.Length < 2)
+            if (span.Length < 2)
                 throw new ArgumentException("配列の長さが足りません");
 
-            int32Array.FromArray(array);
+            int32Array.FromSpan(span);
             bool res = SliderInt2(label, int32Array, speed, vMin, vMax);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = int32Array.GetAt(i);
+                for (int i = 0; i < 2; i++)
+                    span[i] = int32Array.GetAt(i);
 
             return res;
         }
@@ -234,24 +227,23 @@ namespace Altseed2
         /// 3つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">各バーの値を格納する配列</param>
+        /// <param name="span">各バーの値を格納するSpan</param>
         /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderInt3(string label, int[] array, float speed, int vMin, int vMax)
+        public bool SliderInt3(string label, Span<int> span, float speed, int vMin, int vMax)
         {
-            if (array.Length < 3)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 3)
+                throw new ArgumentException("Spanの長さが3未満です。");
 
-            int32Array.FromArray(array);
+            int32Array.FromSpan(span);
             bool res = SliderInt3(label, int32Array, speed, vMin, vMax);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = int32Array.GetAt(i);
+                for (int i = 0; i < 3; i++)
+                    span[i] = int32Array.GetAt(i);
 
             return res;
         }
@@ -260,24 +252,24 @@ namespace Altseed2
         /// 4つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">各バーの値を格納する配列</param>
+        /// <param name="span">各バーの値を格納するSpan</param>
         /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderInt4(string label, int[] array, float speed, int vMin, int vMax)
+        public bool SliderInt4(string label, Span<int> span, float speed, int vMin, int vMax)
         {
-            if (array.Length < 4)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 4)
+                throw new ArgumentException("Spanの長さが4未満です。");
 
-            int32Array.FromArray(array);
+            int32Array.FromSpan(span);
             bool res = SliderInt4(label, int32Array, speed, vMin, vMax);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = int32Array.GetAt(i);
+                for (int i = 0; i < 4; i++)
+                    span[i] = int32Array.GetAt(i);
 
             return res;
         }
@@ -286,24 +278,24 @@ namespace Altseed2
         /// 2つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">各バーの値を格納する配列</param>
+        /// <param name="span">各バーの値を格納するSpan</param>
         /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderFloat2(string label, float[] array, float speed, float vMin, float vMax)
+        public bool SliderFloat2(string label, Span<float> span, float speed, float vMin, float vMax)
         {
-            if (array.Length < 2)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 2)
+                throw new ArgumentException("Spanの長さが足りません");
 
-            floatArray.FromArray(array);
+            floatArray.FromSpan(span);
             bool res = SliderFloat2(label, floatArray, speed, vMin, vMax);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = floatArray.GetAt(i);
+                for (int i = 0; i < 2; i++)
+                    span[i] = floatArray.GetAt(i);
 
             return res;
         }
@@ -312,24 +304,24 @@ namespace Altseed2
         /// 3つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">各バーの値を格納する配列</param>
+        /// <param name="span">各バーの値を格納するSpan</param>
         /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderFloat3(string label, float[] array, float speed, float vMin, float vMax)
+        public bool SliderFloat3(string label, Span<float> span, float speed, float vMin, float vMax)
         {
-            if (array.Length < 3)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 3)
+                throw new ArgumentException("Spanの長さが3未満です。");
 
-            floatArray.FromArray(array);
+            floatArray.FromSpan(span);
             bool res = SliderFloat3(label, floatArray, speed, vMin, vMax);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = floatArray.GetAt(i);
+                for (int i = 0; i < 3; i++)
+                    span[i] = floatArray.GetAt(i);
 
             return res;
         }
@@ -338,24 +330,24 @@ namespace Altseed2
         /// 4つのスライドで値を増減するバーを生成します。
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="array">各バーの値を格納する配列</param>
+        /// <param name="span">各バーの値を格納するSpan</param>
         /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
-        /// <exception cref="ArgumentException"><paramref name="array"/>の大きさが2未満</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderFloat4(string label, float[] array, float speed, float vMin, float vMax)
+        public bool SliderFloat4(string label, Span<float> span, float speed, float vMin, float vMax)
         {
-            if (array.Length < 4)
-                throw new ArgumentException("配列の長さが足りません");
+            if (span.Length < 4)
+                throw new ArgumentException("Spanの長さが4未満です。");
 
-            floatArray.FromArray(array);
+            floatArray.FromSpan(span);
             bool res = SliderFloat4(label, floatArray, speed, vMin, vMax);
 
             if (res)
-                for (int i = 0; i < array.Length; i++)
-                    array[i] = floatArray.GetAt(i);
+                for (int i = 0; i < 4; i++)
+                    span[i] = floatArray.GetAt(i);
 
             return res;
         }
@@ -374,7 +366,7 @@ namespace Altseed2
 
         public void PlotLines(
             string label,
-            float[] values,
+            Span<float> values,
             int valuesCount,
             int valuesOffset = 0,
             string overlayText = null,
@@ -383,13 +375,13 @@ namespace Altseed2
             Vector2F graphSize = default,
             int stride = sizeof(float))
         {
-            floatArray.FromArray(values);
+            floatArray.FromSpan(values);
             PlotLines(label, floatArray, valuesCount, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
         }
 
         public void PlotHistogram(
             string label,
-            float[] values,
+            Span<float> values,
             int values_count,
             int valuesOffset = 0,
             string overlayText = null,
@@ -398,7 +390,7 @@ namespace Altseed2
             Vector2F graphSize = default,
             int stride = sizeof(float))
         {
-            floatArray.FromArray(values);
+            floatArray.FromSpan(values);
             PlotHistogram(label, floatArray, values_count, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
         }
     }

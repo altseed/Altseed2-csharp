@@ -113,7 +113,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector2I Transform2D(Vector2I in_)
         {
-            var values = new int[3];
+            Span<int> values = stackalloc int[3];
 
             for (int i = 0; i < 2; i++)
             {
@@ -133,7 +133,7 @@ namespace Altseed2
         /// <returns>変形後ベクトル</returns>
         public readonly Vector3I Transform3D(Vector3I in_)
         {
-            var values = new int[3];
+            Span<int> values = stackalloc int[3];
 
             for (int i = 0; i < 3; i++)
             {

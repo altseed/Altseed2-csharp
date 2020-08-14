@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -57,18 +58,17 @@ namespace Altseed2
             }
         }
 
-        public static Int8Array Create(IEnumerable<byte> collection)
+        public static Int8Array Create(ReadOnlySpan<byte> src)
         {
-            var src = ArrayExtension.ConvertToArray(collection);
             var dst = Create(src.Length);
+            dst.FromSpan(src);
+            return dst;
+        }
 
-            unsafe
-            {
-                fixed (byte* ptr = src)
-                {
-                    dst.Assign(new IntPtr(ptr), src.Length);
-                }
-            }
+        public static Int8Array Create(IEnumerable<byte> src)
+        {
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -85,7 +85,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             var array = info.GetValue<byte[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
-            this.FromArray(array);
+            this.FromSpan(array);
         }
     }
 
@@ -106,18 +106,17 @@ namespace Altseed2
             }
         }
 
-        public static Int32Array Create(IEnumerable<int> collection)
+        public static Int32Array Create(ReadOnlySpan<int> src)
         {
-            var src = ArrayExtension.ConvertToArray(collection);
             var dst = Create(src.Length);
+            dst.FromSpan(src);
+            return dst;
+        }
 
-            unsafe
-            {
-                fixed (int* ptr = src)
-                {
-                    dst.Assign(new IntPtr(ptr), src.Length);
-                }
-            }
+        public static Int32Array Create(IEnumerable<int> src)
+        {
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -134,7 +133,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             var array = info.GetValue<int[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
-            this.FromArray(array);
+            this.FromSpan(array);
         }
     }
 
@@ -155,18 +154,17 @@ namespace Altseed2
             }
         }
 
-        public static VertexArray Create(IEnumerable<Vertex> collection)
+        public static VertexArray Create(ReadOnlySpan<Vertex> src)
         {
-            var src = ArrayExtension.ConvertToArray(collection);
             var dst = Create(src.Length);
+            dst.FromSpan(src);
+            return dst;
+        }
 
-            unsafe
-            {
-                fixed (Vertex* ptr = src)
-                {
-                    dst.Assign(new IntPtr(ptr), src.Length);
-                }
-            }
+        public static VertexArray Create(IEnumerable<Vertex> src)
+        {
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -183,7 +181,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             var array = info.GetValue<Vertex[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
-            this.FromArray(array);
+            this.FromSpan(array);
         }
     }
 
@@ -204,18 +202,17 @@ namespace Altseed2
             }
         }
 
-        public static FloatArray Create(IEnumerable<float> collection)
+        public static FloatArray Create(ReadOnlySpan<float> src)
         {
-            var src = ArrayExtension.ConvertToArray(collection);
             var dst = Create(src.Length);
+            dst.FromSpan(src);
+            return dst;
+        }
 
-            unsafe
-            {
-                fixed (float* ptr = src)
-                {
-                    dst.Assign(new IntPtr(ptr), src.Length);
-                }
-            }
+        public static FloatArray Create(IEnumerable<float> src)
+        {
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -232,7 +229,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             var array = info.GetValue<float[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
-            this.FromArray(array);
+            this.FromSpan(array);
         }
     }
 
@@ -253,18 +250,17 @@ namespace Altseed2
             }
         }
 
-        public static Vector2FArray Create(IEnumerable<Vector2F> collection)
+        public static Vector2FArray Create(ReadOnlySpan<Vector2F> src)
         {
-            var src = ArrayExtension.ConvertToArray(collection);
             var dst = Create(src.Length);
+            dst.FromSpan(src);
+            return dst;
+        }
 
-            unsafe
-            {
-                fixed (Vector2F* ptr = src)
-                {
-                    dst.Assign(new IntPtr(ptr), src.Length);
-                }
-            }
+        public static Vector2FArray Create(IEnumerable<Vector2F> src)
+        {
+            var dst = Create(0);
+            dst.FromEnumerable(src);
             return dst;
         }
 
@@ -281,7 +277,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
             var array = info.GetValue<Vector2F[]>(S_Array) ?? throw new SerializationException("デシリアライズに失敗しました");
-            this.FromArray(array);
+            this.FromSpan(array);
         }
     }
 
@@ -318,23 +314,24 @@ namespace Altseed2
         /// <summary>
         /// Core接続配列に指定した配列のデータを設定します。
         /// </summary>
-        /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
-        /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>
-        /// <param name="array">設定するデータとなる配列</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="array"/>がnull</exception>
-        internal static void FromArray<TElement>(this IArray<TElement> obj, TElement[] array)
+        /// <typeparam name="TElement">Spanに格納される要素の型</typeparam>
+        /// <param name="obj">配列のもとになるCore接続用配列クラスのインスタンス</param>
+        /// <param name="span">書き込み先の<see cref="Span{TElement}"/></param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>がnull</exception>
+        /// <exception cref="ArgumentException"><paramref name="span"/>の長さが<see cref="IArray{TElement}.Count"/>未満。</exception>
+        internal static void CopyTo<TElement>(this IArray<TElement> obj, Span<TElement> span)
             where TElement : unmanaged
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
-            if (array == null) throw new ArgumentNullException(nameof(array), "引数がnullです");
+            if (obj.Count > span.Length) throw new ArgumentException(nameof(span), $"Spanの長さが{obj.Count}未満です。");
 
-            if (obj.Count < array.Length) obj.Resize(array.Length);
+            if (obj.Count == 0) return;
 
             unsafe
             {
-                fixed (TElement* ptr = array)
+                fixed (TElement* ptr = span)
                 {
-                    obj.Assign(new IntPtr(ptr), array.Length);
+                    obj.CopyTo(new IntPtr(ptr));
                 }
             }
         }
@@ -371,25 +368,47 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>
-        /// <param name="collection">設定するデータとなる配列</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
-        internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> collection)
+        /// <param name="array">設定するデータとなる配列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="array"/>がnull</exception>
+        internal static void FromSpan<TElement>(this IArray<TElement> obj, ReadOnlySpan<TElement> span)
             where TElement : unmanaged
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
-            if (collection == null) throw new ArgumentNullException(nameof(collection), "引数がnullです");
+            obj.Resize(span.Length);
 
-            var array = ConvertToArray(collection);
-
-            if (obj.Count < array.Length) obj.Resize(array.Length);
+            if (span.Length == 0) return;
 
             unsafe
             {
-                fixed (TElement* ptr = array)
+                fixed (TElement* ptr = span)
                 {
-                    obj.Assign(new IntPtr(ptr), array.Length);
+                    obj.Assign(new IntPtr(ptr), span.Length);
                 }
             }
+        }
+
+        /// <summary>
+        /// Core接続配列に指定した配列のデータを設定する
+        /// </summary>
+        /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
+        /// <param name="obj">データを設定するCore接続配列のインスタンス</param>
+        /// <param name="collection">設定するデータとなる<see cref="IEnumerable{TElement}"/></param>
+        /// <param name="count">指定した個数まで値を設定する</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/>が0未満</exception>
+        internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> elements)
+            where TElement : unmanaged
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
+            if (elements == null) throw new ArgumentNullException(nameof(elements), "引数がnullです");
+
+            obj.FromSpan(elements switch
+            {
+                TElement[] array => array,
+                // TODO: System.LinqのToArrayを利用する
+                // https://github.com/altseed/Altseed2/issues/580
+                _ => ConvertToArray(elements)
+            });
         }
     }
 }

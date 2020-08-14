@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 
 namespace Altseed2
 {
@@ -67,8 +68,8 @@ namespace Altseed2
         private void UpdateVertexes()
         {
             var deg = MathF.PI * 2f / _VertNum;
-            var positions = new Vector2F[_VertNum];
 
+            Span<Vector2F> positions = _VertNum <= Engine.MaxStackalloclLength ? stackalloc Vector2F[_VertNum] : Engine.Vector2FBuffer.GetAsSpan(_VertNum);
             for (int i = 0; i < _VertNum; i++)
             {
                 positions[i] = new Vector2F(MathF.Cos(deg * i), MathF.Sin(deg * i)) * Radius;
