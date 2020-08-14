@@ -218,18 +218,25 @@ namespace Altseed2
         [OnSerializing]
         private void OnSerializing(StreamingContext context)
         {
-            if (_ParentReserved is RootNode)
+            // _ParentReserved is RootNode：RootNodeに追加されようとしている
+            // _Parent is RootNode：RootNodeの親
+            // 
+            // この場合はRootNodeを除いてシリアライズする必要があるため，Parent = nullとしてシリアライズし，
+            // デシリアライズ時にEngine.AddNode(this)で再登録する
+            if (_ParentReserved is RootNode || _Parent is RootNode)
             {
-                isRootChild = true;
+                isRootChild = Status != RegisteredStatus.WaitingRemoved; // RootNodeから削除されようとしている場合はデシリアライズ時に再登録されないようにする
                 serialization_Parent = null;
                 serialization_ParentReserved = null;
                 serialization_Status = RegisteredStatus.Free;
-                surpressing = true;
+                surpressing = Status != RegisteredStatus.WaitingRemoved;// RootNodeから削除されようとしている場合はデシリアライズ時に再登録されないようにする
             }
+            // 上記の場合以外は親や登録状態は全てそのままで実行
             else
             {
                 isRootChild = false;
-                serialization_Parent = _ParentReserved;
+                serialization_Parent = _Parent;
+                serialization_ParentReserved = _ParentReserved;
                 serialization_Status = Status;
                 surpressing = false;
             }
@@ -242,6 +249,7 @@ namespace Altseed2
         [OnSerializing]
         private void OnSerialized(StreamingContext context)
         {
+            // シリアライズ終了時にシリアライズ関連のフィールドを初期化してバグを防ぐ
             ResetSerializationField();
             surpressing = false;
         }
@@ -254,11 +262,15 @@ namespace Altseed2
         private void OnDeserialized(StreamingContext context)
         {
             Status = serialization_Status;
+            // シリアライズ時にRootNodeの子だった場合，Engineに自身を登録
             if (isRootChild) Engine.AddNode(this);
+            // それ以外の場合は親情報をそのまま引き継ぐ
             else
             {
+                _Parent = serialization_Parent;
                 _ParentReserved = serialization_ParentReserved;
             }
+            // シリアライズ関連のフィールドをリセットしてバグを防ぐ
             ResetSerializationField();
         }
 

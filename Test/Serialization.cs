@@ -773,6 +773,15 @@ namespace Altseed2.Test
             };
             tc.Init();
 
+            //
+            // RootNode
+            // --node0
+            //   |-node1
+            //   --node2
+            // 
+            // node3 is isolated from other nodes
+            //
+
             var node0 = new NumericNode(0);
             var node1 = new NumericNode(1);
             var node2 = new NumericNode(2);
