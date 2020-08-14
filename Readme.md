@@ -8,8 +8,10 @@
 [Nugetでインストール](https://www.nuget.org/packages/Altseed2)
 
 ## 関連リポジトリ
-- [altseed/Altseed2](https://github.com/altseed/Altseed2): C++による内部実装
-- [altseed/Altseed2-csharp](https://github.com/altseed/Altseed2): C#エンジン
+* [altseed/LLGI](https://github.com/altseed/LLGI): C++による各種描画APIの抽象化
+* [altseed/Altseed2](https://github.com/altseed/Altseed2): C++による内部実装（Core）
+* [altseed/CppBindingGenerator](https://github.com/altseed/CppBindingGenerator): エンジンからCoreを呼び出すためのバインディングコードを自動生成するツール
+* [altseed/Altseed2-csharp](https://github.com/altseed/Altseed2-csharp): C#エンジン
 - [altseed/Altseed2-document](https://github.com/altseed/Altseed2-document): ウェブサイト用ドキュメント
 
 ## Issue
