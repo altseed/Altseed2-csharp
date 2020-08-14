@@ -24,9 +24,9 @@ namespace Altseed2
         /// </summary>
         internal virtual void Update()
         {
-            _IsUpdating = true;
-
             OnUpdate();
+
+            _IsEnumeratingChildren = true;
 
             _Children.Update();
             foreach (var c in Children)
@@ -34,7 +34,7 @@ namespace Altseed2
                 c.Update();
             }
 
-            _IsUpdating = false;
+            _IsEnumeratingChildren = false;
         }
 
         #region Registerable (子として)
@@ -93,10 +93,14 @@ namespace Altseed2
                 return;
             }
 
+            _IsEnumeratingChildren = true;
+
             foreach (var c in Children)
             {
                 c.Registered();
             }
+
+            _IsEnumeratingChildren = false;
 
             OnAdded();
         }
@@ -106,10 +110,14 @@ namespace Altseed2
         /// </summary>
         internal virtual void Unregistered()
         {
+            _IsEnumeratingChildren = true;
+
             foreach (var c in Children)
             {
                 c.Unregistered();
             }
+
+            _IsEnumeratingChildren = false;
 
             OnRemoved();
         }
@@ -120,7 +128,7 @@ namespace Altseed2
 
         internal readonly RegisterableCollection<Node> _Children;
 
-        private bool _IsUpdating = false;
+        private bool _IsEnumeratingChildren = false;
 
         /// <summary>
         /// 子要素のコレクションを取得します。
@@ -155,9 +163,9 @@ namespace Altseed2
         /// <remarks>この<see cref="Node"/>自身の更新中に実行することはできません。</remarks>
         public void FlushQueue()
         {
-            if (_IsUpdating)
+            if (_IsEnumeratingChildren)
             {
-                Engine.Log.Warn(LogCategory.Engine, $"この{GetType()}自身の更新中、直ちに追加・削除を実行することはできません。");
+                Engine.Log.Warn(LogCategory.Engine, $"この{GetType()}は子要素の列挙中です。直ちに追加・削除を実行することはできません。");
                 return;
             }
 
@@ -293,22 +301,16 @@ namespace Altseed2
         /// </summary>
         public IEnumerable<Node> EnumerateDescendants()
         {
+            _IsEnumeratingChildren = true;
+
             foreach (var c in Children)
             {
                 yield return c;
                 foreach (var g in c.EnumerateDescendants())
                     yield return g;
             }
-        }
 
-        /// <summary>
-        /// <typeparamref name="T"/> 型の子孫ノードを列挙します。
-        /// </summary>
-        /// <typeparam name="T">列挙されるノードの型</typeparam>
-        public IEnumerable<T> EnumerateDescendants<T>()
-             where T : Node
-        {
-            return EnumerateDescendants<T>(x => true);
+            _IsEnumeratingChildren = false;
         }
 
         /// <summary>
@@ -316,19 +318,21 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="T">列挙されるノードの型</typeparam>
         /// <param name="condition">列挙するノードの条件</param>
-        /// <exception cref="ArgumentNullException"><paramref name="condition"/>がnull</exception>
-        public IEnumerable<T> EnumerateDescendants<T>(Func<T, bool> condition)
+        public IEnumerable<T> EnumerateDescendants<T>(Func<T, bool> condition = null)
             where T : Node
         {
-            if (condition == null) throw new ArgumentNullException(nameof(condition), "引数がnullです");
+            _IsEnumeratingChildren = true;
+
             foreach (var child in Children)
             {
                 foreach (var g in child.EnumerateDescendants(condition))
-                    if (condition.Invoke(g)) yield return g;
+                    yield return g;
 
-                if (child is T c && condition.Invoke(c))
+                if (child is T c && (condition?.Invoke(c) ?? true))
                     yield return c;
             }
+
+            _IsEnumeratingChildren = false;
         }
     }
 }
