@@ -12,7 +12,7 @@
 * [altseed/Altseed2](https://github.com/altseed/Altseed2): C++による内部実装（Core）
 * [altseed/CppBindingGenerator](https://github.com/altseed/CppBindingGenerator): エンジンからCoreを呼び出すためのバインディングコードを自動生成するツール
 * [altseed/Altseed2-csharp](https://github.com/altseed/Altseed2-csharp): C#エンジン
-- [altseed/Altseed2-document](https://github.com/altseed/Altseed2-document): ウェブサイト用ドキュメント
+* [altseed/Altseed2-document](https://github.com/altseed/Altseed2-document): ウェブサイト用ドキュメント
 
 ## Issue
 新しいissueは[Altseed2/issues](https://github.com/altseed/Altseed2/issues)に作成してください。
