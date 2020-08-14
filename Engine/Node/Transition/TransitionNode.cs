@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -45,6 +45,17 @@ namespace Altseed2
             base.Update();
         }
 
+        internal virtual void TransitionBegin() => OnTransitionBegin();
+
+        internal virtual void Closing(float progress) => OnClosing(progress);
+
+        internal virtual void NodeSwapping() => OnNodeSwapping();
+
+        internal virtual void NodeSwapped() => OnNodeSwapped();
+
+        internal virtual void Opening(float progress) => OnOpening(progress);
+
+        internal virtual void TransitionEnd() => OnTransitionEnd();
         /// <summary>
         /// ノードが入れ替わる前の処理を記述します。
         /// </summary>
@@ -83,18 +94,18 @@ namespace Altseed2
         private IEnumerator<int> GetCoroutine(float closingDuration, float openingDuration)
         {
             // トランジションの開始
-            OnTransitionBegin();
+            TransitionBegin();
             yield return 0;
 
             // ノードが入れ替わる前の処理
             for (float time = 0.0f; time < closingDuration; time += Engine.DeltaSecond)
             {
-                OnClosing(MathF.Min(1.0f, time / closingDuration));
+                Closing(MathF.Min(1.0f, time / closingDuration));
                 yield return 0;
             }
 
             // ノードが入れ替わる直前の処理
-            OnNodeSwapping();
+            NodeSwapping();
             yield return 0;
 
             // ノードの入れ替え
@@ -103,19 +114,19 @@ namespace Altseed2
             parentNode.AddChildNode(_NewNode);
 
             // ノードが入れ替わった直後の処理
-            OnNodeSwapped();
+            NodeSwapped();
             yield return 0;
 
             // ノードが入れ替わった後の処理
             for (float time = 0.0f; time < openingDuration; time += Engine.DeltaSecond)
             {
-                OnOpening(MathF.Min(1.0f, time / openingDuration));
+                Opening(MathF.Min(1.0f, time / openingDuration));
                 yield return 0;
             }
 
             // トランジションの終了
             Parent.RemoveChildNode(this);
-            OnTransitionEnd();
+            TransitionEnd();
         }
     }
 }
