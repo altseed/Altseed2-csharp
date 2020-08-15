@@ -45,17 +45,36 @@ namespace Altseed2
             base.Update();
         }
 
-        internal virtual void TransitionBegin() => OnTransitionBegin();
+        internal virtual void TransitionBegin()
+        {
+            OnTransitionBegin();
+        }
 
-        internal virtual void Closing(float progress) => OnClosing(progress);
+        internal virtual void Closing(float progress)
+        {
+            OnClosing(progress);
+        }
 
-        internal virtual void NodeSwapping() => OnNodeSwapping();
+        internal virtual void NodeSwapping()
+        {
+            OnNodeSwapping();
+        }
 
-        internal virtual void NodeSwapped() => OnNodeSwapped();
+        internal virtual void NodeSwapped()
+        {
+            OnNodeSwapped();
+        }
 
-        internal virtual void Opening(float progress) => OnOpening(progress);
+        internal virtual void Opening(float progress)
+        {
+            OnOpening(progress);
+        }
 
-        internal virtual void TransitionEnd() => OnTransitionEnd();
+        internal virtual void TransitionEnd()
+        {
+            OnTransitionEnd();
+        }
+
         /// <summary>
         /// ノードが入れ替わる前の処理を記述します。
         /// </summary>

@@ -19,10 +19,10 @@ namespace Altseed2.Test
             var t1 = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(t1);
 
-            var s = new SpriteNode();
-            s.Src = new RectF(new Vector2F(100, 100), new Vector2F(100, 100));
-            s.Texture = t1;
-            s.Position = new Vector2F(100, 100);
+            var s = new Altseed2.Node();
+            //s.Src = new RectF(new Vector2F(100, 100), new Vector2F(100, 100));
+            //s.Texture = t1;
+            //s.Position = new Vector2F(100, 100);
 
             var s2 = new SpriteNode();
             s2.Src = new RectF(new Vector2F(200, 200), new Vector2F(100, 100));

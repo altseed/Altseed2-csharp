@@ -90,7 +90,7 @@ namespace Altseed2.Test
             SpriteNode node = null;
 
 #if !CI
-            tc.Duration = 100000;
+            tc.Duration = 50000;
 #endif
 
             tc.LoopBody(c =>

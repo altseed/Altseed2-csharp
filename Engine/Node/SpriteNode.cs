@@ -94,16 +94,16 @@ namespace Altseed2
 
         internal override void Registered()
         {
-            Engine.CullingSystem.Register(_RenderedSprite);
             base.Registered();
             Engine.RegisterDrawn(this);
+            Engine.CullingSystem.Register(_RenderedSprite);
         }
 
         internal override void Unregistered()
         {
-            Engine.CullingSystem.Unregister(_RenderedSprite);
             base.Unregistered();
             Engine.UnregisterDrawn(this);
+            Engine.CullingSystem.Unregister(_RenderedSprite);
         }
 
         #endregion

@@ -70,7 +70,12 @@ namespace Altseed2
                 if (n is RootNode) break;
             }
             _Children.Update();
-            Registered();
+
+            if (!_IsRegistered)
+            {
+                _IsRegistered = true;
+                Registered();
+            }
         }
 
         /// <summary>
@@ -79,11 +84,12 @@ namespace Altseed2
         internal override void Removed()
         {
             _Children.Update();
+            _IsRegistered = false;
             Unregistered();
         }
 
         /// <summary>
-        /// エンジンに登録され、木を辿って<see cref="RootNode"/> にたどり着けるようになったとき実行します。
+        /// エンジンに登録され、ノードツリーを辿って<see cref="RootNode"/> にたどり着けるようになったとき実行します。
         /// </summary>
         internal virtual void Registered()
         {
@@ -97,7 +103,11 @@ namespace Altseed2
 
             foreach (var c in Children)
             {
-                c.Registered();
+                if (!c._IsRegistered)
+                {
+                    c._IsRegistered = true;
+                    c.Registered();
+                }
             }
 
             _IsEnumeratingChildren = false;
@@ -106,7 +116,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// エンジンから削除され、木を辿って<see cref="RootNode"/> にたどり着けなくなったとき実行します。
+        /// エンジンから削除され、ノードツリーを辿って<see cref="RootNode"/> にたどり着けなくなったとき実行します。
         /// </summary>
         internal virtual void Unregistered()
         {
@@ -282,6 +292,13 @@ namespace Altseed2
             serialization_Status = default;
         }
         #endregion
+
+        /// <summary>
+        /// エンジンに登録され、ノードツリーを辿って<see cref="RootNode"/> にたどり着けるかどうかを取得します。
+        /// </summary>
+        public bool IsRegistered => _IsRegistered;
+        [NonSerialized]
+        private bool _IsRegistered = false;
 
         /// <summary>
         /// 先祖ノードを列挙します。
