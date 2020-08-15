@@ -90,8 +90,8 @@ namespace Altseed2
 
             {
                 _Drawns[old].Remove(node);
-                
-                if(!_Drawns.TryGetValue(node.ZOrder, out var set))
+
+                if (!_Drawns.TryGetValue(node.ZOrder, out var set))
                     set = _Drawns[node.ZOrder] = new HashSet<IDrawn>();
 
                 set.Add(node);

@@ -150,16 +150,16 @@ namespace Altseed2
 
         internal override void Registered()
         {
-            Engine.CullingSystem.Register(_RenderedText);
             base.Registered();
             Engine.RegisterDrawn(this);
+            Engine.CullingSystem.Register(_RenderedText);
         }
 
         internal override void Unregistered()
         {
-            Engine.CullingSystem.Unregister(_RenderedText);
             base.Unregistered();
             Engine.UnregisterDrawn(this);
+            Engine.CullingSystem.Unregister(_RenderedText);
         }
 
         /// <inheritdoc/>
