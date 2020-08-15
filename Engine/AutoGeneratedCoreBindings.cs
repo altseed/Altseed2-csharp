@@ -2165,7 +2165,7 @@ namespace Altseed2
         /// <summary>
         /// 前のフレームからの経過時間(秒)を取得します。
         /// </summary>
-        public float DeltaSecond
+        internal float DeltaSecond
         {
             get
             {
@@ -2177,7 +2177,7 @@ namespace Altseed2
         /// <summary>
         /// 現在のFPSを取得します。
         /// </summary>
-        public float CurrentFPS
+        internal float CurrentFPS
         {
             get
             {
@@ -2189,7 +2189,7 @@ namespace Altseed2
         /// <summary>
         /// 目標のFPSを取得または設定します。
         /// </summary>
-        public float TargetFPS
+        internal float TargetFPS
         {
             get
             {
@@ -2211,7 +2211,7 @@ namespace Altseed2
         /// <summary>
         /// フレームレートモードを取得または設定します。デフォルトでは可変フレームレートです。
         /// </summary>
-        public FramerateMode FramerateMode
+        internal FramerateMode FramerateMode
         {
             get
             {
@@ -2408,7 +2408,7 @@ namespace Altseed2
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Int8Array_Clear(selfPtr);
         }
@@ -2422,7 +2422,7 @@ namespace Altseed2
             cbg_Int8Array_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_Int8Array_GetData(selfPtr);
             return ret;
@@ -2446,7 +2446,7 @@ namespace Altseed2
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public byte GetAt(int index)
+        internal byte GetAt(int index)
         {
             var ret = cbg_Int8Array_GetAt(selfPtr, index);
             return ret;
@@ -2457,7 +2457,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, byte value)
+        internal void SetAt(int index, byte value)
         {
             cbg_Int8Array_SetAt(selfPtr, index, value);
         }
@@ -2466,7 +2466,7 @@ namespace Altseed2
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static Int8Array Create(int size)
+        internal static Int8Array Create(int size)
         {
             var ret = cbg_Int8Array_Create(size);
             return Int8Array.TryGetFromCache(ret);
@@ -2699,7 +2699,7 @@ namespace Altseed2
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Int32Array_Clear(selfPtr);
         }
@@ -2713,7 +2713,7 @@ namespace Altseed2
             cbg_Int32Array_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_Int32Array_GetData(selfPtr);
             return ret;
@@ -2737,7 +2737,7 @@ namespace Altseed2
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public int GetAt(int index)
+        internal int GetAt(int index)
         {
             var ret = cbg_Int32Array_GetAt(selfPtr, index);
             return ret;
@@ -2748,7 +2748,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, int value)
+        internal void SetAt(int index, int value)
         {
             cbg_Int32Array_SetAt(selfPtr, index, value);
         }
@@ -2757,7 +2757,7 @@ namespace Altseed2
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static Int32Array Create(int size)
+        internal static Int32Array Create(int size)
         {
             var ret = cbg_Int32Array_Create(size);
             return Int32Array.TryGetFromCache(ret);
@@ -2990,7 +2990,7 @@ namespace Altseed2
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_VertexArray_Clear(selfPtr);
         }
@@ -3004,7 +3004,7 @@ namespace Altseed2
             cbg_VertexArray_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_VertexArray_GetData(selfPtr);
             return ret;
@@ -3028,7 +3028,7 @@ namespace Altseed2
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public Vertex GetAt(int index)
+        internal Vertex GetAt(int index)
         {
             var ret = cbg_VertexArray_GetAt(selfPtr, index);
             return ret;
@@ -3039,7 +3039,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, Vertex value)
+        internal void SetAt(int index, Vertex value)
         {
             cbg_VertexArray_SetAt(selfPtr, index, value);
         }
@@ -3048,7 +3048,7 @@ namespace Altseed2
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static VertexArray Create(int size)
+        internal static VertexArray Create(int size)
         {
             var ret = cbg_VertexArray_Create(size);
             return VertexArray.TryGetFromCache(ret);
@@ -3281,7 +3281,7 @@ namespace Altseed2
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_FloatArray_Clear(selfPtr);
         }
@@ -3295,7 +3295,7 @@ namespace Altseed2
             cbg_FloatArray_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_FloatArray_GetData(selfPtr);
             return ret;
@@ -3319,7 +3319,7 @@ namespace Altseed2
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public float GetAt(int index)
+        internal float GetAt(int index)
         {
             var ret = cbg_FloatArray_GetAt(selfPtr, index);
             return ret;
@@ -3330,7 +3330,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, float value)
+        internal void SetAt(int index, float value)
         {
             cbg_FloatArray_SetAt(selfPtr, index, value);
         }
@@ -3339,7 +3339,7 @@ namespace Altseed2
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static FloatArray Create(int size)
+        internal static FloatArray Create(int size)
         {
             var ret = cbg_FloatArray_Create(size);
             return FloatArray.TryGetFromCache(ret);
@@ -3572,7 +3572,7 @@ namespace Altseed2
         /// <summary>
         /// データをクリアします。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Vector2FArray_Clear(selfPtr);
         }
@@ -3586,7 +3586,7 @@ namespace Altseed2
             cbg_Vector2FArray_Resize(selfPtr, size);
         }
         
-        public IntPtr GetData()
+        internal IntPtr GetData()
         {
             var ret = cbg_Vector2FArray_GetData(selfPtr);
             return ret;
@@ -3610,7 +3610,7 @@ namespace Altseed2
         /// インデックスアクセス
         /// </summary>
         /// <param name="index">インデックス</param>
-        public Vector2F GetAt(int index)
+        internal Vector2F GetAt(int index)
         {
             var ret = cbg_Vector2FArray_GetAt(selfPtr, index);
             return ret;
@@ -3621,7 +3621,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="index">インデックス</param>
         /// <param name="value">値</param>
-        public void SetAt(int index, Vector2F value)
+        internal void SetAt(int index, Vector2F value)
         {
             cbg_Vector2FArray_SetAt(selfPtr, index, value);
         }
@@ -3630,7 +3630,7 @@ namespace Altseed2
         /// インスタンスを作成します。
         /// </summary>
         /// <param name="size">要素数</param>
-        public static Vector2FArray Create(int size)
+        internal static Vector2FArray Create(int size)
         {
             var ret = cbg_Vector2FArray_Create(size);
             return Vector2FArray.TryGetFromCache(ret);
@@ -3841,7 +3841,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="type">個数を検索するリソースの種類</param>
         /// <returns>指定した種類のリソースの個数</returns>
-        public int GetResourcesCount(ResourceType type)
+        internal int GetResourcesCount(ResourceType type)
         {
             var ret = cbg_Resources_GetResourcesCount(selfPtr, (int)type);
             return ret;
@@ -3850,7 +3850,7 @@ namespace Altseed2
         /// <summary>
         /// 登録されたリソースをすべて削除します。
         /// </summary>
-        public void Clear()
+        internal void Clear()
         {
             cbg_Resources_Clear(selfPtr);
         }
@@ -3858,7 +3858,7 @@ namespace Altseed2
         /// <summary>
         /// リソースの再読み込みを行います。
         /// </summary>
-        public void Reload()
+        internal void Reload()
         {
             cbg_Resources_Reload(selfPtr);
         }
@@ -5930,7 +5930,7 @@ namespace Altseed2
         /// <summary>
         /// コマンドリストを描画します。
         /// </summary>
-        public void Render()
+        internal void Render()
         {
             cbg_Renderer_Render(selfPtr);
         }
@@ -5947,7 +5947,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するカメラの設定をリセットします。
         /// </summary>
-        public void ResetCamera()
+        internal void ResetCamera()
         {
             cbg_Renderer_ResetCamera(selfPtr);
         }
@@ -6202,7 +6202,7 @@ namespace Altseed2
         /// <summary>
         /// 変換行列を取得または設定します。
         /// </summary>
-        public Matrix44F Transform
+        internal Matrix44F Transform
         {
             get
             {
@@ -6224,7 +6224,7 @@ namespace Altseed2
         /// <summary>
         /// BaseObjectのIdを取得します。
         /// </summary>
-        public int Id
+        internal int Id
         {
             get
             {
@@ -6445,7 +6445,7 @@ namespace Altseed2
         /// <summary>
         /// テクスチャを取得または設定します。
         /// </summary>
-        public TextureBase Texture
+        internal TextureBase Texture
         {
             get
             {
@@ -6467,7 +6467,7 @@ namespace Altseed2
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
-        public RectF Src
+        internal RectF Src
         {
             get
             {
@@ -6489,7 +6489,7 @@ namespace Altseed2
         /// <summary>
         /// マテリアルを取得または設定します。
         /// </summary>
-        public Material Material
+        internal Material Material
         {
             get
             {
@@ -6511,7 +6511,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
-        public Color Color
+        internal Color Color
         {
             get
             {
@@ -6533,7 +6533,7 @@ namespace Altseed2
         /// <summary>
         /// 描画時のアルファブレンドを取得または設定します。
         /// </summary>
-        public AlphaBlend AlphaBlend
+        internal AlphaBlend AlphaBlend
         {
             get
             {
@@ -6555,7 +6555,7 @@ namespace Altseed2
         /// <summary>
         /// スプライトを作成します。
         /// </summary>
-        public static RenderedSprite Create()
+        internal static RenderedSprite Create()
         {
             var ret = cbg_RenderedSprite_Create();
             return RenderedSprite.TryGetFromCache(ret);
@@ -6844,7 +6844,7 @@ namespace Altseed2
         /// <summary>
         /// 文字の描画に使用するマテリアルを取得または設定します。
         /// </summary>
-        public Material MaterialGlyph
+        internal Material MaterialGlyph
         {
             get
             {
@@ -6866,7 +6866,7 @@ namespace Altseed2
         /// <summary>
         /// テクスチャ文字の描画に使用するマテリアルを取得または設定します。
         /// </summary>
-        public Material MaterialImage
+        internal Material MaterialImage
         {
             get
             {
@@ -6888,7 +6888,7 @@ namespace Altseed2
         /// <summary>
         /// テキストを取得または設定します。
         /// </summary>
-        public string Text
+        internal string Text
         {
             get
             {
@@ -6910,7 +6910,7 @@ namespace Altseed2
         /// <summary>
         /// フォントを取得または設定します。
         /// </summary>
-        public Font Font
+        internal Font Font
         {
             get
             {
@@ -6932,7 +6932,7 @@ namespace Altseed2
         /// <summary>
         /// 文字の太さを取得または設定します。(0 ~ 255)
         /// </summary>
-        public float Weight
+        internal float Weight
         {
             get
             {
@@ -6954,7 +6954,7 @@ namespace Altseed2
         /// <summary>
         /// カーニングの有無を取得または設定します。
         /// </summary>
-        public bool IsEnableKerning
+        internal bool IsEnableKerning
         {
             get
             {
@@ -6976,7 +6976,7 @@ namespace Altseed2
         /// <summary>
         /// 行の方向を取得または設定します。
         /// </summary>
-        public WritingDirection WritingDirection
+        internal WritingDirection WritingDirection
         {
             get
             {
@@ -6998,7 +6998,7 @@ namespace Altseed2
         /// <summary>
         /// 字間をピクセル単位で取得または設定します。
         /// </summary>
-        public float CharacterSpace
+        internal float CharacterSpace
         {
             get
             {
@@ -7020,7 +7020,7 @@ namespace Altseed2
         /// <summary>
         /// 行間をピクセル単位で取得または設定します。
         /// </summary>
-        public float LineGap
+        internal float LineGap
         {
             get
             {
@@ -7042,7 +7042,7 @@ namespace Altseed2
         /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
-        public Vector2F TextureSize
+        internal Vector2F TextureSize
         {
             get
             {
@@ -7054,7 +7054,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
-        public Color Color
+        internal Color Color
         {
             get
             {
@@ -7076,7 +7076,7 @@ namespace Altseed2
         /// <summary>
         /// 描画時のアルファブレンドを取得または設定します。
         /// </summary>
-        public AlphaBlend AlphaBlend
+        internal AlphaBlend AlphaBlend
         {
             get
             {
@@ -7098,7 +7098,7 @@ namespace Altseed2
         /// <summary>
         /// テキストを作成します。
         /// </summary>
-        public static RenderedText Create()
+        internal static RenderedText Create()
         {
             var ret = cbg_RenderedText_Create();
             return RenderedText.TryGetFromCache(ret);
@@ -7365,7 +7365,7 @@ namespace Altseed2
         /// <summary>
         /// 頂点情報を取得または設定します。
         /// </summary>
-        public VertexArray Vertexes
+        internal VertexArray Vertexes
         {
             get
             {
@@ -7387,7 +7387,7 @@ namespace Altseed2
         /// <summary>
         /// テクスチャを取得または設定します。
         /// </summary>
-        public TextureBase Texture
+        internal TextureBase Texture
         {
             get
             {
@@ -7409,7 +7409,7 @@ namespace Altseed2
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
-        public RectF Src
+        internal RectF Src
         {
             get
             {
@@ -7431,7 +7431,7 @@ namespace Altseed2
         /// <summary>
         /// マテリアルを取得または設定します。
         /// </summary>
-        public Material Material
+        internal Material Material
         {
             get
             {
@@ -7453,7 +7453,7 @@ namespace Altseed2
         /// <summary>
         /// 描画時のアルファブレンドを取得または設定します。
         /// </summary>
-        public AlphaBlend AlphaBlend
+        internal AlphaBlend AlphaBlend
         {
             get
             {
@@ -7475,7 +7475,7 @@ namespace Altseed2
         /// <summary>
         /// ポリゴンを作成します。
         /// </summary>
-        public static RenderedPolygon Create()
+        internal static RenderedPolygon Create()
         {
             var ret = cbg_RenderedPolygon_Create();
             return RenderedPolygon.TryGetFromCache(ret);
@@ -7484,7 +7484,7 @@ namespace Altseed2
         /// <summary>
         /// 頂点情報
         /// </summary>
-        public void CreateVertexesByVector2F(Vector2FArray vertexes)
+        internal void CreateVertexesByVector2F(Vector2FArray vertexes)
         {
             cbg_RenderedPolygon_CreateVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
         }
@@ -7734,7 +7734,7 @@ namespace Altseed2
         /// <summary>
         /// TargetTextureを取得または設定します。
         /// </summary>
-        public RenderTexture TargetTexture
+        internal RenderTexture TargetTexture
         {
             get
             {
@@ -7756,7 +7756,7 @@ namespace Altseed2
         /// <summary>
         /// RenderPassParameterを取得または設定します。
         /// </summary>
-        public RenderPassParameter RenderPassParameter
+        internal RenderPassParameter RenderPassParameter
         {
             get
             {
@@ -7778,7 +7778,7 @@ namespace Altseed2
         /// <summary>
         /// RenderedCameraを作成します。
         /// </summary>
-        public static RenderedCamera Create()
+        internal static RenderedCamera Create()
         {
             var ret = cbg_RenderedCamera_Create();
             return RenderedCamera.TryGetFromCache(ret);
@@ -8149,7 +8149,7 @@ namespace Altseed2
         /// <summary>
         /// コンパイルに失敗した場合はnull
         /// </summary>
-        public Shader Value
+        internal Shader Value
         {
             get
             {
@@ -8161,7 +8161,7 @@ namespace Altseed2
         /// <summary>
         /// コンパイル結果のメッセージ
         /// </summary>
-        public string Message
+        internal string Message
         {
             get
             {
@@ -9169,7 +9169,7 @@ namespace Altseed2
         /// <summary>
         /// 描画されているRenderedの個数を取得します。
         /// </summary>
-        public int DrawingRenderedCount
+        internal int DrawingRenderedCount
         {
             get
             {
@@ -9181,7 +9181,7 @@ namespace Altseed2
         /// <summary>
         /// 描画されているRenderedのIdの配列を取得します。
         /// </summary>
-        public Int32Array DrawingRenderedIds
+        internal Int32Array DrawingRenderedIds
         {
             get
             {
@@ -14248,7 +14248,7 @@ namespace Altseed2
         /// ウィンドウに表示するタイトルを取得または設定します
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        public string Title
+        internal string Title
         {
             get
             {
@@ -14270,7 +14270,7 @@ namespace Altseed2
         /// <summary>
         /// ウィンドウサイズを取得します
         /// </summary>
-        public Vector2I Size
+        internal Vector2I Size
         {
             get
             {
