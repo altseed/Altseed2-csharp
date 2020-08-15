@@ -143,9 +143,9 @@ namespace Altseed2
         /// <summary>
         /// 子要素のコレクションを取得します。
         /// </summary>
-        public ReadOnlyCollection<Node> Children => _readonlyChildren ??= _Children.AsReadOnly();
+        public IReadOnlyList<Node> Children => _readonlyChildren ??= _Children.AsReadOnly();
         [NonSerialized]
-        private ReadOnlyCollection<Node> _readonlyChildren;
+        private IReadOnlyList<Node> _readonlyChildren;
 
         /// <summary>
         /// 子要素を追加します。

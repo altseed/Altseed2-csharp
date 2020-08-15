@@ -134,9 +134,9 @@ namespace Altseed2
         /// <summary>
         /// 現在の要素の読み取り専用なコレクションを返します。
         /// </summary>
-        internal ReadOnlyCollection<T> AsReadOnly()
+        internal IReadOnlyList<T> AsReadOnly()
         {
-            return new ReadOnlyCollection<T>(CurrentCollection);
+            return CurrentCollection;
         }
 
         /// <summary>
