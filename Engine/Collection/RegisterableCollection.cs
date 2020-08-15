@@ -11,7 +11,7 @@ namespace Altseed2
     internal class RegisterableCollection<T>
         where T : Registerable<T>
     {
-        private readonly List<T> CurrentCollection = new List<T>();
+        internal readonly List<T> CurrentCollection = new List<T>();
         private readonly Queue<T> AddQueue = new Queue<T>();
         private readonly Queue<T> RemoveQueue = new Queue<T>();
 

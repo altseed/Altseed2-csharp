@@ -35,7 +35,7 @@ namespace Altseed2
 
         internal static IEnumerable<ColliderNode> EnumerateColliderNodes(Node node)
         {
-            foreach (var current in node.Children)
+            foreach (var current in node._Children.CurrentCollection)
                 if (current is ColliderNode n)
                     yield return n;
         }
@@ -52,7 +52,7 @@ namespace Altseed2
 
         internal override void Added(Node owner)
         {
-            foreach (var child in owner.Children)
+            foreach (var child in owner._Children.CurrentCollection)
             {
                 if (child != this && child is CollisionManagerNode) throw new InvalidOperationException("既に衝突判定マネージャが格納されており，追加する事が出来ません");
                 foreach (var node in EnumerateColliderNodes(child))
@@ -63,7 +63,7 @@ namespace Altseed2
 
         internal override void Removed()
         {
-            foreach (var child in Parent.Children)
+            foreach (var child in Parent._Children.CurrentCollection)
                 foreach (var node in EnumerateColliderNodes(child))
                     RemoveCollider(node);
             base.Removed();

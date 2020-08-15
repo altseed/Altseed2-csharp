@@ -26,7 +26,7 @@ namespace Altseed2
         private static CollisionManagerNode SearchManagerFromChildren(Node node)
         {
             if (node == null) return null;
-            foreach (var current in node.Children)
+            foreach (var current in node._Children.CurrentCollection)
                 if (current is CollisionManagerNode m)
                     return m;
             return null;

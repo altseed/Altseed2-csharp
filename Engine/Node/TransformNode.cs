@@ -304,7 +304,7 @@ namespace Altseed2
 
         private void ApplySizeChanged()
         {
-            foreach (var child in Children)
+            foreach (var child in _Children.CurrentCollection)
             {
                 ApplySizeChanged(child);
             }
@@ -329,7 +329,7 @@ namespace Altseed2
             }
             else
             {
-                foreach (var child in node.Children)
+                foreach (var child in node._Children.CurrentCollection)
                 {
                     ApplySizeChanged(child);
                 }
@@ -428,7 +428,7 @@ namespace Altseed2
                 s.InheritedTransform = matrix;
             }
 
-            foreach (var child in node.Children)
+            foreach (var child in node._Children.CurrentCollection)
             {
                 PropagateTransform(child, matrix);
             }

@@ -29,7 +29,7 @@ namespace Altseed2
             _IsEnumeratingChildren = true;
 
             _Children.Update();
-            foreach (var c in Children)
+            foreach (var c in _Children.CurrentCollection)
             {
                 c.Update();
             }
@@ -101,7 +101,7 @@ namespace Altseed2
 
             _IsEnumeratingChildren = true;
 
-            foreach (var c in Children)
+            foreach (var c in _Children.CurrentCollection)
             {
                 if (!c._IsRegistered)
                 {
@@ -122,7 +122,7 @@ namespace Altseed2
         {
             _IsEnumeratingChildren = true;
 
-            foreach (var c in Children)
+            foreach (var c in _Children.CurrentCollection)
             {
                 c.Unregistered();
             }
@@ -332,7 +332,7 @@ namespace Altseed2
         {
             _IsEnumeratingChildren = true;
 
-            foreach (var c in Children)
+            foreach (var c in _Children.CurrentCollection)
             {
                 yield return c;
                 foreach (var g in c.EnumerateDescendants())
@@ -352,7 +352,7 @@ namespace Altseed2
         {
             _IsEnumeratingChildren = true;
 
-            foreach (var child in Children)
+            foreach (var child in _Children.CurrentCollection)
             {
                 foreach (var g in child.EnumerateDescendants(condition))
                     yield return g;

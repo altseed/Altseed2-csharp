@@ -32,7 +32,7 @@ namespace Altseed2
         {
             node.IsDrawnActually = node.IsDrawn && (node.GetAncestorSpecificNode<T>()?.IsDrawnActually ?? true);
 
-            foreach (var child in node.Children)
+            foreach (var child in node._Children.CurrentCollection)
             {
                 if (child is T d)
                     d.UpdateIsDrawnActuallyOfDescendants();
