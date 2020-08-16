@@ -7,10 +7,8 @@ namespace Altseed2
     /// <summary>
     /// Altseed2における<see cref="SynchronizationContext"/>
     /// </summary>
-    [Serializable]
     internal class AltseedContext : SynchronizationContext
     {
-        [Serializable]
         private readonly struct Entry
         {
             private readonly SendOrPostCallback d;
