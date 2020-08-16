@@ -22,12 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\Core\TestData\**\*.*" LinkBase="TestData">
+    <Content Include="..\Core\TestData\**\*.*" LinkBase="TestData" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Core\TestData\Font\mplus-1m-regular.ttf">
+    <Content Include="..\Core\TestData\Font\mplus-1m-regular.ttf" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
