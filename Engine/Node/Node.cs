@@ -84,8 +84,11 @@ namespace Altseed2
         internal override void Removed()
         {
             _Children.Update();
-            _IsRegistered = false;
-            Unregistered();
+            if (_IsRegistered)
+            {
+                _IsRegistered = false;
+                Unregistered();
+            }
         }
 
         /// <summary>
@@ -124,7 +127,11 @@ namespace Altseed2
 
             foreach (var c in Children)
             {
-                c.Unregistered();
+                if (c.IsRegistered)
+                {
+                    c._IsRegistered = false;
+                    c.Unregistered();
+                }
             }
 
             _IsEnumeratingChildren = false;
