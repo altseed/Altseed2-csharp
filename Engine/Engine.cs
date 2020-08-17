@@ -245,7 +245,7 @@ namespace Altseed2
             // RootNode直下のNodeをEngineからRemove(CullingSystemから削除するため)
             _RootNode._Children.Clear();
 
-
+            _PostEffectBuffer = null;
             _RenderTextureCache = null;
             PostEffectNode.TerminateCache();
             Core.Terminate();
