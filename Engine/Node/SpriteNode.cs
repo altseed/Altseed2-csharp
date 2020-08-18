@@ -20,6 +20,8 @@ namespace Altseed2
 
         #region IDrawn
 
+        Rendered ICullableDrawn.Rendered => _RenderedSprite;
+
         void IDrawn.Draw()
         {
             Engine.Renderer.DrawSprite(_RenderedSprite);

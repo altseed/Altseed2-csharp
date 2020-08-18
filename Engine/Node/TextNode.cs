@@ -2,62 +2,6 @@
 
 namespace Altseed2
 {
-    /*
-    /// <summary>
-    /// 水平方向の配置
-    /// </summary>
-    [Serializable]
-    public enum HorizontalAlignment
-    {
-        /// <summary>
-        /// 左揃え
-        /// </summary>
-        Left,
-
-        /// <summary>
-        /// 中央揃え
-        /// </summary>
-        Center,
-
-        /// <summary>
-        /// 右揃え
-        /// </summary>
-        Right,
-
-        /// <summary>
-        /// 手動
-        /// </summary>
-        Manual,
-    }
-
-    /// <summary>
-    /// 垂直方向の配置
-    /// </summary>
-    [Serializable]
-    public enum VerticalAlignment
-    {
-        /// <summary>
-        /// 上揃え
-        /// </summary>
-        Top,
-
-        /// <summary>
-        /// 中央揃え
-        /// </summary>
-        Center,
-
-        /// <summary>
-        /// 下揃え
-        /// </summary>
-        Bottom,
-
-        /// <summary>
-        /// 手動
-        /// </summary>
-        Manual,
-    }
-    */
-
     /// <summary>
     /// テキストを描画するノードのクラス
     /// </summary>
@@ -75,6 +19,8 @@ namespace Altseed2
         }
 
         #region IDrawn
+
+        Rendered ICullableDrawn.Rendered => _RenderedText;
 
         void IDrawn.Draw()
         {
@@ -338,87 +284,10 @@ namespace Altseed2
             }
         }
 
-        /*
-        /// <summary>
-        /// 水平方向の配置
-        /// </summary>
-        public HorizontalAlignment HorizontalAlignment
-        {
-            get => _HorizontalAlignment;
-            set
-            {
-                if (value == _HorizontalAlignment) return;
-
-                _HorizontalAlignment = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private HorizontalAlignment _HorizontalAlignment = HorizontalAlignment.Left;
-
-        /// <summary>
-        /// 垂直方向の配置
-        /// </summary>
-        public VerticalAlignment VerticalAlignment
-        {
-            get => _VerticalAlignment;
-            set
-            {
-                if (value == _VerticalAlignment)
-                    return;
-
-                _VerticalAlignment = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private VerticalAlignment _VerticalAlignment = VerticalAlignment.Top;
-        */
-
         #endregion
 
         /// <inheritdoc/>
         public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
-
-        /*
-        internal void CalcCenterPosition()
-        {
-            var centerPosition = CenterPosition;
-            switch (HorizontalAlignment)
-            {
-                case HorizontalAlignment.Left:
-                    centerPosition.X = 0;
-                    break;
-                case HorizontalAlignment.Center:
-                    centerPosition.X = (ContentSize.X - _RenderedText.TextureSize.X) / 2f;
-                    break;
-                case HorizontalAlignment.Right:
-                    centerPosition.X = ContentSize.X - _RenderedText.TextureSize.X;
-                    break;
-                default:
-                    break;
-            }
-
-            switch (VerticalAlignment)
-            {
-                case VerticalAlignment.Top:
-                    centerPosition.Y = 0;
-                    break;
-                case VerticalAlignment.Center:
-                    centerPosition.Y = (ContentSize.Y - _RenderedText.TextureSize.Y) / 2f;
-                    break;
-                case VerticalAlignment.Bottom:
-                    centerPosition.Y = ContentSize.Y - _RenderedText.TextureSize.Y;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private protected override void CalcTransform()
-        {
-            CalcCenterPosition();
-            base.CalcTransform();
-        }
-        */
 
         /// <inheritdoc/>
         public override Matrix44F AbsoluteTransform => _RenderedText.Transform;

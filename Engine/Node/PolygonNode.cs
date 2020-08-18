@@ -24,6 +24,8 @@ namespace Altseed2
 
         #region IDrawn
 
+        Rendered ICullableDrawn.Rendered => _RenderedPolygon;
+
         void IDrawn.Draw()
         {
             if (_IsValid) Engine.Renderer.DrawPolygon(_RenderedPolygon);
