@@ -19,10 +19,11 @@ namespace Altseed2
 
         internal Matrix44F Transform
         {
-            get => _Transform;
+            get => Transfomer?.Transform ?? _Transform;
             set
             {
-                _Transform = value;
+                if (Transfomer == null)
+                    _Transform = value;
             }
         }
         [NonSerialized]
@@ -35,18 +36,35 @@ namespace Altseed2
         /// </summary>
         public virtual Matrix44F InheritedTransform
         {
-            get => _InheritedTransform;
-            internal set
+            get => Transfomer?.InheritedTransform ?? _InheritedTransform;
+            protected internal set
             {
-                _InheritedTransform = value;
+                // 継承先も必ずbase.InheritedTransform = valueするように
+                if (Transfomer == null)
+                {
+                    _InheritedTransform = value;
+                    _AbsoluteTransform = value;
+                }
+                else
+                    Transfomer.InheritedTransform = value;
             }
         }
-        private protected Matrix44F _InheritedTransform = Matrix44F.Identity;
+        private Matrix44F _InheritedTransform = Matrix44F.Identity;
 
         /// <summary>
         /// 先祖の変形および<see cref="CenterPosition"/>を加味した最終的な変形行列を取得します。
         /// </summary>
-        public virtual Matrix44F AbsoluteTransform => InheritedTransform;
+        public Matrix44F AbsoluteTransform
+        {
+            get => Transfomer?.AbsoluteTransform ?? _AbsoluteTransform;
+            set
+            {
+                _AbsoluteTransform = value;
+            }
+        }
+        private Matrix44F _AbsoluteTransform = Matrix44F.Identity;
+
+        internal TransformerNode Transfomer { get; set; }
 
         /// <summary>
         /// 角度(度数法)を取得または設定します。
@@ -67,7 +85,7 @@ namespace Altseed2
         /// <summary>
         /// 座標を取得または設定します。
         /// </summary>
-        public virtual Vector2F Position
+        public Vector2F Position
         {
             get => _Position;
             set
@@ -78,12 +96,12 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        private protected Vector2F _Position = new Vector2F();
+        private Vector2F _Position = new Vector2F();
 
         /// <summary>
         /// 中心となる座標をピクセル単位で取得または設定します。
         /// </summary>
-        public virtual Vector2F CenterPosition
+        public Vector2F CenterPosition
         {
             get => _CenterPosition;
             set
@@ -110,7 +128,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        private protected Vector2F _Scale = new Vector2F(1.0f, 1.0f);
+        private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
         /// コンテンツのサイズを取得します。
@@ -157,7 +175,7 @@ namespace Altseed2
 
         internal override void Update()
         {
-            if (_RequireCalcTransform)
+            if (_RequireCalcTransform || (Transfomer?.RequireCalcTransform ?? false))
                 UpdateTransform();
 
             base.Update();
@@ -170,7 +188,8 @@ namespace Altseed2
         /// </summary>
         private void UpdateTransform()
         {
-            CalcTransform();
+            if (Transfomer == null)
+                CalcTransform();
 
             var ancestor = GetAncestorSpecificNode<TransformNode>();
             PropagateTransform(this, ancestor?.InheritedTransform ?? Matrix44F.Identity);

@@ -46,11 +46,6 @@ namespace Altseed2
         /// 右揃え
         /// </summary>
         Right,
-
-        /// <summary>
-        /// 手動
-        /// </summary>
-        Manual,
     }
 
     /// <summary>
@@ -73,11 +68,6 @@ namespace Altseed2
         /// 下揃え
         /// </summary>
         Bottom,
-
-        /// <summary>
-        /// 手動
-        /// </summary>
-        Manual,
     }
 
 
@@ -85,29 +75,66 @@ namespace Altseed2
     /// アンカーによって変形するノードのクラス
     /// </summary>
     [Serializable]
-    public class AnchorTransformNode : TransformNode, IAnchorTransformInternal
+    public class AnchorTransformerNode : TransformerNode
     {
+        /// <inheritdoc/>
+        public override Matrix44F Transform
+        {
+            get
+            {
+                if (!RequireCalcTransform)
+                    return _Transform;
+
+                var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
+                var offset
+                    = ((Parent?.GetAncestorSpecificNode<TransformNode>()?.Transfomer as AnchorTransformerNode)?.Size ?? default) * AnchorMin;
+
+                _Transform = Matrix44F.GetTranslation2D(offset) * MathHelper.CalcTransform(Position, MathHelper.DegreeToRadian(Angle), scale) * Matrix44F.GetTranslation2D(-CenterPosition);
+                RequireCalcTransform = false;
+
+                return _Transform;
+            }
+        }
+        private Matrix44F _Transform = Matrix44F.Identity;
+
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
         public override Matrix44F InheritedTransform
         {
             get => _InheritedTransform;
-            internal set
+            set
             {
                 _InheritedTransform = value;
             }
         }
+        private Matrix44F _InheritedTransform = Matrix44F.Identity;
 
         /// <summary>
         /// 先祖の変形および<see cref="AnchorMode"/>を加味した最終的な変形行列を取得します。
         /// </summary>
-        public override Matrix44F AbsoluteTransform => _InheritedTransform;
+        public override Matrix44F AbsoluteTransform => InheritedTransform * CalcInternalTransform();
+
+        /// <summary>
+        /// 角度(度数法)を取得または設定します。
+        /// </summary>
+        public float Angle
+        {
+            get => _Angle;
+            set
+            {
+                if (_Angle == value) return;
+
+                _Angle = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private float _Angle = 0.0f;
 
         /// <summary>
         /// 座標を取得または設定します。
         /// </summary>
-        public override Vector2F Position
+        public Vector2F Position
         {
             get => _Position;
             set
@@ -115,24 +142,23 @@ namespace Altseed2
                 if (_Position == value) return;
 
                 _Position = value;
-                _RequireCalcTransform = true;
+                RequireCalcTransform = true;
 
                 UpdateMargin();
             }
         }
+        private Vector2F _Position = new Vector2F();
 
-        void IAnchorTransformInternal.SetPositionDirectly(Vector2F position)
+        private void SetPositionDirectly(Vector2F position)
         {
-            if (_Position == position) return;
-
             _Position = position;
-            _RequireCalcTransform = true;
+            RequireCalcTransform = true;
         }
 
         /// <summary>
         /// 中心となる座標をピクセル単位で取得または設定します。
         /// </summary>
-        public override Vector2F CenterPosition
+        public Vector2F CenterPosition
         {
             get => Pivot * Size;
             set
@@ -160,7 +186,7 @@ namespace Altseed2
                 if (_Pivot == value) return;
 
                 _Pivot = value;
-                _RequireCalcTransform = true;
+                RequireCalcTransform = true;
             }
         }
         private Vector2F _Pivot;
@@ -176,7 +202,7 @@ namespace Altseed2
                 if (value == _Size) return;
 
                 _Size = value;
-                _RequireCalcTransform = true;
+                RequireCalcTransform = true;
 
                 UpdateMargin();
                 ApplySizeChanged();
@@ -184,12 +210,10 @@ namespace Altseed2
         }
         private Vector2F _Size = new Vector2F(1f, 1f);
 
-        void IAnchorTransformInternal.SetSizeDirectly(Vector2F size)
+        private void SetSizeDirectly(Vector2F size)
         {
-            if (size == _Size) return;
-
             _Size = size;
-            _RequireCalcTransform = true;
+            RequireCalcTransform = true;
         }
 
         /// <summary>
@@ -241,7 +265,7 @@ namespace Altseed2
                 if (_AnchorMin.Y > _AnchorMax.Y) _AnchorMax.Y = _AnchorMin.Y;
 
                 UpdateMargin();
-                _RequireCalcTransform = true;
+                RequireCalcTransform = true;
             }
         }
         private Vector2F _AnchorMin = new Vector2F(0f, 0f);
@@ -263,48 +287,132 @@ namespace Altseed2
                 if (_AnchorMax.Y < _AnchorMin.Y) _AnchorMin.Y = _AnchorMax.Y;
 
                 UpdateMargin();
-                _RequireCalcTransform = true;
+                RequireCalcTransform = true;
             }
         }
         private Vector2F _AnchorMax = new Vector2F(1f, 1f);
 
         /// <summary>
-        /// レイアウト自動計算の方法を指定します。
+        /// 拡大率を取得または設定します。
         /// </summary>
-        public virtual AnchorMode AnchorMode { get; set; }
+        public Vector2F Scale
+        {
+            get => _Scale;
+            set
+            {
+                if (value == _Scale) return;
+
+                _Scale = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
+
+        /// <summary>
+        /// 左右を反転するかどうかを取得または設定します。
+        /// </summary>
+        public bool HorizontalFlip
+        {
+            get => _HorizontalFlip;
+            set
+            {
+                if (value == _HorizontalFlip) return;
+
+                _HorizontalFlip = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private bool _HorizontalFlip = false;
+
+        /// <summary>
+        /// 上下を反転するかどうかを取得または設定します。
+        /// </summary>
+        public bool VerticalFlip
+        {
+            get => _VerticalFlip;
+            set
+            {
+                if (value == _VerticalFlip) return;
+
+                _VerticalFlip = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private bool _VerticalFlip = false;
+
+        /// <summary>
+        /// サイズとコンテンツの関係を取得または設定します。
+        /// </summary>
+        public AnchorMode AnchorMode
+        {
+            get => _AnchorMode;
+            set
+            {
+                if (_AnchorMode == value) return;
+
+                _AnchorMode = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private AnchorMode _AnchorMode = AnchorMode.ContentSize;
 
         /// <summary>
         /// 水平方向の配置
         /// </summary>
-        public virtual HorizontalAlignment HorizontalAlignment { get; set; }
+        public HorizontalAlignment HorizontalAlignment
+        {
+            get => _HorizontalAlignment;
+            set
+            {
+                if (value == _HorizontalAlignment) return;
+
+                _HorizontalAlignment = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private HorizontalAlignment _HorizontalAlignment = HorizontalAlignment.Left;
 
         /// <summary>
         /// 垂直方向の配置
         /// </summary>
-        public virtual VerticalAlignment VerticalAlignment { get; set; }
-
-        private protected void ApplySizeChanged()
+        public VerticalAlignment VerticalAlignment
         {
-            foreach (var child in Children)
+            get => _VerticalAlignment;
+            set
+            {
+                if (value == _VerticalAlignment)
+                    return;
+
+                _VerticalAlignment = value;
+                RequireCalcTransform = true;
+            }
+        }
+        private VerticalAlignment _VerticalAlignment = VerticalAlignment.Top;
+
+        private void ApplySizeChanged()
+        {
+            if (Status == RegisteredStatus.Free) return;
+
+            foreach (var child in Parent.Children)
             {
                 ApplySizeChanged(child);
             }
         }
 
         /// <summary>
-        /// <see cref="Size"/>変更時に、直下の<see cref="AnchorTransformNode{T}"/>に対して
+        /// <see cref="Size"/>変更時に、直下の<see cref="AnchorTransformerNode"/>を持つ<see cref="TransformNode"/>に対して
         /// <see cref="LeftTop"/>/<see cref="RightBottom"/>/<see cref="AnchorMax"/>/<see cref="AnchorMin"/>を用いて
         /// <see cref="Size"/>/<see cref="Position"/>を更新します。
         /// </summary>
         private void ApplySizeChanged(Node node)
         {
-            if (node is IAnchorTransformInternal t)
+            if (node is TransformNode t && t.Transfomer is AnchorTransformerNode transformer)
             {
-                var anchorTransform = node.GetAncestorSpecificNode<IAnchorTransform>();
-                var anchorDistance = (anchorTransform?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin);
+                var parentTransformer = t.GetAncestorSpecificNode<TransformNode>()?.Transfomer as AnchorTransformerNode;
+                var anchorDistance = (parentTransformer?.Size ?? new Vector2F()) * (transformer.AnchorMax - transformer.AnchorMin);
 
-                t.SetSizeDirectly(anchorDistance + t.LeftTop - t.RightBottom);
-                t.SetPositionDirectly(t.Size * t.Pivot - t.LeftTop);
+                transformer.SetSizeDirectly(anchorDistance + transformer.LeftTop - transformer.RightBottom);
+                transformer.SetPositionDirectly(transformer.Size * transformer.Pivot - transformer.LeftTop);
             }
 
             foreach (var child in node.Children)
@@ -318,139 +426,32 @@ namespace Altseed2
             if (Status == RegisteredStatus.Free) return;
 
             // Margin の更新
-            var anchorDistance = (GetAncestorSpecificNode<IAnchorTransform>()?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin);
+            var anchorDistance = ((Parent?.GetAncestorSpecificNode<TransformNode>()?.Transfomer as AnchorTransformerNode)?.Size ?? new Vector2F()) * (AnchorMax - AnchorMin);
             _LeftTop = Pivot * Size - Position;
             _RightBottom = anchorDistance + _LeftTop - _Size;
         }
 
-        /// <inheritdoc/>
-        private protected override void CalcTransform()
-        {
-            var scale = Scale * new Vector2F(HorizontalFlip ? -1 : 1, VerticalFlip ? -1 : 1);
-            var offset = (GetAncestorSpecificNode<IAnchorTransform>()?.Size ?? default) * AnchorMin;
-
-            Transform = Matrix44F.GetTranslation2D(offset) * MathHelper.CalcTransform(Position, MathHelper.DegreeToRadian(Angle), scale) * Matrix44F.GetTranslation2D(-CenterPosition);
-            //_TransformNodeInfo?.Update();
-            _RequireCalcTransform = false;
-        }
-
-        #region Node
-
-        internal override void Registered()
-        {
-            base.Registered();
-
-            UpdateMargin();
-        }
-
-        internal override void Unregistered()
-        {
-            base.Unregistered();
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// アンカーによって変形するノードのクラス
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    [Serializable]
-    public class AnchorTransformNode<T> : AnchorTransformNode, IAnchorTransformInternal, ICullableDrawn
-        where T : Node, ICullableDrawn, new()
-    {
-        /// <summary>
-        /// 元となるのノード
-        /// </summary>
-        public T Source { get; }
-
-        /// <summary>
-        /// 新しいインスタンスを生成します。
-        /// </summary>
-        public AnchorTransformNode()
-        {
-            Source = new T();
-        }
-
-        /// <summary>
-        /// サイズとコンテンツの関係を取得または設定します。
-        /// </summary>
-        public override AnchorMode AnchorMode
-        {
-            get => _AnchorMode;
-            set
-            {
-                if (_AnchorMode == value) return;
-
-                _AnchorMode = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private AnchorMode _AnchorMode = AnchorMode.ContentSize;
-
-        /// <summary>
-        /// 水平方向の配置
-        /// </summary>
-        public override HorizontalAlignment HorizontalAlignment
-        {
-            get => _HorizontalAlignment;
-            set
-            {
-                if (value == _HorizontalAlignment) return;
-
-                _HorizontalAlignment = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private HorizontalAlignment _HorizontalAlignment = HorizontalAlignment.Left;
-
-        /// <summary>
-        /// 垂直方向の配置
-        /// </summary>
-        public override VerticalAlignment VerticalAlignment
-        {
-            get => _VerticalAlignment;
-            set
-            {
-                if (value == _VerticalAlignment)
-                    return;
-
-                _VerticalAlignment = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private VerticalAlignment _VerticalAlignment = VerticalAlignment.Top;
-
-        /// <summary>
-        /// 先祖の変形を加味した変形行列を取得します。
-        /// </summary>
-        public override Matrix44F InheritedTransform
-        {
-            get => _InheritedTransform;
-            internal set
-            {
-                _InheritedTransform = value;
-                Source.Rendered.Transform = value * CalcInternalTransform();
-            }
-        }
-
         private Matrix44F CalcInternalTransform()
         {
+            if (!(Parent is TransformNode))
+                return Matrix44F.Identity;
+
             var res = Matrix44F.Identity;
             var relativeSize = Size;
+            var contentSize = (Parent as TransformNode).ContentSize;
             switch (AnchorMode)
             {
                 case AnchorMode.Fill:
-                    res *= Matrix44F.GetScale2D(Size / ContentSize);
+                    res *= Matrix44F.GetScale2D(Size / contentSize);
                     break;
 
                 case AnchorMode.KeepAspect:
-                    if (Size.X / Size.Y > ContentSize.X / ContentSize.Y)
-                        relativeSize.X = ContentSize.X * Size.Y / ContentSize.Y;
+                    if (Size.X / Size.Y > contentSize.X / contentSize.Y)
+                        relativeSize.X = contentSize.X * Size.Y / contentSize.Y;
                     else
-                        relativeSize.Y = ContentSize.Y * Size.X / ContentSize.X;
+                        relativeSize.Y = contentSize.Y * Size.X / contentSize.X;
 
-                    res *= Matrix44F.GetScale2D(relativeSize / ContentSize);
+                    res *= Matrix44F.GetScale2D(relativeSize / contentSize);
                     break;
 
                 case AnchorMode.ContentSize:
@@ -495,96 +496,14 @@ namespace Altseed2
         internal override void Registered()
         {
             base.Registered();
-            Engine.RegisterDrawn(this);
-            Engine.CullingSystem.Register(Source.Rendered);
+
+            UpdateMargin();
         }
 
         internal override void Unregistered()
         {
             base.Unregistered();
-            Engine.UnregisterDrawn(this);
-            Engine.CullingSystem.Unregister(Source.Rendered);
         }
-
-        #endregion
-
-        #region IDrawn
-
-        Rendered ICullableDrawn.Rendered => Source.Rendered;
-
-        void IDrawn.Draw()
-        {
-            Source.Draw();
-        }
-
-        /// <summary>
-        /// カリング用ID
-        /// </summary>
-        int ICullableDrawn.CullingId => Source.Rendered.Id;
-
-        /// <summary>
-        /// コンテンツのサイズを取得します。
-        /// </summary>
-        public override Vector2F ContentSize => Source.ContentSize;
-
-        /// <summary>
-        /// カメラグループを取得または設定します。
-        /// </summary>
-        public ulong CameraGroup
-        {
-            get => _CameraGroup;
-            set
-            {
-                if (_CameraGroup == value) return;
-
-                var old = _CameraGroup;
-                _CameraGroup = value;
-                Engine.UpdateDrawnCameraGroup(this, old);
-            }
-        }
-        private ulong _CameraGroup;
-
-        /// <summary>
-        /// 描画時の重ね順を取得または設定します。
-        /// </summary>
-        public int ZOrder
-        {
-            get => _ZOrder;
-            set
-            {
-                if (value == _ZOrder) return;
-
-                var old = _ZOrder;
-                _ZOrder = value;
-
-                if (Status == RegisteredStatus.Registered)
-                {
-                    Engine.UpdateDrawnZOrder(this, old);
-                }
-            }
-        }
-        private int _ZOrder;
-
-        /// <summary>
-        /// このノードを描画するかどうかを取得または設定します。
-        /// </summary>
-        public bool IsDrawn
-        {
-            get => _IsDrawn; set
-            {
-                if (_IsDrawn == value) return;
-                _IsDrawn = value;
-                this.UpdateIsDrawnActuallyOfDescendants();
-
-            }
-        }
-        private bool _IsDrawn = true;
-
-        /// <summary>
-        /// 先祖の<see cref="IsDrawn" />を考慮して、このノードを描画するかどうかを取得します。
-        /// </summary>
-        public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
-        bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion
     }

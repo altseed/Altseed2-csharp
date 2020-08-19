@@ -175,11 +175,12 @@ namespace Altseed2
         /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
-            get => _InheritedTransform;
-            internal set
+            get => base.InheritedTransform;
+            protected internal set
             {
-                _InheritedTransform = value;
-                _RenderedPolygon.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                base.InheritedTransform = value;
+                AbsoluteTransform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                _RenderedPolygon.Transform = AbsoluteTransform;
             }
         }
 
@@ -227,8 +228,5 @@ namespace Altseed2
                 return max - min;
             }
         }
-
-        /// <inheritdoc/>
-        public sealed override Matrix44F AbsoluteTransform => _RenderedPolygon.Transform;
     }
 }

@@ -111,11 +111,12 @@ namespace Altseed2
         /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
-            get => _InheritedTransform;
-            internal set
+            get => base.InheritedTransform;
+            protected internal set
             {
-                _InheritedTransform = value;
-                _RenderedText.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                base.InheritedTransform = value;
+                AbsoluteTransform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                _RenderedText.Transform = AbsoluteTransform;
             }
         }
 
@@ -288,8 +289,5 @@ namespace Altseed2
 
         /// <inheritdoc/>
         public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
-
-        /// <inheritdoc/>
-        public override Matrix44F AbsoluteTransform => _RenderedText.Transform;
     }
 }

@@ -347,15 +347,17 @@ float4 main(PS_INPUT input) : SV_TARGET
             var font2 = Font.LoadDynamicFont("../Core/TestData/Font/GenYoMinJP-Bold.ttf", 100);
             Assert.NotNull(font);
 
-            var rotated = new AnchorTransformNode<TextNode>()
+            var rotated = new AnchorTransformerNode()
             {
                 Position = new Vector2F(300.0f, 300.0f),
                 Pivot = new Vector2F(0.5f, 0.5f),
             };
-            rotated.Source.Font = font;
-            rotated.Source.Text = "中心で回転します";
-            rotated.Size = rotated.ContentSize;
-            Engine.AddNode(rotated);
+            var text = new TextNode();
+            text.Font = font;
+            text.Text = "中心で回転します";
+            rotated.Size = text.ContentSize;
+            Engine.AddNode(text);
+            text.AddChildNode(rotated);
 
             tc.LoopBody(c =>
             {
@@ -378,44 +380,53 @@ float4 main(PS_INPUT input) : SV_TARGET
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
+            var sprite = new SpriteNode();
+            sprite.Texture = texture;
+            sprite.ZOrder = 5;
+
             Vector2F rectSize = texture.Size;
-            var parent = new AnchorTransformNode<SpriteNode>();
-            parent.Source.Texture = texture;
+            var parent = new AnchorTransformerNode();
             parent.Position = Engine.WindowSize / 2;
-            parent.ZOrder = 5;
             parent.Size = rectSize;
             parent.AnchorMode = AnchorMode.Fill;
-            Engine.AddNode(parent);
+            Engine.AddNode(sprite);
+            sprite.AddChildNode(parent);
 
-            var child = new AnchorTransformNode<SpriteNode>();
-            child.Source.Texture = texture;
-            child.Source.Color = new Color(255, 0, 0, 200);
+            var sprite2 = new SpriteNode();
+            sprite2.Texture = texture;
+            sprite2.Color = new Color(255, 0, 0, 200);
+            sprite2.ZOrder = 10;
+
+            var child = new AnchorTransformerNode();
             child.Position = rectSize / 2;
             child.Pivot = new Vector2F(0.5f, 0.5f);
             child.AnchorMin = new Vector2F(0.0f, 0.0f);
             child.AnchorMax = new Vector2F(1f, 1f);
             child.HorizontalAlignment = HorizontalAlignment.Center;
             child.VerticalAlignment = VerticalAlignment.Center;
-            child.ZOrder = 10;
-            child.Size = child.ContentSize;
+            child.Size = sprite2.ContentSize;
             child.AnchorMode = AnchorMode.KeepAspect;
-            parent.AddChildNode(child);
+            sprite.AddChildNode(sprite2);
+            sprite2.AddChildNode(child);
 
-            var childText = new AnchorTransformNode<TextNode>();
-            childText.Source.Font = font;
-            childText.Source.Color = new Color(0, 0, 0);
-            childText.Source.Text = "あいうえお";
+            var text = new TextNode();
+            text.Font = font;
+            text.Color = new Color(0, 0, 0);
+            text.Text = "あいうえお";
+            text.ZOrder = 15;
+
+            var childText = new AnchorTransformerNode();
             childText.Pivot = new Vector2F(0.5f, 0.5f);
             childText.AnchorMin = new Vector2F(0.5f, 0.5f);
             childText.AnchorMax = new Vector2F(0.5f, 0.5f);
-            childText.ZOrder = 15;
+            childText.Size = text.ContentSize;
             //childText.HorizontalAlignment = HorizontalAlignment.Center;
             //childText.VerticalAlignment = VerticalAlignment.Center;
-            childText.Size = childText.ContentSize;
             childText.AnchorMode = AnchorMode.ContentSize;
-            child.AddChildNode(childText);
+            sprite2.AddChildNode(text);
+            text.AddChildNode(childText);
 
-            var text = new TextNode()
+            var text2 = new TextNode()
             {
                 Font = font,
                 Text = "",
@@ -423,11 +434,11 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Scale = new Vector2F(0.8f, 0.8f),
                 Color = new Color(255, 128, 0)
             };
-            Engine.AddNode(text);
+            Engine.AddNode(text2);
 
             tc.Duration = 10000;
 
-            string infoText(IAnchorTransform n) =>
+            string infoText(AnchorTransformerNode n) =>
                     $"Scale:{n.Scale}\n" +
                     $"Position:{n.Position}\n" +
                     $"Pivot:{n.Pivot}\n" +
@@ -455,7 +466,7 @@ float4 main(PS_INPUT input) : SV_TARGET
 
                 parent.Size = rectSize;
 
-                text.Text = infoText(parent) + '\n' + infoText(child) + '\n' + infoText(childText);
+                text2.Text = infoText(parent) + '\n' + infoText(child) + '\n' + infoText(childText);
             }, null);
 
             tc.End();

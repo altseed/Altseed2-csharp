@@ -58,12 +58,13 @@ namespace Altseed2
         /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
-            get => _InheritedTransform;
-            internal set
+            get => base.InheritedTransform;
+            protected internal set
             {
-                if (_InheritedTransform == value) return;
-                _InheritedTransform = value;
-                Collider.Transform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                if (base.InheritedTransform == value) return;
+                base.InheritedTransform = value;
+                AbsoluteTransform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                Collider.Transform = AbsoluteTransform;
                 requireUpdate = true;
             }
         }
