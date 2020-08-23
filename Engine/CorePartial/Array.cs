@@ -341,8 +341,8 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>
-        /// <param name="array">設定するデータとなる配列</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="array"/>がnull</exception>
+        /// <param name="span">設定するデータとなる配列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="span"/>がnull</exception>
         internal static void FromSpan<TElement>(this IArray<TElement> obj, ReadOnlySpan<TElement> span)
             where TElement : unmanaged
         {
@@ -365,10 +365,8 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインスタンス</param>
-        /// <param name="collection">設定するデータとなる<see cref="IEnumerable{TElement}"/></param>
-        /// <param name="count">指定した個数まで値を設定する</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/>が0未満</exception>
+        /// <param name="elements">設定するデータとなる<see cref="IEnumerable{TElement}"/></param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="elements"/>がnull</exception>
         internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> elements)
             where TElement : unmanaged
         {
