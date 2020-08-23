@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Altseed2
 {
@@ -204,6 +203,16 @@ namespace Altseed2
             _RenderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
             _RenderedPolygon.OverwriteVertexesColor(color);
 
+            _RequireCalcTransform = true;
+        }
+
+        /// <summary>
+        /// 頂点情報を設定します。
+        /// </summary>
+        /// <param name="vertexes">設定する各頂点の情報を格納する<see cref="ReadOnlySpan{T}"/></param>
+        private protected void SetVertexes(ReadOnlySpan<Vertex> vertexes)
+        {
+            _RenderedPolygon.Vertexes.FromSpan(vertexes);
             _RequireCalcTransform = true;
         }
 
