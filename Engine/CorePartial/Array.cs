@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -10,7 +11,7 @@ namespace Altseed2
     /// Coreとの接続に使用する配列のインターフェイス
     /// </summary>
     /// <typeparam name="T">配列に格納される要素の型</typeparam>
-    internal interface IArray<T>
+    internal interface IArray<T> : IEnumerable<T>
         where T : unmanaged
     {
         /// <summary>
@@ -39,6 +40,8 @@ namespace Altseed2
         void CopyTo(IntPtr ptr);
 
         void Assign(IntPtr ptr, int size);
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     internal partial class Int8Array : IArray<byte>
@@ -70,6 +73,16 @@ namespace Altseed2
             var dst = Create(0);
             dst.FromEnumerable(src);
             return dst;
+        }
+
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<byte> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -120,6 +133,16 @@ namespace Altseed2
             return dst;
         }
 
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<int> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_Int32Array_Create(info.GetInt32(S_Count));
@@ -166,6 +189,16 @@ namespace Altseed2
             var dst = Create(0);
             dst.FromEnumerable(src);
             return dst;
+        }
+
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<Vertex> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -216,6 +249,16 @@ namespace Altseed2
             return dst;
         }
 
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<float> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_FloatArray_Create(info.GetInt32(S_Count));
@@ -262,6 +305,16 @@ namespace Altseed2
             var dst = Create(0);
             dst.FromEnumerable(src);
             return dst;
+        }
+
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<Vector2F> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
