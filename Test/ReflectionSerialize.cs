@@ -179,6 +179,7 @@ namespace Altseed2.Test
     }
     internal static class ReflectionHelper
     {
+        public static bool HasInterface(this Type type, Type interfaceType) => interfaceType.IsInterface && type.GetInterface(interfaceType.FullName) != null;
         public static object[] ToObjectArray(this IEnumerable enumerable)
         {
             object[] result;
@@ -193,6 +194,5 @@ namespace Altseed2.Test
             foreach (var current in list) list.Add(current);
             return list.ToArray();
         }
-        public static bool HasInterface(this Type type, Type interfaceType) => interfaceType.IsInterface && type.GetInterface(interfaceType.FullName) != null;
     }
 }
