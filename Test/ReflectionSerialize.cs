@@ -82,6 +82,11 @@ namespace Altseed2.Test
             //if (obj1.GetType() != type) throw new AssertionException($"typeof obj1 is not {type.FullName}");
             //if (obj2.GetType() != type) throw new AssertionException($"typeof obj2 is not {type.FullName}");
 
+            if (ReflectionSources.Info.TryGetValue(type, out var refInfo))
+            {
+                EnumerateMembers(obj1, obj2, type, refInfo.FieldInfos, refInfo.PropertyInfos, refInfo.MethodsInfos, name);
+                return;
+            }
             switch (type)
             {
                 case Type t when t == typeof(float):
@@ -107,21 +112,9 @@ namespace Altseed2.Test
                     for (int i = 0; i < array1.Length; i++) Compare(array1[i], array2[i], array1[i]?.GetType(), $"{name}[{i}]");
                     return;
                 default:
-                    FieldInfo[] fields;
-                    PropertyInfo[] properties;
-                    (MethodInfo, object[])[] methods;
-                    if (ReflectionSources.Info.TryGetValue(type, out var info))
-                    {
-                        fields = info.FieldInfos;
-                        methods = info.MethodsInfos;
-                        properties = info.PropertyInfos;
-                    }
-                    else
-                    {
-                        fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                        methods = Array.Empty<(MethodInfo, object[])>();
-                        properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    }
+                    var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    var methods = Array.Empty<(MethodInfo, object[])>();
+                    var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     EnumerateMembers(obj1, obj2, type, fields, properties, methods, name);
                     break;
             }
