@@ -79,8 +79,8 @@ namespace Altseed2.Test
                 return;
             }
             Assert.NotNull(obj2, $"{name}\nBasic obj: Not null\nDeserialized obj: null");
-            if (obj1.GetType() != type) throw new AssertionException($"typeof obj1 is not {type.FullName}");
-            if (obj2.GetType() != type) throw new AssertionException($"typeof obj2 is not {type.FullName}");
+            //if (obj1.GetType() != type) throw new AssertionException($"typeof obj1 is not {type.FullName}");
+            //if (obj2.GetType() != type) throw new AssertionException($"typeof obj2 is not {type.FullName}");
 
             switch (type)
             {
