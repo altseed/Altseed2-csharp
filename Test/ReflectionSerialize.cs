@@ -180,6 +180,19 @@ namespace Altseed2.Test
     internal static class ReflectionHelper
     {
         public static bool HasInterface(this Type type, Type interfaceType) => interfaceType.IsInterface && type.GetInterface(interfaceType.FullName) != null;
+        public static string ToLogText(this object value)
+        {
+            if (value == null) return "null";
+            switch (value)
+            {
+                case float v: return $"{v}f";
+                case double v: return $"{v}d";
+                case decimal v: return $"{v}m";
+                case char v: return $"'{v}'";
+                case string v: return $"\"{v}\"";
+                default: return value.ToString();
+            }
+        }
         public static object[] ToObjectArray(this IEnumerable enumerable)
         {
             object[] result;
