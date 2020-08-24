@@ -101,6 +101,10 @@ namespace Altseed2.Test
                 case Type t when t.IsEnum:
                     if ((int)obj1 != (int)obj2) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
                     break;
+                case Type t when t.Name == typeof(KeyValuePair<,>).Name:
+                    Compare(type.GetProperty("Key").GetValue(obj1), type.GetProperty("Key").GetValue(obj2), type.GetGenericArguments()[0], $"{name}.Key");
+                    Compare(type.GetProperty("Value").GetValue(obj1), type.GetProperty("Value").GetValue(obj2), type.GetGenericArguments()[1], $"{name}.Value");
+                    return;
                 case Type t when (t.HasInterface(typeof(IEquatable<>)) && t.GetInterface(typeof(IEquatable<>).FullName).GetGenericArguments()[0] == t):
                     var IEquatableT = t.GetInterface(typeof(IEquatable<>).FullName);
                     if (!(bool)IEquatableT.GetMethod("Equals").Invoke(obj1, new[] { obj2 })) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
