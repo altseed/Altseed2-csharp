@@ -60,7 +60,7 @@ namespace Altseed2.Test
 
         private static void EnumerateMembers(object obj1, object obj2, Type type, FieldInfo[] fields, PropertyInfo[] properties, (MethodInfo, object[])[] methods, string name)
         {
-            writer.WriteLine($"<{name}>");
+            writer.WriteLine($"-{name}-");
             if (!ReflectionSources.Info.ContainsKey(type) && type.IsClass && type.BaseType != null && type.BaseType != typeof(object)) EnumerateMembers(obj1, obj2, type.BaseType, fields, properties, methods, name);
             foreach (var field in fields) Compare(field.GetValue(obj1), field.GetValue(obj2), field.FieldType, $"{name}.{field.Name}");
             foreach (var property in properties) Compare(property.GetValue(obj1), property.GetValue(obj2), property.PropertyType, $"{name}.{property.Name}");
@@ -70,7 +70,7 @@ namespace Altseed2.Test
 
         private static void Compare(object obj1, object obj2, Type type, string name)
         {
-            writer.WriteLine($"{name} : {obj1 ?? "null"} - {obj2 ?? "null"}");
+            writer.WriteLine($"{name}<{type.FullName}> : {obj1 ?? "null"} - {obj2 ?? "null"}");
             if (obj1 == null)
             {
                 Assert.Null(obj2, $"{name}\nBasic obj: null\nDeserialized obj: Not null");
