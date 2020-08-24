@@ -52,7 +52,11 @@ namespace Altseed2.Test
                 var deSerialized = Deserialize(path);
                 Assert.NotNull(deSerialized);
 
+                writer.WriteLine($"-{info.Type}-");
+
                 EnumerateMembers(info.Value, deSerialized, info.Type, info.FieldInfos, info.PropertyInfos, info.MethodsInfos, $"{info.Type.FullName}");
+
+                writer.WriteLine();
             }
 
             tc.End();
@@ -60,20 +64,18 @@ namespace Altseed2.Test
 
         private static void EnumerateMembers(object obj1, object obj2, Type type, FieldInfo[] fields, PropertyInfo[] properties, (MethodInfo, object[])[] methods, string name)
         {
-            writer.WriteLine($"-{name}-");
             if (!ReflectionSources.Info.ContainsKey(type) && type.IsClass && type.BaseType != null && type.BaseType != typeof(object)) EnumerateMembers(obj1, obj2, type.BaseType, fields, properties, methods, name);
             foreach (var field in fields) Compare(field.GetValue(obj1), field.GetValue(obj2), field.FieldType, $"{name}.{field.Name}");
             foreach (var property in properties) Compare(property.GetValue(obj1), property.GetValue(obj2), property.PropertyType, $"{name}.{property.Name}");
             foreach (var (method, args) in methods) Compare(method.Invoke(obj1, args), method.Invoke(obj2, args), method.ReturnType, $"{name}.{method.Name}");
-            writer.WriteLine();
         }
 
         private static void Compare(object obj1, object obj2, Type type, string name)
         {
-            writer.WriteLine($"{name}<{type.FullName}> : {obj1 ?? "null"} - {obj2 ?? "null"}");
             if (obj1 == null)
             {
                 Assert.Null(obj2, $"{name}\nBasic obj: null\nDeserialized obj: Not null");
+                writer.WriteLine($"{name}<{type.FullName}> : {obj1.ToLogText()} - {obj2.ToLogText()}");
                 return;
             }
             Assert.NotNull(obj2, $"{name}\nBasic obj: Not null\nDeserialized obj: null");
@@ -103,7 +105,7 @@ namespace Altseed2.Test
                     var array2 = ((IEnumerable)obj2).ToObjectArray();
                     if (array1.Length != array2.Length) throw new AssertionException($"{name}\nCollection Count is not same\nCount1: {array1.Length}\nCount2: {array2.Length}");
                     for (int i = 0; i < array1.Length; i++) Compare(array1[i], array2[i], array1[i]?.GetType(), $"{name}[{i}]");
-                    break;
+                    return;
                 default:
                     FieldInfo[] fields;
                     PropertyInfo[] properties;
@@ -123,6 +125,7 @@ namespace Altseed2.Test
                     EnumerateMembers(obj1, obj2, type, fields, properties, methods, name);
                     break;
             }
+            writer.WriteLine($"{name}<{type.FullName}> : {obj1.ToLogText()} - {obj2.ToLogText()}");
         }
 
         internal static class ReflectionSources
