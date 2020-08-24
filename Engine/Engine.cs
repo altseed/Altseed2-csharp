@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Altseed2
 {
@@ -40,6 +38,9 @@ namespace Altseed2
 
         // ShapeNodeのSetVertexesで利用するBuffer。
         internal static ArrayBuffer<Vector2F> Vector2FBuffer { get; private set; }
+
+        // ShapeNodeのSetVertexesで利用するBuffer。
+        internal static ArrayBuffer<Vertex> VertexBuffer { get; private set; }
 
         // CreateVertexesByVector2F時に一時的なArrayを生成せずに使い回すためのキャッシュ。
         internal static Vector2FArray Vector2FArrayCache { get; private set; }
@@ -102,6 +103,7 @@ namespace Altseed2
 
                 _DrawingRenderedIdsBuffer = new ArrayBuffer<int>();
                 Vector2FBuffer = new ArrayBuffer<Vector2F>(MaxStackalloclLength * 2);
+                VertexBuffer = new ArrayBuffer<Vertex>(MaxStackalloclLength * 2);
                 Vector2FArrayCache = Vector2FArray.Create(0);
 
                 PostEffectNode.InitializeCache();
@@ -253,6 +255,7 @@ namespace Altseed2
 
             _DrawingRenderedIdsBuffer = null;
             Vector2FBuffer = null;
+            VertexBuffer = null;
             Vector2FArrayCache = null;
 
             Config = null;

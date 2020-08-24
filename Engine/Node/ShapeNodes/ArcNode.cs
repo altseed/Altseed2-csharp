@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 
 namespace Altseed2
 {
@@ -130,6 +129,7 @@ namespace Altseed2
 
         private void UpdateVertexes()
         {
+            // local arguments for position calculation
             GetDegrees(out var _startdegree, out var _enddegree);
             var deg = 360f / _VertNum;
             var size = (int)(Math.Abs(_enddegree - _startdegree) / deg);
@@ -140,19 +140,32 @@ namespace Altseed2
             if (!startMatched) size++;
             if (!endMatched) size++;
 
-            Span<Vector2F> positions = size + 2 <= Engine.MaxStackalloclLength ? stackalloc Vector2F[size + 2] : Engine.Vector2FBuffer.GetAsSpan(size + 2);
+            // local arguments for UV calculation
+            var diameter = _radius * 2;
+            if (diameter == 0) diameter = 1f; // to avoid dividing by Zero
+            var upperLeftPos = -new Vector2F(_radius, _radius);
+
+            Span<Vertex> vertexes = size + 2 <= Engine.MaxStackalloclLength ? stackalloc Vertex[size + 2] : Engine.VertexBuffer.GetAsSpan(size + 2);
             var currentIndex = 1;
-            if (!startMatched) positions[currentIndex++] = GetBaseVector(_startdegree);
+            if (!startMatched) vertexes[currentIndex++].Position = To3F(GetBaseVector(_startdegree));
             var vec = GetBaseVector(deg * startVertexNum);
             for (var i = startVertexNum; i <= endVertexNum; currentIndex++, i++)
             {
-                positions[currentIndex] = vec;
+                vertexes[currentIndex].Position = To3F(vec);
                 vec.Degree += deg;
             }
 
-            if (!endMatched) positions[currentIndex] = GetBaseVector(_enddegree);
+            if (!endMatched) vertexes[currentIndex].Position = To3F(GetBaseVector(_enddegree));
 
-            SetVertexes(positions, Color);
+            for (int i = 0; i < vertexes.Length; i++)
+            {
+                vertexes[i].Color = Color;
+                vertexes[i].UV1 = new Vector2F(vertexes[i].Position.X - upperLeftPos.X, vertexes[i].Position.Y - upperLeftPos.Y) / diameter;
+            }
+
+            SetVertexes(vertexes);
+
+            static Vector3F To3F(Vector2F vector) => new Vector3F(vector.X, vector.Y, 0.5f);
         }
 
         internal override void Update()
