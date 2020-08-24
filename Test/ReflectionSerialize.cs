@@ -82,8 +82,21 @@ namespace Altseed2.Test
 
             switch (type)
             {
-                case Type t when (t.HasInterface(typeof(IEquatable<>)) && t.GetInterface(typeof(IEquatable<>).FullName).GetGenericArguments()[0] == t) || t.IsEnum:
-                    Assert.AreEqual(obj1, obj2, $"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
+                case Type t when t == typeof(float):
+                    if (System.Math.Abs((float)obj1 - (float)obj2) >= MathHelper.MatrixError) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
+                    break;
+                case Type t when t == typeof(double):
+                    if (System.Math.Abs((double)obj1 - (double)obj2) >= MathHelper.MatrixError) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
+                    break;
+                case Type t when t == typeof(decimal):
+                    if (System.Math.Abs((decimal)obj1 - (decimal)obj2) >= (decimal)MathHelper.MatrixError) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
+                    break;
+                case Type t when t.IsEnum:
+                    if ((int)obj1 != (int)obj2) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
+                    break;
+                case Type t when (t.HasInterface(typeof(IEquatable<>)) && t.GetInterface(typeof(IEquatable<>).FullName).GetGenericArguments()[0] == t):
+                    var IEquatableT = t.GetInterface(typeof(IEquatable<>).FullName);
+                    if (!(bool)IEquatableT.GetMethod("Equals").Invoke(obj1, new[] { obj2 })) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
                     break;
                 case Type t when t.HasInterface(typeof(IEnumerable)):
                     var array1 = ((IEnumerable)obj1).ToObjectArray();
