@@ -10,13 +10,13 @@ using NUnit.Framework;
 namespace Altseed2.Test
 {
     /// <summary>
-    /// ƒŠƒtƒŒƒNƒVƒ‡ƒ“‚ğ—p‚¢‚ÄƒVƒŠƒAƒ‰ƒCƒYƒeƒXƒg‚ğs‚¤ƒNƒ‰ƒX
+    /// ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‚’ç”¨ã„ã¦ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºãƒ†ã‚¹ãƒˆã‚’è¡Œã†ã‚¯ãƒ©ã‚¹
     /// </summary>
     [TestFixture]
     public partial class ReflectionSerialize
     {
         /// <summary>
-        /// ƒƒO“f‚­—p‚Ìƒ‰ƒCƒ^[
+        /// ãƒ­ã‚°åãç”¨ã®ãƒ©ã‚¤ã‚¿ãƒ¼
         /// </summary>
         private static StreamWriter writer;
 
@@ -39,9 +39,9 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Serialization()
         {
-            // Serialization\ƒtƒHƒ‹ƒ_‚Ì¶¬
+            // Serialization\ãƒ•ã‚©ãƒ«ãƒ€ã®ç”Ÿæˆ
             if (!Directory.Exists("Serialization")) Directory.CreateDirectory("Serialization");
-            // ƒƒO‚Ì‰Šú‰»
+            // ãƒ­ã‚°ã®åˆæœŸåŒ–
             writer = new StreamWriter("Serialization/SerializationLog.txt", false)
             {
                 AutoFlush = true
@@ -50,33 +50,33 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            // ƒVƒŠƒAƒ‰ƒCƒY—p‚ÌƒTƒ“ƒvƒ‹ƒIƒuƒWƒFƒNƒg‚ğ‡‚Éæ“¾
+            // ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºç”¨ã®ã‚µãƒ³ãƒ—ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é †ã«å–å¾—
             foreach (var (_, info) in ReflectionSources.Info)
             {
-                // ƒVƒŠƒAƒ‰ƒCƒY‚µ‚È‚¢‚æ‚¤‚Éƒ}[ƒN‚³‚ê‚Ä‚¢‚½ê‡ƒXƒLƒbƒv
+                // ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã—ãªã„ã‚ˆã†ã«ãƒãƒ¼ã‚¯ã•ã‚Œã¦ã„ãŸå ´åˆã‚¹ã‚­ãƒƒãƒ—
                 if (!info.DoSerialization) continue;
-                // ƒoƒCƒiƒŠƒtƒ@ƒCƒ‹–¼
+                // ãƒã‚¤ãƒŠãƒªãƒ•ã‚¡ã‚¤ãƒ«å
                 var replacedTypeName = info.Type.FullName.Replace('.', '_').Replace('`', '_');
 
                 var path = $"Serialization/Binaries/{replacedTypeName}.bin";
 
-                // ƒVƒŠƒAƒ‰ƒCƒYÀs
+                // ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºå®Ÿè¡Œ
                 Serialize(path, info.Value);
-                // ƒVƒŠƒAƒŠƒ‰ƒCƒY‚Å¶¬‚µ‚½ƒtƒ@ƒCƒ‹‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+                // ã‚·ãƒªã‚¢ãƒªãƒ©ã‚¤ã‚ºã§ç”Ÿæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
                 if (!System.IO.File.Exists(path)) throw new AssertionException($"Failed to Serialze object\nType: {info.Type.FullName}");
 
-                // ƒfƒVƒŠƒAƒ‰ƒCƒYÀs
+                // ãƒ‡ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºå®Ÿè¡Œ
                 var deSerialized = Deserialize(path);
-                // ƒfƒVƒŠƒAƒ‰ƒCƒYŒ‹‰Ê‚ªnull‚¶‚á‚È‚¢‚©ƒ`ƒFƒbƒN
+                // ãƒ‡ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºçµæœãŒnullã˜ã‚ƒãªã„ã‹ãƒã‚§ãƒƒã‚¯
                 Assert.NotNull(deSerialized);
 
-                // ƒƒO“f‚«o‚µ
+                // ãƒ­ã‚°åãå‡ºã—
                 writer.WriteLine($"-{info.Type}-");
 
-                // ƒƒ“ƒo[—ñ‹“
+                // ãƒ¡ãƒ³ãƒãƒ¼åˆ—æŒ™
                 EnumerateMembers(info.Value, deSerialized, info.Type, info.FieldInfos, info.PropertyInfos, info.MethodsInfos, $"{info.Type.FullName}");
 
-                // ‰üs
+                // æ”¹è¡Œ
                 writer.WriteLine();
             }
 
@@ -84,21 +84,21 @@ namespace Altseed2.Test
         }
 
         /// <summary>
-        /// w’è‚µ‚½ƒƒ“ƒo[‚ğ—ñ‹“‚µ‚Ä”äŠr‚·‚é
+        /// æŒ‡å®šã—ãŸãƒ¡ãƒ³ãƒãƒ¼ã‚’åˆ—æŒ™ã—ã¦æ¯”è¼ƒã™ã‚‹
         /// </summary>
-        /// <param name="obj1">”äŠr‚·‚éƒIƒuƒWƒFƒNƒg1</param>
-        /// <param name="obj2">”äŠr‚·‚éƒIƒuƒWƒFƒNƒg2</param>
-        /// <param name="type"><paramref name="obj1"/>‚â<paramref name="obj2"/>‚É‚¨‚¯‚é<see cref="Type"/></param>
-        /// <param name="fields"><paramref name="obj1"/>‚Æ<paramref name="obj2"/>‚ğ”äŠr‚·‚éÛ‚É—ñ‹“‚·‚éƒtƒB[ƒ‹ƒh</param>
-        /// <param name="properties"><paramref name="obj1"/>‚Æ<paramref name="obj2"/>‚ğ”äŠr‚·‚éÛ‚É—ñ‹“‚·‚éƒvƒƒpƒeƒB</param>
-        /// <param name="methods"><paramref name="obj1"/>‚Æ<paramref name="obj2"/>‚ğ”äŠr‚·‚éÛ‚É—ñ‹“‚·‚éƒƒ\ƒbƒh‚Æ‚»‚Ìˆø”</param>
-        /// <param name="name">ƒƒO“f‚«o‚µ‚É—p‚¢‚é—v‘f‚Ì–¼‘O</param>
+        /// <param name="obj1">æ¯”è¼ƒã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ1</param>
+        /// <param name="obj2">æ¯”è¼ƒã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ2</param>
+        /// <param name="type"><paramref name="obj1"/>ã‚„<paramref name="obj2"/>ã«ãŠã‘ã‚‹<see cref="Type"/></param>
+        /// <param name="fields"><paramref name="obj1"/>ã¨<paramref name="obj2"/>ã‚’æ¯”è¼ƒã™ã‚‹éš›ã«åˆ—æŒ™ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰</param>
+        /// <param name="properties"><paramref name="obj1"/>ã¨<paramref name="obj2"/>ã‚’æ¯”è¼ƒã™ã‚‹éš›ã«åˆ—æŒ™ã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£</param>
+        /// <param name="methods"><paramref name="obj1"/>ã¨<paramref name="obj2"/>ã‚’æ¯”è¼ƒã™ã‚‹éš›ã«åˆ—æŒ™ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¨ãã®å¼•æ•°</param>
+        /// <param name="name">ãƒ­ã‚°åãå‡ºã—æ™‚ã«ç”¨ã„ã‚‹è¦ç´ ã®åå‰</param>
         private static void EnumerateMembers(object obj1, object obj2, Type type, FieldInfo[] fields, PropertyInfo[] properties, (MethodInfo, object[])[] methods, string name)
         {
-            // BaseƒNƒ‰ƒX‚ÌŒŸØ
+            // Baseã‚¯ãƒ©ã‚¹ã®æ¤œè¨¼
             if (!ReflectionSources.Info.ContainsKey(type) && type.IsClass && type.BaseType != null && type.BaseType != typeof(object)) EnumerateMembers(obj1, obj2, type.BaseType, fields, properties, methods, name);
 
-            // OptionalValueProvider‚É”äŠr‚·‚é—v‘f‚ª‹Lq‚³‚ê‚Ä‚¢‚éê‡‚»‚Ì—v‘f‚ğæ‚èo‚µ‚Ä”äŠr
+            // OptionalValueProviderã«æ¯”è¼ƒã™ã‚‹è¦ç´ ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹å ´åˆãã®è¦ç´ ã‚’å–ã‚Šå‡ºã—ã¦æ¯”è¼ƒ
             if (ReflectionSources.Info.TryGetValue(type, out var refInfo))
             {
                 var values = refInfo.OptionalValueProvider?.Invoke(obj1, obj2);
@@ -107,47 +107,47 @@ namespace Altseed2.Test
                         Compare(comparison1, comparison2, valueType, $"{name}.{valueName}");
             }
 
-            // ƒtƒB[ƒ‹ƒh‚ğ”äŠr
+            // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’æ¯”è¼ƒ
             foreach (var field in fields) Compare(field.GetValue(obj1), field.GetValue(obj2), field.FieldType, $"{name}.{field.Name}");
-            // ƒvƒƒpƒeƒB‚ğ”äŠr
+            // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’æ¯”è¼ƒ
             foreach (var property in properties) Compare(property.GetValue(obj1), property.GetValue(obj2), property.PropertyType, $"{name}.{property.Name}");
-            // ƒƒ\ƒbƒh‚Ì•Ô‚è’l‚ğ”äŠr
+            // ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã‚’æ¯”è¼ƒ
             foreach (var (method, args) in methods) Compare(method.Invoke(obj1, args), method.Invoke(obj2, args), method.ReturnType, $"{name}.{method.Name}");
         }
 
         /// <summary>
-        /// w’è‚µ‚½—v‘f‚Ì”äŠr‚ğs‚¤
+        /// æŒ‡å®šã—ãŸè¦ç´ ã®æ¯”è¼ƒã‚’è¡Œã†
         /// </summary>
-        /// <param name="obj1">”äŠr‚·‚é—v‘f1</param>
-        /// <param name="obj2">”äŠr‚·‚é—v‘f2</param>
-        /// <param name="type"><paramref name="obj1"/>‚â<paramref name="obj2"/>‚É‚¨‚¯‚é<see cref="Type"/></param>
-        /// <param name="name">ƒƒO“f‚«o‚µ‚É—p‚¢‚é—v‘f‚Ì–¼‘O</param>
+        /// <param name="obj1">æ¯”è¼ƒã™ã‚‹è¦ç´ 1</param>
+        /// <param name="obj2">æ¯”è¼ƒã™ã‚‹è¦ç´ 2</param>
+        /// <param name="type"><paramref name="obj1"/>ã‚„<paramref name="obj2"/>ã«ãŠã‘ã‚‹<see cref="Type"/></param>
+        /// <param name="name">ãƒ­ã‚°åãå‡ºã—æ™‚ã«ç”¨ã„ã‚‹è¦ç´ ã®åå‰</param>
         private static void Compare(object obj1, object obj2, Type type, string name)
         {
             if (obj1 == null)
             {
-                // obj1‚ªnull‚Ì->obj2‚ªnull‚Å‚ ‚é‚×‚«
+                // obj1ãŒnullã®æ™‚->obj2ãŒnullã§ã‚ã‚‹ã¹ã
                 if (obj2 != null) throw new AssertionException($"{name}\nobj1: null\nobj2: Not null");
                 writer.WriteLine($"{name}<{type.FullName}> : {obj1.ToLogText()} - {obj2.ToLogText()}");
                 return;
             }
-            // obj1‚ªnull‚Å‚È‚¢->obj2‚Ínull‚Å‚È‚¢‚×‚«
+            // obj1ãŒnullã§ãªã„æ™‚->obj2ã¯nullã§ãªã„ã¹ã
             if (obj2 == null) throw new AssertionException($"{name}\nobj1: Not null\nobj2: null");
 
-            // ”äŠr‘ÎÛ‚Ì—v‘f‚Ì”äŠr•û–@‚ªReflectionSources‚É‹LÚ‚³‚ê‚Ä‚¢‚éê‡‚Í‚»‚Ì“à—e‚ğ‚à‚Æ‚É”äŠr‚ğs‚¤
+            // æ¯”è¼ƒå¯¾è±¡ã®è¦ç´ ã®æ¯”è¼ƒæ–¹æ³•ãŒReflectionSourcesã«è¨˜è¼‰ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ãã®å†…å®¹ã‚’ã‚‚ã¨ã«æ¯”è¼ƒã‚’è¡Œã†
             if (ReflectionSources.Info.TryGetValue(type, out var refInfo))
             {
                 EnumerateMembers(obj1, obj2, type, refInfo.FieldInfos, refInfo.PropertyInfos, refInfo.MethodsInfos, name);
                 return;
             }
             //
-            // [’ˆÓ]
-            // ValueType‚É‘Î‚µ‚Äobject.Equal(object, object)‚âobject == object‚ğÀs‚·‚é‚Æ•K‚¸false‚É‚È‚é
+            // [æ³¨æ„]
+            // ValueTypeã«å¯¾ã—ã¦object.Equal(object, object)ã‚„object == objectã‚’å®Ÿè¡Œã™ã‚‹ã¨å¿…ãšfalseã«ãªã‚‹
             //
             switch (type)
             {
                 //
-                // floatCdoubleCdecimal‚È‚Ç‚Ì¬”“_Œn‚Ìê‡CŒë·‚ğ‰Á–¡‚µ‚Ä”äŠr
+                // floatï¼Œdoubleï¼Œdecimalãªã©ã®å°æ•°ç‚¹ç³»ã®å ´åˆï¼Œèª¤å·®ã‚’åŠ å‘³ã—ã¦æ¯”è¼ƒ
                 //
                 case Type t when t == typeof(float):
                     if (System.Math.Abs((float)obj1 - (float)obj2) >= MathHelper.MatrixError) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
@@ -158,36 +158,36 @@ namespace Altseed2.Test
                 case Type t when t == typeof(decimal):
                     if (System.Math.Abs((decimal)obj1 - (decimal)obj2) >= (decimal)MathHelper.MatrixError) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
                     break;
-                // Enum‚Ìê‡‚Í”’l‚É’¼‚µ‚Ä”äŠr
+                // Enumã®å ´åˆã¯æ•°å€¤ã«ç›´ã—ã¦æ¯”è¼ƒ
                 case Type t when t.IsEnum:
                     if ((int)obj1 != (int)obj2) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
                     break;
-                // TStruct?‚Ìê‡‚Í“à•”‚ÌTStruct‚Ì’l‚ğ”äŠr
-                // ¦ æ’ö‚Ì‘€ì‚Ånullƒ`ƒFƒbƒN‚ª‚³‚ê‚Ä‚¢‚é‚½‚ßC‚±‚Ìswitch“à‚Å‚Íobj1‚Æobj2‚Í‹¤‚É”ñnull
+                // TStruct?ã®å ´åˆã¯å†…éƒ¨ã®TStructã®å€¤ã‚’æ¯”è¼ƒ
+                // â€» å…ˆç¨‹ã®æ“ä½œã§nullãƒã‚§ãƒƒã‚¯ãŒã•ã‚Œã¦ã„ã‚‹ãŸã‚ï¼Œã“ã®switchå†…ã§ã¯obj1ã¨obj2ã¯å…±ã«énull
                 case Type t when t.Name == typeof(Nullable<>).Name:
                     Compare(type.GetProperty("Value").GetValue(obj1), type.GetProperty("Value").GetValue(obj2), type.GetGenericArguments()[0], name);
                     return;
-                // KeyValuePair‚Ìê‡‚ÍKey‚ÆValue‚Å‚»‚ê‚¼‚ê”äŠr
-                // ¦ System.Collections.Generic.Dictionary`2 ‘Îô
+                // KeyValuePairã®å ´åˆã¯Keyã¨Valueã§ãã‚Œãã‚Œæ¯”è¼ƒ
+                // â€» System.Collections.Generic.Dictionary`2 å¯¾ç­–
                 case Type t when t.Name == typeof(KeyValuePair<,>).Name:
                     Compare(type.GetProperty("Key").GetValue(obj1), type.GetProperty("Key").GetValue(obj2), type.GetGenericArguments()[0], $"{name}.Key");
                     Compare(type.GetProperty("Value").GetValue(obj1), type.GetProperty("Value").GetValue(obj2), type.GetGenericArguments()[1], $"{name}.Value");
                     return;
-                // System.IEquatable`1 ‚ğÀ‘•‚µ‚Ä‚¢‚éê‡‚Í System.IEquatable`1.Equals‚ğ—p‚¢‚Ä”äŠr(object.Equals(object, object)‚Íæq‚Ì——R‚Ì‚½‚ß—p‚¢‚È‚¢)
+                // System.IEquatable`1 ã‚’å®Ÿè£…ã—ã¦ã„ã‚‹å ´åˆã¯ System.IEquatable`1.Equalsã‚’ç”¨ã„ã¦æ¯”è¼ƒ(object.Equals(object, object)ã¯å…ˆè¿°ã®ç†ç”±ã®ãŸã‚ç”¨ã„ãªã„)
                 case Type t when (t.HasInterface(typeof(IEquatable<>)) && t.GetInterface(typeof(IEquatable<>).FullName).GetGenericArguments()[0] == t):
                     var IEquatableT = t.GetInterface(typeof(IEquatable<>).FullName);
                     if (!(bool)IEquatableT.GetMethod("Equals").Invoke(obj1, new[] { obj2 })) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
                     break;
-                // foreach‰Â”\‚Èê‡object[]‚É‚µ‚Ä—v‘f””äŠr¨Še—v‘f‚ğ”äŠr
-                // ‚±‚Ì‘€ì‚É‚¨‚¯‚é§–ñ‚Í‰º‹L‚ÌToObjectArrayQÆ
+                // foreachå¯èƒ½ãªå ´åˆobject[]ã«ã—ã¦è¦ç´ æ•°æ¯”è¼ƒâ†’å„è¦ç´ ã‚’æ¯”è¼ƒ
+                // ã“ã®æ“ä½œã«ãŠã‘ã‚‹åˆ¶ç´„ã¯ä¸‹è¨˜ã®ToObjectArrayå‚ç…§
                 case Type t when t.HasInterface(typeof(IEnumerable)):
                     var array1 = ((IEnumerable)obj1).ToObjectArray();
                     var array2 = ((IEnumerable)obj2).ToObjectArray();
                     if (array1.Length != array2.Length) throw new AssertionException($"{name}\nCollection Count is not same\nCount1: {array1.Length}\nCount2: {array2.Length}");
                     for (int i = 0; i < array1.Length; i++) Compare(array1[i], array2[i], array1[i]?.GetType(), $"{name}[{i}]");
                     return;
-                // ‚Ç‚Ì‘€ì‚É‚àŠY“–‚µ‚È‚¢ê‡‚ÍƒtƒB[ƒ‹ƒh‚ÆƒvƒƒpƒeƒB‚ğ‘S—ñ‹“‚µ‚Ä”äŠr
-                // \’†”ª‹ã•Ï‚È’l(IntPtr“™)‚ğ”äŠr‚µ‚Ä€‚Ê‚Ì‚Å‚È‚é‚×‚­ReflectionSource“à‚Å‹Lq‚·‚é‚±‚Æ
+                // ã©ã®æ“ä½œã«ã‚‚è©²å½“ã—ãªã„å ´åˆã¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å…¨åˆ—æŒ™ã—ã¦æ¯”è¼ƒ
+                // åä¸­å…«ä¹å¤‰ãªå€¤(IntPtrç­‰)ã‚’æ¯”è¼ƒã—ã¦æ­»ã¬ã®ã§ãªã‚‹ã¹ãReflectionSourceå†…ã§è¨˜è¿°ã™ã‚‹ã“ã¨
                 default:
                     var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     var methods = Array.Empty<(MethodInfo, object[])>();
@@ -195,62 +195,62 @@ namespace Altseed2.Test
                     EnumerateMembers(obj1, obj2, type, fields, properties, methods, name);
                     break;
             }
-            // ƒƒO“f‚«o‚µ
+            // ãƒ­ã‚°åãå‡ºã—
             writer.WriteLine($"{name}<{type.FullName}> : {obj1.ToLogText()} - {obj2.ToLogText()}");
         }
 
         /// <summary>
-        /// ƒŠƒtƒŒƒNƒVƒ‡ƒ“‚ğ—p‚¢‚Ä”äŠr‚·‚é“à—e‚ğ‚ÂƒNƒ‰ƒX
+        /// ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‚’ç”¨ã„ã¦æ¯”è¼ƒã™ã‚‹å†…å®¹ã‚’æŒã¤ã‚¯ãƒ©ã‚¹
         /// </summary>
         public sealed class ReflectionInfo
         {
             /// <summary>
-            /// <see cref="Serialization"/>“à‚Å<see cref="Value"/>‚ÌƒVƒŠƒAƒ‰ƒCƒY‚ğs‚¤‚©‚Ç‚¤‚©‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// <see cref="Serialization"/>å†…ã§<see cref="Value"/>ã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã‚’è¡Œã†ã‹ã©ã†ã‹ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public bool DoSerialization { get; set; } = true;
 
             /// <summary>
-            /// ”äŠr‚·‚éƒtƒB[ƒ‹ƒh‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// æ¯”è¼ƒã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public FieldInfo[] FieldInfos { get => _fieldInfos; set => _fieldInfos = value ?? Array.Empty<FieldInfo>(); }
-            // •Ô‚è’l‚ªnull‚É‚È‚é‚Æforeach“à‚Å€‚Ê‚Ì‚ÅArray.Empty<T>()‚ğ•K‚¸ŒÄ‚Ño‚·‚±‚Æ
+            // è¿”ã‚Šå€¤ãŒnullã«ãªã‚‹ã¨foreachå†…ã§æ­»ã¬ã®ã§Array.Empty<T>()ã‚’å¿…ãšå‘¼ã³å‡ºã™ã“ã¨
             private FieldInfo[] _fieldInfos = Array.Empty<FieldInfo>();
 
             /// <summary>
-            /// ”äŠr‚·‚éƒƒ\ƒbƒh‚Æ‚»‚Ìˆø”‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// æ¯”è¼ƒã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã¨ãã®å¼•æ•°ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public (MethodInfo, object[])[] MethodsInfos { get => _methodInfos; set => _methodInfos = value ?? Array.Empty<(MethodInfo, object[])>(); }
-            // •Ô‚è’l‚ªnull‚É‚È‚é‚Æforeach“à‚Å€‚Ê‚Ì‚ÅArray.Empty<T>()‚ğ•K‚¸ŒÄ‚Ño‚·‚±‚Æ
+            // è¿”ã‚Šå€¤ãŒnullã«ãªã‚‹ã¨foreachå†…ã§æ­»ã¬ã®ã§Array.Empty<T>()ã‚’å¿…ãšå‘¼ã³å‡ºã™ã“ã¨
             private (MethodInfo, object[])[] _methodInfos = Array.Empty<(MethodInfo, object[])>();
 
             /// <summary>
-            /// ’Ç‰Á‚Å”äŠr‚·‚é—v‘f‚ª‚ ‚éê‡‚Í‚±‚Ì’†‚Å•Ô‚è’l‚Æ‚µ‚Ä‚½‚¹‚é
+            /// è¿½åŠ ã§æ¯”è¼ƒã™ã‚‹è¦ç´ ãŒã‚ã‚‹å ´åˆã¯ã“ã®ä¸­ã§è¿”ã‚Šå€¤ã¨ã—ã¦æŒãŸã›ã‚‹
             /// </summary>
             public OptionalValueProvider OptionalValueProvider { get; set; }
 
             /// <summary>
-            /// ”äŠr‚·‚éƒvƒƒpƒeƒB‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// æ¯”è¼ƒã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public PropertyInfo[] PropertyInfos { get => _propertyInfos; set => _propertyInfos = value ?? Array.Empty<PropertyInfo>(); }
-            // •Ô‚è’l‚ªnull‚É‚È‚é‚Æforeach“à‚Å€‚Ê‚Ì‚ÅArray.Empty<T>()‚ğ•K‚¸ŒÄ‚Ño‚·‚±‚Æ
+            // è¿”ã‚Šå€¤ãŒnullã«ãªã‚‹ã¨foreachå†…ã§æ­»ã¬ã®ã§Array.Empty<T>()ã‚’å¿…ãšå‘¼ã³å‡ºã™ã“ã¨
             private PropertyInfo[] _propertyInfos = Array.Empty<PropertyInfo>();
 
             /// <summary>
-            /// Ši”[‚·‚éƒIƒuƒWƒFƒNƒg‚ÌŒ^‚ğæ“¾‚·‚é
+            /// æ ¼ç´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‹ã‚’å–å¾—ã™ã‚‹
             /// </summary>
             public Type Type { get; private set; }
 
             /// <summary>
-            /// <see cref="Serialization"/>“à‚ÅƒVƒŠƒAƒ‰ƒCƒY‚³‚ê‚éƒIƒuƒWƒFƒNƒg‚ğæ“¾‚·‚é
+            /// <see cref="Serialization"/>å†…ã§ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã•ã‚Œã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã™ã‚‹
             /// </summary>
             public object Value { get; private set; }
 
             /// <summary>
-            /// w’è‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğ‚Â<see cref="ReflectionInfo"/>‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚é
+            /// æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã¤<see cref="ReflectionInfo"/>ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
             /// </summary>
-            /// <typeparam name="T">Ši”[‚·‚é—v‘f‚ÌŒ^</typeparam>
-            /// <param name="value">Ši”[‚·‚é—v‘f</param>
-            /// <returns><paramref name="value"/>‚ğ‚Â<see cref="ReflectionInfo"/>‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX</returns>
+            /// <typeparam name="T">æ ¼ç´ã™ã‚‹è¦ç´ ã®å‹</typeparam>
+            /// <param name="value">æ ¼ç´ã™ã‚‹è¦ç´ </param>
+            /// <returns><paramref name="value"/>ã‚’æŒã¤<see cref="ReflectionInfo"/>ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</returns>
             public static ReflectionInfo Create<T>(T value)
             {
                 var result = new ReflectionInfo
@@ -263,33 +263,33 @@ namespace Altseed2.Test
         }
 
         /// <summary>
-        /// ’Ç‰Á‚Å”äŠr‚·‚é—v‘f‚ğ¶¬‚·‚éŠÖ”
+        /// è¿½åŠ ã§æ¯”è¼ƒã™ã‚‹è¦ç´ ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
         /// </summary>
-        /// <param name="obj1">—^‚¦‚ç‚ê‚éƒIƒuƒWƒFƒNƒg1</param>
-        /// <param name="obj2">—^‚¦‚ç‚ê‚éƒIƒuƒWƒFƒNƒg2</param>
-        /// <returns>’Ç‰Á‚Å”äŠr‚·‚é—v‘f‚ğŠi”[‚·‚éƒRƒŒƒNƒVƒ‡ƒ“</returns>
+        /// <param name="obj1">ä¸ãˆã‚‰ã‚Œã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ1</param>
+        /// <param name="obj2">ä¸ãˆã‚‰ã‚Œã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ2</param>
+        /// <returns>è¿½åŠ ã§æ¯”è¼ƒã™ã‚‹è¦ç´ ã‚’æ ¼ç´ã™ã‚‹ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³</returns>
         public delegate IEnumerable<OptionalValueEntry> OptionalValueProvider(object obj1, object obj2);
 
         /// <summary>
-        /// ’Ç‰Á‚Å”äŠr‚·‚é—v‘f‚ğ•\‚·
+        /// è¿½åŠ ã§æ¯”è¼ƒã™ã‚‹è¦ç´ ã‚’è¡¨ã™
         /// </summary>
         public struct OptionalValueEntry
         {
             /// <summary>
-            /// —v‘f–¼‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// è¦ç´ åã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
-            /// <remarks>ƒƒO‚Å“f‚©‚ê‚é–¼‘O‚È‚Ì‚ÅƒƒO‚ğg‚í‚È‚¢ê‡‚Íİ’è‚µ‚È‚­‚ÄOK</remarks>
+            /// <remarks>ãƒ­ã‚°ã§åã‹ã‚Œã‚‹åå‰ãªã®ã§ãƒ­ã‚°ã‚’ä½¿ã‚ãªã„å ´åˆã¯è¨­å®šã—ãªãã¦OK</remarks>
             public string Name { get; set; }
             /// <summary>
-            /// Ši”[‚·‚éƒIƒuƒWƒFƒNƒg‚ÌŒ^‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// æ ¼ç´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‹ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public Type Type { get; set; }
             /// <summary>
-            /// ”äŠr‚·‚é’l‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// æ¯”è¼ƒã™ã‚‹å€¤ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public object Value1 { get; set; }
             /// <summary>
-            /// ”äŠr‚·‚é’l‚ğæ“¾‚Ü‚½‚Íİ’è‚·‚é
+            /// æ¯”è¼ƒã™ã‚‹å€¤ã‚’å–å¾—ã¾ãŸã¯è¨­å®šã™ã‚‹
             /// </summary>
             public object Value2 { get; set; }
             public OptionalValueEntry(string name, Type type, object value1, object value2)
@@ -312,42 +312,42 @@ namespace Altseed2.Test
     internal static class ReflectionHelper
     {
         /// <summary>
-        /// ƒƒ“ƒo[‚ğæ‚èo‚·‚Æ‚«‚É—p‚¢‚éƒtƒ‰ƒO
+        /// ãƒ¡ãƒ³ãƒãƒ¼ã‚’å–ã‚Šå‡ºã™ã¨ãã«ç”¨ã„ã‚‹ãƒ•ãƒ©ã‚°
         /// </summary>
         private const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         /// <summary>
-        /// w’è‚µ‚½ƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğ‚Â‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+        /// æŒ‡å®šã—ãŸã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’æŒã¤ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
         /// </summary>
-        /// <param name="type">”»’è‚·‚éŒ^</param>
-        /// <param name="interfaceType">À‘•‚ğŠm”F‚·‚éƒCƒ“ƒ^[ƒtƒFƒCƒX‚ÌŒ^</param>
-        /// <returns><paramref name="type"/>‚ª<paramref name="interfaceType"/>‚ğÀ‘•‚µ‚Ä‚¢‚½‚çtrueC‚»‚êˆÈŠO‚Åfalse</returns>
+        /// <param name="type">åˆ¤å®šã™ã‚‹å‹</param>
+        /// <param name="interfaceType">å®Ÿè£…ã‚’ç¢ºèªã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®å‹</param>
+        /// <returns><paramref name="type"/>ãŒ<paramref name="interfaceType"/>ã‚’å®Ÿè£…ã—ã¦ã„ãŸã‚‰trueï¼Œãã‚Œä»¥å¤–ã§false</returns>
         public static bool HasInterface(this Type type, Type interfaceType) => interfaceType.IsInterface && type.GetInterface(interfaceType.FullName) != null;
         /// <summary>
-        /// w’è‚µ‚½–¼‘O‚Ì<see cref="FieldInfo"/>‚ğæ‚èo‚·
+        /// æŒ‡å®šã—ãŸåå‰ã®<see cref="FieldInfo"/>ã‚’å–ã‚Šå‡ºã™
         /// </summary>
-        /// <param name="info">ƒtƒB[ƒ‹ƒh‚ğæ‚èo‚µ‚½‚¢<see cref="ReflectionSerialize.ReflectionInfo"/>‚ÌƒCƒ“ƒXƒ^ƒ“ƒX</param>
-        /// <param name="name">æ‚èo‚·ƒtƒB[ƒ‹ƒh‚Ì–¼‘O</param>
-        /// <returns><paramref name="info"/>‚É‚¨‚¯‚é<paramref name="name"/>‚ğ–¼‘O‚Æ‚µ‚Ä‚ÂƒtƒB[ƒ‹ƒh</returns>
-        public static FieldInfo GetField(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetField(name, flags) ?? throw new InvalidOperationException($"ƒtƒB[ƒ‹ƒh‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½\nType: {info.Type.FullName}\nField: {name}");
+        /// <param name="info">ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å–ã‚Šå‡ºã—ãŸã„<see cref="ReflectionSerialize.ReflectionInfo"/>ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</param>
+        /// <param name="name">å–ã‚Šå‡ºã™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åå‰</param>
+        /// <returns><paramref name="info"/>ã«ãŠã‘ã‚‹<paramref name="name"/>ã‚’åå‰ã¨ã—ã¦æŒã¤ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰</returns>
+        public static FieldInfo GetField(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetField(name, flags) ?? throw new InvalidOperationException($"ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ\nType: {info.Type.FullName}\nField: {name}");
         /// <summary>
-        /// w’è‚µ‚½–¼‘O‚Ì<see cref="MethodInfo"/>‚ğæ‚èo‚·
+        /// æŒ‡å®šã—ãŸåå‰ã®<see cref="MethodInfo"/>ã‚’å–ã‚Šå‡ºã™
         /// </summary>
-        /// <param name="info">ƒƒ\ƒbƒh‚ğæ‚èo‚µ‚½‚¢<see cref="ReflectionSerialize.ReflectionInfo"/>‚ÌƒCƒ“ƒXƒ^ƒ“ƒX</param>
-        /// <param name="name">æ‚èo‚·ƒƒ\ƒbƒh‚Ì–¼‘O</param>
-        /// <returns><paramref name="info"/>‚É‚¨‚¯‚é<paramref name="name"/>‚ğ–¼‘O‚Æ‚µ‚Ä‚Âƒƒ\ƒbƒh</returns>
-        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"ƒƒ\ƒbƒh‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½\nType: {info.Type.FullName}\nMethod: {name}");
+        /// <param name="info">ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å–ã‚Šå‡ºã—ãŸã„<see cref="ReflectionSerialize.ReflectionInfo"/>ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</param>
+        /// <param name="name">å–ã‚Šå‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰ã®åå‰</param>
+        /// <returns><paramref name="info"/>ã«ãŠã‘ã‚‹<paramref name="name"/>ã‚’åå‰ã¨ã—ã¦æŒã¤ãƒ¡ã‚½ãƒƒãƒ‰</returns>
+        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"ãƒ¡ã‚½ãƒƒãƒ‰ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ\nType: {info.Type.FullName}\nMethod: {name}");
         /// <summary>
-        /// w’è‚µ‚½–¼‘O‚Ì<see cref="PropertyInfo"/>‚ğæ‚èo‚·
+        /// æŒ‡å®šã—ãŸåå‰ã®<see cref="PropertyInfo"/>ã‚’å–ã‚Šå‡ºã™
         /// </summary>
-        /// <param name="info">ƒvƒƒpƒeƒB‚ğæ‚èo‚µ‚½‚¢<see cref="ReflectionSerialize.ReflectionInfo"/>‚ÌƒCƒ“ƒXƒ^ƒ“ƒX</param>
-        /// <param name="name">æ‚èo‚·ƒvƒƒpƒeƒB‚Ì–¼‘O</param>
-        /// <returns><paramref name="info"/>‚É‚¨‚¯‚é<paramref name="name"/>‚ğ–¼‘O‚Æ‚µ‚Ä‚ÂƒvƒƒpƒeƒB</returns>
-        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"ƒvƒƒpƒeƒB‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½\nType: {info.Type.FullName}\nProperty: {name}");
+        /// <param name="info">ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–ã‚Šå‡ºã—ãŸã„<see cref="ReflectionSerialize.ReflectionInfo"/>ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</param>
+        /// <param name="name">å–ã‚Šå‡ºã™ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åå‰</param>
+        /// <returns><paramref name="info"/>ã«ãŠã‘ã‚‹<paramref name="name"/>ã‚’åå‰ã¨ã—ã¦æŒã¤ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£</returns>
+        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ\nType: {info.Type.FullName}\nProperty: {name}");
         /// <summary>
-        /// ƒƒO‚É“f‚­ƒeƒLƒXƒg‚ğæ“¾‚·‚é
+        /// ãƒ­ã‚°ã«åããƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
         /// </summary>
-        /// <param name="value">ƒeƒLƒXƒg‚É‚·‚éƒIƒuƒWƒFƒNƒg</param>
-        /// <returns><paramref name="value"/>‚ğ•\‚·ƒeƒLƒXƒg</returns>
+        /// <param name="value">ãƒ†ã‚­ã‚¹ãƒˆã«ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
+        /// <returns><paramref name="value"/>ã‚’è¡¨ã™ãƒ†ã‚­ã‚¹ãƒˆ</returns>
         public static string ToLogText(this object value)
         {
             if (value == null) return "null";
@@ -362,13 +362,13 @@ namespace Altseed2.Test
             }
         }
         /// <summary>
-        /// <see cref="IEnumerable"/>‚ğ<see cref="object"/>Œ^‚Ì”z—ñ‚É‚·‚é
+        /// <see cref="IEnumerable"/>ã‚’<see cref="object"/>å‹ã®é…åˆ—ã«ã™ã‚‹
         /// </summary>
-        /// <param name="enumerable">”z—ñ‚É‚·‚é<see cref="IEnumerable"/>‚ÌƒCƒ“ƒXƒ^ƒ“ƒX</param>
-        /// <exception cref="ArgumentException"><paramref name="enumerable"/>‚ª”z—ñ‚ÅC‚»‚ÌŠJnƒCƒ“ƒfƒbƒNƒX‚ª0ˆÈŠO</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="enumerable"/>‚ªnull</exception>
-        /// <exception cref="RankException"><paramref name="enumerable"/>‚ª2ŸŒ³ˆÈã‚Ì”z—ñ</exception>
-        /// <returns><paramref name="enumerable"/>“à‚Ì—v‘f‚ğŠi”[‚·‚é”z—ñ</returns>
+        /// <param name="enumerable">é…åˆ—ã«ã™ã‚‹<see cref="IEnumerable"/>ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</param>
+        /// <exception cref="ArgumentException"><paramref name="enumerable"/>ãŒé…åˆ—ã§ï¼Œãã®é–‹å§‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒ0ä»¥å¤–</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="enumerable"/>ãŒnull</exception>
+        /// <exception cref="RankException"><paramref name="enumerable"/>ãŒ2æ¬¡å…ƒä»¥ä¸Šã®é…åˆ—</exception>
+        /// <returns><paramref name="enumerable"/>å†…ã®è¦ç´ ã‚’æ ¼ç´ã™ã‚‹é…åˆ—</returns>
         public static object[] ToObjectArray(this IEnumerable enumerable)
         {
             object[] result;
