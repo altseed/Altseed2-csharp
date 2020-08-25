@@ -391,7 +391,7 @@ namespace Altseed2
 
         private void ApplySizeChanged()
         {
-            if (Status == RegisteredStatus.Free) return;
+            if (Status != RegisteredStatus.Registered) return;
 
             foreach (var child in Parent.Children)
             {

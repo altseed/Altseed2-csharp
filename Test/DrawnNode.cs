@@ -361,6 +361,9 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             tc.LoopBody(c =>
             {
+                text.Text = "中心で回転します" + c.ToString();
+                rotated.Size = text.ContentSize;
+
                 rotated.Angle += 1.0f;
             }
             , null);
@@ -402,7 +405,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             child.Pivot = new Vector2F(0.5f, 0.5f);
             child.AnchorMin = new Vector2F(0.0f, 0.0f);
             child.AnchorMax = new Vector2F(1f, 1f);
-            child.HorizontalAlignment = HorizontalAlignment.Center;
+            child.HorizontalAlignment = HorizontalAlignment.Left;
             child.VerticalAlignment = VerticalAlignment.Center;
             child.Size = sprite2.ContentSize;
             child.AnchorMode = AnchorMode.KeepAspect;
