@@ -335,14 +335,14 @@ namespace Altseed2.Test
         /// <param name="info">メソッドを取り出したい<see cref="ReflectionSerialize.ReflectionInfo"/>のインスタンス</param>
         /// <param name="name">取り出すメソッドの名前</param>
         /// <returns><paramref name="info"/>における<paramref name="name"/>を名前として持つメソッド</returns>
-        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"メソッドの読み込みに失敗しました\nType: {info.Type.FullName}\nField: {name}");
+        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"メソッドの読み込みに失敗しました\nType: {info.Type.FullName}\nMethod: {name}");
         /// <summary>
         /// 指定した名前の<see cref="PropertyInfo"/>を取り出す
         /// </summary>
         /// <param name="info">プロパティを取り出したい<see cref="ReflectionSerialize.ReflectionInfo"/>のインスタンス</param>
         /// <param name="name">取り出すプロパティの名前</param>
         /// <returns><paramref name="info"/>における<paramref name="name"/>を名前として持つプロパティ</returns>
-        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"プロパティの読み込みに失敗しました\nType: {info.Type.FullName}\nField: {name}");
+        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"プロパティの読み込みに失敗しました\nType: {info.Type.FullName}\nProperty: {name}");
         /// <summary>
         /// ログに吐くテキストを取得する
         /// </summary>
