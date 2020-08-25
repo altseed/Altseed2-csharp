@@ -1128,6 +1128,10 @@ namespace Altseed2.Test
                 result.Add(transformNode.Type, transformNode);
 
                 // Optional
+
+                //
+                // TextureBaseはシリアライズテストは行わないがTextureBase型でCompareが回されるときがあるためその対策
+                // 
                 var textureBase = ReflectionInfo.Create(default(TextureBase));
                 textureBase.DoSerialization = false;
                 textureBase.OptionalValueProvider = (x, y) =>
@@ -1153,7 +1157,6 @@ namespace Altseed2.Test
                 result.Add(textureBase.Type, textureBase);
 
                 return result;
-                //Altseed2.
             }
         }
     }
