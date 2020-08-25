@@ -109,6 +109,9 @@ namespace Altseed2.Test
                 case Type t when t.IsEnum:
                     if ((int)obj1 != (int)obj2) throw new AssertionException($"{name}\nNot Equals\nobj1: {obj1}\nobj2: {obj2}");
                     break;
+                case Type t when t.Name == typeof(Nullable<>).Name:
+                    Compare(type.GetProperty("Value").GetValue(obj1), type.GetProperty("Value").GetValue(obj2), type.GetGenericArguments()[0], name);
+                    return;
                 case Type t when t.Name == typeof(KeyValuePair<,>).Name:
                     Compare(type.GetProperty("Key").GetValue(obj1), type.GetProperty("Key").GetValue(obj2), type.GetGenericArguments()[0], $"{name}.Key");
                     Compare(type.GetProperty("Value").GetValue(obj1), type.GetProperty("Value").GetValue(obj2), type.GetGenericArguments()[1], $"{name}.Value");
@@ -186,9 +189,9 @@ namespace Altseed2.Test
     {
         private const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         public static bool HasInterface(this Type type, Type interfaceType) => interfaceType.IsInterface && type.GetInterface(interfaceType.FullName) != null;
-        public static FieldInfo GetField(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetField(name, flags) ?? throw new InvalidOperationException($"ÔøΩtÔøΩBÔøΩ[ÔøΩÔøΩÔøΩhÔøΩÃì«Ç›çÔøΩÔøΩ›Ç…éÔøΩÔøΩsÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩ\nType: {info.Type.FullName}\nField: {name}");
-        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"ÔøΩÔøΩÔøΩ\ÔøΩbÔøΩhÔøΩÃì«Ç›çÔøΩÔøΩ›Ç…éÔøΩÔøΩsÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩ\nType: {info.Type.FullName}\nField: {name}");
-        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"ÔøΩvÔøΩÔøΩÔøΩpÔøΩeÔøΩBÔøΩÃì«Ç›çÔøΩÔøΩ›Ç…éÔøΩÔøΩsÔøΩÔøΩÔøΩ‹ÇÔøΩÔøΩÔøΩ\nType: {info.Type.FullName}\nField: {name}");
+        public static FieldInfo GetField(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetField(name, flags) ?? throw new InvalidOperationException($"ÉtÉBÅ[ÉãÉhÇÃì«Ç›çûÇ›Ç…é∏îsÇµÇ‹ÇµÇΩ\nType: {info.Type.FullName}\nField: {name}");
+        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"ÉÅÉ\ÉbÉhÇÃì«Ç›çûÇ›Ç…é∏îsÇµÇ‹ÇµÇΩ\nType: {info.Type.FullName}\nField: {name}");
+        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"ÉvÉçÉpÉeÉBÇÃì«Ç›çûÇ›Ç…é∏îsÇµÇ‹ÇµÇΩ\nType: {info.Type.FullName}\nField: {name}");
         public static string ToLogText(this object value)
         {
             if (value == null) return "null";
