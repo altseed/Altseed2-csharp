@@ -130,20 +130,19 @@ namespace Altseed2.Test
             public static Dictionary<Type, ReflectionInfo> Info { get; } = GetInfo();
             private static Dictionary<Type, ReflectionInfo> GetInfo()
             {
-                const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
                 var result = new Dictionary<Type, ReflectionInfo>();
 
                 // Altseed2.AlphaBlend
                 var alphaBlend = ReflectionInfo.Create(AlphaBlend.Normal);
                 alphaBlend.FieldInfos = new[]
                 {
-                    alphaBlend.Type.GetField("IsBlendEnabled", flags),
-                    alphaBlend.Type.GetField("BlendSrcFunc", flags),
-                    alphaBlend.Type.GetField("BlendDstFunc", flags),
-                    alphaBlend.Type.GetField("BlendSrcFuncAlpha", flags),
-                    alphaBlend.Type.GetField("BlendDstFuncAlpha", flags),
-                    alphaBlend.Type.GetField("BlendEquationRGB", flags),
-                    alphaBlend.Type.GetField("BlendEquationAlpha", flags),
+                    alphaBlend.GetField("IsBlendEnabled"),
+                    alphaBlend.GetField("BlendSrcFunc"),
+                    alphaBlend.GetField("BlendDstFunc"),
+                    alphaBlend.GetField("BlendSrcFuncAlpha"),
+                    alphaBlend.GetField("BlendDstFuncAlpha"),
+                    alphaBlend.GetField("BlendEquationRGB"),
+                    alphaBlend.GetField("BlendEquationAlpha"),
                 };
                 result.Add(alphaBlend.Type, alphaBlend);
 
@@ -179,7 +178,11 @@ namespace Altseed2.Test
     }
     internal static class ReflectionHelper
     {
+        private const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         public static bool HasInterface(this Type type, Type interfaceType) => interfaceType.IsInterface && type.GetInterface(interfaceType.FullName) != null;
+        public static FieldInfo GetField(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetField(name, flags) ?? throw new InvalidOperationException($"�t�B�[���h�̓ǂݍ��݂Ɏ��s���܂���\nType: {info.Type.FullName}\nField: {name}");
+        public static MethodInfo GetMethod(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetMethod(name, flags) ?? throw new InvalidOperationException($"���\�b�h�̓ǂݍ��݂Ɏ��s���܂���\nType: {info.Type.FullName}\nField: {name}");
+        public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"�v���p�e�B�̓ǂݍ��݂Ɏ��s���܂���\nType: {info.Type.FullName}\nField: {name}");
         public static string ToLogText(this object value)
         {
             if (value == null) return "null";
