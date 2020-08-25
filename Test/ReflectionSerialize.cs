@@ -65,6 +65,13 @@ namespace Altseed2.Test
         private static void EnumerateMembers(object obj1, object obj2, Type type, FieldInfo[] fields, PropertyInfo[] properties, (MethodInfo, object[])[] methods, string name)
         {
             if (!ReflectionSources.Info.ContainsKey(type) && type.IsClass && type.BaseType != null && type.BaseType != typeof(object)) EnumerateMembers(obj1, obj2, type.BaseType, fields, properties, methods, name);
+            if (ReflectionSources.Info.TryGetValue(type, out var refInfo))
+            {
+                var values = refInfo.OptionalValueProvider?.Invoke(obj1, obj2);
+                if (values != null)
+                    foreach (var (valueName, valueType, comparison1, comparison2) in values)
+                        Compare(comparison1, comparison2, valueType, $"{name}.{valueName}");
+            }
             foreach (var field in fields) Compare(field.GetValue(obj1), field.GetValue(obj2), field.FieldType, $"{name}.{field.Name}");
             foreach (var property in properties) Compare(property.GetValue(obj1), property.GetValue(obj2), property.PropertyType, $"{name}.{property.Name}");
             foreach (var (method, args) in methods) Compare(method.Invoke(obj1, args), method.Invoke(obj2, args), method.ReturnType, $"{name}.{method.Name}");
@@ -152,11 +159,11 @@ namespace Altseed2.Test
 
         public sealed class ReflectionInfo
         {
-            public SerializedObjectComparer Comparer { get; set; }
             public FieldInfo[] FieldInfos { get => _fieldInfos; set => _fieldInfos = value ?? Array.Empty<FieldInfo>(); }
             private FieldInfo[] _fieldInfos = Array.Empty<FieldInfo>();
             public (MethodInfo, object[])[] MethodsInfos { get => _methodInfos; set => _methodInfos = value ?? Array.Empty<(MethodInfo, object[])>(); }
             private (MethodInfo, object[])[] _methodInfos = Array.Empty<(MethodInfo, object[])>();
+            public OptionalValueProvider OptionalValueProvider { get; set; }
             public PropertyInfo[] PropertyInfos { get => _propertyInfos; set => _propertyInfos = value ?? Array.Empty<PropertyInfo>(); }
             private PropertyInfo[] _propertyInfos = Array.Empty<PropertyInfo>();
             public Type Type { get; private set; }
@@ -174,7 +181,29 @@ namespace Altseed2.Test
         }
 
 
-        public delegate AssertionException SerializedObjectComparer(object obj1, object obj2);
+        public delegate IEnumerable<OptionalValueEntry> OptionalValueProvider(object obj1, object obj2);
+
+        public struct OptionalValueEntry
+        {
+            public string Name { get; set; }
+            public Type Type { get; set; }
+            public object Value1 { get; set; }
+            public object Value2 { get; set; }
+            public OptionalValueEntry(string name, Type type, object value1, object value2)
+            {
+                Name = name;
+                Type = type;
+                Value1 = value1;
+                Value2 = value2;
+            }
+            public readonly void Deconstruct(out string name, out Type type, out object value1, out object value2)
+            {
+                name = Name;
+                type = Type;
+                value1 = Value1;
+                value2 = Value2;
+            }
+        }
     }
     internal static class ReflectionHelper
     {
