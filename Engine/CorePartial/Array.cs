@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -10,7 +11,7 @@ namespace Altseed2
     /// Coreとの接続に使用する配列のインターフェイス
     /// </summary>
     /// <typeparam name="T">配列に格納される要素の型</typeparam>
-    internal interface IArray<T>
+    internal interface IArray<T> : IEnumerable<T>
         where T : unmanaged
     {
         /// <summary>
@@ -39,6 +40,8 @@ namespace Altseed2
         void CopyTo(IntPtr ptr);
 
         void Assign(IntPtr ptr, int size);
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     internal partial class Int8Array : IArray<byte>
@@ -70,6 +73,16 @@ namespace Altseed2
             var dst = Create(0);
             dst.FromEnumerable(src);
             return dst;
+        }
+
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<byte> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -120,6 +133,16 @@ namespace Altseed2
             return dst;
         }
 
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<int> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_Int32Array_Create(info.GetInt32(S_Count));
@@ -166,6 +189,16 @@ namespace Altseed2
             var dst = Create(0);
             dst.FromEnumerable(src);
             return dst;
+        }
+
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<Vertex> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -216,6 +249,16 @@ namespace Altseed2
             return dst;
         }
 
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<float> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_FloatArray_Create(info.GetInt32(S_Count));
@@ -262,6 +305,16 @@ namespace Altseed2
             var dst = Create(0);
             dst.FromEnumerable(src);
             return dst;
+        }
+
+        /// <summary>
+        /// 列挙子を返します。
+        /// </summary>
+        /// <returns>このインスタンスの列挙子</returns>
+        public IEnumerator<Vector2F> GetEnumerator()
+        {
+            var array = this.ToArray();
+            for (int i = 0; i < array.Length; i++) yield return array[i];
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -341,8 +394,8 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインデスタンス</param>
-        /// <param name="array">設定するデータとなる配列</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="array"/>がnull</exception>
+        /// <param name="span">設定するデータとなる配列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="span"/>がnull</exception>
         internal static void FromSpan<TElement>(this IArray<TElement> obj, ReadOnlySpan<TElement> span)
             where TElement : unmanaged
         {
@@ -365,10 +418,8 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="TElement">配列に格納される要素の型</typeparam>
         /// <param name="obj">データを設定するCore接続配列のインスタンス</param>
-        /// <param name="collection">設定するデータとなる<see cref="IEnumerable{TElement}"/></param>
-        /// <param name="count">指定した個数まで値を設定する</param>
-        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="collection"/>がnull</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/>が0未満</exception>
+        /// <param name="elements">設定するデータとなる<see cref="IEnumerable{TElement}"/></param>
+        /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="elements"/>がnull</exception>
         internal static void FromEnumerable<TElement>(this IArray<TElement> obj, IEnumerable<TElement> elements)
             where TElement : unmanaged
         {
