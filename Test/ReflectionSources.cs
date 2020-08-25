@@ -277,7 +277,7 @@ namespace Altseed2.Test
                 };
                 result.Add(streamFile.Type, streamFile);
 
-                // Altseed2/Material
+                // Altseed2.Material
                 var material_Value = Material.Create();
                 var material_Value_shader = Shader.Create("MaterialShader", Engine.Graphics.BuiltinShader.TextureMixShader, ShaderStage.Pixel);
                 material_Value.SetShader(material_Value_shader);
@@ -1126,8 +1126,6 @@ namespace Altseed2.Test
                     transformNode.GetProperty("VerticalFlip"),
                 };
                 result.Add(transformNode.Type, transformNode);
-
-
 
                 // Optional
                 var textureBase = ReflectionInfo.Create(default(TextureBase));

@@ -82,13 +82,11 @@ namespace Altseed2.Test
         {
             if (obj1 == null)
             {
-                Assert.Null(obj2, $"{name}\nBasic obj: null\nDeserialized obj: Not null");
+                if (obj2 != null) throw new AssertionException($"{name}\nobj1: null\nobj2: Not null");
                 writer.WriteLine($"{name}<{type.FullName}> : {obj1.ToLogText()} - {obj2.ToLogText()}");
                 return;
             }
-            Assert.NotNull(obj2, $"{name}\nBasic obj: Not null\nDeserialized obj: null");
-            //if (obj1.GetType() != type) throw new AssertionException($"typeof obj1 is not {type.FullName}");
-            //if (obj2.GetType() != type) throw new AssertionException($"typeof obj2 is not {type.FullName}");
+            if (obj2 == null) throw new AssertionException($"{name}\nobj1: Not null\nobj2: null");
 
             if (ReflectionSources.Info.TryGetValue(type, out var refInfo))
             {
