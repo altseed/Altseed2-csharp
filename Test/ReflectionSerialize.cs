@@ -44,7 +44,7 @@ namespace Altseed2.Test
             {
                 var replacedTypeName = info.Type.FullName.Replace('.', '_').Replace('`', '_');
 
-                var path = $"Serialization/{replacedTypeName}.bin";
+                var path = $"Serialization/Binaries/{replacedTypeName}.bin";
 
                 Serialize(path, info.Value);
                 if (!System.IO.File.Exists(path)) throw new AssertionException($"Failed to Serialze object\nType: {info.Type.FullName}");
