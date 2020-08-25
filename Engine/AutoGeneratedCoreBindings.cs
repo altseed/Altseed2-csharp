@@ -6592,7 +6592,7 @@ namespace Altseed2
             CacheHelper.CacheHandling(this, ptr);
             
             var Texture = info.GetValue<TextureBase>(S_Texture);
-            ((IDeserializationCallback)Texture).OnDeserialization(null);
+            ((IDeserializationCallback)Texture)?.OnDeserialization(null);
             this.Texture = Texture;
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
@@ -7150,7 +7150,7 @@ namespace Altseed2
             MaterialImage = info.GetValue<Material>(S_MaterialImage);
             Text = info.GetString(S_Text);
             var Font = info.GetValue<Font>(S_Font);
-            ((IDeserializationCallback)Font).OnDeserialization(null);
+            ((IDeserializationCallback)Font)?.OnDeserialization(null);
             this.Font = Font;
             Weight = info.GetSingle(S_Weight);
             IsEnableKerning = info.GetBoolean(S_IsEnableKerning);
@@ -7529,7 +7529,7 @@ namespace Altseed2
             
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
             var Texture = info.GetValue<TextureBase>(S_Texture);
-            ((IDeserializationCallback)Texture).OnDeserialization(null);
+            ((IDeserializationCallback)Texture)?.OnDeserialization(null);
             this.Texture = Texture;
             Src = info.GetValue<RectF>(S_Src);
             Material = info.GetValue<Material>(S_Material);
@@ -7811,7 +7811,7 @@ namespace Altseed2
             
             ViewMatrix = info.GetValue<Matrix44F>(S_ViewMatrix);
             var TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
-            ((IDeserializationCallback)TargetTexture).OnDeserialization(null);
+            ((IDeserializationCallback)TargetTexture)?.OnDeserialization(null);
             this.TargetTexture = TargetTexture;
             RenderPassParameter = info.GetValue<RenderPassParameter>(S_RenderPassParameter);
             
