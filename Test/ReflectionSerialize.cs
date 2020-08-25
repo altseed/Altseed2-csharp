@@ -343,6 +343,11 @@ namespace Altseed2.Test
         /// <param name="name">取り出すプロパティの名前</param>
         /// <returns><paramref name="info"/>における<paramref name="name"/>を名前として持つプロパティ</returns>
         public static PropertyInfo GetProperty(this ReflectionSerialize.ReflectionInfo info, string name) => info.Type.GetProperty(name, flags) ?? throw new InvalidOperationException($"プロパティの読み込みに失敗しました\nType: {info.Type.FullName}\nField: {name}");
+        /// <summary>
+        /// ログに吐くテキストを取得する
+        /// </summary>
+        /// <param name="value">テキストにするオブジェクト</param>
+        /// <returns><paramref name="value"/>を表すテキスト</returns>
         public static string ToLogText(this object value)
         {
             if (value == null) return "null";
@@ -356,6 +361,14 @@ namespace Altseed2.Test
                 default: return value.ToString();
             }
         }
+        /// <summary>
+        /// <see cref="IEnumerable"/>を<see cref="object"/>型の配列にする
+        /// </summary>
+        /// <param name="enumerable">配列にする<see cref="IEnumerable"/>のインスタンス</param>
+        /// <exception cref="ArgumentException"><paramref name="enumerable"/>が配列で，その開始インデックスが0以外</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="enumerable"/>がnull</exception>
+        /// <exception cref="RankException"><paramref name="enumerable"/>が2次元以上の配列</exception>
+        /// <returns><paramref name="enumerable"/>内の要素を格納する配列</returns>
         public static object[] ToObjectArray(this IEnumerable enumerable)
         {
             object[] result;
