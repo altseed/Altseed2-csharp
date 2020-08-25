@@ -617,6 +617,518 @@ namespace Altseed2.Test
                 };
                 result.Add(vector4I.Type, vector4I);
 
+                // Altseed2.CircleColliderNode
+                var circleColliderNode = ReflectionInfo.Create(new CircleColliderNode()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    Position = new Vector2F(30f, 30f),
+                    Radius = 50f,
+                    Scale = new Vector2F(3f, 2f),
+                    ScaleType = CircleColliderNode.ScaleCalcType.Length,
+                    VerticalFlip = false,
+                });
+                circleColliderNode.PropertyInfos = new[]
+                {
+                    circleColliderNode.GetProperty("Angle"),
+                    circleColliderNode.GetProperty("CenterPosition"),
+                    circleColliderNode.GetProperty("ContentSize"),
+                    circleColliderNode.GetProperty("HorizontalFlip"),
+                    circleColliderNode.GetProperty("IsRegistered"),
+                    circleColliderNode.GetProperty("Position"),
+                    circleColliderNode.GetProperty("Radius"),
+                    circleColliderNode.GetProperty("Scale"),
+                    circleColliderNode.GetProperty("ScaleType"),
+                    circleColliderNode.GetProperty("Status"),
+                    circleColliderNode.GetProperty("VerticalFlip"),
+                };
+                result.Add(circleColliderNode.Type, circleColliderNode);
+
+                // Altseed2.PolygonColliderNode
+                var polygonColliderNode = ReflectionInfo.Create(new PolygonColliderNode()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Vertexes = new[]
+                    {
+                        new Vector2F(0f, 0f),
+                        new Vector2F(10f, 0f),
+                        new Vector2F(10f, 10f),
+                        new Vector2F(0f, 10f),
+                    },
+                    VerticalFlip = false,
+                });
+                polygonColliderNode.PropertyInfos = new[]
+                {
+                    polygonColliderNode.GetProperty("Angle"),
+                    polygonColliderNode.GetProperty("CenterPosition"),
+                    polygonColliderNode.GetProperty("ContentSize"),
+                    polygonColliderNode.GetProperty("HorizontalFlip"),
+                    polygonColliderNode.GetProperty("IsRegistered"),
+                    polygonColliderNode.GetProperty("Position"),
+                    polygonColliderNode.GetProperty("Scale"),
+                    polygonColliderNode.GetProperty("Status"),
+                    polygonColliderNode.GetProperty("Vertexes"),
+                    polygonColliderNode.GetProperty("VerticalFlip"),
+                };
+                result.Add(polygonColliderNode.Type, polygonColliderNode);
+
+                // Altseed2.RectangleColliderNode
+                var rectangleColliderNode = ReflectionInfo.Create(new RectangleColliderNode()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    Position = new Vector2F(30f, 30f),
+                    RectangleSize = new Vector2F(50f, 50f),
+                    Scale = new Vector2F(3f, 2f),
+                    VerticalFlip = false,
+                });
+                rectangleColliderNode.PropertyInfos = new[]
+                {
+                    rectangleColliderNode.GetProperty("Angle"),
+                    rectangleColliderNode.GetProperty("CenterPosition"),
+                    rectangleColliderNode.GetProperty("ContentSize"),
+                    rectangleColliderNode.GetProperty("HorizontalFlip"),
+                    rectangleColliderNode.GetProperty("IsRegistered"),
+                    rectangleColliderNode.GetProperty("Position"),
+                    rectangleColliderNode.GetProperty("RectangleSize"),
+                    rectangleColliderNode.GetProperty("Scale"),
+                    rectangleColliderNode.GetProperty("Status"),
+                    rectangleColliderNode.GetProperty("VerticalFlip"),
+                };
+                result.Add(rectangleColliderNode.Type, rectangleColliderNode);
+
+                // Altseed2.ArcNode
+                var arcNode = ReflectionInfo.Create(new ArcNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    EndDegree = 330f,
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    Radius = 30f,
+                    Scale = new Vector2F(3f, 2f),
+                    StartDegree = 30f,
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    VerticalFlip = false,
+                    VertNum = 30,
+                    ZOrder = 10,
+                });
+                arcNode.PropertyInfos = new[]
+                {
+                    arcNode.GetProperty("AlphaBlend"),
+                    arcNode.GetProperty("Angle"),
+                    arcNode.GetProperty("CameraGroup"),
+                    arcNode.GetProperty("CenterPosition"),
+                    arcNode.GetProperty("Color"),
+                    arcNode.GetProperty("ContentSize"),
+                    arcNode.GetProperty("EndDegree"),
+                    arcNode.GetProperty("HorizontalFlip"),
+                    arcNode.GetProperty("IsDrawn"),
+                    arcNode.GetProperty("IsRegistered"),
+                    arcNode.GetProperty("Material"),
+                    arcNode.GetProperty("Position"),
+                    arcNode.GetProperty("Radius"),
+                    arcNode.GetProperty("Scale"),
+                    arcNode.GetProperty("Src"),
+                    arcNode.GetProperty("StartDegree"),
+                    arcNode.GetProperty("Status"),
+                    arcNode.GetProperty("Texture"),
+                    arcNode.GetProperty("VerticalFlip"),
+                    arcNode.GetProperty("VertNum"),
+                    arcNode.GetProperty("ZOrder"),
+                };
+                result.Add(arcNode.Type, arcNode);
+
+                // Altseed2.CircleNode
+                var circleNode = ReflectionInfo.Create(new CircleNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    Radius = 30f,
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    VerticalFlip = false,
+                    VertNum = 30,
+                    ZOrder = 10,
+                });
+                circleNode.PropertyInfos = new[]
+                {
+                    circleNode.GetProperty("AlphaBlend"),
+                    circleNode.GetProperty("Angle"),
+                    circleNode.GetProperty("CameraGroup"),
+                    circleNode.GetProperty("CenterPosition"),
+                    circleNode.GetProperty("Color"),
+                    circleNode.GetProperty("ContentSize"),
+                    circleNode.GetProperty("HorizontalFlip"),
+                    circleNode.GetProperty("IsDrawn"),
+                    circleNode.GetProperty("IsRegistered"),
+                    circleNode.GetProperty("Material"),
+                    circleNode.GetProperty("Position"),
+                    circleNode.GetProperty("Radius"),
+                    circleNode.GetProperty("Scale"),
+                    circleNode.GetProperty("Src"),
+                    circleNode.GetProperty("Status"),
+                    circleNode.GetProperty("Texture"),
+                    circleNode.GetProperty("VerticalFlip"),
+                    circleNode.GetProperty("VertNum"),
+                    circleNode.GetProperty("ZOrder"),
+                };
+                result.Add(circleNode.Type, circleNode);
+
+                // Altseed2.LineNode
+                var lineNode = ReflectionInfo.Create(new LineNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Point1 = new Vector2F(30f, 30f),
+                    Point2 = new Vector2F(50f, 50f),
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    Thickness = 15f,
+                    VerticalFlip = false,
+                    ZOrder = 10,
+                });
+                lineNode.PropertyInfos = new[]
+                {
+                    lineNode.GetProperty("AlphaBlend"),
+                    lineNode.GetProperty("Angle"),
+                    lineNode.GetProperty("CameraGroup"),
+                    lineNode.GetProperty("CenterPosition"),
+                    lineNode.GetProperty("Color"),
+                    lineNode.GetProperty("ContentSize"),
+                    lineNode.GetProperty("HorizontalFlip"),
+                    lineNode.GetProperty("IsDrawn"),
+                    lineNode.GetProperty("IsRegistered"),
+                    lineNode.GetProperty("Material"),
+                    lineNode.GetProperty("Point1"),
+                    lineNode.GetProperty("Point2"),
+                    lineNode.GetProperty("Position"),
+                    lineNode.GetProperty("Scale"),
+                    lineNode.GetProperty("Src"),
+                    lineNode.GetProperty("Status"),
+                    lineNode.GetProperty("Texture"),
+                    lineNode.GetProperty("Thickness"),
+                    lineNode.GetProperty("VerticalFlip"),
+                    lineNode.GetProperty("ZOrder"),
+                };
+                result.Add(lineNode.Type, lineNode);
+
+                // Altseed2.RectangleNode
+                var rectangleNode = ReflectionInfo.Create(new RectangleNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    RectangleSize = new Vector2F(150f, 150f),
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    VerticalFlip = false,
+                    ZOrder = 10,
+                });
+                rectangleNode.PropertyInfos = new[]
+                {
+                    rectangleNode.GetProperty("AlphaBlend"),
+                    rectangleNode.GetProperty("Angle"),
+                    rectangleNode.GetProperty("CameraGroup"),
+                    rectangleNode.GetProperty("CenterPosition"),
+                    rectangleNode.GetProperty("Color"),
+                    rectangleNode.GetProperty("ContentSize"),
+                    rectangleNode.GetProperty("HorizontalFlip"),
+                    rectangleNode.GetProperty("IsDrawn"),
+                    rectangleNode.GetProperty("IsRegistered"),
+                    rectangleNode.GetProperty("Material"),
+                    rectangleNode.GetProperty("Position"),
+                    rectangleNode.GetProperty("RectangleSize"),
+                    rectangleNode.GetProperty("Scale"),
+                    rectangleNode.GetProperty("Src"),
+                    rectangleNode.GetProperty("Status"),
+                    rectangleNode.GetProperty("Texture"),
+                    rectangleNode.GetProperty("VerticalFlip"),
+                    rectangleNode.GetProperty("ZOrder"),
+                };
+                result.Add(rectangleNode.Type, rectangleNode);
+
+                // Altseed2.TriangleNode
+                var triangleNode = ReflectionInfo.Create(new TriangleNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Point1 = new Vector2F(30f, 30f),
+                    Point2 = new Vector2F(50f, 50f),
+                    Point3 = new Vector2F(50f, 50f),
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    VerticalFlip = false,
+                    ZOrder = 10,
+                });
+                triangleNode.PropertyInfos = new[]
+                {
+                    triangleNode.GetProperty("AlphaBlend"),
+                    triangleNode.GetProperty("Angle"),
+                    triangleNode.GetProperty("CameraGroup"),
+                    triangleNode.GetProperty("CenterPosition"),
+                    triangleNode.GetProperty("Color"),
+                    triangleNode.GetProperty("ContentSize"),
+                    triangleNode.GetProperty("HorizontalFlip"),
+                    triangleNode.GetProperty("IsDrawn"),
+                    triangleNode.GetProperty("IsRegistered"),
+                    triangleNode.GetProperty("Material"),
+                    triangleNode.GetProperty("Point1"),
+                    triangleNode.GetProperty("Point2"),
+                    triangleNode.GetProperty("Point3"),
+                    triangleNode.GetProperty("Position"),
+                    triangleNode.GetProperty("Scale"),
+                    triangleNode.GetProperty("Src"),
+                    triangleNode.GetProperty("Status"),
+                    triangleNode.GetProperty("Texture"),
+                    triangleNode.GetProperty("VerticalFlip"),
+                    triangleNode.GetProperty("ZOrder"),
+                };
+                result.Add(triangleNode.Type, triangleNode);
+
+                // Altseed2.CameraNode
+                var cameraNode = ReflectionInfo.Create(new CameraNode()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    ClearColor = new Color(150, 100, 100),
+                    Group = 3,
+                    IsColorCleared = true,
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    TargetTexture = RenderTexture.Create(new Vector2I(400, 400), TextureFormat.R32G32B32A32_FLOAT),
+                });
+                cameraNode.PropertyInfos = new[]
+                {
+                    cameraNode.GetProperty("Angle"),
+                    cameraNode.GetProperty("CenterPosition"),
+                    cameraNode.GetProperty("ClearColor"),
+                    cameraNode.GetProperty("Group"),
+                    cameraNode.GetProperty("IsColorCleared"),
+                    cameraNode.GetProperty("IsRegistered"),
+                    cameraNode.GetProperty("Position"),
+                    cameraNode.GetProperty("Scale"),
+                    cameraNode.GetProperty("Status"),
+                    cameraNode.GetProperty("TargetTexture"),
+                };
+                result.Add(cameraNode.Type, cameraNode);
+
+                // Altseed2.Node
+                var node = ReflectionInfo.Create(new Altseed2.Node());
+                node.PropertyInfos = new[]
+                {
+                    node.GetProperty("IsRegistered"),
+                    node.GetProperty("Status"),
+                };
+                result.Add(node.Type, node);
+
+                // Altseed2.PolygonNode
+                var polygonNode = ReflectionInfo.Create(new PolygonNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    Vertexes = new Vertex[]
+                    {
+                        new Vertex { Color = new Color(255, 100, 100), Position = new Vector3F(0f, 0f, 0.5f), UV1 = new Vector2F(0.3f, 0.3f), UV2 = new Vector2F(1f, 1f) },
+                        new Vertex { Color = new Color(100, 255, 100), Position = new Vector3F(10f, 0f, 0.5f), UV1 = new Vector2F(0.4f, 0.4f), UV2 = new Vector2F(-1f, 1f) },
+                        new Vertex { Color = new Color(100, 100, 255), Position = new Vector3F(10f, 10f, 0.5f), UV1 = new Vector2F(0.5f, 0.5f), UV2 = new Vector2F(1f, -1f) },
+                        new Vertex { Color = new Color(255, 255, 255), Position = new Vector3F(0f, 10f, 0.5f), UV1 = new Vector2F(0.6f, 0.6f), UV2 = new Vector2F(-1f, -1f) }
+                    },
+                    VerticalFlip = false,
+                    ZOrder = 10,
+                });
+                polygonNode.PropertyInfos = new[]
+                {
+                    polygonNode.GetProperty("AlphaBlend"),
+                    polygonNode.GetProperty("Angle"),
+                    polygonNode.GetProperty("CameraGroup"),
+                    polygonNode.GetProperty("CenterPosition"),
+                    polygonNode.GetProperty("ContentSize"),
+                    polygonNode.GetProperty("HorizontalFlip"),
+                    polygonNode.GetProperty("IsDrawn"),
+                    polygonNode.GetProperty("IsRegistered"),
+                    polygonNode.GetProperty("Material"),
+                    polygonNode.GetProperty("Position"),
+                    polygonNode.GetProperty("Scale"),
+                    polygonNode.GetProperty("Src"),
+                    polygonNode.GetProperty("Status"),
+                    polygonNode.GetProperty("Texture"),
+                    polygonNode.GetProperty("Vertexes"),
+                    polygonNode.GetProperty("VerticalFlip"),
+                    polygonNode.GetProperty("ZOrder"),
+                };
+                result.Add(polygonNode.Type, polygonNode);
+
+                // Altseed2.SpriteNode
+                var spriteNode = ReflectionInfo.Create(new SpriteNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    Src = new RectF(30f, 30f, 50f, 50f),
+                    VerticalFlip = false,
+                    ZOrder = 10,
+                });
+                spriteNode.PropertyInfos = new[]
+                {
+                    spriteNode.GetProperty("AlphaBlend"),
+                    spriteNode.GetProperty("Angle"),
+                    spriteNode.GetProperty("CameraGroup"),
+                    spriteNode.GetProperty("CenterPosition"),
+                    spriteNode.GetProperty("Color"),
+                    spriteNode.GetProperty("ContentSize"),
+                    spriteNode.GetProperty("HorizontalFlip"),
+                    spriteNode.GetProperty("IsDrawn"),
+                    spriteNode.GetProperty("IsRegistered"),
+                    spriteNode.GetProperty("Material"),
+                    spriteNode.GetProperty("Position"),
+                    spriteNode.GetProperty("Scale"),
+                    spriteNode.GetProperty("Src"),
+                    spriteNode.GetProperty("Status"),
+                    spriteNode.GetProperty("Texture"),
+                    spriteNode.GetProperty("VerticalFlip"),
+                    spriteNode.GetProperty("ZOrder"),
+                };
+                result.Add(spriteNode.Type, spriteNode);
+
+                // Altseed2.TextNode
+                var textNode = ReflectionInfo.Create(new TextNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    CharacterSpace = 10f,
+                    Color = new Color(255, 100, 100),
+                    Font = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 30),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    IsEnableKerning = true,
+                    LineGap = 30f,
+                    MaterialGlyph = Material.Create(),
+                    MaterialImage = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Text = "Text",
+                    VerticalFlip = false,
+                    Weight = 15f,
+                    WritingDirection = WritingDirection.Vertical,
+                    ZOrder = 10,                    
+                });
+                textNode.PropertyInfos = new[]
+                {
+                    textNode.GetProperty("AlphaBlend"),
+                    textNode.GetProperty("Angle"),
+                    textNode.GetProperty("CameraGroup"),
+                    textNode.GetProperty("CenterPosition"),
+                    textNode.GetProperty("CharacterSpace"),
+                    textNode.GetProperty("Color"),
+                    textNode.GetProperty("ContentSize"),
+                    textNode.GetProperty("Font"),
+                    textNode.GetProperty("HorizontalFlip"),
+                    textNode.GetProperty("IsDrawn"),
+                    textNode.GetProperty("IsEnableKerning"),
+                    textNode.GetProperty("IsRegistered"),
+                    textNode.GetProperty("LineGap"),
+                    textNode.GetProperty("MaterialGlyph"),
+                    textNode.GetProperty("MaterialImage"),
+                    textNode.GetProperty("Position"),
+                    textNode.GetProperty("Scale"),
+                    textNode.GetProperty("Status"),
+                    textNode.GetProperty("Text"),
+                    textNode.GetProperty("VerticalFlip"),
+                    textNode.GetProperty("Weight"),
+                    textNode.GetProperty("WritingDirection"),
+                    textNode.GetProperty("ZOrder"),
+                };
+                result.Add(textNode.Type, textNode);
+
+                // Altseed2.TransformNode
+                var transformNode = ReflectionInfo.Create(new TransformNode()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    VerticalFlip = false,
+                });
+                transformNode.PropertyInfos = new[]
+                {
+                    transformNode.GetProperty("Angle"),
+                    transformNode.GetProperty("CenterPosition"),
+                    transformNode.GetProperty("ContentSize"),
+                    transformNode.GetProperty("HorizontalFlip"),
+                    transformNode.GetProperty("IsRegistered"),
+                    transformNode.GetProperty("Position"),
+                    transformNode.GetProperty("Scale"),
+                    transformNode.GetProperty("Status"),
+                    transformNode.GetProperty("VerticalFlip"),
+                };
+                result.Add(transformNode.Type, transformNode);
+
+
+
                 // Optional
                 var textureBase = ReflectionInfo.Create(default(TextureBase));
                 textureBase.DoSerialization = false;
@@ -624,19 +1136,19 @@ namespace Altseed2.Test
                 {
                     if (x == null)
                     {
-                        if (y is Texture2D _t2d2) return new[] { new OptionalValueEntry(string.Empty, typeof(Texture2D), null, _t2d2) };
-                        if (y is RenderTexture _r2) return new[] { new OptionalValueEntry(string.Empty, typeof(RenderTexture), null, _r2) };
+                        if (y is Texture2D _t2d2) return new[] { new OptionalValueEntry("ToTexture2D", typeof(Texture2D), null, _t2d2) };
+                        if (y is RenderTexture _r2) return new[] { new OptionalValueEntry("ToRenderTexture", typeof(RenderTexture), null, _r2) };
                         return new[] { new OptionalValueEntry(string.Empty, typeof(Texture2D), null, y) };
                     }
                     if (x is Texture2D _t2d1)
                     {
-                        if (y is Texture2D _t2d2) return new[] { new OptionalValueEntry(string.Empty, typeof(Texture2D), _t2d1, _t2d2) };
-                        else if (y == null) return new[] { new OptionalValueEntry(string.Empty, typeof(Texture2D), _t2d1, null) };
+                        if (y is Texture2D _t2d2) return new[] { new OptionalValueEntry("ToTexture2D", typeof(Texture2D), _t2d1, _t2d2) };
+                        else if (y == null) return new[] { new OptionalValueEntry("ToTexture2D", typeof(Texture2D), _t2d1, null) };
                     }
                     if (x is RenderTexture _r1)
                     {
-                        if (y is RenderTexture _r2) return new[] { new OptionalValueEntry(string.Empty, typeof(RenderTexture), _r1, _r2) };
-                        else if (y == null) return new[] { new OptionalValueEntry(string.Empty, typeof(RenderTexture), _r1, null) };
+                        if (y is RenderTexture _r2) return new[] { new OptionalValueEntry("ToRenderTexture", typeof(RenderTexture), _r1, _r2) };
+                        else if (y == null) return new[] { new OptionalValueEntry("ToRenderTexture", typeof(RenderTexture), _r1, null) };
                     }
                     throw new AssertionException($"Invalid Texture Type\nobj1: {x.GetType().FullName}\nobj2: {y?.GetType().FullName ?? "null"}");
                 };
