@@ -32,7 +32,7 @@ namespace Altseed2
         public sealed override Matrix44F InheritedTransform
         {
             get => base.InheritedTransform;
-            protected internal set
+            private protected set
             {
                 if (base.InheritedTransform == value) return;
                 base.InheritedTransform = value;

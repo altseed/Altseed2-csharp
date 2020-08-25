@@ -37,7 +37,7 @@ namespace Altseed2
         public virtual Matrix44F InheritedTransform
         {
             get => Transfomer?.InheritedTransform ?? _InheritedTransform;
-            protected internal set
+            private protected set
             {
                 // 継承先も必ずbase.InheritedTransform = valueするように
                 if (Transfomer == null)
