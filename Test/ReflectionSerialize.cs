@@ -42,6 +42,7 @@ namespace Altseed2.Test
 
             foreach (var (_, info) in ReflectionSources.Info)
             {
+                if (!info.DoSerialization) continue;
                 var replacedTypeName = info.Type.FullName.Replace('.', '_').Replace('`', '_');
 
                 var path = $"Serialization/Binaries/{replacedTypeName}.bin";
@@ -159,6 +160,7 @@ namespace Altseed2.Test
 
         public sealed class ReflectionInfo
         {
+            public bool DoSerialization { get; set; } = true;
             public FieldInfo[] FieldInfos { get => _fieldInfos; set => _fieldInfos = value ?? Array.Empty<FieldInfo>(); }
             private FieldInfo[] _fieldInfos = Array.Empty<FieldInfo>();
             public (MethodInfo, object[])[] MethodsInfos { get => _methodInfos; set => _methodInfos = value ?? Array.Empty<(MethodInfo, object[])>(); }
