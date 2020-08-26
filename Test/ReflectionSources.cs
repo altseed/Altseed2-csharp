@@ -929,6 +929,47 @@ namespace Altseed2.Test
                 };
                 result.Add(triangleNode.Type, triangleNode);
 
+                // Altseed2.AnchorTransformerNode
+                var anchorTransformerNode = ReflectionInfo.Create(new AnchorTransformerNode()
+                {
+                    AnchorMax = new Vector2F(100f, 100f),
+                    AnchorMin = new Vector2F(50f, 50f),
+                    AnchorMode = AnchorMode.KeepAspect,
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    HorizontalFlip = false,
+                    LeftTop = new Vector2F(10f, 10f),
+                    Pivot = new Vector2F(0.3f, 0.3f),
+                    Position = new Vector2F(30f, 30f),
+                    RightBottom = new Vector2F(50f, 50f),
+                    Scale = new Vector2F(3f, 2f),
+                    Size = new Vector2F(250f, 250f),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalFlip = false,
+                });
+                anchorTransformerNode.PropertyInfos = new[]
+                {
+                    anchorTransformerNode.GetProperty("AnchorMax"),
+                    anchorTransformerNode.GetProperty("AnchorMin"),
+                    anchorTransformerNode.GetProperty("AnchorMode"),
+                    anchorTransformerNode.GetProperty("Angle"),
+                    anchorTransformerNode.GetProperty("CenterPosition"),
+                    anchorTransformerNode.GetProperty("HorizontalAlignment"),
+                    anchorTransformerNode.GetProperty("HorizontalFlip"),
+                    anchorTransformerNode.GetProperty("IsRegistered"),
+                    anchorTransformerNode.GetProperty("LeftTop"),
+                    anchorTransformerNode.GetProperty("Pivot"),
+                    anchorTransformerNode.GetProperty("Position"),
+                    anchorTransformerNode.GetProperty("RightBottom"),
+                    anchorTransformerNode.GetProperty("Scale"),
+                    anchorTransformerNode.GetProperty("Size"),
+                    anchorTransformerNode.GetProperty("Status"),
+                    anchorTransformerNode.GetProperty("VerticalAlignment"),
+                    anchorTransformerNode.GetProperty("VerticalFlip"),
+                };
+                result.Add(anchorTransformerNode.Type, anchorTransformerNode);
+
                 // Altseed2.CameraNode
                 var cameraNode = ReflectionInfo.Create(new CameraNode()
                 {
@@ -1102,6 +1143,22 @@ namespace Altseed2.Test
                     textNode.GetProperty("ZOrder"),
                 };
                 result.Add(textNode.Type, textNode);
+
+                // Altseed2.TransformerNode
+                var transformerNode = ReflectionInfo.Create(new TransformerNode()
+                {
+                    AbsoluteTransform = MathHelper.CalcTransform(new Vector2F(30f, 30f), MathHelper.DegreeToRadian(30f), new Vector2F(3f, 2f)),
+                });
+                transformerNode.PropertyInfos = new[]
+                {
+                    transformerNode.GetProperty("AbsoluteTransform"),
+                    transformerNode.GetProperty("InheritedTransform"),
+                    transformerNode.GetProperty("IsRegistered"),
+                    transformerNode.GetProperty("RequireCalcTransform"),
+                    transformerNode.GetProperty("Status"),
+                    transformerNode.GetProperty("Transform"),
+                };
+                result.Add(transformerNode.Type, transformerNode);
 
                 // Altseed2.TransformNode
                 var transformNode = ReflectionInfo.Create(new TransformNode()
