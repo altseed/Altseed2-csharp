@@ -132,5 +132,61 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Registarable()
+        {
+            var reg = new BareRegisterable();
+
+            var c1 = new BareRegisterable();
+            Assert.AreEqual(c1.Status, RegisteredStatus.Free);
+
+            reg.Children.Add(c1);
+            Assert.AreEqual(c1.Status, RegisteredStatus.WaitingAdded);
+            Assert.Zero(reg.Children.AsReadOnly().Count);
+
+            reg.Children.Update();
+            Assert.AreEqual(c1.Status, RegisteredStatus.Registered);
+            Assert.AreEqual(reg.Children.AsReadOnly().Count, 1);
+
+            reg.Children.Remove(c1);
+            Assert.AreEqual(c1.Status, RegisteredStatus.WaitingRemoved);
+            Assert.AreEqual(reg.Children.AsReadOnly().Count, 1);
+
+            reg.Children.Update();
+            Assert.AreEqual(c1.Status, RegisteredStatus.Free);
+            Assert.Zero(reg.Children.AsReadOnly().Count);
+
+            reg.Children.Add(c1);
+            Assert.AreEqual(c1.Status, RegisteredStatus.WaitingAdded);
+            Assert.Zero(reg.Children.AsReadOnly().Count);
+
+            reg.Children.Update();
+            Assert.AreEqual(c1.Status, RegisteredStatus.Registered);
+            Assert.AreEqual(reg.Children.AsReadOnly().Count, 1);
+        }
+
+        class BareRegisterable : Registerable<BareRegisterable>
+        {
+            public RegisterableCollection<BareRegisterable> Children;
+
+            static List<BareRegisterable> Collection;
+
+            public BareRegisterable()
+            {
+                Children = new RegisterableCollection<BareRegisterable>(this);
+                Collection ??= new List<BareRegisterable>();
+            }
+
+            internal override void Added(BareRegisterable owner)
+            {
+                Collection.Add(this);
+            }
+
+            internal override void Removed()
+            {
+                Collection.Remove(this);
+            }
+        }
     }
 }
