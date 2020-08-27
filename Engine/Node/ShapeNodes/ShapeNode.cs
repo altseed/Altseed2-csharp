@@ -44,6 +44,8 @@ namespace Altseed2
 
                 var old = _CameraGroup;
                 _CameraGroup = value;
+
+                if(IsRegistered)
                 Engine.UpdateDrawnCameraGroup(this, old);
             }
         }
@@ -62,10 +64,9 @@ namespace Altseed2
                 var old = _ZOrder;
                 _ZOrder = value;
 
-                if (Status == RegisteredStatus.Registered)
-                {
+                if (IsRegistered)
                     Engine.UpdateDrawnZOrder(this, old);
-                }
+
             }
         }
         private int _ZOrder;

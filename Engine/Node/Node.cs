@@ -127,7 +127,7 @@ namespace Altseed2
 
             foreach (var c in Children)
             {
-                if (c.IsRegistered)
+                if (c._IsRegistered)
                 {
                     c._IsRegistered = false;
                     c.Unregistered();
