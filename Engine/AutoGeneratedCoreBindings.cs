@@ -2575,6 +2575,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Int8Array>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Int8Array>.Release(IntPtr native) => cbg_Int8Array_Release(native);
         
         #endregion
@@ -2864,6 +2867,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Int32Array>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Int32Array>.Release(IntPtr native) => cbg_Int32Array_Release(native);
@@ -3157,6 +3163,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<VertexArray>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<VertexArray>.Release(IntPtr native) => cbg_VertexArray_Release(native);
         
         #endregion
@@ -3448,6 +3457,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<FloatArray>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<FloatArray>.Release(IntPtr native) => cbg_FloatArray_Release(native);
         
         #endregion
@@ -3737,6 +3749,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Vector2FArray>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Vector2FArray>.Release(IntPtr native) => cbg_Vector2FArray_Release(native);
@@ -5070,6 +5085,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<TextureBase>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<TextureBase>.Release(IntPtr native) => cbg_TextureBase_Release(native);
         
         #endregion
@@ -5321,6 +5339,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Texture2D>.SurpressReleasing => true;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Texture2D>.Release(IntPtr native) => cbg_Texture2D_Release(native);
         
         #endregion
@@ -5521,6 +5542,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<RenderTexture>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderTexture>.Release(IntPtr native) => cbg_RenderTexture_Release(native);
@@ -5789,6 +5813,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Material>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Material>.Release(IntPtr native) => cbg_Material_Release(native);
@@ -6328,6 +6355,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Rendered>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Rendered>.Release(IntPtr native) => cbg_Rendered_Release(native);
         
         #endregion
@@ -6671,6 +6701,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<RenderedSprite>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedSprite>.Release(IntPtr native) => cbg_RenderedSprite_Release(native);
@@ -7240,6 +7273,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<RenderedText>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedText>.Release(IntPtr native) => cbg_RenderedText_Release(native);
         
         #endregion
@@ -7609,6 +7645,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<RenderedPolygon>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedPolygon>.Release(IntPtr native) => cbg_RenderedPolygon_Release(native);
         
         #endregion
@@ -7885,6 +7924,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<RenderedCamera>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RenderedCamera>.Release(IntPtr native) => cbg_RenderedCamera_Release(native);
@@ -8438,6 +8480,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Shader>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Shader>.Release(IntPtr native) => cbg_Shader_Release(native);
@@ -9041,6 +9086,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Font>.SurpressReleasing => true;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Font>.Release(IntPtr native) => cbg_Font_Release(native);
@@ -12777,6 +12825,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<StreamFile>.SurpressReleasing => true;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<StreamFile>.Release(IntPtr native) => cbg_StreamFile_Release(native);
         
         #endregion
@@ -13074,6 +13125,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<StaticFile>.SurpressReleasing => true;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<StaticFile>.Release(IntPtr native) => cbg_StaticFile_Release(native);
@@ -13632,6 +13686,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Sound>.SurpressReleasing => true;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Sound>.Release(IntPtr native) => cbg_Sound_Release(native);
@@ -14498,6 +14555,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<Collider>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<Collider>.Release(IntPtr native) => cbg_Collider_Release(native);
         
         #endregion
@@ -14703,6 +14763,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<CircleCollider>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<CircleCollider>.Release(IntPtr native) => cbg_CircleCollider_Release(native);
@@ -14946,6 +15009,9 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<RectangleCollider>.SurpressReleasing => false;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<RectangleCollider>.Release(IntPtr native) => cbg_RectangleCollider_Release(native);
         
         #endregion
@@ -15125,6 +15191,9 @@ namespace Altseed2
                 selfPtr = value;
             }
         }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        bool ICacheKeeper<PolygonCollider>.SurpressReleasing => false;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         void ICacheKeeper<PolygonCollider>.Release(IntPtr native) => cbg_PolygonCollider_Release(native);

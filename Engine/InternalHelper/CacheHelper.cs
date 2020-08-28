@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +20,10 @@ namespace Altseed2
         /// 自身のポインタを取得または設定します。
         /// </summary>
         internal IntPtr Self { get; set; }
+        /// <summary>
+        /// <see cref="Release(IntPtr)"/>を抑制するかどうかを取得します。
+        /// </summary>
+        internal bool SurpressReleasing { get; }
         /// <summary>
         /// キャッシュを開放します。
         /// </summary>
@@ -50,6 +54,7 @@ namespace Altseed2
                 obj.CacheRepo[native].TryGetTarget(out var cacheSet);
                 if (cacheSet != null)
                 {
+                    if (!obj.SurpressReleasing) obj.Release(native);
                     obj.Self = native;
                     return;
                 }
@@ -90,6 +95,7 @@ namespace Altseed2
                 cacheRepo[native].TryGetTarget(out var cacheSet);
                 if (cacheSet != null)
                 {
+                    if (!obj.SurpressReleasing) obj.Release(native);
                     obj.Self = native;
                     return;
                 }
