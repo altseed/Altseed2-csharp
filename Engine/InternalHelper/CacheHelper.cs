@@ -50,7 +50,6 @@ namespace Altseed2
                 obj.CacheRepo[native].TryGetTarget(out var cacheSet);
                 if (cacheSet != null)
                 {
-                    cacheSet.Release(native);
                     obj.Self = native;
                     return;
                 }
@@ -91,7 +90,6 @@ namespace Altseed2
                 cacheRepo[native].TryGetTarget(out var cacheSet);
                 if (cacheSet != null)
                 {
-                    cacheSet.Release(native);
                     obj.Self = native;
                     return;
                 }
