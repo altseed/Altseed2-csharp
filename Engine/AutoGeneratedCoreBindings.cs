@@ -52,6 +52,21 @@ namespace Altseed2
         Vulkan,
     }
     
+    [Serializable]
+    public enum CoreModules : int
+    {
+        None = 0,
+        Window = 1,
+        File = 2,
+        Keyboard = 4,
+        Mouse = 8,
+        Joystick = 16,
+        Graphics = 32,
+        Tool = 64,
+        Sound = 128,
+        Default = 191,
+    }
+    
     /// <summary>
     /// フレームレートモード
     /// </summary>
@@ -1683,11 +1698,10 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Configuration_GetIsGraphicsOnly(IntPtr selfPtr);
+        private static extern int cbg_Configuration_GetEnabledCoreModules(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Configuration_SetIsGraphicsOnly(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
+        private static extern void cbg_Configuration_SetEnabledCoreModules(IntPtr selfPtr, int value);
         
         
         [DllImport("Altseed2_Core")]
@@ -1714,15 +1728,6 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_SetLogFileName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Configuration_GetToolEnabled(IntPtr selfPtr);
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Configuration_SetToolEnabled(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] bool value);
         
         
         [DllImport("Altseed2_Core")]
@@ -1826,26 +1831,26 @@ namespace Altseed2
         private bool? _WaitVSync;
         
         /// <summary>
-        /// IO・描画機能以外の機能を無効にします。
+        /// 初期化するモジュールを指定します。
         /// </summary>
-        public bool IsGraphicsOnly
+        public CoreModules EnabledCoreModules
         {
             get
             {
-                if (_IsGraphicsOnly != null)
+                if (_EnabledCoreModules != null)
                 {
-                    return _IsGraphicsOnly.Value;
+                    return _EnabledCoreModules.Value;
                 }
-                var ret = cbg_Configuration_GetIsGraphicsOnly(selfPtr);
-                return ret;
+                var ret = cbg_Configuration_GetEnabledCoreModules(selfPtr);
+                return (CoreModules)ret;
             }
             set
             {
-                _IsGraphicsOnly = value;
-                cbg_Configuration_SetIsGraphicsOnly(selfPtr, value);
+                _EnabledCoreModules = value;
+                cbg_Configuration_SetEnabledCoreModules(selfPtr, (int)value);
             }
         }
-        private bool? _IsGraphicsOnly;
+        private CoreModules? _EnabledCoreModules;
         
         /// <summary>
         /// ログをコンソールに出力するかどうかを取得または設定します。
@@ -1913,28 +1918,6 @@ namespace Altseed2
         }
         private string _LogFileName;
         
-        /// <summary>
-        /// ツール機能を使用するかどうかを取得または設定します。
-        /// </summary>
-        public bool ToolEnabled
-        {
-            get
-            {
-                if (_ToolEnabled != null)
-                {
-                    return _ToolEnabled.Value;
-                }
-                var ret = cbg_Configuration_GetToolEnabled(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _ToolEnabled = value;
-                cbg_Configuration_SetToolEnabled(selfPtr, value);
-            }
-        }
-        private bool? _ToolEnabled;
-        
         
         #region ISerialiable
         
@@ -1948,15 +1931,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_WaitVSync = "S_WaitVSync";
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_IsGraphicsOnly = "S_IsGraphicsOnly";
+        private const string S_EnabledCoreModules = "S_EnabledCoreModules";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_ConsoleLoggingEnabled = "S_ConsoleLoggingEnabled";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_FileLoggingEnabled = "S_FileLoggingEnabled";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LogFileName = "S_LogFileName";
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_ToolEnabled = "S_ToolEnabled";
         #endregion
         
         /// <summary>
@@ -1974,11 +1955,10 @@ namespace Altseed2
             IsResizable = info.GetBoolean(S_IsResizable);
             DeviceType = info.GetValue<GraphicsDevice>(S_DeviceType);
             WaitVSync = info.GetBoolean(S_WaitVSync);
-            IsGraphicsOnly = info.GetBoolean(S_IsGraphicsOnly);
+            EnabledCoreModules = info.GetValue<CoreModules>(S_EnabledCoreModules);
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
             FileLoggingEnabled = info.GetBoolean(S_FileLoggingEnabled);
             LogFileName = info.GetString(S_LogFileName);
-            ToolEnabled = info.GetBoolean(S_ToolEnabled);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -1997,11 +1977,10 @@ namespace Altseed2
             info.AddValue(S_IsResizable, IsResizable);
             info.AddValue(S_DeviceType, DeviceType);
             info.AddValue(S_WaitVSync, WaitVSync);
-            info.AddValue(S_IsGraphicsOnly, IsGraphicsOnly);
+            info.AddValue(S_EnabledCoreModules, EnabledCoreModules);
             info.AddValue(S_ConsoleLoggingEnabled, ConsoleLoggingEnabled);
             info.AddValue(S_FileLoggingEnabled, FileLoggingEnabled);
             info.AddValue(S_LogFileName, LogFileName);
-            info.AddValue(S_ToolEnabled, ToolEnabled);
             
             OnGetObjectData(info, context);
         }

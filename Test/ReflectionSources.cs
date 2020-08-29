@@ -158,10 +158,9 @@ namespace Altseed2.Test
                     DeviceType = GraphicsDevice.DirectX,
                     FileLoggingEnabled = true,
                     IsFullscreen = true,
-                    IsGraphicsOnly = false,
+                    EnabledCoreModules = CoreModules.Default | CoreModules.Tool,
                     IsResizable = true,
                     LogFileName = "Log.txt",
-                    ToolEnabled = true,
                     VisibleTransformInfo = true,
                     WaitVSync = true
                 });
@@ -171,10 +170,9 @@ namespace Altseed2.Test
                     configuration.GetProperty("DeviceType"),
                     configuration.GetProperty("FileLoggingEnabled"),
                     configuration.GetProperty("IsFullscreen"),
-                    configuration.GetProperty("IsGraphicsOnly"),
+                    configuration.GetProperty("EnabledCoreModules"),
                     configuration.GetProperty("IsResizable"),
                     configuration.GetProperty("LogFileName"),
-                    configuration.GetProperty("ToolEnabled"),
                     configuration.GetProperty("VisibleTransformInfo"),
                     configuration.GetProperty("WaitVSync"),
                 };

@@ -13,7 +13,7 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void BeginEnd()
         {
-            var tc = new TestCore(new Configuration { ToolEnabled = true });
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool });
             tc.Init();
 
             tc.LoopBody(c =>
@@ -31,7 +31,7 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Input()
         {
-            var tc = new TestCore(new Configuration { ToolEnabled = true });
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool });
             tc.Init();
             Engine.Tool.AddFontFromFileTTF("../Core/TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
             string str0 = "";
@@ -73,7 +73,7 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Color()
         {
-            var tc = new TestCore(new Configuration { ToolEnabled = true });
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool });
             tc.Init();
 
             var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
@@ -114,7 +114,7 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void ListBox()
         {
-            var tc = new TestCore(new Configuration { ToolEnabled = true });
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool });
             tc.Init();
 
             int current = 1;
@@ -139,7 +139,7 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void OpenDialog()
         {
-            var tc = new TestCore(new Configuration { ToolEnabled = true });
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool });
             tc.Init();
 
             Engine.Tool.OpenDialog("png;jpg,jpeg", "");

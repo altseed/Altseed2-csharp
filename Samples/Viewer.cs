@@ -61,7 +61,7 @@ namespace Sample
         {
             var config = new Configuration()
             {
-                ToolEnabled = true,
+                EnabledCoreModules = CoreModules.Default | CoreModules.Tool,
                 FileLoggingEnabled = true,
             };
             if (!Engine.Initialize("Altseed2 サンプルビュワー", 640, 480, config)) return;

@@ -60,6 +60,8 @@ namespace Altseed2
         }
         private static Color _ClearColor = new Color(50, 50, 50, 255);
 
+        private static bool _ToolEnabled = false;
+
         /// <summary>
         /// エンジンを初期化します。
         /// </summary>
@@ -87,7 +89,7 @@ namespace Altseed2
                 _graphics = Graphics.GetInstance();
                 _renderer = Renderer.GetInstance();
                 _cullingSystem = CullingSystem.GetInstance();
-                if (config.ToolEnabled) _tool = Tool.GetInstance();
+                _tool = Tool.GetInstance();
                 _sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
@@ -122,12 +124,12 @@ namespace Altseed2
             Graphics.DoEvents();
             if (!Core.GetInstance().DoEvent()) return false;
 
-            if (Config.ToolEnabled)
+            if (_tool != null)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
                 if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
-                Tool.NewFrame();
+                _tool.NewFrame();
             }
 
             return true;
@@ -148,7 +150,7 @@ namespace Altseed2
             CullingSystem.UpdateAABB();
 
             // (ツール機能を使用しない場合は)描画を開始
-            if (!Config.ToolEnabled)
+            if (_tool == null)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
@@ -176,9 +178,9 @@ namespace Altseed2
             PostEffectNode.UpdateCache();
 
             // （ツール機能を使用する場合は）ツールを描画
-            if (Config.ToolEnabled)
+            if (_tool != null)
             {
-                Tool.Render();
+                _tool.Render();
             }
 
             // 描画を終了
