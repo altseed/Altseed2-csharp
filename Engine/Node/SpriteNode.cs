@@ -13,8 +13,14 @@ namespace Altseed2
         /// <summary>
         /// <see cref="SpriteNode"/>の新しいインスタンスを生成します。
         /// </summary>
+        /// <exception cref="InvalidOperationException">Graphics機能が初期化されていない。</exception>
         public SpriteNode()
         {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphics機能が初期化されていません。");
+            }
+
             _RenderedSprite = RenderedSprite.Create();
         }
 

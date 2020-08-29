@@ -69,8 +69,14 @@ namespace Altseed2
         /// <summary>
         /// <see cref="CameraNode"/>新しいインスタンスを生成します。
         /// </summary>
+        /// <exception cref="InvalidOperationException">Graphics機能が初期化されていない。</exception>
         public CameraNode()
         {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphics機能が初期化されていません。");
+            }
+
             _Camera = RenderedCamera.Create();
 
             ClearColor = new Color(50, 50, 50);
