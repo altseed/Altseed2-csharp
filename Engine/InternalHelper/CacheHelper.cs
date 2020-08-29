@@ -21,10 +21,6 @@ namespace Altseed2
         /// </summary>
         internal IntPtr Self { get; set; }
         /// <summary>
-        /// <see cref="Release(IntPtr)"/>を抑制するかどうかを取得します。
-        /// </summary>
-        internal bool SurpressReleasing { get; }
-        /// <summary>
         /// キャッシュを開放します。
         /// </summary>
         /// <param name="native">開放するオブジェクトのポインタ</param>
@@ -54,7 +50,6 @@ namespace Altseed2
                 obj.CacheRepo[native].TryGetTarget(out var cacheRet);
                 if (cacheRet != null)
                 {
-                    if (!obj.SurpressReleasing) obj.Release(native);
                     obj.Self = native;
                     return;
                 }
@@ -95,7 +90,6 @@ namespace Altseed2
                 cacheRepo[native].TryGetTarget(out var cacheRet);
                 if (cacheRet != null)
                 {
-                    if (!obj.SurpressReleasing) obj.Release(native);
                     obj.Self = native;
                     return;
                 }
