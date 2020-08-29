@@ -40,6 +40,7 @@ namespace Altseed2
         /// <param name="obj">キャッシュ制御を行うクラスのインスタンス</param>
         /// <param name="native"><paramref name="obj"/>に登録するポインタ</param>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
+        /// <remarks>デシリアライズ時に実行</remarks>
         internal static void CacheHandlingOnDeserialization<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
@@ -68,6 +69,7 @@ namespace Altseed2
         /// <param name="native"><paramref name="obj"/>に登録するポインタ</param>
         /// <exception cref="ArgumentException">スレッドセーフなキャッシュ保存ディクショナリを取得できなかった</exception>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
+        /// <remarks>デシリアライズ時に実行</remarks>
         internal static void CacheHandlingOnDeserializationConcurrent<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
