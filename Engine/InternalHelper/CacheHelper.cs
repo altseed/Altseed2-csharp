@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,17 +40,17 @@ namespace Altseed2
         /// <param name="obj">キャッシュ制御を行うクラスのインスタンス</param>
         /// <param name="native"><paramref name="obj"/>に登録するポインタ</param>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
-        internal static void CacheHandling<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
+        /// <remarks>デシリアライズ時に実行</remarks>
+        internal static void CacheHandlingOnDeserialization<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
             if (native == IntPtr.Zero) throw new ArgumentNullException(nameof(native), "引数がnullです");
 
             if (obj.CacheRepo.ContainsKey(native))
             {
-                obj.CacheRepo[native].TryGetTarget(out var cacheSet);
-                if (cacheSet != null)
+                obj.CacheRepo[native].TryGetTarget(out var cacheRet);
+                if (cacheRet != null)
                 {
-                    cacheSet.Release(native);
                     obj.Self = native;
                     return;
                 }
@@ -69,7 +69,8 @@ namespace Altseed2
         /// <param name="native"><paramref name="obj"/>に登録するポインタ</param>
         /// <exception cref="ArgumentException">スレッドセーフなキャッシュ保存ディクショナリを取得できなかった</exception>
         /// <exception cref="ArgumentNullException"><paramref name="obj"/>または<paramref name="native"/>がnull</exception>
-        internal static void CacheHandlingConcurrent<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
+        /// <remarks>デシリアライズ時に実行</remarks>
+        internal static void CacheHandlingOnDeserializationConcurrent<TClass>(TClass obj, IntPtr native) where TClass : class, ICacheKeeper<TClass>
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj), "引数がnullです");
             if (native == IntPtr.Zero) throw new ArgumentNullException(nameof(native), "引数がnullです");
@@ -88,10 +89,9 @@ namespace Altseed2
 
             if (cacheRepo.ContainsKey(native))
             {
-                cacheRepo[native].TryGetTarget(out var cacheSet);
-                if (cacheSet != null)
+                cacheRepo[native].TryGetTarget(out var cacheRet);
+                if (cacheRet != null)
                 {
-                    cacheSet.Release(native);
                     obj.Self = native;
                     return;
                 }

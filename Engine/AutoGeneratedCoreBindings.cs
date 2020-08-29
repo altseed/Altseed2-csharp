@@ -2491,7 +2491,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -2782,7 +2782,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -3073,7 +3073,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -3364,7 +3364,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -3655,7 +3655,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -5088,7 +5088,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            CacheHelper.CacheHandlingOnDeserializationConcurrent(this, ptr);
             
             WrapMode = seInfo.GetValue<TextureWrapMode>(S_WrapMode);
             FilterType = seInfo.GetValue<TextureFilter>(S_FilterType);
@@ -5340,7 +5340,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            CacheHelper.CacheHandlingOnDeserializationConcurrent(this, ptr);
             
             base.OnDeserialization(sender);
             
@@ -5542,7 +5542,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             base.OnDeserialization(sender);
             
@@ -5717,7 +5717,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             AlphaBlend = info.GetValue<AlphaBlend>(S_AlphaBlend);
             
@@ -6252,7 +6252,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             Transform = info.GetValue<Matrix44F>(S_Transform);
             
@@ -6589,7 +6589,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             var Texture = info.GetValue<TextureBase>(S_Texture);
             ((IDeserializationCallback)Texture)?.OnDeserialization(null);
@@ -7144,7 +7144,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             MaterialGlyph = info.GetValue<Material>(S_MaterialGlyph);
             MaterialImage = info.GetValue<Material>(S_MaterialImage);
@@ -7525,7 +7525,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
             var Texture = info.GetValue<TextureBase>(S_Texture);
@@ -7807,7 +7807,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             ViewMatrix = info.GetValue<Matrix44F>(S_ViewMatrix);
             var TargetTexture = info.GetValue<RenderTexture>(S_TargetTexture);
@@ -8350,7 +8350,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -9061,7 +9061,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            CacheHelper.CacheHandlingOnDeserializationConcurrent(this, ptr);
             
             
             OnDeserialize_Method(sender);
@@ -12795,7 +12795,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(seInfo);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            CacheHelper.CacheHandlingOnDeserializationConcurrent(this, ptr);
             
             
             OnDeserialize_Method(sender);
@@ -12992,7 +12992,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            CacheHelper.CacheHandlingOnDeserializationConcurrent(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
@@ -13541,7 +13541,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandlingConcurrent(this, ptr);
+            CacheHelper.CacheHandlingOnDeserializationConcurrent(this, ptr);
             
             LoopStartingPoint = info.GetSingle(S_LoopStartingPoint);
             LoopEndPoint = info.GetSingle(S_LoopEndPoint);
@@ -14422,7 +14422,7 @@ namespace Altseed2
             var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             Transform = info.GetValue<Matrix44F>(S_Transform);
             
@@ -14631,7 +14631,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             Radius = info.GetSingle(S_Radius);
             
@@ -14870,7 +14870,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             Size = info.GetValue<Vector2F>(S_Size);
             CenterPosition = info.GetValue<Vector2F>(S_CenterPosition);
@@ -15055,7 +15055,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
-            CacheHelper.CacheHandling(this, ptr);
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             
             OnDeserialize_Constructor(info, context);
