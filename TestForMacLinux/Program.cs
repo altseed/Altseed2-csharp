@@ -23,7 +23,7 @@ namespace Altseed2.TestForMacLinux
             var options = ((Parsed<Options>)result).Value;
 
             // if you test specific cases in code, you add filter.
-            options.Filter = new List<string> { "TreeDelete" };
+            //options.Filter = new List<string> { "Sound" };
 #if CI
             options.Filter = new List<string> { "-Sound" };
 #endif

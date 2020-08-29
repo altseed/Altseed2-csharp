@@ -87,26 +87,30 @@ namespace Altseed2
                 _graphics = Graphics.GetInstance();
                 _renderer = Renderer.GetInstance();
                 _cullingSystem = CullingSystem.GetInstance();
-                if (config.ToolEnabled) _tool = Tool.GetInstance();
+                _tool = Tool.GetInstance();
                 _sound = SoundMixer.GetInstance();
 
                 _RootNode = new RootNode();
                 _UpdatedNode = _RootNode;
 
-                _DrawnCollection = new DrawnCollection();
-                _CameraNodes = new CameraNodeCollection();
-                _RenderTextureCache = new RenderTextureCache();
+                if (_graphics != null)
+                {
+                    _DrawnCollection = new DrawnCollection();
+                    _CameraNodes = new CameraNodeCollection();
+                    _RenderTextureCache = new RenderTextureCache();
 
-                _DefaultCamera = RenderedCamera.Create();
-                _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
-                _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
+                    _DefaultCamera = RenderedCamera.Create();
+                    _DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-WindowSize / 2);
+                    _DefaultCamera.RenderPassParameter = new RenderPassParameter(ClearColor, true, true);
 
-                _DrawingRenderedIdsBuffer = new ArrayBuffer<int>();
-                Vector2FBuffer = new ArrayBuffer<Vector2F>(MaxStackalloclLength * 2);
-                VertexBuffer = new ArrayBuffer<Vertex>(MaxStackalloclLength * 2);
-                Vector2FArrayCache = Vector2FArray.Create(0);
+                    _DrawingRenderedIdsBuffer = new ArrayBuffer<int>();
+                    Vector2FBuffer = new ArrayBuffer<Vector2F>(MaxStackalloclLength * 2);
+                    VertexBuffer = new ArrayBuffer<Vertex>(MaxStackalloclLength * 2);
+                    Vector2FArrayCache = Vector2FArray.Create(0);
 
-                PostEffectNode.InitializeCache();
+                    PostEffectNode.InitializeCache();
+                }
+
                 isActive = true;
 
                 return true;
@@ -119,15 +123,15 @@ namespace Altseed2
         /// </summary>
         public static bool DoEvents()
         {
-            Graphics.DoEvents();
+            _graphics?.DoEvents();
             if (!Core.GetInstance().DoEvent()) return false;
 
-            if (Config.ToolEnabled)
+            if (_tool != null)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
                 if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
-                Tool.NewFrame();
+                _tool.NewFrame();
             }
 
             return true;
@@ -144,15 +148,18 @@ namespace Altseed2
             // Contextの更新
             Context.Update();
 
+            // Graphicsが初期化されていない場合は早期リターン
+            if (_graphics == null) return true;
+
             // カリング用AABBの更新
-            CullingSystem.UpdateAABB();
+            _cullingSystem?.UpdateAABB();
 
             // (ツール機能を使用しない場合は)描画を開始
-            if (!Config.ToolEnabled)
+            if (_tool == null)
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
-                if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
+                if (!_graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
             }
 
             if (_CameraNodes.Count == 0)
@@ -176,9 +183,9 @@ namespace Altseed2
             PostEffectNode.UpdateCache();
 
             // （ツール機能を使用する場合は）ツールを描画
-            if (Config.ToolEnabled)
+            if (_tool != null)
             {
-                Tool.Render();
+                _tool.Render();
             }
 
             // 描画を終了
@@ -301,91 +308,91 @@ namespace Altseed2
         #region Modules
         private static bool isActive;
 
-        internal static Core Core => _core ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        internal static Core Core => _core ?? throw new InvalidOperationException("Coreが初期化されていません。");
         private static Core _core;
 
         /// <summary>
         /// ファイルを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static File File => _file ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">File機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static File File => _file ?? throw new InvalidOperationException("File機能が初期化されていません。");
         private static File _file;
 
         /// <summary>
         /// キーボードを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Keyboard Keyboard => _keyboard ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Keyboard機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Keyboard Keyboard => _keyboard ?? throw new InvalidOperationException("Keyboard機能が初期化されていません。");
         private static Keyboard _keyboard;
 
         /// <summary>
         /// マウスを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Mouse Mouse => _mouse ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Mouse機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Mouse Mouse => _mouse ?? throw new InvalidOperationException("Mouse機能が初期化されていません。");
         private static Mouse _mouse;
 
         /// <summary>
         /// ジョイスティックを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Joystick Joystick => _joystick ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Joystick機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Joystick Joystick => _joystick ?? throw new InvalidOperationException("Joystic機能が初期化されていません。");
         private static Joystick _joystick;
 
         /// <summary>
         /// グラフィックのクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Graphics Graphics => _graphics ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Graphics機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Graphics Graphics => _graphics ?? throw new InvalidOperationException("Graphics機能が初期化されていません。");
         private static Graphics _graphics;
 
         /// <summary>
         /// ログを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Log Log => _log ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Log機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Log Log => _log ?? throw new InvalidOperationException("Log機能が初期化されていません。");
         private static Log _log;
 
         /// <summary>
         /// レンダラのクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Renderer Renderer => _renderer ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Rendererが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Renderer Renderer => _renderer ?? throw new InvalidOperationException("Graphics機能が初期化されていません。");
         private static Renderer _renderer;
 
         /// <summary>
         /// カリングのクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static CullingSystem CullingSystem => _cullingSystem ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">CullingSystemが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static CullingSystem CullingSystem => _cullingSystem ?? throw new InvalidOperationException("Graphics機能が初期化されていません。");
         private static CullingSystem _cullingSystem;
 
         /// <summary>
         /// 音を管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static SoundMixer Sound => _sound ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Sound機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static SoundMixer Sound => _sound ?? throw new InvalidOperationException("Sound機能が初期化されていません。");
         private static SoundMixer _sound;
 
         /// <summary>
         /// リソースを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Resources Resources => _resources ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">File機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Resources Resources => _resources ?? throw new InvalidOperationException("File機能が初期化されていません。");
         private static Resources _resources;
 
         /// <summary>
         /// ウインドウを表すクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        internal static Window Window => _window ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Windowが初期されていなかったり終了していて操作を実行できなかった</exception>
+        internal static Window Window => _window ?? throw new InvalidOperationException("Window機能が初期化されていません。");
         private static Window _window;
 
         /// <summary>
         /// ツールを管理するクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">エンジンが初期されていなかったり終了していて操作を実行できなかった</exception>
-        public static Tool Tool => _tool ?? throw new InvalidOperationException("現在その操作は許可されていません");
+        /// <exception cref="InvalidOperationException">Tool機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+        public static Tool Tool => _tool ?? throw new InvalidOperationException("Tool機能が初期化されていません。");
         private static Tool _tool;
 
         #endregion
@@ -433,21 +440,25 @@ namespace Altseed2
 
         internal static void RegisterDrawn(IDrawn node)
         {
+            if (_DrawnCollection is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _DrawnCollection.Register(node);
         }
 
         internal static void UnregisterDrawn(IDrawn node)
         {
+            if (_DrawnCollection is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _DrawnCollection.Unregister(node);
         }
 
         internal static void UpdateDrawnCameraGroup(IDrawn node, ulong old)
         {
+            if (_DrawnCollection is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _DrawnCollection.UpdateCameraGroup(node, old);
         }
 
         internal static void UpdateDrawnZOrder(IDrawn node, int old)
         {
+            if (_DrawnCollection is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _DrawnCollection.UpdateZOrder(node, old);
         }
 
@@ -457,16 +468,19 @@ namespace Altseed2
 
         internal static void RegisterCameraNode(CameraNode camera)
         {
+            if (_CameraNodes is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _CameraNodes.AddCamera(camera);
         }
 
         internal static void UnregisterCameraNode(CameraNode camera)
         {
+            if (_CameraNodes is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _CameraNodes.RemoveCamera(camera);
         }
 
         internal static void UpdateCameraNodeGroup(CameraNode camera, int oldGroup)
         {
+            if (_CameraNodes is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _CameraNodes.UpdateGroup(camera, oldGroup);
         }
 

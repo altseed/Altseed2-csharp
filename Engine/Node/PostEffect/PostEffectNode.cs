@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -86,7 +87,14 @@ namespace Altseed2
         /// <summary>
         /// <see cref="PostEffectNode"/>の新しいインスタンスを生成します。
         /// </summary>
-        protected PostEffectNode() { }
+        /// <exception cref="InvalidOperationException">Graphics機能が初期化されていない。</exception>
+        public PostEffectNode()
+        {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphics機能が初期化されていません。");
+            }
+        }
 
         void IDrawn.Draw()
         {

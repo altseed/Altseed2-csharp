@@ -36,14 +36,20 @@ namespace Altseed2
         private readonly RuledTransitionState _OpeningState;
 
         /// <summary>
-        /// 指定したマスクテクスチャを用いて<see cref="RuledTransitionNode"/>の新しいインスタンスを生成します。
+        /// <see cref="RuledTransitionNode"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="closingState">遷移元のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
         /// <param name="openingState">遷移先のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
-        /// <param name="maskTexture">使用するマスクテクスチャ</param>
-        public RuledTransitionNode(RuledTransitionState closingState, RuledTransitionState openingState, Texture2D maskTexture)
+        /// <param name="maskTexture">指定するマスクテクスチャ</param>
+        /// 
+        public RuledTransitionNode(RuledTransitionState closingState, RuledTransitionState openingState, Texture2D maskTexture = null)
             : base(closingState.TargetNode, openingState.TargetNode, closingState.Duration, openingState.Duration)
         {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphics機能が初期化されていません。");
+            }
+
             _ClosingState = closingState;
             _OpeningState = openingState;
 
@@ -53,28 +59,7 @@ namespace Altseed2
                 RuleTexture = _ClosingState.RuleTexture,
                 Softness = _ClosingState.Softness,
                 MixRate = 0.0f,
-                UseCaptionAsMaskTexture = false
-            };
-        }
-
-        /// <summary>
-        /// 既定のマスクテクスチャを用いて<see cref="RuledTransitionNode"/>の新しいインスタンスを生成します。
-        /// </summary>
-        /// <param name="closingState">遷移元のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
-        /// <param name="openingState">遷移先のノードにおける<see cref="RuledTransitionState"/>のインスタンス</param>
-        public RuledTransitionNode(RuledTransitionState closingState, RuledTransitionState openingState)
-            : base(closingState.TargetNode, openingState.TargetNode, closingState.Duration, openingState.Duration)
-        {
-            _ClosingState = closingState;
-            _OpeningState = openingState;
-
-            _TransitionEffectNode = new RuledTransitionEffectNode
-            {
-                MaskTexture = null,
-                RuleTexture = _ClosingState.RuleTexture,
-                Softness = _ClosingState.Softness,
-                MixRate = 0.0f,
-                UseCaptionAsMaskTexture = true
+                UseCaptionAsMaskTexture = maskTexture != null,
             };
         }
 

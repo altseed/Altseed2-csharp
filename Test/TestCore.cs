@@ -19,7 +19,7 @@ namespace Altseed2.Test
                 config.LogFileName = "log.txt";
                 config.ConsoleLoggingEnabled = true;
 #if CI
-                config.IsGraphicsOnly = true;
+                config.EnabledCoreModules = CoreModules.Graphics;
 #endif
             }
             _Config = config ?? new Configuration()
@@ -28,7 +28,7 @@ namespace Altseed2.Test
                 LogFileName = "log.txt",
                 ConsoleLoggingEnabled = true,
 #if CI
-                IsGraphicsOnly = true,
+                EnabledCoreModules = CoreModules.Graphics,
 #endif
             };
         }

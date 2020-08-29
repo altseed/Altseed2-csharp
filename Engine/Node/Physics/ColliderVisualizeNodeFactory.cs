@@ -19,11 +19,18 @@ namespace Altseed2
         /// <paramref name="colliderNode"/>の型がサポートされていない型である
         /// (<see cref="CircleColliderNode"/>，<see cref="PolygonColliderNode"/>，<see cref="RectangleColliderNode"/>若しくはそれらから派生した型ではない)
         /// </exception>
+        /// <exception cref="InvalidOperationException">Graphics機能が初期化されていない。</exception>
         /// <exception cref="ArgumentNullException"><paramref name="colliderNode"/>がnull</exception>
         /// <returns><paramref name="colliderNode"/>の当たり領域を表示するノード</returns>
         public static Node Create(ColliderNode colliderNode)
         {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphics機能が初期化されていません。");
+            }
+
             if (colliderNode == null) throw new ArgumentNullException(nameof(colliderNode), "引数がnullです");
+
             return colliderNode switch
             {
                 CircleColliderNode c => new CircleColliderVisualizeNode(c),

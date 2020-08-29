@@ -7,7 +7,7 @@ namespace Altseed2.Tool.FilePackageGenerator
         [STAThread]
         static void Main(string[] args)
         {
-            Engine.Initialize("File Package Generator", 400, 600, new Configuration() { ToolEnabled = true, IsResizable = false });
+            Engine.Initialize("File Package Generator", 400, 600, new Configuration() { EnabledCoreModules = CoreModules.Default | CoreModules.Tool, IsResizable = false });
 
             string input = "";
             string password = "";

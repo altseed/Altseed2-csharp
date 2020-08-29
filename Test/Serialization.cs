@@ -103,12 +103,11 @@ namespace Altseed2.Test
                 DeviceType = GraphicsDevice.Metal,
                 FileLoggingEnabled = false,
                 IsFullscreen = false,
-                IsGraphicsOnly = false,
                 IsResizable = true,
                 LogFileName = "Log.txt",
-                ToolEnabled = true,
                 VisibleTransformInfo = true,
-                WaitVSync = true
+                WaitVSync = true,
+                EnabledCoreModules = CoreModules.Default | CoreModules.Tool
             };
 
             const string path = "Serialization/Configuration.bin";
@@ -127,14 +126,12 @@ namespace Altseed2.Test
             Assert.AreEqual(config1.FileLoggingEnabled, config2.FileLoggingEnabled);
             Assert.AreEqual(config1.IsFullscreen, false);
             Assert.AreEqual(config1.IsFullscreen, config2.IsFullscreen);
-            Assert.AreEqual(config1.IsGraphicsOnly, false);
-            Assert.AreEqual(config1.IsGraphicsOnly, config2.IsGraphicsOnly);
+            Assert.AreEqual(config1.EnabledCoreModules, CoreModules.Default | CoreModules.Tool);
+            Assert.AreEqual(config1.EnabledCoreModules, config2.EnabledCoreModules);
             Assert.AreEqual(config1.IsResizable, true);
             Assert.AreEqual(config1.IsResizable, config2.IsResizable);
             Assert.AreEqual(config1.LogFileName, "Log.txt");
             Assert.AreEqual(config1.LogFileName, config2.LogFileName);
-            Assert.AreEqual(config1.ToolEnabled, true);
-            Assert.AreEqual(config1.ToolEnabled, config2.ToolEnabled);
             Assert.AreEqual(config1.VisibleTransformInfo, true);
             Assert.AreEqual(config1.VisibleTransformInfo, config2.VisibleTransformInfo);
             Assert.AreEqual(config1.WaitVSync, true);

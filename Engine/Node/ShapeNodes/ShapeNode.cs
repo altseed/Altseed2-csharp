@@ -13,8 +13,14 @@ namespace Altseed2
         /// <summary>
         /// <see cref="ShapeNode"/>の新しいインスタンスを生成します。
         /// </summary>
+        /// <exception cref="InvalidOperationException">Graphics機能が初期化されていない。</exception>
         protected ShapeNode()
         {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphics機能が初期化されていません。");
+            }
+
             _RenderedPolygon = RenderedPolygon.Create();
         }
 

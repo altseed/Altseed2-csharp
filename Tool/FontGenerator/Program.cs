@@ -7,7 +7,7 @@ namespace Altseed2.Tool.FontGenerator
         [STAThread]
         static void Main(string[] args)
         {
-            Engine.Initialize("Font Generator", 400, 600, new Configuration() { ToolEnabled = true, IsResizable = false });
+            Engine.Initialize("Font Generator", 400, 600, new Configuration() { EnabledCoreModules = CoreModules.Default | CoreModules.Tool, IsResizable = false });
 
             string input = "";
             int size = 20;
