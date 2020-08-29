@@ -227,7 +227,7 @@ namespace Altseed2
                 if (_LeftTop == value) return;
 
                 _LeftTop = value;
-                UpdateMargin();
+                ApplySizeChanged(Parent);
             }
         }
         private Vector2F _LeftTop = new Vector2F(0f, 0f);
@@ -243,7 +243,7 @@ namespace Altseed2
                 if (_RightBottom == value) return;
 
                 _RightBottom = value;
-                UpdateMargin();
+                ApplySizeChanged(Parent);
             }
         }
         private Vector2F _RightBottom = new Vector2F(0f, 0f);
@@ -264,7 +264,7 @@ namespace Altseed2
                 if (_AnchorMin.Y < 0) _AnchorMin.Y = 0;
                 if (_AnchorMin.Y > _AnchorMax.Y) _AnchorMax.Y = _AnchorMin.Y;
 
-                UpdateMargin();
+                ApplySizeChanged(Parent);
                 RequireCalcTransform = true;
             }
         }
@@ -286,7 +286,7 @@ namespace Altseed2
                 if (_AnchorMax.Y > 1) _AnchorMin.Y = 1;
                 if (_AnchorMax.Y < _AnchorMin.Y) _AnchorMin.Y = _AnchorMax.Y;
 
-                UpdateMargin();
+                ApplySizeChanged(Parent);
                 RequireCalcTransform = true;
             }
         }
@@ -406,6 +406,9 @@ namespace Altseed2
         /// </summary>
         private void ApplySizeChanged(Node node)
         {
+            if (node == null)
+                return;
+
             if (node is TransformNode t && t.Transfomer is AnchorTransformerNode transformer)
             {
                 var parentTransformer = t.GetAncestorSpecificNode<TransformNode>()?.Transfomer as AnchorTransformerNode;
