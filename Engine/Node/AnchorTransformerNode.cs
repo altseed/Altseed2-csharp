@@ -458,6 +458,7 @@ namespace Altseed2
                     break;
 
                 case AnchorMode.ContentSize:
+                    relativeSize = contentSize;
                     break;
 
                 default: throw new InvalidOperationException(nameof(AnchorMode));
