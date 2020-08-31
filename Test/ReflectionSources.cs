@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using NUnit.Framework;
 
 namespace Altseed2.Test
@@ -1112,7 +1113,7 @@ namespace Altseed2.Test
                     VerticalFlip = false,
                     Weight = 15f,
                     WritingDirection = WritingDirection.Vertical,
-                    ZOrder = 10,                    
+                    ZOrder = 10,
                 });
                 textNode.PropertyInfos = new[]
                 {
