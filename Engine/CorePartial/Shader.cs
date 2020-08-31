@@ -64,7 +64,7 @@ namespace Altseed2
             Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
             var result = new ShaderCompileResult(new MemoryHandle(cbg_Shader_Compile(name, code, (int)stage)));
             if (result.Value == null) throw new SerializationException($"シェーダのデシリアライズ時のコンパイルに失敗しました\n{nameof(result.Message)}: {result.Message}");
-            ptr = result.GetValurPtr();
+            ptr = result.GetValuePtr();
         }
     }
 
@@ -75,6 +75,6 @@ namespace Altseed2
         /// </summary>
         /// <returns><see cref="Value"/></returns>
         /// <remarks><see cref="Shader"/>デシリアライズ時に仕様</remarks>
-        internal IntPtr GetValurPtr() => cbg_ShaderCompileResult_GetValue(selfPtr);
+        internal IntPtr GetValuePtr() => cbg_ShaderCompileResult_GetValue(selfPtr);
     }
 }
