@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+
 using NUnit.Framework;
 
 namespace Altseed2.Test

@@ -39,8 +39,8 @@ namespace Altseed2.Test
             var tasks = new List<Task<StaticFile>>();
             foreach (var i in Enumerable.Range(0, itemnum))
             {
-                if(i % 10 == 0 && dogc)
-				{
+                if (i % 10 == 0 && dogc)
+                {
                     Thread.Sleep(10);
                     Assert.True(Engine.Update());
                 }
