@@ -64,7 +64,25 @@ namespace Altseed2
             Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
             var result = new ShaderCompileResult(new MemoryHandle(cbg_Shader_Compile(name, code, (int)stage)));
             if (result.Value == null) throw new SerializationException($"シェーダのデシリアライズ時のコンパイルに失敗しました\n{nameof(result.Message)}: {result.Message}");
-            ptr = result.Value.selfPtr;
+            ptr = result.GetValueWithoutReleasing().selfPtr;
+        }
+    }
+
+    internal partial class ShaderCompileResult
+    {
+        /// <summary>
+        /// <see cref="Shader.cbg_Shader_Release(IntPtr)"/>を行わず<see cref="Value"/>を取得する
+        /// </summary>
+        /// <returns><see cref="Value"/></returns>
+        /// <remarks><see cref="Shader"/>デシリアライズ時に仕様</remarks>
+        internal Shader GetValueWithoutReleasing()
+        {
+            var ptr = cbg_ShaderCompileResult_GetValue(selfPtr);
+            var CacheRepo = ((ICacheKeeper<Shader>)new Shader(default)).CacheRepo;
+            if (CacheRepo.TryGetValue(ptr, out var weakRef) && weakRef.TryGetTarget(out var result)) return result;
+            result = new Shader(new MemoryHandle(ptr));
+            CacheRepo[ptr] = new WeakReference<Shader>(result);
+            return result;
         }
     }
 }
