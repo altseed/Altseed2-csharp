@@ -51,8 +51,8 @@ namespace Altseed2
                 var old = _CameraGroup;
                 _CameraGroup = value;
 
-                if(IsRegistered)
-                Engine.UpdateDrawnCameraGroup(this, old);
+                if (IsRegistered)
+                    Engine.UpdateDrawnCameraGroup(this, old);
             }
         }
         private ulong _CameraGroup;
