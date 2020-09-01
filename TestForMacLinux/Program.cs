@@ -23,7 +23,7 @@ namespace Altseed2.TestForMacLinux
             var options = ((Parsed<Options>)result).Value;
 
             // if you test specific cases in code, you add filter.
-            //options.Filter = new List<string> { "Sound" };
+            // options.Filter = new List<string> { "Sound" };
 #if CI
             options.Filter = new List<string> { "-Sound" };
 #endif
@@ -33,12 +33,10 @@ namespace Altseed2.TestForMacLinux
             foreach (var classType in testProjctAssembly.GetTypes().Where(obj => Attribute.GetCustomAttribute(obj, typeof(TestFixtureAttribute)) != null))
             {
                 var instance = Activator.CreateInstance(classType);
-                foreach (var method in classType.GetMethods()
-                    .Where(obj => Attribute.GetCustomAttribute(obj, typeof(TestAttribute)) != null &&
-                         (options.Filter.Count() == 0 ||
-                         options.Filter.Where(cond => cond.FirstOrDefault() != '-').Any(cond => (classType.Name + "." + obj.Name).Contains(cond)) &&
-                         options.Filter.Where(cond => cond.FirstOrDefault() == '-').All(cond => !(classType.Name + "." + obj.Name).Contains(cond.TrimStart('-'))))))
+                foreach (var method in classType.GetMethods())
                 {
+                    if (!ShouldRun(options, classType, method)) continue;
+
                     try
                     {
                         Console.WriteLine(classType.Name + "." + method.Name);
@@ -66,6 +64,23 @@ namespace Altseed2.TestForMacLinux
             }
 
             return isSuccessful ? 0 : -1;
+        }
+
+        private static bool ShouldRun(Options options, Type type, MethodInfo method)
+        {
+            if (Attribute.GetCustomAttribute(method, typeof(TestAttribute)) == null) return false;
+
+            // フィルタが1つもなければすべて true
+            if (!options.Filter.Any()) return true;
+            var name = $"{type.Name}.{method.Name}";
+
+            // 指定フィルタ
+            if (!options.Filter.Where(f => !f.StartsWith('-')).All(f => name.Contains(f))) return false;
+
+            // 除外フィルタ
+            if (options.Filter.Where(f => f.StartsWith('-')).Any(f => name.Contains(f.Substring(1)))) return false;
+
+            return true;
         }
     }
 }
