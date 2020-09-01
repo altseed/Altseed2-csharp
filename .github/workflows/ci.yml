@@ -51,11 +51,20 @@ jobs:
       - name: Update Submodules
         run: |
           git submodule update --init
-          
+
       - name: Download Windows
         uses: actions/download-artifact@v1
         with:
           name: test-windows
+
+      - name: Copy Test
+        run: |
+          cd Core
+          git submodule update  --init TestData
+          cd ..
+          mkdir Build
+          xcopy Core\TestData Build\TestData /E
+
       - name: Test
         continue-on-error: true
         run: |
