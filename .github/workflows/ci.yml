@@ -8,9 +8,7 @@ on:
 
 jobs:
   windows:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Update Submodules
@@ -38,11 +36,6 @@ jobs:
         dotnet-version: 3.0.103
     - name: Build
       run: dotnet build Altseed2.sln --configuration CI
-    - name: Test
-      continue-on-error: true
-      run: |
-        cd Build
-        dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
@@ -50,8 +43,26 @@ jobs:
         name: test-windows
         path: Build
   
-  linux:
+  test:
+    runs-on: windows-latest
+    needs: [windows]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update Submodules
+        run: |
+          git submodule update --init
+          
+      - name: Download Windows
+        uses: actions/download-artifact@v1
+        with:
+          name: test-windows
+      - name: Test
+        continue-on-error: true
+        run: |
+          cd test-windows
+          dotnet TestForMacLinux.dll
 
+  linux:
     runs-on: ubuntu-18.04
 
     steps:
