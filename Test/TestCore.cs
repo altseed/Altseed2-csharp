@@ -55,6 +55,11 @@ namespace Altseed2.Test
                 Assert.True(Engine.Update());
 
                 afterUpdateAction?.Invoke(count);
+
+                if(count == Duration / 2 && !string.IsNullOrEmpty(_TestName))
+                {
+                    Engine.Graphics.SaveScreenshot(_TestName + ".png");
+                }
             }
         }
 
