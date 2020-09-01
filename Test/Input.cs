@@ -15,7 +15,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
@@ -39,7 +39,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
@@ -64,7 +64,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var cursor = Cursor.Create("../Core/TestData/IO/AltseedPink.png", new Vector2I(16, 16));
+            var cursor = Cursor.Create("TestData/IO/AltseedPink.png", new Vector2I(16, 16));
             Assert.NotNull(cursor);
             if (cursor != null)
             {
@@ -81,7 +81,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();
@@ -105,7 +105,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var node = new TextNode();

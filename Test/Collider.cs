@@ -13,7 +13,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var node = new SpriteNode();

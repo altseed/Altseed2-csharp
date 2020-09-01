@@ -14,8 +14,8 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var bgm = Altseed2.Sound.Load(@"../Core/TestData/Sound/bgm1.ogg", false);
-            var se = Altseed2.Sound.Load(@"../Core/TestData/Sound/se1.wav", true);
+            var bgm = Altseed2.Sound.Load(@"TestData/Sound/bgm1.ogg", false);
+            var se = Altseed2.Sound.Load(@"TestData/Sound/se1.wav", true);
 
             Assert.NotNull(bgm);
             Assert.NotNull(se);
@@ -36,7 +36,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var bgm = Altseed2.Sound.Load(@"../Core/TestData/Sound/bgm1.ogg", false);
+            var bgm = Altseed2.Sound.Load(@"TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(bgm);
 
             bgm.IsLoopingMode = true;
@@ -58,12 +58,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var bgm = Altseed2.Sound.Load(@"../Core/TestData/Sound/bgm1.ogg", false);
+            var bgm = Altseed2.Sound.Load(@"TestData/Sound/bgm1.ogg", false);
             Assert.NotNull(bgm);
 
             int bgm_id = Engine.Sound.Play(bgm);
 
-            var font = Font.LoadDynamicFont("../Core/TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
             Assert.NotNull(font);
 
             var textNode = new TextNode();

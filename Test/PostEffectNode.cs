@@ -68,7 +68,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode()
@@ -98,7 +98,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode()
@@ -126,7 +126,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode()
@@ -154,7 +154,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode()
@@ -182,7 +182,7 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             Engine.AddNode(new SpriteNode()

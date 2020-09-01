@@ -17,14 +17,14 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            Assert.True(Engine.File.Pack("../Core/TestData/IO/pack/", "pack.pack"));
-            Assert.True(Engine.File.PackWithPassword("../Core/TestData/IO/pack/", "password.pack", "altseed"));
+            Assert.True(Engine.File.Pack("TestData/IO/pack/", "pack.pack"));
+            Assert.True(Engine.File.PackWithPassword("TestData/IO/pack/", "password.pack", "altseed"));
 
             // default root
-            Assert.True(Engine.File.Exists("../Core/TestData/IO/test.txt"));
+            Assert.True(Engine.File.Exists("TestData/IO/test.txt"));
 
             // add directory root
-            Assert.True(Engine.File.AddRootDirectory("../Core/TestData/IO/root/"));
+            Assert.True(Engine.File.AddRootDirectory("TestData/IO/root/"));
 
             // directory root
             Assert.False(Engine.File.Exists("test.txt"));
@@ -34,8 +34,8 @@ namespace Altseed2.Test
 
             // clear root
             Engine.File.ClearRootDirectories();
-            Assert.True(Engine.File.Exists("../Core/TestData/IO/test.txt"));
-            Assert.True(Engine.File.Exists("../Core/TestData/IO/../IO/test.txt"));
+            Assert.True(Engine.File.Exists("TestData/IO/test.txt"));
+            Assert.True(Engine.File.Exists("TestData/IO/../IO/test.txt"));
             Assert.False(Engine.File.Exists("space test.txt"));
             Assert.False(Engine.File.Exists("全角 テスト.txt"));
             Assert.False(Engine.File.Exists("全角　テスト.txt"));
@@ -70,15 +70,15 @@ namespace Altseed2.Test
             tc.Init();
 
             // pack files
-            Assert.True(Engine.File.Pack("../Core/TestData/IO/", "pack.pack"));
-            Assert.True(Engine.File.PackWithPassword("../Core/TestData/IO/pack/", "password.pack", "altseed"));
+            Assert.True(Engine.File.Pack("TestData/IO/", "pack.pack"));
+            Assert.True(Engine.File.PackWithPassword("TestData/IO/pack/", "password.pack", "altseed"));
 
             // add package
             Assert.True(Engine.File.AddRootPackage("pack.pack"));
 
             // create static file, and compare no-package and package without password
             StaticFile test = null;
-            Assert.AreNotEqual(test = StaticFile.Create("../Core/TestData/IO/test.txt"), null);
+            Assert.AreNotEqual(test = StaticFile.Create("TestData/IO/test.txt"), null);
             Assert.False(test.IsInPackage);
             StaticFile testPack = null;
             Assert.AreNotEqual(testPack = StaticFile.Create("test.txt"), null);
@@ -99,7 +99,7 @@ namespace Altseed2.Test
 
             // create static file, and compare no-package and package with password
             StaticFile test3 = null;
-            Assert.AreNotEqual(test3 = StaticFile.Create("../Core/TestData/IO/pack/test.txt"), null);
+            Assert.AreNotEqual(test3 = StaticFile.Create("TestData/IO/pack/test.txt"), null);
             Assert.AreEqual(test3.Size, testPack2.Size);
             Assert.AreEqual(test3.Size, testPack2.Size);
 
@@ -113,15 +113,15 @@ namespace Altseed2.Test
             tc.Init();
 
             // pack files
-            Assert.True(Engine.File.Pack("../Core/TestData/IO/", "pack.pack"));
-            Assert.True(Engine.File.PackWithPassword("../Core/TestData/IO/pack/", "password.pack", "altseed"));
+            Assert.True(Engine.File.Pack("TestData/IO/", "pack.pack"));
+            Assert.True(Engine.File.PackWithPassword("TestData/IO/pack/", "password.pack", "altseed"));
 
             // add package
             Assert.True(Engine.File.AddRootPackage("pack.pack"));
 
             // create static file, and compare no-package and package without password
             StreamFile test = null;
-            Assert.AreNotEqual(test = StreamFile.Create("../Core/TestData/IO/test.txt"), null);
+            Assert.AreNotEqual(test = StreamFile.Create("TestData/IO/test.txt"), null);
             Assert.False(test.IsInPackage);
             StreamFile testPack = null;
             Assert.AreNotEqual(testPack = StreamFile.Create("test.txt"), null);
@@ -152,7 +152,7 @@ namespace Altseed2.Test
 
             // create static file, and compare no-package and package with password
             StreamFile test3 = null;
-            Assert.AreNotEqual(test3 = StreamFile.Create("../Core/TestData/IO/pack/test.txt"), null);
+            Assert.AreNotEqual(test3 = StreamFile.Create("TestData/IO/pack/test.txt"), null);
             Assert.AreEqual(test3.Size, testPack2.Size);
             Assert.AreEqual(test3.Size, testPack2.Size);
             Assert.AreEqual(test3.TempBufferSize, 0);
@@ -175,7 +175,7 @@ namespace Altseed2.Test
             tc.Init();
 
             // pack files
-            Assert.True(Engine.File.Pack("../Core/TestData/IO/", "pack.pack"));
+            Assert.True(Engine.File.Pack("TestData/IO/", "pack.pack"));
 
             // add package
             Assert.True(Engine.File.AddRootPackage("pack.pack"));
@@ -185,8 +185,8 @@ namespace Altseed2.Test
             StaticFile testPack1 = null;
             StaticFile testPack2 = null;
 
-            test1 = StaticFile.Create("../Core/TestData/IO/全角 テスト.txt");
-            test2 = StaticFile.Create("../Core/TestData/IO/全角　テスト.txt");
+            test1 = StaticFile.Create("TestData/IO/全角 テスト.txt");
+            test2 = StaticFile.Create("TestData/IO/全角　テスト.txt");
             testPack1 = StaticFile.Create("全角 テスト.txt");
             testPack2 = StaticFile.Create("全角　テスト.txt");
 
@@ -210,7 +210,7 @@ namespace Altseed2.Test
             tc.Init();
 
             // pack files
-            Assert.True(Engine.File.Pack("../Core/TestData/IO/", "pack.pack"));
+            Assert.True(Engine.File.Pack("TestData/IO/", "pack.pack"));
 
             // add package
             Assert.True(Engine.File.AddRootPackage("pack.pack"));
@@ -229,17 +229,17 @@ namespace Altseed2.Test
 
             var task1 = Task.Run(() =>
             {
-                test1 = StaticFile.Create("../Core/TestData/IO/test.txt");
-                test3 = StaticFile.Create("../Core/TestData/IO/全角 テスト.txt");
+                test1 = StaticFile.Create("TestData/IO/test.txt");
+                test3 = StaticFile.Create("TestData/IO/全角 テスト.txt");
                 testPack1 = StaticFile.Create("test.txt");
                 testPack3 = StaticFile.Create("全角 テスト.txt");
-                testCache = StaticFile.Create("../Core/TestData/IO/test.txt");
+                testCache = StaticFile.Create("TestData/IO/test.txt");
             });
 
             var task2 = Task.Run(() =>
             {
-                test2 = StaticFile.Create("../Core/TestData/IO/space test.txt");
-                test4 = StaticFile.Create("../Core/TestData/IO/全角　テスト.txt");
+                test2 = StaticFile.Create("TestData/IO/space test.txt");
+                test4 = StaticFile.Create("TestData/IO/全角　テスト.txt");
                 testPack2 = StaticFile.Create("space test.txt");
                 testPack4 = StaticFile.Create("全角　テスト.txt");
                 testPackCache = StaticFile.Create("space test.txt");
@@ -274,7 +274,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var path = System.IO.Path.GetFullPath("../Core/TestData/IO/AltseedPink.png");
+            var path = System.IO.Path.GetFullPath("TestData/IO/AltseedPink.png");
             Assert.True(Engine.File.Exists(path));
             StaticFile test = null;
             Assert.AreNotEqual(test = StaticFile.Create(path), null);

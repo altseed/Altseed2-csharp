@@ -16,7 +16,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
             var node = new RotateSpriteNode();
@@ -65,7 +65,7 @@ namespace Altseed2.Test
                 if (node != null) Engine.RemoveNode(node);
 
                 node = new SpriteNode();
-                node.Texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+                node.Texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
                 node.CenterPosition = node.Texture.Size / 2;
                 node.Position = new Vector2F(200, 200);
                 Engine.AddNode(node);
@@ -98,7 +98,7 @@ namespace Altseed2.Test
                 if (node != null) Engine.RemoveNode(node);
 
                 node = new SpriteNode();
-                node.Texture = Texture2D.Load(@"../Core/TestData/IO/AltseedPink.png");
+                node.Texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
                 node.CenterPosition = node.Texture.Size / 2;
                 node.Position = new Vector2F(200, 200);
                 node.Material = Material.Create();
