@@ -18,18 +18,12 @@ namespace Altseed2.Test
                 config.FileLoggingEnabled = true;
                 config.LogFileName = "log.txt";
                 config.ConsoleLoggingEnabled = true;
-#if CI
-                config.EnabledCoreModules = CoreModules.Graphics;
-#endif
             }
             _Config = config ?? new Configuration()
             {
                 FileLoggingEnabled = true,
                 LogFileName = "log.txt",
                 ConsoleLoggingEnabled = true,
-#if CI
-                EnabledCoreModules = CoreModules.Graphics,
-#endif
             };
         }
 
