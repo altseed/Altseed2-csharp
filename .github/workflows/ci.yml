@@ -67,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: test-result
-          path: Build
+          path: test-windows
 
   linux:
     runs-on: ubuntu-18.04
