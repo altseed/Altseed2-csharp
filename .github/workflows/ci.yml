@@ -42,7 +42,13 @@ jobs:
       with:
         name: test-windows
         path: Build
-  
+    - name: Upload artifact2
+      continue-on-error: true
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: test-windows-data
+        path: Core/TestData
+    
   test:
     runs-on: windows-latest
     needs: [windows]
