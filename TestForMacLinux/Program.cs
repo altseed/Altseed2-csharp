@@ -63,7 +63,7 @@ namespace Altseed2.TestForMacLinux
                 }
             }
 
-            return isSuccessful ? 0 : -1;
+            return isSuccessful ? 0 : 1;
         }
 
         private static bool ShouldRun(Options options, Type type, MethodInfo method)

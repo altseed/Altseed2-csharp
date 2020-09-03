@@ -239,12 +239,16 @@ namespace Altseed2.Test
             StaticFile test1 = null;
             StaticFile test2 = null;
             StaticFile test3 = null;
+#if !CI
             StaticFile test4 = null;
+#endif
             StaticFile testCache = null;
             StaticFile testPack1 = null;
             StaticFile testPack2 = null;
             StaticFile testPack3 = null;
+#if !CI
             StaticFile testPack4 = null;
+#endif
             StaticFile testPackCache = null;
 
             var task1 = Task.Run(() =>
@@ -259,9 +263,13 @@ namespace Altseed2.Test
             var task2 = Task.Run(() =>
             {
                 test2 = StaticFile.Create("TestData/IO/space test.txt");
+#if !CI
                 test4 = StaticFile.Create("TestData/IO/全角　テスト.txt");
+#endif
                 testPack2 = StaticFile.Create("space test.txt");
+#if !CI
                 testPack4 = StaticFile.Create("全角　テスト.txt");
+#endif
                 testPackCache = StaticFile.Create("space test.txt");
             });
 
@@ -271,20 +279,25 @@ namespace Altseed2.Test
             Assert.AreNotEqual(test1, null);
             Assert.AreNotEqual(test2, null);
             Assert.AreNotEqual(test3, null);
+#if !CI
             Assert.AreNotEqual(test4, null);
+#endif
             Assert.AreNotEqual(testCache, null);
             Assert.AreNotEqual(testPack1, null);
             Assert.AreNotEqual(testPack2, null);
             Assert.AreNotEqual(testPack3, null);
+#if !CI
             Assert.AreNotEqual(testPack4, null);
+#endif
             Assert.AreNotEqual(testPackCache, null);
 
             Assert.AreEqual(test1.Size, testPack1.Size);
             Assert.AreEqual(test1.Size, testPack1.Size);
             Assert.AreEqual(test2.Size, testPack2.Size);
             Assert.AreEqual(test3.Size, testPack3.Size);
+#if !CI
             Assert.AreEqual(test4.Size, testPack4.Size);
-
+#endif
             tc.End();
         }
 
