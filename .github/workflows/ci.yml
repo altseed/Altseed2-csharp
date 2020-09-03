@@ -57,7 +57,6 @@ jobs:
         with:
           name: test-windows
       - name: Test
-        continue-on-error: true
         run: |
           cd test-windows
           ./TestForMacLinux.exe
