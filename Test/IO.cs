@@ -195,19 +195,30 @@ namespace Altseed2.Test
             StaticFile testPack2 = null;
 
             test1 = StaticFile.Create("TestData/IO/全角 テスト.txt");
+#if !CI
             test2 = StaticFile.Create("TestData/IO/全角　テスト.txt");
+#endif
             testPack1 = StaticFile.Create("全角 テスト.txt");
+
+#if !CI
             testPack2 = StaticFile.Create("全角　テスト.txt");
+#endif
 
             Assert.AreNotEqual(test1, null);
-            Assert.AreNotEqual(test2, null);
             Assert.AreNotEqual(testPack1, null);
+
+#if !CI
+            Assert.AreNotEqual(test2, null);
             Assert.AreNotEqual(testPack2, null);
+#endif
 
             Assert.AreNotEqual(test1.Size, 0);
-            Assert.AreNotEqual(test2.Size, 0);
             Assert.AreNotEqual(testPack1.Size, 0);
+
+#if !CI
+            Assert.AreNotEqual(test2.Size, 0);
             Assert.AreNotEqual(testPack2.Size, 0);
+#endif
 
             tc.End();
         }
