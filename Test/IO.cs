@@ -29,9 +29,9 @@ namespace Altseed2.Test
             // directory root
             Assert.False(Engine.File.Exists("test.txt"));
             Assert.True(Engine.File.Exists("space test.txt"));
-            Assert.True(Engine.File.Exists("全角 テスト.txt"));
 
 #if !CI
+            Assert.True(Engine.File.Exists("全角 テスト.txt"));
             Assert.True(Engine.File.Exists("全角　テスト.txt"));
 #endif
             // clear root
@@ -39,9 +39,9 @@ namespace Altseed2.Test
             Assert.True(Engine.File.Exists("TestData/IO/test.txt"));
             Assert.True(Engine.File.Exists("TestData/IO/../IO/test.txt"));
             Assert.False(Engine.File.Exists("space test.txt"));
-            Assert.False(Engine.File.Exists("全角 テスト.txt"));
 
 #if !CI
+            Assert.False(Engine.File.Exists("全角 テスト.txt"));
             Assert.False(Engine.File.Exists("全角　テスト.txt"));
 #endif
 
@@ -49,8 +49,8 @@ namespace Altseed2.Test
             Assert.True(Engine.File.AddRootPackage("pack.pack"));
             Assert.True(Engine.File.Exists("test.txt"));
             Assert.True(Engine.File.Exists("space test.txt"));
-            Assert.True(Engine.File.Exists("全角 テスト.txt"));
 #if !CI
+            Assert.True(Engine.File.Exists("全角 テスト.txt"));
             Assert.True(Engine.File.Exists("全角　テスト.txt"));
 #endif
             Assert.True(Engine.File.Exists("testDir/test.txt"));
@@ -62,8 +62,8 @@ namespace Altseed2.Test
             Assert.True(Engine.File.AddRootPackageWithPassword("password.pack", "altseed"));
             Assert.True(Engine.File.Exists("test.txt"));
             Assert.True(Engine.File.Exists("space test.txt"));
-            Assert.True(Engine.File.Exists("全角 テスト.txt"));
 #if !CI
+            Assert.True(Engine.File.Exists("全角 テスト.txt"));
             Assert.True(Engine.File.Exists("全角　テスト.txt"));
 #endif
             Assert.True(Engine.File.Exists("testDir/test.txt"));
@@ -194,28 +194,18 @@ namespace Altseed2.Test
             StaticFile testPack1 = null;
             StaticFile testPack2 = null;
 
+#if !CI
             test1 = StaticFile.Create("TestData/IO/全角 テスト.txt");
-#if !CI
             test2 = StaticFile.Create("TestData/IO/全角　テスト.txt");
-#endif
             testPack1 = StaticFile.Create("全角 テスト.txt");
-
-#if !CI
             testPack2 = StaticFile.Create("全角　テスト.txt");
-#endif
 
             Assert.AreNotEqual(test1, null);
             Assert.AreNotEqual(testPack1, null);
-
-#if !CI
             Assert.AreNotEqual(test2, null);
             Assert.AreNotEqual(testPack2, null);
-#endif
-
             Assert.AreNotEqual(test1.Size, 0);
             Assert.AreNotEqual(testPack1.Size, 0);
-
-#if !CI
             Assert.AreNotEqual(test2.Size, 0);
             Assert.AreNotEqual(testPack2.Size, 0);
 #endif
@@ -238,15 +228,15 @@ namespace Altseed2.Test
             // create static file, and compare no-package and package without password
             StaticFile test1 = null;
             StaticFile test2 = null;
-            StaticFile test3 = null;
 #if !CI
+            StaticFile test3 = null;
             StaticFile test4 = null;
 #endif
             StaticFile testCache = null;
             StaticFile testPack1 = null;
             StaticFile testPack2 = null;
-            StaticFile testPack3 = null;
 #if !CI
+            StaticFile testPack3 = null;
             StaticFile testPack4 = null;
 #endif
             StaticFile testPackCache = null;
@@ -254,9 +244,13 @@ namespace Altseed2.Test
             var task1 = Task.Run(() =>
             {
                 test1 = StaticFile.Create("TestData/IO/test.txt");
+#if !CI
                 test3 = StaticFile.Create("TestData/IO/全角 テスト.txt");
+#endif
                 testPack1 = StaticFile.Create("test.txt");
+#if !CI
                 testPack3 = StaticFile.Create("全角 テスト.txt");
+#endif
                 testCache = StaticFile.Create("TestData/IO/test.txt");
             });
 
@@ -278,24 +272,23 @@ namespace Altseed2.Test
 
             Assert.AreNotEqual(test1, null);
             Assert.AreNotEqual(test2, null);
-            Assert.AreNotEqual(test3, null);
 #if !CI
+            Assert.AreNotEqual(test3, null);
             Assert.AreNotEqual(test4, null);
 #endif
             Assert.AreNotEqual(testCache, null);
             Assert.AreNotEqual(testPack1, null);
             Assert.AreNotEqual(testPack2, null);
-            Assert.AreNotEqual(testPack3, null);
 #if !CI
+            Assert.AreNotEqual(testPack3, null);
             Assert.AreNotEqual(testPack4, null);
 #endif
             Assert.AreNotEqual(testPackCache, null);
 
             Assert.AreEqual(test1.Size, testPack1.Size);
-            Assert.AreEqual(test1.Size, testPack1.Size);
             Assert.AreEqual(test2.Size, testPack2.Size);
-            Assert.AreEqual(test3.Size, testPack3.Size);
 #if !CI
+            Assert.AreEqual(test3.Size, testPack3.Size);
             Assert.AreEqual(test4.Size, testPack4.Size);
 #endif
             tc.End();
