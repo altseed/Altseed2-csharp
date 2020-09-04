@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -136,22 +136,48 @@ namespace Altseed2
 
         internal void AddCamera(CameraNode node)
         {
-            _Lists[node.Group].Add(node);
+            for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
+            {
+                var mask = 1u << i;
+                if (HasBit(node.Group, mask))
+                {
+                    _Lists[i].Add(node);
+                }
+            }
             Count++;
         }
 
         internal void RemoveCamera(CameraNode node)
         {
-            _Lists[node.Group].Remove(node);
+            for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
+            {
+                var mask = 1u << i;
+                if (HasBit(node.Group, mask))
+                {
+                    _Lists[i].Remove(node);
+                }
+            }
             Count--;
         }
 
-        internal void UpdateGroup(CameraNode node, int oldGroup)
+        internal void UpdateGroup(CameraNode node, ulong oldGroup)
         {
-            _Lists[oldGroup].Remove(node);
-            _Lists[node.Group].Add(node);
+            for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
+            {
+                var mask = 1u << i;
+                if (HasBit(oldGroup, mask) && !HasBit(node.Group, mask))
+                {
+                    _Lists[i].Remove(node);
+                }
+                else if (!HasBit(oldGroup, mask) && HasBit(node.Group, mask))
+                {
+                    _Lists[i].Add(node);
+                }
+            }
         }
 
         internal List<CameraNode> this[int index] => _Lists[index];
+
+        private bool HasBit(ulong value, uint mask) => (value & mask) != 0;
     }
 }

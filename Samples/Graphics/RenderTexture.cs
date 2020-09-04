@@ -9,8 +9,8 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            const int cameraGroup = 1;
-            const int cameraGroup2 = 2;
+            const ulong cameraGroup = 0b1;
+            const ulong cameraGroup2 = 0b10;
 
             // Altseed2 を初期化します。
             if (!Engine.Initialize("RenderTexture", 640, 480)) return;
@@ -19,7 +19,7 @@ namespace Sample
             // 詳しくは SpriteNode のサンプルを参照してください。
             var sprite = new SpriteNode();
             sprite.Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
-            sprite.CameraGroup = 1u << cameraGroup;
+            sprite.CameraGroup = cameraGroup;
             sprite.Scale = new Vector2F(200, 200) / sprite.Texture.Size;
             Engine.AddNode(sprite);
 
@@ -45,7 +45,7 @@ namespace Sample
             // renderTexture をスクリーンに描画するための SpriteNode を作成します。
             var sprite2 = new SpriteNode();
             sprite2.Texture = renderTexture;
-            sprite2.CameraGroup = 1u << cameraGroup2;
+            sprite2.CameraGroup = cameraGroup2;
             Engine.AddNode(sprite2);
 
             // sprite2 を写してスクリーンに出力するカメラを作成します。
