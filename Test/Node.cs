@@ -219,5 +219,97 @@ namespace Altseed2.Test
             tc.End();
         }
 
+        class IsUpdatedTestNode : TextNode
+        {
+            public string Name { get; }
+
+            public IsUpdatedTestNode(string name)
+            {
+                Font = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 30);
+                Assert.NotNull(Font);
+
+                Name = name;
+            }
+
+            public void UpdateText()
+            {
+                Text = $"{Name} IsUpdated: {IsUpdated}, IsUpdatedActually: {IsUpdatedActually}";
+            }
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void IsUpdated()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var node1 = new IsUpdatedTestNode("node1") { Position = new Vector2F(0f, 0f) };
+            var node2 = new IsUpdatedTestNode("node2") { Position = new Vector2F(0f, 100f) };
+            var node3 = new IsUpdatedTestNode("node3") { Position = new Vector2F(0f, 200f) };
+            Engine.AddNode(node1);
+            node1.AddChildNode(node2);
+            node2.AddChildNode(node3);
+
+            tc.LoopBody(c =>
+            {
+                node1.UpdateText();
+                node2.UpdateText();
+                node3.UpdateText();
+
+                if (c == 10)
+                {
+                    node1.IsUpdated = false;
+                    Assert.False(node1.IsUpdated);
+                    Assert.True(node2.IsUpdated);
+                    Assert.True(node3.IsUpdated);
+                    Assert.False(node1.IsUpdatedActually);
+                    Assert.False(node2.IsUpdatedActually);
+                    Assert.False(node3.IsUpdatedActually);
+                }
+                else if (c == 40)
+                {
+                    node1.IsUpdated = true;
+                    Assert.True(node1.IsUpdated);
+                    Assert.True(node2.IsUpdated);
+                    Assert.True(node3.IsUpdated);
+                    Assert.True(node1.IsUpdatedActually);
+                    Assert.True(node2.IsUpdatedActually);
+                    Assert.True(node3.IsUpdatedActually);
+                }
+                else if (c == 70)
+                {
+                    node3.IsUpdated = false;
+                    Assert.True(node1.IsUpdated);
+                    Assert.True(node2.IsUpdated);
+                    Assert.False(node3.IsUpdated);
+                    Assert.True(node1.IsUpdatedActually);
+                    Assert.True(node2.IsUpdatedActually);
+                    Assert.False(node3.IsUpdatedActually);
+                }
+                else if (c == 100)
+                {
+                    node2.IsUpdated = false;
+                    Assert.True(node1.IsUpdated);
+                    Assert.False(node2.IsUpdated);
+                    Assert.False(node3.IsUpdated);
+                    Assert.True(node1.IsUpdatedActually);
+                    Assert.False(node2.IsUpdatedActually);
+                    Assert.False(node3.IsUpdatedActually);
+                }
+                else if (c == 130)
+                {
+                    node2.IsUpdated = true;
+                    Assert.True(node1.IsUpdated);
+                    Assert.True(node2.IsUpdated);
+                    Assert.False(node3.IsUpdated);
+                    Assert.True(node1.IsUpdatedActually);
+                    Assert.True(node2.IsUpdatedActually);
+                    Assert.False(node3.IsUpdatedActually);
+                }
+
+            }, null);
+
+            tc.End();
+        }
     }
 }

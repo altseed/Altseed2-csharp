@@ -24,6 +24,8 @@ namespace Altseed2
         /// </summary>
         internal virtual void Update()
         {
+            if (!IsUpdated) return;
+
             OnUpdate();
 
             _IsEnumeratingChildren = true;
@@ -35,6 +37,7 @@ namespace Altseed2
             }
 
             _IsEnumeratingChildren = false;
+
         }
 
         #region Registerable (子として)
@@ -306,6 +309,41 @@ namespace Altseed2
         public bool IsRegistered => _IsRegistered;
         [NonSerialized]
         private bool _IsRegistered = false;
+
+
+        /// <summary>
+        /// この<see cref="Node"/>が更新されるかどうかを取得または設定します。
+        /// </summary>
+        public bool IsUpdated
+        {
+            get => _IsUpdated;
+            set
+            {
+                _IsUpdated = value;
+                PropagateIsUpdatedActually(this, Parent?.IsUpdatedActually ?? true);
+            }
+        }
+        private bool _IsUpdated = true;
+
+        /// <summary>
+        /// 先祖の<see cref="IsUpdated" />を考慮して、このノードが更新されるかどうかを取得します。
+        /// </summary>
+        public bool IsUpdatedActually { get; private set; } = true;
+
+        /// <summary>
+        /// 子孫ノード<see cref="Node"/>に対して<see cref="IsUpdatedActually"/>を伝播させます。
+        /// </summary>
+        /// <param name="node"><see cref="IsUpdatedActually"/>を変更する対象のノード</param>
+        /// <param name="isUpdatedActually">親ノードの<see cref="IsUpdatedActually"/></param>
+        private void PropagateIsUpdatedActually(Node node, bool isUpdatedActually)
+        {
+            node.IsUpdatedActually = isUpdatedActually && node.IsUpdated;
+
+            foreach (var child in node.Children)
+            {
+                PropagateIsUpdatedActually(child, node.IsUpdatedActually);
+            }
+        }
 
         /// <summary>
         /// 先祖ノードを列挙します。
