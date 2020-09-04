@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -416,6 +416,7 @@ namespace Altseed2.Test
                 };
                 result.Add(shader.Type, shader);
 
+#if !CI
                 // Altseed2.Sound
                 var sound_Value = Altseed2.Sound.LoadStrict("TestData/Sound/bgm1.ogg", false);
                 sound_Value.IsLoopingMode = true;
@@ -432,6 +433,7 @@ namespace Altseed2.Test
                     sound.GetProperty("Path"),
                 };
                 result.Add(sound.Type, sound);
+#endif
 
                 // Altseed2.Texture2D
                 var texture2D_Value = Texture2D.LoadStrict("TestData/IO/AltseedPink.png");
