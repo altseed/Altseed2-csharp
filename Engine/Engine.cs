@@ -478,7 +478,7 @@ namespace Altseed2
             _CameraNodes.RemoveCamera(camera);
         }
 
-        internal static void UpdateCameraNodeGroup(CameraNode camera, int oldGroup)
+        internal static void UpdateCameraNodeGroup(CameraNode camera, ulong oldGroup)
         {
             if (_CameraNodes is null) throw new InvalidOperationException("Graphics機能が初期化されていません。");
             _CameraNodes.UpdateGroup(camera, oldGroup);

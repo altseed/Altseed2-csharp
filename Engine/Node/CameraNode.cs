@@ -16,15 +16,12 @@ namespace Altseed2
         /// <summary>
         /// 描画対象のグループを取得または設定します。
         /// </summary>
-        public int Group
+        public ulong Group
         {
             get => _Group;
             set
             {
                 if (_Group == value) return;
-
-                if (value <= 0) Engine.Log.Warn(LogCategory.Engine, $"{GetType()} のGroupの値が小さすぎます。");
-                if (value >= Engine.MaxCameraGroupCount) Engine.Log.Warn(LogCategory.Engine, $"{GetType()} のGroupの値が大きすぎます。");
 
                 var old = _Group;
                 _Group = value;
@@ -34,7 +31,7 @@ namespace Altseed2
 
             }
         }
-        private int _Group = 0;
+        private ulong _Group = 0;
 
         /// <summary>
         /// 何も描画されていない部分の色を取得または設定します。

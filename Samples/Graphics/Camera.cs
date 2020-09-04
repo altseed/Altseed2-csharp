@@ -9,7 +9,7 @@ namespace Sample
         [STAThread]
         static void Main(string[] args)
         {
-            const int cameraGroup = 1;
+            const ulong cameraGroup = 0b1;
 
             // Altseed2 を初期化します。
             if (!Engine.Initialize("Camera", 640, 480)) return;
@@ -19,7 +19,7 @@ namespace Sample
             var sprite = new SpriteNode();
             // テクスチャを設定します。
             sprite.Texture = Texture2D.Load(@"TestData/IO/AltseedPink256.png");
-            sprite.CameraGroup = 1u << cameraGroup;
+            sprite.CameraGroup = cameraGroup;
             Engine.AddNode(sprite);
 
             // sprite の座標を設定します。
