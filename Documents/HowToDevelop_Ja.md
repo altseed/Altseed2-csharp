@@ -36,3 +36,21 @@
 c.f.: 
 - [テスト エクスプローラーを使用した単体テストの実行とデバッグ - Visual Studio](https://docs.microsoft.com/ja-jp/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2019)
 - [Exploring and Managing Unit Tests Using Test Explorer in Visual Studio - Daily .NET Tips](https://dailydotnettips.com/exploring-and-managing-unit-tests-using-test-explorer-in-visual-studio/)
+
+### スクリーンショット比較
+
+Altseed2では、テストをスクリーンショットで比較しています。
+スクリーンショットによる比較の対象を追加する場合は、下記の手順を行います。
+
+1. [Altseed2-csharp](https://github.com/altseed/Altseed2-csharp)の CIからtest-resultをダウンロードする。
+
+2. ダウンロードしたファイルの中から比較したいスクリーンショットを取得する。
+
+3. [TestResult](https://github.com/altseed/Altseed2-csharp-test-result)に比較したいスクリーンショットを追加する。
+
+4. Altseed2-csharpのリポジトリのTestResultを更新する。
+
+環境ごとにスクリーンショットは細かい部分で異なるので、CIからダウンロードする必要があります。
+比較する場合、実行するたびに表示が変わる内容は実装してはいけません。
+
+
