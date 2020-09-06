@@ -299,6 +299,63 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void IBPolygonNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            IBPolygonNode node = new IBPolygonNode()
+            {
+                Position = new Vector2F(250, 250)
+            };
+            Engine.AddNode(node);
+
+            //Span<Vector2F> span = stackalloc Vector2F[]
+            //{
+            //    new Vector2F(-100, -100),
+            //    new Vector2F(-50, -100),
+            //    new Vector2F(-50, -50),
+            //    new Vector2F(-100, -50),
+            //    new Vector2F(50, 50),
+            //    new Vector2F(100, 50),
+            //    new Vector2F(100, 100),
+            //    new Vector2F(50, 100),
+            //};
+
+            //node.SetVertexes(span, new Color(255, 0, 0));
+
+            //node.Buffers = new[]
+            //{
+            //    new IndexBuffer(0, 1, 2),
+            //    new IndexBuffer(0, 2, 3),
+            //    new IndexBuffer(4, 5, 6),
+            //    new IndexBuffer(4, 6, 7),
+            //};
+
+            node.SetVertexGroupsFromPositions(new[]
+            {
+                new[]
+                {
+                    new Vector2F(-100, -100),
+                    new Vector2F(-50, -100),
+                    new Vector2F(-50, -50),
+                    new Vector2F(-100, -50),
+                },
+                new[]
+                {
+                    new Vector2F(50, 50),
+                    new Vector2F(100, 50),
+                    new Vector2F(100, 100),
+                    new Vector2F(50, 100),
+                },
+            }, new Color(255, 0, 0));
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void CenterPosition()
         {
             var tc = new TestCore();
