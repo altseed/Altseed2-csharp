@@ -102,26 +102,6 @@ namespace Altseed2.Test
                 };
                 result.Add(vector2FArray.Type, vector2FArray);
 
-                // Altseed2.IndexBufferArray
-                var indexBufferArray = ReflectionInfo.Create(IndexBufferArray.Create((ReadOnlySpan<IndexBuffer>)new[]
-                {
-                    new IndexBuffer(0, 1, 2),
-                    new IndexBuffer(0, 2, 3),
-                    new IndexBuffer(0, 3, 4),
-                    new IndexBuffer(0, 4, 5),
-                }));
-                indexBufferArray.OptionalValueProvider = (x, y) => new[]
-                {
-                    new OptionalValueEntry()
-                    {
-                        Name = "Values",
-                        Type = typeof(IndexBuffer[]),
-                        Value1 = ((IndexBufferArray)x).ToArray(),
-                        Value2 = ((IndexBufferArray)y).ToArray(),
-                    },
-                };
-                result.Add(indexBufferArray.Type, indexBufferArray);
-
                 // Altseed2.CircleCollider
                 var circleCollider_Value = CircleCollider.Create();
                 circleCollider_Value.Position = new Vector2F(30f, 30f);

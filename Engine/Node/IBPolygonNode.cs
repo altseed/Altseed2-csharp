@@ -319,15 +319,21 @@ namespace Altseed2
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
         public IReadOnlyList<IndexBuffer> Buffers
         {
-            get => _RenderedIBPolygon.Buffers?.ToArray();
+            get
+            {
+                if (_RenderedIBPolygon.Buffers == null) return null;
+                var array = _RenderedIBPolygon.Buffers?.ToArray();
+                var result = new IndexBuffer[_RenderedIBPolygon.Buffers.Count / 3];
+                for (int i = 0; i < result.Length; i++) result[i] = new IndexBuffer(array[i * 3], array[i * 3 + 1], array[i * 3 + 2]);
+                return result;
+            }
             set
             {
-                _RenderedIBPolygon.Buffers.FromEnumerable(value);
                 SetBuffers(_RenderedIBPolygon.Buffers);
             }
         }
 
-        internal void SetBuffers(IndexBufferArray array)
+        internal void SetBuffers(Int32Array array)
         {
             _RenderedIBPolygon.Buffers = array;
         }
@@ -338,7 +344,14 @@ namespace Altseed2
         /// <param name="buffers">設定するインデックスバッファー</param>
         public void SetBuffers(ReadOnlySpan<IndexBuffer> buffers)
         {
-            _RenderedIBPolygon.Buffers.FromSpan(buffers);
+            var array = new int[buffers.Length * 3];
+            for (int i = 0; i < buffers.Length; i++)
+            {
+                array[i * 3] = buffers[i].Index1;
+                array[i * 3 + 1] = buffers[i].Index2;
+                array[i * 3 + 2] = buffers[i].Index3;
+            }
+            _RenderedIBPolygon.Buffers.FromSpan(array);
             SetBuffers(_RenderedIBPolygon.Buffers);
         }
 
@@ -349,8 +362,9 @@ namespace Altseed2
         /// <exception cref="ArgumentNullException"><paramref name="buffers"/>がnull</exception>
         public void SetBuffers(IEnumerable<IndexBuffer> buffers)
         {
-            _RenderedIBPolygon.Buffers.FromEnumerable(buffers);
-            SetBuffers(_RenderedIBPolygon.Buffers);
+            if (buffers == null) throw new ArgumentNullException(nameof(buffers), "引数がnullです");
+            var array = buffers is IndexBuffer[] a ? a : buffers.ToArray();
+            SetBuffers((ReadOnlySpan<IndexBuffer>)array);
         }
 
         /// <summary>

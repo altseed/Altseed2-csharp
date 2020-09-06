@@ -35,16 +35,16 @@ namespace Altseed2
         /// インデックスバッファーを取得または設定します。
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
-        public IndexBufferArray Buffers
+        public Int32Array Buffers
         {
-            get => _buffers ??= IndexBufferArray.TryGetFromCache(cbg_RenderedIBPolygon_GetBuffers(selfPtr));
+            get => _buffers ??= Int32Array.TryGetFromCache(cbg_RenderedIBPolygon_GetBuffers(selfPtr));
             set
             {
                 _buffers = value ?? throw new ArgumentNullException(nameof(value), "引数がnullです");
                 cbg_RenderedIBPolygon_SetBuffers(selfPtr, value.selfPtr);
             }
         }
-        private IndexBufferArray _buffers;
+        private Int32Array _buffers;
 
         /// <summary>
         /// インデックスバッファーを<see cref="RenderedPolygon"/>と同様の方式に設定します。
