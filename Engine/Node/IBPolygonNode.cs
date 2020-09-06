@@ -367,7 +367,7 @@ namespace Altseed2
             foreach (var currentVertexes in vertexes)
             {
                 if (currentVertexes == null) throw new ArgumentNullException(nameof(vertexes), "要素の一つがnullです");
-                var array = currentVertexes.ToArray();
+                var array = currentVertexes is Vertex[] v ? v : currentVertexes.ToArray();
                 if (array.Length < 3) continue;
                 for (int i = 0; i < array.Length; i++) vertexList.Add(array[i]);
                 for (int i = 0; i < array.Length - 2; i++) bufferList.Add(new IndexBuffer(totalCount, totalCount + i + 1, totalCount + i + 2));
@@ -392,7 +392,7 @@ namespace Altseed2
             foreach (var currentVertexes in vertexes)
             {
                 if (currentVertexes == null) throw new ArgumentNullException(nameof(vertexes), "要素の一つがnullです");
-                var array = currentVertexes.ToArray();
+                var array = currentVertexes is Vector2F[] v ? v : currentVertexes.ToArray();
                 if (array.Length < 3) continue;
                 for (int i = 0; i < array.Length; i++) vertexList.Add(array[i]);
                 for (int i = 0; i < array.Length - 2; i++) bufferList.Add(new IndexBuffer(totalCount, totalCount + i + 1, totalCount + i + 2));
