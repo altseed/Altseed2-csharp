@@ -356,6 +356,48 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void IBPolygonNodeWithTexture()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            IBPolygonNode node = new IBPolygonNode()
+            {
+                Position = new Vector2F(250, 250),
+                Texture = texture
+            };
+            Engine.AddNode(node);
+
+            var basePositions = new[]
+            {
+                new Vector2F(-100f, -100f),
+                new Vector2F(100f, 100f),
+                new Vector2F(-150f, 250f),
+                new Vector2F(250f, -150f),
+            };
+            var array = new Vector2F[basePositions.Length][];
+            for (int i = 0; i < basePositions.Length; i++)
+            {
+                array[i] = new[]
+                {
+                    basePositions[i],
+                    basePositions[i] + new Vector2F(50f, 0f),
+                    basePositions[i] + new Vector2F(50f, 50f),
+                    basePositions[i] + new Vector2F(0f, 50f),
+                };
+            }
+
+            node.SetVertexGroupsFromPositions(array, new Color(255, 255, 255));
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void CenterPosition()
         {
             var tc = new TestCore();

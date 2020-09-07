@@ -400,7 +400,7 @@ namespace Altseed2
         public void SetVertexGroupsFromPositions(IEnumerable<IEnumerable<Vector2F>> vertexes, Color color)
         {
             if (vertexes == null) throw new ArgumentNullException(nameof(vertexes), "引数がnullです");
-            var vertexList = new List<Vector2F>();
+            var vertexList = new List<Vertex>();
             var bufferList = new List<IndexBuffer>();
             var totalCount = 0;
             foreach (var currentVertexes in vertexes)
@@ -408,11 +408,15 @@ namespace Altseed2
                 if (currentVertexes == null) throw new ArgumentNullException(nameof(vertexes), "要素の一つがnullです");
                 var array = currentVertexes is Vector2F[] v ? v : currentVertexes.ToArray();
                 if (array.Length < 3) continue;
-                for (int i = 0; i < array.Length; i++) vertexList.Add(array[i]);
+                MathHelper.GetMinMax(out var min, out var max, array);
+                var size = max - min;
+                if (size.X == 0) size.X = 1f;
+                if (size.Y == 0) size.Y = 1f;
+                for (int i = 0; i < array.Length; i++) vertexList.Add(new Vertex(new Vector3F(array[i].X, array[i].Y, 0.5f), color, (array[i] - min) / size, default));
                 for (int i = 0; i < array.Length - 2; i++) bufferList.Add(new IndexBuffer(totalCount, totalCount + i + 1, totalCount + i + 2));
                 totalCount += array.Length;
             }
-            SetVertexes(vertexList, color, false);
+            SetVertexes(vertexList, false);
             SetBuffers(bufferList);
         }
 
