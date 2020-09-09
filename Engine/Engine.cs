@@ -208,6 +208,8 @@ namespace Altseed2
 
             _PostEffectBuffer = null;
 
+            RenderTexture targetTexture = null;
+
             foreach (var (_, znodes) in drawns)
             {
                 foreach (var node in znodes)
@@ -220,9 +222,10 @@ namespace Altseed2
                             requireRender = false;
                         }
 
-                        _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(Graphics.CommandList.GetScreenTexture().Size, Graphics.CommandList.ScreenTextureFormat);
+                        targetTexture ??= camera.TargetTexture ?? Graphics.CommandList.GetScreenTexture();
+                        _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(targetTexture.Size, targetTexture.Format);
 
-                        Graphics.CommandList.CopyTexture(Graphics.CommandList.GetScreenTexture(), _PostEffectBuffer);
+                        Graphics.CommandList.CopyTexture(targetTexture, _PostEffectBuffer);
                         node.Draw();
                     }
                     else if (node is ICullableDrawn cdrawn)

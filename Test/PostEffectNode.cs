@@ -204,5 +204,47 @@ float4 tex = mainTex.Sample(mainSamp, float2(x, input.UV1.y));
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void PostEffectWithCamera()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            const ulong cameraGroup1 = 0b01;
+            const ulong cameraGroup2 = 0b10;
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            Engine.AddNode(new SpriteNode()
+            {
+                Scale = new Vector2F(1.5f, 1.5f),
+                Texture = texture,
+                ZOrder = 1,
+                CameraGroup = cameraGroup1 | cameraGroup2,
+            });
+
+            Engine.AddNode(new PostEffectGaussianBlurNode()
+            {
+                ZOrder = 2,
+                CameraGroup = cameraGroup2,
+            });
+
+            var target = RenderTexture.Create((new Vector2F(0.5f, 1.0f) * Engine.Window.Size.To2F()).To2I(), TextureFormat.R8G8B8A8_UNORM);
+
+            Engine.AddNode(new CameraNode() { Group = cameraGroup2, TargetTexture = target, IsColorCleared = true, ClearColor = new Color(80, 80, 80) });
+
+            // 表示用
+            Engine.AddNode(new CameraNode() { Group = cameraGroup1 });
+            Engine.AddNode(new SpriteNode() { Texture = target, CameraGroup = cameraGroup1 });
+
+            tc.LoopBody(c =>
+            {
+
+            }, null);
+
+            tc.End();
+        }
     }
 }
