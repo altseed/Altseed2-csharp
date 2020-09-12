@@ -5847,6 +5847,10 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Renderer_DrawIBPolygon(IntPtr selfPtr, IntPtr polygon);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Renderer_Render(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
@@ -5904,6 +5908,15 @@ namespace Altseed2
         internal void DrawPolygon(RenderedPolygon polygon)
         {
             cbg_Renderer_DrawPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// IBが編集可能なポリゴンを描画します。
+        /// </summary>
+        /// <param name="polygon">描画する<see cref="RenderedIBPolygon"/>のインスタンス</param>
+        internal void DrawIBPolygon(RenderedIBPolygon polygon)
+        {
+            cbg_Renderer_DrawIBPolygon(selfPtr, polygon != null ? polygon.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -7604,6 +7617,391 @@ namespace Altseed2
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_RenderedPolygon_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// IndexBufferを設定可能なポリゴンのクラス
+    /// </summary>
+    [Serializable]
+    internal sealed partial class RenderedIBPolygon : Rendered, ISerializable, ICacheKeeper<RenderedIBPolygon>
+    {
+        #region unmanaged
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<RenderedIBPolygon>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedIBPolygon>>();
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new RenderedIBPolygon TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                RenderedIBPolygon cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_RenderedIBPolygon_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new RenderedIBPolygon(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<RenderedIBPolygon>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_RenderedIBPolygon_Create();
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_CreateVertexesByVector2F(IntPtr selfPtr, IntPtr vertexes);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_OverwriteVertexesColor(IntPtr selfPtr, Color color);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetDefaultIndexBuffer(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_RenderedIBPolygon_GetBuffers(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetBuffers(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_RenderedIBPolygon_GetVertexes(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetVertexes(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_RenderedIBPolygon_GetTexture(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetTexture(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern RectF cbg_RenderedIBPolygon_GetSrc(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetSrc(IntPtr selfPtr, RectF value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_RenderedIBPolygon_GetMaterial(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetMaterial(IntPtr selfPtr, IntPtr value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern AlphaBlend cbg_RenderedIBPolygon_GetAlphaBlend(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_SetAlphaBlend(IntPtr selfPtr, AlphaBlend value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedIBPolygon_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal RenderedIBPolygon(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 頂点情報を取得または設定します。
+        /// </summary>
+        internal VertexArray Vertexes
+        {
+            get
+            {
+                if (_Vertexes != null)
+                {
+                    return _Vertexes;
+                }
+                var ret = cbg_RenderedIBPolygon_GetVertexes(selfPtr);
+                return VertexArray.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Vertexes = value;
+                cbg_RenderedIBPolygon_SetVertexes(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private VertexArray _Vertexes;
+        
+        /// <summary>
+        /// テクスチャを取得または設定します。
+        /// </summary>
+        internal TextureBase Texture
+        {
+            get
+            {
+                if (_Texture != null)
+                {
+                    return _Texture;
+                }
+                var ret = cbg_RenderedIBPolygon_GetTexture(selfPtr);
+                return TextureBase.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Texture = value;
+                cbg_RenderedIBPolygon_SetTexture(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private TextureBase _Texture;
+        
+        /// <summary>
+        /// 描画範囲を取得または設定します。
+        /// </summary>
+        internal RectF Src
+        {
+            get
+            {
+                if (_Src != null)
+                {
+                    return _Src.Value;
+                }
+                var ret = cbg_RenderedIBPolygon_GetSrc(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Src = value;
+                cbg_RenderedIBPolygon_SetSrc(selfPtr, value);
+            }
+        }
+        private RectF? _Src;
+        
+        /// <summary>
+        /// マテリアルを取得または設定します。
+        /// </summary>
+        internal Material Material
+        {
+            get
+            {
+                if (_Material != null)
+                {
+                    return _Material;
+                }
+                var ret = cbg_RenderedIBPolygon_GetMaterial(selfPtr);
+                return Material.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Material = value;
+                cbg_RenderedIBPolygon_SetMaterial(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Material _Material;
+        
+        /// <summary>
+        /// 描画時のアルファブレンドを取得または設定します。
+        /// </summary>
+        internal AlphaBlend AlphaBlend
+        {
+            get
+            {
+                if (_AlphaBlend != null)
+                {
+                    return _AlphaBlend.Value;
+                }
+                var ret = cbg_RenderedIBPolygon_GetAlphaBlend(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _AlphaBlend = value;
+                cbg_RenderedIBPolygon_SetAlphaBlend(selfPtr, value);
+            }
+        }
+        private AlphaBlend? _AlphaBlend;
+        
+        /// <summary>
+        /// ポリゴンを作成します。
+        /// </summary>
+        internal static RenderedIBPolygon Create()
+        {
+            var ret = cbg_RenderedIBPolygon_Create();
+            return RenderedIBPolygon.TryGetFromCache(ret);
+        }
+        
+        /// <summary>
+        /// 頂点情報
+        /// </summary>
+        internal void CreateVertexesByVector2F(Vector2FArray vertexes)
+        {
+            cbg_RenderedIBPolygon_CreateVertexesByVector2F(selfPtr, vertexes != null ? vertexes.selfPtr : IntPtr.Zero);
+        }
+        
+        /// <summary>
+        /// 頂点情報
+        /// </summary>
+        public void OverwriteVertexesColor(Color color)
+        {
+            cbg_RenderedIBPolygon_OverwriteVertexesColor(selfPtr, color);
+        }
+        
+        
+        #region ISerialiable
+        
+        #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Buffers = "S_Buffers";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Vertexes = "S_Vertexes";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Texture = "S_Texture";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Src = "S_Src";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Material = "S_Material";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_AlphaBlend = "S_AlphaBlend";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="RenderedIBPolygon"/>のインスタンスを生成します。
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private RenderedIBPolygon(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
+            
+            Buffers = info.GetValue<Int32Array>(S_Buffers);
+            Vertexes = info.GetValue<VertexArray>(S_Vertexes);
+            var Texture = info.GetValue<TextureBase>(S_Texture);
+            ((IDeserializationCallback)Texture)?.OnDeserialization(null);
+            this.Texture = Texture;
+            Src = info.GetValue<RectF>(S_Src);
+            Material = info.GetValue<Material>(S_Material);
+            AlphaBlend = info.GetValue<AlphaBlend>(S_AlphaBlend);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            
+            info.AddValue(S_Buffers, Buffers);
+            info.AddValue(S_Vertexes, Vertexes);
+            info.AddValue(S_Texture, Texture);
+            info.AddValue(S_Src, Src);
+            info.AddValue(S_Material, Material);
+            info.AddValue(S_AlphaBlend, AlphaBlend);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        /// <summary>
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        
+        /// <summary>
+        /// <see cref="RenderedIBPolygon(SerializationInfo, StreamingContext)"/>内で実行します。
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        
+        /// <summary>
+        /// <see cref="RenderedIBPolygon(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
+        /// </summary>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
+        #region ICacheKeeper
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        IDictionary<IntPtr, WeakReference<RenderedIBPolygon>> ICacheKeeper<RenderedIBPolygon>.CacheRepo => cacheRepo;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        IntPtr ICacheKeeper<RenderedIBPolygon>.Self
+        {
+            get => selfPtr;
+            set
+            {
+                selfPtr = value;
+            }
+        }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        void ICacheKeeper<RenderedIBPolygon>.Release(IntPtr native) => cbg_RenderedIBPolygon_Release(native);
+        
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// <see cref="RenderedIBPolygon"/>のインスタンスを削除します。
+        /// </summary>
+        ~RenderedIBPolygon()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_RenderedIBPolygon_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
