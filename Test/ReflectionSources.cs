@@ -250,16 +250,6 @@ namespace Altseed2.Test
                 };
                 result.Add(alphaBlend.Type, alphaBlend);
 
-                // Altseed2.IndexBuffer
-                var indexBuffer = ReflectionInfo.Create(new IndexBuffer(0, 1, 2));
-                indexBuffer.FieldInfos = new[]
-                {
-                    indexBuffer.GetField("Index1"),
-                    indexBuffer.GetField("Index2"),
-                    indexBuffer.GetField("Index3"),
-                };
-                result.Add(indexBuffer.Type, indexBuffer);
-
                 // Altseed2.StaticFile
                 var staticFile = ReflectionInfo.Create(StaticFile.CreateStrict("TestData/IO/test.txt"));
                 staticFile.PropertyInfos = new[]
@@ -341,10 +331,12 @@ namespace Altseed2.Test
                     new Vertex { Color = new Color(100, 100, 255), Position = new Vector3F(10f, 10f, 0.5f), UV1 = new Vector2F(0.5f, 0.5f), UV2 = new Vector2F(1f, -1f) },
                     new Vertex { Color = new Color(255, 255, 255), Position = new Vector3F(0f, 10f, 0.5f), UV1 = new Vector2F(0.6f, 0.6f), UV2 = new Vector2F(-1f, -1f) }
                 });
+                renderedPolygon_Value.SetDefaultIndexBuffer();
                 var renderedPolygon = ReflectionInfo.Create(renderedPolygon_Value);
                 renderedPolygon.PropertyInfos = new[]
                 {
                     renderedPolygon.GetProperty("AlphaBlend"),
+                    renderedPolygon.GetProperty("Buffers"),
                     renderedPolygon.GetProperty("Material"),
                     renderedPolygon.GetProperty("Src"),
                     renderedPolygon.GetProperty("Texture"),
@@ -352,38 +344,6 @@ namespace Altseed2.Test
                     renderedPolygon.GetProperty("Vertexes"),
                 };
                 result.Add(renderedPolygon.Type, renderedPolygon);
-
-                // Altseed2.RenderedIBPolygon
-                var renderedIBPolygon_Value = RenderedIBPolygon.Create();
-                renderedIBPolygon_Value.AlphaBlend = AlphaBlend.Normal;
-                renderedIBPolygon_Value.Material = Material.Create();
-                renderedIBPolygon_Value.Material.AlphaBlend = AlphaBlend.Add;
-                renderedIBPolygon_Value.Material.SetShader(Shader.Create("RenderedIBPolygonShader", Engine.Graphics.BuiltinShader.TextureMixShader, ShaderStage.Pixel));
-                renderedIBPolygon_Value.Material.SetVector4F("Vec", new Vector4F(10f, 20f, 30f, 40f));
-                renderedIBPolygon_Value.Src = new RectF(30f, 30f, 50f, 50f);
-                renderedIBPolygon_Value.Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png");
-                renderedIBPolygon_Value.Texture.FilterType = TextureFilter.Nearest;
-                renderedIBPolygon_Value.Transform = MathHelper.CalcTransform(new Vector2F(30f, 30f), MathHelper.DegreeToRadian(30f), new Vector2F(3f, 2f));
-                renderedIBPolygon_Value.Vertexes = VertexArray.Create((ReadOnlySpan<Vertex>)new Vertex[]
-                {
-                    new Vertex { Color = new Color(255, 100, 100), Position = new Vector3F(0f, 0f, 0.5f), UV1 = new Vector2F(0.3f, 0.3f), UV2 = new Vector2F(1f, 1f) },
-                    new Vertex { Color = new Color(100, 255, 100), Position = new Vector3F(10f, 0f, 0.5f), UV1 = new Vector2F(0.4f, 0.4f), UV2 = new Vector2F(-1f, 1f) },
-                    new Vertex { Color = new Color(100, 100, 255), Position = new Vector3F(10f, 10f, 0.5f), UV1 = new Vector2F(0.5f, 0.5f), UV2 = new Vector2F(1f, -1f) },
-                    new Vertex { Color = new Color(255, 255, 255), Position = new Vector3F(0f, 10f, 0.5f), UV1 = new Vector2F(0.6f, 0.6f), UV2 = new Vector2F(-1f, -1f) }
-                });
-                renderedIBPolygon_Value.SetDefaultIndexBuffer();
-                var renderedIBPolygon = ReflectionInfo.Create(renderedIBPolygon_Value);
-                renderedIBPolygon.PropertyInfos = new[]
-                {
-                    renderedIBPolygon.GetProperty("AlphaBlend"),
-                    renderedIBPolygon.GetProperty("Buffers"),
-                    renderedIBPolygon.GetProperty("Material"),
-                    renderedIBPolygon.GetProperty("Src"),
-                    renderedIBPolygon.GetProperty("Texture"),
-                    renderedIBPolygon.GetProperty("Transform"),
-                    renderedIBPolygon.GetProperty("Vertexes"),
-                };
-                result.Add(renderedIBPolygon.Type, renderedIBPolygon);
 
                 // Altseed2.RenderedSprite
                 var renderedSprite_Value = RenderedSprite.Create();
@@ -1099,6 +1059,7 @@ namespace Altseed2.Test
                 {
                     polygonNode.GetProperty("AlphaBlend"),
                     polygonNode.GetProperty("Angle"),
+                    polygonNode.GetProperty("Buffers"),
                     polygonNode.GetProperty("CameraGroup"),
                     polygonNode.GetProperty("CenterPosition"),
                     polygonNode.GetProperty("ContentSize"),
@@ -1118,55 +1079,6 @@ namespace Altseed2.Test
                     polygonNode.GetProperty("ZOrder"),
                 };
                 result.Add(polygonNode.Type, polygonNode);
-
-                // Altseed2.IBPolygonNode
-                var iBPolygonNode = ReflectionInfo.Create(new IBPolygonNode()
-                {
-                    AlphaBlend = AlphaBlend.Normal,
-                    Angle = 30f,
-                    CameraGroup = 1,
-                    CenterPosition = new Vector2F(50f, 50f),
-                    HorizontalFlip = false,
-                    IsDrawn = false,
-                    Material = Material.Create(),
-                    Position = new Vector2F(30f, 30f),
-                    Scale = new Vector2F(3f, 2f),
-                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
-                    Src = new RectF(30f, 30f, 50f, 50f),
-                    Vertexes = new Vertex[]
-                    {
-                        new Vertex { Color = new Color(255, 100, 100), Position = new Vector3F(0f, 0f, 0.5f), UV1 = new Vector2F(0.3f, 0.3f), UV2 = new Vector2F(1f, 1f) },
-                        new Vertex { Color = new Color(100, 255, 100), Position = new Vector3F(10f, 0f, 0.5f), UV1 = new Vector2F(0.4f, 0.4f), UV2 = new Vector2F(-1f, 1f) },
-                        new Vertex { Color = new Color(100, 100, 255), Position = new Vector3F(10f, 10f, 0.5f), UV1 = new Vector2F(0.5f, 0.5f), UV2 = new Vector2F(1f, -1f) },
-                        new Vertex { Color = new Color(255, 255, 255), Position = new Vector3F(0f, 10f, 0.5f), UV1 = new Vector2F(0.6f, 0.6f), UV2 = new Vector2F(-1f, -1f) }
-                    },
-                    VerticalFlip = false,
-                    ZOrder = 10,
-                });
-                iBPolygonNode.PropertyInfos = new[]
-                {
-                    iBPolygonNode.GetProperty("AlphaBlend"),
-                    iBPolygonNode.GetProperty("Angle"),
-                    iBPolygonNode.GetProperty("Buffers"),
-                    iBPolygonNode.GetProperty("CameraGroup"),
-                    iBPolygonNode.GetProperty("CenterPosition"),
-                    iBPolygonNode.GetProperty("ContentSize"),
-                    iBPolygonNode.GetProperty("HorizontalFlip"),
-                    iBPolygonNode.GetProperty("IsDrawn"),
-                    iBPolygonNode.GetProperty("IsRegistered"),
-                    iBPolygonNode.GetProperty("IsUpdated"),
-                    iBPolygonNode.GetProperty("IsUpdatedActually"),
-                    iBPolygonNode.GetProperty("Material"),
-                    iBPolygonNode.GetProperty("Position"),
-                    iBPolygonNode.GetProperty("Scale"),
-                    iBPolygonNode.GetProperty("Src"),
-                    iBPolygonNode.GetProperty("Status"),
-                    iBPolygonNode.GetProperty("Texture"),
-                    iBPolygonNode.GetProperty("Vertexes"),
-                    iBPolygonNode.GetProperty("VerticalFlip"),
-                    iBPolygonNode.GetProperty("ZOrder"),
-                };
-                result.Add(iBPolygonNode.Type, iBPolygonNode);
 
                 // Altseed2.SpriteNode
                 var spriteNode = ReflectionInfo.Create(new SpriteNode()

@@ -293,6 +293,8 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             node.SetVertexes(span, new Color(255, 0, 0));
 
+            foreach (var current in node.Buffers) System.Diagnostics.Debug.WriteLine(current);
+
             tc.LoopBody(c => { }, null);
 
             tc.End();
@@ -304,7 +306,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            IBPolygonNode node = new IBPolygonNode()
+            var node = new PolygonNode()
             {
                 Position = new Vector2F(250, 250)
             };
@@ -364,7 +366,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            IBPolygonNode node = new IBPolygonNode()
+            var node = new PolygonNode()
             {
                 Position = new Vector2F(250, 250),
                 Texture = texture

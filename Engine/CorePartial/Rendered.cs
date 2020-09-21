@@ -23,41 +23,33 @@ namespace Altseed2
 
     internal partial class RenderedPolygon
     {
-        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
-        {
-            ptr = cbg_RenderedPolygon_Create();
-        }
-    }
-
-    internal partial class RenderedIBPolygon
-    {
         /// <summary>
         /// インデックスバッファーを取得または設定します。
         /// </summary>
         /// <exception cref="ArgumentNullException">設定しようとした値がnull</exception>
         public Int32Array Buffers
         {
-            get => _buffers ??= Int32Array.TryGetFromCache(cbg_RenderedIBPolygon_GetBuffers(selfPtr));
+            get => _buffers ??= Int32Array.TryGetFromCache(cbg_RenderedPolygon_GetBuffers(selfPtr));
             set
             {
                 _buffers = value ?? throw new ArgumentNullException(nameof(value), "引数がnullです");
-                cbg_RenderedIBPolygon_SetBuffers(selfPtr, value.selfPtr);
+                cbg_RenderedPolygon_SetBuffers(selfPtr, value.selfPtr);
             }
         }
         private Int32Array _buffers;
 
         /// <summary>
-        /// インデックスバッファーを<see cref="RenderedPolygon"/>と同様の方式に設定します。
+        /// インデックスバッファーを既定のもの設定します。
         /// </summary>
         public void SetDefaultIndexBuffer()
         {
-            cbg_RenderedIBPolygon_SetDefaultIndexBuffer(selfPtr);
+            cbg_RenderedPolygon_SetDefaultIndexBuffer(selfPtr);
             _buffers = null;
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_RenderedIBPolygon_Create();
+            ptr = cbg_RenderedPolygon_Create();
         }
     }
 

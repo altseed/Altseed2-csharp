@@ -137,7 +137,7 @@ namespace Altseed2
             if (_Owner.PolygonCollider.VertexesInternal is Vector2FArray array)
             {
 
-                SetVertexesFromPositions(array, ColliderVisualizeNodeFactory.AreaColor);
+                SetVertexesFromPositions(array, ColliderVisualizeNodeFactory.AreaColor, true);
             }
             else
             {
