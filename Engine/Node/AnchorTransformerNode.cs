@@ -492,6 +492,17 @@ namespace Altseed2
                     break;
             }
 
+            if (Parent is PolygonNode polygonNode)
+            {
+                MathHelper.GetMinMax(out var min, out var _, polygonNode.VertexeArray);
+                res *= Matrix44F.GetTranslation2D(-min);
+            }
+            else if (Parent is ShapeNode shapeNode)
+            {
+                MathHelper.GetMinMax(out var min, out var _, shapeNode.VertexeArray);
+                res *= Matrix44F.GetTranslation2D(-min);
+            }
+
             return res;
         }
 

@@ -214,5 +214,110 @@ namespace Altseed2.Test
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void AcnhorAndShapeNode()
+        {
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
+            tc.Init();
+
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 30);
+            Assert.NotNull(font);
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var sprite = new SpriteNode();
+            sprite.Texture = texture;
+            sprite.ZOrder = 5;
+
+            Vector2F rectSize = texture.Size;
+            var parent = new AnchorTransformerNode();
+            parent.Position = Engine.WindowSize / 2;
+            parent.Size = rectSize;
+            parent.AnchorMode = AnchorMode.Fill;
+            Engine.AddNode(sprite);
+            sprite.AddChildNode(parent);
+
+            var circle2 = new CircleNode()
+            {
+                Color = new Color(0, 255, 0),
+                Position = new Vector2F(400, 200),
+                Radius = 100f,
+                VertNum = 80,
+                ZOrder = 10,
+            };
+
+            var circle2Anchor = new AnchorTransformerNode();
+            circle2Anchor.AnchorMin = new Vector2F(0.0f, 0.0f);
+            circle2Anchor.AnchorMax = new Vector2F(0.5f, 1f);
+            circle2Anchor.AnchorMode = AnchorMode.Fill;
+            sprite.AddChildNode(circle2);
+            circle2.AddChildNode(circle2Anchor);
+
+            var circle3 = new CircleNode()
+            {
+                Color = new Color(0, 0, 255),
+                Position = new Vector2F(50, 400),
+                Radius = 100f,
+                VertNum = 50,
+                ZOrder = 15,
+            };
+
+            var circle3Anchor = new AnchorTransformerNode();
+            circle3Anchor.AnchorMin = new Vector2F(0.5f, 0.5f);
+            circle3Anchor.AnchorMax = new Vector2F(1f, 1f);
+            circle3Anchor.AnchorMode = AnchorMode.Fill;
+            circle2.AddChildNode(circle3);
+            circle3.AddChildNode(circle3Anchor);
+
+            var text2 = new TextNode()
+            {
+                Font = font,
+                Text = "",
+                ZOrder = 10,
+                Scale = new Vector2F(0.8f, 0.8f),
+                Color = new Color(255, 128, 0)
+            };
+            Engine.AddNode(text2);
+
+            tc.Duration = 10000;
+
+            string infoText(AnchorTransformerNode n) =>
+                    $"Scale:{n.Scale}\n" +
+                    $"Position:{n.Position}\n" +
+                    $"Pivot:{n.Pivot}\n" +
+                    $"Size:{n.Size}\n" +
+                    $"Margin: LT:{n.LeftTop} RB:{n.RightBottom}\n" +
+                    $"Anchor: {n.AnchorMin} {n.AnchorMax}\n";
+
+            tc.LoopBody(c =>
+            {
+                    circle2Anchor.RightBottom = new Vector2F();
+                    circle3Anchor.RightBottom = new Vector2F();
+
+                if (Engine.Keyboard.GetKeyState(Key.Right) == ButtonState.Hold) rectSize.X += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Left) == ButtonState.Hold) rectSize.X -= 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Down) == ButtonState.Hold) rectSize.Y += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold) rectSize.Y -= 1.5f;
+
+                if (Engine.Keyboard.GetKeyState(Key.D) == ButtonState.Hold) parent.Position += new Vector2F(1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.A) == ButtonState.Hold) parent.Position += new Vector2F(-1.5f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.S) == ButtonState.Hold) parent.Position += new Vector2F(0, 1.5f);
+                if (Engine.Keyboard.GetKeyState(Key.W) == ButtonState.Hold) parent.Position += new Vector2F(0, -1.5f);
+
+                if (Engine.Keyboard.GetKeyState(Key.Q) == ButtonState.Hold) circle2Anchor.Angle += 1.5f;
+                if (Engine.Keyboard.GetKeyState(Key.E) == ButtonState.Hold) circle2Anchor.Angle -= 1.5f;
+
+                if (Engine.Keyboard.GetKeyState(Key.Z) == ButtonState.Hold) parent.Scale += new Vector2F(0.1f, 0);
+                if (Engine.Keyboard.GetKeyState(Key.C) == ButtonState.Hold) parent.Scale -= new Vector2F(0.1f, 0);
+
+                parent.Size = rectSize;
+
+                text2.Text = infoText(parent) + '\n' + infoText(circle2Anchor) + '\n' + infoText(circle3Anchor);
+            }, null);
+
+            tc.End();
+        }
     }
 }

@@ -193,6 +193,8 @@ namespace Altseed2
 
         #endregion
 
+        internal VertexArray VertexeArray => _RenderedPolygon.Vertexes;
+
         /// <summary>
         /// 各頂点に指定した色を設定する
         /// </summary>

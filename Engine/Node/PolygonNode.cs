@@ -196,6 +196,8 @@ namespace Altseed2
 
         #endregion
 
+        internal VertexArray VertexeArray => _RenderedPolygon.Vertexes;
+
         /// <summary>
         /// 頂点情報のコレクションを取得または設定します。
         /// </summary>
