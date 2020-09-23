@@ -7291,18 +7291,6 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RenderedPolygon_SetDefaultIndexBuffer(IntPtr selfPtr);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_RenderedPolygon_GetBuffers(IntPtr selfPtr);
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RenderedPolygon_SetBuffers(IntPtr selfPtr, IntPtr value);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedPolygon_GetVertexes(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -7493,8 +7481,6 @@ namespace Altseed2
         
         #region SerializeName
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Buffers = "S_Buffers";
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Vertexes = "S_Vertexes";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_Texture = "S_Texture";
@@ -7520,7 +7506,6 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
-            Buffers = info.GetValue<Int32Array>(S_Buffers);
             Vertexes = info.GetValue<VertexArray>(S_Vertexes);
             var Texture = info.GetValue<TextureBase>(S_Texture);
             ((IDeserializationCallback)Texture)?.OnDeserialization(null);
@@ -7542,7 +7527,6 @@ namespace Altseed2
         {
             base.GetObjectData(info, context);
             
-            info.AddValue(S_Buffers, Buffers);
             info.AddValue(S_Vertexes, Vertexes);
             info.AddValue(S_Texture, Texture);
             info.AddValue(S_Src, Src);
