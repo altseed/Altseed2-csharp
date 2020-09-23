@@ -212,6 +212,7 @@ namespace Altseed2
             Engine.Vector2FArrayCache.FromSpan(vertexes);
             _RenderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
             _RenderedPolygon.OverwriteVertexesColor(color);
+            _RenderedPolygon.SetDefaultIndexBuffer();
 
             _RequireCalcTransform = true;
         }
@@ -224,6 +225,7 @@ namespace Altseed2
         {
             _RenderedPolygon.Vertexes.FromSpan(vertexes);
             _RequireCalcTransform = true;
+            _RenderedPolygon.SetDefaultIndexBuffer();
         }
 
         /// <inheritdoc/>

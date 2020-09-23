@@ -293,7 +293,108 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             node.SetVertexes(span, new Color(255, 0, 0));
 
+            foreach (var current in node.Buffers) System.Diagnostics.Debug.WriteLine(current);
+
             tc.LoopBody(c => { }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void IBPolygonNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var node = new PolygonNode()
+            {
+                Position = new Vector2F(250, 250)
+            };
+            Engine.AddNode(node);
+
+            //Span<Vector2F> span = stackalloc Vector2F[]
+            //{
+            //    new Vector2F(-100, -100),
+            //    new Vector2F(-50, -100),
+            //    new Vector2F(-50, -50),
+            //    new Vector2F(-100, -50),
+            //    new Vector2F(50, 50),
+            //    new Vector2F(100, 50),
+            //    new Vector2F(100, 100),
+            //    new Vector2F(50, 100),
+            //};
+
+            //node.SetVertexes(span, new Color(255, 0, 0));
+
+            //node.Buffers = new[]
+            //{
+            //    new IndexBuffer(0, 1, 2),
+            //    new IndexBuffer(0, 2, 3),
+            //    new IndexBuffer(4, 5, 6),
+            //    new IndexBuffer(4, 6, 7),
+            //};
+
+            node.SetVertexGroupsFromPositions(new[]
+            {
+                new[]
+                {
+                    new Vector2F(-100, -100),
+                    new Vector2F(-50, -100),
+                    new Vector2F(-50, -50),
+                    new Vector2F(-100, -50),
+                },
+                new[]
+                {
+                    new Vector2F(50, 50),
+                    new Vector2F(100, 50),
+                    new Vector2F(100, 100),
+                    new Vector2F(50, 100),
+                },
+            }, new Color(255, 0, 0));
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void IBPolygonNodeWithTexture()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new PolygonNode()
+            {
+                Position = new Vector2F(250, 250),
+                Texture = texture
+            };
+            Engine.AddNode(node);
+
+            var basePositions = new[]
+            {
+                new Vector2F(-100f, -100f),
+                new Vector2F(100f, 100f),
+                new Vector2F(-150f, 250f),
+                new Vector2F(250f, -150f),
+            };
+            var array = new Vector2F[basePositions.Length][];
+            for (int i = 0; i < basePositions.Length; i++)
+            {
+                array[i] = new[]
+                {
+                    basePositions[i],
+                    basePositions[i] + new Vector2F(50f, 0f),
+                    basePositions[i] + new Vector2F(50f, 50f),
+                    basePositions[i] + new Vector2F(0f, 50f),
+                };
+            }
+
+            node.SetVertexGroupsFromPositions(array, new Color(255, 255, 255));
+
+            tc.LoopBody(null, null);
 
             tc.End();
         }

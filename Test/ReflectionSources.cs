@@ -76,7 +76,7 @@ namespace Altseed2.Test
                 };
                 result.Add(floatArray.Type, floatArray);
 
-                // Altseed2.Verctor2FArray
+                // Altseed2.Vector2FArray
                 var vector2FArray = ReflectionInfo.Create(Vector2FArray.Create((ReadOnlySpan<Vector2F>)new[]
                 {
                     new Vector2F(0.1f, 0.1f),
@@ -331,10 +331,12 @@ namespace Altseed2.Test
                     new Vertex { Color = new Color(100, 100, 255), Position = new Vector3F(10f, 10f, 0.5f), UV1 = new Vector2F(0.5f, 0.5f), UV2 = new Vector2F(1f, -1f) },
                     new Vertex { Color = new Color(255, 255, 255), Position = new Vector3F(0f, 10f, 0.5f), UV1 = new Vector2F(0.6f, 0.6f), UV2 = new Vector2F(-1f, -1f) }
                 });
+                renderedPolygon_Value.SetDefaultIndexBuffer();
                 var renderedPolygon = ReflectionInfo.Create(renderedPolygon_Value);
                 renderedPolygon.PropertyInfos = new[]
                 {
                     renderedPolygon.GetProperty("AlphaBlend"),
+                    renderedPolygon.GetProperty("Buffers"),
                     renderedPolygon.GetProperty("Material"),
                     renderedPolygon.GetProperty("Src"),
                     renderedPolygon.GetProperty("Texture"),
@@ -1057,6 +1059,7 @@ namespace Altseed2.Test
                 {
                     polygonNode.GetProperty("AlphaBlend"),
                     polygonNode.GetProperty("Angle"),
+                    polygonNode.GetProperty("Buffers"),
                     polygonNode.GetProperty("CameraGroup"),
                     polygonNode.GetProperty("CenterPosition"),
                     polygonNode.GetProperty("ContentSize"),
