@@ -194,7 +194,7 @@ namespace Altseed2
         /// <param name="v1">使用するベクトル1</param>
         /// <param name="v2">使用するベクトル2</param>
         /// <returns><paramref name="v1"/>と<paramref name="v2"/>の内積</returns>
-        public static float Dot(Vector2F v1, Vector2F v2) => v1.X * v2.X + v1.Y + v2.Y;
+        public static float Dot(Vector2F v1, Vector2F v2) => v1.X * v2.X + v1.Y * v2.Y;
 
         #region CalOperators
         /// <summary>
