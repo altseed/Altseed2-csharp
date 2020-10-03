@@ -130,6 +130,7 @@ namespace Altseed2.Test
                 var polygonCollider = ReflectionInfo.Create(polygonCollider_Value);
                 polygonCollider.PropertyInfos = new[]
                 {
+                    polygonCollider.GetProperty("Buffers"),
                     polygonCollider.GetProperty("Position"),
                     polygonCollider.GetProperty("Rotation"),
                     polygonCollider.GetProperty("Vertexes"),
@@ -670,6 +671,7 @@ namespace Altseed2.Test
                 polygonColliderNode.PropertyInfos = new[]
                 {
                     polygonColliderNode.GetProperty("Angle"),
+                    polygonColliderNode.GetProperty("Buffers"),
                     polygonColliderNode.GetProperty("CenterPosition"),
                     polygonColliderNode.GetProperty("ContentSize"),
                     polygonColliderNode.GetProperty("HorizontalFlip"),

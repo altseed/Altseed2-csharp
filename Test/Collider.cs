@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 
 using NUnit.Framework;
 
@@ -157,7 +157,7 @@ namespace Altseed2.Test
             new Vector2F(0f, -225f), new Vector2F(75f, -75f),
             new Vector2F(225f, 0f), new Vector2F(75f, 75f),
             new Vector2F(0f, 225f), new Vector2F(-75f, 75f),
-            new Vector2F(-225f + MathHelper.MatrixError, 0f), new Vector2F(MathHelper.MatrixError, 0f)
+            new Vector2F(-225f, 0f)
         };
 
         [Test, Apartment(ApartmentState.STA)]

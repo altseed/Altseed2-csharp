@@ -12,6 +12,19 @@ namespace Altseed2
     {
         private bool requireUpdate = true;
 
+        /// <summary>
+        /// インデックスバッファーを取得または設定します。
+        /// </summary>
+        public IReadOnlyList<int> Buffers
+        {
+            get => PolygonCollider.Buffers;
+            set
+            {
+                PolygonCollider.SetBuffers(value);
+                UpdateVersion();
+            }
+        }
+
         /// <inheritdoc/>
         public sealed override Vector2F ContentSize
         {
@@ -71,13 +84,36 @@ namespace Altseed2
         }
 
         /// <summary>
+        /// インデックスバッファーを設定します。
+        /// </summary>
+        /// <param name="buffers">設定する座標</param>
+        /// <remarks>サイズは3の倍数である必要があります<br></br>余った値は無視されます</remarks>
+        public void SetBuffers(IEnumerable<int> buffers)
+        {
+            PolygonCollider.SetBuffers(buffers);
+            UpdateVersion();
+        }
+
+        /// <summary>
+        /// インデックスバッファーを設定します。
+        /// </summary>
+        /// <param name="buffers">設定するインデックスバッファー</param>
+        /// <remarks>サイズは3の倍数である必要があります<br></br>余った値は無視されます</remarks>
+        public void SetBuffers(ReadOnlySpan<int> buffers)
+        {
+            PolygonCollider.SetBuffers(buffers);
+            UpdateVersion();
+        }
+
+        /// <summary>
         /// 指定した座標に頂点を設定します。
         /// </summary>
         /// <param name="positions">設定する座標</param>
         /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
-        public void SetVertexes(IEnumerable<Vector2F> positions)
+        /// <param name="resetIB"><see cref="Buffers"/>を自動計算したものに設定するかどうか</param>
+        public void SetVertexes(IEnumerable<Vector2F> positions, bool resetIB = true)
         {
-            PolygonCollider.SetVertexes(positions);
+            PolygonCollider.SetVertexes(positions, resetIB);
             requireUpdate = true;
         }
 
@@ -85,9 +121,10 @@ namespace Altseed2
         /// 指定した座標に頂点を設定する
         /// </summary>
         /// <param name="positions">設定する座標</param>
-        public void SetVertexes(Span<Vector2F> positions)
+        /// <param name="resetIB"><see cref="Buffers"/>を自動計算したものに設定するかどうか</param>
+        public void SetVertexes(Span<Vector2F> positions, bool resetIB = true)
         {
-            PolygonCollider.SetVertexes(positions);
+            PolygonCollider.SetVertexes(positions, resetIB);
             requireUpdate = true;
         }
 
@@ -134,16 +171,9 @@ namespace Altseed2
 
         private void UpdatePolygon()
         {
-            if (_Owner.PolygonCollider.VertexesInternal is Vector2FArray array)
-            {
+            SetVertexesFromPositions(_Owner.PolygonCollider.VertexesInternal, ColliderVisualizeNodeFactory.AreaColor, false);
+            SetBuffers(_Owner.PolygonCollider.Buffers);
 
-                SetVertexesFromPositions(array, ColliderVisualizeNodeFactory.AreaColor, true);
-            }
-            else
-            {
-                Span<Vector2F> span = stackalloc Vector2F[0];
-                SetVertexes(span, ColliderVisualizeNodeFactory.AreaColor);
-            }
             CenterPosition = _Owner.CenterPosition;
 
             _CurrentVersion = _Owner._Version;
