@@ -237,7 +237,7 @@ namespace Altseed2
 
             VertexesInternal = _vertexesInternalCache;
 
-            SetDefaultIndexBuffer();
+            if (resetIB) SetDefaultIndexBuffer();
         }
     }
 }

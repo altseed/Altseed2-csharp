@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -138,7 +137,7 @@ namespace Altseed2
             {
                 var array = new Vector2F[Vertexes.Count];
                 for (int i = 0; i < Vertexes.Count; i++) array[i] = Vertexes[i] * scale - CenterPosition;
-                PolygonCollider.Vertexes = array;
+                PolygonCollider.SetVertexes((ReadOnlySpan<Vector2F>)array, false);
             }
             else PolygonCollider.Vertexes = Array.Empty<Vector2F>();
 
