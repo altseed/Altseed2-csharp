@@ -10,8 +10,6 @@ namespace Altseed2
     /// </summary>
     public class Vector2FToolElement : ToolElement
     {
-        private float[] vectorArray;
-
         /// <summary>
         /// 
         /// </summary>
@@ -41,7 +39,6 @@ namespace Altseed2
             Speed = speed;
             Min = min;
             Max = max;
-            vectorArray = new float[2];
 
             if (!typeof(Vector2F).IsAssignableFrom(PropertyInfo?.PropertyType))
             {
@@ -59,14 +56,33 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             Vector2F vector = (Vector2F)PropertyInfo.GetValue(Source);
-            vectorArray[0] = vector.X;
-            vectorArray[1] = vector.Y;
-            if (Engine.Tool.SliderFloat2(Name, vectorArray, Speed, Min, Max))
+            float x = vector.X;
+            float y = vector.Y;
+
+            var width = Engine.Tool.GetColumnWidth(0) * 0.65f;
+            Engine.Tool.Columns(2, false);
+            Engine.Tool.SetColumnWidth(0, width / 2);
+            Engine.Tool.SetColumnWidth(1, width / 2);
+            Engine.Tool.PushItemWidth(-1);
+
+            if (Engine.Tool.DragFloat($"##{Name}_X", ref x, Speed, Min, Max))
             {
-                vector.X = vectorArray[0];
-                vector.Y = vectorArray[1];
+                vector.X = x;
                 PropertyInfo.SetValue(Source, vector);
             }
+
+            Engine.Tool.PopItemWidth();
+            Engine.Tool.NextColumn();
+            Engine.Tool.PushItemWidth(-1);
+
+            if (Engine.Tool.DragFloat($"##{Name}_Y", ref y, Speed, Min, Max))
+            {
+                PropertyInfo.SetValue(Source, vector);
+            }
+            Engine.Tool.PopItemWidth();
+            Engine.Tool.Columns(1, false);
+            Engine.Tool.SameLine();
+            Engine.Tool.Text(Name);
         }
 
         /// <summary>

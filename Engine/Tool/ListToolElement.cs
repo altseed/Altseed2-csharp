@@ -38,6 +38,11 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
+        public string SelectedItemIndexPropertyName { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Current { get => current; set => current = value; }
 
         /// <summary>
@@ -97,6 +102,24 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
+        public PropertyInfo SelectedItemIndexPropertyInfo
+        {
+            get
+            {
+                try
+                {
+                    return Source?.GetType().GetProperty(SelectedItemIndexPropertyName);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="name"></param>
         /// <param name="source"></param>
         /// <param name="propertyName"></param>
@@ -104,12 +127,13 @@ namespace Altseed2
         /// <param name="selectedItemPropertyName"></param>
         /// <param name="addMethodName"></param>
         /// <param name="removeMethodName"></param>
-        public ListToolElement(string name, object source, string propertyName, string listElementPropertyName = null, string selectedItemPropertyName = null, string addMethodName = null, string removeMethodName = null) : base(name, source, propertyName)
+        public ListToolElement(string name, object source, string propertyName, string listElementPropertyName = null, string selectedItemPropertyName = null, string addMethodName = null, string removeMethodName = null, string selectedItemIndexPropertyName = null) : base(name, source, propertyName)
         {
             ListElementPropertyName = listElementPropertyName;
             SelectedItemPropertyName = selectedItemPropertyName;
             AddMethodName = addMethodName;
             RemoveMethodName = removeMethodName;
+            SelectedItemIndexPropertyName = selectedItemIndexPropertyName;
 
             if (!typeof(IList).IsAssignableFrom(PropertyInfo?.PropertyType))
             {
@@ -135,6 +159,13 @@ namespace Altseed2
             {
                 throw new ArgumentException("RemoveMethodNameはvoid(int)のメソッドを指定してください");
             }
+
+            if (SelectedItemIndexPropertyName != null && !typeof(int).IsAssignableFrom(SelectedItemIndexPropertyInfo?.PropertyType))
+            {
+                throw new ArgumentException("SelectedIndexItemがint型ではありません");
+            }
+
+            SelectedItemIndexPropertyInfo?.SetValue(Source, current);
         }
 
         /// <summary>
@@ -147,6 +178,10 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             IList list = (IList)PropertyInfo.GetValue(Source);
+
+            if (list == null)
+                return;
+
             List<string> names;
             if (ListElementPropertyName == null)
             {
@@ -161,6 +196,8 @@ namespace Altseed2
             {
                 if (current >= 0 && current < list.Count)
                     SelectedItemPropertyInfo?.SetValue(Source, list[current]);
+
+                SelectedItemIndexPropertyInfo?.SetValue(Source, current);
             }
 
             if (AddMethodInfo != null && Engine.Tool.SmallButton("+"))
@@ -191,7 +228,8 @@ namespace Altseed2
             var selectedItemPropertyName = objectMapping.Options.ContainsKey("selectedItemPropertyName") ? (string)objectMapping.Options["selectedItemPropertyName"] : null;
             var addMethodName = objectMapping.Options.ContainsKey("addMethodName") ? (string)objectMapping.Options["addMethodName"] : null;
             var removeMethodName = objectMapping.Options.ContainsKey("removeMethodName") ? (string)objectMapping.Options["removeMethodName"] : null;
-            return new ListToolElement(objectMapping.Name, source, objectMapping.PropertyName, listElementPropertyName, selectedItemPropertyName, addMethodName, removeMethodName);
+            var selectedItemIndexPropertyName = objectMapping.Options.ContainsKey("selectedItemIndexPropertyName") ? (string)objectMapping.Options["selectedItemIndexPropertyName"] : null;
+            return new ListToolElement(objectMapping.Name, source, objectMapping.PropertyName, listElementPropertyName, selectedItemPropertyName, addMethodName, removeMethodName, selectedItemIndexPropertyName);
         }
     }
 }

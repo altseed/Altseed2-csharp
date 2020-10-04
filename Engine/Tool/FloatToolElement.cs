@@ -56,7 +56,7 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             float num = (float)PropertyInfo.GetValue(Source);
-            if (Engine.Tool.SliderFloat(Name, ref num, Speed, Min, Max))
+            if (Engine.Tool.DragFloat(Name, ref num, Speed, Min, Max))
             {
                 PropertyInfo.SetValue(Source, num);
             }
