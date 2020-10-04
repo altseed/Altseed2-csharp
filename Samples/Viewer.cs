@@ -50,8 +50,6 @@ namespace Sample
 
             SamplesString = string.Join('\t', Samples.Select(s => s.Name));
 
-            args = new[] {"Editor"};
-
             if (args.Length != 1) ShowViewer();
             else
             {
@@ -137,11 +135,6 @@ namespace Sample
             catch (PlatformNotSupportedException _)
             {
                 return Process.Start(command, arguments) != null;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
             }
 
             return true;
