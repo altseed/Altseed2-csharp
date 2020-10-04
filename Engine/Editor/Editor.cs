@@ -122,27 +122,32 @@ namespace Altseed2
         {
             if (first)
             {
-                if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
-                {
-                    Engine.Tool.End();
-                }
-                if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
-                {
-                    Engine.Tool.End();
-                }
-                first = false;
+                OnFirstUpdate();
             }
 
+            UpdateCameraGroup();
+            UpdateComponents();
+
+            return Engine.Update();
+        }
+
+        private static void UpdateCameraGroup()
+        {
             foreach (var node in Engine.GetNodes().Union(Engine.GetNodes().SelectMany(obj => obj.EnumerateDescendants())))
             {
                 try
                 {
                     var propertyInfo = node.GetType().GetProperty("CameraGroup");
-                    propertyInfo.SetValue(node, (ulong)propertyInfo.GetValue(node) | 1u << 63);
+                    propertyInfo?.SetValue(node, (ulong) propertyInfo.GetValue(node) | 1u << 63);
                 }
-                catch { }
+                catch
+                {
+                }
             }
+        }
 
+        private static void UpdateComponents()
+        {
             UpdateMainWindow();
             UpdateMenu();
             UpdateNodeTreeWindow();
@@ -152,7 +157,21 @@ namespace Altseed2
                 UpdateTextureBrowser();
             if (FontBrowserTarget != null)
                 UpdateFontBrowser();
-            return Engine.Update();
+        }
+
+        private static void OnFirstUpdate()
+        {
+            if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
+            {
+                Engine.Tool.End();
+            }
+
+            if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
+            {
+                Engine.Tool.End();
+            }
+
+            first = false;
         }
 
         static Vector2I windowSize = Engine.WindowSize;

@@ -46,8 +46,11 @@ namespace Sample
             Samples.Add(new Sample("PostEffect/GaussianBlur", "ガウスぼかしのポストエフェクトを適用します。", typeof(PostEffectGaussianBlur)));
             Samples.Add(new Sample("PostEffect/LightBloom", "ライトブルームのポストエフェクトを適用します。", typeof(PostEffectLightBloom)));
             Samples.Add(new Sample("CustomPostEffect", "自作のポストエフェクトを適用します。", typeof(CustomPostEffect)));
+            Samples.Add(new Sample("Editor", "Altseed2ノードエディタを実行します。", typeof(Editor)));
 
             SamplesString = string.Join('\t', Samples.Select(s => s.Name));
+
+            args = new[] {"Editor"};
 
             if (args.Length != 1) ShowViewer();
             else
@@ -126,14 +129,19 @@ namespace Sample
                 var process = new Process();
                 process.StartInfo.FileName = command;
                 process.StartInfo.Arguments = arguments;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.CreateNoWindow = false;
                 var result = process.Start();
                 if (!result) return false;
             }
             catch (PlatformNotSupportedException _)
             {
                 return Process.Start(command, arguments) != null;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
             }
 
             return true;
