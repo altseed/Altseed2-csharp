@@ -6,12 +6,10 @@ namespace Altseed2
     /// カメラとして機能するノードのクラス
     /// </summary>
     [Serializable]
-    public class CameraNode : Node
+    public class CameraNode : TransformNode
     {
         private readonly RenderedCamera _Camera;
         internal RenderedCamera RenderedCamera => _Camera;
-
-        private bool _RequireCalcTransform = true;
 
         /// <summary>
         /// 描画対象のグループを取得または設定します。
@@ -82,70 +80,6 @@ namespace Altseed2
             ClearColor = new Color(50, 50, 50);
             IsColorCleared = false;
         }
-
-        /// <summary>
-        /// 描画領域の回転角（度数法）を取得または設定します。
-        /// </summary>
-        public float Angle
-        {
-            get => _Angle;
-            set
-            {
-                if (_Angle == value) return;
-
-                _Angle = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private float _Angle = 0.0f;
-
-        /// <summary>
-        /// 描画領域の座標を取得または設定します。
-        /// </summary>
-        public Vector2F Position
-        {
-            get => _Position;
-            set
-            {
-                if (_Position == value) return;
-
-                _Position = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private Vector2F _Position = new Vector2F();
-
-        /// <summary>
-        /// 描画領域の中心座標をピクセル単位で取得または設定します。
-        /// </summary>
-        public Vector2F CenterPosition
-        {
-            get => _CenterPosition;
-            set
-            {
-                if (_CenterPosition == value) return;
-
-                _CenterPosition = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private Vector2F _CenterPosition;
-
-        /// <summary>
-        /// 描画領域の拡大率を取得または設定します。
-        /// </summary>
-        public Vector2F Scale
-        {
-            get => _Scale;
-            set
-            {
-                if (value == _Scale) return;
-
-                _Scale = value;
-                _RequireCalcTransform = true;
-            }
-        }
-        private protected Vector2F _Scale = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
         /// 描画先のテクスチャを取得または設定します。
