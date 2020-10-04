@@ -168,7 +168,7 @@ namespace Altseed2
                 RenderedCamera.ViewMatrix =
                 Matrix44F.GetTranslation2D(CenterPosition - _TargetSize / 2)
                 * Matrix44F.GetScale2D(new Vector2F(1f, 1f) / Scale)
-                * Matrix44F.GetRotationZ(-Angle)
+                * Matrix44F.GetRotationZ(MathHelper.RadianToDegree(-Angle))
                 * Matrix44F.GetTranslation2D(-Position);
                 // NOTE: DrawnNodeのTransformとは逆
 
