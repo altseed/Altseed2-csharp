@@ -103,11 +103,12 @@ namespace Altseed2.Test
                 result.Add(vector2FArray.Type, vector2FArray);
 
                 // Altseed2.CircleCollider
-                var circleCollider_Value = CircleCollider.Create();
-                circleCollider_Value.Position = new Vector2F(30f, 30f);
-                circleCollider_Value.Radius = 25f;
-                circleCollider_Value.Rotation = MathHelper.DegreeToRadian(30f);
-                var circleCollider = ReflectionInfo.Create(circleCollider_Value);
+                var circleCollider = ReflectionInfo.Create(new CircleCollider
+                {
+                    Position = new Vector2F(30f, 30f),
+                    Radius = 25f,
+                    Rotation = MathHelper.DegreeToRadian(30f)
+                });
                 circleCollider.PropertyInfos = new[]
                 {
                     circleCollider.GetProperty("Position"),
@@ -117,17 +118,18 @@ namespace Altseed2.Test
                 result.Add(circleCollider.Type, circleCollider);
 
                 // Altseed2.PolygonCollider
-                var polygonCollider_Value = PolygonCollider.Create();
-                polygonCollider_Value.Position = new Vector2F(30f, 30f);
-                polygonCollider_Value.Rotation = MathHelper.DegreeToRadian(30f);
-                polygonCollider_Value.Vertexes = new[]
+                var polygonCollider = ReflectionInfo.Create(new PolygonCollider
                 {
-                    new Vector2F(0f, 0f),
-                    new Vector2F(0f, 10f),
-                    new Vector2F(10f, 10f),
-                    new Vector2F(10f, 0f),
-                };
-                var polygonCollider = ReflectionInfo.Create(polygonCollider_Value);
+                    Position = new Vector2F(30f, 30f),
+                    Rotation = MathHelper.DegreeToRadian(30f),
+                    Vertexes = new[]
+                    {
+                        new Vector2F(0f, 0f),
+                        new Vector2F(0f, 10f),
+                        new Vector2F(10f, 10f),
+                        new Vector2F(10f, 0f),
+                    }
+                });
                 polygonCollider.PropertyInfos = new[]
                 {
                     polygonCollider.GetProperty("Buffers"),
@@ -138,12 +140,13 @@ namespace Altseed2.Test
                 result.Add(polygonCollider.Type, polygonCollider);
 
                 // Altseed2.RectangleCollider
-                var rectangleCollider_Value = RectangleCollider.Create();
-                rectangleCollider_Value.CenterPosition = new Vector2F(25f, 25f);
-                rectangleCollider_Value.Position = new Vector2F(30f, 30f);
-                rectangleCollider_Value.Rotation = MathHelper.DegreeToRadian(30f);
-                rectangleCollider_Value.Size = new Vector2F(50f, 50f);
-                var rectangleCollider = ReflectionInfo.Create(rectangleCollider_Value);
+                var rectangleCollider = ReflectionInfo.Create(new RectangleCollider
+                {
+                    CenterPosition = new Vector2F(25f, 25f),
+                    Position = new Vector2F(30f, 30f),
+                    Rotation = MathHelper.DegreeToRadian(30f),
+                    Size = new Vector2F(50f, 50f)
+                });
                 rectangleCollider.PropertyInfos = new[]
                 {
                     rectangleCollider.GetProperty("CenterPosition"),
