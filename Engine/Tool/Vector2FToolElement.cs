@@ -77,6 +77,7 @@ namespace Altseed2
 
             if (Engine.Tool.DragFloat($"##{Name}_Y", ref y, Speed, Min, Max))
             {
+                vector.Y = y;
                 PropertyInfo.SetValue(Source, vector);
             }
             Engine.Tool.PopItemWidth();
