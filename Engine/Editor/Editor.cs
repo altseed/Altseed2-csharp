@@ -35,25 +35,6 @@ namespace Altseed2
         /// </summary>
         public static bool IsMainWindowFocus { get; private set; }
 
-        /// <summary>
-        /// メインウィンドウ対象カメラ
-        /// </summary>
-        public static CameraNode MainCamera
-        {
-            get => mainCamera;
-            set
-            {
-                if (value == mainCamera) return;
-                mainCamera?.Parent?.RemoveChildNode(mainCamera);
-
-                mainCamera = value;
-                if (mainCamera.Status == RegisteredStatus.Free)
-                {
-                    Engine.AddNode(mainCamera);
-                }
-            }
-        }
-
         internal static TextureBaseToolElement TextureBrowserTarget { get; set; }
         internal static FontToolElement FontBrowserTarget { get; set; }
 
@@ -86,6 +67,7 @@ namespace Altseed2
             if (config == null)
                 config = new Configuration();
             config.EnabledCoreModules |= CoreModules.Tool;
+            config.IsResizable = true;
 
             var res = Engine.Initialize(title, width, height, config);
             Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
@@ -93,13 +75,7 @@ namespace Altseed2
             ToolElementManager.SetAltseed2DefaultObjectMapping();
 
             main = RenderTexture.Create(Engine.WindowSize - new Vector2I(600, 18), TextureFormat.R8G8B8A8_UNORM);
-
-            MainCamera = new CameraNode();
-            MainCamera.IsColorCleared = true;
-            MainCamera.ClearColor = new Color(50, 50, 50);
-            MainCamera.Group = 63;
-            MainCamera.TargetTexture = main;
-            Engine.AddNode(MainCamera);
+            Engine._DefaultCamera.TargetTexture = main;
 
             first = true;
 
@@ -128,7 +104,50 @@ namespace Altseed2
             UpdateCameraGroup();
             UpdateComponents();
 
-            return Engine.Update();
+            // ノードの更新
+            Engine._UpdatedNode?.Update();
+
+            // Contextの更新
+            Engine.Context.Update();
+
+            // Graphicsが初期化されていない場合は早期リターン
+            if (Engine.Graphics == null) return true;
+
+            // カリング用AABBの更新
+            Engine.CullingSystem?.UpdateAABB();
+
+            // (ツール機能を使用しない場合は)描画を開始
+            if (Engine.Tool == null)
+            {
+                //ツール機能を使用するときはDoEventsでフレームを開始
+                //使用しないときはUpdateでフレームを開始
+                if (!Engine.Graphics.BeginFrame(new RenderPassParameter(Engine.ClearColor, true, true))) return false;
+            }
+
+            // カメラが 1 つもない場合はデフォルトカメラを使用
+            Engine.DrawCameraGroup(Engine._DefaultCamera, Engine._DrawnCollection.GetDrawns());
+
+            // 特定のカメラに映りこむノードを描画
+            for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
+            {
+                foreach (var camera in Engine._CameraNodes[i])
+                {
+                    Engine.DrawCameraGroup(camera.RenderedCamera, Engine._DrawnCollection[i]);
+                }
+            }
+
+            Engine._RenderTextureCache.Update();
+            PostEffectNode.UpdateCache();
+
+            // （ツール機能を使用する場合は）ツールを描画
+            if (Engine.Tool != null)
+            {
+                Engine.Tool.Render();
+            }
+
+            // 描画を終了
+            if (!Engine.Graphics.EndFrame()) return false;
+            return true;
         }
 
         private static void UpdateCameraGroup()
@@ -138,7 +157,7 @@ namespace Altseed2
                 try
                 {
                     var propertyInfo = node.GetType().GetProperty("CameraGroup");
-                    propertyInfo?.SetValue(node, (ulong) propertyInfo.GetValue(node) | 1u << 63);
+                    propertyInfo?.SetValue(node, (ulong)propertyInfo.GetValue(node) | 1u << 63);
                 }
                 catch
                 {
@@ -185,7 +204,7 @@ namespace Altseed2
                 Vector2I texSize = Engine.WindowSize - new Vector2I(600, (int)menuHeight);
                 if (texSize.X > 0 && texSize.Y > 0)
                     main = RenderTexture.Create(texSize, TextureFormat.R8G8B8A8_UNORM);
-                MainCamera.TargetTexture = main;
+                Engine._DefaultCamera.TargetTexture = main;
                 windowSize = Engine.WindowSize;
             }
 
@@ -215,8 +234,6 @@ namespace Altseed2
             {
                 foreach (var node in nodes)
                 {
-                    if (node == MainCamera) continue;
-
                     Engine.Tool.PushID(node.GetHashCode());
                     var flags = ToolTreeNodeFlags.OpenOnArrow;
                     if (node == Selected)

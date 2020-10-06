@@ -24,13 +24,13 @@ namespace Altseed2
         /// 実際のUpdate対象のノード
         /// </summary>
         /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
-        private static Node _UpdatedNode;
+        internal static Node _UpdatedNode;
 
-        private static CameraNodeCollection _CameraNodes;
-        private static RenderedCamera _DefaultCamera;
-        private static DrawnCollection _DrawnCollection;
+        internal static CameraNodeCollection _CameraNodes;
+        internal static RenderedCamera _DefaultCamera;
+        internal static DrawnCollection _DrawnCollection;
 
-        private static RenderTextureCache _RenderTextureCache;
+        internal static RenderTextureCache _RenderTextureCache;
         internal static RenderTexture _PostEffectBuffer; // TODO: 渡し方をうまくやる。
 
         // cullingの結果を格納するためのBuffer
@@ -193,7 +193,7 @@ namespace Altseed2
             return true;
         }
 
-        private static void DrawCameraGroup(RenderedCamera camera, SortedDictionary<int, HashSet<IDrawn>> drawns)
+        internal static void DrawCameraGroup(RenderedCamera camera, SortedDictionary<int, HashSet<IDrawn>> drawns)
         {
             Renderer.SetCamera(camera);
 
