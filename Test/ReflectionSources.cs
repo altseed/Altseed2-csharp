@@ -117,6 +117,23 @@ namespace Altseed2.Test
                 };
                 result.Add(circleCollider.Type, circleCollider);
 
+                // Altseed2.EdgeCollider
+                var edgeCollider = ReflectionInfo.Create(new EdgeCollider
+                {
+                    Point1 = new Vector2F(100f, 100f),
+                    Point2 = new Vector2F(200f, 200f),
+                    Position = new Vector2F(30f, 30f),
+                    Rotation = MathHelper.DegreeToRadian(30f)
+                });
+                edgeCollider.PropertyInfos = new[]
+                {
+                    edgeCollider.GetProperty("Point1"),
+                    edgeCollider.GetProperty("Point2"),
+                    edgeCollider.GetProperty("Position"),
+                    edgeCollider.GetProperty("Rotation"),
+                };
+                result.Add(edgeCollider.Type, edgeCollider);
+
                 // Altseed2.PolygonCollider
                 var polygonCollider = ReflectionInfo.Create(new PolygonCollider
                 {

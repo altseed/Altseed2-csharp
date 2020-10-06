@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -77,6 +77,22 @@ namespace Altseed2
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_CircleCollider_Create();
+        }
+    }
+
+    public partial class EdgeCollider
+    {
+        /// <summary>
+        /// <see cref="EdgeCollider"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public EdgeCollider() : base(new MemoryHandle(cbg_EdgeCollider_Create()))
+        {
+            if (selfPtr == IntPtr.Zero) throw new InvalidOperationException("インスタンス生成に失敗しました");
+        }
+
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
+        {
+            ptr = cbg_EdgeCollider_Create();
         }
     }
 
