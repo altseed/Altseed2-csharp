@@ -76,8 +76,28 @@ namespace Altseed2
     public partial class PolygonCollider
     {
         #region SerializeName
+        private const string S_Buffers = "S_Buffers";
         private const string S_Vertexes = "S_Vertexes";
         #endregion
+
+        /// <summary>
+        /// インデックスバッファーを取得または設定します。
+        /// </summary>
+        public IReadOnlyList<int> Buffers
+        {
+            get => BuffersInternal?.ToArray();
+            set => SetBuffers(value);
+        }
+        internal Int32Array BuffersInternal
+        {
+            get => _buffersInternalCache ??= Int32Array.TryGetFromCache(cbg_PolygonCollider_GetBuffers(selfPtr));
+            set
+            {
+                _buffersInternalCache = value ?? throw new ArgumentNullException(nameof(value), "引数がnullです");
+                cbg_PolygonCollider_SetBuffers(selfPtr, value.selfPtr);
+            }
+        }
+        private Int32Array _buffersInternalCache;
 
         /// <summary>
         /// 頂点情報のコレクションを取得または設定します。
@@ -108,23 +128,74 @@ namespace Altseed2
 
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context)
         {
+            BuffersInternal = info.GetValue<Int32Array>(S_Buffers);
             VertexesInternal = info.GetValue<Vector2FArray>(S_Vertexes);
         }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue(S_Buffers, BuffersInternal);
             info.AddValue(S_Vertexes, VertexesInternal);
+        }
+
+        /// <summary>
+        /// インデックスバッファーを設定します。
+        /// </summary>
+        /// <param name="buffers">設定する座標</param>
+        /// <remarks>サイズは3の倍数である必要があります<br></br>余った値は無視されます</remarks>
+        public void SetBuffers(IEnumerable<int> buffers)
+        {
+            if (buffers is null)
+            {
+                BuffersInternal = Int32Array.Create(0);
+                return;
+            }
+
+            SetBuffers(buffers is int[] a ? (ReadOnlySpan<int>)a : buffers.ToArray());
+        }
+
+        /// <summary>
+        /// インデックスバッファーを設定します。
+        /// </summary>
+        /// <param name="buffers">設定するインデックスバッファー</param>
+        /// <remarks>サイズは3の倍数である必要があります<br></br>余った値は無視されます</remarks>
+        public void SetBuffers(ReadOnlySpan<int> buffers)
+        {
+            if (buffers.Length == 0)
+            {
+                BuffersInternal = Int32Array.Create(0);
+                return;
+            }
+
+            var length = buffers.Length / 3 * 3;
+            if (buffers.Length != length) buffers = buffers.Slice(0, length);
+
+            if (_buffersInternalCache is null) _buffersInternalCache = Int32Array.Create(buffers);
+            else _buffersInternalCache.FromSpan(buffers);
+            
+            BuffersInternal = _buffersInternalCache;
+        }
+
+        /// <summary>
+        /// インデックスバッファーを既定のものに設定します。
+        /// </summary>
+        public void SetDefaultIndexBuffer()
+        {
+            cbg_PolygonCollider_SetDefaultIndexBuffer(selfPtr);
+            _buffersInternalCache = null;
         }
 
         /// <summary>
         /// 指定した座標に頂点を設定します。
         /// </summary>
         /// <param name="positions">設定する座標</param>
-        public void SetVertexes(IEnumerable<Vector2F> positions)
+        /// <param name="resetIB"><see cref="Buffers"/>を自動計算したものに設定するかどうか</param>
+        public void SetVertexes(IEnumerable<Vector2F> positions, bool resetIB = true)
         {
             if (positions is null)
             {
                 VertexesInternal = null;
+                if (resetIB) BuffersInternal = Int32Array.Create(0);
                 return;
             }
 
@@ -137,17 +208,21 @@ namespace Altseed2
                 _vertexesInternalCache.FromEnumerable(positions);
             }
             VertexesInternal = _vertexesInternalCache;
+
+            if (resetIB) SetDefaultIndexBuffer();
         }
 
         /// <summary>
         /// 指定した座標に頂点を設定する
         /// </summary>
         /// <param name="positions">設定する座標</param>
-        public void SetVertexes(ReadOnlySpan<Vector2F> positions)
+        /// <param name="resetIB"><see cref="Buffers"/>を自動計算したものに設定するかどうか</param>
+        public void SetVertexes(ReadOnlySpan<Vector2F> positions, bool resetIB = true)
         {
             if (positions.Length == 0)
             {
                 VertexesInternal = null;
+                if (resetIB) BuffersInternal = Int32Array.Create(0);
                 return;
             }
 
@@ -161,6 +236,8 @@ namespace Altseed2
             }
 
             VertexesInternal = _vertexesInternalCache;
+
+            if (resetIB) SetDefaultIndexBuffer();
         }
     }
 }

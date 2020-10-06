@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 
 using NUnit.Framework;
 
@@ -157,7 +157,7 @@ namespace Altseed2.Test
             new Vector2F(0f, -225f), new Vector2F(75f, -75f),
             new Vector2F(225f, 0f), new Vector2F(75f, 75f),
             new Vector2F(0f, 225f), new Vector2F(-75f, 75f),
-            new Vector2F(-225f + MathHelper.MatrixError, 0f), new Vector2F(MathHelper.MatrixError, 0f)
+            new Vector2F(-225f, 0f)
         };
 
         [Test, Apartment(ApartmentState.STA)]
@@ -200,6 +200,66 @@ namespace Altseed2.Test
             {
                 player.Angle++;
                 comparison.Angle++;
+                if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (x == 10)
+                {
+                    Assert.True(manager.ContainsCollider(colliderNode));
+                    Assert.AreEqual(manager.ColliderCount, 2);
+                }
+            });
+            tc.End();
+        }
+
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void AutoCollisionSystem_PolygonIB()
+        {
+            var tc = new TestCore();
+            tc.Init();
+            //tc.Duration = int.MaxValue;
+
+            var texture = Texture2D.LoadStrict(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var scene = new Altseed2.Node();
+            var manager = new CollisionManagerNode();
+            scene.AddChildNode(manager);
+
+            Engine.AddNode(scene);
+
+            var player = new Player_Polygon(texture);
+            player.Angle += 45f;
+
+            scene.AddChildNode(player);
+
+            var comparison = new SpriteNode()
+            {
+                Color = default,
+                Texture = texture,
+                CenterPosition = texture.Size / 2,
+                Position = new Vector2F(580f, 300f),
+            };
+            var colliderNode = new PolygonColliderNode();
+            colliderNode.SetVertexes(stackalloc Vector2F[]
+            {
+                new Vector2F(-150f, -150f),
+                new Vector2F(-200f, -150f),
+                new Vector2F(-200f, -100f),
+                new Vector2F(-150f, -100f),
+                new Vector2F(-200f, 100f),
+                new Vector2F(-200f, 150f),
+                new Vector2F(-150f, 150f),
+                new Vector2F(-150f, 100f),
+            }, false);
+            colliderNode.Buffers = new[] { 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7 };
+            colliderNode.AddChildNode((PolygonNode)ColliderVisualizeNodeFactory.Create(colliderNode));
+            comparison.AddChildNode(colliderNode);
+
+            scene.AddChildNode(comparison);
+
+            tc.LoopBody(null, x =>
+            {
+                player.Angle++;
                 if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
                 if (x == 10)
                 {
