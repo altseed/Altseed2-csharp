@@ -14389,15 +14389,6 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
-        /// <summary>
-        /// 指定したコライダとの衝突判定を行います。
-        /// </summary>
-        public bool GetIsCollidedWith(Collider collider)
-        {
-            var ret = cbg_Collider_GetIsCollidedWith(selfPtr, collider != null ? collider.selfPtr : IntPtr.Zero);
-            return ret;
-        }
-        
         
         #region ISerialiable
         
@@ -14597,15 +14588,6 @@ namespace Altseed2
         }
         private float? _Radius;
         
-        /// <summary>
-        /// 円形コライダを作成します。
-        /// </summary>
-        public static CircleCollider Create()
-        {
-            var ret = cbg_CircleCollider_Create();
-            return CircleCollider.TryGetFromCache(ret);
-        }
-        
         
         #region ISerialiable
         
@@ -14723,28 +14705,28 @@ namespace Altseed2
     }
     
     /// <summary>
-    /// 矩形コライダのクラス
+    /// 図形コライダのクラス
     /// </summary>
     [Serializable]
-    public partial class RectangleCollider : Collider, ISerializable, ICacheKeeper<RectangleCollider>
+    public partial class ShapeCollider : Collider, ISerializable, ICacheKeeper<ShapeCollider>
     {
         #region unmanaged
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static Dictionary<IntPtr, WeakReference<RectangleCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<RectangleCollider>>();
+        private static Dictionary<IntPtr, WeakReference<ShapeCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<ShapeCollider>>();
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-                internal static new RectangleCollider TryGetFromCache(IntPtr native)
+                internal static new ShapeCollider TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
             if(cacheRepo.ContainsKey(native))
             {
-                RectangleCollider cacheRet;
+                ShapeCollider cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
                 if(cacheRet != null)
                 {
-                    cbg_RectangleCollider_Release(native);
+                    cbg_ShapeCollider_Release(native);
                     return cacheRet;
                 }
                 else
@@ -14753,113 +14735,72 @@ namespace Altseed2
                 }
             }
         
-            var newObject = new RectangleCollider(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<RectangleCollider>(newObject);
+            var newObject = new ShapeCollider(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<ShapeCollider>(newObject);
             return newObject;
         }
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_RectangleCollider_Create();
+        private static extern IntPtr cbg_ShapeCollider_Create();
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern Vector2F cbg_RectangleCollider_GetSize(IntPtr selfPtr);
+        private static extern IntPtr cbg_ShapeCollider_GetVertexes(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RectangleCollider_SetSize(IntPtr selfPtr, Vector2F value);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern Vector2F cbg_RectangleCollider_GetCenterPosition(IntPtr selfPtr);
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RectangleCollider_SetCenterPosition(IntPtr selfPtr, Vector2F value);
+        private static extern void cbg_ShapeCollider_SetVertexes(IntPtr selfPtr, IntPtr value);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RectangleCollider_Release(IntPtr selfPtr);
+        private static extern void cbg_ShapeCollider_Release(IntPtr selfPtr);
         
         #endregion
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal RectangleCollider(MemoryHandle handle) : base(handle)
+        internal ShapeCollider(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
         }
         
         /// <summary>
-        /// 矩形コライダの幅・高さを取得または設定します。
+        /// 頂点座標を取得または設定します。
         /// </summary>
-        public Vector2F Size
+        internal Vector2FArray Vertexes
         {
             get
             {
-                if (_Size != null)
+                if (_Vertexes != null)
                 {
-                    return _Size.Value;
+                    return _Vertexes;
                 }
-                var ret = cbg_RectangleCollider_GetSize(selfPtr);
-                return ret;
+                var ret = cbg_ShapeCollider_GetVertexes(selfPtr);
+                return Vector2FArray.TryGetFromCache(ret);
             }
             set
             {
-                _Size = value;
-                cbg_RectangleCollider_SetSize(selfPtr, value);
+                _Vertexes = value;
+                cbg_ShapeCollider_SetVertexes(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
             }
         }
-        private Vector2F? _Size;
-        
-        /// <summary>
-        /// 矩形コライダの中心の位置を取得または設定します。
-        /// </summary>
-        public Vector2F CenterPosition
-        {
-            get
-            {
-                if (_CenterPosition != null)
-                {
-                    return _CenterPosition.Value;
-                }
-                var ret = cbg_RectangleCollider_GetCenterPosition(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _CenterPosition = value;
-                cbg_RectangleCollider_SetCenterPosition(selfPtr, value);
-            }
-        }
-        private Vector2F? _CenterPosition;
-        
-        /// <summary>
-        /// 矩形コライダを作成します。
-        /// </summary>
-        public static RectangleCollider Create()
-        {
-            var ret = cbg_RectangleCollider_Create();
-            return RectangleCollider.TryGetFromCache(ret);
-        }
+        private Vector2FArray _Vertexes;
         
         
         #region ISerialiable
         
         #region SerializeName
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Size = "S_Size";
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_CenterPosition = "S_CenterPosition";
+        private const string S_Vertexes = "S_Vertexes";
         #endregion
         
         /// <summary>
-        /// シリアライズされたデータをもとに<see cref="RectangleCollider"/>のインスタンスを生成します。
+        /// シリアライズされたデータをもとに<see cref="ShapeCollider"/>のインスタンスを生成します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected RectangleCollider(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ShapeCollider(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             var ptr = selfPtr;
             if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
@@ -14867,8 +14808,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
-            Size = info.GetValue<Vector2F>(S_Size);
-            CenterPosition = info.GetValue<Vector2F>(S_CenterPosition);
+            Vertexes = info.GetValue<Vector2FArray>(S_Vertexes);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -14883,8 +14823,7 @@ namespace Altseed2
         {
             base.GetObjectData(info, context);
             
-            info.AddValue(S_Size, Size);
-            info.AddValue(S_CenterPosition, CenterPosition);
+            info.AddValue(S_Vertexes, Vertexes);
             
             OnGetObjectData(info, context);
         }
@@ -14898,7 +14837,7 @@ namespace Altseed2
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で実行します。
+        /// <see cref="ShapeCollider(SerializationInfo, StreamingContext)"/>内で実行します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
@@ -14906,7 +14845,7 @@ namespace Altseed2
         partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
         
         /// <summary>
-        /// <see cref="RectangleCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// <see cref="ShapeCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
         /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
         /// </summary>
         /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
@@ -14928,10 +14867,10 @@ namespace Altseed2
         #region ICacheKeeper
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        IDictionary<IntPtr, WeakReference<RectangleCollider>> ICacheKeeper<RectangleCollider>.CacheRepo => cacheRepo;
+        IDictionary<IntPtr, WeakReference<ShapeCollider>> ICacheKeeper<ShapeCollider>.CacheRepo => cacheRepo;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        IntPtr ICacheKeeper<RectangleCollider>.Self
+        IntPtr ICacheKeeper<ShapeCollider>.Self
         {
             get => selfPtr;
             set
@@ -14941,22 +14880,22 @@ namespace Altseed2
         }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        void ICacheKeeper<RectangleCollider>.Release(IntPtr native) => cbg_RectangleCollider_Release(native);
+        void ICacheKeeper<ShapeCollider>.Release(IntPtr native) => cbg_ShapeCollider_Release(native);
         
         #endregion
         
         #endregion
         
         /// <summary>
-        /// <see cref="RectangleCollider"/>のインスタンスを削除します。
+        /// <see cref="ShapeCollider"/>のインスタンスを削除します。
         /// </summary>
-        ~RectangleCollider()
+        ~ShapeCollider()
         {
             lock (this) 
             {
                 if (selfPtr != IntPtr.Zero)
                 {
-                    cbg_RectangleCollider_Release(selfPtr);
+                    cbg_ShapeCollider_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
@@ -15033,15 +14972,6 @@ namespace Altseed2
         internal PolygonCollider(MemoryHandle handle) : base(handle)
         {
             selfPtr = handle.selfPtr;
-        }
-        
-        /// <summary>
-        /// 多角形コライダを作成します。
-        /// </summary>
-        public static PolygonCollider Create()
-        {
-            var ret = cbg_PolygonCollider_Create();
-            return PolygonCollider.TryGetFromCache(ret);
         }
         
         

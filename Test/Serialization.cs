@@ -653,7 +653,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var collider1 = Altseed2.CircleCollider.Create();
+            var collider1 = new CircleCollider();
 
             collider1.Position = new Vector2F(30f, 30f);
             collider1.Rotation = MathHelper.DegreeToRadian(10.0f);
@@ -680,7 +680,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var collider1 = Altseed2.PolygonCollider.Create();
+            var collider1 = new PolygonCollider();
             collider1.Position = new Vector2F(30f, 30f);
             collider1.Rotation = MathHelper.DegreeToRadian(10.0f);
 
@@ -714,7 +714,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var collider1 = Altseed2.RectangleCollider.Create();
+            var collider1 = new RectangleCollider();
 
             collider1.CenterPosition = new Vector2F(15f, 15f);
             collider1.Position = new Vector2F(30f, 30f);

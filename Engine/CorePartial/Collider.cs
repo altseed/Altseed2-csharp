@@ -55,26 +55,88 @@ namespace Altseed2
             }
         }
         private Matrix44F? _transform;
+
+        /// <summary>
+        /// 指定したコライダとの衝突判定を行います。
+        /// </summary>
+        /// <param name="collider">衝突判定を行うコライダ</param>
+        /// <returns>このインスタンスと<paramref name="collider"/>が衝突していたらtrue，それ以外でfalse</returns>
+        public virtual bool GetIsCollidedWith(Collider collider) => cbg_Collider_GetIsCollidedWith(selfPtr, collider?.selfPtr ?? IntPtr.Zero);
     }
 
     public partial class CircleCollider
     {
+        /// <summary>
+        /// <see cref="CircleCollider"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public CircleCollider() : base(new MemoryHandle(cbg_CircleCollider_Create()))
+        {
+            if (selfPtr == IntPtr.Zero) throw new InvalidOperationException("インスタンス生成に失敗しました");
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             ptr = cbg_CircleCollider_Create();
         }
     }
 
-    public partial class RectangleCollider
+    public partial class ShapeCollider
     {
+        /// <summary>
+        /// <see cref="ShapeCollider"/>の新しいインスタンスを生成します。
+        /// </summary>
+        private protected ShapeCollider() : base(new MemoryHandle(cbg_ShapeCollider_Create()))
+        {
+            if (selfPtr == IntPtr.Zero) throw new InvalidOperationException("インスタンス生成に失敗しました");
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            ptr = cbg_RectangleCollider_Create();
+            ptr = cbg_ShapeCollider_Create();
+        }
+
+        /// <summary>
+        /// 指定した座標に頂点を設定します。
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        /// <exception cref="ArgumentException"><paramref name="positions"/>のサイズが8を超えている</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="positions"/>がnull</exception>
+        private protected void SetVertexes(IEnumerable<Vector2F> positions)
+        {
+            if (positions == null) throw new ArgumentNullException(nameof(positions), "引数がnullです");
+            SetVertexes(positions is Vector2F[] array ? (ReadOnlySpan<Vector2F>)array : positions.ToArray());
+        }
+
+        /// <summary>
+        /// 指定した座標に頂点を設定する
+        /// </summary>
+        /// <param name="positions">設定する座標</param>
+        /// <exception cref="ArgumentException"><paramref name="positions"/>のサイズが8を超えている</exception>
+        private protected void SetVertexes(ReadOnlySpan<Vector2F> positions)
+        {
+            if (positions.Length > 8) throw new ArgumentException($"頂点の個数は8つまでです\n与えられた頂点数：{positions.Length}", nameof(positions));
+
+            Vector2FArray array;
+            if (Vertexes is null) array = Vector2FArray.Create(positions);
+            else
+            {
+                array = Vertexes;
+                array.FromSpan(positions);
+            }
+            Vertexes = array;
         }
     }
 
     public partial class PolygonCollider
     {
+        /// <summary>
+        /// <see cref="PolygonCollider"/>の新しいインスタンスを生成します。
+        /// </summary>
+        public PolygonCollider() : base(new MemoryHandle(cbg_PolygonCollider_Create()))
+        {
+            if (selfPtr == IntPtr.Zero) throw new InvalidOperationException("インスタンス生成に失敗しました");
+        }
+
         #region SerializeName
         private const string S_Buffers = "S_Buffers";
         private const string S_Vertexes = "S_Vertexes";

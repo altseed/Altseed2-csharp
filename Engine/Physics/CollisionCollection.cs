@@ -172,7 +172,7 @@ namespace Altseed2
 
             public readonly override int GetHashCode() => collider1.GetHashCode() ^ collider2.GetHashCode();
 
-            internal bool IsColliding() => collider1.GetIsCollidedWith(collider2);
+            internal readonly bool IsColliding() => collider1.GetIsCollidedWith(collider2);
 
             public static bool operator ==(ColliderEntry left, ColliderEntry right) => left.Equals(right);
             public static bool operator !=(ColliderEntry left, ColliderEntry right) => !(left == right);

@@ -59,7 +59,7 @@ namespace Altseed2
         /// <param name="collider">使用する<see cref="Altseed2.RectangleCollider"/>のインスタンス</param>
         internal RectangleColliderNode(RectangleCollider collider)
         {
-            RectangleCollider = collider ?? RectangleCollider.Create();
+            RectangleCollider = collider ?? new RectangleCollider();
         }
 
         internal override void UpdateCollider()
