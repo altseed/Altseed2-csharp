@@ -1,4 +1,4 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+﻿// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
 //   このファイルは自動生成されました。
@@ -14698,6 +14698,238 @@ namespace Altseed2
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_CircleCollider_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 線分コライダのクラス
+    /// </summary>
+    [Serializable]
+    public partial class EdgeCollider : Collider, ISerializable, ICacheKeeper<EdgeCollider>
+    {
+        #region unmanaged
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<EdgeCollider>> cacheRepo = new Dictionary<IntPtr, WeakReference<EdgeCollider>>();
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+                internal static new EdgeCollider TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                EdgeCollider cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_EdgeCollider_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new EdgeCollider(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<EdgeCollider>(newObject);
+            return newObject;
+        }
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_EdgeCollider_Create();
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector2F cbg_EdgeCollider_GetPoint1(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_EdgeCollider_SetPoint1(IntPtr selfPtr, Vector2F value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector2F cbg_EdgeCollider_GetPoint2(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_EdgeCollider_SetPoint2(IntPtr selfPtr, Vector2F value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_EdgeCollider_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal EdgeCollider(MemoryHandle handle) : base(handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        /// <summary>
+        /// 線分コライダの端点1を取得または設定します。
+        /// </summary>
+        public Vector2F Point1
+        {
+            get
+            {
+                if (_Point1 != null)
+                {
+                    return _Point1.Value;
+                }
+                var ret = cbg_EdgeCollider_GetPoint1(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Point1 = value;
+                cbg_EdgeCollider_SetPoint1(selfPtr, value);
+            }
+        }
+        private Vector2F? _Point1;
+        
+        /// <summary>
+        /// 線分コライダの端点2を取得または設定します。
+        /// </summary>
+        public Vector2F Point2
+        {
+            get
+            {
+                if (_Point2 != null)
+                {
+                    return _Point2.Value;
+                }
+                var ret = cbg_EdgeCollider_GetPoint2(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _Point2 = value;
+                cbg_EdgeCollider_SetPoint2(selfPtr, value);
+            }
+        }
+        private Vector2F? _Point2;
+        
+        
+        #region ISerialiable
+        
+        #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Point1 = "S_Point1";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_Point2 = "S_Point2";
+        #endregion
+        
+        /// <summary>
+        /// シリアライズされたデータをもとに<see cref="EdgeCollider"/>のインスタンスを生成します。
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected EdgeCollider(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            var ptr = selfPtr;
+            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
+            
+            if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
+            CacheHelper.CacheHandlingOnDeserialization(this, ptr);
+            
+            Point1 = info.GetValue<Vector2F>(S_Point1);
+            Point2 = info.GetValue<Vector2F>(S_Point2);
+            
+            OnDeserialize_Constructor(info, context);
+        }
+        
+        /// <summary>
+        /// シリアライズするデータを設定します。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            
+            info.AddValue(S_Point1, Point1);
+            info.AddValue(S_Point2, Point2);
+            
+            OnGetObjectData(info, context);
+        }
+        
+        /// <summary>
+        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
+        /// </summary>
+        /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
+        /// <param name="context">送信先の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        partial void OnGetObjectData(SerializationInfo info, StreamingContext context);
+        
+        /// <summary>
+        /// <see cref="EdgeCollider(SerializationInfo, StreamingContext)"/>内で実行します。
+        /// </summary>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        /// <param name="context">送信元の情報</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        partial void OnDeserialize_Constructor(SerializationInfo info, StreamingContext context);
+        
+        /// <summary>
+        /// <see cref="EdgeCollider(SerializationInfo, StreamingContext)"/>内で呼び出される
+        /// デシリアライズ時にselfPtrを取得する操作をここに必ず書くこと
+        /// </summary>
+        /// <param name="ptr">selfPtrとなる値 初期値である<see cref="IntPtr.Zero"/>のままだと<see cref="SerializationException"/>がスローされる</param>
+        /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info);
+        
+        /// <summary>
+        /// 呼び出し禁止
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        {
+            var ptr = IntPtr.Zero;
+            Deserialize_GetPtr(ref ptr, info);
+            return ptr;
+        }
+        
+        #region ICacheKeeper
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        IDictionary<IntPtr, WeakReference<EdgeCollider>> ICacheKeeper<EdgeCollider>.CacheRepo => cacheRepo;
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        IntPtr ICacheKeeper<EdgeCollider>.Self
+        {
+            get => selfPtr;
+            set
+            {
+                selfPtr = value;
+            }
+        }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        void ICacheKeeper<EdgeCollider>.Release(IntPtr native) => cbg_EdgeCollider_Release(native);
+        
+        #endregion
+        
+        #endregion
+        
+        /// <summary>
+        /// <see cref="EdgeCollider"/>のインスタンスを削除します。
+        /// </summary>
+        ~EdgeCollider()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_EdgeCollider_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
