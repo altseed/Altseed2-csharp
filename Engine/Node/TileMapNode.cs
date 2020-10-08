@@ -355,6 +355,7 @@ namespace Altseed2
                 if (_horizontalFlip == value) return;
                 _horizontalFlip = value;
                 requireCalcTransform = true;
+                Owner?.RequestUpdateVertexes();
             }
         }
         private bool _horizontalFlip = false;
@@ -437,6 +438,7 @@ namespace Altseed2
                 if (_verticalFlip == value) return;
                 _verticalFlip = value;
                 requireCalcTransform = true;
+                Owner?.RequestUpdateVertexes();
             }
         }
         private bool _verticalFlip = false;
