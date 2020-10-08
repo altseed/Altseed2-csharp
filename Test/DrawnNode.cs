@@ -400,6 +400,51 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void TileMapNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new TileMapNode()
+            {
+                Position = new Vector2F(250, 250),
+                Texture = texture
+            };
+            Engine.AddNode(node);
+
+            Assert.True(node.AddMapChip(new MapChip()
+            {
+                Angle = 30f,
+                CenterPosition = texture.Size / 2,
+                Color = new Color(255, 100, 100),
+                Position = new Vector2F(100f, 100f),
+                ZOrder = 0
+            }));
+            Assert.True(node.AddMapChip(new MapChip()
+            {
+                CenterPosition = texture.Size / 2,
+                Color = new Color(100, 100, 255),
+                Position = new Vector2F(-50f, 0f),
+                ZOrder = 1
+            }));
+            Assert.True(node.AddMapChip(new MapChip()
+            {
+                CenterPosition = texture.Size / 2,
+                Color = new Color(100, 255, 100),
+                Position = new Vector2F(0f, 0f),
+                Scale = new Vector2F(0.5f, 0.5f),
+                ZOrder = 2
+            }));
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void CenterPosition()
         {
             var tc = new TestCore();
