@@ -9,15 +9,27 @@ namespace Altseed2
     [Serializable]
     public class TransitionNode : Node
     {
-        /// <summary>
-        /// トランジションによって取り除かれるノード
-        /// </summary>
-        protected readonly Node _OldNode;
+        private bool _OnTransition;
 
         /// <summary>
-        /// トランジションによって追加されるノード
+        /// トランジションによって取り除かれるノード(トランジション中でない場合のみ設定可能)
         /// </summary>
-        protected readonly Node _NewNode;
+        public Node OldNode
+        {
+            get { return _OldNode; }
+            set { if (!_OnTransition) _OldNode = value; }
+        }
+        protected Node _OldNode;
+
+        /// <summary>
+        /// トランジションによって追加されるノード(トランジション中でない場合のみ設定可能)
+        /// </summary>
+        public Node NewNode
+        {
+            get { return _NewNode; }
+            set { if (!_OnTransition) _NewNode = value; }
+        }
+        protected Node _NewNode;
 
         /// <summary>
         /// トランジションを行うコルーチン
@@ -33,6 +45,8 @@ namespace Altseed2
         /// <param name="openingDuration">ノードが入れ替わってからトランジションが終わるまでの期間</param>
         public TransitionNode(Node oldNode, Node newNode, float closingDuration, float openingDuration)
         {
+            _OnTransition = false;
+
             _OldNode = oldNode;
             _NewNode = newNode;
 
@@ -112,6 +126,8 @@ namespace Altseed2
         /// </summary>
         private IEnumerator<int> GetCoroutine(float closingDuration, float openingDuration)
         {
+            _OnTransition = true;
+
             // トランジションの開始
             TransitionBegin();
             yield return 0;
@@ -146,6 +162,8 @@ namespace Altseed2
             // トランジションの終了
             Parent.RemoveChildNode(this);
             TransitionEnd();
+
+            _OnTransition = false;
         }
     }
 }
