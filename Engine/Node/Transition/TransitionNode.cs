@@ -24,12 +24,30 @@ namespace Altseed2
         /// <summary>
         /// トランジションが始まってからノードが入れ替わるまでの期間
         /// </summary>
-        public float ClosingDuration { get; set; }
+        public float ClosingDuration
+        {
+            get => _ClosingDuration;
+            set
+            {
+                if (!_OnTransition) _ClosingDuration = value;
+                else Engine.Log.Error(LogCategory.Engine, "Cannot set value during transition.");
+            }
+        }
+        private float _ClosingDuration;
 
         /// <summary>
         /// ノードが入れ替わってからトランジションが終わるまでの期間
         /// </summary>
-        public float OpeningDuration { get; set; }
+        public float OpeningDuration
+        {
+            get => _OpeningDuration;
+            set
+            {
+                if (!_OnTransition) _OpeningDuration = value;
+                else Engine.Log.Error(LogCategory.Engine, "Cannot set value during transition.");
+            }
+        }
+        private float _OpeningDuration;
 
         /// <summary>
         /// トランジションを行うコルーチン
