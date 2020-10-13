@@ -24,12 +24,12 @@ namespace Altseed2
         /// <summary>
         /// トランジションが始まってからノードが入れ替わるまでの期間
         /// </summary>
-        public float ClosingDuration { get; set; } // ←アクセスレベルどうする問題
+        public float ClosingDuration { get; set; }
 
         /// <summary>
         /// ノードが入れ替わってからトランジションが終わるまでの期間
         /// </summary>
-        public float OpeningDuration { get; set; } // ←アクセスレベルどうする問題
+        public float OpeningDuration { get; set; }
 
         /// <summary>
         /// トランジションを行うコルーチン
@@ -55,7 +55,6 @@ namespace Altseed2
             if (!_OnTransition)
             {
                 _Coroutine = GetCoroutine();
-                _OnTransition = true;
 
                 OldNode = oldNode;
                 NewNode = newNode;
@@ -66,7 +65,7 @@ namespace Altseed2
         internal override void Update()
         {
             base.Update();
-            _OnTransition = _Coroutine.MoveNext();
+            _OnTransition = _Coroutine?.MoveNext() ?? false;
         }
 
         internal virtual void TransitionBegin()
@@ -168,6 +167,7 @@ namespace Altseed2
             }
 
             // トランジションの終了
+            Parent.RemoveChildNode(this);
             TransitionEnd();
         }
     }
