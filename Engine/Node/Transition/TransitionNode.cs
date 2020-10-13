@@ -14,12 +14,12 @@ namespace Altseed2
         /// <summary>
         /// トランジションによって取り除かれるノード
         /// </summary>
-        public Node OldNode { get; private set; }
+        public Node PrevNode { get; private set; }
 
         /// <summary>
         /// トランジションによって追加されるノード
         /// </summary>
-        public Node NewNode { get; private set; }
+        public Node NextNode { get; private set; }
 
         /// <summary>
         /// トランジションが始まってからノードが入れ替わるまでの期間
@@ -61,21 +61,21 @@ namespace Altseed2
         {
             _OnTransition = false;
 
-            OldNode = null;
-            NewNode = null;
+            PrevNode = null;
+            NextNode = null;
         }
 
         /// <summary>
         /// トランジションを開始します。
         /// </summary>
-        public void StartTransition(Node oldNode, Node newNode)
+        public void StartTransition(Node prevNode, Node nextNode)
         {
             if (!_OnTransition)
             {
                 _Coroutine = GetCoroutine();
 
-                OldNode = oldNode;
-                NewNode = newNode;
+                PrevNode = prevNode;
+                NextNode = nextNode;
             }
             else Engine.Log.Error(LogCategory.Engine, "Cannot start during transition.");
         }
@@ -169,9 +169,9 @@ namespace Altseed2
             yield return 0;
 
             // ノードの入れ替え
-            var parentNode = OldNode.Parent;
-            parentNode.RemoveChildNode(OldNode);
-            parentNode.AddChildNode(NewNode);
+            var parentNode = PrevNode.Parent;
+            parentNode.RemoveChildNode(PrevNode);
+            parentNode.AddChildNode(NextNode);
 
             // ノードが入れ替わった直後の処理
             NodeSwapped();
