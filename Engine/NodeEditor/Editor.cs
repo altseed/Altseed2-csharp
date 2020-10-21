@@ -33,7 +33,7 @@ namespace Altseed2
 
         private static EditorPropertyAccessor propertyAccessor;
         private static NodeTreeWindow nodeTreeWindow;
-        private static SelectedNodeWindow selectedNodeWindow_refactor;
+        private static SelectedNodeWindow selectedNodeWindow;
 
         private static object selected;
         private static RenderTexture main;
@@ -104,7 +104,7 @@ namespace Altseed2
 
             propertyAccessor = new EditorPropertyAccessor();
             nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
-            selectedNodeWindow_refactor = new SelectedNodeWindow(propertyAccessor);
+            selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
 
             return res;
         }
@@ -114,6 +114,7 @@ namespace Altseed2
         /// </summary>
         public static void Terminate()
         {
+            selectedNodeWindow.Dispose();
             Engine.Terminate();
         }
 
@@ -197,7 +198,7 @@ namespace Altseed2
             UpdateMainWindow();
             UpdateMenu();
             nodeTreeWindow.Render();
-            UpdateSelectedWindow();
+            selectedNodeWindow.Render();
 
             if (TextureBrowserTarget != null)
                 UpdateTextureBrowser();
@@ -253,11 +254,6 @@ namespace Altseed2
                 Engine.Tool.End();
             }
             Engine.Tool.PopStyleVar(2);
-        }
-
-        private static void UpdateSelectedWindow()
-        {
-            selectedNodeWindow_refactor.Render();
         }
 
         static void UpdateMenu()
