@@ -1,6 +1,6 @@
 ﻿using Altseed2;
 
-class Editor
+class NodeEditor
 {
     public static void Main(string[] args)
     {
@@ -9,13 +9,13 @@ class Editor
             WaitVSync = true,
         };
 
-        Altseed2.Editor.Initialize("AltseedEditor", 1280, 960, config);
+        Editor.Initialize("AltseedEditor", 1280, 960, config);
 
         while (Engine.DoEvents())
         {
-            Altseed2.Editor.Update();
+            Editor.Update();
         }
 
-        Altseed2.Editor.Terminate();
+        Editor.Terminate();
     }
 }

@@ -10,6 +10,19 @@ namespace Altseed2
     /// </summary>
     public static class Editor
     {
+        private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
+        {
+            public object Selected
+            {
+                get => Editor.Selected;
+                set => Editor.Selected = value;
+            }
+
+            public float MenuHeight => menuHeight;
+        }
+
+        private static NodeTreeWindow nodeTreeWindow_refactor;
+
         private static object selected;
         private static RenderTexture main;
 
@@ -78,6 +91,8 @@ namespace Altseed2
             Engine._DefaultCamera.TargetTexture = main;
 
             first = true;
+
+            nodeTreeWindow_refactor = new NodeTreeWindow(new EditorPropertyAccessor());
 
             return res;
         }
@@ -193,8 +208,8 @@ namespace Altseed2
             first = false;
         }
 
-        static Vector2I windowSize = Engine.WindowSize;
-        private static float menuHeight = 20;
+        static Vector2I windowSize = Engine.WindowSize; // UpdateMainWindowメソッドだけで使われる
+        private static float menuHeight = 20;   // UpdateMainWindow, UpdateNodeTreeWindow, UpdateSelectedWindow, UpdateMenu で使われる
         private static bool first;
 
         private static void UpdateMainWindow()
@@ -230,65 +245,7 @@ namespace Altseed2
 
         private static void UpdateNodeTreeWindow()
         {
-            void NodeTree(IEnumerable<Altseed2.Node> nodes)
-            {
-                foreach (var node in nodes)
-                {
-                    Engine.Tool.PushID(node.GetHashCode());
-                    var flags = ToolTreeNodeFlags.OpenOnArrow;
-                    if (node == Selected)
-                        flags |= ToolTreeNodeFlags.Selected;
-                    if (node.Children.Count == 0)
-                        flags |= ToolTreeNodeFlags.Leaf;
-
-                    bool treeNode = Engine.Tool.TreeNodeEx(node.ToString(), flags);
-                    if (Engine.Tool.IsItemClicked(0))
-                    {
-                        Selected = node;
-                    }
-
-                    if (treeNode)
-                    {
-                        NodeTree(node.Children);
-                        Engine.Tool.TreePop();
-                    }
-                    Engine.Tool.PopID();
-                }
-            }
-
-            var size = new Vector2F(300, Engine.WindowSize.Y - menuHeight);
-            var pos = new Vector2F(0, menuHeight);
-            Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(pos, ToolCond.None);
-            var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
-                | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
-                | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoCollapse;
-
-            if (Engine.Tool.Begin("Node", flags))
-            {
-                if (Engine.Tool.Button("Sprite"))
-                    Engine.AddNode(new SpriteNode());
-                Engine.Tool.SameLine();
-                if (Engine.Tool.Button("Text"))
-                    Engine.AddNode(new TextNode());
-                Engine.Tool.SameLine();
-                if (Engine.Tool.Button("Arc"))
-                    Engine.AddNode(new ArcNode() { Radius = 100, StartDegree = 0, EndDegree = 90 });
-                Engine.Tool.SameLine();
-                if (Engine.Tool.Button("Circle"))
-                    Engine.AddNode(new CircleNode() { Radius = 100 });
-                Engine.Tool.SameLine();
-                if (Engine.Tool.Button("Line"))
-                    Engine.AddNode(new LineNode() { Point2 = new Vector2F(100, 100) });
-                if (Engine.Tool.Button("Rectangle"))
-                    Engine.AddNode(new RectangleNode() { RectangleSize = new Vector2F(100, 100) });
-                Engine.Tool.SameLine();
-                if (Engine.Tool.Button("Triangle"))
-                    Engine.AddNode(new TriangleNode() { Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0) });
-
-                NodeTree(Engine.GetNodes());
-                Engine.Tool.End();
-            }
+            nodeTreeWindow_refactor.UpdateNodeTreeWindow();
         }
 
         private static void UpdateSelectedWindow()
@@ -388,8 +345,7 @@ namespace Altseed2
             }
         }
 
-        static int fontSize = 50;
-        private static CameraNode mainCamera;
+        static int fontSize = 50;   // UpdateFontBrowser だけで使用される
 
         private static void UpdateFontBrowser()
         {

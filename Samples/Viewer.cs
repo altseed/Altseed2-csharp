@@ -46,7 +46,7 @@ namespace Sample
             Samples.Add(new Sample("PostEffect/GaussianBlur", "ガウスぼかしのポストエフェクトを適用します。", typeof(PostEffectGaussianBlur)));
             Samples.Add(new Sample("PostEffect/LightBloom", "ライトブルームのポストエフェクトを適用します。", typeof(PostEffectLightBloom)));
             Samples.Add(new Sample("CustomPostEffect", "自作のポストエフェクトを適用します。", typeof(CustomPostEffect)));
-            Samples.Add(new Sample("Editor", "Altseed2ノードエディタを実行します。", typeof(Editor)));
+            Samples.Add(new Sample("NodeEditor", "Altseed2ノードエディタを実行します。", typeof(NodeEditor)));
 
             SamplesString = string.Join('\t', Samples.Select(s => s.Name));
 
