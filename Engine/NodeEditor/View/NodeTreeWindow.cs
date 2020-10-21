@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
-using Altseed2.NodeEditor.Presenter;
+﻿using System.Collections.Generic;
+using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
-    internal class NodeTreeWindow : INodeTreeView
+    internal class NodeTreeWindow
     {
         private static readonly NewNodeButton[] NodeButtonLayout = {
             new NewNodeButton(NodeType.Sprite, true),
@@ -22,16 +20,15 @@ namespace Altseed2.NodeEditor.View
             | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoCollapse;
 
         private readonly IEditorPropertyAccessor _accessor;
-        private readonly Subject<NodeType> _onCommitNewNodeSubject = new Subject<NodeType>();
+        private readonly NodeTreeViewModel _viewModel;
 
-        public NodeTreeWindow(IEditorPropertyAccessor accessor)
+        public NodeTreeWindow(IEditorPropertyAccessor accessor, NodeTreeViewModel viewModel)
         {
             _accessor = accessor;
+            _viewModel = viewModel;
         }
 
-        public IObservable<NodeType> OnCommitNewNode => _onCommitNewNodeSubject;
-
-        public void UpdateNodeTreeWindow()
+        public void Render()
         {
             // TODO: size, pos, begin, end の呼び出しのセットが頻出するかを確認して、クラスに抽出したい
             var size = new Vector2F(300, Engine.WindowSize.Y - _accessor.MenuHeight);
@@ -43,39 +40,33 @@ namespace Altseed2.NodeEditor.View
             {
                 foreach (var button in NodeButtonLayout)
                 {
-                    button.Update(_onCommitNewNodeSubject);
+                    button.Render(_viewModel);
                 }
 
-                UpdateNodeTree(Engine.GetNodes());
+                RenderNodeTree(Engine.GetNodes());
                 Engine.Tool.End();
             }
         }
 
-        private void UpdateNodeTree(IEnumerable<Node> nodes)
+        private void RenderNodeTree(IEnumerable<Node> nodes)
         {
             foreach (var node in nodes)
             {
                 Engine.Tool.PushID(node.GetHashCode());
 
-                // TODO: これは状態の問い合わせ処理なので、Node に対して Presenter のような層は欲しいかも。
-                var flags = ToolTreeNodeFlags.OpenOnArrow;
-                if (node == _accessor.Selected)
-                    flags |= ToolTreeNodeFlags.Selected;
-                if (node.Children.Count == 0)
-                    flags |= ToolTreeNodeFlags.Leaf;
+                bool treeNode = Engine.Tool.TreeNodeEx(node.ToString(), _viewModel.GetNodeStatus(node));
 
-                bool treeNode = Engine.Tool.TreeNodeEx(node.ToString(), flags);
                 if (Engine.Tool.IsItemClicked(0))
                 {
-                    // TODO: これはデータ更新なので、Presenterを挟みたいかも。
-                    _accessor.Selected = node;
+                    _viewModel.OnNodeSelected(node);
                 }
 
                 if (treeNode)
                 {
-                    UpdateNodeTree(node.Children);
+                    RenderNodeTree(node.Children);
                     Engine.Tool.TreePop();
                 }
+
                 Engine.Tool.PopID();
             }
         }
@@ -91,7 +82,7 @@ namespace Altseed2.NodeEditor.View
                 _onNewLine = onNewLine;
             }
 
-            public void Update(IObserver<NodeType> observer)
+            public void Render(NodeTreeViewModel model)
             {
                 if (!_onNewLine)
                 {
@@ -100,7 +91,7 @@ namespace Altseed2.NodeEditor.View
 
                 if (Engine.Tool.Button(_type.ToString()))
                 {
-                    observer.OnNext(_type);
+                    model.CreateNewNode(_type);
                 }
             }
         }

@@ -1,21 +1,22 @@
 ﻿using System;
 
-namespace Altseed2.NodeEditor.Presenter
+namespace Altseed2.NodeEditor.ViewModel
 {
     internal enum NodeType
     {
         Sprite, Text, Arc, Circle, Line, Rectangle, Triangle
     }
     
-    // このクラスに対してメソッドを呼び出したい場面が不明なので、ひょっとすると不要なクラスかもしれない
-    internal class NodeTreeViewPresenter
+    internal sealed class NodeTreeViewModel
     {
-        public NodeTreeViewPresenter(INodeTreeView view)
+        private readonly IEditorPropertyAccessor _accessor;
+
+        public NodeTreeViewModel(IEditorPropertyAccessor accessor)
         {
-            view.OnCommitNewNode.Subscribe(CreateNewNode);
+            _accessor = accessor;
         }
 
-        private void CreateNewNode(NodeType type)
+        public void CreateNewNode(NodeType type)
         {
             var node = type switch
             {
@@ -29,6 +30,24 @@ namespace Altseed2.NodeEditor.Presenter
                 _ => throw new Exception(),
             };
             Engine.AddNode(node);
+        }
+
+        public ToolTreeNodeFlags GetNodeStatus(Node node)
+        {
+            var flags = ToolTreeNodeFlags.OpenOnArrow;
+
+            if (node == _accessor.Selected)
+                flags |= ToolTreeNodeFlags.Selected;
+
+            if (node.Children.Count == 0)
+                flags |= ToolTreeNodeFlags.Leaf;
+
+            return flags;
+        }
+
+        public void OnNodeSelected(Node node)
+        {
+            _accessor.Selected = node;
         }
     }
 }

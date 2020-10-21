@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Altseed2.NodeEditor.Presenter;
 using Altseed2.NodeEditor.View;
+using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2
 {
@@ -24,7 +24,6 @@ namespace Altseed2
         }
 
         private static NodeTreeWindow nodeTreeWindow_refactor;
-        private static NodeTreeViewPresenter nodeTreeViewPresenter_refactor;
 
         private static object selected;
         private static RenderTexture main;
@@ -95,8 +94,8 @@ namespace Altseed2
 
             first = true;
 
-            nodeTreeWindow_refactor = new NodeTreeWindow(new EditorPropertyAccessor());
-            nodeTreeViewPresenter_refactor = new NodeTreeViewPresenter(new NodeTreeWindow(new EditorPropertyAccessor()));
+            var accessor = new EditorPropertyAccessor();
+            nodeTreeWindow_refactor = new NodeTreeWindow(accessor, new NodeTreeViewModel(accessor));
 
             return res;
         }
@@ -249,7 +248,7 @@ namespace Altseed2
 
         private static void UpdateNodeTreeWindow()
         {
-            nodeTreeWindow_refactor.UpdateNodeTreeWindow();
+            nodeTreeWindow_refactor.Render();
         }
 
         private static void UpdateSelectedWindow()
