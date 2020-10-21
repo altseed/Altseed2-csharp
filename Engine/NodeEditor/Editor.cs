@@ -34,6 +34,7 @@ namespace Altseed2
         private static EditorPropertyAccessor propertyAccessor;
         private static NodeTreeWindow nodeTreeWindow;
         private static SelectedNodeWindow selectedNodeWindow;
+        private static PreviewWindow previewWindow_refactor;
 
         private static object selected;
         private static RenderTexture main;
@@ -51,12 +52,12 @@ namespace Altseed2
         /// <summary>
         /// マウス座標
         /// </summary>
-        public static Vector2F MousePosition { get; private set; }
+        public static Vector2F MousePosition => previewWindow_refactor.MousePosition;
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool IsMainWindowFocus { get; private set; }
+        public static bool IsMainWindowFocus => previewWindow_refactor.IsMainWindowFocus;
 
         internal static TextureBaseToolElement TextureBrowserTarget { get; set; }
         internal static FontToolElement FontBrowserTarget { get; set; }
@@ -105,6 +106,8 @@ namespace Altseed2
             propertyAccessor = new EditorPropertyAccessor();
             nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
+            previewWindow_refactor = new PreviewWindow(propertyAccessor);
+            previewWindow_refactor.Main = main;
 
             return res;
         }
@@ -221,39 +224,12 @@ namespace Altseed2
             first = false;
         }
 
-        static Vector2I windowSize = Engine.WindowSize; // UpdateMainWindowメソッドだけで使われる
         private static float menuHeight = 20;   // UpdateMainWindow, UpdateNodeTreeWindow, UpdateSelectedWindow, UpdateMenu で使われる
         private static bool first;
 
         private static void UpdateMainWindow()
         {
-            if (windowSize != Engine.WindowSize)
-            {
-                Vector2I texSize = Engine.WindowSize - new Vector2I(600, (int)menuHeight);
-                if (texSize.X > 0 && texSize.Y > 0)
-                    main = RenderTexture.Create(texSize, TextureFormat.R8G8B8A8_UNORM);
-                Engine._DefaultCamera.TargetTexture = main;
-                windowSize = Engine.WindowSize;
-            }
-
-            var size = windowSize - new Vector2F(600, menuHeight);
-            var pos = new Vector2F(300, menuHeight);
-            Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(pos, ToolCond.None);
-            var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
-                | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
-                | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoTitleBar | ToolWindowFlags.NoScrollWithMouse;
-
-            Engine.Tool.PushStyleVarVector2F(ToolStyleVar.WindowPadding, default);
-            Engine.Tool.PushStyleVarFloat(ToolStyleVar.WindowRounding, 0);
-            if (Engine.Tool.Begin("Main", flags))
-            {
-                IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocused.None);
-                MousePosition = Engine.Mouse.Position - Engine.Tool.GetWindowPos();
-                Engine.Tool.Image(main, main.Size, default, new Vector2F(1, 1), new Color(255, 255, 255), new Color());
-                Engine.Tool.End();
-            }
-            Engine.Tool.PopStyleVar(2);
+            previewWindow_refactor.UpdateMainWindow();
         }
 
         static void UpdateMenu()
