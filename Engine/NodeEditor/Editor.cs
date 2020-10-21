@@ -14,30 +14,12 @@ namespace Altseed2
     /// </summary>
     public static class Editor
     {
-        private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
-        {
-            private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
-
-            public object Selected
-            {
-                get => Editor.Selected;
-                set => Editor.Selected = value;
-            }
-
-            public float MenuHeight => menuHeight;
-
-            public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
-
-            public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);
-        }
-
         private static EditorPropertyAccessor propertyAccessor;
         private static NodeTreeWindow nodeTreeWindow;
         private static SelectedNodeWindow selectedNodeWindow;
         private static PreviewWindow previewWindow_refactor;
 
         private static object selected;
-        private static RenderTexture main;
 
         /// <summary>
         /// テクスチャ一覧
@@ -194,7 +176,7 @@ namespace Altseed2
 
         private static void UpdateComponents()
         {
-            previewWindow_refactor.UpdateMainWindow();
+            previewWindow_refactor.Render();
             UpdateMenu();
             nodeTreeWindow.Render();
             selectedNodeWindow.Render();
@@ -348,6 +330,23 @@ namespace Altseed2
                 }
                 Engine.Tool.End();
             }
+        }
+        
+        private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
+        {
+            private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
+
+            public object Selected
+            {
+                get => Editor.Selected;
+                set => Editor.Selected = value;
+            }
+
+            public float MenuHeight => menuHeight;
+
+            public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
+
+            public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);
         }
     }
 }

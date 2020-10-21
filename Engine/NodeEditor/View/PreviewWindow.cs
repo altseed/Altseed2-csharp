@@ -1,11 +1,12 @@
 ﻿namespace Altseed2.NodeEditor.View
 {
-    class PreviewWindow
+    internal sealed class PreviewWindow
     {
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeEditorPane _pane = new NodeEditorPane("Main");
 
-        private Vector2I _windowSize = Engine.WindowSize;
+        private Vector2I _latestWindowSize = Engine.WindowSize;
+        // RenderTextureの管理はViewModelの責務かも
         private RenderTexture _main;
 
         public PreviewWindow(IEditorPropertyAccessor accessor)
@@ -19,11 +20,11 @@
         public bool IsMainWindowFocus { get; private set; }
         public Vector2F MousePosition { get; private set; }
 
-        public void UpdateMainWindow()
+        public void Render()
         {
             AdjustWindowSize();
 
-            var size = _windowSize - new Vector2F(600, _accessor.MenuHeight);
+            var size = _latestWindowSize - new Vector2F(600, _accessor.MenuHeight);
             var pos = new Vector2F(300, _accessor.MenuHeight);
 
             Engine.Tool.PushStyleVarVector2F(ToolStyleVar.WindowPadding, default);
@@ -41,14 +42,14 @@
 
         private void AdjustWindowSize()
         {
-            if (_windowSize != Engine.WindowSize)
+            if (_latestWindowSize != Engine.WindowSize)
             {
                 Vector2I texSize = Engine.WindowSize - new Vector2I(600, (int) _accessor.MenuHeight);
 
                 UpdateRenderTexture(texSize.X > 0 && texSize.Y > 0,
                     RenderTexture.Create(texSize, TextureFormat.R8G8B8A8_UNORM));
 
-                _windowSize = Engine.WindowSize;
+                _latestWindowSize = Engine.WindowSize;
             }
         }
 
