@@ -257,7 +257,7 @@ namespace Altseed2
 
         private static void UpdateSelectedWindow()
         {
-            selectedNodeWindow_refactor.UpdateSelectedWindow();
+            selectedNodeWindow_refactor.Render();
         }
 
         static void UpdateMenu()

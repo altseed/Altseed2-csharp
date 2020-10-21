@@ -14,13 +14,10 @@ namespace Altseed2.NodeEditor.View
             new NewNodeButton(NodeType.Rectangle),
             new NewNodeButton(NodeType.Triangle),
         };
-        private static readonly ToolWindowFlags NodeTreeWindowConfig =
-            ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
-            | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
-            | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoCollapse;
 
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeTreeViewModel _viewModel;
+        private readonly NodeEditorPane _pane = new NodeEditorPane("Node");
 
         public NodeTreeWindow(IEditorPropertyAccessor accessor, NodeTreeViewModel viewModel)
         {
@@ -30,13 +27,10 @@ namespace Altseed2.NodeEditor.View
 
         public void Render()
         {
-            // TODO: size, pos, begin, end の呼び出しのセットが頻出するかを確認して、クラスに抽出したい
             var size = new Vector2F(300, Engine.WindowSize.Y - _accessor.MenuHeight);
             var pos = new Vector2F(0, _accessor.MenuHeight);
-            Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(pos, ToolCond.None);
 
-            if (Engine.Tool.Begin("Node", NodeTreeWindowConfig))
+            _pane.Render(pos, size, () =>
             {
                 foreach (var button in NodeButtonLayout)
                 {
@@ -44,8 +38,7 @@ namespace Altseed2.NodeEditor.View
                 }
 
                 RenderNodeTree(Engine.GetNodes());
-                Engine.Tool.End();
-            }
+            });
         }
 
         private void RenderNodeTree(IEnumerable<Node> nodes)

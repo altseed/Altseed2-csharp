@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Altseed2.NodeEditor.View
 {
     internal sealed class SelectedNodeWindow : IDisposable
     {
         private readonly IEditorPropertyAccessor _accessor;
+        private readonly IDisposable _subscription;
+        private readonly NodeEditorPane _pane = new NodeEditorPane("Selected");
+
         private IEnumerable<ToolElement> _selectedToolElements;
-        private IDisposable _subscription;
 
         public SelectedNodeWindow(IEditorPropertyAccessor accessor)
         {
@@ -18,19 +19,12 @@ namespace Altseed2.NodeEditor.View
                 x => _selectedToolElements = ToolElementManager.CreateToolElements(accessor.Selected));
         }
 
-        public void UpdateSelectedWindow()
+        public void Render()
         {
-            var menuHeight = _accessor.MenuHeight;
+            var size = new Vector2F(300, Engine.WindowSize.Y - _accessor.MenuHeight);
+            var pos = new Vector2F(Engine.WindowSize.X - size.X, _accessor.MenuHeight);
 
-            var size = new Vector2F(300, Engine.WindowSize.Y - menuHeight);
-            var pos = new Vector2F(Engine.WindowSize.X - size.X, menuHeight);
-            Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(pos, ToolCond.None);
-            var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
-                | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
-                | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoCollapse;
-
-            if (Engine.Tool.Begin("Selected", flags))
+            _pane.Render(pos, size, () =>
             {
                 if (_selectedToolElements != null)
                 {
@@ -43,8 +37,7 @@ namespace Altseed2.NodeEditor.View
                     }
                     Engine.Tool.PopID();
                 }
-                Engine.Tool.End();
-            }
+            });
         }
 
         public void Dispose()
