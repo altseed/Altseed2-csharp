@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Subjects;
 using System.Text;
 using Altseed2.NodeEditor.View;
 using Altseed2.NodeEditor.ViewModel;
@@ -14,6 +16,8 @@ namespace Altseed2
     {
         private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
         {
+            private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
+
             public object Selected
             {
                 get => Editor.Selected;
@@ -21,14 +25,18 @@ namespace Altseed2
             }
 
             public float MenuHeight => menuHeight;
+
+            public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
+
+            public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);
         }
 
-        private static NodeTreeWindow nodeTreeWindow_refactor;
+        private static EditorPropertyAccessor propertyAccessor;
+        private static NodeTreeWindow nodeTreeWindow;
+        private static SelectedNodeWindow selectedNodeWindow_refactor;
 
         private static object selected;
         private static RenderTexture main;
-
-        private static IEnumerable<ToolElement> selectedToolElements;
 
         /// <summary>
         /// テクスチャ一覧
@@ -65,7 +73,7 @@ namespace Altseed2
                     return;
                 selected = value;
 
-                selectedToolElements = ToolElementManager.CreateToolElements(selected);
+                propertyAccessor.OnSelectedValueChanged();
             }
         }
 
@@ -94,8 +102,9 @@ namespace Altseed2
 
             first = true;
 
-            var accessor = new EditorPropertyAccessor();
-            nodeTreeWindow_refactor = new NodeTreeWindow(accessor, new NodeTreeViewModel(accessor));
+            propertyAccessor = new EditorPropertyAccessor();
+            nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
+            selectedNodeWindow_refactor = new SelectedNodeWindow(propertyAccessor);
 
             return res;
         }
@@ -187,7 +196,7 @@ namespace Altseed2
         {
             UpdateMainWindow();
             UpdateMenu();
-            UpdateNodeTreeWindow();
+            nodeTreeWindow.Render();
             UpdateSelectedWindow();
 
             if (TextureBrowserTarget != null)
@@ -246,36 +255,9 @@ namespace Altseed2
             Engine.Tool.PopStyleVar(2);
         }
 
-        private static void UpdateNodeTreeWindow()
-        {
-            nodeTreeWindow_refactor.Render();
-        }
-
         private static void UpdateSelectedWindow()
         {
-            var size = new Vector2F(300, Engine.WindowSize.Y - menuHeight);
-            var pos = new Vector2F(Engine.WindowSize.X - size.X, menuHeight);
-            Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(pos, ToolCond.None);
-            var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
-                | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
-                | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoCollapse;
-
-            if (Engine.Tool.Begin("Selected", flags))
-            {
-                if (selectedToolElements != null)
-                {
-                    Engine.Tool.PushID("Selected".GetHashCode());
-                    foreach (var toolElement in selectedToolElements)
-                    {
-                        Engine.Tool.PushID(toolElement.GetHashCode());
-                        toolElement.Update();
-                        Engine.Tool.PopID();
-                    }
-                    Engine.Tool.PopID();
-                }
-                Engine.Tool.End();
-            }
+            selectedNodeWindow_refactor.UpdateSelectedWindow();
         }
 
         static void UpdateMenu()
