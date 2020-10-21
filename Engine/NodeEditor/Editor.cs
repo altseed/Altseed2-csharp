@@ -98,16 +98,12 @@ namespace Altseed2
             Engine.Tool.ToolUsage = ToolUsage.Main;
             ToolElementManager.SetAltseed2DefaultObjectMapping();
 
-            main = RenderTexture.Create(Engine.WindowSize - new Vector2I(600, 18), TextureFormat.R8G8B8A8_UNORM);
-            Engine._DefaultCamera.TargetTexture = main;
-
             first = true;
 
             propertyAccessor = new EditorPropertyAccessor();
             nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
             previewWindow_refactor = new PreviewWindow(propertyAccessor);
-            previewWindow_refactor.Main = main;
 
             return res;
         }
@@ -198,7 +194,7 @@ namespace Altseed2
 
         private static void UpdateComponents()
         {
-            UpdateMainWindow();
+            previewWindow_refactor.UpdateMainWindow();
             UpdateMenu();
             nodeTreeWindow.Render();
             selectedNodeWindow.Render();
@@ -226,11 +222,6 @@ namespace Altseed2
 
         private static float menuHeight = 20;   // UpdateMainWindow, UpdateNodeTreeWindow, UpdateSelectedWindow, UpdateMenu で使われる
         private static bool first;
-
-        private static void UpdateMainWindow()
-        {
-            previewWindow_refactor.UpdateMainWindow();
-        }
 
         static void UpdateMenu()
         {
