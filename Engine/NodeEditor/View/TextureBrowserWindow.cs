@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -21,35 +20,17 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.PushID("Browser".GetHashCode());
                 if (Engine.Tool.Button("+"))
                 {
-                    string path;
-                    if ((path = Engine.Tool.OpenDialog("png,jpg,jpeg,psd", "")) != null)
-                    {
-                        var newTexture = Texture2D.Load(path);
-                        if (newTexture != null)
-                            _textureOptions.Add(newTexture);
-                    }
+                    OpenImage();
                 }
 
                 foreach (var item in _textureOptions)
                 {
-                    if (Engine.Tool.ImageButton(item,
-                        new Vector2F(80, 80),
-                        new Vector2F(0, 0),
-                        new Vector2F(1, 1),
-                        5,
-                        new Color(),
-                        new Color(255, 255, 255, 255)))
-                    {
-                        if (_accessor.TextureBrowserTarget != null)
-                            _accessor.TextureBrowserTarget.PropertyInfo.SetValue(_accessor.TextureBrowserTarget.Source, item);
-                        _accessor.TextureBrowserTarget = null;
-                    }
+                    RenderImageButton(item, () => SetTexture(item));
                 }
 
                 if (Engine.Tool.Button("null"))
                 {
-                    _accessor.TextureBrowserTarget.PropertyInfo.SetValue(_accessor.TextureBrowserTarget.Source, null);
-                    _accessor.TextureBrowserTarget = null;
+                    SetTexture(null);
                 }
 
                 Engine.Tool.PopID();
@@ -59,6 +40,35 @@ namespace Altseed2.NodeEditor.View
                     _accessor.TextureBrowserTarget = null;
                 }
                 Engine.Tool.End();
+            }
+        }
+
+        private void SetTexture(TextureBase item)
+        {
+            _accessor.TextureBrowserTarget?.PropertyInfo.SetValue(_accessor.TextureBrowserTarget.Source, item);
+            _accessor.TextureBrowserTarget = null;
+        }
+
+        private void OpenImage()
+        {
+            if (Engine.Tool.OpenDialog("png,jpg,jpeg,psd", "") is { } path
+                && Texture2D.Load(path) is { } newTexture)
+            {
+                _textureOptions.Add(newTexture);
+            }
+        }
+
+        private void RenderImageButton(TextureBase image, Action onActive)
+        {
+            if (Engine.Tool.ImageButton(image,
+                new Vector2F(80, 80),
+                new Vector2F(0, 0),
+                new Vector2F(1, 1),
+                5,
+                new Color(),
+                new Color(255, 255, 255, 255)))
+            {
+                onActive();
             }
         }
 

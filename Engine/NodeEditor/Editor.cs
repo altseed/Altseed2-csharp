@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Subjects;
-using System.Text;
 using Altseed2.NodeEditor.View;
 using Altseed2.NodeEditor.ViewModel;
 
@@ -21,11 +20,6 @@ namespace Altseed2
         private static TextureBrowserWindow textureBrowserWindow_refactor;
 
         private static object selected;
-
-        /// <summary>
-        /// テクスチャ一覧
-        /// </summary>
-        public static List<TextureBase> TextureBases = new List<TextureBase>();
 
         /// <summary>
         /// フォント一覧
@@ -184,7 +178,7 @@ namespace Altseed2
             selectedNodeWindow.Render();
 
             if (TextureBrowserTarget != null)
-                UpdateTextureBrowser();
+                textureBrowserWindow_refactor.UpdateTextureBrowser();
             if (FontBrowserTarget != null)
                 UpdateFontBrowser();
         }
@@ -227,11 +221,6 @@ namespace Altseed2
                 Engine.Tool.EndMainMenuBar();
             }
             menuHeight = Engine.Tool.GetFrameHeight();
-        }
-
-        static void UpdateTextureBrowser()
-        {
-            textureBrowserWindow_refactor.UpdateTextureBrowser();
         }
 
         static int fontSize = 50;   // UpdateFontBrowser だけで使用される
