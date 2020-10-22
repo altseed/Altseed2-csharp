@@ -12,23 +12,21 @@ namespace Altseed2
     /// </summary>
     public class ToolElementManager
     {
-        private static readonly ToolElementFactory ToolElementFactory = new ToolElementFactory();
-        public static readonly GuiInfoRepository GuiInfoRepository = new GuiInfoRepository();
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void SetAltseed2DefaultObjectMapping()
+        private readonly ToolElementFactory _toolElementFactory;
+
+        public ToolElementManager()
         {
-            GuiInfoRepository.SetAltseed2DefaultObjectMapping();
+            _toolElementFactory = new ToolElementFactory(this);
         }
+
+        public GuiInfoRepository GuiInfoRepository { get; } = new GuiInfoRepository();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IEnumerable<ToolElement> CreateToolElements(object source)
+        public IEnumerable<ToolElement> CreateToolElements(object source)
         {
             if (source == null)
                 return Enumerable.Empty<ToolElement>();
@@ -61,7 +59,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        private static Dictionary<string, ToolElement> CreateToolElementsAuto(object source)
+        private Dictionary<string, ToolElement> CreateToolElementsAuto(object source)
         {
             Dictionary<string, ToolElement> res = new Dictionary<string, ToolElement>();
 
@@ -72,7 +70,7 @@ namespace Altseed2
                     if (System.Attribute.IsDefined(info, typeof(ToolHiddenAttribute)))
                         continue;
 
-                    if (ToolElementFactory.FromPropertyMetadata(info, source) is {} element)
+                    if (_toolElementFactory.FromPropertyMetadata(info, source) is {} element)
                     {
                         res[info.Name] = element;
                     }
@@ -87,7 +85,7 @@ namespace Altseed2
             return res;
         }
 
-        private static Dictionary<string, ToolElement> CreateToolElementsFromPropetyAttributes(object source)
+        private Dictionary<string, ToolElement> CreateToolElementsFromPropetyAttributes(object source)
         {
             Dictionary<string, ToolElement> res = new Dictionary<string, ToolElement>();
 
@@ -103,7 +101,7 @@ namespace Altseed2
 
                     try
                     {
-                        if (ToolElementFactory.FromPropertyAttribute(toolAttribute, info, source) is {} element)
+                        if (_toolElementFactory.FromPropertyAttribute(toolAttribute, info, source) is {} element)
                         {
                             res[toolAttribute.Name ?? info.Name] = element;
                         }
@@ -128,7 +126,7 @@ namespace Altseed2
 
                     try
                     {
-                        if (ToolElementFactory.FromMethodAttribute(commandAttribute, info, source) is {} element)
+                        if (_toolElementFactory.FromMethodAttribute(commandAttribute, info, source) is {} element)
                         {
                             res[commandAttribute.Name ?? info.Name] = element;
                         }
@@ -144,25 +142,24 @@ namespace Altseed2
             return res;
         }
 
-        private static Dictionary<string, ToolElement> CreateToolElementsFromObjectMappings(object source)
+        private Dictionary<string, ToolElement> CreateToolElementsFromObjectMappings(object source)
         {
-            var res = new Dictionary<string, ToolElement>();
-            var objectMappings = GuiInfoRepository.MappingsFromType(source.GetType());
-
-            foreach (var (name, objectMapping) in objectMappings)
-            {
-                try
+            return GuiInfoRepository.MappingsFromType(source.GetType())
+                .Select(pair =>
                 {
-                    res[name] = ToolElementFactory.FromObjectMapping(source, objectMapping);
-                }
-                catch (Exception e)
-                {
-                    Engine.Log.Error(LogCategory.User, e.Message);
-                    Engine.Log.Error(LogCategory.User, e.StackTrace);
-                }
-            }
-
-            return res;
+                    try
+                    {
+                        return (pair.Key, value: _toolElementFactory.FromObjectMapping(source, pair.Value));
+                    }
+                    catch (Exception e)
+                    {
+                        Engine.Log.Error(LogCategory.User, e.Message);
+                        Engine.Log.Error(LogCategory.User, e.StackTrace);
+                        return (pair.Key, value: null);
+                    }
+                })
+                .Where(pair => pair.value != null)
+                .ToDictionary(pair => pair.Key, pair => pair.value);
         }
     }
 }

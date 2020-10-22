@@ -9,6 +9,7 @@ namespace Altseed2
     /// </summary>
     public class GroupToolElement : ToolElement
     {
+        private readonly ToolElementManager _toolElementManager;
         List<ToolElement> ToolElements { get; set; }
 
         WeakReference<object> Target { get; set; }
@@ -19,13 +20,16 @@ namespace Altseed2
         /// <param name="name"></param>
         /// <param name="source"></param>
         /// <param name="propertyName"></param>
-        public GroupToolElement(string name, object source, string propertyName) : base(name, source, propertyName)
+        /// <param name="toolElementManager"></param>
+        public GroupToolElement(string name, object source, string propertyName, ToolElementManager toolElementManager)
+            : base(name, source, propertyName)
         {
+            _toolElementManager = toolElementManager;
             object target = PropertyInfo?.GetValue(source);
             if (target != null)
             {
                 Target = new WeakReference<object>(target);
-                ToolElements = ToolElementManager.CreateToolElements(target).ToList();
+                ToolElements = toolElementManager.CreateToolElements(target).ToList();
             }
         }
 
@@ -43,7 +47,7 @@ namespace Altseed2
             {
                 object t = PropertyInfo?.GetValue(Source);
                 Target = new WeakReference<object>(t);
-                ToolElements = ToolElementManager.CreateToolElements(t).ToList();
+                ToolElements = _toolElementManager.CreateToolElements(t).ToList();
             }
 
             if (Engine.Tool.CollapsingHeader(Name, ToolTreeNodeFlags.CollapsingHeader | ToolTreeNodeFlags.Framed | ToolTreeNodeFlags.FramePadding))
@@ -63,10 +67,11 @@ namespace Altseed2
         /// </summary>
         /// <param name="source"></param>
         /// <param name="guiInfo"></param>
+        /// <param name="toolElementManager"></param>
         /// <returns></returns>
-        public static GroupToolElement Create(object source, MemberGuiInfo guiInfo)
+        public static GroupToolElement Create(object source, MemberGuiInfo guiInfo, ToolElementManager toolElementManager)
         {
-            return new GroupToolElement(guiInfo.Name, source, guiInfo.PropertyName);
+            return new GroupToolElement(guiInfo.Name, source, guiInfo.PropertyName, toolElementManager);
         }
     }
 }

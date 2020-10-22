@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Altseed2.GuiTool.Repository;
 using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
@@ -10,6 +11,7 @@ namespace Altseed2.NodeEditor.View
     {
         private static NodeEditorViewModel _nodeEditorViewModel;
         private static NodeEditor _nodeEditor;
+        private static ToolElementManager _toolElementManager;
         
         /// <summary>
         /// テクスチャ一覧
@@ -70,10 +72,12 @@ namespace Altseed2.NodeEditor.View
             var res = Engine.Initialize(title, width, height, config);
             Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
             Engine.Tool.ToolUsage = ToolUsage.Main;
-            ToolElementManager.SetAltseed2DefaultObjectMapping();
+
+            _toolElementManager = new ToolElementManager();
+            _toolElementManager.GuiInfoRepository.SetAltseed2DefaultObjectMapping();
 
             _nodeEditorViewModel = new NodeEditorViewModel();
-            _nodeEditor = new NodeEditor(_nodeEditorViewModel);
+            _nodeEditor = new NodeEditor(_nodeEditorViewModel, _toolElementManager);
 
             return res;
         }

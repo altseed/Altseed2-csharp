@@ -6,6 +6,13 @@ namespace Altseed2.GuiTool.Factory
 {
     internal class ToolElementFactory
     {
+        private readonly ToolElementManager _toolElementManager;
+
+        public ToolElementFactory(ToolElementManager toolElementManager)
+        {
+            _toolElementManager = toolElementManager;
+        }
+
         public ToolElement FromPropertyMetadata(PropertyInfo info, object source)
         {
             if (!info.CanWrite)
@@ -61,7 +68,7 @@ namespace Altseed2.GuiTool.Factory
                 ToolEnumAttribute _ => new EnumToolElement(elementName, source, info.Name),
                 ToolFloatAttribute toolFloatAttribute => new FloatToolElement(elementName, source, info.Name, toolFloatAttribute.Speed, toolFloatAttribute.Min, toolFloatAttribute.Max),
                 ToolFontAttribute _ => new FontToolElement(elementName, source, info.Name),
-                ToolGroupAttribute _ => new GroupToolElement(elementName, source, info.Name),
+                ToolGroupAttribute _ => new GroupToolElement(elementName, source, info.Name, _toolElementManager),
                 ToolInputTextAttribute toolInputTextAttribute => new InputTextToolElement(elementName, source, info.Name, toolInputTextAttribute.IsMultiLine, toolInputTextAttribute.MaxLength),
                 ToolIntAttribute toolIntAttribute => new IntToolElement(elementName, source, info.Name, toolIntAttribute.Speed, toolIntAttribute.Min, toolIntAttribute.Max),
                 ToolLabelAttribute _ => new LabelToolElement(elementName, source, info.Name),
@@ -103,7 +110,7 @@ namespace Altseed2.GuiTool.Factory
             {
                 ToolElementType.Bool => BoolToolElement.Create(source, guiInfo),
                 ToolElementType.Color => ColorToolElement.Create(source, guiInfo),
-                ToolElementType.Group => GroupToolElement.Create(source, guiInfo),
+                ToolElementType.Group => GroupToolElement.Create(source, guiInfo, _toolElementManager),
                 ToolElementType.InputText => InputTextToolElement.Create(source, guiInfo),
                 ToolElementType.Int => IntToolElement.Create(source, guiInfo),
                 ToolElementType.Label => LabelToolElement.Create(source, guiInfo),

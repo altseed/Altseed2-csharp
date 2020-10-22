@@ -11,12 +11,12 @@ namespace Altseed2.NodeEditor.View
 
         private IEnumerable<ToolElement> _selectedToolElements;
 
-        public SelectedNodeWindow(IEditorPropertyAccessor accessor)
+        public SelectedNodeWindow(IEditorPropertyAccessor accessor, ToolElementManager toolElementManager)
         {
             _accessor = accessor;
 
             _subscription = accessor.OnSelectedNodeChanged.Subscribe(
-                x => _selectedToolElements = ToolElementManager.CreateToolElements(accessor.Selected));
+                x => _selectedToolElements = toolElementManager.CreateToolElements(accessor.Selected));
         }
 
         public void Render()
