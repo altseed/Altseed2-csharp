@@ -12,6 +12,8 @@ namespace Altseed2.NodeEditor.View
             _viewModel = viewModel;
         }
 
+        public bool IsActive => _viewModel.Selected != null;
+
         public void Render()
         {
             if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))

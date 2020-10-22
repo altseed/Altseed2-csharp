@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -7,47 +8,48 @@ namespace Altseed2.NodeEditor.View
     /// </summary>
     public static class NodeEditorHost
     {
-        private static NodeEditor _logic;
+        private static NodeEditorViewModel _nodeEditorViewModel;
+        private static NodeEditor _nodeEditor;
         
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
-        public static List<TextureBase> TextureOptions => _logic.TextureOptions;
+        public static List<TextureBase> TextureOptions => _nodeEditorViewModel.TextureOptions;
 
         /// <summary>
         /// フォント一覧
         /// </summary>
-        public static List<Font> Fonts => _logic.Fonts;
+        public static List<Font> Fonts => _nodeEditorViewModel.Fonts;
 
         /// <summary>
         /// マウス座標
         /// </summary>
-        public static Vector2F MousePosition => _logic.MousePosition;
+        public static Vector2F MousePosition => _nodeEditorViewModel.MousePosition;
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool IsMainWindowFocus => _logic.IsMainWindowFocus;
+        public static bool IsMainWindowFocus => _nodeEditorViewModel.IsMainWindowFocus;
+
+        internal static TextureBaseToolElement TextureBrowserTarget
+        {
+            get => _nodeEditorViewModel.TextureBrowserTarget;
+            set => _nodeEditorViewModel.TextureBrowserTarget = value;
+        }
+
+        internal static FontToolElement FontBrowserTarget
+        {
+            get => _nodeEditorViewModel.FontBrowserTarget;
+            set => _nodeEditorViewModel.FontBrowserTarget = value;
+        }
 
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
         public static object Selected
         {
-            get => _logic.Selected;
-            set => _logic.Selected = value;
-        }
-
-        internal static TextureBaseToolElement TextureBrowserTarget
-        {
-            get => _logic.TextureBrowserTarget;
-            set => _logic.TextureBrowserTarget = value;
-        }
-
-        internal static FontToolElement FontBrowserTarget
-        {
-            get => _logic.FontBrowserTarget;
-            set => _logic.FontBrowserTarget = value;
+            get => _nodeEditor.Selected;
+            set => _nodeEditor.Selected = value;
         }
 
 
@@ -70,7 +72,8 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.ToolUsage = ToolUsage.Main;
             ToolElementManager.SetAltseed2DefaultObjectMapping();
 
-            _logic = new NodeEditor();
+            _nodeEditorViewModel = new NodeEditorViewModel();
+            _nodeEditor = new NodeEditor(_nodeEditorViewModel);
 
             return res;
         }
@@ -81,7 +84,7 @@ namespace Altseed2.NodeEditor.View
         /// <returns></returns>
         public static bool Update()
         {
-            _logic.UpdateUi();
+            _nodeEditor.UpdateUi();
 
             return Engine.UpdateComponents(true, true);
         }
@@ -91,7 +94,7 @@ namespace Altseed2.NodeEditor.View
         /// </summary>
         public static void Terminate()
         {
-            _logic.Dispose();
+            _nodeEditor.Dispose();
             Engine.Terminate();
         }
     }

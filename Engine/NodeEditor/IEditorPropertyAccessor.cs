@@ -10,8 +10,5 @@ namespace Altseed2
         float MenuHeight { get; }
 
         IObservable<Unit> OnSelectedNodeChanged { get; }
-
-        TextureBaseToolElement TextureBrowserTarget { get; set; }
-        FontToolElement FontBrowserTarget { get; set; }
     }
 }

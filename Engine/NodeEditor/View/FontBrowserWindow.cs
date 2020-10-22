@@ -12,6 +12,8 @@ namespace Altseed2.NodeEditor.View
             _viewModel = viewModel;
         }
 
+        public bool IsActive => _viewModel.Selected != null;
+
         public void UpdateFontBrowser()
         {
             if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
