@@ -8,20 +8,15 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolButtonAttribute : System.Attribute
+    public sealed class ToolButtonAttribute : ToolCommandAttributeBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         public ToolButtonAttribute(string name = null)
+            : base(name)
         {
-            Name = name;
         }
     }
 }

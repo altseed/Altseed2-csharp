@@ -8,7 +8,7 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolInputTextAttribute : System.Attribute
+    public sealed class ToolInputTextAttribute : ToolAttributeBase
     {
         /// <summary>
         /// 
@@ -23,17 +23,12 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="name"></param>
         /// <param name="isMultiLine"></param>
         /// <param name="maxLength"></param>
         public ToolInputTextAttribute(string name = null, bool isMultiLine = false, int maxLength = 1024)
+            : base(name)
         {
-            Name = name;
             IsMultiLine = isMultiLine;
             MaxLength = maxLength;
         }

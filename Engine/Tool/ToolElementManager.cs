@@ -195,6 +195,7 @@ namespace Altseed2
         private static Dictionary<string, ToolElement> CreateToolElementsAuto(object source)
         {
             Dictionary<string, ToolElement> res = new Dictionary<string, ToolElement>();
+            var factory = new ToolElementFactory();
 
             foreach (var info in source.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
@@ -203,35 +204,10 @@ namespace Altseed2
                     if (System.Attribute.IsDefined(info, typeof(ToolHiddenAttribute)))
                         continue;
 
-                    if (!info.CanWrite)
+                    if (factory.FromPropertyMetadata(info, source) is {} element)
                     {
-                        res[info.Name] = new LabelToolElement(info.Name, source, info.Name);
-                        continue;
+                        res[info.Name] = element;
                     }
-
-                    if (info.PropertyType == typeof(bool))
-                        res[info.Name] = new BoolToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(Color))
-                        res[info.Name] = new ColorToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(Enum))
-                        res[info.Name] = new EnumToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(float))
-                        res[info.Name] = new FloatToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(Font))
-                        res[info.Name] = new FontToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(string))
-                    {
-                        if (info.CanWrite)
-                            res[info.Name] = new InputTextToolElement(info.Name, source, info.Name);
-                    }
-                    else if (info.PropertyType == typeof(int))
-                        res[info.Name] = new IntToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(IList))
-                        res[info.Name] = new ListToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(TextureBase))
-                        res[info.Name] = new TextureBaseToolElement(info.Name, source, info.Name);
-                    else if (info.PropertyType == typeof(Vector2F))
-                        res[info.Name] = new Vector2FToolElement(info.Name, source, info.Name);
                 }
                 catch (Exception e)
                 {
@@ -246,59 +222,23 @@ namespace Altseed2
         private static Dictionary<string, ToolElement> CreateToolElementsFromPropetyAttributes(object source)
         {
             Dictionary<string, ToolElement> res = new Dictionary<string, ToolElement>();
+            var factory = new ToolElementFactory();
 
             foreach (var info in source.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 System.Attribute[] attributes = System.Attribute.GetCustomAttributes(info, typeof(System.Attribute));
                 foreach (System.Attribute attribute in attributes)
                 {
+                    if (!(attribute is ToolAttributeBase toolAttribute))
+                    {
+                        continue;
+                    }
+
                     try
                     {
-                        switch (attribute)
+                        if (factory.FromPropertyAttribute(toolAttribute, info, source) is {} element)
                         {
-                            case ToolBoolAttribute toolBoolAttribute:
-                                res[toolBoolAttribute.Name ?? info.Name] = new BoolToolElement(toolBoolAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolColorAttribute toolColorAttribute:
-                                res[toolColorAttribute.Name ?? info.Name] = new ColorToolElement(toolColorAttribute.Name ?? info.Name, source, info.Name, toolColorAttribute.Flags);
-                                break;
-                            case ToolEnumAttribute toolEnumAttribute:
-                                res[toolEnumAttribute.Name ?? info.Name] = new EnumToolElement(toolEnumAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolFloatAttribute toolFloatAttribute:
-                                res[toolFloatAttribute.Name ?? info.Name] = new FloatToolElement(toolFloatAttribute.Name ?? info.Name, source, info.Name, toolFloatAttribute.Speed, toolFloatAttribute.Min, toolFloatAttribute.Max);
-                                break;
-                            case ToolFontAttribute toolFontAttribute:
-                                res[toolFontAttribute.Name ?? info.Name] = new FontToolElement(toolFontAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolGroupAttribute toolGroupAttribute:
-                                res[toolGroupAttribute.Name ?? info.Name] = new GroupToolElement(toolGroupAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolInputTextAttribute toolInputTextAttribute:
-                                res[toolInputTextAttribute.Name ?? info.Name] = new InputTextToolElement(toolInputTextAttribute.Name ?? info.Name, source, info.Name, toolInputTextAttribute.IsMultiLine, toolInputTextAttribute.MaxLength);
-                                break;
-                            case ToolIntAttribute toolIntAttribute:
-                                res[toolIntAttribute.Name ?? info.Name] = new IntToolElement(toolIntAttribute.Name ?? info.Name, source, info.Name, toolIntAttribute.Speed, toolIntAttribute.Min, toolIntAttribute.Max);
-                                break;
-                            case ToolLabelAttribute toolLabelAttribute:
-                                res[toolLabelAttribute.Name ?? info.Name] = new LabelToolElement(toolLabelAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolListAttribute toolListAttribute:
-                                res[toolListAttribute.Name ?? info.Name] = new ListToolElement(
-                                    toolListAttribute.Name ?? info.Name, source, info.Name,
-                                    toolListAttribute.ListElementPropertyName,
-                                    toolListAttribute.SelectedItemPropertyName, toolListAttribute.AddMethodName,
-                                    toolListAttribute.RemoveMethodName, toolListAttribute.SelectedItemIndexPropertyName);
-                                break;
-                            case ToolPathAttribute toolPathAttribute:
-                                res[toolPathAttribute.Name ?? info.Name] = new PathToolElement(toolPathAttribute.Name ?? info.Name, source, info.Name, toolPathAttribute.IsDirectory, toolPathAttribute.Filter, toolPathAttribute.DefaultPath, toolPathAttribute.MaxLength, toolPathAttribute.RootDirectoryPathPropertyName);
-                                break;
-                            case ToolTextureBaseAttribute toolTextureBaseAttribute:
-                                res[toolTextureBaseAttribute.Name ?? info.Name] = new TextureBaseToolElement(toolTextureBaseAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolVector2FAttribute toolVector2FAttribute:
-                                res[toolVector2FAttribute.Name ?? info.Name] = new Vector2FToolElement(toolVector2FAttribute.Name ?? info.Name, source, info.Name, toolVector2FAttribute.Speed, toolVector2FAttribute.Min, toolVector2FAttribute.Max);
-                                break;
+                            res[toolAttribute.Name ?? info.Name] = element;
                         }
                     }
                     catch (Exception e)
@@ -314,16 +254,16 @@ namespace Altseed2
                 System.Attribute[] attributes = System.Attribute.GetCustomAttributes(info, typeof(System.Attribute));
                 foreach (System.Attribute attribute in attributes)
                 {
+                    if (!(attribute is ToolCommandAttributeBase commandAttribute))
+                    {
+                        continue;
+                    }
+
                     try
                     {
-                        switch (attribute)
+                        if (factory.FromMethodAttribute(commandAttribute, info, source) is {} element)
                         {
-                            case ToolButtonAttribute toolButtonAttribute:
-                                res[toolButtonAttribute.Name ?? info.Name] = new ButtonToolElement(toolButtonAttribute.Name ?? info.Name, source, info.Name);
-                                break;
-                            case ToolUserAttribute toolUserAttribute:
-                                res[toolUserAttribute.Name ?? info.Name] = new UserToolElement(toolUserAttribute.Name ?? info.Name, source, info.Name);
-                                break;
+                            res[commandAttribute.Name ?? info.Name] = element;
                         }
                     }
                     catch (Exception e)
@@ -376,63 +316,12 @@ namespace Altseed2
             var type = source.GetType();
             var objectMappings = GetObjectMappings(type);
 
+            var factory = new ToolElementFactory();
             foreach (var (name, objectMapping) in objectMappings)
             {
                 try
                 {
-                    ToolElement toolElement = null;
-                    switch (objectMapping.ToolElementType)
-                    {
-                        case ToolElementType.Bool:
-                            toolElement = BoolToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Color:
-                            toolElement = ColorToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Group:
-                            toolElement = GroupToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.InputText:
-                            toolElement = InputTextToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Int:
-                            toolElement = IntToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Label:
-                            toolElement = LabelToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.List:
-                            toolElement = ListToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Path:
-                            toolElement = PathToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Vector2F:
-                            toolElement = Vector2FToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Float:
-                            toolElement = FloatToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.TextureBase:
-                            toolElement = TextureBaseToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Font:
-                            toolElement = FontToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Enum:
-                            toolElement = EnumToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.Button:
-                            toolElement = ButtonToolElement.Create(source, objectMapping);
-                            break;
-                        case ToolElementType.User:
-                            toolElement = UserToolElement.Create(source, objectMapping);
-                            break;
-                        default:
-                            Engine.Log.Error(LogCategory.User, $"{objectMapping.ToolElementType} is not defined.");
-                            break;
-                    }
-                    res[name] = toolElement;
+                    res[name] = factory.FromObjectMapping(source, objectMapping);
                 }
                 catch (Exception e)
                 {

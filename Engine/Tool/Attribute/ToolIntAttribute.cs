@@ -8,13 +8,8 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolIntAttribute : System.Attribute
+    public sealed class ToolIntAttribute : ToolAttributeBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -38,8 +33,8 @@ namespace Altseed2
         /// <param name="min"></param>
         /// <param name="max"></param>
         public ToolIntAttribute(string name = null, float speed = 1, int min = -100, int max = 100)
+            : base(name)
         {
-            Name = name;
             Speed = speed;
             Min = min;
             Max = max;

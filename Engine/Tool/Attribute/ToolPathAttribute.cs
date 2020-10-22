@@ -8,13 +8,8 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolPathAttribute : System.Attribute
+    public sealed class ToolPathAttribute : ToolAttributeBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -50,8 +45,8 @@ namespace Altseed2
         /// <param name="maxLength"></param>
         /// <param name="rootDirectoryPathPropertyName"></param>
         public ToolPathAttribute(string name = null, bool isDirectory = false, string filter = "", string defaultPath = "", int maxLength = 1024, string rootDirectoryPathPropertyName = null)
+            : base(name)
         {
-            Name = name;
             MaxLength = maxLength;
             Filter = filter;
             DefaultPath = defaultPath;

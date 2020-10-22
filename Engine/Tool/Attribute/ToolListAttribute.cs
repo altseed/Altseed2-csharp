@@ -8,13 +8,8 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolListAttribute : System.Attribute
+    public sealed class ToolListAttribute : ToolAttributeBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -50,8 +45,8 @@ namespace Altseed2
         /// <param name="removeMethodName"></param>
         /// <param name="selectedItemIndexPropertyName"></param>
         public ToolListAttribute(string name = null, string listElementPropertyName = null, string selectedItemPropertyName = null, string addMethodName = null, string removeMethodName = null, string selectedItemIndexPropertyName = null)
+            : base(name)
         {
-            Name = name;
             ListElementPropertyName = listElementPropertyName;
             SelectedItemPropertyName = selectedItemPropertyName;
             AddMethodName = addMethodName;

@@ -8,20 +8,15 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolBoolAttribute : System.Attribute
+    public sealed class ToolBoolAttribute : ToolAttributeBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         public ToolBoolAttribute(string name = null)
+            : base(name)
         {
-            Name = name;
         }
     }
 }

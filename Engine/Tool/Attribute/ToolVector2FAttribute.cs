@@ -8,13 +8,8 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolVector2FAttribute : System.Attribute
+    public sealed class ToolVector2FAttribute : ToolAttributeBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -38,8 +33,8 @@ namespace Altseed2
         /// <param name="min"></param>
         /// <param name="max"></param>
         public ToolVector2FAttribute(string name = null, float speed = 1, float min = -1000, float max = 1000)
+            : base(name)
         {
-            Name = name;
             Speed = speed;
             Min = min;
             Max = max;

@@ -9,7 +9,7 @@ namespace Altseed2
     /// 
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public sealed class ToolColorAttribute : System.Attribute
+    public sealed class ToolColorAttribute : ToolAttributeBase
     {
         /// <summary>
         /// 
@@ -19,16 +19,11 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="name"></param>
         /// <param name="flags"></param>
         public ToolColorAttribute(string name = null, ToolColorEditFlags flags = ToolColorEditFlags.AlphaBar)
+            : base(name)
         {
-            Name = name;
             Flags = flags;
         }
     }
