@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Altseed2.GuiTool.Repository
 {
-    internal sealed class GuiInfoRepository
+    public sealed class GuiInfoRepository
     {
         public readonly Dictionary<Type, List<MemberGuiInfo>> ObjectMappings = new Dictionary<Type, List<MemberGuiInfo>>();
         

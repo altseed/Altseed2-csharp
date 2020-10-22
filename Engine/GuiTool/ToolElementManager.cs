@@ -10,76 +10,10 @@ namespace Altseed2
     /// <summary>
     /// 
     /// </summary>
-    public enum ToolElementType
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        Bool,
-        /// <summary>
-        /// 
-        /// </summary>
-        Color,
-        /// <summary>
-        /// 
-        /// </summary>
-        Float,
-        /// <summary>
-        /// 
-        /// </summary>
-        Group,
-        /// <summary>
-        /// 
-        /// </summary>
-        InputText,
-        /// <summary>
-        /// 
-        /// </summary>
-        Int,
-        /// <summary>
-        /// 
-        /// </summary>
-        Label,
-        /// <summary>
-        /// 
-        /// </summary>
-        List,
-        /// <summary>
-        /// 
-        /// </summary>
-        Path,
-        /// <summary>
-        /// 
-        /// </summary>
-        Vector2F,
-        /// <summary>
-        /// 
-        /// </summary>
-        TextureBase,
-        /// <summary>
-        /// 
-        /// </summary>
-        Font,
-        /// <summary>
-        /// 
-        /// </summary>
-        Enum,
-        /// <summary>
-        /// 
-        /// </summary>
-        Button,
-        /// <summary>
-        /// 
-        /// </summary>
-        User,
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     public class ToolElementManager
     {
-        private static readonly GuiInfoRepository GuiInfoRepository = new GuiInfoRepository();
+        private static readonly ToolElementFactory ToolElementFactory = new ToolElementFactory();
+        public static readonly GuiInfoRepository GuiInfoRepository = new GuiInfoRepository();
         
         /// <summary>
         /// 
@@ -130,7 +64,6 @@ namespace Altseed2
         private static Dictionary<string, ToolElement> CreateToolElementsAuto(object source)
         {
             Dictionary<string, ToolElement> res = new Dictionary<string, ToolElement>();
-            var factory = new ToolElementFactory();
 
             foreach (var info in source.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
@@ -139,7 +72,7 @@ namespace Altseed2
                     if (System.Attribute.IsDefined(info, typeof(ToolHiddenAttribute)))
                         continue;
 
-                    if (factory.FromPropertyMetadata(info, source) is {} element)
+                    if (ToolElementFactory.FromPropertyMetadata(info, source) is {} element)
                     {
                         res[info.Name] = element;
                     }
@@ -157,7 +90,6 @@ namespace Altseed2
         private static Dictionary<string, ToolElement> CreateToolElementsFromPropetyAttributes(object source)
         {
             Dictionary<string, ToolElement> res = new Dictionary<string, ToolElement>();
-            var factory = new ToolElementFactory();
 
             foreach (var info in source.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
@@ -171,7 +103,7 @@ namespace Altseed2
 
                     try
                     {
-                        if (factory.FromPropertyAttribute(toolAttribute, info, source) is {} element)
+                        if (ToolElementFactory.FromPropertyAttribute(toolAttribute, info, source) is {} element)
                         {
                             res[toolAttribute.Name ?? info.Name] = element;
                         }
@@ -196,7 +128,7 @@ namespace Altseed2
 
                     try
                     {
-                        if (factory.FromMethodAttribute(commandAttribute, info, source) is {} element)
+                        if (ToolElementFactory.FromMethodAttribute(commandAttribute, info, source) is {} element)
                         {
                             res[commandAttribute.Name ?? info.Name] = element;
                         }
@@ -217,12 +149,11 @@ namespace Altseed2
             var res = new Dictionary<string, ToolElement>();
             var objectMappings = GuiInfoRepository.MappingsFromType(source.GetType());
 
-            var factory = new ToolElementFactory();
             foreach (var (name, objectMapping) in objectMappings)
             {
                 try
                 {
-                    res[name] = factory.FromObjectMapping(source, objectMapping);
+                    res[name] = ToolElementFactory.FromObjectMapping(source, objectMapping);
                 }
                 catch (Exception e)
                 {

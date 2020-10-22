@@ -5,6 +5,73 @@ namespace Altseed2
     /// <summary>
     /// 
     /// </summary>
+    public enum ToolElementType
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Bool,
+        /// <summary>
+        /// 
+        /// </summary>
+        Color,
+        /// <summary>
+        /// 
+        /// </summary>
+        Float,
+        /// <summary>
+        /// 
+        /// </summary>
+        Group,
+        /// <summary>
+        /// 
+        /// </summary>
+        InputText,
+        /// <summary>
+        /// 
+        /// </summary>
+        Int,
+        /// <summary>
+        /// 
+        /// </summary>
+        Label,
+        /// <summary>
+        /// 
+        /// </summary>
+        List,
+        /// <summary>
+        /// 
+        /// </summary>
+        Path,
+        /// <summary>
+        /// 
+        /// </summary>
+        Vector2F,
+        /// <summary>
+        /// 
+        /// </summary>
+        TextureBase,
+        /// <summary>
+        /// 
+        /// </summary>
+        Font,
+        /// <summary>
+        /// 
+        /// </summary>
+        Enum,
+        /// <summary>
+        /// 
+        /// </summary>
+        Button,
+        /// <summary>
+        /// 
+        /// </summary>
+        User,
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class MemberGuiInfo
     {
         /// <summary>
