@@ -132,16 +132,16 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static PathToolElement Create(object source, ObjectMapping objectMapping)
+        public static PathToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            var isDirectory = objectMapping.Options.ContainsKey("isDirectory") ? (bool)objectMapping.Options["isDirectory"] : false;
-            var filter = objectMapping.Options.ContainsKey("filter") ? (string)objectMapping.Options["filter"] : "";
-            var defaultPath = objectMapping.Options.ContainsKey("defaultPath") ? (string)objectMapping.Options["defaultPath"] : "";
-            var maxLength = objectMapping.Options.ContainsKey("maxLength") ? (int)objectMapping.Options["maxLength"] : 1024;
-            var rootDirectoryPathPropertyName = objectMapping.Options.ContainsKey("rootDirectoryPathPropertyName") ? (string)objectMapping.Options["rootDirectoryPathPropertyName"] : null;
-            return new PathToolElement(objectMapping.Name, source, objectMapping.PropertyName, isDirectory, filter, defaultPath, maxLength, rootDirectoryPathPropertyName);
+            var isDirectory = guiInfo.Options.ContainsKey("isDirectory") ? (bool)guiInfo.Options["isDirectory"] : false;
+            var filter = guiInfo.Options.ContainsKey("filter") ? (string)guiInfo.Options["filter"] : "";
+            var defaultPath = guiInfo.Options.ContainsKey("defaultPath") ? (string)guiInfo.Options["defaultPath"] : "";
+            var maxLength = guiInfo.Options.ContainsKey("maxLength") ? (int)guiInfo.Options["maxLength"] : 1024;
+            var rootDirectoryPathPropertyName = guiInfo.Options.ContainsKey("rootDirectoryPathPropertyName") ? (string)guiInfo.Options["rootDirectoryPathPropertyName"] : null;
+            return new PathToolElement(guiInfo.Name, source, guiInfo.PropertyName, isDirectory, filter, defaultPath, maxLength, rootDirectoryPathPropertyName);
         }
     }
 }

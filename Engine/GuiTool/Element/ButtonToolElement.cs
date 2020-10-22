@@ -63,11 +63,11 @@ namespace Altseed2
         /// <see cref="ToolElementManager.ObjectMapping"/>から<see cref="BoolToolElement"/>を作成します。
         /// </summary>
         /// <param name="source">バインディング対象</param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static ButtonToolElement Create(object source, ObjectMapping objectMapping)
+        public static ButtonToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new ButtonToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new ButtonToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

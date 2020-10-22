@@ -5,7 +5,7 @@ namespace Altseed2
     /// <summary>
     /// 
     /// </summary>
-    public class ObjectMapping
+    public class MemberGuiInfo
     {
         /// <summary>
         /// 
@@ -34,7 +34,7 @@ namespace Altseed2
         /// <param name="name"></param>
         /// <param name="propertyName"></param>
         /// <param name="options"></param>
-        public ObjectMapping(ToolElementType toolElementType, string name, string propertyName, Dictionary<string, object> options)
+        public MemberGuiInfo(ToolElementType toolElementType, string name, string propertyName, Dictionary<string, object> options)
         {
             ToolElementType = toolElementType;
             Name = name;

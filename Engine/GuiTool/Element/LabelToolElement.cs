@@ -38,11 +38,11 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static LabelToolElement Create(object source, ObjectMapping objectMapping)
+        public static LabelToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new LabelToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new LabelToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

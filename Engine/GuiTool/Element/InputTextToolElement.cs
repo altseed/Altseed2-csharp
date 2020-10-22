@@ -59,13 +59,13 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static InputTextToolElement Create(object source, ObjectMapping objectMapping)
+        public static InputTextToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            var isMultiLine = objectMapping.Options.ContainsKey("isMultiLine") ? (bool)objectMapping.Options["isMultiLine"] : false;
-            var maxLength = objectMapping.Options.ContainsKey("maxLength") ? (int)objectMapping.Options["maxLength"] : 1024;
-            return new InputTextToolElement(objectMapping.Name, source, objectMapping.PropertyName, isMultiLine, maxLength);
+            var isMultiLine = guiInfo.Options.ContainsKey("isMultiLine") ? (bool)guiInfo.Options["isMultiLine"] : false;
+            var maxLength = guiInfo.Options.ContainsKey("maxLength") ? (int)guiInfo.Options["maxLength"] : 1024;
+            return new InputTextToolElement(guiInfo.Name, source, guiInfo.PropertyName, isMultiLine, maxLength);
         }
     }
 }

@@ -36,14 +36,14 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// <see cref="ObjectMapping"/>から<see cref="BoolToolElement"/>を作成します。
+        /// <see cref="MemberGuiInfo"/>から<see cref="BoolToolElement"/>を作成します。
         /// </summary>
         /// <param name="source">バインディング対象</param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static BoolToolElement Create(object source, ObjectMapping objectMapping)
+        public static BoolToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new BoolToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new BoolToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

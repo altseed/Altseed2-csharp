@@ -62,11 +62,11 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static GroupToolElement Create(object source, ObjectMapping objectMapping)
+        public static GroupToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new GroupToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new GroupToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

@@ -87,14 +87,14 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static Vector2FToolElement Create(object source, ObjectMapping objectMapping)
+        public static Vector2FToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            var speed = objectMapping.Options.ContainsKey("speed") ? (float)objectMapping.Options["speed"] : 1;
-            var min = objectMapping.Options.ContainsKey("min") ? (float)objectMapping.Options["min"] : -1000;
-            var max = objectMapping.Options.ContainsKey("max") ? (float)objectMapping.Options["max"] : 1000;
-            return new Vector2FToolElement(objectMapping.Name, source, objectMapping.PropertyName, speed, min, max);
+            var speed = guiInfo.Options.ContainsKey("speed") ? (float)guiInfo.Options["speed"] : 1;
+            var min = guiInfo.Options.ContainsKey("min") ? (float)guiInfo.Options["min"] : -1000;
+            var max = guiInfo.Options.ContainsKey("max") ? (float)guiInfo.Options["max"] : 1000;
+            return new Vector2FToolElement(guiInfo.Name, source, guiInfo.PropertyName, speed, min, max);
         }
     }
 }

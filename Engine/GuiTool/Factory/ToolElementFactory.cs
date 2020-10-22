@@ -97,31 +97,31 @@ namespace Altseed2.GuiTool.Factory
             };
         }
 
-        public ToolElement FromObjectMapping(object source, ObjectMapping objectMapping)
+        public ToolElement FromObjectMapping(object source, MemberGuiInfo guiInfo)
         {
-            ToolElement toolElement = objectMapping.ToolElementType switch
+            ToolElement toolElement = guiInfo.ToolElementType switch
             {
-                ToolElementType.Bool => BoolToolElement.Create(source, objectMapping),
-                ToolElementType.Color => ColorToolElement.Create(source, objectMapping),
-                ToolElementType.Group => GroupToolElement.Create(source, objectMapping),
-                ToolElementType.InputText => InputTextToolElement.Create(source, objectMapping),
-                ToolElementType.Int => IntToolElement.Create(source, objectMapping),
-                ToolElementType.Label => LabelToolElement.Create(source, objectMapping),
-                ToolElementType.List => ListToolElement.Create(source, objectMapping),
-                ToolElementType.Path => PathToolElement.Create(source, objectMapping),
-                ToolElementType.Vector2F => Vector2FToolElement.Create(source, objectMapping),
-                ToolElementType.Float => FloatToolElement.Create(source, objectMapping),
-                ToolElementType.TextureBase => TextureBaseToolElement.Create(source, objectMapping),
-                ToolElementType.Font => FontToolElement.Create(source, objectMapping),
-                ToolElementType.Enum => EnumToolElement.Create(source, objectMapping),
-                ToolElementType.Button => ButtonToolElement.Create(source, objectMapping),
-                ToolElementType.User => UserToolElement.Create(source, objectMapping),
+                ToolElementType.Bool => BoolToolElement.Create(source, guiInfo),
+                ToolElementType.Color => ColorToolElement.Create(source, guiInfo),
+                ToolElementType.Group => GroupToolElement.Create(source, guiInfo),
+                ToolElementType.InputText => InputTextToolElement.Create(source, guiInfo),
+                ToolElementType.Int => IntToolElement.Create(source, guiInfo),
+                ToolElementType.Label => LabelToolElement.Create(source, guiInfo),
+                ToolElementType.List => ListToolElement.Create(source, guiInfo),
+                ToolElementType.Path => PathToolElement.Create(source, guiInfo),
+                ToolElementType.Vector2F => Vector2FToolElement.Create(source, guiInfo),
+                ToolElementType.Float => FloatToolElement.Create(source, guiInfo),
+                ToolElementType.TextureBase => TextureBaseToolElement.Create(source, guiInfo),
+                ToolElementType.Font => FontToolElement.Create(source, guiInfo),
+                ToolElementType.Enum => EnumToolElement.Create(source, guiInfo),
+                ToolElementType.Button => ButtonToolElement.Create(source, guiInfo),
+                ToolElementType.User => UserToolElement.Create(source, guiInfo),
                 _ => null
             };
 
             if (toolElement is null)
             {
-                Engine.Log.Error(LogCategory.User, $"{objectMapping.ToolElementType} is not defined.");
+                Engine.Log.Error(LogCategory.User, $"{guiInfo.ToolElementType} is not defined.");
             }
 
             return toolElement;

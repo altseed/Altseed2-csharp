@@ -61,11 +61,11 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static UserToolElement Create(object source, ObjectMapping objectMapping)
+        public static UserToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new UserToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new UserToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

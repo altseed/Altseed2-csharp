@@ -218,16 +218,16 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static ListToolElement Create(object source, ObjectMapping objectMapping)
+        public static ListToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            var listElementPropertyName = objectMapping.Options.ContainsKey("listElementPropertyName") ? (string)objectMapping.Options["listElementPropertyName"] : null;
-            var selectedItemPropertyName = objectMapping.Options.ContainsKey("selectedItemPropertyName") ? (string)objectMapping.Options["selectedItemPropertyName"] : null;
-            var addMethodName = objectMapping.Options.ContainsKey("addMethodName") ? (string)objectMapping.Options["addMethodName"] : null;
-            var removeMethodName = objectMapping.Options.ContainsKey("removeMethodName") ? (string)objectMapping.Options["removeMethodName"] : null;
-            var selectedItemIndexPropertyName = objectMapping.Options.ContainsKey("selectedItemIndexPropertyName") ? (string)objectMapping.Options["selectedItemIndexPropertyName"] : null;
-            return new ListToolElement(objectMapping.Name, source, objectMapping.PropertyName, listElementPropertyName, selectedItemPropertyName, addMethodName, removeMethodName, selectedItemIndexPropertyName);
+            var listElementPropertyName = guiInfo.Options.ContainsKey("listElementPropertyName") ? (string)guiInfo.Options["listElementPropertyName"] : null;
+            var selectedItemPropertyName = guiInfo.Options.ContainsKey("selectedItemPropertyName") ? (string)guiInfo.Options["selectedItemPropertyName"] : null;
+            var addMethodName = guiInfo.Options.ContainsKey("addMethodName") ? (string)guiInfo.Options["addMethodName"] : null;
+            var removeMethodName = guiInfo.Options.ContainsKey("removeMethodName") ? (string)guiInfo.Options["removeMethodName"] : null;
+            var selectedItemIndexPropertyName = guiInfo.Options.ContainsKey("selectedItemIndexPropertyName") ? (string)guiInfo.Options["selectedItemIndexPropertyName"] : null;
+            return new ListToolElement(guiInfo.Name, source, guiInfo.PropertyName, listElementPropertyName, selectedItemPropertyName, addMethodName, removeMethodName, selectedItemIndexPropertyName);
         }
     }
 }

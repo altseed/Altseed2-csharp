@@ -41,11 +41,11 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static EnumToolElement Create(object source, ObjectMapping objectMapping)
+        public static EnumToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new EnumToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new EnumToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

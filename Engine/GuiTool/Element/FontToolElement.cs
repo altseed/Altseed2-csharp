@@ -63,11 +63,11 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static FontToolElement Create(object source, ObjectMapping objectMapping)
+        public static FontToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new FontToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new FontToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }

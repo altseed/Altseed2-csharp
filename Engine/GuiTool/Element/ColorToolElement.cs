@@ -47,12 +47,12 @@ namespace Altseed2
         /// <see cref="ToolElementManager.ObjectMapping"/>から<see cref="ColorToolElement"/>を作成します。
         /// </summary>
         /// <param name="source">バインディング対象</param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static ColorToolElement Create(object source, ObjectMapping objectMapping)
+        public static ColorToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            var flags = objectMapping.Options.ContainsKey("flags") ? (ToolColorEditFlags)objectMapping.Options["flags"] : ToolColorEditFlags.AlphaBar;
-            return new ColorToolElement(objectMapping.Name, source, objectMapping.PropertyName, flags);
+            var flags = guiInfo.Options.ContainsKey("flags") ? (ToolColorEditFlags)guiInfo.Options["flags"] : ToolColorEditFlags.AlphaBar;
+            return new ColorToolElement(guiInfo.Name, source, guiInfo.PropertyName, flags);
         }
     }
 }

@@ -63,14 +63,14 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static IntToolElement Create(object source, ObjectMapping objectMapping)
+        public static IntToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            var speed = objectMapping.Options.ContainsKey("speed") ? (float)objectMapping.Options["speed"] : 1;
-            var min = objectMapping.Options.ContainsKey("min") ? (int)objectMapping.Options["min"] : -100;
-            var max = objectMapping.Options.ContainsKey("max") ? (int)objectMapping.Options["max"] : 100;
-            return new IntToolElement(objectMapping.Name, source, objectMapping.PropertyName, speed, min, max);
+            var speed = guiInfo.Options.ContainsKey("speed") ? (float)guiInfo.Options["speed"] : 1;
+            var min = guiInfo.Options.ContainsKey("min") ? (int)guiInfo.Options["min"] : -100;
+            var max = guiInfo.Options.ContainsKey("max") ? (int)guiInfo.Options["max"] : 100;
+            return new IntToolElement(guiInfo.Name, source, guiInfo.PropertyName, speed, min, max);
         }
     }
 }

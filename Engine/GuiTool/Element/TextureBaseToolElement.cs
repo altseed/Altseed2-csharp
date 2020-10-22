@@ -62,11 +62,11 @@ namespace Altseed2
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="objectMapping"></param>
+        /// <param name="guiInfo"></param>
         /// <returns></returns>
-        public static TextureBaseToolElement Create(object source, ObjectMapping objectMapping)
+        public static TextureBaseToolElement Create(object source, MemberGuiInfo guiInfo)
         {
-            return new TextureBaseToolElement(objectMapping.Name, source, objectMapping.PropertyName);
+            return new TextureBaseToolElement(guiInfo.Name, source, guiInfo.PropertyName);
         }
     }
 }
