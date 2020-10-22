@@ -10,13 +10,13 @@ class NodeEditor
             WaitVSync = true,
         };
 
-        Editor.Initialize("AltseedEditor", 1280, 960, config);
+        NodeEditorHost.Initialize("AltseedEditor", 1280, 960, config);
 
         while (Engine.DoEvents())
         {
-            Editor.Update();
+            NodeEditorHost.Update();
         }
 
-        Editor.Terminate();
+        NodeEditorHost.Terminate();
     }
 }

@@ -7,7 +7,7 @@ using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
-    internal sealed class EditorLogic : IDisposable
+    internal sealed class NodeEditor : IDisposable
     {
         private readonly EditorPropertyAccessor _propertyAccessor;
         private readonly NodeTreeWindow _nodeTreeWindow;
@@ -59,7 +59,7 @@ namespace Altseed2.NodeEditor.View
         public TextureBaseToolElement TextureBrowserTarget { get; set; }
         public FontToolElement FontBrowserTarget { get; set; }
 
-        public EditorLogic()
+        public NodeEditor()
         {
             _first = true;
             _propertyAccessor = new EditorPropertyAccessor(this);
@@ -149,10 +149,10 @@ namespace Altseed2.NodeEditor.View
         
         private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
         {
-            private readonly EditorLogic _owner;
+            private readonly NodeEditor _owner;
             private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
-            public EditorPropertyAccessor(EditorLogic owner)
+            public EditorPropertyAccessor(NodeEditor owner)
             {
                 _owner = owner;
             }

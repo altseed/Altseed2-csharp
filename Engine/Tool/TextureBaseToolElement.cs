@@ -46,7 +46,7 @@ namespace Altseed2
                     new Color(),
                     new Color(255, 255, 255, 255)))
                 {
-                    Editor.TextureBrowserTarget = this;
+                    NodeEditorHost.TextureBrowserTarget = this;
                     Engine.Tool.SetWindowFocusByName("Texture Browser");
                 }
             }
@@ -54,7 +54,7 @@ namespace Altseed2
             {
                 if (Engine.Tool.Button("null"))
                 {
-                    Editor.TextureBrowserTarget = this;
+                    NodeEditorHost.TextureBrowserTarget = this;
                     Engine.Tool.SetWindowFocusByName("Texture Browser");
                 }
             }

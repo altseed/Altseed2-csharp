@@ -36,7 +36,7 @@ namespace Altseed2.Test
         [Test, Apartment(ApartmentState.STA)]
         public void Basic()
         {
-            Editor.Initialize("Texture2DExtension", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+            NodeEditorHost.Initialize("Texture2DExtension", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
 
             for (int i = 0; i < 5; i++)
             {
@@ -54,16 +54,16 @@ namespace Altseed2.Test
                     sprite.AddChildNode(text);
                 }
                 Engine.AddNode(sprite);
-                Editor.Selected = sprite;
+                NodeEditorHost.Selected = sprite;
             }
 
 
             while (Engine.DoEvents())
             {
-                Editor.Update();
+                NodeEditorHost.Update();
             }
 
-            Editor.Terminate();
+            NodeEditorHost.Terminate();
         }
     }
 }

@@ -5,9 +5,9 @@ namespace Altseed2.NodeEditor.View
     /// <summary>
     /// エディター
     /// </summary>
-    public static class Editor
+    public static class NodeEditorHost
     {
-        private static EditorLogic _logic;
+        private static NodeEditor _logic;
         
         /// <summary>
         /// テクスチャ一覧
@@ -70,7 +70,7 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.ToolUsage = ToolUsage.Main;
             ToolElementManager.SetAltseed2DefaultObjectMapping();
 
-            _logic = new EditorLogic();
+            _logic = new NodeEditor();
 
             return res;
         }
