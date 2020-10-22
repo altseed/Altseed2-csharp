@@ -1,4 +1,5 @@
 ﻿using Altseed2;
+using Altseed2.NodeEditor.View;
 
 class NodeEditor
 {

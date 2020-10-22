@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading;
+using Altseed2.NodeEditor.View;
 
 namespace Altseed2.Test
 {

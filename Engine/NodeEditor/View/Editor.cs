@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Subjects;
-using Altseed2.NodeEditor.View;
 using Altseed2.NodeEditor.ViewModel;
 
-namespace Altseed2
+namespace Altseed2.NodeEditor.View
 {
     /// <summary>
     /// エディター
