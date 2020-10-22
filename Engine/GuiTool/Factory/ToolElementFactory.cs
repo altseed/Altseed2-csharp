@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Reflection;
 
-namespace Altseed2
+namespace Altseed2.GuiTool.Factory
 {
     internal class ToolElementFactory
     {

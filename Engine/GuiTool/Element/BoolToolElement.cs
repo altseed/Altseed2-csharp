@@ -1,7 +1,4 @@
-﻿using Altseed2;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Altseed2
 {
@@ -39,7 +36,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// <see cref="ToolElementManager.ObjectMapping"/>から<see cref="BoolToolElement"/>を作成します。
+        /// <see cref="ObjectMapping"/>から<see cref="BoolToolElement"/>を作成します。
         /// </summary>
         /// <param name="source">バインディング対象</param>
         /// <param name="objectMapping"></param>

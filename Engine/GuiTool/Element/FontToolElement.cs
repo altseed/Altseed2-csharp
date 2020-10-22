@@ -1,7 +1,4 @@
-﻿using Altseed2;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using Altseed2.NodeEditor.View;
 
 namespace Altseed2
