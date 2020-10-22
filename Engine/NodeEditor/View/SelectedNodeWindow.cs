@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Altseed2.GuiTool.Factory;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -11,12 +12,12 @@ namespace Altseed2.NodeEditor.View
 
         private IEnumerable<ToolElement> _selectedToolElements;
 
-        public SelectedNodeWindow(IEditorPropertyAccessor accessor, ToolElementManager toolElementManager)
+        public SelectedNodeWindow(IEditorPropertyAccessor accessor, IToolElementTreeFactory toolElementTreeFactory)
         {
             _accessor = accessor;
 
             _subscription = accessor.OnSelectedNodeChanged.Subscribe(
-                x => _selectedToolElements = toolElementManager.CreateToolElements(accessor.Selected));
+                x => _selectedToolElements = toolElementTreeFactory.CreateToolElements(accessor.Selected));
         }
 
         public void Render()

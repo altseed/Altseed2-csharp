@@ -22,7 +22,7 @@ namespace Altseed2.NodeEditor.View
         {
             _first = true;
             
-            var t = new ToolElementManager();
+            var t = new ToolElementTreeFactory();
             t.GuiInfoRepository.SetAltseed2DefaultObjectMapping();
 
             IEditorPropertyAccessor propertyAccessor = this;

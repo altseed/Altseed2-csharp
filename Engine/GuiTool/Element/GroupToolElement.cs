@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Altseed2.GuiTool.Factory;
 
 namespace Altseed2
 {
@@ -9,7 +10,7 @@ namespace Altseed2
     /// </summary>
     public class GroupToolElement : ToolElement
     {
-        private readonly ToolElementManager _toolElementManager;
+        private readonly IToolElementTreeFactory _toolElementTreeFactory;
         List<ToolElement> ToolElements { get; set; }
 
         WeakReference<object> Target { get; set; }
@@ -20,16 +21,16 @@ namespace Altseed2
         /// <param name="name"></param>
         /// <param name="source"></param>
         /// <param name="propertyName"></param>
-        /// <param name="toolElementManager"></param>
-        public GroupToolElement(string name, object source, string propertyName, ToolElementManager toolElementManager)
+        /// <param name="toolElementTreeFactory"></param>
+        public GroupToolElement(string name, object source, string propertyName, IToolElementTreeFactory toolElementTreeFactory)
             : base(name, source, propertyName)
         {
-            _toolElementManager = toolElementManager;
+            _toolElementTreeFactory = toolElementTreeFactory;
             object target = PropertyInfo?.GetValue(source);
             if (target != null)
             {
                 Target = new WeakReference<object>(target);
-                ToolElements = toolElementManager.CreateToolElements(target).ToList();
+                ToolElements = toolElementTreeFactory.CreateToolElements(target).ToList();
             }
         }
 
@@ -47,7 +48,7 @@ namespace Altseed2
             {
                 object t = PropertyInfo?.GetValue(Source);
                 Target = new WeakReference<object>(t);
-                ToolElements = _toolElementManager.CreateToolElements(t).ToList();
+                ToolElements = _toolElementTreeFactory.CreateToolElements(t).ToList();
             }
 
             if (Engine.Tool.CollapsingHeader(Name, ToolTreeNodeFlags.CollapsingHeader | ToolTreeNodeFlags.Framed | ToolTreeNodeFlags.FramePadding))
@@ -67,11 +68,11 @@ namespace Altseed2
         /// </summary>
         /// <param name="source"></param>
         /// <param name="guiInfo"></param>
-        /// <param name="toolElementManager"></param>
+        /// <param name="toolElementTreeFactory"></param>
         /// <returns></returns>
-        public static GroupToolElement Create(object source, MemberGuiInfo guiInfo, ToolElementManager toolElementManager)
+        public static GroupToolElement Create(object source, MemberGuiInfo guiInfo, IToolElementTreeFactory toolElementTreeFactory)
         {
-            return new GroupToolElement(guiInfo.Name, source, guiInfo.PropertyName, toolElementManager);
+            return new GroupToolElement(guiInfo.Name, source, guiInfo.PropertyName, toolElementTreeFactory);
         }
     }
 }

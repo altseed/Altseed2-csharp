@@ -60,7 +60,7 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// <see cref="ToolElementManager.ObjectMapping"/>から<see cref="BoolToolElement"/>を作成します。
+        /// <see cref="ToolElementTreeFactory.ObjectMapping"/>から<see cref="BoolToolElement"/>を作成します。
         /// </summary>
         /// <param name="source">バインディング対象</param>
         /// <param name="guiInfo"></param>

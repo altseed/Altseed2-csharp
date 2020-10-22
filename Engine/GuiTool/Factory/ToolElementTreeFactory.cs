@@ -10,11 +10,11 @@ namespace Altseed2
     /// <summary>
     /// 
     /// </summary>
-    public class ToolElementManager
+    public class ToolElementTreeFactory : IToolElementTreeFactory
     {
         private readonly ToolElementFactory _toolElementFactory;
 
-        public ToolElementManager()
+        public ToolElementTreeFactory()
         {
             _toolElementFactory = new ToolElementFactory(this);
         }
