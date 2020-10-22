@@ -17,6 +17,7 @@ namespace Altseed2.NodeEditor.View
 
         private readonly TextureBrowserViewModel _textureBrowserViewModel;
         private readonly FontBrowserViewModel _fontBrowserViewModel;
+        private readonly PreviewViewModel _previewViewModel;
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
         private bool _first;
@@ -47,16 +48,21 @@ namespace Altseed2.NodeEditor.View
 
         public List<Font> Fonts => _fontBrowserViewModel.Options;
 
-        public Vector2F MousePosition => _previewWindow.MousePosition;
+        public Vector2F MousePosition => _previewViewModel.MousePosition;
 
-        public bool IsMainWindowFocus => _previewWindow.IsMainWindowFocus;
+        public bool IsMainWindowFocus => _previewViewModel.IsMainWindowFocus;
 
         public TextureBaseToolElement TextureBrowserTarget
         {
             get => _textureBrowserViewModel.Selected;
             set => _textureBrowserViewModel.Selected = value;
         }
-        public FontToolElement FontBrowserTarget { get; set; }
+
+        public FontToolElement FontBrowserTarget
+        {
+            get => _fontBrowserViewModel.Selected;
+            set => _fontBrowserViewModel.Selected = value;
+        }
 #endregion
 
         public NodeEditor()
@@ -65,11 +71,12 @@ namespace Altseed2.NodeEditor.View
 
             _textureBrowserViewModel = new TextureBrowserViewModel();
             _fontBrowserViewModel = new FontBrowserViewModel();
+            _previewViewModel = new PreviewViewModel();
 
             IEditorPropertyAccessor propertyAccessor = this;
             _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
-            _previewWindow = new PreviewWindow(propertyAccessor);
+            _previewWindow = new PreviewWindow(propertyAccessor, _previewViewModel);
             _textureBrowserWindow = new TextureBrowserWindow(_textureBrowserViewModel);
             _fontBrowserWindow = new FontBrowserWindow(_fontBrowserViewModel);
         }
