@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -23,39 +24,17 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.SameLine();
                 if (Engine.Tool.Button("+"))
                 {
-                    string path;
-                    if ((path = Engine.Tool.OpenDialog("ttf", "")) != null)
-                    {
-                        var font = Font.LoadDynamicFont(path, _fontSize);
-                        font.GetGlyph((int)'a');
-                        font.GetGlyph((int)'あ');
-                        font.GetGlyph((int)'阿');
-                        if (font != null)
-                            _fonts.Add(font);
-                    }
+                    OpenFont();
                 }
 
                 foreach (var item in _fonts)
                 {
-                    var glyph = item.GetGlyph((int)'阿');
-                    if (Engine.Tool.ImageButton(item.GetFontTexture(glyph.TextureIndex),
-                        new Vector2I(80, 80),
-                        new Vector2F(0, 0),
-                        (glyph.Position + glyph.Size).To2F() / glyph.TextureSize,
-                        5,
-                        new Color(),
-                        new Color(255, 255, 255, 255)))
-                    {
-                        if (_accessor.FontBrowserTarget != null)
-                            _accessor.FontBrowserTarget.PropertyInfo.SetValue(_accessor.FontBrowserTarget.Source, item);
-                        _accessor.FontBrowserTarget = null;
-                    }
+                    RenderFontButton(item, () => SetTexture(item));
                 }
 
                 if (Engine.Tool.Button("null"))
                 {
-                    _accessor.FontBrowserTarget.PropertyInfo.SetValue(_accessor.FontBrowserTarget.Source, null);
-                    _accessor.FontBrowserTarget = null;
+                    SetTexture(null);
                 }
 
                 Engine.Tool.PopID();
@@ -65,6 +44,39 @@ namespace Altseed2.NodeEditor.View
                     _accessor.FontBrowserTarget = null;
                 }
                 Engine.Tool.End();
+            }
+        }
+
+        private void SetTexture(Font item)
+        {
+            _accessor.FontBrowserTarget?.PropertyInfo.SetValue(_accessor.FontBrowserTarget.Source, item);
+            _accessor.FontBrowserTarget = null;
+        }
+
+        private void OpenFont()
+        {
+            if (Engine.Tool.OpenDialog("ttf", "") is {} path)
+            {
+                var font = Font.LoadDynamicFont(path, _fontSize);
+                font.GetGlyph((int) 'a');
+                font.GetGlyph((int) 'あ');
+                font.GetGlyph((int) '阿');
+                _fonts.Add(font);
+            }
+        }
+
+        private void RenderFontButton(Font font, Action onClick)
+        {
+            var glyph = font.GetGlyph((int)'阿');
+            if (Engine.Tool.ImageButton(font.GetFontTexture(glyph.TextureIndex),
+                new Vector2I(80, 80),
+                new Vector2F(0, 0),
+                (glyph.Position + glyph.Size).To2F() / glyph.TextureSize,
+                5,
+                new Color(),
+                new Color(255, 255, 255, 255)))
+            {
+                onClick();
             }
         }
     }

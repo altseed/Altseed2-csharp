@@ -181,8 +181,9 @@ namespace Altseed2
 
             if (TextureBrowserTarget != null)
                 textureBrowserWindow_refactor.Render();
+
             if (FontBrowserTarget != null)
-                UpdateFontBrowser();
+                fontBrowserWindow_refactor.UpdateFontBrowser();
         }
 
         private static void OnFirstUpdate()
@@ -225,13 +226,6 @@ namespace Altseed2
             menuHeight = Engine.Tool.GetFrameHeight();
         }
 
-        static int fontSize = 50;   // UpdateFontBrowser だけで使用される
-
-        private static void UpdateFontBrowser()
-        {
-            fontBrowserWindow_refactor.UpdateFontBrowser();
-        }
-        
         private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
         {
             private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
