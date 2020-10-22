@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
     internal sealed class FontBrowserWindow
     {
-        private readonly IEditorPropertyAccessor _accessor;
-        private int _fontSize = 50;
+        private readonly FontBrowserViewModel _viewModel;
 
-        public FontBrowserWindow(IEditorPropertyAccessor accessor)
+        public FontBrowserWindow(FontBrowserViewModel viewModel)
         {
-            _accessor = accessor;
+            _viewModel = viewModel;
         }
-
-        public List<Font> Fonts { get; } = new List<Font>();
 
         public void UpdateFontBrowser()
         {
@@ -21,48 +18,38 @@ namespace Altseed2.NodeEditor.View
             {
                 Engine.Tool.PushID("Browser".GetHashCode());
 
-                Engine.Tool.InputInt("Font Size", ref _fontSize);
+                Engine.Tool.InputInt("Font Size", ref _viewModel.FontSize);
                 Engine.Tool.SameLine();
                 if (Engine.Tool.Button("+"))
                 {
                     OpenFont();
                 }
 
-                foreach (var item in Fonts)
+                foreach (var item in _viewModel.Options)
                 {
-                    RenderFontButton(item, () => SetTexture(item));
+                    RenderFontButton(item, () => _viewModel.SetSelection(item));
                 }
 
                 if (Engine.Tool.Button("null"))
                 {
-                    SetTexture(null);
+                    _viewModel.SetSelection(null);
                 }
 
                 Engine.Tool.PopID();
 
                 if (!Engine.Tool.IsWindowFocused(ToolFocused.None))
                 {
-                    _accessor.FontBrowserTarget = null;
+                    _viewModel.Selected = null;
                 }
                 Engine.Tool.End();
             }
-        }
-
-        private void SetTexture(Font item)
-        {
-            _accessor.FontBrowserTarget?.PropertyInfo.SetValue(_accessor.FontBrowserTarget.Source, item);
-            _accessor.FontBrowserTarget = null;
         }
 
         private void OpenFont()
         {
             if (Engine.Tool.OpenDialog("ttf", "") is {} path)
             {
-                var font = Font.LoadDynamicFont(path, _fontSize);
-                font.GetGlyph((int) 'a');
-                font.GetGlyph((int) 'あ');
-                font.GetGlyph((int) '阿');
-                Fonts.Add(font);
+                _viewModel.LoadFont(path);
             }
         }
 

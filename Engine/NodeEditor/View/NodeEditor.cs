@@ -11,10 +11,12 @@ namespace Altseed2.NodeEditor.View
     {
         private readonly NodeTreeWindow _nodeTreeWindow;
         private readonly SelectedNodeWindow _selectedNodeWindow;
-        private readonly PreviewWindow _previewWindowRefactor;
-        private readonly TextureBrowserWindow _textureBrowserWindowRefactor;
-        private readonly FontBrowserWindow _fontBrowserWindowRefactor;
+        private readonly PreviewWindow _previewWindow;
+        private readonly TextureBrowserWindow _textureBrowserWindow;
+        private readonly FontBrowserWindow _fontBrowserWindow;
+
         private readonly TextureBrowserViewModel _textureBrowserViewModel;
+        private readonly FontBrowserViewModel _fontBrowserViewModel;
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
         private bool _first;
@@ -43,11 +45,11 @@ namespace Altseed2.NodeEditor.View
 #region 委譲
         public List<TextureBase> TextureOptions => _textureBrowserViewModel.Options;
 
-        public List<Font> Fonts => _fontBrowserWindowRefactor.Fonts;
+        public List<Font> Fonts => _fontBrowserViewModel.Options;
 
-        public Vector2F MousePosition => _previewWindowRefactor.MousePosition;
+        public Vector2F MousePosition => _previewWindow.MousePosition;
 
-        public bool IsMainWindowFocus => _previewWindowRefactor.IsMainWindowFocus;
+        public bool IsMainWindowFocus => _previewWindow.IsMainWindowFocus;
 
         public TextureBaseToolElement TextureBrowserTarget
         {
@@ -62,13 +64,14 @@ namespace Altseed2.NodeEditor.View
             _first = true;
 
             _textureBrowserViewModel = new TextureBrowserViewModel();
+            _fontBrowserViewModel = new FontBrowserViewModel();
 
             IEditorPropertyAccessor propertyAccessor = this;
             _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
-            _previewWindowRefactor = new PreviewWindow(propertyAccessor);
-            _textureBrowserWindowRefactor = new TextureBrowserWindow(_textureBrowserViewModel);
-            _fontBrowserWindowRefactor = new FontBrowserWindow(propertyAccessor);
+            _previewWindow = new PreviewWindow(propertyAccessor);
+            _textureBrowserWindow = new TextureBrowserWindow(_textureBrowserViewModel);
+            _fontBrowserWindow = new FontBrowserWindow(_fontBrowserViewModel);
         }
 
         public void UpdateUi()
@@ -120,16 +123,16 @@ namespace Altseed2.NodeEditor.View
 
         private void UpdateComponents()
         {
-            _previewWindowRefactor.Render();
+            _previewWindow.Render();
             UpdateMenu();
             _nodeTreeWindow.Render();
             _selectedNodeWindow.Render();
 
             if (TextureBrowserTarget != null)
-                _textureBrowserWindowRefactor.Render();
+                _textureBrowserWindow.Render();
 
             if (FontBrowserTarget != null)
-                _fontBrowserWindowRefactor.UpdateFontBrowser();
+                _fontBrowserWindow.UpdateFontBrowser();
         }
 
         private void UpdateMenu()
