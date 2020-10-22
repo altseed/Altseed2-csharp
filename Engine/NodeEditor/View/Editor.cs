@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Subjects;
-using Altseed2.NodeEditor.ViewModel;
+﻿using System.Collections.Generic;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -12,53 +7,49 @@ namespace Altseed2.NodeEditor.View
     /// </summary>
     public static class Editor
     {
-        private static EditorPropertyAccessor propertyAccessor;
-        private static NodeTreeWindow nodeTreeWindow;
-        private static SelectedNodeWindow selectedNodeWindow;
-        private static PreviewWindow previewWindow_refactor;
-        private static TextureBrowserWindow textureBrowserWindow_refactor;
-        private static FontBrowserWindow fontBrowserWindow_refactor;
-
-        private static object selected;
+        private static EditorLogic logic_refactor;
         
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
-        public static List<TextureBase> TextureOptions => textureBrowserWindow_refactor.TextureOptions;
+        public static List<TextureBase> TextureOptions => logic_refactor.TextureOptions;
 
         /// <summary>
         /// フォント一覧
         /// </summary>
-        public static List<Font> Fonts => fontBrowserWindow_refactor.Fonts;
+        public static List<Font> Fonts => logic_refactor.Fonts;
 
         /// <summary>
         /// マウス座標
         /// </summary>
-        public static Vector2F MousePosition => previewWindow_refactor.MousePosition;
+        public static Vector2F MousePosition => logic_refactor.MousePosition;
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool IsMainWindowFocus => previewWindow_refactor.IsMainWindowFocus;
-
-        internal static TextureBaseToolElement TextureBrowserTarget { get; set; }
-        internal static FontToolElement FontBrowserTarget { get; set; }
+        public static bool IsMainWindowFocus => logic_refactor.IsMainWindowFocus;
 
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
         public static object Selected
         {
-            get => selected;
-            set
-            {
-                if (value == selected)
-                    return;
-                selected = value;
-
-                propertyAccessor.OnSelectedValueChanged();
-            }
+            get => logic_refactor.Selected;
+            set => logic_refactor.Selected = value;
         }
+
+        internal static TextureBaseToolElement TextureBrowserTarget
+        {
+            get => logic_refactor.TextureBrowserTarget;
+            set => logic_refactor.TextureBrowserTarget = value;
+        }
+
+        internal static FontToolElement FontBrowserTarget
+        {
+            get => logic_refactor.FontBrowserTarget;
+            set => logic_refactor.FontBrowserTarget = value;
+        }
+
 
         /// <summary>
         /// エディターを初期化する
@@ -79,25 +70,10 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.ToolUsage = ToolUsage.Main;
             ToolElementManager.SetAltseed2DefaultObjectMapping();
 
-            first = true;
-
-            propertyAccessor = new EditorPropertyAccessor();
-            nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
-            selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
-            previewWindow_refactor = new PreviewWindow(propertyAccessor);
-            textureBrowserWindow_refactor = new TextureBrowserWindow(propertyAccessor);
-            fontBrowserWindow_refactor = new FontBrowserWindow(propertyAccessor);
+            logic_refactor = new EditorLogic();
+            logic_refactor.InitializeComponents();
 
             return res;
-        }
-
-        /// <summary>
-        /// エディターを終了する。
-        /// </summary>
-        public static void Terminate()
-        {
-            selectedNodeWindow.Dispose();
-            Engine.Terminate();
         }
 
         /// <summary>
@@ -106,112 +82,18 @@ namespace Altseed2.NodeEditor.View
         /// <returns></returns>
         public static bool Update()
         {
-            if (first)
-            {
-                OnFirstUpdate();
-            }
-
-            UpdateCameraGroup();
-            UpdateComponents();
+            logic_refactor.UpdateUi();
 
             return Engine.UpdateComponents(true, true);
         }
 
-        private static void UpdateCameraGroup()
+        /// <summary>
+        /// エディターを終了する。
+        /// </summary>
+        public static void Terminate()
         {
-            foreach (var node in Engine.GetNodes().Union(Engine.GetNodes().SelectMany(obj => obj.EnumerateDescendants())))
-            {
-                try
-                {
-                    var propertyInfo = node.GetType().GetProperty("CameraGroup");
-                    propertyInfo?.SetValue(node, (ulong)propertyInfo.GetValue(node) | 1u << 63);
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        private static void UpdateComponents()
-        {
-            previewWindow_refactor.Render();
-            UpdateMenu();
-            nodeTreeWindow.Render();
-            selectedNodeWindow.Render();
-
-            if (TextureBrowserTarget != null)
-                textureBrowserWindow_refactor.Render();
-
-            if (FontBrowserTarget != null)
-                fontBrowserWindow_refactor.UpdateFontBrowser();
-        }
-
-        private static void OnFirstUpdate()
-        {
-            if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
-            {
-                Engine.Tool.End();
-            }
-
-            if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
-            {
-                Engine.Tool.End();
-            }
-
-            first = false;
-        }
-
-        private static float menuHeight = 20;   // UpdateMainWindow, UpdateNodeTreeWindow, UpdateSelectedWindow, UpdateMenu で使われる
-        private static bool first;
-
-        static void UpdateMenu()
-        {
-            if (Engine.Tool.BeginMainMenuBar())
-            {
-                if (Engine.Tool.BeginMenu("File", true))
-                {
-                    Engine.Tool.MenuItem("New", "", false, true);
-                    Engine.Tool.MenuItem("Open", "", false, true);
-                    Engine.Tool.EndMenu();
-                }
-                if (Engine.Tool.BeginMenu("Edit", true))
-                {
-                    Engine.Tool.MenuItem("Copy", "", false, true);
-                    Engine.Tool.MenuItem("Paste", "", false, true);
-                    Engine.Tool.EndMenu();
-                }
-                Engine.Tool.Text(Engine.CurrentFPS.ToString());
-                Engine.Tool.EndMainMenuBar();
-            }
-            menuHeight = Engine.Tool.GetFrameHeight();
-        }
-
-        private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
-        {
-            private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
-
-            public object Selected
-            {
-                get => Editor.Selected;
-                set => Editor.Selected = value;
-            }
-
-            public float MenuHeight => menuHeight;
-
-            public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
-            public TextureBaseToolElement TextureBrowserTarget
-            {
-                get => Editor.TextureBrowserTarget;
-                set => Editor.TextureBrowserTarget = value;
-            }
-
-            public FontToolElement FontBrowserTarget
-            {
-                get => Editor.FontBrowserTarget;
-                set => Editor.FontBrowserTarget = value;
-            }
-
-            public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);
+            logic_refactor.Dispose();
+            Engine.Terminate();
         }
     }
 }
