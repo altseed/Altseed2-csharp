@@ -178,7 +178,7 @@ namespace Altseed2
             selectedNodeWindow.Render();
 
             if (TextureBrowserTarget != null)
-                textureBrowserWindow_refactor.UpdateTextureBrowser();
+                textureBrowserWindow_refactor.Render();
             if (FontBrowserTarget != null)
                 UpdateFontBrowser();
         }

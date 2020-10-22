@@ -13,7 +13,7 @@ namespace Altseed2.NodeEditor.View
             _accessor = accessor;
         }
 
-        public void UpdateTextureBrowser()
+        public void Render()
         {
             if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
             {
@@ -58,7 +58,7 @@ namespace Altseed2.NodeEditor.View
             }
         }
 
-        private void RenderImageButton(TextureBase image, Action onActive)
+        private static void RenderImageButton(TextureBase image, Action onActive)
         {
             if (Engine.Tool.ImageButton(image,
                 new Vector2F(80, 80),
