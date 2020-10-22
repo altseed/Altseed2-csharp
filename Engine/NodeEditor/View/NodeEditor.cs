@@ -107,6 +107,7 @@ namespace Altseed2.NodeEditor.View
                 }
                 catch
                 {
+                    // TODO: 例外を無条件に握りつぶしたくはない。少なくともどんな例外を握りつぶしたいかを明示したい
                 }
             }
         }
