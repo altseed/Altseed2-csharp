@@ -18,6 +18,7 @@ namespace Altseed2
         private static SelectedNodeWindow selectedNodeWindow;
         private static PreviewWindow previewWindow_refactor;
         private static TextureBrowserWindow textureBrowserWindow_refactor;
+        private static FontBrowserWindow fontBrowserWindow_refactor;
 
         private static object selected;
 
@@ -82,6 +83,7 @@ namespace Altseed2
             selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
             previewWindow_refactor = new PreviewWindow(propertyAccessor);
             textureBrowserWindow_refactor = new TextureBrowserWindow(propertyAccessor);
+            fontBrowserWindow_refactor = new FontBrowserWindow(propertyAccessor);
 
             return res;
         }
@@ -227,57 +229,7 @@ namespace Altseed2
 
         private static void UpdateFontBrowser()
         {
-            if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
-            {
-                Engine.Tool.PushID("Browser".GetHashCode());
-
-                Engine.Tool.InputInt("Font Size", ref fontSize);
-                Engine.Tool.SameLine();
-                if (Engine.Tool.Button("+"))
-                {
-                    string path;
-                    if ((path = Engine.Tool.OpenDialog("ttf", "")) != null)
-                    {
-                        var font = Font.LoadDynamicFont(path, fontSize);
-                        font.GetGlyph((int)'a');
-                        font.GetGlyph((int)'あ');
-                        font.GetGlyph((int)'阿');
-                        if (font != null)
-                            Fonts.Add(font);
-                    }
-                }
-
-                foreach (var item in Fonts)
-                {
-                    var glyph = item.GetGlyph((int)'阿');
-                    if (Engine.Tool.ImageButton(item.GetFontTexture(glyph.TextureIndex),
-                        new Vector2I(80, 80),
-                        new Vector2F(0, 0),
-                        (glyph.Position + glyph.Size).To2F() / glyph.TextureSize,
-                        5,
-                        new Color(),
-                        new Color(255, 255, 255, 255)))
-                    {
-                        if (FontBrowserTarget != null)
-                            FontBrowserTarget.PropertyInfo.SetValue(FontBrowserTarget.Source, item);
-                        FontBrowserTarget = null;
-                    }
-                }
-
-                if (Engine.Tool.Button("null"))
-                {
-                    FontBrowserTarget.PropertyInfo.SetValue(FontBrowserTarget.Source, null);
-                    FontBrowserTarget = null;
-                }
-
-                Engine.Tool.PopID();
-
-                if (!Engine.Tool.IsWindowFocused(ToolFocused.None))
-                {
-                    FontBrowserTarget = null;
-                }
-                Engine.Tool.End();
-            }
+            fontBrowserWindow_refactor.UpdateFontBrowser();
         }
         
         private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
@@ -297,6 +249,12 @@ namespace Altseed2
             {
                 get => Editor.TextureBrowserTarget;
                 set => Editor.TextureBrowserTarget = value;
+            }
+
+            public FontToolElement FontBrowserTarget
+            {
+                get => Editor.FontBrowserTarget;
+                set => Editor.FontBrowserTarget = value;
             }
 
             public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);

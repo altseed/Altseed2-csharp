@@ -12,5 +12,6 @@ namespace Altseed2
         IObservable<Unit> OnPropertyChanged_Selected_refactor { get; }
 
         TextureBaseToolElement TextureBrowserTarget { get; set; }
+        FontToolElement FontBrowserTarget { get; set; }
     }
 }
