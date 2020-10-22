@@ -7,19 +7,18 @@ using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
-    internal sealed class NodeEditor : IDisposable
+    internal sealed class NodeEditor : IDisposable, IEditorPropertyAccessor
     {
-        private readonly EditorPropertyAccessor _propertyAccessor;
         private readonly NodeTreeWindow _nodeTreeWindow;
         private readonly SelectedNodeWindow _selectedNodeWindow;
         private readonly PreviewWindow _previewWindowRefactor;
         private readonly TextureBrowserWindow _textureBrowserWindowRefactor;
         private readonly FontBrowserWindow _fontBrowserWindowRefactor;
+        private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
         private bool _first;
         private object _selected;
-        private float _menuHeight = 20;
-        
+
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
@@ -32,28 +31,20 @@ namespace Altseed2.NodeEditor.View
                     return;
                 _selected = value;
 
-                _propertyAccessor.OnSelectedValueChanged();
+                _onSelectedNodeChanged.OnNext(Unit.Default);
             }
         }
 
-        /// <summary>
-        /// テクスチャ一覧
-        /// </summary>
+        public float MenuHeight { get; private set; } = 20;
+
+        public IObservable<Unit> OnSelectedNodeChanged => _onSelectedNodeChanged;
+
         public List<TextureBase> TextureOptions => _textureBrowserWindowRefactor.TextureOptions;
 
-        /// <summary>
-        /// フォント一覧
-        /// </summary>
         public List<Font> Fonts => _fontBrowserWindowRefactor.Fonts;
 
-        /// <summary>
-        /// マウス座標
-        /// </summary>
         public Vector2F MousePosition => _previewWindowRefactor.MousePosition;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsMainWindowFocus => _previewWindowRefactor.IsMainWindowFocus;
 
         public TextureBaseToolElement TextureBrowserTarget { get; set; }
@@ -62,12 +53,13 @@ namespace Altseed2.NodeEditor.View
         public NodeEditor()
         {
             _first = true;
-            _propertyAccessor = new EditorPropertyAccessor(this);
-            _nodeTreeWindow = new NodeTreeWindow(_propertyAccessor, new NodeTreeViewModel(_propertyAccessor));
-            _selectedNodeWindow = new SelectedNodeWindow(_propertyAccessor);
-            _previewWindowRefactor = new PreviewWindow(_propertyAccessor);
-            _textureBrowserWindowRefactor = new TextureBrowserWindow(_propertyAccessor);
-            _fontBrowserWindowRefactor = new FontBrowserWindow(_propertyAccessor);
+
+            IEditorPropertyAccessor propertyAccessor = this;
+            _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
+            _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
+            _previewWindowRefactor = new PreviewWindow(propertyAccessor);
+            _textureBrowserWindowRefactor = new TextureBrowserWindow(propertyAccessor);
+            _fontBrowserWindowRefactor = new FontBrowserWindow(propertyAccessor);
         }
 
         public void UpdateUi()
@@ -96,7 +88,7 @@ namespace Altseed2.NodeEditor.View
             _first = false;
         }
 
-        private void UpdateCameraGroup()
+        private static void UpdateCameraGroup()
         {
             foreach (var node in Engine.GetNodes().Union(Engine.GetNodes().SelectMany(obj => obj.EnumerateDescendants())))
             {
@@ -126,7 +118,7 @@ namespace Altseed2.NodeEditor.View
                 _fontBrowserWindowRefactor.UpdateFontBrowser();
         }
 
-        void UpdateMenu()
+        private void UpdateMenu()
         {
             if (Engine.Tool.BeginMainMenuBar())
             {
@@ -145,41 +137,7 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }
-            _menuHeight = Engine.Tool.GetFrameHeight();
-        }
-        
-        private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
-        {
-            private readonly NodeEditor _owner;
-            private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
-
-            public EditorPropertyAccessor(NodeEditor owner)
-            {
-                _owner = owner;
-            }
-
-            public object Selected
-            {
-                get => _owner.Selected;
-                set => _owner.Selected = value;
-            }
-
-            public float MenuHeight => _owner._menuHeight;
-
-            public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
-            public TextureBaseToolElement TextureBrowserTarget
-            {
-                get => _owner.TextureBrowserTarget;
-                set => _owner.TextureBrowserTarget = value;
-            }
-
-            public FontToolElement FontBrowserTarget
-            {
-                get => _owner.FontBrowserTarget;
-                set => _owner.FontBrowserTarget = value;
-            }
-
-            public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);
+            MenuHeight = Engine.Tool.GetFrameHeight();
         }
 
         public void Dispose()

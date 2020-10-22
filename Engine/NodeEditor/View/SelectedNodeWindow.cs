@@ -15,7 +15,7 @@ namespace Altseed2.NodeEditor.View
         {
             _accessor = accessor;
 
-            _subscription = accessor.OnPropertyChanged_Selected_refactor.Subscribe(
+            _subscription = accessor.OnSelectedNodeChanged.Subscribe(
                 x => _selectedToolElements = ToolElementManager.CreateToolElements(accessor.Selected));
         }
 

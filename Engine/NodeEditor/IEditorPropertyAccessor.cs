@@ -9,7 +9,7 @@ namespace Altseed2
         object Selected { get; set; }
         float MenuHeight { get; }
 
-        IObservable<Unit> OnPropertyChanged_Selected_refactor { get; }
+        IObservable<Unit> OnSelectedNodeChanged { get; }
 
         TextureBaseToolElement TextureBrowserTarget { get; set; }
         FontToolElement FontBrowserTarget { get; set; }
