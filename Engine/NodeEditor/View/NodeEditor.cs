@@ -18,13 +18,16 @@ namespace Altseed2.NodeEditor.View
         private bool _first;
         private object _selected;
 
-        public NodeEditor(NodeEditorViewModel viewModel, ToolElementManager toolElementManager)
+        public NodeEditor(NodeEditorViewModel viewModel)
         {
             _first = true;
+            
+            var t = new ToolElementManager();
+            t.GuiInfoRepository.SetAltseed2DefaultObjectMapping();
 
             IEditorPropertyAccessor propertyAccessor = this;
             _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
-            _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor, toolElementManager);
+            _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor, t);
             _previewWindow = new PreviewWindow(propertyAccessor, viewModel.PreviewViewModel);
             _textureBrowserWindow = new TextureBrowserWindow(viewModel.TextureBrowserViewModel);
             _fontBrowserWindow = new FontBrowserWindow(viewModel.FontBrowserViewModel);
