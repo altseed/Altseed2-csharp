@@ -7,47 +7,47 @@ namespace Altseed2.NodeEditor.View
     /// </summary>
     public static class Editor
     {
-        private static EditorLogic logic_refactor;
+        private static EditorLogic _logic;
         
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
-        public static List<TextureBase> TextureOptions => logic_refactor.TextureOptions;
+        public static List<TextureBase> TextureOptions => _logic.TextureOptions;
 
         /// <summary>
         /// フォント一覧
         /// </summary>
-        public static List<Font> Fonts => logic_refactor.Fonts;
+        public static List<Font> Fonts => _logic.Fonts;
 
         /// <summary>
         /// マウス座標
         /// </summary>
-        public static Vector2F MousePosition => logic_refactor.MousePosition;
+        public static Vector2F MousePosition => _logic.MousePosition;
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool IsMainWindowFocus => logic_refactor.IsMainWindowFocus;
+        public static bool IsMainWindowFocus => _logic.IsMainWindowFocus;
 
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
         public static object Selected
         {
-            get => logic_refactor.Selected;
-            set => logic_refactor.Selected = value;
+            get => _logic.Selected;
+            set => _logic.Selected = value;
         }
 
         internal static TextureBaseToolElement TextureBrowserTarget
         {
-            get => logic_refactor.TextureBrowserTarget;
-            set => logic_refactor.TextureBrowserTarget = value;
+            get => _logic.TextureBrowserTarget;
+            set => _logic.TextureBrowserTarget = value;
         }
 
         internal static FontToolElement FontBrowserTarget
         {
-            get => logic_refactor.FontBrowserTarget;
-            set => logic_refactor.FontBrowserTarget = value;
+            get => _logic.FontBrowserTarget;
+            set => _logic.FontBrowserTarget = value;
         }
 
 
@@ -70,8 +70,7 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.ToolUsage = ToolUsage.Main;
             ToolElementManager.SetAltseed2DefaultObjectMapping();
 
-            logic_refactor = new EditorLogic();
-            logic_refactor.InitializeComponents();
+            _logic = new EditorLogic();
 
             return res;
         }
@@ -82,7 +81,7 @@ namespace Altseed2.NodeEditor.View
         /// <returns></returns>
         public static bool Update()
         {
-            logic_refactor.UpdateUi();
+            _logic.UpdateUi();
 
             return Engine.UpdateComponents(true, true);
         }
@@ -92,7 +91,7 @@ namespace Altseed2.NodeEditor.View
         /// </summary>
         public static void Terminate()
         {
-            logic_refactor.Dispose();
+            _logic.Dispose();
             Engine.Terminate();
         }
     }

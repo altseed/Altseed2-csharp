@@ -3,78 +3,76 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Subjects;
-using System.Text;
 using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
     internal sealed class EditorLogic : IDisposable
     {
-        private EditorPropertyAccessor propertyAccessor;
-        private NodeTreeWindow nodeTreeWindow;
-        private SelectedNodeWindow selectedNodeWindow;
-        private PreviewWindow previewWindow_refactor;
-        private TextureBrowserWindow textureBrowserWindow_refactor;
-        private FontBrowserWindow fontBrowserWindow_refactor;
+        private readonly EditorPropertyAccessor _propertyAccessor;
+        private readonly NodeTreeWindow _nodeTreeWindow;
+        private readonly SelectedNodeWindow _selectedNodeWindow;
+        private readonly PreviewWindow _previewWindowRefactor;
+        private readonly TextureBrowserWindow _textureBrowserWindowRefactor;
+        private readonly FontBrowserWindow _fontBrowserWindowRefactor;
 
-        private object selected;
-        private float menuHeight = 20;   // UpdateMainWindow, UpdateNodeTreeWindow, UpdateSelectedWindow, UpdateMenu で使われる
-        private bool first;
+        private bool _first;
+        private object _selected;
+        private float _menuHeight = 20;
         
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
         public object Selected
         {
-            get => selected;
+            get => _selected;
             set
             {
-                if (value == selected)
+                if (value == _selected)
                     return;
-                selected = value;
+                _selected = value;
 
-                propertyAccessor.OnSelectedValueChanged();
+                _propertyAccessor.OnSelectedValueChanged();
             }
         }
 
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
-        public List<TextureBase> TextureOptions => textureBrowserWindow_refactor.TextureOptions;
+        public List<TextureBase> TextureOptions => _textureBrowserWindowRefactor.TextureOptions;
 
         /// <summary>
         /// フォント一覧
         /// </summary>
-        public List<Font> Fonts => fontBrowserWindow_refactor.Fonts;
+        public List<Font> Fonts => _fontBrowserWindowRefactor.Fonts;
 
         /// <summary>
         /// マウス座標
         /// </summary>
-        public Vector2F MousePosition => previewWindow_refactor.MousePosition;
+        public Vector2F MousePosition => _previewWindowRefactor.MousePosition;
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsMainWindowFocus => previewWindow_refactor.IsMainWindowFocus;
+        public bool IsMainWindowFocus => _previewWindowRefactor.IsMainWindowFocus;
 
         public TextureBaseToolElement TextureBrowserTarget { get; set; }
         public FontToolElement FontBrowserTarget { get; set; }
 
-        public void InitializeComponents()
+        public EditorLogic()
         {
-            first = true;
-
-            propertyAccessor = new EditorPropertyAccessor(this);
-            nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
-            selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
-            previewWindow_refactor = new PreviewWindow(propertyAccessor);
-            textureBrowserWindow_refactor = new TextureBrowserWindow(propertyAccessor);
-            fontBrowserWindow_refactor = new FontBrowserWindow(propertyAccessor);
+            _first = true;
+            _propertyAccessor = new EditorPropertyAccessor(this);
+            _nodeTreeWindow = new NodeTreeWindow(_propertyAccessor, new NodeTreeViewModel(_propertyAccessor));
+            _selectedNodeWindow = new SelectedNodeWindow(_propertyAccessor);
+            _previewWindowRefactor = new PreviewWindow(_propertyAccessor);
+            _textureBrowserWindowRefactor = new TextureBrowserWindow(_propertyAccessor);
+            _fontBrowserWindowRefactor = new FontBrowserWindow(_propertyAccessor);
         }
 
         public void UpdateUi()
         {
-            if (first)
+            if (_first)
             {
                 OnFirstUpdate();
             }
@@ -95,7 +93,7 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.End();
             }
 
-            first = false;
+            _first = false;
         }
 
         private void UpdateCameraGroup()
@@ -115,16 +113,16 @@ namespace Altseed2.NodeEditor.View
 
         private void UpdateComponents()
         {
-            previewWindow_refactor.Render();
+            _previewWindowRefactor.Render();
             UpdateMenu();
-            nodeTreeWindow.Render();
-            selectedNodeWindow.Render();
+            _nodeTreeWindow.Render();
+            _selectedNodeWindow.Render();
 
             if (TextureBrowserTarget != null)
-                textureBrowserWindow_refactor.Render();
+                _textureBrowserWindowRefactor.Render();
 
             if (FontBrowserTarget != null)
-                fontBrowserWindow_refactor.UpdateFontBrowser();
+                _fontBrowserWindowRefactor.UpdateFontBrowser();
         }
 
         void UpdateMenu()
@@ -146,7 +144,7 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }
-            menuHeight = Engine.Tool.GetFrameHeight();
+            _menuHeight = Engine.Tool.GetFrameHeight();
         }
         
         private sealed class EditorPropertyAccessor : IEditorPropertyAccessor
@@ -165,7 +163,7 @@ namespace Altseed2.NodeEditor.View
                 set => _owner.Selected = value;
             }
 
-            public float MenuHeight => _owner.menuHeight;
+            public float MenuHeight => _owner._menuHeight;
 
             public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
             public TextureBaseToolElement TextureBrowserTarget
@@ -185,7 +183,7 @@ namespace Altseed2.NodeEditor.View
 
         public void Dispose()
         {
-            selectedNodeWindow.Dispose();
+            _selectedNodeWindow.Dispose();
         }
     }
 }
