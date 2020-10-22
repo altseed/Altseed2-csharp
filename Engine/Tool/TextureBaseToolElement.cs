@@ -68,7 +68,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static TextureBaseToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static TextureBaseToolElement Create(object source, ObjectMapping objectMapping)
         {
             return new TextureBaseToolElement(objectMapping.Name, source, objectMapping.PropertyName);
         }

@@ -68,7 +68,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static FontToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static FontToolElement Create(object source, ObjectMapping objectMapping)
         {
             return new FontToolElement(objectMapping.Name, source, objectMapping.PropertyName);
         }

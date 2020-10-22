@@ -222,7 +222,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static ListToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static ListToolElement Create(object source, ObjectMapping objectMapping)
         {
             var listElementPropertyName = objectMapping.Options.ContainsKey("listElementPropertyName") ? (string)objectMapping.Options["listElementPropertyName"] : null;
             var selectedItemPropertyName = objectMapping.Options.ContainsKey("selectedItemPropertyName") ? (string)objectMapping.Options["selectedItemPropertyName"] : null;

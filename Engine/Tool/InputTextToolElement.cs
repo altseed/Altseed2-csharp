@@ -64,7 +64,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static InputTextToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static InputTextToolElement Create(object source, ObjectMapping objectMapping)
         {
             var isMultiLine = objectMapping.Options.ContainsKey("isMultiLine") ? (bool)objectMapping.Options["isMultiLine"] : false;
             var maxLength = objectMapping.Options.ContainsKey("maxLength") ? (int)objectMapping.Options["maxLength"] : 1024;

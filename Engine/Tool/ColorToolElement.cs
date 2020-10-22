@@ -52,7 +52,7 @@ namespace Altseed2
         /// <param name="source">バインディング対象</param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static ColorToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static ColorToolElement Create(object source, ObjectMapping objectMapping)
         {
             var flags = objectMapping.Options.ContainsKey("flags") ? (ToolColorEditFlags)objectMapping.Options["flags"] : ToolColorEditFlags.AlphaBar;
             return new ColorToolElement(objectMapping.Name, source, objectMapping.PropertyName, flags);

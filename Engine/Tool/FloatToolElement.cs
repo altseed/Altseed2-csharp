@@ -68,7 +68,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static FloatToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static FloatToolElement Create(object source, ObjectMapping objectMapping)
         {
             var speed = objectMapping.Options.ContainsKey("speed") ? (float)objectMapping.Options["speed"] : 1f;
             var min = objectMapping.Options.ContainsKey("min") ? (float)objectMapping.Options["min"] : -100f;

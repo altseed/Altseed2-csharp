@@ -68,7 +68,7 @@ namespace Altseed2
         /// <param name="source">バインディング対象</param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static ButtonToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static ButtonToolElement Create(object source, ObjectMapping objectMapping)
         {
             return new ButtonToolElement(objectMapping.Name, source, objectMapping.PropertyName);
         }

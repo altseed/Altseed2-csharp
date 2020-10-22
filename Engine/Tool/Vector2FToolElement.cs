@@ -92,7 +92,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static Vector2FToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static Vector2FToolElement Create(object source, ObjectMapping objectMapping)
         {
             var speed = objectMapping.Options.ContainsKey("speed") ? (float)objectMapping.Options["speed"] : 1;
             var min = objectMapping.Options.ContainsKey("min") ? (float)objectMapping.Options["min"] : -1000;

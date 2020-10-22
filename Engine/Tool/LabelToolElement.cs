@@ -43,7 +43,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static LabelToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static LabelToolElement Create(object source, ObjectMapping objectMapping)
         {
             return new LabelToolElement(objectMapping.Name, source, objectMapping.PropertyName);
         }

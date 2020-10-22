@@ -137,7 +137,7 @@ namespace Altseed2
         /// <param name="source"></param>
         /// <param name="objectMapping"></param>
         /// <returns></returns>
-        public static PathToolElement Create(object source, ToolElementManager.ObjectMapping objectMapping)
+        public static PathToolElement Create(object source, ObjectMapping objectMapping)
         {
             var isDirectory = objectMapping.Options.ContainsKey("isDirectory") ? (bool)objectMapping.Options["isDirectory"] : false;
             var filter = objectMapping.Options.ContainsKey("filter") ? (string)objectMapping.Options["filter"] : "";

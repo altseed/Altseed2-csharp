@@ -97,7 +97,7 @@ namespace Altseed2
             };
         }
 
-        public ToolElement FromObjectMapping(object source, ToolElementManager.ObjectMapping objectMapping)
+        public ToolElement FromObjectMapping(object source, ObjectMapping objectMapping)
         {
             ToolElement toolElement = objectMapping.ToolElementType switch
             {
