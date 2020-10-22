@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reactive;
 
-namespace Altseed2
+namespace Altseed2.NodeEditor
 {
-    // TODO: データの更新に関するプロパティと、GUIの描画に関するプロパティは別のインターフェースに分けたい
     internal interface IEditorPropertyAccessor
     {
         object Selected { get; set; }

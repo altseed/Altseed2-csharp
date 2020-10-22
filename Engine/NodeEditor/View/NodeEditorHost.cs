@@ -84,8 +84,7 @@ namespace Altseed2.NodeEditor.View
         /// <returns></returns>
         public static bool Update()
         {
-            _nodeEditor.UpdateUi();
-
+            _nodeEditor.Render();
             return Engine.UpdateComponents(true, true);
         }
 

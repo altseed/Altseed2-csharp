@@ -18,6 +18,18 @@ namespace Altseed2.NodeEditor.View
         private bool _first;
         private object _selected;
 
+        public NodeEditor(NodeEditorViewModel viewModel)
+        {
+            _first = true;
+
+            IEditorPropertyAccessor propertyAccessor = this;
+            _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
+            _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
+            _previewWindow = new PreviewWindow(propertyAccessor, viewModel.PreviewViewModel);
+            _textureBrowserWindow = new TextureBrowserWindow(viewModel.TextureBrowserViewModel);
+            _fontBrowserWindow = new FontBrowserWindow(viewModel.FontBrowserViewModel);
+        }
+
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
@@ -38,19 +50,7 @@ namespace Altseed2.NodeEditor.View
 
         public IObservable<Unit> OnSelectedNodeChanged => _onSelectedNodeChanged;
 
-        public NodeEditor(NodeEditorViewModel viewModel)
-        {
-            _first = true;
-
-            IEditorPropertyAccessor propertyAccessor = this;
-            _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
-            _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
-            _previewWindow = new PreviewWindow(propertyAccessor, viewModel.PreviewViewModel);
-            _textureBrowserWindow = new TextureBrowserWindow(viewModel.TextureBrowserViewModel);
-            _fontBrowserWindow = new FontBrowserWindow(viewModel.FontBrowserViewModel);
-        }
-
-        public void UpdateUi()
+        public void Render()
         {
             if (_first)
             {
