@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
     internal sealed class TextureBrowserWindow
     {
-        private readonly IEditorPropertyAccessor _accessor;
+        private readonly TextureBrowserViewModel _viewModel;
 
-        public TextureBrowserWindow(IEditorPropertyAccessor accessor)
+        public TextureBrowserWindow(TextureBrowserViewModel viewModel)
         {
-            _accessor = accessor;
+            _viewModel = viewModel;
         }
-
-        public List<TextureBase> TextureOptions { get; } = new List<TextureBase>();
 
         public void Render()
         {
@@ -24,42 +22,35 @@ namespace Altseed2.NodeEditor.View
                     OpenImage();
                 }
 
-                foreach (var item in TextureOptions)
+                foreach (var item in _viewModel.Options)
                 {
-                    RenderImageButton(item, () => SetTexture(item));
+                    RenderImageButton(item, () => _viewModel.SetSelection(item));
                 }
 
                 if (Engine.Tool.Button("null"))
                 {
-                    SetTexture(null);
+                    _viewModel.SetSelection(null);
                 }
 
                 Engine.Tool.PopID();
 
                 if (!Engine.Tool.IsWindowFocused(ToolFocused.None))
                 {
-                    _accessor.TextureBrowserTarget = null;
+                    _viewModel.Selected = null;
                 }
                 Engine.Tool.End();
             }
         }
 
-        private void SetTexture(TextureBase item)
-        {
-            _accessor.TextureBrowserTarget?.PropertyInfo.SetValue(_accessor.TextureBrowserTarget.Source, item);
-            _accessor.TextureBrowserTarget = null;
-        }
-
         private void OpenImage()
         {
-            if (Engine.Tool.OpenDialog("png,jpg,jpeg,psd", "") is { } path
-                && Texture2D.Load(path) is { } newTexture)
+            if (Engine.Tool.OpenDialog("png,jpg,jpeg,psd", "") is { } path)
             {
-                TextureOptions.Add(newTexture);
+                _viewModel.LoadImage(path);
             }
         }
 
-        private static void RenderImageButton(TextureBase image, Action onActive)
+        private static void RenderImageButton(TextureBase image, Action onClick)
         {
             if (Engine.Tool.ImageButton(image,
                 new Vector2F(80, 80),
@@ -69,7 +60,7 @@ namespace Altseed2.NodeEditor.View
                 new Color(),
                 new Color(255, 255, 255, 255)))
             {
-                onActive();
+                onClick();
             }
         }
 

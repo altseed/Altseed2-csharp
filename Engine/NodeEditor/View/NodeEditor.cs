@@ -14,6 +14,7 @@ namespace Altseed2.NodeEditor.View
         private readonly PreviewWindow _previewWindowRefactor;
         private readonly TextureBrowserWindow _textureBrowserWindowRefactor;
         private readonly FontBrowserWindow _fontBrowserWindowRefactor;
+        private readonly TextureBrowserViewModel _textureBrowserViewModel;
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
         private bool _first;
@@ -39,7 +40,8 @@ namespace Altseed2.NodeEditor.View
 
         public IObservable<Unit> OnSelectedNodeChanged => _onSelectedNodeChanged;
 
-        public List<TextureBase> TextureOptions => _textureBrowserWindowRefactor.TextureOptions;
+#region 委譲
+        public List<TextureBase> TextureOptions => _textureBrowserViewModel.Options;
 
         public List<Font> Fonts => _fontBrowserWindowRefactor.Fonts;
 
@@ -47,18 +49,25 @@ namespace Altseed2.NodeEditor.View
 
         public bool IsMainWindowFocus => _previewWindowRefactor.IsMainWindowFocus;
 
-        public TextureBaseToolElement TextureBrowserTarget { get; set; }
+        public TextureBaseToolElement TextureBrowserTarget
+        {
+            get => _textureBrowserViewModel.Selected;
+            set => _textureBrowserViewModel.Selected = value;
+        }
         public FontToolElement FontBrowserTarget { get; set; }
+#endregion
 
         public NodeEditor()
         {
             _first = true;
 
+            _textureBrowserViewModel = new TextureBrowserViewModel();
+
             IEditorPropertyAccessor propertyAccessor = this;
             _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
             _previewWindowRefactor = new PreviewWindow(propertyAccessor);
-            _textureBrowserWindowRefactor = new TextureBrowserWindow(propertyAccessor);
+            _textureBrowserWindowRefactor = new TextureBrowserWindow(_textureBrowserViewModel);
             _fontBrowserWindowRefactor = new FontBrowserWindow(propertyAccessor);
         }
 
@@ -71,6 +80,11 @@ namespace Altseed2.NodeEditor.View
 
             UpdateCameraGroup();
             UpdateComponents();
+        }
+
+        public void Dispose()
+        {
+            _selectedNodeWindow.Dispose();
         }
 
         private void OnFirstUpdate()
@@ -138,11 +152,6 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.EndMainMenuBar();
             }
             MenuHeight = Engine.Tool.GetFrameHeight();
-        }
-
-        public void Dispose()
-        {
-            _selectedNodeWindow.Dispose();
         }
     }
 }
