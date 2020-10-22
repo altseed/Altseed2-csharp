@@ -71,8 +71,7 @@ namespace Altseed2
         /// <returns></returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
-            if (config == null)
-                config = new Configuration();
+            config ??= new Configuration();
             config.EnabledCoreModules |= CoreModules.Tool;
             config.IsResizable = true;
 
@@ -116,50 +115,7 @@ namespace Altseed2
             UpdateCameraGroup();
             UpdateComponents();
 
-            // ノードの更新
-            Engine._UpdatedNode?.Update();
-
-            // Contextの更新
-            Engine.Context.Update();
-
-            // Graphicsが初期化されていない場合は早期リターン
-            if (Engine.Graphics == null) return true;
-
-            // カリング用AABBの更新
-            Engine.CullingSystem?.UpdateAABB();
-
-            // (ツール機能を使用しない場合は)描画を開始
-            if (Engine.Tool == null)
-            {
-                //ツール機能を使用するときはDoEventsでフレームを開始
-                //使用しないときはUpdateでフレームを開始
-                if (!Engine.Graphics.BeginFrame(new RenderPassParameter(Engine.ClearColor, true, true))) return false;
-            }
-
-            // カメラが 1 つもない場合はデフォルトカメラを使用
-            Engine.DrawCameraGroup(Engine._DefaultCamera, Engine._DrawnCollection.GetDrawns());
-
-            // 特定のカメラに映りこむノードを描画
-            for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
-            {
-                foreach (var camera in Engine._CameraNodes[i])
-                {
-                    Engine.DrawCameraGroup(camera.RenderedCamera, Engine._DrawnCollection[i]);
-                }
-            }
-
-            Engine._RenderTextureCache.Update();
-            PostEffectNode.UpdateCache();
-
-            // （ツール機能を使用する場合は）ツールを描画
-            if (Engine.Tool != null)
-            {
-                Engine.Tool.Render();
-            }
-
-            // 描画を終了
-            if (!Engine.Graphics.EndFrame()) return false;
-            return true;
+            return Engine.UpdateComponents(true, true);
         }
 
         private static void UpdateCameraGroup()
