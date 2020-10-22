@@ -6,13 +6,14 @@ namespace Altseed2.NodeEditor.View
     internal sealed class FontBrowserWindow
     {
         private readonly IEditorPropertyAccessor _accessor;
-        private readonly List<Font> _fonts = new List<Font>();  // TODO: publicにしてユーザーに公開すべき
         private int _fontSize = 50;
 
         public FontBrowserWindow(IEditorPropertyAccessor accessor)
         {
             _accessor = accessor;
         }
+
+        public List<Font> Fonts { get; } = new List<Font>();
 
         public void UpdateFontBrowser()
         {
@@ -27,7 +28,7 @@ namespace Altseed2.NodeEditor.View
                     OpenFont();
                 }
 
-                foreach (var item in _fonts)
+                foreach (var item in Fonts)
                 {
                     RenderFontButton(item, () => SetTexture(item));
                 }
@@ -61,7 +62,7 @@ namespace Altseed2.NodeEditor.View
                 font.GetGlyph((int) 'a');
                 font.GetGlyph((int) 'あ');
                 font.GetGlyph((int) '阿');
-                _fonts.Add(font);
+                Fonts.Add(font);
             }
         }
 

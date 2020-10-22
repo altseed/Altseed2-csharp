@@ -5,13 +5,14 @@ namespace Altseed2.NodeEditor.View
 {
     internal sealed class TextureBrowserWindow
     {
-        private readonly List<TextureBase> _textureOptions = new List<TextureBase>();
         private readonly IEditorPropertyAccessor _accessor;
 
         public TextureBrowserWindow(IEditorPropertyAccessor accessor)
         {
             _accessor = accessor;
         }
+
+        public List<TextureBase> TextureOptions { get; } = new List<TextureBase>();
 
         public void Render()
         {
@@ -23,7 +24,7 @@ namespace Altseed2.NodeEditor.View
                     OpenImage();
                 }
 
-                foreach (var item in _textureOptions)
+                foreach (var item in TextureOptions)
                 {
                     RenderImageButton(item, () => SetTexture(item));
                 }
@@ -54,7 +55,7 @@ namespace Altseed2.NodeEditor.View
             if (Engine.Tool.OpenDialog("png,jpg,jpeg,psd", "") is { } path
                 && Texture2D.Load(path) is { } newTexture)
             {
-                _textureOptions.Add(newTexture);
+                TextureOptions.Add(newTexture);
             }
         }
 

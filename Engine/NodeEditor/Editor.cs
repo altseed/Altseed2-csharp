@@ -21,11 +21,16 @@ namespace Altseed2
         private static FontBrowserWindow fontBrowserWindow_refactor;
 
         private static object selected;
+        
+        /// <summary>
+        /// テクスチャ一覧
+        /// </summary>
+        public static List<TextureBase> TextureOptions => textureBrowserWindow_refactor.TextureOptions;
 
         /// <summary>
         /// フォント一覧
         /// </summary>
-        public static List<Font> Fonts = new List<Font>();
+        public static List<Font> Fonts => fontBrowserWindow_refactor.Fonts;
 
         /// <summary>
         /// マウス座標
