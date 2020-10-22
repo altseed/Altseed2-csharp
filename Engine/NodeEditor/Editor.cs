@@ -18,6 +18,7 @@ namespace Altseed2
         private static NodeTreeWindow nodeTreeWindow;
         private static SelectedNodeWindow selectedNodeWindow;
         private static PreviewWindow previewWindow_refactor;
+        private static TextureBrowserWindow textureBrowserWindow_refactor;
 
         private static object selected;
 
@@ -86,6 +87,7 @@ namespace Altseed2
             nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             selectedNodeWindow = new SelectedNodeWindow(propertyAccessor);
             previewWindow_refactor = new PreviewWindow(propertyAccessor);
+            textureBrowserWindow_refactor = new TextureBrowserWindow(propertyAccessor);
 
             return res;
         }
@@ -229,50 +231,7 @@ namespace Altseed2
 
         static void UpdateTextureBrowser()
         {
-            if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
-            {
-                Engine.Tool.PushID("Browser".GetHashCode());
-                if (Engine.Tool.Button("+"))
-                {
-                    string path;
-                    if ((path = Engine.Tool.OpenDialog("png,jpg,jpeg,psd", "")) != null)
-                    {
-                        var newTexture = Texture2D.Load(path);
-                        if (newTexture != null)
-                            TextureBases.Add(newTexture);
-                    }
-                }
-
-                foreach (var item in TextureBases)
-                {
-                    if (Engine.Tool.ImageButton(item,
-                        new Vector2F(80, 80),
-                        new Vector2F(0, 0),
-                        new Vector2F(1, 1),
-                        5,
-                        new Color(),
-                        new Color(255, 255, 255, 255)))
-                    {
-                        if (TextureBrowserTarget != null)
-                            TextureBrowserTarget.PropertyInfo.SetValue(TextureBrowserTarget.Source, item);
-                        TextureBrowserTarget = null;
-                    }
-                }
-
-                if (Engine.Tool.Button("null"))
-                {
-                    TextureBrowserTarget.PropertyInfo.SetValue(TextureBrowserTarget.Source, null);
-                    TextureBrowserTarget = null;
-                }
-
-                Engine.Tool.PopID();
-
-                if (!Engine.Tool.IsWindowFocused(ToolFocused.None))
-                {
-                    TextureBrowserTarget = null;
-                }
-                Engine.Tool.End();
-            }
+            textureBrowserWindow_refactor.UpdateTextureBrowser();
         }
 
         static int fontSize = 50;   // UpdateFontBrowser だけで使用される
@@ -345,6 +304,11 @@ namespace Altseed2
             public float MenuHeight => menuHeight;
 
             public IObservable<Unit> OnPropertyChanged_Selected_refactor => _onSelectedNodeChanged;
+            public TextureBaseToolElement TextureBrowserTarget
+            {
+                get => Editor.TextureBrowserTarget;
+                set => Editor.TextureBrowserTarget = value;
+            }
 
             public void OnSelectedValueChanged() => _onSelectedNodeChanged.OnNext(Unit.Default);
         }
