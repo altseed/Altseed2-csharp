@@ -1,20 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Altseed2.NodeEditor.ViewModel;
 
 namespace Altseed2.NodeEditor.View
 {
     internal class NodeTreeWindow
     {
-        private static readonly NewNodeButton[] NodeButtonLayout = {
-            new NewNodeButton(NodeType.Sprite, true),
-            new NewNodeButton(NodeType.Text),
-            new NewNodeButton(NodeType.Arc),
-            new NewNodeButton(NodeType.Circle),
-            new NewNodeButton(NodeType.Line, true),
-            new NewNodeButton(NodeType.Rectangle),
-            new NewNodeButton(NodeType.Triangle),
-        };
-
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeTreeViewModel _viewModel;
         private readonly NodeEditorPane _pane = new NodeEditorPane("Node");
@@ -32,13 +23,29 @@ namespace Altseed2.NodeEditor.View
 
             _pane.Render(pos, size, () =>
             {
-                foreach (var button in NodeButtonLayout)
-                {
-                    button.Render(_viewModel);
-                }
+                RenderButton("Sprite", _viewModel.CreateSpriteNode, true);
+                RenderButton("Text", _viewModel.CreateTextNode);
+                RenderButton("Arc", _viewModel.CreateArcNode);
+                RenderButton("Circle", _viewModel.CreateCircleNode);
+                RenderButton("Line", _viewModel.CreateLineNode, true);
+                RenderButton("Rectangle", _viewModel.CreateRectangleNode);
+                RenderButton("Triangle", _viewModel.CreateTriangleNode);
 
                 RenderNodeTree(Engine.GetNodes());
             });
+        }
+
+        private void RenderButton(string label, Action action, bool onNewLine = false)
+        {
+            if (!onNewLine)
+            {
+                Engine.Tool.SameLine();
+            }
+
+            if (Engine.Tool.Button(label))
+            {
+                action();
+            }
         }
 
         private void RenderNodeTree(IEnumerable<Node> nodes)
@@ -61,31 +68,6 @@ namespace Altseed2.NodeEditor.View
                 }
 
                 Engine.Tool.PopID();
-            }
-        }
-
-        private sealed class NewNodeButton
-        {
-            private readonly NodeType _type;
-            private readonly bool _onNewLine;
-
-            public NewNodeButton(NodeType type, bool onNewLine = false)
-            {
-                _type = type;
-                _onNewLine = onNewLine;
-            }
-
-            public void Render(NodeTreeViewModel model)
-            {
-                if (!_onNewLine)
-                {
-                    Engine.Tool.SameLine();
-                }
-
-                if (Engine.Tool.Button(_type.ToString()))
-                {
-                    model.CreateNewNode(_type);
-                }
             }
         }
     }

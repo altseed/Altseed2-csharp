@@ -1,12 +1,5 @@
-﻿using System;
-
-namespace Altseed2.NodeEditor.ViewModel
+﻿namespace Altseed2.NodeEditor.ViewModel
 {
-    internal enum NodeType
-    {
-        Sprite, Text, Arc, Circle, Line, Rectangle, Triangle
-    }
-    
     internal sealed class NodeTreeViewModel
     {
         private readonly IEditorPropertyAccessor _accessor;
@@ -16,21 +9,28 @@ namespace Altseed2.NodeEditor.ViewModel
             _accessor = accessor;
         }
 
-        public void CreateNewNode(NodeType type)
+        public void CreateSpriteNode() => Engine.AddNode(new SpriteNode());
+        public void CreateTextNode() => Engine.AddNode(new TextNode());
+        public void CreateArcNode() => Engine.AddNode(new ArcNode
         {
-            var node = type switch
-            {
-                NodeType.Sprite => (Node)new SpriteNode(),
-                NodeType.Text => new TextNode(),
-                NodeType.Arc => new ArcNode { Radius = 100, StartDegree = 0, EndDegree = 90 },
-                NodeType.Circle => new CircleNode() { Radius = 100 },
-                NodeType.Line => new LineNode() { Point2 = new Vector2F(100, 100) },
-                NodeType.Rectangle => new RectangleNode() { RectangleSize = new Vector2F(100, 100) },
-                NodeType.Triangle => new TriangleNode() { Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0) },
-                _ => throw new Exception(),
-            };
-            Engine.AddNode(node);
-        }
+            Radius = 100, StartDegree = 0, EndDegree = 90
+        });
+        public void CreateCircleNode() => Engine.AddNode(new CircleNode
+        {
+            Radius = 100
+        });
+        public void CreateLineNode() => Engine.AddNode(new LineNode
+        {
+            Point2 = new Vector2F(100, 100)
+        });
+        public void CreateRectangleNode() => Engine.AddNode(new RectangleNode
+        {
+            RectangleSize = new Vector2F(100, 100)
+        });
+        public void CreateTriangleNode() => Engine.AddNode(new TriangleNode
+        {
+            Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0)
+        });
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
         {
