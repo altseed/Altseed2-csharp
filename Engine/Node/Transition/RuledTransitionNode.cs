@@ -9,10 +9,6 @@ namespace Altseed2
     public sealed class RuledTransitionState
     {
         /// <summary>
-        /// この設定を適用するノードを取得または設定します。
-        /// </summary>
-        public Node TargetNode { get; set; }
-        /// <summary>
         /// 遷移に掛かる時間を取得または設定します。
         /// </summary>
         public float Duration { get; set; }
@@ -43,7 +39,6 @@ namespace Altseed2
         /// <param name="maskTexture">指定するマスクテクスチャ</param>
         /// 
         public RuledTransitionNode(RuledTransitionState closingState, RuledTransitionState openingState, Texture2D maskTexture = null)
-            : base(closingState.TargetNode, openingState.TargetNode, closingState.Duration, openingState.Duration)
         {
             if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
             {
@@ -61,6 +56,9 @@ namespace Altseed2
                 MixRate = 0.0f,
                 UseCaptionAsMaskTexture = maskTexture != null,
             };
+
+            ClosingDuration = closingState.Duration;
+            OpeningDuration = openingState.Duration;
         }
 
         internal override void TransitionBegin()

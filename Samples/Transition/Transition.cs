@@ -30,11 +30,13 @@ namespace Sample
             amusementCreators.Position = new Vector2F(320, 240);
 
             // トランジションを行うノードを作成します。
-            var transitionNode = new MyTransitionNode(altseedPink, amusementCreators);
+            var transitionNode = new MyTransitionNode();
 
             // トランジションを行うノードを登録します。
-            // この瞬間、トランジションが開始されます。
             Engine.AddNode(transitionNode);
+
+            // トランジションを開始します。
+            transitionNode.StartTransition(altseedPink, amusementCreators);
 
             // メインループ。
             // Altseed のウインドウが閉じられると終了します。
@@ -56,8 +58,14 @@ namespace Sample
         private TransitionEffectNode _MyPostEffect;
 
         // コンストラクタ
-        public MyTransitionNode(Node oldNode, Node newNode) : base(oldNode, newNode, 1.0f, 1.0f)
+        public MyTransitionNode()
         {
+            // トランジションが始まってからノードが入れ替わるまでの期間を設定します。
+            ClosingDuration = 1.0f;
+
+            // ノードが入れ替わってからトランジションが終わるまでの期間を設定します。
+            OpeningDuration = 1.0f;
+
             // ポストエフェクトのノードを作成します。
             _MyPostEffect = new TransitionEffectNode();
 
