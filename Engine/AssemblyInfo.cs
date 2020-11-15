@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -14,3 +14,4 @@ using System.Runtime.InteropServices;
 //
 
 [assembly: InternalsVisibleTo("Test")]
+[assembly: InternalsVisibleTo("NodeEditor")]
