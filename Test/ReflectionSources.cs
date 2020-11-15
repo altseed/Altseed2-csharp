@@ -177,7 +177,7 @@ namespace Altseed2.Test
                 var configuration = ReflectionInfo.Create(new Configuration()
                 {
                     ConsoleLoggingEnabled = true,
-                    DeviceType = GraphicsDevice.DirectX,
+                    DeviceType = GraphicsDevice.DirectX12,
                     FileLoggingEnabled = true,
                     IsFullscreen = true,
                     EnabledCoreModules = CoreModules.Default | CoreModules.Tool,

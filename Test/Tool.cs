@@ -18,7 +18,8 @@ namespace Altseed2.Test
 
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
+                bool open = true;
+                if (Engine.Tool.Begin("Test", ref open, ToolWindowFlags.None))
                 {
                     Engine.Tool.End();
                 }
@@ -41,7 +42,8 @@ namespace Altseed2.Test
             float[] floatArray = new float[] { 0, 1, 2, 3, 4 };
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
+                bool open = true;
+                if (Engine.Tool.Begin("Test", ref open, ToolWindowFlags.None))
                 {
                     var tmp = Engine.Tool.InputText("InputText", str0, 1024, ToolInputTextFlags.None);
                     if (tmp != null) str0 = tmp;
@@ -52,15 +54,15 @@ namespace Altseed2.Test
                     tmp = Engine.Tool.InputTextWithHint("InputTextWithHint", "hint", str2, 1024, ToolInputTextFlags.None);
                     if (tmp != null) str2 = tmp;
 
-                    Engine.Tool.InputInt2("InputInt2", intArray);
-                    Engine.Tool.InputInt4("InputInt4", intArray);
-                    Engine.Tool.InputFloat3("InputFloat3", floatArray);
-                    Engine.Tool.InputFloat2("InputFloat2", floatArray);
+                    Engine.Tool.InputInt2("InputInt2", intArray, ToolInputTextFlags.None);
+                    Engine.Tool.InputInt4("InputInt4", intArray, ToolInputTextFlags.None);
+                    Engine.Tool.InputFloat3("InputFloat3", floatArray, "%f", ToolInputTextFlags.None);
+                    Engine.Tool.InputFloat2("InputFloat2", floatArray, "%f", ToolInputTextFlags.None);
 
-                    Engine.Tool.SliderInt2("SliderInt2", intArray, 0.1f, 0, 100);
-                    Engine.Tool.SliderInt4("SliderInt4", intArray, 0.1f, 0, 100);
-                    Engine.Tool.SliderFloat3("SliderFloat3", floatArray, 0.1f, 0, 100);
-                    Engine.Tool.SliderFloat2("SliderFloat2", floatArray, 0.1f, 0, 100);
+                    Engine.Tool.SliderInt2("SliderInt2", intArray, 0, 100, "%d", ToolSliderFlags.None);
+                    Engine.Tool.SliderInt4("SliderInt4", intArray, 0, 100, "%d", ToolSliderFlags.None);
+                    Engine.Tool.SliderFloat3("SliderFloat3", floatArray, 0, 100, "%f", ToolSliderFlags.None);
+                    Engine.Tool.SliderFloat2("SliderFloat2", floatArray, 0, 100, "%f", ToolSliderFlags.None);
 
                     Engine.Tool.End();
                 }
@@ -93,7 +95,8 @@ namespace Altseed2.Test
             Color col2 = new Color(10, 20, 50, 100);
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
+                bool open = true;
+                if (Engine.Tool.Begin("Test", ref open, ToolWindowFlags.None))
                 {
                     Engine.Tool.ColorEdit3("Color1", ref col1, ToolColorEditFlags.None);  // RGB
                     Engine.Tool.ColorEdit4("Color2", ref col2, ToolColorEditFlags.None);  // RGBAのアルファ付き
@@ -120,7 +123,8 @@ namespace Altseed2.Test
             int current = 1;
             tc.LoopBody(c =>
             {
-                if (Engine.Tool.Begin("Test", ToolWindowFlags.None))
+                bool open = true;
+                if (Engine.Tool.Begin("Test", ref open, ToolWindowFlags.None))
                 {
                     List<string> items = new List<string>() { "Apple", "Banana", "Cherry", "Kiwi", "Mango", "Orange", "Pineapple", "Strawberry", "Watermelon" };
 

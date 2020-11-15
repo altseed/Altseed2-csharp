@@ -69,7 +69,7 @@ namespace Altseed2.Test
             if (cursor != null)
             {
                 // マウスにカーソルをセットします。
-                Engine.Mouse.SetCursorImage(cursor);
+                Engine.Mouse.CursorImage = cursor;
             }
 
             tc.End();

@@ -195,7 +195,7 @@ namespace Altseed2
 
         private static void DrawCameraGroup(RenderedCamera camera, SortedDictionary<int, HashSet<IDrawn>> drawns)
         {
-            Renderer.SetCamera(camera);
+            Renderer.Camera = camera;
 
             // カリングの結果
             var cullingIdsCount = CullingSystem.DrawingRenderedIds.Count;
@@ -222,7 +222,7 @@ namespace Altseed2
                             requireRender = false;
                         }
 
-                        targetTexture ??= camera.TargetTexture ?? Graphics.CommandList.GetScreenTexture();
+                        targetTexture ??= camera.TargetTexture ?? Graphics.CommandList.ScreenTexture;
                         _PostEffectBuffer ??= _RenderTextureCache.GetRenderTexture(targetTexture.Size, targetTexture.Format);
 
                         Graphics.CommandList.CopyTexture(targetTexture, _PostEffectBuffer);
@@ -538,7 +538,7 @@ namespace Altseed2
         public static float TargetFPS
         {
             get => Core.TargetFPS;
-            set { Core.TargetFPS = value; }
+            set { Core.TargetFPS = (int)value; }
         }
 
         /// <summary>

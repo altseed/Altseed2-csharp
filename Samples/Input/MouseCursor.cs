@@ -18,7 +18,7 @@ namespace Sample
             if (cursor != null)
             {
                 // マウスにカーソルをセットします。
-                Engine.Mouse.SetCursorImage(cursor);
+                Engine.Mouse.CursorImage = cursor;
             }
 
             while (Engine.DoEvents())
