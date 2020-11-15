@@ -23,7 +23,7 @@ namespace Altseed2.Tool.FontGenerator
                     if (Engine.Tool.SmallButton("Open TTF File"))
                         input = Engine.Tool.OpenDialog("ttf", "");
 
-                    Engine.Tool.SliderInt("Font Size", ref size, 1, 1, 1024);
+                    Engine.Tool.SliderInt("Font Size", ref size, 1, 1024, "%d", ToolSliderFlags.None);
 
                     tmp = Engine.Tool.InputText("Characters Text File", charactersTextFilePath, 2048, ToolInputTextFlags.None);
                     if (tmp != null) charactersTextFilePath = tmp;
