@@ -7658,7 +7658,7 @@ namespace Altseed2
     /// カメラのクラス
     /// </summary>
     [Serializable]
-    internal sealed partial class RenderedCamera : Rendered, ISerializable, ICacheKeeper<RenderedCamera>
+    internal sealed partial class RenderedCamera : ISerializable, ICacheKeeper<RenderedCamera>
     {
         #region unmanaged
         
@@ -7666,7 +7666,7 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static new RenderedCamera TryGetFromCache(IntPtr native)
+        public static  RenderedCamera TryGetFromCache(IntPtr native)
         {
             if(native == IntPtr.Zero) return null;
         
@@ -7690,6 +7690,8 @@ namespace Altseed2
             return newObject;
         }
         
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedCamera_Create();
@@ -7730,7 +7732,7 @@ namespace Altseed2
         #endregion
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal RenderedCamera(MemoryHandle handle) : base(handle)
+        internal RenderedCamera(MemoryHandle handle)
         {
             selfPtr = handle.selfPtr;
         }
@@ -7837,10 +7839,9 @@ namespace Altseed2
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
         /// <param name="context">送信元の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private RenderedCamera(SerializationInfo info, StreamingContext context) : base(info, context)
+        private RenderedCamera(SerializationInfo info, StreamingContext context) : this(new MemoryHandle(IntPtr.Zero))
         {
-            var ptr = selfPtr;
-            if (ptr == IntPtr.Zero) ptr = Call_GetPtr(info);
+            var ptr = Call_GetPtr(info);
             
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingOnDeserialization(this, ptr);
@@ -7860,9 +7861,9 @@ namespace Altseed2
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            base.GetObjectData(info, context);
+            if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
             info.AddValue(S_TargetTexture, TargetTexture);
             info.AddValue(S_RenderPassParameter, RenderPassParameter);
@@ -7872,7 +7873,7 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// <see cref="GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
+        /// <see cref="ISerializable.GetObjectData(SerializationInfo, StreamingContext)"/>内で実行されます。
         /// </summary>
         /// <param name="info">シリアライズされるデータを格納するオブジェクト</param>
         /// <param name="context">送信先の情報</param>
@@ -7900,7 +7901,7 @@ namespace Altseed2
         /// 呼び出し禁止
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected private override IntPtr Call_GetPtr(SerializationInfo info)
+        private IntPtr Call_GetPtr(SerializationInfo info)
         {
             var ptr = IntPtr.Zero;
             Deserialize_GetPtr(ref ptr, info);

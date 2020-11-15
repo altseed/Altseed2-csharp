@@ -23,7 +23,7 @@ namespace Altseed2.TestForMacLinux
             var options = ((Parsed<Options>)result).Value;
 
             // if you test specific cases in code, you add filter.
-            options.Filter = new List<string> { "AcnhorAndShapeNode" };
+            //options.Filter = new List<string> { "AcnhorAndShapeNode" };
 #if CI
             options.Filter = new List<string> { "-Sound" };
 #endif
