@@ -18,14 +18,15 @@ namespace Altseed2
             var pos = new Vector2F(0, offset);
             var size = Engine.Window.Size - pos;
             SetNextWindowSize(size, ToolCond.None);
-            SetNextWindowPos(pos, ToolCond.None);
+            SetNextWindowPos(pos, ToolCond.None, new Vector2F());
 
             var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
                 | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
                 | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoTitleBar;
 
             //const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;
-            var visible = Begin(" ", flags);
+            bool _tmp = false;
+            var visible = Begin(" ", ref _tmp,flags);
             // ImGui::GetStyle().WindowRounding = oldWindowRounding;
             return visible;
         }
@@ -71,15 +72,16 @@ namespace Altseed2
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <param name="flags"></param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputInt2(string label, Span<int> span)
+        public bool InputInt2(string label, Span<int> span, ToolInputTextFlags flags)
         {
             if (span.Length < 2)
                 throw new ArgumentException("Spanの長さが2未満です。");
 
             int32Array.FromSpan(span);
-            bool res = InputInt2(label, int32Array);
+            bool res = InputInt2(label, int32Array, flags);
 
             if (res)
                 for (int i = 0; i < 2; i++)
@@ -93,15 +95,16 @@ namespace Altseed2
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="span">それぞれのボックスの値を格納するSpan</param>
+        /// <param name="flags"></param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputInt3(string label, Span<int> span)
+        public bool InputInt3(string label, Span<int> span, ToolInputTextFlags flags)
         {
             if (span.Length < 3)
                 throw new ArgumentException("Spanの長さが3未満です。");
 
             int32Array.FromSpan(span);
-            bool res = InputInt3(label, int32Array);
+            bool res = InputInt3(label, int32Array, flags);
 
             if (res)
                 for (int i = 0; i < 3; i++)
@@ -117,13 +120,13 @@ namespace Altseed2
         /// <param name="span">それぞれのボックスの値を格納するSpan</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputInt4(string label, Span<int> span)
+        public bool InputInt4(string label, Span<int> span, ToolInputTextFlags flags)
         {
             if (span.Length < 4)
                 throw new ArgumentException("Spanの長さが4未満です。");
 
             int32Array.FromSpan(span);
-            bool res = InputInt4(label, int32Array);
+            bool res = InputInt4(label, int32Array, flags);
 
             if (res)
                 for (int i = 0; i < 4; i++)
@@ -139,13 +142,13 @@ namespace Altseed2
         /// <param name="span">それぞれのボックスの値を格納するSpan</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputFloat2(string label, Span<float> span)
+        public bool InputFloat2(string label, Span<float> span, string format, ToolInputTextFlags flags)
         {
             if (span.Length < 2)
                 throw new ArgumentException("Spanの長さが2未満です。");
 
             floatArray.FromSpan(span);
-            bool res = InputFloat2(label, floatArray);
+            bool res = InputFloat2(label, floatArray, format, flags);
 
             if (res)
                 for (int i = 0; i < 2; i++)
@@ -161,13 +164,13 @@ namespace Altseed2
         /// <param name="span">それぞれのボックスの値を格納するSpan</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputFloat3(string label, Span<float> span)
+        public bool InputFloat3(string label, Span<float> span, string format, ToolInputTextFlags flags)
         {
             if (span.Length < 3)
                 throw new ArgumentException("Spanの長さが3未満です。");
 
             floatArray.FromSpan(span);
-            bool res = InputFloat3(label, floatArray);
+            bool res = InputFloat3(label, floatArray, format, flags);
 
             if (res)
                 for (int i = 0; i < 3; i++)
@@ -183,13 +186,13 @@ namespace Altseed2
         /// <param name="span">それぞれのボックスの値を格納するSpan</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool InputFloat4(string label, Span<float> span)
+        public bool InputFloat4(string label, Span<float> span, string format, ToolInputTextFlags flags)
         {
             if (span.Length < 4)
                 throw new ArgumentException("Spanの長さが4未満です。");
 
             floatArray.FromSpan(span);
-            bool res = InputFloat4(label, floatArray);
+            bool res = InputFloat4(label, floatArray, format, flags);
 
             if (res)
                 for (int i = 0; i < 4; i++)
@@ -203,18 +206,17 @@ namespace Altseed2
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="span">各バーの値を格納するSpan</param>
-        /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderInt2(string label, Span<int> span, float speed, int vMin, int vMax)
+        public bool SliderInt2(string label, Span<int> span, int vMin, int vMax, string format, ToolSliderFlags flags)
         {
             if (span.Length < 2)
                 throw new ArgumentException("配列の長さが足りません");
 
             int32Array.FromSpan(span);
-            bool res = SliderInt2(label, int32Array, speed, vMin, vMax);
+            bool res = SliderInt2(label, int32Array, vMin, vMax, format, flags);
 
             if (res)
                 for (int i = 0; i < 2; i++)
@@ -228,18 +230,17 @@ namespace Altseed2
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="span">各バーの値を格納するSpan</param>
-        /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderInt3(string label, Span<int> span, float speed, int vMin, int vMax)
+        public bool SliderInt3(string label, Span<int> span, int vMin, int vMax, string format, ToolSliderFlags flags)
         {
             if (span.Length < 3)
                 throw new ArgumentException("Spanの長さが3未満です。");
 
             int32Array.FromSpan(span);
-            bool res = SliderInt3(label, int32Array, speed, vMin, vMax);
+            bool res = SliderInt3(label, int32Array, vMin, vMax, format, flags);
 
             if (res)
                 for (int i = 0; i < 3; i++)
@@ -253,19 +254,18 @@ namespace Altseed2
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="span">各バーの値を格納するSpan</param>
-        /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
         /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderInt4(string label, Span<int> span, float speed, int vMin, int vMax)
+        public bool SliderInt4(string label, Span<int> span, int vMin, int vMax, string format, ToolSliderFlags flags)
         {
             if (span.Length < 4)
                 throw new ArgumentException("Spanの長さが4未満です。");
 
             int32Array.FromSpan(span);
-            bool res = SliderInt4(label, int32Array, speed, vMin, vMax);
+            bool res = SliderInt4(label, int32Array, vMin, vMax, format, flags);
 
             if (res)
                 for (int i = 0; i < 4; i++)
@@ -279,19 +279,18 @@ namespace Altseed2
         /// </summary>
         /// <param name="label">横に表示されるラベルの文字列</param>
         /// <param name="span">各バーの値を格納するSpan</param>
-        /// <param name="speed">値の増減する量</param>
         /// <param name="vMin">最小値</param>
         /// <param name="vMax">最大値</param>
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが2未満</exception>
         /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderFloat2(string label, Span<float> span, float speed, float vMin, float vMax)
+        public bool SliderFloat2(string label, Span<float> span, float vMin, float vMax, string format, ToolSliderFlags flags)
         {
             if (span.Length < 2)
                 throw new ArgumentException("Spanの長さが足りません");
 
             floatArray.FromSpan(span);
-            bool res = SliderFloat2(label, floatArray, speed, vMin, vMax);
+            bool res = SliderFloat2(label, floatArray, vMin, vMax, format, flags);
 
             if (res)
                 for (int i = 0; i < 2; i++)
@@ -311,13 +310,13 @@ namespace Altseed2
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが3未満</exception>
         /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderFloat3(string label, Span<float> span, float speed, float vMin, float vMax)
+        public bool SliderFloat3(string label, Span<float> span, float vMin, float vMax, string format, ToolSliderFlags flags)
         {
             if (span.Length < 3)
                 throw new ArgumentException("Spanの長さが3未満です。");
 
             floatArray.FromSpan(span);
-            bool res = SliderFloat3(label, floatArray, speed, vMin, vMax);
+            bool res = SliderFloat3(label, floatArray, vMin, vMax, format, flags);
 
             if (res)
                 for (int i = 0; i < 3; i++)
@@ -337,31 +336,19 @@ namespace Altseed2
         /// <exception cref="ArgumentException"><paramref name="span"/>の大きさが4未満</exception>
         /// <exception cref="ArgumentNullException"><paramref name="span"/>がnull</exception>
         /// <returns>入力が決定されたらtrue，それ以外でfalse</returns>
-        public bool SliderFloat4(string label, Span<float> span, float speed, float vMin, float vMax)
+        public bool SliderFloat4(string label, Span<float> span, float vMin, float vMax, string format, ToolSliderFlags flags)
         {
             if (span.Length < 4)
                 throw new ArgumentException("Spanの長さが4未満です。");
 
             floatArray.FromSpan(span);
-            bool res = SliderFloat4(label, floatArray, speed, vMin, vMax);
+            bool res = SliderFloat4(label, floatArray, vMin, vMax, format, flags);
 
             if (res)
                 for (int i = 0; i < 4; i++)
                     span[i] = floatArray.GetAt(i);
 
             return res;
-        }
-
-        /// <summary>
-        /// ラジオボタンを生成します。
-        /// </summary>
-        /// <param name="label">横に表示されるラベルの文字列</param>
-        /// <param name="v">選択されているボタンのインデックス</param>
-        /// <param name="vButton">ボタンのインデックス</param>
-        /// <returns>クリックされたらtrue，それ以外でfalse</returns>
-        public bool RadioButton(string label, ref int v, int vButton)
-        {
-            return RadioButton_2(label, ref v, vButton);
         }
 
         public void PlotLines(
@@ -392,6 +379,29 @@ namespace Altseed2
         {
             floatArray.FromSpan(values);
             PlotHistogram(label, floatArray, values_count, valuesOffset, overlayText, scaleMin, scaleMax, graphSize, stride);
+        }
+
+        public bool ColorEdit3(string label, ref Color col, ToolColorEditFlags flags)
+        {
+            float[] span = new float[3] { col.R / 255f, col.G / 255f, col.B / 255f };
+            floatArray.FromSpan(span);
+            var res = ColorEdit3(label, floatArray, flags);
+            col.R = (byte)(floatArray[0] * 255);
+            col.G = (byte)(floatArray[1] * 255);
+            col.B = (byte)(floatArray[2] * 255);
+            return res;
+        }
+
+        public bool ColorEdit4(string label, ref Color col, ToolColorEditFlags flags)
+        {
+            float[] span = new float[4] { col.R / 255f, col.G / 255f, col.B / 255f, col.A / 255f };
+            floatArray.FromSpan(span);
+            var res = ColorEdit4(label, floatArray, flags);
+            col.R = (byte)(floatArray[0] * 255);
+            col.G = (byte)(floatArray[1] * 255);
+            col.B = (byte)(floatArray[2] * 255);
+            col.A = (byte)(floatArray[3] * 255);
+            return res;
         }
     }
 }

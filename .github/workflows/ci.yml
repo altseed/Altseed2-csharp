@@ -91,6 +91,13 @@ jobs:
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
+        wget https://github.com/harfbuzz/harfbuzz/releases/download/2.7.1/harfbuzz-2.7.1.tar.xz
+        tar Jxfv harfbuzz-2.7.1.tar.xz
+        cd harfbuzz-2.7.1
+        sudo ./configure --prefix=/usr --with-gobject --with-graphite2 &&
+        sudo make
+        sudo make install
+        cd ..
         wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
         sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.1.121-bionic.list http://packages.lunarg.com/vulkan/1.1.121/lunarg-vulkan-1.1.121-bionic.list
         sudo apt update

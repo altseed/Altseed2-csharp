@@ -61,7 +61,7 @@ namespace Altseed2
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            Shader_Unsetter_Deserialize(info, out var stage, out var code, out var name);
+            Shader_Unsetter_Deserialize(info, out var code, out var name, out var stage);
             var result = new ShaderCompileResult(new MemoryHandle(cbg_Shader_Compile(name, code, (int)stage)));
             if (result.Value == null) throw new SerializationException($"シェーダのデシリアライズ時のコンパイルに失敗しました\n{nameof(result.Message)}: {result.Message}");
             ptr = result.GetValuePtr();

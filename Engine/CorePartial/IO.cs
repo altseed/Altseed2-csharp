@@ -12,7 +12,7 @@ namespace Altseed2
         /// </summary>
         public byte[] Buffer
         {
-            get { return GetBuffer().ToArray(); }
+            get { return Int8ArrayBuffer.ToArray(); }
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -57,7 +57,7 @@ namespace Altseed2
         /// </summary>
         public byte[] TempBuffer
         {
-            get { return GetTempBuffer().ToArray(); }
+            get { return Int8ArrayTempBuffer.ToArray(); }
         }
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
