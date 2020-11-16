@@ -4323,6 +4323,8 @@ namespace Altseed2
         #region ISerialiable
         
         #region SerializeName
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_AlphaBlend = "S_AlphaBlend";
         #endregion
         
         /// <summary>
@@ -4338,6 +4340,7 @@ namespace Altseed2
             if (ptr == IntPtr.Zero) throw new SerializationException("インスタンス生成に失敗しました");
             CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
+            AlphaBlend = info.GetValue<AlphaBlend>(S_AlphaBlend);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -4352,6 +4355,7 @@ namespace Altseed2
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
+            info.AddValue(S_AlphaBlend, AlphaBlend);
             
             OnGetObjectData(info, context);
         }
