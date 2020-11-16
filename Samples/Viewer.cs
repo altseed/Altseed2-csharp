@@ -126,8 +126,8 @@ namespace Sample
                 var process = new Process();
                 process.StartInfo.FileName = command;
                 process.StartInfo.Arguments = arguments;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.CreateNoWindow = false;
                 var result = process.Start();
                 if (!result) return false;
             }
