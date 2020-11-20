@@ -19,13 +19,14 @@ namespace Altseed2.NodeEditor.View
         public void Render(Vector2F position, Vector2F size, Action onActive)
         {
             Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(position, ToolCond.None);
+            Engine.Tool.SetNextWindowPos(position, ToolCond.None, new Vector2F());
 
-            if (Engine.Tool.Begin(_name, UiConfig))
+            bool pOpen = true;
+            if (Engine.Tool.Begin(_name, ref pOpen,UiConfig))
             {
                 onActive();
-                Engine.Tool.End();
             }
+            Engine.Tool.End();
         }
     }
 }

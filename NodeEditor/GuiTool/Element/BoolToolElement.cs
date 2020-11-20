@@ -29,7 +29,7 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             bool flag = (bool)PropertyInfo.GetValue(Source);
-            if (Engine.Tool.CheckBox(Name, ref flag))
+            if (Engine.Tool.Checkbox(Name, ref flag))
             {
                 PropertyInfo.SetValue(Source, flag);
             }

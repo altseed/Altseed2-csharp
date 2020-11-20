@@ -39,7 +39,7 @@ namespace Altseed2.NodeEditor.View
         {
             if (!onNewLine)
             {
-                Engine.Tool.SameLine();
+                Engine.Tool.SameLine(0, -1);
             }
 
             if (Engine.Tool.Button(label))

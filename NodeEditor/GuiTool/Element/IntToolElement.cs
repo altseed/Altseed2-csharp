@@ -53,7 +53,7 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             int num = (int)PropertyInfo.GetValue(Source);
-            if (Engine.Tool.DragInt(Name, ref num, Speed, Min, Max))
+            if (Engine.Tool.DragInt(Name, ref num, Speed, Min, Max, "%d", ToolSliderFlags.None))
             {
                 PropertyInfo.SetValue(Source, num);
             }

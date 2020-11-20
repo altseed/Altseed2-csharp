@@ -21,8 +21,8 @@ namespace Altseed2.Test
                 bool open = true;
                 if (Engine.Tool.Begin("Test", ref open, ToolWindowFlags.None))
                 {
-                    Engine.Tool.End();
                 }
+                Engine.Tool.End();
             }
             , null);
 
@@ -63,9 +63,8 @@ namespace Altseed2.Test
                     Engine.Tool.SliderInt4("SliderInt4", intArray, 0, 100, "%d", ToolSliderFlags.None);
                     Engine.Tool.SliderFloat3("SliderFloat3", floatArray, 0, 100, "%f", ToolSliderFlags.None);
                     Engine.Tool.SliderFloat2("SliderFloat2", floatArray, 0, 100, "%f", ToolSliderFlags.None);
-
-                    Engine.Tool.End();
                 }
+                Engine.Tool.End();
             }
             , null);
 
@@ -104,8 +103,8 @@ namespace Altseed2.Test
                     var flag = ToolColorEditFlags.Float | ToolColorEditFlags.NoInputs | ToolColorEditFlags.NoLabel;
 
                     Engine.Tool.ColorEdit3("Color ID", ref col1, flag);
-                    Engine.Tool.End();
                 }
+                Engine.Tool.End();
 
                 text.Color = col1;
             }
@@ -130,9 +129,8 @@ namespace Altseed2.Test
 
                     Engine.Tool.ListBox("ListBox", ref current, items, 3);
                     Engine.Tool.Combo("Combo", ref current, items, 3);
-
-                    Engine.Tool.End();
                 }
+                Engine.Tool.End();
             }
             , null);
 

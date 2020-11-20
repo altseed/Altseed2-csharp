@@ -53,34 +53,14 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             Vector2F vector = (Vector2F)PropertyInfo.GetValue(Source);
-            float x = vector.X;
-            float y = vector.Y;
+            float[] vectorArray =  new float[2] { vector.X, vector.Y };
 
-            var width = Engine.Tool.GetColumnWidth(0) * 0.65f;
-            Engine.Tool.Columns(2, false);
-            Engine.Tool.SetColumnWidth(0, width / 2);
-            Engine.Tool.SetColumnWidth(1, width / 2);
-            Engine.Tool.PushItemWidth(-1);
-
-            if (Engine.Tool.DragFloat($"##{Name}_X", ref x, Speed, Min, Max))
+            if (Engine.Tool.DragFloat2(Name, vectorArray, Speed, Min, Max, "%f", ToolSliderFlags.None))
             {
-                vector.X = x;
+                vector.X = vectorArray[0];
+                vector.Y = vectorArray[1];
                 PropertyInfo.SetValue(Source, vector);
             }
-
-            Engine.Tool.PopItemWidth();
-            Engine.Tool.NextColumn();
-            Engine.Tool.PushItemWidth(-1);
-
-            if (Engine.Tool.DragFloat($"##{Name}_Y", ref y, Speed, Min, Max))
-            {
-                vector.Y = y;
-                PropertyInfo.SetValue(Source, vector);
-            }
-            Engine.Tool.PopItemWidth();
-            Engine.Tool.Columns(1, false);
-            Engine.Tool.SameLine();
-            Engine.Tool.Text(Name);
         }
 
         /// <summary>

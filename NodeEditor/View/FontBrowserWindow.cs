@@ -16,12 +16,13 @@ namespace Altseed2.NodeEditor.View
 
         public void UpdateFontBrowser()
         {
-            if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
+            bool pOpen = true;
+            if (Engine.Tool.Begin("Font Browser", ref pOpen, ToolWindowFlags.None))
             {
                 Engine.Tool.PushID("Browser".GetHashCode());
 
-                Engine.Tool.InputInt("Font Size", ref _viewModel.FontSize);
-                Engine.Tool.SameLine();
+                Engine.Tool.InputInt("Font Size", ref _viewModel.FontSize, 1, 1, ToolInputTextFlags.None);
+                Engine.Tool.SameLine(0, -1);
                 if (Engine.Tool.Button("+"))
                 {
                     OpenFont();
@@ -39,7 +40,7 @@ namespace Altseed2.NodeEditor.View
 
                 Engine.Tool.PopID();
 
-                if (!Engine.Tool.IsWindowFocused(ToolFocused.None))
+                if (!Engine.Tool.IsWindowFocused(ToolFocusedFlags.None))
                 {
                     _viewModel.Selected = null;
                 }
@@ -49,7 +50,7 @@ namespace Altseed2.NodeEditor.View
 
         private void OpenFont()
         {
-            if (Engine.Tool.OpenDialog("ttf", "") is {} path)
+            if (Engine.Tool.OpenDialog("ttf", "") is { } path)
             {
                 _viewModel.LoadFont(path);
             }

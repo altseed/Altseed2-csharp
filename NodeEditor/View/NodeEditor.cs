@@ -71,15 +71,17 @@ namespace Altseed2.NodeEditor.View
 
         private void OnFirstUpdate()
         {
-            if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
+            bool pOpen = true;
+            if (Engine.Tool.Begin("Texture Browser", ref pOpen,ToolWindowFlags.None))
             {
-                Engine.Tool.End();
             }
+            Engine.Tool.End();
 
-            if (Engine.Tool.Begin("Font Browser", ToolWindowFlags.None))
+            pOpen = false;
+            if (Engine.Tool.Begin("Font Browser", ref pOpen, ToolWindowFlags.None))
             {
-                Engine.Tool.End();
             }
+            Engine.Tool.End();
 
             _first = false;
         }

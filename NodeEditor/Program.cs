@@ -1,9 +1,11 @@
 ﻿using Altseed2.NodeEditor.View;
+using System;
 
 namespace Altseed2.NodeEditor
 {
 	class Program
 	{
+		[STAThread]
 		static void Main(string[] args)
 		{
 			var config = new Configuration()

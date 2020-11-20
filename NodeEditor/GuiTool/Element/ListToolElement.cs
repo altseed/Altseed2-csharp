@@ -202,7 +202,7 @@ namespace Altseed2
             {
                 AddMethodInfo?.Invoke(Source, new object[] { Current });
                 if (RemoveMethodInfo != null)
-                    Engine.Tool.SameLine();
+                    Engine.Tool.SameLine(0, -1);
             }
 
             if (RemoveMethodInfo != null)

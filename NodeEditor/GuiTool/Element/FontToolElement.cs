@@ -44,7 +44,7 @@ namespace Altseed2
                     new Color(255, 255, 255, 255)))
                 {
                     NodeEditorHost.FontBrowserTarget = this;
-                    Engine.Tool.SetWindowFocusByName("Font Browser");
+                    Engine.Tool.SetWindowFocus("Font Browser");
                 }
             }
             else
@@ -52,10 +52,10 @@ namespace Altseed2
                 if (Engine.Tool.Button("null"))
                 {
                     NodeEditorHost.FontBrowserTarget = this;
-                    Engine.Tool.SetWindowFocusByName("Font Browser");
+                    Engine.Tool.SetWindowFocus("Font Browser");
                 }
             }
-            Engine.Tool.SameLine();
+            Engine.Tool.SameLine(0, -1);
             Engine.Tool.LabelText("Font", Name);
         }
 

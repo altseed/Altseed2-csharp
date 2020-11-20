@@ -26,12 +26,12 @@ namespace Altseed2.NodeEditor.View
             var size = _latestWindowSize - new Vector2F(600, _accessor.MenuHeight);
             var pos = new Vector2F(300, _accessor.MenuHeight);
 
-            Engine.Tool.PushStyleVarVector2F(ToolStyleVar.WindowPadding, default);
-            Engine.Tool.PushStyleVarFloat(ToolStyleVar.WindowRounding, 0);
+            Engine.Tool.PushStyleVar(ToolStyleVar.WindowPadding, new Vector2F());
+            Engine.Tool.PushStyleVar(ToolStyleVar.WindowRounding, 0);
 
             _pane.Render(pos, size, () =>
             {
-                _viewModel.IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocused.None);
+                _viewModel.IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocusedFlags.None);
                 _viewModel.MousePosition = Engine.Mouse.Position - Engine.Tool.GetWindowPos();
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());

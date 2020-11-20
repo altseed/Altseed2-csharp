@@ -16,7 +16,8 @@ namespace Altseed2.NodeEditor.View
 
         public void Render()
         {
-            if (Engine.Tool.Begin("Texture Browser", ToolWindowFlags.None))
+            bool pOpen = true;
+            if (Engine.Tool.Begin("Texture Browser", ref pOpen, ToolWindowFlags.None))
             {
                 Engine.Tool.PushID("Browser".GetHashCode());
                 if (Engine.Tool.Button("+"))
@@ -36,12 +37,12 @@ namespace Altseed2.NodeEditor.View
 
                 Engine.Tool.PopID();
 
-                if (!Engine.Tool.IsWindowFocused(ToolFocused.None))
+                if (!Engine.Tool.IsWindowFocused(ToolFocusedFlags.None))
                 {
                     _viewModel.Selected = null;
                 }
-                Engine.Tool.End();
             }
+            Engine.Tool.End();
         }
 
         private void OpenImage()
