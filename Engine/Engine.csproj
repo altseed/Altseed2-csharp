@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Altseed2</RootNamespace>
@@ -72,9 +72,5 @@
     </When>
 
   </Choose>
-
-  <ItemGroup>
-    <PackageReference Include="System.Reactive" Version="4.4.1" />
-  </ItemGroup>
 
 </Project>
