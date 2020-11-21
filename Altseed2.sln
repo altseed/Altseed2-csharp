@@ -20,6 +20,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FontGenerator", "Tool\FontG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilePackageGenerator", "Tool\FilePackageGenerator\FilePackageGenerator.csproj", "{AE44F118-F8AC-4880-8EE5-757A7330205C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeEditor", "NodeEditor\NodeEditor.csproj", "{1C73002B-9C9D-4D42-99E0-453B2B88C82C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeEditor.Test", "NodeEditor.Test\NodeEditor.Test.csproj", "{7458F307-A62D-4C7F-B51C-67446AE7A3DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CI|x64 = CI|x64
@@ -63,6 +67,18 @@ Global
 		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Debug|x64.Build.0 = Debug|x64
 		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Release|x64.ActiveCfg = Release|x64
 		{AE44F118-F8AC-4880-8EE5-757A7330205C}.Release|x64.Build.0 = Release|x64
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C}.CI|x64.ActiveCfg = Release|x64
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C}.CI|x64.Build.0 = Release|x64
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C}.Debug|x64.ActiveCfg = Debug|x64
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C}.Debug|x64.Build.0 = Debug|x64
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C}.Release|x64.ActiveCfg = Release|x64
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C}.Release|x64.Build.0 = Release|x64
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA}.CI|x64.ActiveCfg = Release|x64
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA}.CI|x64.Build.0 = Release|x64
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA}.Debug|x64.ActiveCfg = Debug|x64
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA}.Debug|x64.Build.0 = Debug|x64
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA}.Release|x64.ActiveCfg = Release|x64
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +86,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1A14729B-0397-4ADB-BEAA-9946CD61BD99} = {2604264E-917B-4031-A33F-CFE134662FFB}
 		{AE44F118-F8AC-4880-8EE5-757A7330205C} = {2604264E-917B-4031-A33F-CFE134662FFB}
+		{1C73002B-9C9D-4D42-99E0-453B2B88C82C} = {2604264E-917B-4031-A33F-CFE134662FFB}
+		{7458F307-A62D-4C7F-B51C-67446AE7A3DA} = {2604264E-917B-4031-A33F-CFE134662FFB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03A27F6C-8AA5-4EEE-BE21-B3BFECB9B100}

@@ -24,13 +24,13 @@ namespace Altseed2
         /// 実際のUpdate対象のノード
         /// </summary>
         /// <remarks>Pause中は一部のノードのみが更新対象になる。</remarks>
-        private static Node _UpdatedNode;
+        internal static Node _UpdatedNode;
 
-        private static CameraNodeCollection _CameraNodes;
-        private static RenderedCamera _DefaultCamera;
-        private static DrawnCollection _DrawnCollection;
+        internal static CameraNodeCollection _CameraNodes;
+        internal static RenderedCamera _DefaultCamera;
+        internal static DrawnCollection _DrawnCollection;
 
-        private static RenderTextureCache _RenderTextureCache;
+        internal static RenderTextureCache _RenderTextureCache;
         internal static RenderTexture _PostEffectBuffer; // TODO: 渡し方をうまくやる。
 
         // cullingの結果を格納するためのBuffer
@@ -142,6 +142,12 @@ namespace Altseed2
         /// </summary>
         public static bool Update()
         {
+            var anyCamera = _CameraNodes.Count != 0;
+            return UpdateComponents(!anyCamera, anyCamera);
+        }
+
+        internal static bool UpdateComponents(bool drawDefaultCameraGroup, bool drawCustomCameraGroup)
+        {
             // ノードの更新
             _UpdatedNode?.Update();
 
@@ -162,12 +168,13 @@ namespace Altseed2
                 if (!_graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
             }
 
-            if (_CameraNodes.Count == 0)
+            if (drawDefaultCameraGroup)
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
                 DrawCameraGroup(_DefaultCamera, _DrawnCollection.GetDrawns());
             }
-            else
+
+            if (drawCustomCameraGroup)
             {
                 // 特定のカメラに映りこむノードを描画
                 for (int i = 0; i < MaxCameraGroupCount; i++)
@@ -193,7 +200,7 @@ namespace Altseed2
             return true;
         }
 
-        private static void DrawCameraGroup(RenderedCamera camera, SortedDictionary<int, HashSet<IDrawn>> drawns)
+        internal static void DrawCameraGroup(RenderedCamera camera, SortedDictionary<int, HashSet<IDrawn>> drawns)
         {
             Renderer.Camera = camera;
 

@@ -26,7 +26,7 @@ namespace Altseed2
 
             //const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;
             bool _tmp = false;
-            var visible = Begin(" ", ref _tmp,flags);
+            var visible = Begin(" ", ref _tmp, flags);
             // ImGui::GetStyle().WindowRounding = oldWindowRounding;
             return visible;
         }
@@ -401,6 +401,96 @@ namespace Altseed2
             col.G = (byte)(floatArray[1] * 255);
             col.B = (byte)(floatArray[2] * 255);
             col.A = (byte)(floatArray[3] * 255);
+            return res;
+        }
+
+        public bool DragInt2(string label, Span<int> span, float v_speed, int v_min, int v_max, string format, ToolSliderFlags flags)
+        {
+            if (span.Length < 2)
+                throw new ArgumentException("Spanの長さが2未満です。");
+
+            int32Array.FromSpan(span);
+            bool res = DragInt2(label, int32Array, v_speed, v_min, v_max, format, flags);
+
+            if (res)
+                for (int i = 0; i < 2; i++)
+                    span[i] = int32Array.GetAt(i);
+
+            return res;
+        }
+
+        public bool DragInt3(string label, Span<int> span, float v_speed, int v_min, int v_max, string format, ToolSliderFlags flags)
+        {
+            if (span.Length < 3)
+                throw new ArgumentException("Spanの長さが3未満です。");
+
+            int32Array.FromSpan(span);
+            bool res = DragInt3(label, int32Array, v_speed, v_min, v_max, format, flags);
+
+            if (res)
+                for (int i = 0; i < 3; i++)
+                    span[i] = int32Array.GetAt(i);
+
+            return res;
+        }
+
+        public bool DragInt4(string label, Span<int> span, float v_speed, int v_min, int v_max, string format, ToolSliderFlags flags)
+        {
+            if (span.Length < 4)
+                throw new ArgumentException("Spanの長さが4未満です。");
+
+            int32Array.FromSpan(span);
+            bool res = DragInt4(label, int32Array, v_speed, v_min, v_max, format, flags);
+
+            if (res)
+                for (int i = 0; i < 4; i++)
+                    span[i] = int32Array.GetAt(i);
+
+            return res;
+        }
+
+        public bool DragFloat2(string label, Span<float> span, float v_speed, float v_min, float v_max, string format, ToolSliderFlags flags)
+        {
+            if (span.Length < 2)
+                throw new ArgumentException("Spanの長さが2未満です。");
+
+            floatArray.FromSpan(span);
+            bool res = DragFloat2(label, floatArray, v_speed, v_min, v_max, format, flags);
+
+            if (res)
+                for (int i = 0; i < 2; i++)
+                    span[i] = floatArray.GetAt(i);
+
+            return res;
+        }
+
+        public bool DragFloat3(string label, Span<float> span, float v_speed, float v_min, float v_max, string format, ToolSliderFlags flags)
+        {
+            if (span.Length < 3)
+                throw new ArgumentException("Spanの長さが3未満です。");
+
+            floatArray.FromSpan(span);
+            bool res = DragFloat3(label, floatArray, v_speed, v_min, v_max, format, flags);
+
+            if (res)
+                for (int i = 0; i < 3; i++)
+                    span[i] = floatArray.GetAt(i);
+
+            return res;
+        }
+
+        public bool DragFloat4(string label, Span<float> span, float v_speed, float v_min, float v_max, string format, ToolSliderFlags flags)
+        {
+            if (span.Length < 4)
+                throw new ArgumentException("Spanの長さが4未満です。");
+
+            floatArray.FromSpan(span);
+            bool res = DragFloat4(label, floatArray, v_speed, v_min, v_max, format, flags);
+
+            if (res)
+                for (int i = 0; i < 4; i++)
+                    span[i] = floatArray.GetAt(i);
+
             return res;
         }
     }
