@@ -19,7 +19,7 @@ namespace Altseed2
         /// <summary>
         /// 描画時の重ね順を取得または設定します。
         /// </summary>
-        int ZOrder { get; }
+        int ZOrder { get; set; }
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace Altseed2
         /// <summary>
         /// このノードを描画するかどうかを取得または設定します。
         /// </summary>
-        bool IsDrawn { get; }
+        bool IsDrawn { get; set; }
 
         /// <summary>
         /// 先祖の<see cref="IsDrawn" />を考慮して、このノードを描画するかどうかを取得します。
