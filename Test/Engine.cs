@@ -188,5 +188,16 @@ float4 main(PS_INPUT input) : SV_TARGET
                 Collection.Remove(this);
             }
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void CoreModulesNone()
+        {
+            var config = new Configuration { EnabledCoreModules = CoreModules.None };
+
+            var tc = new TestCore(config);
+            tc.Init();
+            tc.Init();
+            tc.End();
+        }
     }
 }
