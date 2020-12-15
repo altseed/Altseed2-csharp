@@ -55,10 +55,14 @@ namespace Altseed2
             {
                 if (_ClearColor == value) return;
                 _ClearColor = value;
-                if (_DefaultCamera != null)
+
+                if (_DefaultCamera is null)
                 {
-                    _DefaultCamera.RenderPassParameter = new RenderPassParameter(value, true, true);
+                    Log.Warn(LogCategory.Engine, "Graphics機能が初期化されていません。");
+                    return;
                 }
+
+                _DefaultCamera.RenderPassParameter = new RenderPassParameter(value, true, true);
             }
         }
         private static Color _ClearColor = new Color(50, 50, 50, 255);
