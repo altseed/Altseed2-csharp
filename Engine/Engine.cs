@@ -55,6 +55,13 @@ namespace Altseed2
             {
                 if (_ClearColor == value) return;
                 _ClearColor = value;
+
+                if (_DefaultCamera is null)
+                {
+                    Log.Warn(LogCategory.Engine, "Graphics機能が初期化されていません。");
+                    return;
+                }
+
                 _DefaultCamera.RenderPassParameter = new RenderPassParameter(value, true, true);
             }
         }
@@ -130,7 +137,7 @@ namespace Altseed2
             {
                 //ツール機能を使用するときはDoEventsでフレームを開始
                 //使用しないときはUpdateでフレームを開始
-                if (!Graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
+                if (!_graphics.BeginFrame(new RenderPassParameter(ClearColor, true, true))) return false;
                 _tool.NewFrame();
             }
 
@@ -142,8 +149,13 @@ namespace Altseed2
         /// </summary>
         public static bool Update()
         {
-            var anyCamera = _CameraNodes.Count != 0;
-            return UpdateComponents(!anyCamera, anyCamera);
+            if (_CameraNodes != null)
+            {
+                var anyCamera = _CameraNodes.Count != 0;
+                return UpdateComponents(!anyCamera, anyCamera);
+            }
+
+            return true;
         }
 
         internal static bool UpdateComponents(bool drawDefaultCameraGroup, bool drawCustomCameraGroup)
