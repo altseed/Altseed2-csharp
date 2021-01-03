@@ -52,8 +52,8 @@ namespace Altseed2
             set
             {
                 var len = Length;
-                X /= (value / len);
-                Y /= (value / len);
+                X *= (value / len);
+                Y *= (value / len);
             }
         }
 
