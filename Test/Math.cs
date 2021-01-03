@@ -59,7 +59,7 @@ namespace Altseed2.Test
         {
             var sourceVector = new Vector2F(sourceX, sourceY);
             sourceVector.Length = newLength;
-            Assert.AreEqual(newLength, sourceVector.Length);
+            TestValue(newLength, sourceVector.Length);
         }
         
         [Test]
@@ -70,7 +70,7 @@ namespace Altseed2.Test
         {
             var sourceVector = new Vector3F(sourceX, sourceY, sourceZ);
             sourceVector.Length = newLength;
-            Assert.AreEqual(newLength, sourceVector.Length);
+            TestValue(newLength, sourceVector.Length);
         }
         
         [Test]
@@ -81,7 +81,7 @@ namespace Altseed2.Test
         {
             var sourceVector = new Vector4F(sourceX, sourceY, sourceZ, sourceW);
             sourceVector.Length = newLength;
-            Assert.AreEqual(newLength, sourceVector.Length);
+            TestValue(newLength, sourceVector.Length);
         }
         
         public static void TestValue(float left, float right)
@@ -97,7 +97,7 @@ namespace Altseed2.Test
         {
             if (MathF.Abs(left.X - right.X) >= MathHelper.MatrixError) throw new AssertionException($"At X:\nleft: {left.X}\nright: {right.X}");
             if (MathF.Abs(left.Y - right.Y) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Y}\nright: {right.Y}");
-            if (MathF.Abs(left.Z - right.Z) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Z}\nright: {right.Z}");
+            if (MathF.Abs(left.Z - right.Z) >= MathHelper.MatrixError) throw new AssertionException($"At Z:\nleft: {left.Z}\nright: {right.Z}");
         }
         public static void TestValue(Matrix33F left, Matrix33F right)
         {
