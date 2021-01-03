@@ -51,10 +51,10 @@ namespace Altseed2.Test
             }
         }
 
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         [TestCase(5f, 5f, 10f)]
         [TestCase(5f, 5f, 0f)]
-        [TestCase(0f, 0f, float.NaN)]
+        [TestCase(0f, 0f, 12f)]
         public void Length2D(float sourceX, float sourceY, float newLength)
         {
             var sourceVector = new Vector2F(sourceX, sourceY);
@@ -62,10 +62,10 @@ namespace Altseed2.Test
             TestValue(newLength, sourceVector.Length);
         }
         
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         [TestCase(5f, 5f, 2f, 10f)]
         [TestCase(5f, 5f, 2f, 0f)]
-        [TestCase(0f, 0f, 0f, float.NaN)]
+        [TestCase(0f, 0f, 0f, 12f)]
         public void Length3D(float sourceX, float sourceY, float sourceZ, float newLength)
         {
             var sourceVector = new Vector3F(sourceX, sourceY, sourceZ);
@@ -73,10 +73,10 @@ namespace Altseed2.Test
             TestValue(newLength, sourceVector.Length);
         }
         
-        [Test, Apartment(ApartmentState.STA)]
+        [Test]
         [TestCase(5f, 5f, 2f, 2f, 10f)]
         [TestCase(5f, 5f, 2f, 2f, 0f)]
-        [TestCase(0f, 0f, 0f, 0f, float.NaN)]
+        [TestCase(0f, 0f, 0f, 0f, 12f)]
         public void Length4D(float sourceX, float sourceY, float sourceZ, float sourceW, float newLength)
         {
             var sourceVector = new Vector4F(sourceX, sourceY, sourceZ, sourceW);
@@ -86,6 +86,11 @@ namespace Altseed2.Test
         
         public static void TestValue(float left, float right)
         {
+            if (float.IsNaN(left) || float.IsNaN(right))
+            {
+                throw new AssertionException($"left: {left}\nright: {right}");
+            }
+            
             if (MathF.Abs(left - right) >= MathHelper.MatrixError) throw new AssertionException($"left: {left}\nright: {right}");
         }
         public static void TestValue(Vector2F left, Vector2F right)
