@@ -51,6 +51,39 @@ namespace Altseed2.Test
             }
         }
 
+        [Test]
+        [TestCase(5f, 5f, 10f)]
+        [TestCase(5f, 5f, 0f)]
+        [TestCase(0f, 0f, float.NaN)]
+        public void Length2D(float sourceX, float sourceY, float newLength)
+        {
+            var sourceVector = new Vector2F(sourceX, sourceY);
+            sourceVector.Length = newLength;
+            Assert.AreEqual(newLength, sourceVector.Length);
+        }
+        
+        [Test]
+        [TestCase(5f, 5f, 2f, 10f)]
+        [TestCase(5f, 5f, 2f, 0f)]
+        [TestCase(0f, 0f, 0f, float.NaN)]
+        public void Length3D(float sourceX, float sourceY, float sourceZ, float newLength)
+        {
+            var sourceVector = new Vector3F(sourceX, sourceY, sourceZ);
+            sourceVector.Length = newLength;
+            Assert.AreEqual(newLength, sourceVector.Length);
+        }
+        
+        [Test]
+        [TestCase(5f, 5f, 2f, 2f, 10f)]
+        [TestCase(5f, 5f, 2f, 2f, 0f)]
+        [TestCase(0f, 0f, 0f, 0f, float.NaN)]
+        public void Length4D(float sourceX, float sourceY, float sourceZ, float sourceW, float newLength)
+        {
+            var sourceVector = new Vector4F(sourceX, sourceY, sourceZ, sourceW);
+            sourceVector.Length = newLength;
+            Assert.AreEqual(newLength, sourceVector.Length);
+        }
+        
         public static void TestValue(float left, float right)
         {
             if (MathF.Abs(left - right) >= MathHelper.MatrixError) throw new AssertionException($"left: {left}\nright: {right}");
