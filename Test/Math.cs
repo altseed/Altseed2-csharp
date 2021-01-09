@@ -51,8 +51,43 @@ namespace Altseed2.Test
             }
         }
 
+        [TestCase(5f, 5f, 10f)]
+        [TestCase(5f, 5f, 0f)]
+        [TestCase(0f, 0f, 12f)]
+        public void Length2D(float sourceX, float sourceY, float newLength)
+        {
+            var sourceVector = new Vector2F(sourceX, sourceY);
+            sourceVector.Length = newLength;
+            TestValue(newLength, sourceVector.Length);
+        }
+        
+        [TestCase(5f, 5f, 2f, 10f)]
+        [TestCase(5f, 5f, 2f, 0f)]
+        [TestCase(0f, 0f, 0f, 12f)]
+        public void Length3D(float sourceX, float sourceY, float sourceZ, float newLength)
+        {
+            var sourceVector = new Vector3F(sourceX, sourceY, sourceZ);
+            sourceVector.Length = newLength;
+            TestValue(newLength, sourceVector.Length);
+        }
+        
+        [TestCase(5f, 5f, 2f, 2f, 10f)]
+        [TestCase(5f, 5f, 2f, 2f, 0f)]
+        [TestCase(0f, 0f, 0f, 0f, 12f)]
+        public void Length4D(float sourceX, float sourceY, float sourceZ, float sourceW, float newLength)
+        {
+            var sourceVector = new Vector4F(sourceX, sourceY, sourceZ, sourceW);
+            sourceVector.Length = newLength;
+            TestValue(newLength, sourceVector.Length);
+        }
+        
         public static void TestValue(float left, float right)
         {
+            if (float.IsNaN(left) || float.IsNaN(right))
+            {
+                throw new AssertionException($"left: {left}\nright: {right}");
+            }
+            
             if (MathF.Abs(left - right) >= MathHelper.MatrixError) throw new AssertionException($"left: {left}\nright: {right}");
         }
         public static void TestValue(Vector2F left, Vector2F right)
@@ -64,7 +99,7 @@ namespace Altseed2.Test
         {
             if (MathF.Abs(left.X - right.X) >= MathHelper.MatrixError) throw new AssertionException($"At X:\nleft: {left.X}\nright: {right.X}");
             if (MathF.Abs(left.Y - right.Y) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Y}\nright: {right.Y}");
-            if (MathF.Abs(left.Z - right.Z) >= MathHelper.MatrixError) throw new AssertionException($"At Y:\nleft: {left.Z}\nright: {right.Z}");
+            if (MathF.Abs(left.Z - right.Z) >= MathHelper.MatrixError) throw new AssertionException($"At Z:\nleft: {left.Z}\nright: {right.Z}");
         }
         public static void TestValue(Matrix33F left, Matrix33F right)
         {

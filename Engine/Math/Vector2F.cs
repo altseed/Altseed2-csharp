@@ -51,9 +51,14 @@ namespace Altseed2
             readonly get => MathF.Sqrt(SquaredLength);
             set
             {
+                if (X == 0 && Y == 0)
+                {
+                    X = 1;
+                }
+                
                 var len = Length;
-                X /= (value / len);
-                Y /= (value / len);
+                X *= (value / len);
+                Y *= (value / len);
             }
         }
 
