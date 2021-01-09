@@ -51,7 +51,6 @@ namespace Altseed2.Test
             }
         }
 
-        [Test]
         [TestCase(5f, 5f, 10f)]
         [TestCase(5f, 5f, 0f)]
         [TestCase(0f, 0f, 12f)]
@@ -62,7 +61,6 @@ namespace Altseed2.Test
             TestValue(newLength, sourceVector.Length);
         }
         
-        [Test]
         [TestCase(5f, 5f, 2f, 10f)]
         [TestCase(5f, 5f, 2f, 0f)]
         [TestCase(0f, 0f, 0f, 12f)]
@@ -73,7 +71,6 @@ namespace Altseed2.Test
             TestValue(newLength, sourceVector.Length);
         }
         
-        [Test]
         [TestCase(5f, 5f, 2f, 2f, 10f)]
         [TestCase(5f, 5f, 2f, 2f, 0f)]
         [TestCase(0f, 0f, 0f, 0f, 12f)]
