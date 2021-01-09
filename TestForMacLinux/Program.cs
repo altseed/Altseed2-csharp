@@ -49,6 +49,7 @@ namespace Altseed2.TestForMacLinux
                     catch (Exception e)
                     {
                         Console.WriteLine("");
+                        Console.WriteLine(e.Message);
                         Console.WriteLine(e.InnerException);
                         Console.WriteLine("");
                         Console.WriteLine("Fail");
