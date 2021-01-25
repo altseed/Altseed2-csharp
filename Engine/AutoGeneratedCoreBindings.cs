@@ -513,12 +513,14 @@ namespace Altseed2
         NoNav = 786432,
         NoInputs = 786944,
         UnsavedDocument = 1048576,
+        NoDocking = 2097152,
         NavFlattened = 8388608,
         ChildWindow = 16777216,
         Tooltip = 33554432,
         Popup = 67108864,
         Modal = 134217728,
         ChildMenu = 268435456,
+        DockNodeHost = 536870912,
     }
     
     /// <summary>
@@ -692,6 +694,21 @@ namespace Altseed2
     /// 
     /// </summary>
     [Serializable]
+    public enum ToolDockNodeFlags : int
+    {
+        None = 0,
+        KeepAliveOnly = 1,
+        NoDockingInCentralNode = 4,
+        PassthruCentralNode = 8,
+        NoSplit = 16,
+        NoResize = 32,
+        AutoHideTabBar = 64,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
     public enum ToolDragDropFlags : int
     {
         None = 0,
@@ -822,6 +839,10 @@ namespace Altseed2
         NavNoCaptureKeyboard = 8,
         NoMouse = 16,
         NoMouseCursorChange = 32,
+        DockingEnable = 64,
+        ViewportsEnable = 1024,
+        DpiEnableScaleViewports = 16384,
+        DpiEnableScaleFonts = 32768,
         IsSRGB = 1048576,
         IsTouchScreen = 2097152,
     }
@@ -837,6 +858,9 @@ namespace Altseed2
         HasMouseCursors = 2,
         HasSetMousePos = 4,
         RendererHasVtxOffset = 8,
+        PlatformHasViewports = 1024,
+        HasMouseHoveredViewport = 2048,
+        RendererHasViewports = 4096,
     }
     
     /// <summary>
@@ -883,17 +907,19 @@ namespace Altseed2
         TabActive = 35,
         TabUnfocused = 36,
         TabUnfocusedActive = 37,
-        PlotLines = 38,
-        PlotLinesHovered = 39,
-        PlotHistogram = 40,
-        PlotHistogramHovered = 41,
-        TextSelectedBg = 42,
-        DragDropTarget = 43,
-        NavHighlight = 44,
-        NavWindowingHighlight = 45,
-        NavWindowingDimBg = 46,
-        ModalWindowDimBg = 47,
-        COUNT = 48,
+        DockingPreview = 38,
+        DockingEmptyBg = 39,
+        PlotLines = 40,
+        PlotLinesHovered = 41,
+        PlotHistogram = 42,
+        PlotHistogramHovered = 43,
+        TextSelectedBg = 44,
+        DragDropTarget = 45,
+        NavHighlight = 46,
+        NavWindowingHighlight = 47,
+        NavWindowingDimBg = 48,
+        ModalWindowDimBg = 49,
+        COUNT = 50,
     }
     
     /// <summary>
@@ -1075,6 +1101,25 @@ namespace Altseed2
         NoPowerOfTwoHeight = 1,
         NoMouseCursors = 2,
         NoBakedLines = 4,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum ToolViewportFlags : int
+    {
+        None = 0,
+        NoDecoration = 1,
+        NoTaskBarIcon = 2,
+        NoFocusOnAppearing = 4,
+        NoFocusOnClick = 8,
+        NoInputs = 16,
+        NoRendererClear = 32,
+        TopMost = 64,
+        Minimized = 128,
+        NoAutoMerge = 256,
+        CanHostOtherWindows = 512,
     }
     
     /// <summary>
@@ -12483,6 +12528,57 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_DockSpace(IntPtr selfPtr, int id, Vector2F size, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginDockHost(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, Vector2F offset);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_ShowDemoWindowNoCloseButton(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_ShowAboutWindowNoCloseButton(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_ShowMetricsWindowNoCloseButton(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_Begin_char16p_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_Begin_char16p_boolp_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginPopupModal_char16p_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginPopupModal_char16p_boolp_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginTabItem_char16p_ToolTabItemFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_BeginTabItem_char16p_boolp_ToolTabItemFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Tool_OpenDialog(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string filter, [MarshalAs(UnmanagedType.LPWStr)] string defaultPath);
         
         [DllImport("Altseed2_Core")]
@@ -12528,11 +12624,6 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_Begin(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_End(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
@@ -12568,6 +12659,10 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Tool_IsWindowHovered(IntPtr selfPtr, int flags);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern float cbg_Tool_GetWindowDpiScale(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -12608,6 +12703,10 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetNextWindowBgAlpha(IntPtr selfPtr, float alpha);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_SetNextWindowViewport(IntPtr selfPtr, int viewport_id);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13286,11 +13385,6 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_BeginPopupModal(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndPopup(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
@@ -13368,11 +13462,6 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_BeginTabItem(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_EndTabItem(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
@@ -13383,6 +13472,19 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_SetTabItemClosed(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string tab_or_docked_window_label);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_SetNextWindowDockID(IntPtr selfPtr, int dock_id, int cond);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern int cbg_Tool_GetWindowDockID(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_IsWindowDocked(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13670,6 +13772,14 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_UpdatePlatformWindows(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_DestroyPlatformWindows(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Tool_GetToolUsage(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13887,6 +13997,99 @@ namespace Altseed2
             return ret;
         }
         
+        public void DockSpace(int id, Vector2F size, ToolDockNodeFlags flags)
+        {
+            cbg_Tool_DockSpace(selfPtr, id, size, (int)flags);
+        }
+        
+        public bool BeginDockHost(string label, Vector2F offset)
+        {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            var ret = cbg_Tool_BeginDockHost(selfPtr, label, offset);
+            return ret;
+        }
+        
+        public void ShowDemoWindowNoCloseButton()
+        {
+            cbg_Tool_ShowDemoWindowNoCloseButton(selfPtr);
+        }
+        
+        public void ShowAboutWindowNoCloseButton()
+        {
+            cbg_Tool_ShowAboutWindowNoCloseButton(selfPtr);
+        }
+        
+        public void ShowMetricsWindowNoCloseButton()
+        {
+            cbg_Tool_ShowMetricsWindowNoCloseButton(selfPtr);
+        }
+        
+        /// <summary>
+        /// 'End()' を呼び出してください。
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>がnull</exception>
+        public bool Begin(string name, ToolWindowFlags flags)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
+            var ret = cbg_Tool_Begin_char16p_ToolWindowFlags(selfPtr, name, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 'End()' を呼び出してください。
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>がnull</exception>
+        public bool Begin(string name, ref bool p_open, ToolWindowFlags flags)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
+            var ret = cbg_Tool_Begin_char16p_boolp_ToolWindowFlags(selfPtr, name, ref p_open, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 'EndPopup()' を呼び出してください
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>がnull</exception>
+        public bool BeginPopupModal(string name, ToolWindowFlags flags)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
+            var ret = cbg_Tool_BeginPopupModal_char16p_ToolWindowFlags(selfPtr, name, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 'EndPopup()' を呼び出してください
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>がnull</exception>
+        public bool BeginPopupModal(string name, ref bool p_open, ToolWindowFlags flags)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
+            var ret = cbg_Tool_BeginPopupModal_char16p_boolp_ToolWindowFlags(selfPtr, name, ref p_open, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 'EndTabItem()' を呼び出してください
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        public bool BeginTabItem(string label, ToolTabItemFlags flags)
+        {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            var ret = cbg_Tool_BeginTabItem_char16p_ToolTabItemFlags(selfPtr, label, (int)flags);
+            return ret;
+        }
+        
+        /// <summary>
+        /// 'EndTabItem()' を呼び出してください
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
+        public bool BeginTabItem(string label, ref bool p_open, ToolTabItemFlags flags)
+        {
+            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
+            var ret = cbg_Tool_BeginTabItem_char16p_boolp_ToolTabItemFlags(selfPtr, label, ref p_open, (int)flags);
+            return ret;
+        }
+        
         /// <summary>
         /// 1つの開くファイルを選択するダイアログを開きます。
         /// </summary>
@@ -13980,17 +14183,6 @@ namespace Altseed2
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
         }
         
-        /// <summary>
-        /// 'End()' を呼び出してください。
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="name"/>がnull</exception>
-        public bool Begin(string name, ref bool p_open, ToolWindowFlags flags)
-        {
-            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
-            var ret = cbg_Tool_Begin(selfPtr, name, ref p_open, (int)flags);
-            return ret;
-        }
-        
         public void End()
         {
             cbg_Tool_End(selfPtr);
@@ -14042,6 +14234,12 @@ namespace Altseed2
         public bool IsWindowHovered(ToolHoveredFlags flags)
         {
             var ret = cbg_Tool_IsWindowHovered(selfPtr, (int)flags);
+            return ret;
+        }
+        
+        public float GetWindowDpiScale()
+        {
+            var ret = cbg_Tool_GetWindowDpiScale(selfPtr);
             return ret;
         }
         
@@ -14097,6 +14295,11 @@ namespace Altseed2
         public void SetNextWindowBgAlpha(float alpha)
         {
             cbg_Tool_SetNextWindowBgAlpha(selfPtr, alpha);
+        }
+        
+        public void SetNextWindowViewport(int viewport_id)
+        {
+            cbg_Tool_SetNextWindowViewport(selfPtr, viewport_id);
         }
         
         public void SetWindowPos(Vector2F pos, ToolCond cond)
@@ -15291,17 +15494,6 @@ namespace Altseed2
             return ret;
         }
         
-        /// <summary>
-        /// 'EndPopup()' を呼び出してください
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="name"/>がnull</exception>
-        public bool BeginPopupModal(string name, ref bool p_open, ToolWindowFlags flags)
-        {
-            if (name == null) throw new ArgumentNullException(nameof(name), "引数がnullです");
-            var ret = cbg_Tool_BeginPopupModal(selfPtr, name, ref p_open, (int)flags);
-            return ret;
-        }
-        
         public void EndPopup()
         {
             cbg_Tool_EndPopup(selfPtr);
@@ -15413,17 +15605,6 @@ namespace Altseed2
             cbg_Tool_EndTabBar(selfPtr);
         }
         
-        /// <summary>
-        /// 'EndTabItem()' を呼び出してください
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="label"/>がnull</exception>
-        public bool BeginTabItem(string label, ref bool p_open, ToolTabItemFlags flags)
-        {
-            if (label == null) throw new ArgumentNullException(nameof(label), "引数がnullです");
-            var ret = cbg_Tool_BeginTabItem(selfPtr, label, ref p_open, (int)flags);
-            return ret;
-        }
-        
         public void EndTabItem()
         {
             cbg_Tool_EndTabItem(selfPtr);
@@ -15440,6 +15621,23 @@ namespace Altseed2
         {
             if (tab_or_docked_window_label == null) throw new ArgumentNullException(nameof(tab_or_docked_window_label), "引数がnullです");
             cbg_Tool_SetTabItemClosed(selfPtr, tab_or_docked_window_label);
+        }
+        
+        public void SetNextWindowDockID(int dock_id, ToolCond cond)
+        {
+            cbg_Tool_SetNextWindowDockID(selfPtr, dock_id, (int)cond);
+        }
+        
+        public int GetWindowDockID()
+        {
+            var ret = cbg_Tool_GetWindowDockID(selfPtr);
+            return ret;
+        }
+        
+        public bool IsWindowDocked()
+        {
+            var ret = cbg_Tool_IsWindowDocked(selfPtr);
+            return ret;
         }
         
         public void LogToTTY(int auto_open_depth)
@@ -15809,6 +16007,16 @@ namespace Altseed2
         {
             if (ini_filename == null) throw new ArgumentNullException(nameof(ini_filename), "引数がnullです");
             cbg_Tool_SaveIniSettingsToDisk(selfPtr, ini_filename);
+        }
+        
+        public void UpdatePlatformWindows()
+        {
+            cbg_Tool_UpdatePlatformWindows(selfPtr);
+        }
+        
+        public void DestroyPlatformWindows()
+        {
+            cbg_Tool_DestroyPlatformWindows(selfPtr);
         }
         
         /// <summary>
