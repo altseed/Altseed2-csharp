@@ -53,7 +53,7 @@ namespace Altseed2
         {
             Vertexes = Vector2FArray.Create(4);
         }
-        
+
         /// <summary>
         /// シリアライズされたデータをもとに<see cref="RectangleCollider"/>のインスタンスを生成します。
         /// </summary>
@@ -79,22 +79,24 @@ namespace Altseed2
         /// <inheritdoc/>
         public override bool GetIsCollidedWith(Collider collider)
         {
-            if (requireUpdate)
-            {
-                UpdateVertexes();
-                requireUpdate = false;
-            }
+            UpdateVertexes();
             return base.GetIsCollidedWith(collider);
         }
 
-        private void UpdateVertexes()
+        internal void UpdateVertexes()
         {
-            Span<Vector2F> positions = stackalloc Vector2F[4];
-            positions[0] = -_centerPosition;
-            positions[1] = new Vector2F(_size.X, 0f) - _centerPosition;
-            positions[2] = _size - _centerPosition;
-            positions[3] = new Vector2F(0f, _size.Y) - _centerPosition;
+            if (!requireUpdate) return;
+
+            Span<Vector2F> positions = stackalloc Vector2F[4]{
+                -_centerPosition,
+                new Vector2F(_size.X, 0f) - _centerPosition,
+                _size - _centerPosition,
+                new Vector2F(0f, _size.Y) - _centerPosition,
+            };
+
             SetVertexes(positions);
+
+            requireUpdate = false;
         }
     }
 }

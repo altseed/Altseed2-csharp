@@ -61,7 +61,15 @@ namespace Altseed2
         /// </summary>
         /// <param name="collider">衝突判定を行うコライダ</param>
         /// <returns>このインスタンスと<paramref name="collider"/>が衝突していたらtrue，それ以外でfalse</returns>
-        public virtual bool GetIsCollidedWith(Collider collider) => cbg_Collider_GetIsCollidedWith(selfPtr, collider?.selfPtr ?? IntPtr.Zero);
+        public virtual bool GetIsCollidedWith(Collider collider)
+        {
+            if (collider is RectangleCollider r)
+            {
+                r.UpdateVertexes();
+            }
+
+            return cbg_Collider_GetIsCollidedWith(selfPtr, collider?.selfPtr ?? IntPtr.Zero);
+        }
     }
 
     public partial class CircleCollider
@@ -250,7 +258,7 @@ namespace Altseed2
 
             if (_buffersInternalCache is null) _buffersInternalCache = Int32Array.Create(buffers);
             else _buffersInternalCache.FromSpan(buffers);
-            
+
             BuffersInternal = _buffersInternalCache;
         }
 
