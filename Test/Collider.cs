@@ -405,5 +405,52 @@ namespace Altseed2.Test
 
             }
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void AutoCollisionSystem_Edge()
+        {
+            var tc = new TestCore();
+            tc.Init();
+            //tc.Duration = int.MaxValue;
+
+            var texture = Texture2D.LoadStrict(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var scene = new Altseed2.Node();
+            var manager = new CollisionManagerNode();
+            scene.AddChildNode(manager);
+
+            Engine.AddNode(scene);
+
+            var player = new Player_Circle(texture);
+            scene.AddChildNode(player);
+
+            var comparison = new SpriteNode()
+            {
+                Texture = texture,
+                CenterPosition = texture.Size / 2,
+                Position = new Vector2F(500f, 100f),
+                Scale = new Vector2F(0.8f, 0.8f),
+            };
+            var colliderNode = new EdgeColliderNode()
+            {
+                Point1 = new Vector2F( 0, texture.Size.Y / 2),
+                Point2 = new Vector2F( 0, -texture.Size.Y / 2),
+            };
+            comparison.AddChildNode(colliderNode);
+            colliderNode.AddChildNode(ColliderVisualizeNodeFactory.Create(colliderNode));
+            scene.AddChildNode(comparison);
+
+            tc.LoopBody(null, x =>
+            {
+                if (Engine.Keyboard.GetKeyState(Key.Escape) == ButtonState.Push) tc.Duration = 0;
+                if (x == 10)
+                {
+                    Assert.True(manager.ContainsCollider(colliderNode));
+                    Assert.AreEqual(manager.ColliderCount, 2);
+                }
+            });
+            tc.End();
+        }
     }
 }

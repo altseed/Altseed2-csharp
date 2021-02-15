@@ -36,6 +36,7 @@ namespace Altseed2
                 CircleColliderNode c => new CircleColliderVisualizeNode(c),
                 PolygonColliderNode p => new PolygonColliderVisualizeNode(p),
                 RectangleColliderNode r => new RectangleColliderVisualizeNode(r),
+                EdgeColliderNode e => new EdgeColliderVisualizeNode(e),
                 _ => throw new ArgumentException($"サポートされていない型です\n型：{colliderNode.GetType()}", nameof(colliderNode))
             };
         }

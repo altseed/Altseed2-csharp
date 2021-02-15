@@ -10,6 +10,23 @@ namespace Altseed2
     {
         private bool requireUpdate = true;
 
+        /// <inheritdoc/>
+        public sealed override Vector2F ContentSize => new Vector2F(Math.Abs(Point1.X - Point2.X), Math.Abs(Point1.Y - Point2.Y));
+
+        /// <inheritdoc/>
+        public sealed override Matrix44F InheritedTransform
+        {
+            get => base.InheritedTransform;
+            private protected set
+            {
+                if (base.InheritedTransform == value) return;
+                base.InheritedTransform = value;
+                AbsoluteTransform = value * Matrix44F.GetTranslation2D(-CenterPosition);
+                Collider.Transform = AbsoluteTransform;
+                requireUpdate = true;
+            }
+        }
+
         /// <summary>
         /// 使用するコライダを取得します。
         /// </summary>
