@@ -734,6 +734,36 @@ namespace Altseed2.Test
                 };
                 result.Add(rectangleColliderNode.Type, rectangleColliderNode);
 
+                // Altseed2.EdgeColliderNode
+                var edgeColliderNode = ReflectionInfo.Create(new EdgeColliderNode()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    Position = new Vector2F(30f, 30f),
+                    Point1 = new Vector2F(60, 40),
+                    Point2 = new Vector2F(30, 50),
+                    Scale = new Vector2F(3f, 2f),
+                    VerticalFlip = false,
+                });
+                edgeColliderNode.PropertyInfos = new[]
+                {
+                    edgeColliderNode.GetProperty("Angle"),
+                    edgeColliderNode.GetProperty("CenterPosition"),
+                    edgeColliderNode.GetProperty("ContentSize"),
+                    edgeColliderNode.GetProperty("HorizontalFlip"),
+                    edgeColliderNode.GetProperty("IsRegistered"),
+                    edgeColliderNode.GetProperty("IsUpdated"),
+                    edgeColliderNode.GetProperty("IsUpdatedActually"),
+                    edgeColliderNode.GetProperty("Position"),
+                    edgeColliderNode.GetProperty("Point1"),
+                    edgeColliderNode.GetProperty("Point2"),
+                    edgeColliderNode.GetProperty("Scale"),
+                    edgeColliderNode.GetProperty("Status"),
+                    edgeColliderNode.GetProperty("VerticalFlip"),
+                };
+                result.Add(edgeColliderNode.Type, edgeColliderNode);
+
                 // Altseed2.ArcNode
                 var arcNode = ReflectionInfo.Create(new ArcNode()
                 {
