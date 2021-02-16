@@ -1198,6 +1198,71 @@ namespace Altseed2.Test
                 };
                 result.Add(textNode.Type, textNode);
 
+                // Altseed2.TileMapNode
+                var tileMapNode = ReflectionInfo.Create(new TileMapNode()
+                {
+                    AlphaBlend = AlphaBlend.Normal,
+                    Angle = 30f,
+                    CameraGroup = 1,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    HorizontalFlip = false,
+                    IsDrawn = false,
+                    Material = Material.Create(),
+                    Position = new Vector2F(30f, 30f),
+                    Scale = new Vector2F(3f, 2f),
+                    Texture = Texture2D.LoadStrict("TestData/IO/AltseedPink.png"),
+                    VerticalFlip = false,
+                    ZOrder = 10,
+                });
+                tileMapNode.PropertyInfos = new[]
+                {
+                    tileMapNode.GetProperty("AlphaBlend"),
+                    tileMapNode.GetProperty("Angle"),
+                    tileMapNode.GetProperty("CameraGroup"),
+                    tileMapNode.GetProperty("CenterPosition"),
+                    tileMapNode.GetProperty("ContentSize"),
+                    tileMapNode.GetProperty("HorizontalFlip"),
+                    tileMapNode.GetProperty("IsDrawn"),
+                    tileMapNode.GetProperty("IsRegistered"),
+                    tileMapNode.GetProperty("IsUpdated"),
+                    tileMapNode.GetProperty("IsUpdatedActually"),
+                    tileMapNode.GetProperty("Material"),
+                    tileMapNode.GetProperty("Position"),
+                    tileMapNode.GetProperty("Scale"),
+                    tileMapNode.GetProperty("Status"),
+                    tileMapNode.GetProperty("Texture"),
+                    tileMapNode.GetProperty("VerticalFlip"),
+                    tileMapNode.GetProperty("ZOrder"),
+                };
+                result.Add(tileMapNode.Type, tileMapNode);
+
+                // Altseed2.MapChip
+                var mapChip = ReflectionInfo.Create(new MapChip()
+                {
+                    Angle = 30f,
+                    CenterPosition = new Vector2F(50f, 50f),
+                    Color = new Color(255, 100, 100),
+                    HorizontalFlip = true,
+                    Position = new Vector2F(100f, 100f),
+                    Scale = new Vector2F(3f, 2f),
+                    Src = new RectF(50f, 50f, 100f, 100f),
+                    VerticalFlip = false,
+                    ZOrder = 3,
+                });
+                mapChip.PropertyInfos = new[]
+                {
+                    mapChip.GetProperty("Angle"),
+                    mapChip.GetProperty("CenterPosition"),
+                    mapChip.GetProperty("Color"),
+                    mapChip.GetProperty("HorizontalFlip"),
+                    mapChip.GetProperty("Position"),
+                    mapChip.GetProperty("Scale"),
+                    mapChip.GetProperty("Src"),
+                    mapChip.GetProperty("VerticalFlip"),
+                    mapChip.GetProperty("ZOrder"),
+                };
+                result.Add(mapChip.Type, mapChip);
+
                 // Altseed2.TransformerNode
                 var transformerNode = ReflectionInfo.Create(new TransformerNode()
                 {
