@@ -6158,6 +6158,135 @@ namespace Altseed2
     }
     
     /// <summary>
+    /// 
+    /// </summary>
+    public sealed partial class Profiler
+    {
+        #region unmanaged
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<Profiler>> cacheRepo = new Dictionary<IntPtr, WeakReference<Profiler>>();
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static  Profiler TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Profiler cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Profiler_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Profiler(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Profiler>(newObject);
+            return newObject;
+        }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Profiler_GetInstance();
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_BeginBlock(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.LPWStr)] string _filename, int _line, Color color);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_EndBlock(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_StartCapture(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_StopCapture(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_StartListen(IntPtr selfPtr, int port);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_DumpToFileAndStopCapture(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string path);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Profiler_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal Profiler(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        internal static Profiler GetInstance()
+        {
+            var ret = cbg_Profiler_GetInstance();
+            return Profiler.TryGetFromCache(ret);
+        }
+        
+        public void BeginBlock(string name, string _filename, int _line, Color color)
+        {
+            cbg_Profiler_BeginBlock(selfPtr, name, _filename, _line, color);
+        }
+        
+        public void EndBlock()
+        {
+            cbg_Profiler_EndBlock(selfPtr);
+        }
+        
+        public void StartCapture()
+        {
+            cbg_Profiler_StartCapture(selfPtr);
+        }
+        
+        public void StopCapture()
+        {
+            cbg_Profiler_StopCapture(selfPtr);
+        }
+        
+        public void StartListen(int port)
+        {
+            cbg_Profiler_StartListen(selfPtr, port);
+        }
+        
+        public void DumpToFileAndStopCapture(string path)
+        {
+            cbg_Profiler_DumpToFileAndStopCapture(selfPtr, path);
+        }
+        
+        /// <summary>
+        /// <see cref="Profiler"/>のインスタンスを削除します。
+        /// </summary>
+        ~Profiler()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Profiler_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// ポストエフェクトやカメラにおける描画先のクラス
     /// </summary>
     [Serializable]
