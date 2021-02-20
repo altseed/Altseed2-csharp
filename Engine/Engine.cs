@@ -96,6 +96,7 @@ namespace Altseed2
                 _cullingSystem = CullingSystem.GetInstance();
                 _tool = Tool.GetInstance();
                 _sound = SoundMixer.GetInstance();
+                _profiler = Profiler.GetInstance();
 
                 _RootNode = new RootNode();
                 _UpdatedNode = _RootNode;
@@ -306,6 +307,7 @@ namespace Altseed2
             _DrawnCollection = null;
             _CameraNodes = null;
             _DefaultCamera = null;
+            _profiler = null;
 
             isActive = false;
         }
@@ -416,6 +418,14 @@ namespace Altseed2
         /// <exception cref="InvalidOperationException">Tool機能が初期されていなかったり終了していて操作を実行できなかった</exception>
         public static Tool Tool => _tool ?? throw new InvalidOperationException("Tool機能が初期化されていません。");
         private static Tool _tool;
+
+        /// <summary>
+        /// プロファイラを管理するクラスを取得します。
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Profiler機能が初期されていなかったり終了していて操作を実行できなかった</exception>
+
+        public static Profiler Profiler => _profiler ?? throw new InvalidOperationException("Profiler機能が初期化されていません。");
+        private static Profiler _profiler;
 
         #endregion
 
