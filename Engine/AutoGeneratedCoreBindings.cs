@@ -6158,7 +6158,7 @@ namespace Altseed2
     }
     
     /// <summary>
-    /// 
+    /// プロファイラのクラス
     /// </summary>
     public sealed partial class Profiler
     {
@@ -6224,6 +6224,12 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Profiler_GetIsProfilerRunning(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Profiler_Release(IntPtr selfPtr);
         
         #endregion
@@ -6234,37 +6240,73 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        public bool IsProfilerRunning
+        {
+            get
+            {
+                var ret = cbg_Profiler_GetIsProfilerRunning(selfPtr);
+                return ret;
+            }
+        }
+        
+        /// <summary>
+        /// インスタンスを取得します。
+        /// </summary>
         internal static Profiler GetInstance()
         {
             var ret = cbg_Profiler_GetInstance();
             return Profiler.TryGetFromCache(ret);
         }
         
+        /// <summary>
+        /// 測定するブロックを開始します。
+        /// </summary>
+        /// <param name="name">ブロックの名称</param>
+        /// <param name="_filename">ブロックが位置するファイル名</param>
+        /// <param name="_line">ブロックが位置する行数</param>
+        /// <param name="color">ブロックの色</param>
         public void BeginBlock(string name, string _filename, int _line, Color color)
         {
             cbg_Profiler_BeginBlock(selfPtr, name, _filename, _line, color);
         }
         
+        /// <summary>
+        /// 測定するブロックを終了します。
+        /// </summary>
         public void EndBlock()
         {
             cbg_Profiler_EndBlock(selfPtr);
         }
         
+        /// <summary>
+        /// 測定を開始します。
+        /// </summary>
         public void StartCapture()
         {
             cbg_Profiler_StartCapture(selfPtr);
         }
         
+        /// <summary>
+        /// 測定を終了します。
+        /// </summary>
         public void StopCapture()
         {
             cbg_Profiler_StopCapture(selfPtr);
         }
         
+        /// <summary>
+        /// リモートから状態を監視します。
+        /// </summary>
+        /// <param name="port">通信に使用するポート</param>
         public void StartListen(int port)
         {
             cbg_Profiler_StartListen(selfPtr, port);
         }
         
+        /// <summary>
+        /// 測定を終了し、結果を出力します。
+        /// </summary>
+        /// <param name="path">出力先</param>
         public void DumpToFileAndStopCapture(string path)
         {
             cbg_Profiler_DumpToFileAndStopCapture(selfPtr, path);
