@@ -7,6 +7,9 @@ using System.Runtime.CompilerServices;
 
 namespace Altseed2
 {
+    /// <summary>
+    /// プロファイラのブロックを簡単に使用できるようにするクラス
+    /// </summary>
     public struct ProfilerBlock : IDisposable
     {
         /// <summary>
@@ -18,6 +21,11 @@ namespace Altseed2
         /// <param name="line"></param>
         public ProfilerBlock(string name, Color color, [CallerFilePath] string filepath = null, [CallerLineNumber] int line = 0)
         {
+            if(!Engine.Profiler.IsProfilerRunning)
+            {
+                return;
+            }
+
             Engine.Profiler.BeginBlock(name, filepath, line, color);
         }
 
@@ -26,6 +34,11 @@ namespace Altseed2
         /// </summary>
         public void Dispose()
         {
+            if (!Engine.Profiler.IsProfilerRunning)
+            {
+                return;
+            }
+
             Engine.Profiler.EndBlock();
         }
     }
