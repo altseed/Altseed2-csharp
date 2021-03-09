@@ -683,5 +683,46 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void TransformNodeInfo()
+        {
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Texture = texture;
+            node.Position = new Vector2F(460, 200);
+            node.Src = new RectF(0, 0, 128, 128);
+            Engine.AddNode(node);
+
+            var node2 = new SpriteNode();
+            node2.Texture = texture;
+            node2.CenterPosition = texture.Size / 2;
+            node2.Position = new Vector2F(200, 200);
+            node2.ZOrder = 200;
+            node2.Scale = new Vector2F(0.8f, 0.5f);
+            node2.Color = new Color(0, 0, 255);
+            Engine.AddNode(node2);
+
+            var node3 = new SpriteNode();
+            node3.Texture = texture;
+            node3.CenterPosition = texture.Size / 2;
+            node3.Position = new Vector2F(300, 300);
+            node3.ZOrder = 150;
+            node3.Color = new Color(0, 255, 0);
+            Engine.AddNode(node3);
+
+            tc.Duration = 600;
+            tc.LoopBody(c =>
+            {
+            }
+            , null);
+
+            tc.End();
+        }
     }
 }
