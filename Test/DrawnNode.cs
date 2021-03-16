@@ -695,7 +695,7 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             var node = new SpriteNode();
             node.Texture = texture;
-            node.Position = new Vector2F(460, 200);
+            node.Position = new Vector2F(100, 200);
             node.Src = new RectF(0, 0, 128, 128);
             Engine.AddNode(node);
 
@@ -706,7 +706,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             node2.ZOrder = 200;
             node2.Scale = new Vector2F(0.8f, 0.5f);
             node2.Color = new Color(0, 0, 255);
-            Engine.AddNode(node2);
+            node.AddChildNode(node2);
 
             var node3 = new SpriteNode();
             node3.Texture = texture;
@@ -714,7 +714,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             node3.Position = new Vector2F(300, 300);
             node3.ZOrder = 150;
             node3.Color = new Color(0, 255, 0);
-            Engine.AddNode(node3);
+            node2.AddChildNode(node3);
 
             tc.Duration = 600;
             tc.LoopBody(c =>
