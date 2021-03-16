@@ -6,9 +6,6 @@ namespace Altseed2
     {
         private TransformNode _TransformNode;
 
-        /// <summary>
-        /// <see cref="TransformNode.Size"/>の領域を表示します。
-        /// </summary>
         private RenderedPolygon[] _SizeBoxLines;
         private RenderedPolygon _PositionBox;
 
@@ -26,31 +23,33 @@ namespace Altseed2
 
         internal void Update()
         {
-            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
-            _PositionBox.Transform = mat;
-            for (int i = 0; i < _SizeBoxLines.Length; i++)
-            {
-                _SizeBoxLines[i].Transform = mat;
-            }
-
             UpdatePositionBox();
             UpdateSizeBox();
         }
 
         private void UpdatePositionBox()
         {
-            SetPoint(_PositionBox, _TransformNode.Position, 8, new Color(255, 0, 0));
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
+            SetPoint(_PositionBox, new Vector2F(pos.X, pos.Y), 8, new Color(255, 0, 0));
         }
 
         private void UpdateSizeBox()
         {
             var points = new Vector2F[4];
 
-            Vector2F origin = _TransformNode.Position - _TransformNode.CenterPosition * _TransformNode.Scale;
+            var origin = _TransformNode.Position - _TransformNode.CenterPosition * _TransformNode.Scale;
             points[0] = origin;
             points[1] = origin + new Vector2F(_TransformNode.ContentSize.X, 0) * _TransformNode.Scale;
             points[2] = origin + _TransformNode.ContentSize * _TransformNode.Scale;
             points[3] = origin + new Vector2F(0, _TransformNode.ContentSize.Y) * _TransformNode.Scale;
+
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            for (int i = 0; i < points.Length; i++)
+            {
+                var vector = mat.Transform3D(new Vector3F(points[i].X, points[i].Y, 0));
+                points[i] = new Vector2F(vector.X, vector.Y);
+            }
 
             for (int i = 0; i < points.Length; i++)
             {

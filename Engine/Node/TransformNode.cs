@@ -47,6 +47,7 @@ namespace Altseed2
                 }
                 else
                     Transfomer.InheritedTransform = value;
+                _TransformNodeInfo?.Update();
             }
         }
         private Matrix44F _InheritedTransform = Matrix44F.Identity;
@@ -204,7 +205,6 @@ namespace Altseed2
 
             Transform = MathHelper.CalcTransform(Position, MathHelper.DegreeToRadian(Angle), scale);
 
-            _TransformNodeInfo?.Update();
             _RequireCalcTransform = false;
         }
 
