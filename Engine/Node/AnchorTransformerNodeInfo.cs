@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Altseed2
 {
+    [Serializable]
     sealed class AnchorTransformerNodeInfo : TransformerNodeInfo
     {
         private AnchorTransformerNode AnchorTransformerNode => _TransformerNode as AnchorTransformerNode;
