@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Altseed2
 {
+    [Serializable]
     public abstract class TransformerNodeInfo
     {
         protected TransformerNode _TransformerNode;

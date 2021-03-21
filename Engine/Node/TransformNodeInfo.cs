@@ -2,6 +2,7 @@
 
 namespace Altseed2
 {
+    [Serializable]
     class TransformNodeInfo
     {
         private TransformNode _TransformNode;
