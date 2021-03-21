@@ -505,7 +505,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             child.Position = rectSize / 2;
             child.Pivot = new Vector2F(0.5f, 0.5f);
             child.AnchorMin = new Vector2F(0.0f, 0.0f);
-            child.AnchorMax = new Vector2F(1f, 1f);
+            child.AnchorMax = new Vector2F(0.5f, 1f);
             child.HorizontalAlignment = HorizontalAlignment.Left;
             child.VerticalAlignment = VerticalAlignment.Center;
             child.Size = sprite2.ContentSize;
@@ -703,6 +703,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             node2.Texture = texture;
             node2.CenterPosition = texture.Size / 2;
             node2.Position = new Vector2F(200, 200);
+            node2.Angle = 68;
             node2.ZOrder = 200;
             node2.Scale = new Vector2F(0.8f, 0.5f);
             node2.Color = new Color(0, 0, 255);

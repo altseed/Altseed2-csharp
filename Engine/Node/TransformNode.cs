@@ -44,10 +44,13 @@ namespace Altseed2
                 {
                     _InheritedTransform = value;
                     _AbsoluteTransform = value;
+                    _TransformNodeInfo?.Update();
                 }
                 else
+                {
                     Transfomer.InheritedTransform = value;
-                _TransformNodeInfo?.Update();
+                    Transfomer.TransformerNodeInfo?.Update();
+                }
             }
         }
         private Matrix44F _InheritedTransform = Matrix44F.Identity;
@@ -232,7 +235,14 @@ namespace Altseed2
 
         internal void DrawTransformInfo()
         {
-            _TransformNodeInfo?.Draw();
+            if (Transfomer == null)
+            {
+                _TransformNodeInfo?.Draw();
+            }
+            else
+            {
+                Transfomer.TransformerNodeInfo?.Draw();
+            }
         }
     }
 }
