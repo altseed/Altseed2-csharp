@@ -508,7 +508,8 @@ namespace Altseed2
 
         public AnchorTransformerNode()
         {
-            TransformerNodeInfo = new AnchorTransformerNodeInfo(this);
+            if (Engine.Config.VisibleTransformInfo)
+                TransformerNodeInfo = new AnchorTransformerNodeInfo(this);
         }
 
         #region Node

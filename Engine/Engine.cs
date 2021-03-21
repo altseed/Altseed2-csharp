@@ -262,18 +262,21 @@ namespace Altseed2
                 }
             }
 
-            foreach (var (_, znodes) in drawns)
+            if (Config.VisibleTransformInfo)
             {
-                foreach (var node in znodes)
+                foreach (var (_, znodes) in drawns)
                 {
-                    if (node is ICullableDrawn cdrawn)
+                    foreach (var node in znodes)
                     {
-                        if (!cdrawn.IsDrawnActually) continue;
-                        if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
-                        if (node is TransformNode t)
+                        if (node is ICullableDrawn cdrawn)
                         {
-                            t.DrawTransformInfo();
-                            requireRender = true;
+                            if (!cdrawn.IsDrawnActually) continue;
+                            if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
+                            if (node is TransformNode t)
+                            {
+                                t.DrawTransformInfo();
+                                requireRender = true;
+                            }
                         }
                     }
                 }
