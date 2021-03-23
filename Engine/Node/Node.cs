@@ -181,7 +181,7 @@ namespace Altseed2
         /// 予約されている追加・削除を直ちに実行します。
         /// </summary>
         /// <remarks>この<see cref="Node"/>自身の更新中に実行することはできません。</remarks>
-        public void FlushQueue()
+        public virtual void FlushQueue()
         {
             if (_IsEnumeratingChildren)
             {

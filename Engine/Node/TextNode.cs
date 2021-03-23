@@ -114,6 +114,13 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
+        public override void FlushQueue()
+        {
+            base.FlushQueue();
+            this.UpdateIsDrawnActuallyOfDescendants();
+        }
+
+        /// <inheritdoc/>
         public sealed override Matrix44F InheritedTransform
         {
             get => base.InheritedTransform;

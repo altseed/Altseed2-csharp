@@ -80,12 +80,12 @@ namespace Altseed2
         /// </summary>
         public bool IsDrawn
         {
-            get => _IsDrawn; set
+            get => _IsDrawn;
+            set
             {
                 if (_IsDrawn == value) return;
                 _IsDrawn = value;
                 this.UpdateIsDrawnActuallyOfDescendants();
-
             }
         }
         private bool _IsDrawn = true;
@@ -112,6 +112,13 @@ namespace Altseed2
             base.Unregistered();
             Engine.UnregisterDrawn(this);
             Engine.CullingSystem.Unregister(_RenderedSprite);
+        }
+
+        /// <inheritdoc/>
+        public override void FlushQueue()
+        {
+            base.FlushQueue();
+            this.UpdateIsDrawnActuallyOfDescendants();
         }
 
         #endregion
