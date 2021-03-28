@@ -13,8 +13,8 @@ namespace Altseed2
         /// </summary>
         public TransformNode()
         {
-            //if (Engine.Config.VisibleTransformInfo)
-            //    _TransformNodeInfo = new TransformNodeInfo(this);
+            if (Engine.Config.VisibleTransformInfo)
+                _TransformNodeInfo = new TransformNodeInfo(this);
         }
 
         internal Matrix44F Transform
@@ -44,9 +44,13 @@ namespace Altseed2
                 {
                     _InheritedTransform = value;
                     _AbsoluteTransform = value;
+                    _TransformNodeInfo?.Update();
                 }
                 else
+                {
                     Transfomer.InheritedTransform = value;
+                    Transfomer.TransformerNodeInfo?.Update();
+                }
             }
         }
         private Matrix44F _InheritedTransform = Matrix44F.Identity;
@@ -204,7 +208,6 @@ namespace Altseed2
 
             Transform = MathHelper.CalcTransform(Position, MathHelper.DegreeToRadian(Angle), scale);
 
-            //_TransformNodeInfo?.Update();
             _RequireCalcTransform = false;
         }
 
@@ -228,11 +231,18 @@ namespace Altseed2
         /// <summary>
         /// 変形に関する情報
         /// </summary>
-        //private TransformNodeInfo _TransformNodeInfo { get; }
+        private TransformNodeInfo _TransformNodeInfo { get; }
 
-        //internal void DrawTransformInfo()
-        //{
-        //    _TransformNodeInfo?.Draw();
-        //}
+        internal void DrawTransformInfo()
+        {
+            if (Transfomer == null)
+            {
+                _TransformNodeInfo?.Draw();
+            }
+            else
+            {
+                Transfomer.TransformerNodeInfo?.Draw();
+            }
+        }
     }
 }

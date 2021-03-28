@@ -256,11 +256,29 @@ namespace Altseed2
                         if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
-                        //if (node is TransformNode t)
-                        //    t.DrawTransformInfo();
                         requireRender = true;
                     }
                     else throw new InvalidOperationException();
+                }
+            }
+
+            if (Config.VisibleTransformInfo)
+            {
+                foreach (var (_, znodes) in drawns)
+                {
+                    foreach (var node in znodes)
+                    {
+                        if (node is ICullableDrawn cdrawn)
+                        {
+                            if (!cdrawn.IsDrawnActually) continue;
+                            if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
+                            if (node is TransformNode t)
+                            {
+                                t.DrawTransformInfo();
+                                requireRender = true;
+                            }
+                        }
+                    }
                 }
             }
 

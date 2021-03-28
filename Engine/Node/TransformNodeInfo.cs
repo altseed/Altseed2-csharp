@@ -2,25 +2,13 @@
 
 namespace Altseed2
 {
+    [Serializable]
     class TransformNodeInfo
     {
         private TransformNode _TransformNode;
 
-        /// <summary>
-        /// <see cref="TransformNode.Size"/>の領域を表示します。
-        /// </summary>
         private RenderedPolygon[] _SizeBoxLines;
-
-        /// <summary>
-        /// <see cref="TransformNode.Pivot"/>の領域を表示します。
-        /// </summary>
-        private RenderedPolygon _PivotBox;
-
-        private RenderedPolygon _LeftTop;
-        private RenderedPolygon _RightBottom;
-
-        private RenderedPolygon _AnchorMin;
-        private RenderedPolygon _AnchorMax;
+        private RenderedPolygon _PositionBox;
 
         internal TransformNodeInfo(TransformNode transformNode)
         {
@@ -31,67 +19,48 @@ namespace Altseed2
                 _SizeBoxLines[i] = RenderedPolygon.Create();
             }
 
-            _PivotBox = RenderedPolygon.Create();
-
-            _LeftTop = RenderedPolygon.Create();
-            _RightBottom = RenderedPolygon.Create();
-
-            _AnchorMin = RenderedPolygon.Create();
-            _AnchorMax = RenderedPolygon.Create();
+            _PositionBox = RenderedPolygon.Create();
         }
 
-        //internal void Update()
-        //{
-        //    var origin = _TransformNode.Position;
+        internal void Update()
+        {
+            UpdatePositionBox();
+            UpdateSizeBox();
+        }
 
-        //    UpdateSizeBox(origin);
-        //    UpdatePivot();
-        //    UpdateMargin(origin);
-        //    UpdateAnchors();
-        //}
+        private void UpdatePositionBox()
+        {
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
+            SetPoint(_PositionBox, new Vector2F(pos.X, pos.Y), 8, new Color(255, 0, 0));
+        }
 
-        //private void UpdateSizeBox(Vector2F origin)
-        //{
-        //    var points = new Vector2F[4];
+        private void UpdateSizeBox()
+        {
+            var points = new Vector2F[4];
 
-        //    points[0] = origin + new Vector2F();
-        //    points[1] = origin + new Vector2F(_TransformNode.Size.X, 0);
-        //    points[2] = origin + _TransformNode.Size;
-        //    points[3] = origin + new Vector2F(0, _TransformNode.Size.Y);
+            var origin = -_TransformNode.CenterPosition * _TransformNode.Scale;
+            points[0] = origin;
+            points[1] = origin + new Vector2F(_TransformNode.ContentSize.X, 0) * _TransformNode.Scale;
+            points[2] = origin + _TransformNode.ContentSize * _TransformNode.Scale;
+            points[3] = origin + new Vector2F(0, _TransformNode.ContentSize.Y) * _TransformNode.Scale;
 
-        //    for (int i = 0; i < points.Length; i++)
-        //    {
-        //        var point1 = points[i];
-        //        var point2 = points[(i + 1) % points.Length];
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            mat = mat * Matrix44F.GetTranslation2D(_TransformNode.Position) * Matrix44F.GetRotationZ(MathHelper.DegreeToRadian(_TransformNode.Angle));
+            for (int i = 0; i < points.Length; i++)
+            {
+                var vector = mat.Transform3D(new Vector3F(points[i].X, points[i].Y, 0));
+                points[i] = new Vector2F(vector.X, vector.Y);
+            }
 
-        //        SetLine(_SizeBoxLines[i], point1, point2, new Color(255, 128, 0));
-        //    }
-        //}
+            for (int i = 0; i < points.Length; i++)
+            {
+                var point1 = points[i];
+                var point2 = points[(i + 1) % points.Length];
 
-        //private void UpdatePivot()
-        //{
-        //    SetPoint(_PivotBox, _TransformNode.Position, 5f, new Color(255, 128, 0));
-        //}
-
-        //private void UpdateMargin(Vector2F origin)
-        //{
-        //    var ancestorSize = GetAncestorSize();
-
-        //    SetLine(_LeftTop,
-        //        ancestorSize * _TransformNode.AnchorMin,
-        //        origin, new Color(255, 100, 100));
-        //    SetLine(_RightBottom,
-        //        ancestorSize * _TransformNode.AnchorMax,
-        //        origin + _TransformNode.Size, new Color(100, 100, 255));
-        //}
-
-        //private void UpdateAnchors()
-        //{
-        //    var ancestorSize = GetAncestorSize();
-
-        //    SetPoint(_AnchorMin, ancestorSize * _TransformNode.AnchorMin, 4, new Color(255, 0, 0));
-        //    SetPoint(_AnchorMax, ancestorSize * _TransformNode.AnchorMax, 4, new Color(0, 0, 255));
-        //}
+                SetLine(_SizeBoxLines[i], point1, point2, new Color(255, 128, 0));
+            }
+        }
 
         private void SetLine(RenderedPolygon renderedPolygon, Vector2F point1, Vector2F point2, Color color)
         {
@@ -105,9 +74,10 @@ namespace Altseed2
             positions[2] = point2 + side;
             positions[3] = point2 - side;
 
-            var array = Vector2FArray.Create(positions);
-            renderedPolygon.CreateVertexesByVector2F(array);
+            Engine.Vector2FArrayCache.FromSpan(positions);
+            renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
             renderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.SetDefaultIndexBuffer();
         }
 
         private void SetPoint(RenderedPolygon renderedPolygon, Vector2F point, float size, Color color)
@@ -118,30 +88,16 @@ namespace Altseed2
             points[2] = point + new Vector2F(1f, 1f) * size / 2f;
             points[3] = point + new Vector2F(-1f, 1f) * size / 2f;
 
-            var array = Vector2FArray.Create(points);
-            renderedPolygon.CreateVertexesByVector2F(array);
+            Engine.Vector2FArrayCache.FromSpan(points);
+            renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
             renderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.SetDefaultIndexBuffer();
         }
-
-        //private Vector2F GetAncestorSize()
-        //{
-        //    var ancestor = _TransformNode.GetAncestorSpecificNode<ISized>();
-        //    return ancestor switch
-        //    {
-        //        TransformNode t => t.Size / t.Scale,
-        //        ISized s => s.Size,
-        //        _ => new Vector2F()
-        //    };
-        //}
 
         internal void Draw()
         {
-            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?
-                .InheritedTransform ?? Matrix44F.Identity;
-
             void draw(RenderedPolygon renderedPolygon)
             {
-                renderedPolygon.Transform = mat;
                 Engine.Renderer.DrawPolygon(renderedPolygon);
             };
 
@@ -150,11 +106,7 @@ namespace Altseed2
                 draw(_SizeBoxLines[i]);
             }
 
-            draw(_PivotBox);
-            draw(_LeftTop);
-            draw(_RightBottom);
-            draw(_AnchorMin);
-            draw(_AnchorMax);
+            draw(_PositionBox);
         }
     }
 }

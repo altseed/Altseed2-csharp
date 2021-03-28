@@ -30,6 +30,11 @@ namespace Altseed2
         /// </summary>
         protected internal virtual bool RequireCalcTransform { get; set; } = true;
 
+        /// <summary>
+        /// 情報表示
+        /// </summary>
+        internal protected　TransformerNodeInfo TransformerNodeInfo { get; protected set; }
+
         internal override void Added(Node owner)
         {
             if (owner is TransformNode transformNode)

@@ -506,6 +506,12 @@ namespace Altseed2
             return res;
         }
 
+        public AnchorTransformerNode()
+        {
+            if (Engine.Config.VisibleTransformInfo)
+                TransformerNodeInfo = new AnchorTransformerNodeInfo(this);
+        }
+
         #region Node
 
         internal override void Registered()
