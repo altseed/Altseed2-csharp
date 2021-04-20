@@ -6610,12 +6610,17 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern Vector2I cbg_Glyph_GetOffset(IntPtr selfPtr);
+        private static extern Vector2F cbg_Glyph_GetOffset(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Glyph_GetGlyphWidth(IntPtr selfPtr);
+        private static extern float cbg_Glyph_GetAdvance(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern float cbg_Glyph_GetScale(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
@@ -6681,7 +6686,7 @@ namespace Altseed2
         /// <summary>
         /// 文字のオフセットを取得します。
         /// </summary>
-        public Vector2I Offset
+        public Vector2F Offset
         {
             get
             {
@@ -6690,14 +6695,20 @@ namespace Altseed2
             }
         }
         
-        /// <summary>
-        /// 文字の幅を取得します。
-        /// </summary>
-        public int GlyphWidth
+        public float Advance
         {
             get
             {
-                var ret = cbg_Glyph_GetGlyphWidth(selfPtr);
+                var ret = cbg_Glyph_GetAdvance(selfPtr);
+                return ret;
+            }
+        }
+        
+        public float Scale
+        {
+            get
+            {
+                var ret = cbg_Glyph_GetScale(selfPtr);
                 return ret;
             }
         }
@@ -6770,7 +6781,7 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int size);
+        private static extern IntPtr cbg_Font_LoadDynamicFont([MarshalAs(UnmanagedType.LPWStr)] string path, int samplingSize);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -6783,7 +6794,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Font_GenerateFontFile([MarshalAs(UnmanagedType.LPWStr)] string dynamicFontPath, [MarshalAs(UnmanagedType.LPWStr)] string staticFontPath, int size, [MarshalAs(UnmanagedType.LPWStr)] string characters);
+        private static extern bool cbg_Font_GenerateFontFile([MarshalAs(UnmanagedType.LPWStr)] string dynamicFontPath, [MarshalAs(UnmanagedType.LPWStr)] string staticFontPath, int samplingSize, [MarshalAs(UnmanagedType.LPWStr)] string characters);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -6800,48 +6811,33 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Font_GetSize(IntPtr selfPtr);
+        private static extern int cbg_Font_GetSamplingSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Font_GetAscent(IntPtr selfPtr);
+        private static extern float cbg_Font_GetAscent(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Font_GetDescent(IntPtr selfPtr);
+        private static extern float cbg_Font_GetDescent(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Font_GetLineGap(IntPtr selfPtr);
+        private static extern float cbg_Font_GetLineGap(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern float cbg_Font_GetEmSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_Font_GetIsStaticFont(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Font_GetActualSize(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_Font_GetPixelDistScale(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_Font_GetActualScale(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_Font_GetScale(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
@@ -6861,14 +6857,11 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
-        /// <summary>
-        /// フォントのサイズを取得します。
-        /// </summary>
-        public int Size
+        public int SamplingSize
         {
             get
             {
-                var ret = cbg_Font_GetSize(selfPtr);
+                var ret = cbg_Font_GetSamplingSize(selfPtr);
                 return ret;
             }
         }
@@ -6876,7 +6869,7 @@ namespace Altseed2
         /// <summary>
         /// フォントのベースラインからトップラインまでの距離を取得します。
         /// </summary>
-        public int Ascent
+        public float Ascent
         {
             get
             {
@@ -6888,7 +6881,7 @@ namespace Altseed2
         /// <summary>
         /// フォントのベースラインからボトムラインまでの距離を取得します。
         /// </summary>
-        public int Descent
+        public float Descent
         {
             get
             {
@@ -6900,11 +6893,20 @@ namespace Altseed2
         /// <summary>
         /// フォントの行間の距離を取得します。
         /// </summary>
-        public int LineGap
+        public float LineGap
         {
             get
             {
                 var ret = cbg_Font_GetLineGap(selfPtr);
+                return ret;
+            }
+        }
+        
+        public float EmSize
+        {
+            get
+            {
+                var ret = cbg_Font_GetEmSize(selfPtr);
                 return ret;
             }
         }
@@ -6917,42 +6919,6 @@ namespace Altseed2
             get
             {
                 var ret = cbg_Font_GetIsStaticFont(selfPtr);
-                return ret;
-            }
-        }
-        
-        public int ActualSize
-        {
-            get
-            {
-                var ret = cbg_Font_GetActualSize(selfPtr);
-                return ret;
-            }
-        }
-        
-        public float PixelDistScale
-        {
-            get
-            {
-                var ret = cbg_Font_GetPixelDistScale(selfPtr);
-                return ret;
-            }
-        }
-        
-        public float ActualScale
-        {
-            get
-            {
-                var ret = cbg_Font_GetActualScale(selfPtr);
-                return ret;
-            }
-        }
-        
-        public float Scale
-        {
-            get
-            {
-                var ret = cbg_Font_GetScale(selfPtr);
                 return ret;
             }
         }
@@ -7004,12 +6970,11 @@ namespace Altseed2
         /// フォントファイルを読み込んでFontの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
-        /// <param name="size">フォントのサイズ</param>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
-        public static Font LoadDynamicFont(string path, int size)
+        public static Font LoadDynamicFont(string path, int samplingSize)
         {
             if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
-            var ret = cbg_Font_LoadDynamicFont(path, size);
+            var ret = cbg_Font_LoadDynamicFont(path, samplingSize);
             return Font.TryGetFromCache(ret);
         }
         
@@ -7042,15 +7007,14 @@ namespace Altseed2
         /// </summary>
         /// <param name="dynamicFontPath">読み込むtruetypeフォントのパス</param>
         /// <param name="staticFontPath">生成するa2fフォントのパス</param>
-        /// <param name="size">フォントのサイズ</param>
         /// <param name="characters">フォント化させる文字列</param>
         /// <exception cref="ArgumentNullException"><paramref name="dynamicFontPath"/>, <paramref name="staticFontPath"/>, <paramref name="characters"/>のいずれかがnull</exception>
-        public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int size, string characters)
+        public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int samplingSize, string characters)
         {
             if (dynamicFontPath == null) throw new ArgumentNullException(nameof(dynamicFontPath), "引数がnullです");
             if (staticFontPath == null) throw new ArgumentNullException(nameof(staticFontPath), "引数がnullです");
             if (characters == null) throw new ArgumentNullException(nameof(characters), "引数がnullです");
-            var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, size, characters);
+            var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, samplingSize, characters);
             return ret;
         }
         
@@ -7085,7 +7049,7 @@ namespace Altseed2
         
         #region SerializeName
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Size = "S_Size";
+        private const string S_SamplingSize = "S_SamplingSize";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_IsStaticFont = "S_IsStaticFont";
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -7118,7 +7082,7 @@ namespace Altseed2
         {
             if (info == null) throw new ArgumentNullException(nameof(info), "引数がnullです");
             
-            info.AddValue(S_Size, Size);
+            info.AddValue(S_SamplingSize, SamplingSize);
             info.AddValue(S_IsStaticFont, IsStaticFont);
             info.AddValue(S_Path, Path);
             
@@ -7165,13 +7129,13 @@ namespace Altseed2
         /// <see cref="IDeserializationCallback.OnDeserialization"/>でデシリアライズされなかったオブジェクトを呼び出します。
         /// </summary>
         /// <param name="info">シリアライズされたデータを格納するオブジェクト</param>
-        /// <param name="Size"><see cref="Font.Size"/></param>
+        /// <param name="SamplingSize"><see cref="Font.SamplingSize"/></param>
         /// <param name="IsStaticFont"><see cref="Font.IsStaticFont"/></param>
         /// <param name="Path"><see cref="Font.Path"/></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private void Font_Unsetter_Deserialize(SerializationInfo info, out int Size, out bool IsStaticFont, out string Path)
+        private void Font_Unsetter_Deserialize(SerializationInfo info, out int SamplingSize, out bool IsStaticFont, out string Path)
         {
-            Size = info.GetInt32(S_Size);
+            SamplingSize = info.GetInt32(S_SamplingSize);
             IsStaticFont = info.GetBoolean(S_IsStaticFont);
             Path = info.GetString(S_Path) ?? throw new SerializationException("デシリアライズに失敗しました");
         }
@@ -7299,48 +7263,33 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_ImageFont_GetSize(IntPtr selfPtr);
+        private static extern int cbg_ImageFont_GetSamplingSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_ImageFont_GetAscent(IntPtr selfPtr);
+        private static extern float cbg_ImageFont_GetAscent(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_ImageFont_GetDescent(IntPtr selfPtr);
+        private static extern float cbg_ImageFont_GetDescent(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_ImageFont_GetLineGap(IntPtr selfPtr);
+        private static extern float cbg_ImageFont_GetLineGap(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern float cbg_ImageFont_GetEmSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool cbg_ImageFont_GetIsStaticFont(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_ImageFont_GetActualSize(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_ImageFont_GetPixelDistScale(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_ImageFont_GetActualScale(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_ImageFont_GetScale(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
@@ -7355,16 +7304,16 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
-        public int Size
+        public int SamplingSize
         {
             get
             {
-                var ret = cbg_ImageFont_GetSize(selfPtr);
+                var ret = cbg_ImageFont_GetSamplingSize(selfPtr);
                 return ret;
             }
         }
         
-        public int Ascent
+        public float Ascent
         {
             get
             {
@@ -7373,7 +7322,7 @@ namespace Altseed2
             }
         }
         
-        public int Descent
+        public float Descent
         {
             get
             {
@@ -7382,11 +7331,20 @@ namespace Altseed2
             }
         }
         
-        public int LineGap
+        public float LineGap
         {
             get
             {
                 var ret = cbg_ImageFont_GetLineGap(selfPtr);
+                return ret;
+            }
+        }
+        
+        public float EmSize
+        {
+            get
+            {
+                var ret = cbg_ImageFont_GetEmSize(selfPtr);
                 return ret;
             }
         }
@@ -7396,42 +7354,6 @@ namespace Altseed2
             get
             {
                 var ret = cbg_ImageFont_GetIsStaticFont(selfPtr);
-                return ret;
-            }
-        }
-        
-        public int ActualSize
-        {
-            get
-            {
-                var ret = cbg_ImageFont_GetActualSize(selfPtr);
-                return ret;
-            }
-        }
-        
-        public float PixelDistScale
-        {
-            get
-            {
-                var ret = cbg_ImageFont_GetPixelDistScale(selfPtr);
-                return ret;
-            }
-        }
-        
-        public float ActualScale
-        {
-            get
-            {
-                var ret = cbg_ImageFont_GetActualScale(selfPtr);
-                return ret;
-            }
-        }
-        
-        public float Scale
-        {
-            get
-            {
-                var ret = cbg_ImageFont_GetScale(selfPtr);
                 return ret;
             }
         }
@@ -8561,14 +8483,6 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_RenderedText_GetWeight(IntPtr selfPtr);
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_RenderedText_SetWeight(IntPtr selfPtr, float value);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_RenderedText_GetMaterialGlyph(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -8642,6 +8556,14 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern float cbg_RenderedText_GetFontSize(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_RenderedText_SetFontSize(IntPtr selfPtr, float value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
         
         
@@ -8678,28 +8600,6 @@ namespace Altseed2
             }
         }
         private AlphaBlend? _AlphaBlend;
-        
-        /// <summary>
-        /// 文字の太さを取得または設定します。(0 ~ 255)
-        /// </summary>
-        internal float Weight
-        {
-            get
-            {
-                if (_Weight != null)
-                {
-                    return _Weight.Value;
-                }
-                var ret = cbg_RenderedText_GetWeight(selfPtr);
-                return ret;
-            }
-            set
-            {
-                _Weight = value;
-                cbg_RenderedText_SetWeight(selfPtr, value);
-            }
-        }
-        private float? _Weight;
         
         /// <summary>
         /// 文字の描画に使用するマテリアルを取得または設定します。
@@ -8899,6 +8799,25 @@ namespace Altseed2
         }
         private float? _LineGap;
         
+        internal float FontSize
+        {
+            get
+            {
+                if (_FontSize != null)
+                {
+                    return _FontSize.Value;
+                }
+                var ret = cbg_RenderedText_GetFontSize(selfPtr);
+                return ret;
+            }
+            set
+            {
+                _FontSize = value;
+                cbg_RenderedText_SetFontSize(selfPtr, value);
+            }
+        }
+        private float? _FontSize;
+        
         /// <summary>
         /// テキストを描画したときのサイズを取得します
         /// </summary>
@@ -8927,8 +8846,6 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_AlphaBlend = "S_AlphaBlend";
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private const string S_Weight = "S_Weight";
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_MaterialGlyph = "S_MaterialGlyph";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_MaterialImage = "S_MaterialImage";
@@ -8946,6 +8863,8 @@ namespace Altseed2
         private const string S_CharacterSpace = "S_CharacterSpace";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LineGap = "S_LineGap";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_FontSize = "S_FontSize";
         #endregion
         
         /// <summary>
@@ -8963,7 +8882,6 @@ namespace Altseed2
             CacheHelper.CacheHandlingOnDeserialization(this, ptr);
             
             AlphaBlend = info.GetValue<AlphaBlend>(S_AlphaBlend);
-            Weight = info.GetSingle(S_Weight);
             MaterialGlyph = info.GetValue<Material>(S_MaterialGlyph);
             MaterialImage = info.GetValue<Material>(S_MaterialImage);
             Color = info.GetValue<Color>(S_Color);
@@ -8975,6 +8893,7 @@ namespace Altseed2
             WritingDirection = info.GetValue<WritingDirection>(S_WritingDirection);
             CharacterSpace = info.GetSingle(S_CharacterSpace);
             LineGap = info.GetSingle(S_LineGap);
+            FontSize = info.GetSingle(S_FontSize);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -8990,7 +8909,6 @@ namespace Altseed2
             base.GetObjectData(info, context);
             
             info.AddValue(S_AlphaBlend, AlphaBlend);
-            info.AddValue(S_Weight, Weight);
             info.AddValue(S_MaterialGlyph, MaterialGlyph);
             info.AddValue(S_MaterialImage, MaterialImage);
             info.AddValue(S_Color, Color);
@@ -9000,6 +8918,7 @@ namespace Altseed2
             info.AddValue(S_WritingDirection, WritingDirection);
             info.AddValue(S_CharacterSpace, CharacterSpace);
             info.AddValue(S_LineGap, LineGap);
+            info.AddValue(S_FontSize, FontSize);
             
             OnGetObjectData(info, context);
         }
