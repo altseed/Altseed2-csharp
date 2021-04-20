@@ -15,11 +15,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var node = new TextNode();
             node.Font = font;
+            node.FontSize = 100;
 
             Engine.AddNode(node);
 
@@ -39,11 +40,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var node = new TextNode();
             node.Font = font;
+            node.FontSize = 100;
 
             Engine.AddNode(node);
 
@@ -81,11 +83,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var node = new TextNode();
             node.Font = font;
+            node.FontSize = 100;
 
             Engine.AddNode(node);
 
@@ -105,11 +108,12 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var node = new TextNode();
             node.Font = font;
+            node.FontSize = 100;
 
             Engine.AddNode(node);
             tc.LoopBody(c =>

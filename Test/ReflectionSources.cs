@@ -201,7 +201,7 @@ namespace Altseed2.Test
                 result.Add(configuration.Type, configuration);
 
                 // Altseed2.Font
-                var font_Value = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 30);
+                var font_Value = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 64);
                 var font = ReflectionInfo.Create(font_Value);
                 font.PropertyInfos = new[]
                 {
@@ -209,8 +209,9 @@ namespace Altseed2.Test
                     font.GetProperty("Descent"),
                     font.GetProperty("IsStaticFont"),
                     font.GetProperty("LineGap"),
+                    font.GetProperty("EmSize"),
                     font.GetProperty("Path"),
-                    font.GetProperty("Size"),
+                    font.GetProperty("SamplingSize"),
                 };
                 result.Add(font.Type, font);
 
@@ -395,7 +396,7 @@ namespace Altseed2.Test
                 renderedText_Value.AlphaBlend = AlphaBlend.Normal;
                 renderedText_Value.CharacterSpace = 20f;
                 renderedText_Value.Color = new Color(255, 100, 100);
-                renderedText_Value.Font = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 30);
+                renderedText_Value.Font = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 64);
                 renderedText_Value.IsEnableKerning = true;
                 renderedText_Value.LineGap = 10f;
                 renderedText_Value.MaterialGlyph = Material.Create();
@@ -408,7 +409,7 @@ namespace Altseed2.Test
                 renderedText_Value.MaterialImage.SetVector4F("Vec", new Vector4F(10f, 20f, 30f, 40f));
                 renderedText_Value.Text = "Text";
                 renderedText_Value.Transform = MathHelper.CalcTransform(new Vector2F(30f, 30f), MathHelper.DegreeToRadian(30f), new Vector2F(3f, 2f));
-                renderedText_Value.Weight = 45;
+                renderedText_Value.FontSize = 30;
                 renderedText_Value.WritingDirection = WritingDirection.Horizontal;
                 var renderedText = ReflectionInfo.Create(renderedText_Value);
                 renderedText.PropertyInfos = new[]
@@ -424,7 +425,7 @@ namespace Altseed2.Test
                     renderedText.GetProperty("Text"),
                     renderedText.GetProperty("TextureSize"),
                     renderedText.GetProperty("Transform"),
-                    renderedText.GetProperty("Weight"),
+                    renderedText.GetProperty("FontSize"),
                     renderedText.GetProperty("WritingDirection"),
                 };
                 result.Add(renderedText.Type, renderedText);
@@ -1183,7 +1184,7 @@ namespace Altseed2.Test
                     CenterPosition = new Vector2F(50f, 50f),
                     CharacterSpace = 10f,
                     Color = new Color(255, 100, 100),
-                    Font = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 30),
+                    Font = Font.LoadDynamicFontStrict("TestData/Font/GenYoMinJP-Bold.ttf", 64),
                     HorizontalFlip = false,
                     IsDrawn = false,
                     IsEnableKerning = true,
@@ -1194,7 +1195,7 @@ namespace Altseed2.Test
                     Scale = new Vector2F(3f, 2f),
                     Text = "Text",
                     VerticalFlip = false,
-                    Weight = 15f,
+                    FontSize = 30,
                     WritingDirection = WritingDirection.Vertical,
                     ZOrder = 10,
                 });
@@ -1222,7 +1223,7 @@ namespace Altseed2.Test
                     textNode.GetProperty("Status"),
                     textNode.GetProperty("Text"),
                     textNode.GetProperty("VerticalFlip"),
-                    textNode.GetProperty("Weight"),
+                    textNode.GetProperty("FontSize"),
                     textNode.GetProperty("WritingDirection"),
                     textNode.GetProperty("ZOrder"),
                 };
@@ -1276,7 +1277,7 @@ namespace Altseed2.Test
 
                 //
                 // TextureBaseはシリアライズテストは行わないがTextureBase型でCompareが回されるときがあるためその対策
-                // 
+                //
                 var textureBase = ReflectionInfo.Create(default(TextureBase));
                 textureBase.DoSerialization = false;
                 textureBase.OptionalValueProvider = (x, y) =>

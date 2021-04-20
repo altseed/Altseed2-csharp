@@ -13,13 +13,16 @@ namespace Sample
             if (!Engine.Initialize("TextNode", 640, 480)) return;
 
             // フォントファイルを読み込みます。
-            var font = Font.LoadDynamicFont(@"TestData/Font/mplus-1m-regular.ttf", 48);
+            var font = Font.LoadDynamicFont(@"TestData/Font/mplus-1m-regular.ttf", 64);
 
             // テキストを描画するノードを作成します。
             var node = new TextNode();
 
             // フォントを設定します。
             node.Font = font;
+
+            // フォントサイズ
+            node.FontSize = 48;
 
             // 描画する文字列を設定します。
             node.Text = "Hello World!";

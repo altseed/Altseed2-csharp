@@ -15,8 +15,8 @@ namespace Altseed2
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
-            Font_Unsetter_Deserialize(info, out var size, out var isStatic, out var path);
-            ptr = isStatic ? cbg_Font_LoadStaticFont(path) : cbg_Font_LoadDynamicFont(path, size);
+            Font_Unsetter_Deserialize(info, out var samplingSize, out var isStatic, out var path);
+            ptr = isStatic ? cbg_Font_LoadStaticFont(path) : cbg_Font_LoadDynamicFont(path, samplingSize);
         }
 
         partial void OnGetObjectData(SerializationInfo info, StreamingContext context)
@@ -34,20 +34,20 @@ namespace Altseed2
         /// フォントファイルを読み込んで<see cref="Font"/>の新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">フォントファイルのパス</param>
-        /// <param name="size">フォントサイズ</param>
+        /// <param name="samplingSize">MSDFのサンプリングサイズ</param>
         /// <exception cref="ArgumentException"><paramref name="path"/>が空白文字のみからなる又は使用できない文字を含む</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/>が0以下</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="samplingSize"/>が0以下</exception>
         /// <exception cref="FileNotFoundException"><paramref name="path"/>で指定したファイルが見つからない</exception>
         /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
-        public static Font LoadDynamicFontStrict(string path, int size)
+        public static Font LoadDynamicFontStrict(string path, int samplingSize)
         {
-            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), $"サイズは正の値にしてください\n実際の値：{size}");
+            if (samplingSize <= 0) throw new ArgumentOutOfRangeException(nameof(samplingSize), $"サイズは正の値にしてください\n実際の値：{samplingSize}");
             var ex = IOHelper.CheckLoadPath(path);
             if (ex != null) throw ex;
-            return LoadDynamicFont(path, size) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
+            return LoadDynamicFont(path, samplingSize) ?? throw new SystemException("ファイルが破損しているか読み込みに失敗しました");
         }
 
         /// <summary>

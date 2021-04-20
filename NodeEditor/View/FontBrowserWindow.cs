@@ -21,7 +21,7 @@ namespace Altseed2.NodeEditor.View
             {
                 Engine.Tool.PushID("Browser".GetHashCode());
 
-                Engine.Tool.InputInt("Font Size", ref _viewModel.FontSize, 1, 1, ToolInputTextFlags.None);
+                Engine.Tool.InputInt("Sampling Size", ref _viewModel.SamplingSize, 1, 1, ToolInputTextFlags.None);
                 Engine.Tool.SameLine(0, -1);
                 if (Engine.Tool.Button("+"))
                 {
@@ -50,7 +50,7 @@ namespace Altseed2.NodeEditor.View
 
         private void OpenFont()
         {
-            if (Engine.Tool.OpenDialog("ttf", "") is { } path)
+            if (Engine.Tool.OpenDialog("ttf,otf", "") is { } path)
             {
                 _viewModel.LoadFont(path);
             }

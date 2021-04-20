@@ -34,7 +34,8 @@ namespace Sample
 
             // テキストを描画するノードを作成し、エンジンに登録します。
             var title = new TextNode();
-            title.Font = Font.LoadDynamicFont("Courier.ttf", 48);
+            title.Font = Font.LoadDynamicFont("Courier.ttf", 64);
+            title.FontSize = 48;
             title.Text = Engine.WindowTitle;
             title.CenterPosition = title.ContentSize / 2;
             title.Position = new Vector2F(320.0f, 80.0f);

@@ -13,7 +13,7 @@ namespace Sample
             if (!Engine.Initialize("TextNode", 640, 480)) return;
 
             // フォントファイルを読み込みます。
-            var font = Font.LoadDynamicFont(@"TestData/Font/mplus-1m-regular.ttf", 48);
+            var font = Font.LoadDynamicFont(@"TestData/Font/mplus-1m-regular.ttf", 64);
 
             // テクスチャ追加対応フォントを作成します。
             var imageFont = Font.CreateImageFont(font);
@@ -29,6 +29,9 @@ namespace Sample
 
             // フォントを設定します。
             node.Font = imageFont;
+
+            // フォントのサイズを指定します。
+            node.FontSize = 48;
 
             // 描画する文字列を設定します。
             node.Text = "Altseed2 ○ Altseed2";

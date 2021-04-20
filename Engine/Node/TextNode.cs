@@ -219,16 +219,16 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// 文字の太さを取得または設定します。
+        /// 文字の大きさを取得または設定します。
         /// </summary>
-        public float Weight
+        public float FontSize
         {
-            get => _RenderedText.Weight;
+            get => _RenderedText.FontSize;
             set
             {
-                if (_RenderedText.Weight == value) return;
+                if (_RenderedText.FontSize == value) return;
 
-                _RenderedText.Weight = value;
+                _RenderedText.FontSize = value;
                 _RequireCalcTransform = true;
             }
         }

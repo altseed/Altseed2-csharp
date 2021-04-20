@@ -225,7 +225,8 @@ namespace Altseed2.Test
 
             public IsUpdatedTestNode(string name)
             {
-                Font = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 30);
+                Font = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 64);
+                FontSize = 30;
                 Assert.NotNull(Font);
 
                 Name = name;

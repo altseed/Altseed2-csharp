@@ -81,8 +81,8 @@ struct PS_INPUT
     float2  UV1 : UV0;
     float2  UV2 : UV1;
 };
-float4 main(PS_INPUT input) : SV_TARGET 
-{ 
+float4 main(PS_INPUT input) : SV_TARGET
+{
     float4 c;
     c = mainTex.Sample(mainSamp, input.UV1) * input.Color;
     return c;
@@ -102,20 +102,18 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
-            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
+            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 64);
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
             imageFont.AddImageGlyph('〇', Texture2D.Load(@"TestData/IO/AltseedPink.png"));
 
-            Engine.AddNode(new TextNode() { Font = font, Text = "Hello, world! こんにちは" });
-            Engine.AddNode(new TextNode() { Font = font, Text = "色を指定します。", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
-            Engine.AddNode(new TextNode() { Font = font, Text = "太さを指定します。", Position = new Vector2F(0.0f, 200.0f), Weight = 1.0f });
-            Engine.AddNode(new TextNode() { Font = font, Text = "太さを指定します。", Position = new Vector2F(0.0f, 200.0f), Weight = 1.0f });
-            Engine.AddNode(new TextNode() { Font = font2, Text = "𠀋 𡈽 𡌛 𡑮 𡢽 𠮟 𡚴 𡸴 𣇄 𣗄 𣜿 𣝣 𣳾", Position = new Vector2F(0.0f, 300.0f) });
-            Engine.AddNode(new TextNode() { Font = imageFont, Text = "Altseed〇Altseed", Position = new Vector2F(0.0f, 500.0f) });
-            var rotated = new TextNode() { Font = font, Text = "太さを指定します。", Position = new Vector2F(400.0f, 400.0f) };
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 100, Text = "Hello, world! こんにちは" });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 100, Text = "色を指定します。", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
+            Engine.AddNode(new TextNode() { Font = font2, FontSize = 100, Text = "𠀋 𡈽 𡌛 𡑮 𡢽 𠮟 𡚴 𡸴 𣇄 𣗄 𣜿 𣝣 𣳾", Position = new Vector2F(0.0f, 300.0f) });
+            Engine.AddNode(new TextNode() { Font = imageFont, FontSize = 100, Text = "Altseed〇Altseed", Position = new Vector2F(0.0f, 500.0f) });
+            var rotated = new TextNode() { Font = font, FontSize = 100, Text = "回転します。", Position = new Vector2F(400.0f, 400.0f) };
             Engine.AddNode(rotated);
 
             tc.LoopBody(c =>
@@ -133,19 +131,19 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 40);
-            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 40);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
+            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 64);
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
             imageFont.AddImageGlyph('〇', Texture2D.Load(@"TestData/IO/AltseedPink.png"));
 
-            TextNode node = new TextNode() { Font = font2, Text = "Hello, world! こんにちは カーニングあるよ！！", IsEnableKerning = false, Color = new Color(255, 0, 0, 200) };
+            TextNode node = new TextNode() { Font = font2, FontSize = 40, Text = "Hello, world! こんにちは カーニングあるよ！！", IsEnableKerning = false, Color = new Color(255, 0, 0, 200) };
             Engine.AddNode(node);
-            Engine.AddNode(new TextNode() { Font = font2, Text = "Hello, world! こんにちは カーニングないです", Color = new Color(0, 255, 0, 200) });
-            Engine.AddNode(new TextNode() { Font = font, Text = node.ContentSize.ToString(), Position = new Vector2F(0.0f, 50.0f) });
-            Engine.AddNode(new TextNode() { Font = font, Text = "字間5です。\n行間標準です。", CharacterSpace = 10, Position = new Vector2F(0.0f, 150.0f) });
-            Engine.AddNode(new TextNode() { Font = font, Text = "字間10です。\n行間70です。", CharacterSpace = 50, LineGap = 200, Position = new Vector2F(0.0f, 250.0f) });
+            Engine.AddNode(new TextNode() { Font = font2, FontSize = 40, Text = "Hello, world! こんにちは カーニングないです", Color = new Color(0, 255, 0, 200) });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 40, Text = node.ContentSize.ToString(), Position = new Vector2F(0.0f, 50.0f) });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 40, Text = "字間5です。\n行間標準です。", CharacterSpace = 10, Position = new Vector2F(0.0f, 150.0f) });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 40, Text = "字間10です。\n行間70です。", CharacterSpace = 50, LineGap = 200, Position = new Vector2F(0.0f, 250.0f) });
             tc.LoopBody(c =>
             {
             }
@@ -160,17 +158,17 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            Assert.IsTrue(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
+            Assert.IsTrue(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", 64, "Hello, world! こんにちは"));
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             var font2 = Font.LoadStaticFont("test.a2f");
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
             imageFont.AddImageGlyph('〇', Texture2D.Load(@"TestData/IO/AltseedPink.png"));
 
-            Engine.AddNode(new TextNode() { Font = font, Text = "Hello, world! こんにちは" });
-            Engine.AddNode(new TextNode() { Font = font2, Text = "Hello, world! こんにちは", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 100, Text = "Hello, world! こんにちは" });
+            Engine.AddNode(new TextNode() { Font = font2, FontSize = 100, Text = "Hello, world! こんにちは", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
 
             tc.LoopBody(c => { }, null);
 
@@ -183,13 +181,13 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 30);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
             Assert.NotNull(texture);
 
-            var text = new TextNode() { Font = font, Text = "", ZOrder = 10 };
+            var text = new TextNode() { Font = font, FontSize = 30, Text = "", ZOrder = 10 };
             Engine.AddNode(text);
 
             var parent = new Altseed2.Node();
@@ -444,8 +442,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
-            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var rotated = new AnchorTransformerNode()
@@ -455,6 +452,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             };
             var text = new TextNode();
             text.Font = font;
+            text.FontSize = 100;
             text.Text = "中心で回転します";
             rotated.Size = text.ContentSize;
             Engine.AddNode(text);
@@ -478,7 +476,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 30);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
@@ -515,6 +513,7 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             var text = new TextNode();
             text.Font = font;
+            text.FontSize = 30;
             text.Color = new Color(0, 0, 0);
             text.Text = "あいうえお";
             text.ZOrder = 15;

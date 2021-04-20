@@ -146,7 +146,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font1 = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 50);
+            var font1 = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 64);
 
             Assert.NotNull(font1);
 
@@ -163,20 +163,23 @@ namespace Altseed2.Test
             Assert.AreEqual(font1.Path, font2.Path);
             Assert.AreEqual(font1.Ascent, font2.Ascent);
             Assert.AreEqual(font1.Descent, font2.Descent);
+            Assert.AreEqual(font1.EmSize, font2.EmSize);
             Assert.AreEqual(font1.LineGap, font2.LineGap);
-            Assert.AreEqual(font1.Size, font2.Size);
+            Assert.AreEqual(font1.SamplingSize, font2.SamplingSize);
             Assert.AreEqual(font1.IsStaticFont, font2.IsStaticFont);
 
             var obj1 = new TextNode()
             {
                 Position = new Vector2F(100, 100),
                 Font = font1,
+                FontSize = 50,
                 Text = "Font1"
             };
             var obj2 = new TextNode()
             {
                 Position = new Vector2F(100, 500),
                 Font = font2,
+                FontSize = 50,
                 Text = "Font2"
             };
 
@@ -194,7 +197,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            Assert.True(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", 100, "Hello, world! こんにちは"));
+            Assert.True(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", 64, "Hello, world! こんにちは"));
             var font1 = Font.LoadStaticFontStrict("test.a2f");
 
             Assert.NotNull(font1);
@@ -212,20 +215,23 @@ namespace Altseed2.Test
             Assert.AreEqual(font1.Path, font2.Path);
             Assert.AreEqual(font1.Ascent, font2.Ascent);
             Assert.AreEqual(font1.Descent, font2.Descent);
+            Assert.AreEqual(font1.EmSize, font2.EmSize);
             Assert.AreEqual(font1.LineGap, font2.LineGap);
-            Assert.AreEqual(font1.Size, font2.Size);
+            Assert.AreEqual(font1.SamplingSize, font2.SamplingSize);
             Assert.AreEqual(font1.IsStaticFont, font2.IsStaticFont);
 
             var obj1 = new TextNode()
             {
                 Position = new Vector2F(100, 100),
                 Font = font1,
+                FontSize = 100,
                 Text = "Hellow"
             };
             var obj2 = new TextNode()
             {
                 Position = new Vector2F(100, 500),
                 Font = font2,
+                FontSize = 100,
                 Text = "Hellow"
             };
 
@@ -533,7 +539,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 50);
+            var font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 64);
 
             Assert.NotNull(font);
 
@@ -543,6 +549,7 @@ namespace Altseed2.Test
 
             text1.Color = new Color(100, 255, 200, 255);
             text1.Font = font;
+            text1.FontSize = 50;
             text1.Text = "test";
 
             const string path = "Serialization/RenderedText.bin";
@@ -557,7 +564,7 @@ namespace Altseed2.Test
             Assert.AreEqual(text1.CharacterSpace, text2.CharacterSpace);
             Assert.AreEqual(text1.Color, text2.Color);
             Assert.AreEqual(text1.Font.Path, text2.Font.Path);
-            Assert.AreEqual(text1.Font.Size, text2.Font.Size);
+            Assert.AreEqual(text1.Font.SamplingSize, text2.Font.SamplingSize);
             Assert.AreEqual(text1.IsEnableKerning, text2.IsEnableKerning);
             Assert.AreEqual(text1.LineGap, text2.LineGap);
             Assert.AreEqual(text1.MaterialGlyph, text2.MaterialGlyph);
@@ -565,7 +572,7 @@ namespace Altseed2.Test
             Assert.AreEqual(text1.Text, text2.Text);
             Assert.AreEqual(text1.TextureSize, text2.TextureSize);
             Assert.AreEqual(text1.Transform, text2.Transform);
-            Assert.AreEqual(text1.Weight, text2.Weight);
+            Assert.AreEqual(text1.FontSize, text2.FontSize);
             Assert.AreEqual(text1.WritingDirection, text2.WritingDirection);
 
             tc.End();
@@ -775,7 +782,7 @@ namespace Altseed2.Test
             // --node0
             //   |-node1
             //   --node2
-            // 
+            //
             // node3 is isolated from other nodes
             //
 

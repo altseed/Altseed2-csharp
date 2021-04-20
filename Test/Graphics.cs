@@ -158,8 +158,8 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
-            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
+            var font2 = Font.LoadDynamicFont("TestData/Font/GenYoMinJP-Bold.ttf", 64);
             Assert.NotNull(font);
             Assert.NotNull(font2);
             var imageFont = Font.CreateImageFont(font);
@@ -170,6 +170,7 @@ namespace Altseed2.Test
             {
                 var t = RenderedText.Create();
                 t.Font = font;
+                t.FontSize = 100;
                 t.Text = "Hello, world! こんにちは";
                 t.Transform = MathHelper.CalcTransform(new Vector2F(), 0, new Vector2F(1, 1));
                 texts.Add(t);
@@ -178,6 +179,7 @@ namespace Altseed2.Test
             {
                 var t = RenderedText.Create();
                 t.Font = font;
+                t.FontSize = 100;
                 t.Text = "色を指定する。";
                 t.Color = new Color(0, 0, 255, 255);
                 t.Transform = MathHelper.CalcTransform(new Vector2F(0, 100), 0, new Vector2F(1, 1));
@@ -187,6 +189,7 @@ namespace Altseed2.Test
             {
                 var t = RenderedText.Create();
                 t.Font = font2;
+                t.FontSize = 100;
                 t.Text = "𠀋 𡈽 𡌛 𡑮 𡢽 𠮟 𡚴 𡸴 𣇄 𣗄 𣜿 𣝣 𣳾 𤟱 𥒎 𥔎 𥝱 𥧄 𥶡 𦫿 𦹀 𧃴 𧚄 𨉷";
                 t.Transform = MathHelper.CalcTransform(new Vector2F(0, 200), 0, new Vector2F(1, 1));
                 texts.Add(t);
@@ -195,6 +198,7 @@ namespace Altseed2.Test
             var rotatedText = RenderedText.Create();
             {
                 rotatedText.Font = font;
+                rotatedText.FontSize = 100;
                 rotatedText.Text = "くるくるまわる";
                 texts.Add(rotatedText);
             }
@@ -202,6 +206,7 @@ namespace Altseed2.Test
             {
                 var imageFontText = RenderedText.Create();
                 imageFontText.Font = imageFont;
+                imageFontText.FontSize = 100;
                 imageFontText.Text = "Altseed〇Altseed";
                 imageFontText.Transform = MathHelper.CalcTransform(new Vector2F(0, 300), 0, new Vector2F(1, 1));
                 texts.Add(imageFontText);

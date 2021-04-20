@@ -13,9 +13,10 @@ namespace Sample
 
             // 状態を出力するための TextNode を作成します。
             // 詳細は TextNode のサンプルを参照してください。
-            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 40);
+            var font = Font.LoadDynamicFont("./mplus-1m-regular.ttf", 64);
             var textNode = new TextNode();
             textNode.Font = font;
+            textNode.FontSize = 40;
 
             while (Engine.DoEvents())
             {

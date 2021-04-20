@@ -108,7 +108,8 @@ namespace Altseed2.Test
             {
                 Engine.AddNode(text = new TextNode()
                 {
-                    Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40),
+                    Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 64),
+                    FontSize = 40,
                     Position = new Vector2F(0, 0),
                     Color = new Color(255, 255, 255, 255),
                 });
@@ -274,7 +275,8 @@ namespace Altseed2.Test
             private readonly PolygonColliderNode node;
             private readonly TextNode text = new TextNode()
             {
-                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40),
+                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 64),
+                FontSize = 40,
                 Position = new Vector2F(0, 0),
                 Color = new Color(255, 255, 255, 255),
             };
@@ -366,7 +368,8 @@ namespace Altseed2.Test
             private readonly RectangleColliderNode node;
             private readonly TextNode text = new TextNode()
             {
-                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 40)
+                Font = Font.LoadDynamicFontStrict("TestData/Font/mplus-1m-regular.ttf", 64),
+                FontSize = 40,
             };
             public Player_Rectangle(Texture2D texture)
             {

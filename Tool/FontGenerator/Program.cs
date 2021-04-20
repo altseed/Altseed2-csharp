@@ -10,20 +10,20 @@ namespace Altseed2.Tool.FontGenerator
             Engine.Initialize("Font Generator", 400, 600, new Configuration() { EnabledCoreModules = CoreModules.Default | CoreModules.Tool, IsResizable = false });
 
             string input = "";
-            int size = 20;
+            int samplingSize = 64;
             string charactersTextFilePath = "";
             string msg = "";
             while (Engine.DoEvents())
             {
                 if (Engine.Tool.BeginFullScreen(0))
                 {
-                    var tmp = Engine.Tool.InputText("Input TTF File", input, 2048, ToolInputTextFlags.None);
+                    var tmp = Engine.Tool.InputText("Input Font File", input, 2048, ToolInputTextFlags.None);
                     if (tmp != null) input = tmp;
 
-                    if (Engine.Tool.SmallButton("Open TTF File"))
-                        input = Engine.Tool.OpenDialog("ttf", "");
+                    if (Engine.Tool.SmallButton("Open Font File"))
+                        input = Engine.Tool.OpenDialog("ttf,otf", "");
 
-                    Engine.Tool.SliderInt("Font Size", ref size, 1, 1024, "%d", ToolSliderFlags.None);
+                    Engine.Tool.SliderInt("Sampling Size", ref samplingSize, 1, 1024, "%d", ToolSliderFlags.None);
 
                     tmp = Engine.Tool.InputText("Characters Text File", charactersTextFilePath, 2048, ToolInputTextFlags.None);
                     if (tmp != null) charactersTextFilePath = tmp;
@@ -35,7 +35,7 @@ namespace Altseed2.Tool.FontGenerator
                     {
                         if (!System.IO.File.Exists(input))
                         {
-                            msg = "Not Exists TTF File.";
+                            msg = "Not Exists Font File.";
                             goto fail;
                         }
 
@@ -52,7 +52,7 @@ namespace Altseed2.Tool.FontGenerator
                             if (!output.EndsWith(".a2f")) output += ".a2f";
 
                             var characters = System.IO.File.ReadAllText(charactersTextFilePath);
-                            var res = Font.GenerateFontFile(input, output, size, characters);
+                            var res = Font.GenerateFontFile(input, output, samplingSize, characters);
 
                             if (res)
                                 msg = "Success!";

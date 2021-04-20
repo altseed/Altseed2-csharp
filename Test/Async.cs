@@ -26,10 +26,10 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
-            var node = new TextNode() { Font = font, Text = "" };
+            var node = new TextNode() { Font = font, FontSize = 100, Text = "" };
             Engine.AddNode(node);
 
             // TODO : improve performance
@@ -79,10 +79,10 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
-            var node = new TextNode() { Font = font, Text = "", CameraGroup = 1 << 0 };
+            var node = new TextNode() { Font = font, FontSize = 100, Text = "", CameraGroup = 1 << 0 };
             Engine.AddNode(node);
 
             var camera = new CameraNode();

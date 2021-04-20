@@ -48,9 +48,10 @@ namespace Altseed2.Test
                 {
                     var text = new TextNode();
                     text.Position = new Vector2F(0, 50 * l);
-                    text.Font = Font.LoadDynamicFont("../TestData/Font/mplus-1m-regular.ttf", 80);
+                    text.Font = Font.LoadDynamicFont("../TestData/Font/mplus-1m-regular.ttf", 64);
                     text.Color = new Color(255, 255, 255);
                     text.Text = "テキスト";
+                    text.FontSize = 80;
                     sprite.AddChildNode(text);
                 }
                 Engine.AddNode(sprite);
