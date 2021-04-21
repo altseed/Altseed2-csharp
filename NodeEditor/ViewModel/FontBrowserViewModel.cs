@@ -6,7 +6,7 @@ namespace Altseed2.NodeEditor.ViewModel
     {
         public List<Font> Options { get; } = new List<Font>();
         public FontToolElement Selected { get; set; }
-        public int FontSize;
+        public int SamplingSize;
 
         public void SetSelection(Font item)
         {
@@ -16,7 +16,7 @@ namespace Altseed2.NodeEditor.ViewModel
 
         public void LoadFont(string fontPath)
         {
-            var font = Font.LoadDynamicFont(fontPath, FontSize);
+            var font = Font.LoadDynamicFont(fontPath, SamplingSize);
             font.GetGlyph((int) 'a');
             font.GetGlyph((int) 'あ');
             font.GetGlyph((int) '阿');

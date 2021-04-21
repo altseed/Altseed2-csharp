@@ -86,8 +86,8 @@ namespace Altseed2.Test
             node.CenterPosition = texture.Size / 2;
             Engine.AddNode(node);
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 100);
-            var text = new TextNode() { Font = font, Text = "色テスト", Position = new Vector2F(0.0f, 0.0f) };
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
+            var text = new TextNode() { Font = font, FontSize = 80, Text = "色テスト", Position = new Vector2F(0.0f, 0.0f) };
             Engine.AddNode(text);
 
             Color col1 = new Color(10, 20, 50, 100);
