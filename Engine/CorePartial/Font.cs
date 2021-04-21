@@ -11,6 +11,8 @@ namespace Altseed2
         private const string S_Textures = "S_Textures";
         #endregion
 
+        public const int DefaultSamplingSize = 64;
+
         private Dictionary<int, Texture2D> textures = new Dictionary<int, Texture2D>();
 
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
@@ -28,6 +30,34 @@ namespace Altseed2
         {
             textures = seInfo.GetValue<Dictionary<int, Texture2D>>(S_Textures);
             foreach (var t in textures) AddImageGlyph(t.Key, t.Value);
+        }
+
+        /// <summary>
+        /// フォントファイルを読み込んでFontの新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="path">読み込むフォントのパス</param>
+        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
+        public static Font LoadDynamicFont(string path, int samplingSize = DefaultSamplingSize)
+        {
+            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
+            var ret = cbg_Font_LoadDynamicFont(path, samplingSize);
+            return Font.TryGetFromCache(ret);
+        }
+
+        /// <summary>
+        /// a2fフォントを生成します。
+        /// </summary>
+        /// <param name="dynamicFontPath">読み込むtruetypeフォントのパス</param>
+        /// <param name="staticFontPath">生成するa2fフォントのパス</param>
+        /// <param name="characters">フォント化させる文字列</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dynamicFontPath"/>, <paramref name="staticFontPath"/>, <paramref name="characters"/>のいずれかがnull</exception>
+        public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, string characters, int samplingSize = DefaultSamplingSize)
+        {
+            if (dynamicFontPath == null) throw new ArgumentNullException(nameof(dynamicFontPath), "引数がnullです");
+            if (staticFontPath == null) throw new ArgumentNullException(nameof(staticFontPath), "引数がnullです");
+            if (characters == null) throw new ArgumentNullException(nameof(characters), "引数がnullです");
+            var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, samplingSize, characters);
+            return ret;
         }
 
         /// <summary>

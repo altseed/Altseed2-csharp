@@ -197,7 +197,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            Assert.True(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", 64, "Hello, world! こんにちは"));
+            Assert.True(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", "Hello, world! こんにちは", 64));
             var font1 = Font.LoadStaticFontStrict("test.a2f");
 
             Assert.NotNull(font1);

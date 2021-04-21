@@ -52,7 +52,7 @@ namespace Altseed2.Tool.FontGenerator
                             if (!output.EndsWith(".a2f")) output += ".a2f";
 
                             var characters = System.IO.File.ReadAllText(charactersTextFilePath);
-                            var res = Font.GenerateFontFile(input, output, samplingSize, characters);
+                            var res = Font.GenerateFontFile(input, output, characters, samplingSize);
 
                             if (res)
                                 msg = "Success!";

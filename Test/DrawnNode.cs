@@ -158,7 +158,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var tc = new TestCore();
             tc.Init();
 
-            Assert.IsTrue(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", 64, "Hello, world! こんにちは"));
+            Assert.IsTrue(Font.GenerateFontFile("TestData/Font/mplus-1m-regular.ttf", "test.a2f", "Hello, world! こんにちは", 64));
 
             var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             var font2 = Font.LoadStaticFont("test.a2f");

@@ -6967,18 +6967,6 @@ namespace Altseed2
         }
         
         /// <summary>
-        /// フォントファイルを読み込んでFontの新しいインスタンスを生成します。
-        /// </summary>
-        /// <param name="path">読み込むフォントのパス</param>
-        /// <exception cref="ArgumentNullException"><paramref name="path"/>がnull</exception>
-        public static Font LoadDynamicFont(string path, int samplingSize)
-        {
-            if (path == null) throw new ArgumentNullException(nameof(path), "引数がnullです");
-            var ret = cbg_Font_LoadDynamicFont(path, samplingSize);
-            return Font.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
         /// FontGeneratorで生成したフォントを読み込んでFontの新しいインスタンスを生成します。
         /// </summary>
         /// <param name="path">読み込むフォントのパス</param>
@@ -7000,22 +6988,6 @@ namespace Altseed2
             if (baseFont == null) throw new ArgumentNullException(nameof(baseFont), "引数がnullです");
             var ret = cbg_Font_CreateImageFont(baseFont != null ? baseFont.selfPtr : IntPtr.Zero);
             return Font.TryGetFromCache(ret);
-        }
-        
-        /// <summary>
-        /// a2fフォントを生成します。
-        /// </summary>
-        /// <param name="dynamicFontPath">読み込むtruetypeフォントのパス</param>
-        /// <param name="staticFontPath">生成するa2fフォントのパス</param>
-        /// <param name="characters">フォント化させる文字列</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dynamicFontPath"/>, <paramref name="staticFontPath"/>, <paramref name="characters"/>のいずれかがnull</exception>
-        public static bool GenerateFontFile(string dynamicFontPath, string staticFontPath, int samplingSize, string characters)
-        {
-            if (dynamicFontPath == null) throw new ArgumentNullException(nameof(dynamicFontPath), "引数がnullです");
-            if (staticFontPath == null) throw new ArgumentNullException(nameof(staticFontPath), "引数がnullです");
-            if (characters == null) throw new ArgumentNullException(nameof(characters), "引数がnullです");
-            var ret = cbg_Font_GenerateFontFile(dynamicFontPath, staticFontPath, samplingSize, characters);
-            return ret;
         }
         
         /// <summary>
