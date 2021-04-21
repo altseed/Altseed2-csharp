@@ -20,7 +20,7 @@ namespace Altseed2.Test
 
             var node = new TextNode();
             node.Font = font;
-            node.FontSize = 100;
+            node.FontSize = 80;
 
             Engine.AddNode(node);
 
@@ -45,7 +45,7 @@ namespace Altseed2.Test
 
             var node = new TextNode();
             node.Font = font;
-            node.FontSize = 100;
+            node.FontSize = 80;
 
             Engine.AddNode(node);
 
@@ -88,7 +88,7 @@ namespace Altseed2.Test
 
             var node = new TextNode();
             node.Font = font;
-            node.FontSize = 100;
+            node.FontSize = 80;
 
             Engine.AddNode(node);
 
@@ -113,7 +113,7 @@ namespace Altseed2.Test
 
             var node = new TextNode();
             node.Font = font;
-            node.FontSize = 100;
+            node.FontSize = 80;
 
             Engine.AddNode(node);
             tc.LoopBody(c =>

@@ -109,11 +109,11 @@ float4 main(PS_INPUT input) : SV_TARGET
             var imageFont = Font.CreateImageFont(font);
             imageFont.AddImageGlyph('〇', Texture2D.Load(@"TestData/IO/AltseedPink.png"));
 
-            Engine.AddNode(new TextNode() { Font = font, FontSize = 100, Text = "Hello, world! こんにちは" });
-            Engine.AddNode(new TextNode() { Font = font, FontSize = 100, Text = "色を指定します。", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
-            Engine.AddNode(new TextNode() { Font = font2, FontSize = 100, Text = "𠀋 𡈽 𡌛 𡑮 𡢽 𠮟 𡚴 𡸴 𣇄 𣗄 𣜿 𣝣 𣳾", Position = new Vector2F(0.0f, 300.0f) });
-            Engine.AddNode(new TextNode() { Font = imageFont, FontSize = 100, Text = "Altseed〇Altseed", Position = new Vector2F(0.0f, 500.0f) });
-            var rotated = new TextNode() { Font = font, FontSize = 100, Text = "回転します。", Position = new Vector2F(400.0f, 400.0f) };
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 80, Text = "Hello, world! こんにちは" });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 80, Text = "色を指定します。", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
+            Engine.AddNode(new TextNode() { Font = font2, FontSize = 80, Text = "𠀋 𡈽 𡌛 𡑮 𡢽 𠮟 𡚴 𡸴 𣇄 𣗄 𣜿 𣝣 𣳾", Position = new Vector2F(0.0f, 300.0f) });
+            Engine.AddNode(new TextNode() { Font = imageFont, FontSize = 80, Text = "Altseed〇Altseed", Position = new Vector2F(0.0f, 500.0f) });
+            var rotated = new TextNode() { Font = font, FontSize = 80, Text = "回転します。", Position = new Vector2F(400.0f, 400.0f) };
             Engine.AddNode(rotated);
 
             tc.LoopBody(c =>
@@ -167,8 +167,8 @@ float4 main(PS_INPUT input) : SV_TARGET
             var imageFont = Font.CreateImageFont(font);
             imageFont.AddImageGlyph('〇', Texture2D.Load(@"TestData/IO/AltseedPink.png"));
 
-            Engine.AddNode(new TextNode() { Font = font, FontSize = 100, Text = "Hello, world! こんにちは" });
-            Engine.AddNode(new TextNode() { Font = font2, FontSize = 100, Text = "Hello, world! こんにちは", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
+            Engine.AddNode(new TextNode() { Font = font, FontSize = 80, Text = "Hello, world! こんにちは" });
+            Engine.AddNode(new TextNode() { Font = font2, FontSize = 80, Text = "Hello, world! こんにちは", Position = new Vector2F(0.0f, 100.0f), Color = new Color(0, 0, 255) });
 
             tc.LoopBody(c => { }, null);
 
@@ -452,7 +452,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             };
             var text = new TextNode();
             text.Font = font;
-            text.FontSize = 100;
+            text.FontSize = 80;
             text.Text = "中心で回転します";
             rotated.Size = text.ContentSize;
             Engine.AddNode(text);

@@ -224,14 +224,14 @@ namespace Altseed2.Test
             {
                 Position = new Vector2F(100, 100),
                 Font = font1,
-                FontSize = 100,
+                FontSize = 80,
                 Text = "Hellow"
             };
             var obj2 = new TextNode()
             {
                 Position = new Vector2F(100, 500),
                 Font = font2,
-                FontSize = 100,
+                FontSize = 80,
                 Text = "Hellow"
             };
 
