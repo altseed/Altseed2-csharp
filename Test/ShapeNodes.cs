@@ -221,7 +221,7 @@ namespace Altseed2.Test
             var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
             tc.Init();
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 30);
+            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
             Assert.NotNull(font);
 
             var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
@@ -274,6 +274,7 @@ namespace Altseed2.Test
             var text2 = new TextNode()
             {
                 Font = font,
+                FontSize = 20,
                 Text = "",
                 ZOrder = 10,
                 Scale = new Vector2F(0.8f, 0.8f),

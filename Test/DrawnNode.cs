@@ -513,7 +513,7 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             var text = new TextNode();
             text.Font = font;
-            text.FontSize = 30;
+            text.FontSize = 20;
             text.Color = new Color(0, 0, 0);
             text.Text = "あいうえお";
             text.ZOrder = 15;
@@ -532,6 +532,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text2 = new TextNode()
             {
                 Font = font,
+                FontSize = 20,
                 Text = "",
                 ZOrder = 10,
                 Scale = new Vector2F(0.8f, 0.8f),
