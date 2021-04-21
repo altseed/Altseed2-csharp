@@ -570,7 +570,7 @@ namespace Altseed2.Test
             Assert.AreEqual(text1.MaterialGlyph, text2.MaterialGlyph);
             Assert.AreEqual(text1.MaterialImage, text2.MaterialImage);
             Assert.AreEqual(text1.Text, text2.Text);
-            Assert.AreEqual(text1.TextureSize, text2.TextureSize);
+            Assert.AreEqual(text1.RenderingSize, text2.RenderingSize);
             Assert.AreEqual(text1.Transform, text2.Transform);
             Assert.AreEqual(text1.FontSize, text2.FontSize);
             Assert.AreEqual(text1.WritingDirection, text2.WritingDirection);

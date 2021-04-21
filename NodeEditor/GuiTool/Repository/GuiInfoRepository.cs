@@ -62,7 +62,7 @@ namespace Altseed2.GuiTool.Repository
                     new MemberGuiInfo(ToolElementType.Color, "Color", "Color", null),
                     new MemberGuiInfo(ToolElementType.Bool, "IsEnableKerning", "IsEnableKerning", null),
                     new MemberGuiInfo(ToolElementType.Float, "CharacterSpace", "CharacterSpace", null),
-                    new MemberGuiInfo(ToolElementType.Int, "FontSize", "FontSize", null),
+                    new MemberGuiInfo(ToolElementType.Float, "FontSize", "FontSize", null),
                     new MemberGuiInfo(ToolElementType.Int, "ZOrder", "ZOrder", null),
                     new MemberGuiInfo(ToolElementType.Bool, "IsDrawn", "IsDrawn", null),
                     new MemberGuiInfo(ToolElementType.Enum, "WritingDirection", "WritingDirection", null),

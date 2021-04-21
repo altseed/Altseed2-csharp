@@ -300,6 +300,6 @@ namespace Altseed2
         #endregion
 
         /// <inheritdoc/>
-        public sealed override Vector2F ContentSize => _RenderedText.TextureSize;
+        public sealed override Vector2F ContentSize => _RenderedText.RenderingSize;
     }
 }

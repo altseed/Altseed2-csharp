@@ -423,7 +423,7 @@ namespace Altseed2.Test
                     renderedText.GetProperty("MaterialGlyph"),
                     renderedText.GetProperty("MaterialImage"),
                     renderedText.GetProperty("Text"),
-                    renderedText.GetProperty("TextureSize"),
+                    renderedText.GetProperty("RenderingSize"),
                     renderedText.GetProperty("Transform"),
                     renderedText.GetProperty("FontSize"),
                     renderedText.GetProperty("WritingDirection"),

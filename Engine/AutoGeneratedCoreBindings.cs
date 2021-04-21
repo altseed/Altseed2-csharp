@@ -7023,7 +7023,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="character">文字</param>
         /// <param name="texture">テクスチャ</param>
-        internal void AddImageGlyph(int character, Texture2D texture)
+        internal void AddImageGlyph(int character, TextureBase texture)
         {
             cbg_Font_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
         }
@@ -7032,10 +7032,10 @@ namespace Altseed2
         /// テクスチャ文字を取得します。
         /// </summary>
         /// <param name="character">文字</param>
-        public Texture2D GetImageGlyph(int character)
+        public TextureBase GetImageGlyph(int character)
         {
             var ret = cbg_Font_GetImageGlyph(selfPtr, character);
-            return Texture2D.TryGetFromCache(ret);
+            return TextureBase.TryGetFromCache(ret);
         }
         
         public bool Reload()
@@ -7376,15 +7376,15 @@ namespace Altseed2
             return ret;
         }
         
-        public void AddImageGlyph(int character, Texture2D texture)
+        public void AddImageGlyph(int character, TextureBase texture)
         {
             cbg_ImageFont_AddImageGlyph(selfPtr, character, texture != null ? texture.selfPtr : IntPtr.Zero);
         }
         
-        public Texture2D GetImageGlyph(int character)
+        public TextureBase GetImageGlyph(int character)
         {
             var ret = cbg_ImageFont_GetImageGlyph(selfPtr, character);
-            return Texture2D.TryGetFromCache(ret);
+            return TextureBase.TryGetFromCache(ret);
         }
         
         /// <summary>
@@ -8564,7 +8564,7 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern Vector2F cbg_RenderedText_GetTextureSize(IntPtr selfPtr);
+        private static extern Vector2F cbg_RenderedText_GetRenderingSize(IntPtr selfPtr);
         
         
         [DllImport("Altseed2_Core")]
@@ -8818,14 +8818,11 @@ namespace Altseed2
         }
         private float? _FontSize;
         
-        /// <summary>
-        /// テキストを描画したときのサイズを取得します
-        /// </summary>
-        internal Vector2F TextureSize
+        public Vector2F RenderingSize
         {
             get
             {
-                var ret = cbg_RenderedText_GetTextureSize(selfPtr);
+                var ret = cbg_RenderedText_GetRenderingSize(selfPtr);
                 return ret;
             }
         }
