@@ -58,14 +58,14 @@ jobs:
           name: test-windows
       - name: Test
         run: |
-          cd test-windows
+          cd test-windows/CI/net5.0
           ./TestForMacLinux.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           name: test-result
-          path: test-windows
+          path: test-windows/CI/net5.0
 
       - name: Compare tests
         run: |
@@ -121,7 +121,7 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        cd Build
+        cd Build/CI/net5.0
         mv libAltseed2_Core.so libAltseed2_Core
         dotnet TestForMacLinux.dll
     - name: Upload artifact
@@ -171,7 +171,7 @@ jobs:
     - name: Test
       continue-on-error: true
       run: |
-        cd Build
+        cd Build/CI/net5.0
         dotnet TestForMacLinux.dll
     - name: Upload artifact
       continue-on-error: true
@@ -207,12 +207,17 @@ jobs:
       - name: Merge
         run: |
           mkdir Altseed2
+          mkdir Altseed2/netstandard2.1
+          mkdir Altseed2/net5.0
+          
           cp Core/LICENSE Altseed2/
-          cp test-windows/Altseed2.dll Altseed2/
-          cp test-windows/Altseed2.xml Altseed2/
-          cp test-windows/Altseed2_Core.dll Altseed2/
-          cp test-mac/libAltseed2_Core.dylib Altseed2/
-          cp test-linux/libAltseed2_Core Altseed2/
+          cp test-windows/Release/Altseed2.xml Altseed2/.
+          cp test-windows/Release/netstandard2.1/Altseed2.dll Altseed2/netstandard2.1/.
+          cp test-windows/Release/net5.0/Altseed2.dll Altseed2/net5.0/.
+          
+          cp test-windows/Release/net5.0/Altseed2_Core.dll Altseed2/.
+          cp test-mac/Release/net5.0/libAltseed2_Core.dylib Altseed2/.
+          cp test-linux/Release/net5.0/libAltseed2_Core Altseed2/.
         
       - name: Upload artifact
         uses: actions/upload-artifact@v1
@@ -235,8 +240,8 @@ jobs:
           mkdir package/
           mkdir package/licenses
           mkdir result/
-          mv Nuget/* package/
-          mv Altseed2-${{ github.sha }}/* package/
+          mv Nuget/* package/.
+          mv Altseed2-${{ github.sha }}/* package/.
           cd package
           mv LICENSE licenses/LICENSE.txt
           ..\nuget.exe pack Altseed2.nuspec -OutputDirectory ../result

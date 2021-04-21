@@ -3,15 +3,14 @@
   <PropertyGroup>
     <RootNamespace>Altseed2</RootNamespace>
     <AssemblyName>Altseed2</AssemblyName>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputPath>$(SolutionDir)Build/</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>$(SolutionDir)Build\$(Configuration)\</OutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>$(SolutionDir)Build/Altseed2.xml</DocumentationFile>
+    <DocumentationFile>$(SolutionDir)Build\$(Configuration)\Altseed2.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -13,7 +13,7 @@ class ScreenShotTest(unittest.TestCase):
 
         for path in generated_file_paths:
             name = os.path.basename(path)
-            self.assertTrue(filecmp.cmp('../test-windows/' + name, path), name + ' is not equal')
+            self.assertTrue(filecmp.cmp('../test-windows/CI/net5.0' + name, path), name + ' is not equal')
 
 if __name__ == '__main__':
     unittest.main()
