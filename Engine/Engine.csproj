@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Altseed2</RootNamespace>
     <AssemblyName>Altseed2</AssemblyName>
-    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

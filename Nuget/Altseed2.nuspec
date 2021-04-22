@@ -21,9 +21,7 @@
         <file src="Altseed2_Core.dll" target="runtimes\win-x64\native\Altseed2_Core.dll" />
         <file src="libAltseed2_Core.dylib" target="runtimes\osx-x64\native\libAltseed2_Core.dylib" />
         <file src="libAltseed2_Core" target="runtimes\linux-x64\native\libAltseed2_Core" />
-
-        <file src="netstandard2.1\Altseed2.dll" target="lib\netstandard2.1" />
-        <file src="net5.0\Altseed2.dll" target="lib\net5.0" />
+        <file src="Altseed2.dll" target="lib\netstandard2.1" />
         
     </files>
 </package>
