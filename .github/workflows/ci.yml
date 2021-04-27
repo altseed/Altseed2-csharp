@@ -3,8 +3,9 @@ name: Altseed
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - '*'
+  pull_request: 
 
 jobs:
   windows:
