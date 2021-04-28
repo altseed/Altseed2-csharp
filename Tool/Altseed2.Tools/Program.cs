@@ -19,7 +19,7 @@ namespace Altseed2.Tools
 
             var attr = attrs[0];
 
-            if (!Engine.Initialize("Altseed2.Tool", attr.Width, attr.Height, new Configuration { EnabledCoreModules = attr.CoreModules }))
+            if (!Engine.Initialize("Altseed2.Tool", attr.Width, attr.Height, new Configuration { EnabledCoreModules = attr.CoreModules, ToolSettingFileName = null }))
             {
                 throw new Exception("Failed to initialize the Engine");
             }
