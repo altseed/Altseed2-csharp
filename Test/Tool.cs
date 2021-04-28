@@ -30,6 +30,26 @@ namespace Altseed2.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void SettingFileNameIsNull()
+        {
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool, ToolSettingFileName = null });
+            tc.Init();
+
+            tc.LoopBody(c =>
+            {
+                bool open = true;
+                if (Engine.Tool.Begin("Test", ref open, ToolWindowFlags.None))
+                {
+
+                }
+                Engine.Tool.End();
+            }
+            , null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void Input()
         {
             var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool });
