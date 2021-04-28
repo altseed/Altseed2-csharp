@@ -18,10 +18,7 @@ namespace Altseed2.NodeEditor.View
 
         public void Render()
         {
-            var size = new Vector2F(300, Engine.WindowSize.Y - _accessor.MenuHeight);
-            var pos = new Vector2F(0, _accessor.MenuHeight);
-
-            _pane.Render(pos, size, () =>
+            _pane.Render(() =>
             {
                 RenderButton("Sprite", _viewModel.CreateSpriteNode, true);
                 RenderButton("Text", _viewModel.CreateTextNode);

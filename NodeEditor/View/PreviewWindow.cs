@@ -21,35 +21,30 @@ namespace Altseed2.NodeEditor.View
 
         public void Render()
         {
-            AdjustWindowSize();
-
-            var size = _latestWindowSize - new Vector2F(600, _accessor.MenuHeight);
-            var pos = new Vector2F(300, _accessor.MenuHeight);
-
             Engine.Tool.PushStyleVar(ToolStyleVar.WindowPadding, new Vector2F());
-            Engine.Tool.PushStyleVar(ToolStyleVar.WindowRounding, 0);
 
-            _pane.Render(pos, size, () =>
+            _pane.Render(() =>
             {
+                AdjustWindowSize();
                 _viewModel.IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocusedFlags.None);
                 _viewModel.MousePosition = Engine.Mouse.Position - Engine.Tool.GetWindowPos();
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());
-            });
-
-            Engine.Tool.PopStyleVar(2);
+            }, ToolWindowFlags.NoScrollbar);
+            
+            Engine.Tool.PopStyleVar(1);
         }
 
         private void AdjustWindowSize()
         {
-            if (_latestWindowSize != Engine.WindowSize)
+            if (_latestWindowSize != Engine.Tool.GetWindowSize().To2I())
             {
-                Vector2I texSize = Engine.WindowSize - new Vector2I(600, (int) _accessor.MenuHeight);
+                Vector2I texSize = Engine.Tool.GetWindowSize().To2I();
 
                 _viewModel.UpdateRenderTexture(texSize.X > 0 && texSize.Y > 0,
                     RenderTexture.Create(texSize, TextureFormat.R8G8B8A8_UNORM));
 
-                _latestWindowSize = Engine.WindowSize;
+                _latestWindowSize = texSize;
             }
         }
     }

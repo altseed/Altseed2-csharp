@@ -13,15 +13,15 @@ namespace Altseed2
         /// </summary>
         /// <param name="offset"></param>
         /// <returns>処理に成功したらtrue，それ以外でfalse</returns>
-        public bool BeginFullScreen(int offset)
+        public bool BeginFullScreen(int offset, ToolWindowFlags flags = ToolWindowFlags.None)
         {
             var pos = new Vector2F(0, offset);
             var size = Engine.Window.Size - pos;
             SetNextWindowSize(size, ToolCond.None);
             SetNextWindowPos(pos, ToolCond.None, new Vector2F());
 
-            var flags = ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
-                | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
+            flags |= ToolWindowFlags.NoMove | ToolWindowFlags.NoBringToFrontOnFocus
+                 | ToolWindowFlags.NoScrollbar
                 | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoTitleBar;
 
             //const float oldWindowRounding = ImGui::GetStyle().WindowRounding; ImGui::GetStyle().WindowRounding = 0;

@@ -22,10 +22,7 @@ namespace Altseed2.NodeEditor.View
 
         public void Render()
         {
-            var size = new Vector2F(300, Engine.WindowSize.Y - _accessor.MenuHeight);
-            var pos = new Vector2F(Engine.WindowSize.X - size.X, _accessor.MenuHeight);
-
-            _pane.Render(pos, size, () =>
+            _pane.Render(() =>
             {
                 if (_selectedToolElements != null)
                 {

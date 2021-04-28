@@ -48,6 +48,21 @@ namespace Altseed2.Test
 
             tc.End();
         }
+        public void Docking()
+        {
+            var tc = new TestCore(new Configuration { EnabledCoreModules = CoreModules.Default | CoreModules.Tool, IsResizable = true });
+            tc.Init();
+
+            tc.Duration = 20000;
+            tc.LoopBody(c =>
+            {
+                bool open = true;
+                Engine.Tool.ShowDemoWindow(ref open);
+            }
+            , null);
+
+            tc.End();
+        }
 
         [Test, Apartment(ApartmentState.STA)]
         public void Input()
