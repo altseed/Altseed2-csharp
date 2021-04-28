@@ -7,7 +7,7 @@ using CommandLine;
 namespace Altseed2.Tools
 {
     [Verb("gui")]
-    [SubCommand(400, 600, CoreModules.Default | CoreModules.Tool)]
+    [SubCommand(600, 600, CoreModules.Default | CoreModules.Tool)]
     public class GUICommand : ISubCommand
     {
         void ISubCommand.Run()
@@ -39,7 +39,7 @@ namespace Altseed2.Tools
                         Engine.Tool.EndTabBar();
                     }
 
-                    
+
                     app.DrawImGui();
 
                     Engine.Tool.Text(app.Msg);

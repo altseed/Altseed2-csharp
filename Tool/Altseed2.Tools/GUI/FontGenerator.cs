@@ -32,20 +32,20 @@ namespace Altseed2.Tools.GUI
 
             if (Engine.Tool.SmallButton("Open Characters Text File"))
             {
-                charactersTextFilePath = Engine.Tool.OpenDialog("txt", "");
+                charactersTextFilePath = Engine.Tool.OpenDialog("txt", "") ?? "";
             }
 
             if (Engine.Tool.Button("Save A2F File", new Vector2F()))
             {
                 if (!System.IO.File.Exists(input))
                 {
-                    msg = "Not Exists Font File.";
+                    msg = $"Font file '{input}' not found.";
                     return;
                 }
 
                 if (!System.IO.File.Exists(charactersTextFilePath))
                 {
-                    msg = "Not Exists Characters Text File.";
+                    msg = $"Characters text file '{charactersTextFilePath}' not found.";
                     return;
                 }
 
@@ -64,7 +64,7 @@ namespace Altseed2.Tools.GUI
                     }
                     else
                     {
-                        msg = "Fail to Generate A2F File";
+                        msg = "Fail to generate A2F file";
                     }
                 }
             }

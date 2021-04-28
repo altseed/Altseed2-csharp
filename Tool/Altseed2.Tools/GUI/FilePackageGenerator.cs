@@ -13,7 +13,7 @@ namespace Altseed2.Tools.GUI
 
         void IGuiApp.DrawImGui()
         {
-            var tmp = Engine.Tool.InputText("Input Directory", input, 2048, ToolInputTextFlags.None);
+            var tmp = Engine.Tool.InputText("Source Directory", input, 2048, ToolInputTextFlags.None);
             if (tmp != null)
             {
                 input = tmp;
@@ -34,7 +34,7 @@ namespace Altseed2.Tools.GUI
             {
                 if (!System.IO.Directory.Exists(input))
                 {
-                    msg = "Not Exists Input Directory.";
+                    msg = $"Source directory '{input}' not found.";
                     return;
                 }
 
@@ -57,7 +57,7 @@ namespace Altseed2.Tools.GUI
                         res = Engine.File.PackWithPassword(input, output, password);
                     }
 
-                    msg = res ? "Success!" : "Fail to Generate A2F File";
+                    msg = res ? "Success!" : "Fail to generate package file";
                 }
             }
         }
