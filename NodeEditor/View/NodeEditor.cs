@@ -21,7 +21,7 @@ namespace Altseed2.NodeEditor.View
         public NodeEditor(NodeEditorViewModel viewModel)
         {
             _first = true;
-            
+
             var t = new ToolElementTreeFactory();
             t.GuiInfoRepository.SetAltseed2DefaultObjectMapping();
 
@@ -72,7 +72,7 @@ namespace Altseed2.NodeEditor.View
         private void OnFirstUpdate()
         {
             bool pOpen = true;
-            if (Engine.Tool.Begin("Texture Browser", ref pOpen,ToolWindowFlags.None))
+            if (Engine.Tool.Begin("Texture Browser", ref pOpen, ToolWindowFlags.None))
             {
             }
             Engine.Tool.End();
@@ -104,8 +104,13 @@ namespace Altseed2.NodeEditor.View
 
         private void UpdateComponents()
         {
+            Engine.Tool.SetNextWindowViewport(0);
+            Engine.Tool.BeginDockHost("host", new Vector2F(0, MenuHeight));
+            Engine.Tool.End();
+
             _previewWindow.Render();
             UpdateMenu();
+
             _nodeTreeWindow.Render();
             _selectedNodeWindow.Render();
 

@@ -6,23 +6,16 @@ namespace Altseed2.NodeEditor.View
     {
         private readonly string _name;
 
-        private const ToolWindowFlags UiConfig = ToolWindowFlags.NoMove
-            | ToolWindowFlags.NoBringToFrontOnFocus
-            | ToolWindowFlags.NoResize | ToolWindowFlags.NoScrollbar
-            | ToolWindowFlags.NoScrollbar | ToolWindowFlags.NoCollapse;
+        private const ToolWindowFlags UiConfig = ToolWindowFlags.None;
 
         public NodeEditorPane(string name)
         {
             _name = name;
         }
 
-        public void Render(Vector2F position, Vector2F size, Action onActive)
+        public void Render(Action onActive, ToolWindowFlags flags = UiConfig)
         {
-            Engine.Tool.SetNextWindowSize(size, ToolCond.None);
-            Engine.Tool.SetNextWindowPos(position, ToolCond.None, new Vector2F());
-
-            bool pOpen = true;
-            if (Engine.Tool.Begin(_name, ref pOpen,UiConfig))
+            if (Engine.Tool.Begin(_name, flags))
             {
                 onActive();
             }
