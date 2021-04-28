@@ -25,7 +25,7 @@ namespace Altseed2.TestForMacLinux
             // if you test specific cases in code, you add filter.
             //options.Filter = new List<string> { "AcnhorAndShapeNode" };
 #if CI
-            options.Filter = new List<string> { "-Sound", "Tool.SettingFileNameIsNull" };
+            options.Filter = new List<string> { "-Sound" };
 #endif
 
             bool isSuccessful = true;
