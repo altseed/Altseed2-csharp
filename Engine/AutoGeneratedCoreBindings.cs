@@ -5380,6 +5380,14 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Configuration_GetToolSettingFileName(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Configuration_SetToolSettingFileName(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Configuration_Release(IntPtr selfPtr);
         
         #endregion
@@ -5566,6 +5574,25 @@ namespace Altseed2
         }
         private string _LogFileName;
         
+        public string ToolSettingFileName
+        {
+            get
+            {
+                if (_ToolSettingFileName != null)
+                {
+                    return _ToolSettingFileName;
+                }
+                var ret = cbg_Configuration_GetToolSettingFileName(selfPtr);
+                return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+            }
+            set
+            {
+                _ToolSettingFileName = value;
+                cbg_Configuration_SetToolSettingFileName(selfPtr, value);
+            }
+        }
+        private string _ToolSettingFileName;
+        
         
         #region ISerialiable
         
@@ -5586,6 +5613,8 @@ namespace Altseed2
         private const string S_FileLoggingEnabled = "S_FileLoggingEnabled";
         [EditorBrowsable(EditorBrowsableState.Never)]
         private const string S_LogFileName = "S_LogFileName";
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private const string S_ToolSettingFileName = "S_ToolSettingFileName";
         #endregion
         
         /// <summary>
@@ -5607,6 +5636,7 @@ namespace Altseed2
             ConsoleLoggingEnabled = info.GetBoolean(S_ConsoleLoggingEnabled);
             FileLoggingEnabled = info.GetBoolean(S_FileLoggingEnabled);
             LogFileName = info.GetString(S_LogFileName);
+            ToolSettingFileName = info.GetString(S_ToolSettingFileName);
             
             OnDeserialize_Constructor(info, context);
         }
@@ -5629,6 +5659,7 @@ namespace Altseed2
             info.AddValue(S_ConsoleLoggingEnabled, ConsoleLoggingEnabled);
             info.AddValue(S_FileLoggingEnabled, FileLoggingEnabled);
             info.AddValue(S_LogFileName, LogFileName);
+            info.AddValue(S_ToolSettingFileName, ToolSettingFileName);
             
             OnGetObjectData(info, context);
         }
