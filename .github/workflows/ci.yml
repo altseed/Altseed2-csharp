@@ -275,7 +275,7 @@ jobs:
       - name: Make Nuget Package (Altseed2.Tools)
         run: |
           cp Altseed2-${{ github.sha }}/Altseed2.dll Tool/Altseed2.Tools/.
-          cp Altseed2-${{ github.sha }}/*Altseed2_Core.* Tool/Altseed2.Tools/.
+          cp Altseed2-${{ github.sha }}/*Altseed2_Core* Tool/Altseed2.Tools/.
 
           cp Altseed2-Tools-LICENSE/LICENSE.txt Tool/Altseed2.Tools/LICENSE.txt
           
