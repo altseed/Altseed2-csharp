@@ -49,7 +49,7 @@ namespace Altseed2.Tools.GUI
                     return;
                 }
 
-                var output = Engine.Tool.SaveDialog("a2f", "");
+                var output = Engine.Tool.SaveDialog("a2f", "") ?? "";
 
                 if (output != "")
                 {
@@ -58,14 +58,7 @@ namespace Altseed2.Tools.GUI
                     var characters = System.IO.File.ReadAllText(charactersTextFilePath);
                     var res = Font.GenerateFontFile(input, output, characters, samplingSize);
 
-                    if (res)
-                    {
-                        msg = "Success!";
-                    }
-                    else
-                    {
-                        msg = "Fail to generate A2F file";
-                    }
+                    msg = res ?$"Success!" : $"Fail to generate A2F file";
                 }
             }
         }
