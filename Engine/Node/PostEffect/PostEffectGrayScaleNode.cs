@@ -1,14 +1,14 @@
 namespace Altseed2
 {
     /// <summary>
-    /// グレースケール化を適用するポストエフェクトのクラス
+    /// 繧ｰ繝ｬ繝ｼ繧ｹ繧ｱ繝ｼ繝ｫ蛹悶ｒ驕ｩ逕ｨ縺吶ｋ繝昴せ繝医お繝輔ぉ繧ｯ繝医�ｮ繧ｯ繝ｩ繧ｹ
     /// </summary>
     public sealed class PostEffectGrayScaleNode : PostEffectNode
     {
         readonly Material material;
 
         /// <summary>
-        /// <see cref="PostEffectGrayScaleNode"/>の新しいインスタンスを生成します。
+        /// <see cref="PostEffectGrayScaleNode"/>縺ｮ譁ｰ縺励＞繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ繧堤函謌舌＠縺ｾ縺吶�
         /// </summary>
         public PostEffectGrayScaleNode()
         {
