@@ -36,7 +36,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Build
-      run: dotnet build Altseed2.sln --configuration CI
+      run: |
+        dotnet build Altseed2.sln --configuration CI
     - name: Upload artifact
       continue-on-error: true
       uses: actions/upload-artifact@v1.0.0
@@ -120,6 +121,7 @@ jobs:
     - name: Build
       run: |
         dotnet build Altseed2.sln --configuration CI
+
         mv Build/CI/net5.0/libAltseed2_Core.so Build/CI/net5.0/libAltseed2_Core
         mv Build/Release/net5.0/libAltseed2_Core.so Build/Release/net5.0/libAltseed2_Core
         mv Build/Release/netstandard2.1/libAltseed2_Core.so Build/Release/netstandard2.1/libAltseed2_Core
@@ -170,7 +172,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Build
-      run: dotnet build Altseed2.sln --configuration CI
+      run: |
+        dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |
@@ -210,7 +213,6 @@ jobs:
       - name: Merge
         run: |
           mkdir Altseed2
-          mkdir Altseed2/netstandard2.1
           
           cp Core/LICENSE Altseed2/
           cp test-windows/Release/Altseed2.xml Altseed2/.
@@ -219,33 +221,67 @@ jobs:
           cp test-windows/Release/net5.0/Altseed2_Core.dll Altseed2/.
           cp test-mac/Release/net5.0/libAltseed2_Core.dylib Altseed2/.
           cp test-linux/Release/net5.0/libAltseed2_Core Altseed2/.
+
+          mkdir Altseed2-Tools-LICENSE
+          cp Core/LICENSE Altseed2-Tools-LICENSE/LICENSE.txt
+          cat Nuget/license.tools.txt >> Altseed2-Tools-LICENSE/LICENSE.txt
         
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
           name: Altseed2-${{ github.sha }}
           path: Altseed2
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Altseed2-Tools-LICENSE
+          path: Altseed2-Tools-LICENSE
+
+
   make_nuget:
     runs-on: windows-latest
     needs: [merge]
     steps:
       - uses: actions/checkout@v2
+
       - name: Download Altseed2
         uses: actions/download-artifact@v1
         with:
           name: Altseed2-${{ github.sha }}
-      
-      - name: Make Nuget Package
+
+      - name: Download Altseed2-Tools-LICENSE
+        uses: actions/download-artifact@v1
+        with:
+          name: Altseed2-Tools-LICENSE
+
+      - name: Setup
         run: |
           wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -O nuget.exe
+          mkdir result/
+        shell: powershell
+      
+      - name: Make Nuget Package (Altseed2)
+        run: |
           mkdir package/
           mkdir package/licenses
-          mkdir result/
-          mv Nuget/* package/.
-          mv Altseed2-${{ github.sha }}/* package/.
+          cp Nuget/Altseed2.nuspec package/.
+          cp Altseed2-${{ github.sha }}/* package/.
           cd package
           mv LICENSE licenses/LICENSE.txt
           ..\nuget.exe pack Altseed2.nuspec -OutputDirectory ../result
+        shell: powershell
+
+      - name: Make Nuget Package (Altseed2.Tools)
+        run: |
+          cp Altseed2-${{ github.sha }}/Altseed2.dll Tool/Altseed2.Tools/.
+          cp Altseed2-${{ github.sha }}/*Altseed2_Core* Tool/Altseed2.Tools/.
+
+          cp Altseed2-Tools-LICENSE/LICENSE.txt Tool/Altseed2.Tools/LICENSE.txt
+          
+          cd Tool/Altseed2.Tools
+          dotnet pack -c CI
+          cp Build/CI/Altseed2.Tools.2.0.0.nupkg ../../result/.
         shell: powershell
         
       - name: Upload artifact
