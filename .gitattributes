@@ -1,4 +1,4 @@
-* text=auto
-* text eol=crlf
-*.nuspec text eol=crlf
-*.sh text eol=sh
+*         text=auto
+*         text eol=crlf encoding=utf-8
+*.nuspec  text eol=crlf
+*.sh      text eol=sh
