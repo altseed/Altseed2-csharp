@@ -1,7 +1,7 @@
 namespace Altseed2
 {
     /// <summary>
-    ///　グレースケール化を適用するポストエフェクトのクラス
+    /// グレースケール化を適用するポストエフェクトのクラス
     /// </summary>
     public sealed class PostEffectGrayScaleNode : PostEffectNode
     {
