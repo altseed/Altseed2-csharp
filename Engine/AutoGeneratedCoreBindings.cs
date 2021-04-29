@@ -12618,6 +12618,26 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern int cbg_Tool_GetMainViewportID(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector2F cbg_Tool_GetMainViewportPos(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector2F cbg_Tool_GetMainViewportSize(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector2F cbg_Tool_GetMainViewportWorkPos(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector2F cbg_Tool_GetMainViewportWorkSize(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_DockSpace(IntPtr selfPtr, int id, Vector2F size, int flags);
         
         [DllImport("Altseed2_Core")]
@@ -14084,6 +14104,36 @@ namespace Altseed2
         public float GetTime()
         {
             var ret = cbg_Tool_GetTime(selfPtr);
+            return ret;
+        }
+        
+        public int GetMainViewportID()
+        {
+            var ret = cbg_Tool_GetMainViewportID(selfPtr);
+            return ret;
+        }
+        
+        public Vector2F GetMainViewportPos()
+        {
+            var ret = cbg_Tool_GetMainViewportPos(selfPtr);
+            return ret;
+        }
+        
+        public Vector2F GetMainViewportSize()
+        {
+            var ret = cbg_Tool_GetMainViewportSize(selfPtr);
+            return ret;
+        }
+        
+        public Vector2F GetMainViewportWorkPos()
+        {
+            var ret = cbg_Tool_GetMainViewportWorkPos(selfPtr);
+            return ret;
+        }
+        
+        public Vector2F GetMainViewportWorkSize()
+        {
+            var ret = cbg_Tool_GetMainViewportWorkSize(selfPtr);
             return ret;
         }
         
