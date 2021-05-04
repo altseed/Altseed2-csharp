@@ -72,7 +72,7 @@ namespace Altseed2
         /// <exception cref="PathTooLongException"><paramref name="path"/>が長すぎる</exception>
         /// <exception cref="SystemException">ファイルが破損していたまたは読み込みに失敗した</exception>
         /// <returns><paramref name="path"/>の指定するファイルから生成されたフォント</returns>
-        public static Font LoadDynamicFontStrict(string path, int samplingSize)
+        public static Font LoadDynamicFontStrict(string path, int samplingSize = DefaultSamplingSize)
         {
             if (samplingSize <= 0) throw new ArgumentOutOfRangeException(nameof(samplingSize), $"サイズは正の値にしてください\n実際の値：{samplingSize}");
             var ex = IOHelper.CheckLoadPath(path);
