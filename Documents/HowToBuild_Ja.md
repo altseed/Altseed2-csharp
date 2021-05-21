@@ -3,7 +3,7 @@
 ## 必須
 - [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 
-- その他: [Coreのdocument](Core/documents/development/HowToBuild_Ja.md)を参照
+- その他: [Coreのdocument](../Core/documents/development/HowToBuild_Ja.md)を参照
 
 ## Build
 
