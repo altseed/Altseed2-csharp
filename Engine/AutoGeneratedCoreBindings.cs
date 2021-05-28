@@ -10772,7 +10772,7 @@ namespace Altseed2
     }
     
     /// <summary>
-    /// 
+    /// 映像を再生するクラス
     /// </summary>
     public partial class MediaPlayer
     {
@@ -10844,6 +10844,9 @@ namespace Altseed2
             selfPtr = handle.selfPtr;
         }
         
+        /// <summary>
+        /// 映像の大きさを取得します。
+        /// </summary>
         public Vector2I Size
         {
             get
@@ -10853,6 +10856,9 @@ namespace Altseed2
             }
         }
         
+        /// <summary>
+        /// 映像の現在のフレーム番号を取得します。
+        /// </summary>
         public int CurrentFrame
         {
             get
@@ -10862,18 +10868,30 @@ namespace Altseed2
             }
         }
         
+        /// <summary>
+        /// 映像を再生します。
+        /// </summary>
+        /// <param name="isLoopingMode">ループ再生するか?</param>
         public bool Play(bool isLoopingMode)
         {
             var ret = cbg_MediaPlayer_Play(selfPtr, isLoopingMode);
             return ret;
         }
         
+        /// <summary>
+        /// 現在の映像のフレームをテクスチャに書き込みます。映像とテクスチャは同じサイズである必要があります。
+        /// </summary>
+        /// <param name="target">テクスチャ</param>
         public bool WriteToTexture2D(Texture2D target)
         {
             var ret = cbg_MediaPlayer_WriteToTexture2D(selfPtr, target != null ? target.selfPtr : IntPtr.Zero);
             return ret;
         }
         
+        /// <summary>
+        /// 映像を読み込みます。
+        /// </summary>
+        /// <param name="path">パス(パッケージ内の映像は読み込めません。)</param>
         public static MediaPlayer Load(string path)
         {
             var ret = cbg_MediaPlayer_Load(path);
