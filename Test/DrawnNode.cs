@@ -576,7 +576,6 @@ float4 main(PS_INPUT input) : SV_TARGET
             tc.End();
         }
 
-
         [Test, Apartment(ApartmentState.STA)]
         public void IsDrawn()
         {
@@ -597,7 +596,8 @@ float4 main(PS_INPUT input) : SV_TARGET
             node2.CenterPosition = texture.Size / 2;
             node2.Position = new Vector2F(200, 200);
 
-            var node3 = new SpriteNode();
+            var node3 = new RectangleNode();
+            node3.RectangleSize = texture.Size;
             node3.Texture = texture;
             node3.CenterPosition = texture.Size / 2;
             node3.Position = new Vector2F(300, 300);
@@ -608,20 +608,19 @@ float4 main(PS_INPUT input) : SV_TARGET
                 {
                     node.AddChildNode(node2);
                 }
-
-                if (c == 4)
+                else if (c == 4)
                 {
                     node.IsDrawn = false;
                     Assert.IsFalse(node.IsDrawnActually);
                     Assert.IsFalse(node2.IsDrawnActually);
                 }
 
-                if (c == 6)
+                else if (c == 6)
                 {
                     node2.AddChildNode(node3);
                 }
 
-                if (c == 8)
+                else if (c == 8)
                 {
                     node.IsDrawn = true;
 
@@ -629,8 +628,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                     Assert.IsTrue(node2.IsDrawnActually);
                     Assert.IsTrue(node3.IsDrawnActually);
                 }
-
-                if (c == 10)
+                else if (c == 10)
                 {
                     node2.IsDrawn = false;
 
