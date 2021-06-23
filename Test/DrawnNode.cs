@@ -747,7 +747,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             tc.Duration = 600;
             tc.LoopBody(c =>
             {
-                node4.VisibleTransformNodeInfo = !node6.VisibleTransformNodeInfo;
+                node4.VisibleTransformNodeInfo = (c / 10) % 2 == 0;
                 node5.VisibleTransformNodeInfo = !node4.VisibleTransformNodeInfo;
                 node6.VisibleTransformNodeInfo = !node5.VisibleTransformNodeInfo;
             }
