@@ -717,6 +717,24 @@ float4 main(PS_INPUT input) : SV_TARGET
             node3.Color = new Color(0, 255, 0);
             node2.AddChildNode(node3);
 
+            tc.Duration = 600;
+            tc.LoopBody(c =>
+            {
+            }
+            , null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void VisibleTransformNodeInfo()
+        {
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
             var node4 = new SpriteNode();
             node4.Texture = texture;
             node4.Position = new Vector2F(400, 200);
