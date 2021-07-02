@@ -16,9 +16,9 @@
   <PropertyGroup>
     <AssemblyTitle>Altseed2</AssemblyTitle>
     <Copyright>Copyright © 2020 Altseed</Copyright>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <InformationalVersion>2.0.0</InformationalVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <InformationalVersion>2.1.0</InformationalVersion>
   </PropertyGroup>
 
   <Choose>

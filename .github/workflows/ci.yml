@@ -281,7 +281,7 @@ jobs:
           
           cd Tool/Altseed2.Tools
           dotnet pack -c CI
-          cp Build/CI/Altseed2.Tools.2.0.0.nupkg ../../result/.
+          cp Build/CI/Altseed2.Tools.*.nupkg ../../result/.
         shell: powershell
         
       - name: Upload artifact
