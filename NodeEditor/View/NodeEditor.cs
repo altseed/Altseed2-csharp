@@ -51,8 +51,6 @@ namespace Altseed2.NodeEditor.View
 
         public float MenuHeight { get; private set; } = 20;
 
-        public Vector2F EditorWindowPosition { get; private set; }
-
         public IObservable<Unit> OnSelectedNodeChanged => _onSelectedNodeChanged;
 
         public void Render()
@@ -111,7 +109,6 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.End();
 
             UpdateMenu();
-            UpdateEditorWindowPosition();
 
             _previewWindow.Render();
             _nodeTreeWindow.Render();
@@ -144,15 +141,6 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.EndMainMenuBar();
             }
             MenuHeight = Engine.Tool.GetFrameHeight();
-        }
-
-        private void UpdateEditorWindowPosition()
-        {
-            if (Engine.Tool.BeginMainMenuBar())
-            {
-                EditorWindowPosition = Engine.Tool.GetWindowPos();
-                Engine.Tool.EndMainMenuBar();
-            }
         }
     }
 }
