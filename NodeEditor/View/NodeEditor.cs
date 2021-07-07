@@ -108,9 +108,9 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.BeginDockHost("host", new Vector2F(0, MenuHeight));
             Engine.Tool.End();
 
-            _previewWindow.Render();
             UpdateMenu();
 
+            _previewWindow.Render();
             _nodeTreeWindow.Render();
             _selectedNodeWindow.Render();
 

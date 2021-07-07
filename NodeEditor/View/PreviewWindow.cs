@@ -27,9 +27,12 @@ namespace Altseed2.NodeEditor.View
             {
                 AdjustWindowSize();
                 _viewModel.IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocusedFlags.None);
-                _viewModel.MousePosition = Engine.Mouse.Position - Engine.Tool.GetWindowPos();
+
+                _viewModel.MousePosition = Engine.Mouse.Position + EditorWindowPosition() - (Engine.Tool.GetWindowContentRegionMin() + Engine.Tool.GetWindowPos());
+
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());
+                
             }, ToolWindowFlags.NoScrollbar);
             
             Engine.Tool.PopStyleVar(1);
@@ -46,6 +49,17 @@ namespace Altseed2.NodeEditor.View
 
                 _latestWindowSize = texSize;
             }
+        }
+
+        private Vector2F EditorWindowPosition()
+        {
+            var pos = new Vector2F(0, 0);
+            if (Engine.Tool.BeginMainMenuBar())
+            {
+                pos = Engine.Tool.GetWindowPos();
+                Engine.Tool.EndMainMenuBar();
+            }
+            return pos;
         }
     }
 }
