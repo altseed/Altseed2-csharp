@@ -725,5 +725,53 @@ float4 main(PS_INPUT input) : SV_TARGET
 
             tc.End();
         }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void VisibleTransformNodeInfo()
+        {
+            var tc = new TestCore(new Configuration() { VisibleTransformInfo = true });
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node4 = new SpriteNode();
+            node4.Texture = texture;
+            node4.Position = new Vector2F(400, 200);
+            node4.Src = new RectF(0, 0, 128, 128);
+            node4.VisibleTransformNodeInfo = false;
+            Engine.AddNode(node4);
+
+            var node5 = new SpriteNode();
+            node5.Texture = texture;
+            node5.CenterPosition = texture.Size / 2;
+            node5.Position = new Vector2F(200, 200);
+            node5.Angle = 68;
+            node5.ZOrder = 200;
+            node5.Scale = new Vector2F(0.8f, 0.5f);
+            node5.Color = new Color(0, 0, 255);
+            node5.VisibleTransformNodeInfo = false;
+            node4.AddChildNode(node5);
+
+            var node6 = new SpriteNode();
+            node6.Texture = texture;
+            node6.CenterPosition = texture.Size / 2;
+            node6.Position = new Vector2F(300, 300);
+            node6.ZOrder = 150;
+            node6.Color = new Color(0, 255, 0);
+            node6.VisibleTransformNodeInfo = false;
+            node5.AddChildNode(node6);
+
+            tc.Duration = 600;
+            tc.LoopBody(c =>
+            {
+                node4.VisibleTransformNodeInfo = (c / 10) % 2 == 0;
+                node5.VisibleTransformNodeInfo = !node4.VisibleTransformNodeInfo;
+                node6.VisibleTransformNodeInfo = !node5.VisibleTransformNodeInfo;
+            }
+            , null);
+
+            tc.End();
+        }
     }
 }

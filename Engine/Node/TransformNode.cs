@@ -233,8 +233,12 @@ namespace Altseed2
         /// </summary>
         private TransformNodeInfo _TransformNodeInfo { get; }
 
+        public bool VisibleTransformNodeInfo { get; set; } = Engine.Config.VisibleTransformInfo;
+
         internal void DrawTransformInfo()
         {
+            if (!VisibleTransformNodeInfo) return;
+
             if (Transfomer == null)
             {
                 _TransformNodeInfo?.Draw();

@@ -52,6 +52,7 @@ namespace Altseed2.GuiTool.Repository
                     new MemberGuiInfo(ToolElementType.Float, "Angle", "Angle", new Dictionary<string, object>() { {"min", -180f}, {"max", 180f} }),
                     new MemberGuiInfo(ToolElementType.Bool, "HorizontalFlip", "HorizontalFlip", null),
                     new MemberGuiInfo(ToolElementType.Bool, "VerticalFlip", "VerticalFlip", null),
+                    new MemberGuiInfo(ToolElementType.Bool, "VisibleTransformNodeInfo", "VisibleTransformNodeInfo", null),
                 });
 
             ObjectMappings.Add(typeof(TextNode),
