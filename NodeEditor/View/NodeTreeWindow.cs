@@ -56,6 +56,7 @@ namespace Altseed2.NodeEditor.View
                 if (Engine.Tool.IsItemClicked(0))
                 {
                     _viewModel.OnNodeSelected(node);
+
                 }
 
                 if (treeNode)
