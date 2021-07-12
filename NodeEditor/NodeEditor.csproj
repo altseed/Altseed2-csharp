@@ -17,15 +17,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GUIManipulator\**" />
+    <EmbeddedResource Remove="GUIManipulator\**" />
+    <None Remove="GUIManipulator\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="GUIManipulator\" />
   </ItemGroup>
 
 </Project>

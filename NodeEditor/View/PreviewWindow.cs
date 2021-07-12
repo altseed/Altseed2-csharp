@@ -1,13 +1,18 @@
 ﻿using Altseed2.NodeEditor.ViewModel;
+using System.Reactive;
+using System.Reactive.Subjects;
+using System;
 
 namespace Altseed2.NodeEditor.View
 {
-    internal sealed class PreviewWindow
+    internal sealed class PreviewWindow : IDisposable
     {
         private readonly IEditorPropertyAccessor _accessor;
         private readonly PreviewViewModel _viewModel;
         private readonly NodeEditorPane _pane = new NodeEditorPane("Main");
 
+
+        private readonly IDisposable _subscription;
         CircleNode circle = new CircleNode();
         
         ParallelMove move;
@@ -28,30 +33,56 @@ namespace Altseed2.NodeEditor.View
             circle.Color = new Color(0, 255, 0);
             circle.Radius = 100;
             move = new ParallelMove(circle);
+
+            _subscription = accessor.OnSelectedNodeChanged.Subscribe(_ => ChangeManipulatee(accessor.Selected as TransformNode));
+        }
+
+        private void ChangeManipulatee(TransformNode target)
+        {
+            move = new ParallelMove(target);
+        }
+
+        public void Dispose()
+        {
+            _subscription.Dispose();
         }
 
         public void Render()
         {
             Engine.Tool.PushStyleVar(ToolStyleVar.WindowPadding, new Vector2F());
 
-            var mousePos = new Vector2F((float)(_viewModel.MousePosition.X / _viewModel.Main.Size.X) * 2f - 1f, -((float)(_viewModel.MousePosition.Y / _viewModel.Main.Size.Y)*2f - 1f));
-            move.Update(mousePos);
+            var mousePosition = _viewModel.MousePosition;
+            move.Update(mousePosition);
             move.Draw();
 
             if (Engine.Tool.BeginMainMenuBar())
             {
-                Engine.Tool.Text(mousePos.ToString());
-
+                Engine.Tool.Text("mousepos =>" + mousePosition);
+                
+                if (Engine.Tool.BeginMenu("PreviewWindow", true))
+                {
+                    if(Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, true))
+                    {
+                        Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
+                    }
+                    if(Engine.Tool.MenuItem("Parallel Move", "", true, true))
+                    {
+                        move = new ParallelMove(_accessor.Selected as TransformNode);
+                        
+                    }
+                    Engine.Tool.EndMenu();
+                }
                 Engine.Tool.EndMainMenuBar();
             }
 
+            
 
             _pane.Render(() =>
             {
                 AdjustWindowSize();
                 _viewModel.IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocusedFlags.None);
 
-                _viewModel.MousePosition = Engine.Mouse.Position + EditorWindowPosition() - (Engine.Tool.GetWindowContentRegionMin() + Engine.Tool.GetWindowPos());
+                _viewModel.MousePosition = GetMousePositionInPreiewWindow();
 
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());
@@ -73,6 +104,14 @@ namespace Altseed2.NodeEditor.View
                 _latestWindowSize = texSize;
             }
         }
+
+        private Vector2F GetMousePositionInPreiewWindow()
+        {
+            var Position0to2 = Engine.Mouse.Position + EditorWindowPosition() - (Engine.Tool.GetWindowContentRegionMin() + Engine.Tool.GetWindowPos());
+            return new Vector2F((float)(Position0to2.X / _viewModel.Main.Size.X) * 2f - 1f, -((float)(Position0to2.Y / _viewModel.Main.Size.Y) * 2f - 1f));
+        }
+
+        
 
         private Vector2F EditorWindowPosition()
         {
