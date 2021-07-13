@@ -26,16 +26,6 @@ namespace Altseed2.NodeEditor
 
             UpdateArrow(mousePosition);
             UpdateCenterBox();
-
-
-            
-            var position = GetScreenPosition(_TransformNode.Position);
-
-            if (Engine.Tool.BeginMainMenuBar())
-            {
-                Engine.Tool.Text("TrNd" + position);
-                Engine.Tool.EndMainMenuBar();
-            }
         }
 
         private void Input(Vector2F mousePosition)
