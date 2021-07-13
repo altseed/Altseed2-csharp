@@ -71,10 +71,11 @@
         private void AdjustScale(Vector2F difference)
         {
             const float error = 0.0001f;
+            const float speed = 2.0f;
 
             if(difference.Length > error)
             {
-                _TransformNode.Scale += difference * new Vector2F(1f, -1f);
+                _TransformNode.Scale += difference * new Vector2F(1f, -1f) * speed;
             }
         }
 
