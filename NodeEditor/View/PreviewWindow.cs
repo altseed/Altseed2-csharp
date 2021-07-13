@@ -49,24 +49,20 @@ namespace Altseed2.NodeEditor.View
 
 
             if (Engine.Tool.BeginMainMenuBar())
-            {   
-                if (Engine.Tool.BeginMenu("PreviewWindow", true))
+            {
+                if (Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, true))
                 {
-                    if(Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, true))
-                    {
-                        Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
-                    }
-                    if(Engine.Tool.MenuItem("Parallel Move", "", _manipulator is ParallelMove, _accessor.Selected is TransformNode))
-                    {
-                        if (_manipulator is ParallelMove) _manipulator = null;
-                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
-                    }
-                    if(Engine.Tool.MenuItem("Scale", "", _manipulator is Scale, _accessor.Selected is TransformNode))
-                    {
-                        if (_manipulator is Scale) _manipulator = null;
-                        else _manipulator = new Scale(_accessor.Selected as TransformNode);
-                    }
-                    Engine.Tool.EndMenu();
+                    Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
+                }
+                if (Engine.Tool.MenuItem("ParallelMove", "", _manipulator is ParallelMove, _accessor.Selected is TransformNode))
+                {
+                    if (_manipulator is ParallelMove) _manipulator = null;
+                    else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
+                }
+                if (Engine.Tool.MenuItem("Scale", "", _manipulator is Scale, _accessor.Selected is TransformNode))
+                {
+                    if (_manipulator is Scale) _manipulator = null;
+                    else _manipulator = new Scale(_accessor.Selected as TransformNode);
                 }
                 Engine.Tool.EndMainMenuBar();
             }
