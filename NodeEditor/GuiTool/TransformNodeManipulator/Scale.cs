@@ -6,7 +6,7 @@
         private RenderedPolygon _CenterBox;
 
         private ControlState _ControlState = ControlState.none;
-        private Vector2F _AdjustOffset = new Vector2F(0, 0);
+        private Vector2F _MousePositionBasis = new Vector2F(0, 0);
 
         internal Scale(TransformNode transformNode) : base(transformNode)
         {
@@ -34,8 +34,7 @@
                     {
                         if(mouseLButton == ButtonState.Push)
                         {
-                            _AdjustOffset = mousePosition - GetScreenPosition(_TransformNode.Position);
-
+                            _MousePositionBasis = mousePosition;
                             if(MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrow.Vertexes) && MouseHit(mousePosition, _YArrow.Vertexes)))
                             {
                                 _ControlState = ControlState.FreeDrag;
@@ -53,13 +52,29 @@
                     break;
                 case ControlState.XDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
+                    AdjustScale(new Vector2F(mousePosition.X - _MousePositionBasis.X, 0));
+                    _MousePositionBasis = mousePosition;
                     break;
                 case ControlState.YDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
+                    AdjustScale(new Vector2F(0, mousePosition.Y - _MousePositionBasis.Y));
+                    _MousePositionBasis = mousePosition;
                     break;
                 case ControlState.FreeDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
+                    AdjustScale(mousePosition - _MousePositionBasis);
+                    _MousePositionBasis = mousePosition;
                     break;
+            }
+        }
+
+        private void AdjustScale(Vector2F difference)
+        {
+            const float error = 0.0001f;
+
+            if(difference.Length > error)
+            {
+                _TransformNode.Scale += difference * new Vector2F(1f, -1f);
             }
         }
 
