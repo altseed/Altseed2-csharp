@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Altseed2
+namespace Altseed2.NodeEditor
 {
     [Serializable]
     abstract class TransformNodeManipulator
     {
         protected TransformNode _TransformNode;
 
-        internal TransformNodeManipulator(TransformNode transformNode)
+        internal protected TransformNodeManipulator(TransformNode transformNode)
         {
             _TransformNode = transformNode;
         }
@@ -40,22 +40,44 @@ namespace Altseed2
             return new Vector2F(vector3.X, vector3.Y);
         }
 
-        internal protected void AdjustPosition(Vector2F referenceScreenPosition)
-        {
-            const float error = 0.0001f;
-
-            var vec = (referenceScreenPosition - GetScreenPosition(_TransformNode.Position));
-
-            if (vec.Length > error)
-            {
-                _TransformNode.Position = _TransformNode.Position + vec * new Vector2F(1, -1) * 100f;
-            }
-        }
 
         protected Vector2F GetScreenPosition(Vector3F worldPosition)
         {
             var vector3 = Engine._DefaultCamera.ProjectionMatrix.Transform3D(Engine._DefaultCamera.ViewMatrix.Transform3D(worldPosition));
             return new Vector2F(vector3.X, vector3.Y);
+        }
+
+
+        internal protected void SetLine(RenderedPolygon renderedPolygon, Vector2F rootPosition, Vector2F vector, Color color)
+        {
+            Span<Vector2F> points = stackalloc Vector2F[4];
+
+            var side = new Vector2F(vector.Y, -vector.X).Normal * 2;
+
+            points[0] = rootPosition - side;
+            points[1] = rootPosition + side;
+            points[2] = rootPosition + vector + side;
+            points[3] = rootPosition + vector - side;
+
+            Engine.Vector2FArrayCache.FromSpan(points);
+            renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
+            renderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.SetDefaultIndexBuffer();
+
+        }
+
+        internal protected void SetBox(RenderedPolygon renderedPolygon, Vector2F position, Vector2F size, Color color)
+        {
+            Span<Vector2F> points = stackalloc Vector2F[4];
+            points[0] = position + new Vector2F(-1f, -1f) * size / 2f;
+            points[1] = position + new Vector2F(1f, -1f) * size / 2f;
+            points[2] = position + new Vector2F(1f, 1f) * size / 2f;
+            points[3] = position + new Vector2F(-1f, 1f) * size / 2f;
+
+            Engine.Vector2FArrayCache.FromSpan(points);
+            renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
+            renderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.SetDefaultIndexBuffer();
         }
 
         protected bool IsInPreviewWindow(Vector2F position)
