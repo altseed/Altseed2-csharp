@@ -88,5 +88,10 @@ namespace Altseed2.NodeEditor
                 && -1f <= position.Y
                 && position.Y <= 1f;
         }
+
+        internal void SetManipulatee(TransformNode transformNode)
+        {
+            _TransformNode = transformNode;
+        }
     }
 }

@@ -13,10 +13,7 @@ namespace Altseed2.NodeEditor.View
 
 
         private readonly IDisposable _subscription;
-        CircleNode circle = new CircleNode();
-        
-        ParallelMove move;
-
+        private TransformNodeManipulator _manipulator;
 
         private Vector2I _latestWindowSize = Engine.WindowSize;
 
@@ -28,19 +25,12 @@ namespace Altseed2.NodeEditor.View
             _viewModel.UpdateRenderTexture(true,
                 RenderTexture.Create(Engine.WindowSize - new Vector2I(600, 18), TextureFormat.R8G8B8A8_UNORM));
 
-            Engine.AddNode(circle);
-
-            circle.Color = new Color(0, 255, 0);
-            circle.Radius = 100;
-            circle.Position = new Vector2F(200, 200);
-            move = new ParallelMove(circle);
-
             _subscription = accessor.OnSelectedNodeChanged.Subscribe(_ => ChangeManipulatee(accessor.Selected as TransformNode));
         }
 
         private void ChangeManipulatee(TransformNode target)
         {
-            move = new ParallelMove(target);
+            _manipulator?.SetManipulatee(target);
         }
 
         public void Dispose()
@@ -53,23 +43,28 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.PushStyleVar(ToolStyleVar.WindowPadding, new Vector2F());
 
             var mousePosition = _viewModel.MousePosition;
-            move.Update(mousePosition);
-            move.Draw();
+            
+            _manipulator?.Update(mousePosition);
+            _manipulator?.Draw();
+
 
             if (Engine.Tool.BeginMainMenuBar())
-            {
-                Engine.Tool.Text("mousepos =>" + mousePosition);
-                
+            {   
                 if (Engine.Tool.BeginMenu("PreviewWindow", true))
                 {
                     if(Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, true))
                     {
                         Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
                     }
-                    if(Engine.Tool.MenuItem("Parallel Move", "", true, true))
+                    if(Engine.Tool.MenuItem("Parallel Move", "", _manipulator is ParallelMove, _accessor.Selected is TransformNode))
                     {
-                        move = new ParallelMove(_accessor.Selected as TransformNode);
-                        
+                        if (_manipulator is ParallelMove) _manipulator = null;
+                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
+                    }
+                    if(Engine.Tool.MenuItem("Scale", "", _manipulator is Scale, _accessor.Selected is TransformNode))
+                    {
+                        if (_manipulator is Scale) _manipulator = null;
+                        else _manipulator = new Scale(_accessor.Selected as TransformNode);
                     }
                     Engine.Tool.EndMenu();
                 }
