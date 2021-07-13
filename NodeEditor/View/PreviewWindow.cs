@@ -32,6 +32,7 @@ namespace Altseed2.NodeEditor.View
 
             circle.Color = new Color(0, 255, 0);
             circle.Radius = 100;
+            circle.Position = new Vector2F(200, 200);
             move = new ParallelMove(circle);
 
             _subscription = accessor.OnSelectedNodeChanged.Subscribe(_ => ChangeManipulatee(accessor.Selected as TransformNode));

@@ -40,18 +40,19 @@ namespace Altseed2.NodeEditor
                     {
                         if(mouseLButton == ButtonState.Push)
                         {
-                            if(MouseHit(mousePosition, _XArrow.Vertexes))
+                            _AdjustOffset = mousePosition - GetScreenPosition(_TransformNode.Position);
+
+                            if (MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrow.Vertexes) && MouseHit(mousePosition, _YArrow.Vertexes)))
                             {
-                                _AdjustOffset = mousePosition - GetScreenPosition(_TransformNode.Position);
+                                state = ControlState.FreeDrag;
+                            }
+                            else if(MouseHit(mousePosition, _XArrow.Vertexes))
+                            {
                                 state = ControlState.Xdrag;
                             }
                             else if(MouseHit(mousePosition, _YArrow.Vertexes))
                             {
-
-                            }
-                            else if(MouseHit(mousePosition, _CenterBox.Vertexes))
-                            {
-
+                                state = ControlState.Ydrag;
                             }
                         }
                     }
@@ -59,13 +60,17 @@ namespace Altseed2.NodeEditor
 
                 case ControlState.Xdrag:
                     if (mouseLButton == ButtonState.Release) state = ControlState.none;
-                    AdjustPosition(new Vector2F(mousePosition.X, _TransformNode.Position.Y));
+                    AdjustPosition(new Vector2F(mousePosition.X - _AdjustOffset.X, GetScreenPosition(_TransformNode.Position).Y));
                     break;
 
                 case ControlState.Ydrag:
+                    if (mouseLButton == ButtonState.Release) state = ControlState.none;
+                    AdjustPosition(new Vector2F(GetScreenPosition(_TransformNode.Position).X, mousePosition.Y - _AdjustOffset.Y));
                     break;
 
                 case ControlState.FreeDrag:
+                    if (mouseLButton == ButtonState.Release) state = ControlState.none;
+                    AdjustPosition(mousePosition - _AdjustOffset);
                     break;
             }
         }
@@ -78,15 +83,15 @@ namespace Altseed2.NodeEditor
             {
                 Engine.Tool.Text("moving");
                 Engine.Tool.Text("offset =>" + _AdjustOffset.ToString());
-                //Engine.Tool.Text(Engine._DefaultCamera.ProjectionMatrix.Inverse.Transform3D(Engine._DefaultCamera.ViewMatrix.Inverse.Transform3D(new Vector3F(referenceScreenPosition.X, referenceScreenPosition.Y, 0))).ToString());
+                
                 Engine.Tool.EndMainMenuBar();
             }
 
-            var vec = (GetScreenPosition(_TransformNode.Position) - referenceScreenPosition + _AdjustOffset);
+            var vec = (referenceScreenPosition - GetScreenPosition(_TransformNode.Position));
 
             if (vec.Length > error)
             {
-                _TransformNode.Position = _TransformNode.Position + new Vector2F(-100000f, 0f) * vec / vec.Length;
+                _TransformNode.Position = _TransformNode.Position + vec * new Vector2F(1, -1) * 100f ;
             }
         }
 
@@ -118,23 +123,15 @@ namespace Altseed2.NodeEditor
 
             Color xColor = new Color(255, 255, 255), yColor = new Color(255, 255, 255);
 
-            if (MouseHit(mousepos, _XArrow.Vertexes))
+            if ((MouseHit(mousepos, _XArrow.Vertexes) || state == ControlState.Xdrag) && state != ControlState.Ydrag)
             {
                 xColor = new Color(255, 0, 0);
 
-                var vec = Engine._DefaultCamera.ProjectionMatrix.Transform3D(Engine._DefaultCamera.ViewMatrix.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0)));
-                if (Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Hold)
-                {
-                    //_TransformNode.Position = new Vector2F(_TransformNode.Position.X+10*(mousepos - new Vector2F(vec.X,vec.Y)).X, _TransformNode.Position.Y);
-                }
             }
-            if (MouseHit(mousepos, _YArrow.Vertexes))
+            if ((MouseHit(mousepos, _YArrow.Vertexes) || state == ControlState.Ydrag) && state != ControlState.Xdrag)
             {
                 yColor = new Color(0, 0, 255);
             }
-
-            //_XArrowHitBox = _XArrow.Vertexes;
-            //_YArrowHitBox = _YArrow.Vertexes;
 
             SetArrow(_XArrow, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, xColor);
             SetArrow(_YArrow, new Vector2F(pos.X, pos.Y), new Vector2F(0, 1) * length, yColor);
