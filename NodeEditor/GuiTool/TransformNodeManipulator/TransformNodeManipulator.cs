@@ -63,7 +63,6 @@ namespace Altseed2.NodeEditor
             renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
             renderedPolygon.OverwriteVertexesColor(color);
             renderedPolygon.SetDefaultIndexBuffer();
-
         }
 
         internal protected void SetBox(RenderedPolygon renderedPolygon, Vector2F position, Vector2F size, Color color)
@@ -73,6 +72,27 @@ namespace Altseed2.NodeEditor
             points[1] = position + new Vector2F(1f, -1f) * size / 2f;
             points[2] = position + new Vector2F(1f, 1f) * size / 2f;
             points[3] = position + new Vector2F(-1f, 1f) * size / 2f;
+
+            Engine.Vector2FArrayCache.FromSpan(points);
+            renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
+            renderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.SetDefaultIndexBuffer();
+        }
+
+        internal protected void SetArrow(RenderedPolygon renderedPolygon, Vector2F rootPosition, Vector2F headPosition, float wedge, Color color)
+        {
+            Span<Vector2F> points = stackalloc Vector2F[4];
+
+            var vector = headPosition - rootPosition;
+
+            var side = new Vector2F(vector.Y, -vector.X).Normal * 2;
+
+            points[0] = rootPosition - side;
+            points[1] = rootPosition + side;
+            points[2] = rootPosition + vector + side;
+            points[3] = rootPosition + vector - side;
+
+            
 
             Engine.Vector2FArrayCache.FromSpan(points);
             renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);

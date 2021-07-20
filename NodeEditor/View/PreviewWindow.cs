@@ -50,7 +50,7 @@ namespace Altseed2.NodeEditor.View
 
             if (Engine.Tool.BeginMainMenuBar())
             {
-                if (Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, true))
+                if (Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, _accessor.Selected is TransformNode))
                 {
                     Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
                 }
