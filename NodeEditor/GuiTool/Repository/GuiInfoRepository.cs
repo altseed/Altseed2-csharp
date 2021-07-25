@@ -128,6 +128,22 @@ namespace Altseed2.GuiTool.Repository
                     new MemberGuiInfo(ToolElementType.Vector2F, "Point2", "Point2", null),
                     new MemberGuiInfo(ToolElementType.Vector2F, "Point3", "Point3", null),
                 });
+            ObjectMappings.Add(typeof(AnchorTransformerNode),
+                new List<MemberGuiInfo>
+                {
+                    new MemberGuiInfo(ToolElementType.Float, "Angle", "Angle", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "CenterPosition", "CenterPosition", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "Pivot", "Pivot", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "Size", "Size", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "RightRoom", "RightRoom", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "AnchorMin", "AnchorMin", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "AnchorMax", "AnchorMax", null),
+                    new MemberGuiInfo(ToolElementType.Vector2F, "Scale", "Scale", null),
+                    new MemberGuiInfo(ToolElementType.Bool, "VerticalFlip", "VerticalFlip", null),
+                    new MemberGuiInfo(ToolElementType.Enum, "AnchorMode", "AnchorMode", null),
+                    new MemberGuiInfo(ToolElementType.Enum, "HorizontalAlignment", "HorizontalAlignment", null),
+                    new MemberGuiInfo(ToolElementType.Enum, "VerticalAlignment", "VerticalAlignment", null),
+                }) ;
         }
 
         public Dictionary<string, MemberGuiInfo> MappingsFromType(Type type)
