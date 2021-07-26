@@ -16,6 +16,7 @@ namespace Altseed2.NodeEditor
 
         internal abstract void Draw();
 
+
         internal protected bool MouseHit(Vector2F pos, VertexArray vertices)
         {
             Vector2F[] screenPosition = new Vector2F[vertices.Count];
