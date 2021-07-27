@@ -14,6 +14,8 @@ namespace Altseed2.NodeEditor.View
 
         private readonly IDisposable _subscription;
         private TransformNodeManipulator _manipulator;
+        private MouseControlState _MouseControlState;
+        private Vector2F _StartPoint;
 
         private Vector2I _latestWindowSize = Engine.WindowSize;
 
@@ -110,26 +112,11 @@ namespace Altseed2.NodeEditor.View
 
             RenderTransformNodeManipulatorMenu();
 
-            foreach(var node in Engine.GetNodes())
+            CheckMouseInput(mousePosition);
+
+            if(Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold)
             {
-                if (!(node is TransformNode)) continue;
-
-                var transformNode = node as TransformNode;
-
-                var upperRight = transformNode.Position - transformNode.CenterPosition;
-                var lowerLeft = upperRight + transformNode.ContentSize;
-                
-                Vector2F[] rect = new Vector2F[4];
-                rect[0] = GetScreenPosition(new Vector3F(upperRight.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                rect[1] = GetScreenPosition(new Vector3F(upperRight.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                rect[2] = GetScreenPosition(new Vector3F(lowerLeft.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                rect[3] = GetScreenPosition(new Vector3F(lowerLeft.X, upperRight.Y, transformNode is SpriteNode? (transformNode as SpriteNode).ZOrder : 0));
-                if (MouseHit(mousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
-                {
-                    _accessor.Selected = node;
-                    break;
-                }
-
+                Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(new Vector2F(0, 5)) * Engine._DefaultCamera.ViewMatrix;
             }
 
             _pane.Render(() =>
@@ -145,6 +132,58 @@ namespace Altseed2.NodeEditor.View
             }, ToolWindowFlags.NoScrollbar);
 
             Engine.Tool.PopStyleVar(1);
+        }
+
+        private void CheckMouseInput(Vector2F MousePosition)
+        {
+            foreach (var node in Engine.GetNodes())
+            {
+                if (!(node is TransformNode)) continue;
+
+                var transformNode = node as TransformNode;
+
+                var upperRight = transformNode.Position - transformNode.CenterPosition;
+                var lowerLeft = upperRight + transformNode.ContentSize;
+
+                Vector2F[] rect = new Vector2F[4];
+                rect[0] = GetScreenPosition(new Vector3F(upperRight.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                rect[1] = GetScreenPosition(new Vector3F(upperRight.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                rect[2] = GetScreenPosition(new Vector3F(lowerLeft.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                rect[3] = GetScreenPosition(new Vector3F(lowerLeft.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                if (MouseHit(MousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
+                {
+                    _accessor.Selected = node;
+                    return;
+                }
+            }
+
+            if(_MouseControlState == MouseControlState.none && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
+            {
+                _StartPoint = MousePosition;
+                _MouseControlState = MouseControlState.drag;
+                
+                //ToDo カーソルのテクスチャをドラッグしてるかんじに変更できるように
+                Engine.Mouse.CursorMode = CursorMode.Normal;
+            }
+            
+            if(_MouseControlState == MouseControlState.drag && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Release)
+            {
+                _MouseControlState = MouseControlState.none;
+                Engine.Mouse.CursorMode = CursorMode.Normal;
+            }
+
+            if(_MouseControlState == MouseControlState.drag)
+            {
+                const float error = 0.0001f;
+
+                var vec = (_StartPoint - MousePosition);
+
+                if (vec.Length > error)
+                {
+                    Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(vec * new Vector2F(-1, 1) * 300f) * Engine._DefaultCamera.ViewMatrix;
+                }
+                _StartPoint = MousePosition;
+            }
         }
 
         private void AdjustWindowSize()
@@ -228,6 +267,11 @@ namespace Altseed2.NodeEditor.View
                 && position.X <= 1f
                 && -1f <= position.Y
                 && position.Y <= 1f;
+        }
+
+        enum MouseControlState
+        {
+            none, drag,
         }
     }
 }

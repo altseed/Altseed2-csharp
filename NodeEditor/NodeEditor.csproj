@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GUIAsset\" />
+  </ItemGroup>
+
 </Project>
