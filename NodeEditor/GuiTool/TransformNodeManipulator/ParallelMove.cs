@@ -2,7 +2,6 @@
 
 namespace Altseed2.NodeEditor
 {
-    [Serializable]
     internal class ParallelMove : TransformNodeManipulator
     {
         private RenderedPolygon _XArrowLine, _YArrowLine, _XArrowTriangle, _YArrowTriangle;
@@ -10,8 +9,6 @@ namespace Altseed2.NodeEditor
 
         private ControlState _ControlState = ControlState.none;
         private Vector2F _AdjustOffset = new Vector2F(0, 0);
-
-        public Vector2F PositionInRenderedTexture { get { var vec = Engine._DefaultCamera.ProjectionMatrix.Transform3D(Engine._DefaultCamera.ViewMatrix.Transform3D(new Vector3F(_TransformNode.CenterPosition.X, _TransformNode.CenterPosition.Y, 0)));  return new Vector2F(vec.X, vec.Y); } }
 
         internal ParallelMove(TransformNode transformNode) : base (transformNode)
         {

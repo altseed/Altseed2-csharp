@@ -304,6 +304,11 @@ namespace Altseed2.NodeEditor.View
                     if (_manipulator is Scale) _manipulator = null;
                     else _manipulator = new Scale(_accessor.Selected as TransformNode);
                 }
+                if(Engine.Tool.MenuItem("Rotate", "", _manipulator is Rotate, _accessor.Selected is TransformNode))
+                {
+                    if (_manipulator is Rotate) _manipulator = null;
+                    else _manipulator = new Rotate(_accessor.Selected as TransformNode);
+                }
                 if(Engine.Tool.MenuItem("Find", "", false, _accessor.Selected is TransformNode))
                 {
                     FindTransformNode(_accessor.Selected as TransformNode);

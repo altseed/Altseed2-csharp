@@ -82,6 +82,32 @@ namespace Altseed2.NodeEditor
             renderedPolygon.SetDefaultIndexBuffer();
         }
 
+        internal protected void SetRing(RenderedPolygon[] renderedPolygon, Vector2F position, float radius, float width, Color color)
+        {
+            int smoothness = renderedPolygon.Length;
+            for (int i = 0;i < smoothness; i++)
+            {
+                Span<Vector2F> points = stackalloc Vector2F[4];
+                float angle = (MathF.PI * 2f / smoothness);
+                
+                float x1 = MathF.Cos(angle * (i + 0.5f));
+                float y1 = MathF.Sin(angle * (i + 0.5f));
+                float x2 = MathF.Cos(angle * (i - 0.5f));
+                float y2 = MathF.Sin(angle * (i - 0.5f));
+
+                points[0] = position + new Vector2F(x1, y1) * (radius + width / 2f);
+                points[1] = position + new Vector2F(x1, y1) * (radius - width / 2f);
+                points[2] = position + new Vector2F(x2, y2) * (radius - width / 2f);
+                points[3] = position + new Vector2F(x2, y2) * (radius + width / 2f);
+                
+                Engine.Vector2FArrayCache.FromSpan(points);
+                renderedPolygon[i].CreateVertexesByVector2F(Engine.Vector2FArrayCache);
+                renderedPolygon[i].OverwriteVertexesColor(color);
+                renderedPolygon[i].SetDefaultIndexBuffer();
+            }
+
+        }
+
         internal protected void SetTriangle(RenderedPolygon renderedPolygon, Vector2F centerPosition, Vector2F point1, Vector2F point2, Vector2F point3, Color color)
         {
             Span<Vector2F> points = stackalloc Vector2F[3];
