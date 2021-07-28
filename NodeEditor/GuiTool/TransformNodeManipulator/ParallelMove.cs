@@ -40,7 +40,6 @@ namespace Altseed2.NodeEditor
                         if (mouseLButton == ButtonState.Push)
                         {
                             _AdjustOffset = mousePosition - GetScreenPosition(_TransformNode.Position);
-
                             if (MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrowLine.Vertexes) && MouseHit(mousePosition, _YArrowLine.Vertexes)))
                             {
                                 _ControlState = ControlState.FreeDrag;
@@ -89,16 +88,15 @@ namespace Altseed2.NodeEditor
             var scale = Engine._DefaultCamera.ViewMatrix[1, 1] * Engine._DefaultCamera.ViewMatrix[2, 2];
             var length = 300 / scale;
 
-            Color xColor = new Color(255, 255, 255), yColor = new Color(255, 255, 255);
+            Color xColor = new Color(255, 0, 0), yColor = new Color(0, 0, 255);
 
             if ((MouseHit(mousePosition, _XArrowLine.Vertexes) || _ControlState == ControlState.Xdrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.Ydrag)
             {
-                xColor = new Color(255, 0, 0);
-
+                xColor = new Color(255, 255, 255);
             }
             if ((MouseHit(mousePosition, _YArrowLine.Vertexes) || _ControlState == ControlState.Ydrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.Xdrag)
             {
-                yColor = new Color(0, 0, 255);
+                yColor = new Color(255, 255, 255);
             }
 
             SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, length / 150, xColor);

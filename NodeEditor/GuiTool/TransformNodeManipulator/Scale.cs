@@ -92,15 +92,15 @@
             var scale = Engine._DefaultCamera.ViewMatrix[1, 1] * Engine._DefaultCamera.ViewMatrix[2, 2];
             var length = 300 / scale;
 
-            Color xColor = new Color(255, 255, 255), yColor = new Color(255, 255, 255);
+            Color xColor = new Color(255, 0, 0), yColor = new Color(0, 0, 255);
 
             if((MouseHit(mousePosition, _XArrowLine.Vertexes) || _ControlState == ControlState.XDrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.YDrag)
             {
-                xColor = new Color(255, 0, 0);
+                xColor = new Color(255, 255, 255);
             }
             if ((MouseHit(mousePosition, _YArrowLine.Vertexes) || _ControlState == ControlState.YDrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.XDrag)
             {
-                yColor = new Color(0, 0, 255);
+                yColor = new Color(255, 255, 255);
             }
 
             SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1f, 0f) * length, length / 150, xColor);
