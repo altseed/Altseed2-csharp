@@ -162,6 +162,20 @@ namespace Altseed2.NodeEditor.View
                     var mat = transformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
                     var pos = mat.Transform3D(new Vector3F(transformNode.Position.X, transformNode.Position.Y, 0));
 
+                    bool HasAnchorNode(TransformNode target)
+                    {
+                        foreach(var childNode in target.Children)
+                        {
+                            if (childNode is TransformerNode) return true;
+                        }
+                        return false;
+                    }
+
+                    if (HasAnchorNode(transformNode))
+                    {
+                        pos = transformNode.AbsoluteTransform.Transform3D(pos);
+                    }
+
                     var pos2d = new Vector2F(pos.X, pos.Y);
 
                     var upperRight = pos2d - transformNode.CenterPosition;
