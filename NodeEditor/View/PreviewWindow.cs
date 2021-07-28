@@ -208,6 +208,17 @@ namespace Altseed2.NodeEditor.View
                 _StartPoint = MousePosition;
             }
 
+            if (IsInPreviewWindow(MousePosition))
+            {
+                var wheelState = Engine.Mouse.Wheel;
+                if(wheelState != 0)
+                {
+                    //Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation3D(new Vector3F(0, 0, wheelState * 0.01f)) * Engine._DefaultCamera.ViewMatrix;
+                    Engine._DefaultCamera.ViewMatrix = Matrix44F.GetScale2D(new Vector2F(1, 1) * (1 + wheelState * 0.25f)) *  Engine._DefaultCamera.ViewMatrix;
+                }
+            }
+
+            //debug用
             if (Engine.Tool.BeginMainMenuBar())
             {
                 Engine.Tool.Text(_MouseControlState.ToString());
