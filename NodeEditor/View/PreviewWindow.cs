@@ -116,12 +116,12 @@ namespace Altseed2.NodeEditor.View
 
             var mousePosition = _viewModel.MousePosition;
             
+            MouseInput(mousePosition);
             _manipulator?.Update(mousePosition);
             _manipulator?.Draw();
 
             RenderTransformNodeManipulatorMenu();
 
-            MouseInput(mousePosition);
 
             if(Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold)
             {
