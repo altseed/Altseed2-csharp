@@ -38,17 +38,18 @@
                             if(MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrowLine.Vertexes) && MouseHit(mousePosition, _YArrowLine.Vertexes)))
                             {
                                 _ControlState = ControlState.FreeDrag;
+                                return true;
                             }
                             else if(MouseHit(mousePosition, _XArrowLine.Vertexes))
                             {
                                 _ControlState = ControlState.XDrag;
+                                return true;
                             }
                             else if(MouseHit(mousePosition, _YArrowLine.Vertexes))
                             {
                                 _ControlState = ControlState.YDrag;
+                                return true;
                             }
-
-                            return true;
                         }
                     }
                     return false ;
