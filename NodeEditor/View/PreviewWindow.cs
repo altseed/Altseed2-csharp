@@ -235,13 +235,6 @@ namespace Altseed2.NodeEditor.View
                 var wheelState = Engine.Mouse.Wheel;
                 Engine._DefaultCamera.ViewMatrix = Matrix44F.GetScale2D(new Vector2F(1, 1) * (1 + wheelState * 0.25f)) *  Engine._DefaultCamera.ViewMatrix;
             }
-
-            //debug用
-            if (Engine.Tool.BeginMainMenuBar())
-            {
-                Engine.Tool.Text(_MouseControlState.ToString());
-                Engine.Tool.EndMainMenuBar();
-            }
         }
 
         private void AdjustWindowSize()
