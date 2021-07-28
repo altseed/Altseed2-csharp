@@ -153,32 +153,40 @@ namespace Altseed2.NodeEditor.View
 
             if (_MouseControlState == MouseControlState.ControlManipulator) _MouseControlState = MouseControlState.none;
 
-            foreach (var node in Engine.GetNodes())
+            void CheckMouseClick(Node node)
             {
-                if (!(node is TransformNode)) continue;
-
-                var transformNode = node as TransformNode;
-
-                var mat = transformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
-                var pos = mat.Transform3D(new Vector3F(transformNode.Position.X, transformNode.Position.Y, 0));
-                
-                var pos2d = new Vector2F(pos.X, pos.Y);
-
-                var upperRight = pos2d - transformNode.CenterPosition;
-                var lowerLeft = upperRight + transformNode.ContentSize;
-
-                Vector2F[] rect = new Vector2F[4];
-                rect[0] = GetScreenPosition(new Vector3F(upperRight.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                rect[1] = GetScreenPosition(new Vector3F(upperRight.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                rect[2] = GetScreenPosition(new Vector3F(lowerLeft.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                rect[3] = GetScreenPosition(new Vector3F(lowerLeft.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-
-                if (MouseHit(MousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push && IsInPreviewWindow(MousePosition))
+                if (node is TransformNode)
                 {
-                    _accessor.Selected = node;
-                    return;
+                    var transformNode = node as TransformNode;
+
+                    var mat = transformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+                    var pos = mat.Transform3D(new Vector3F(transformNode.Position.X, transformNode.Position.Y, 0));
+
+                    var pos2d = new Vector2F(pos.X, pos.Y);
+
+                    var upperRight = pos2d - transformNode.CenterPosition;
+                    var lowerLeft = upperRight + transformNode.ContentSize;
+
+                    Vector2F[] rect = new Vector2F[4];
+                    rect[0] = GetScreenPosition(new Vector3F(upperRight.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                    rect[1] = GetScreenPosition(new Vector3F(upperRight.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                    rect[2] = GetScreenPosition(new Vector3F(lowerLeft.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+                    rect[3] = GetScreenPosition(new Vector3F(lowerLeft.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
+
+                    if (MouseHit(MousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push && IsInPreviewWindow(MousePosition))
+                    {
+                        _accessor.Selected = transformNode;
+                        return;
+                    }
+                }
+                
+                foreach(var child in node.Children)
+                {
+                    CheckMouseClick(child);
                 }
             }
+
+            foreach (var node in Engine.GetNodes()) CheckMouseClick(node);
 
             if(IsInPreviewWindow(MousePosition) && _MouseControlState == MouseControlState.none && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
             {
