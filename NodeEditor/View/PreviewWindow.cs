@@ -241,7 +241,17 @@ namespace Altseed2.NodeEditor.View
             return new Vector2F((float)(Position0to2.X / _viewModel.Main.Size.X) * 2f - 1f, -((float)(Position0to2.Y / _viewModel.Main.Size.Y) * 2f - 1f));
         }
 
-        
+        private void FindTransformNode(TransformNode target)
+        {
+            if (!target.IsRegistered) return;
+
+            var mat = target.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var worldPosition = mat.Transform3D(new Vector3F(target.Position.X, target.Position.Y, 0));
+
+            var pos2d = new Vector2F(worldPosition.X, worldPosition.Y);
+
+            Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(- pos2d);
+        }
 
         private Vector2F EditorWindowPosition()
         {
@@ -271,6 +281,10 @@ namespace Altseed2.NodeEditor.View
                 {
                     if (_manipulator is Scale) _manipulator = null;
                     else _manipulator = new Scale(_accessor.Selected as TransformNode);
+                }
+                if(Engine.Tool.MenuItem("Find", "", false, _accessor.Selected is TransformNode))
+                {
+                    FindTransformNode(_accessor.Selected as TransformNode);
                 }
                 Engine.Tool.EndMainMenuBar();
             }
