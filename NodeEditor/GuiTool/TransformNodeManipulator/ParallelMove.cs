@@ -5,7 +5,7 @@ namespace Altseed2.NodeEditor
     [Serializable]
     internal class ParallelMove : TransformNodeManipulator
     {
-        private RenderedPolygon _XArrow, _YArrow;
+        private RenderedPolygon _XArrowLine, _YArrowLine, _XArrowTriangle, _YArrowTriangle;
         private RenderedPolygon _CenterBox;
 
         private ControlState _ControlState = ControlState.none;
@@ -15,8 +15,10 @@ namespace Altseed2.NodeEditor
 
         internal ParallelMove(TransformNode transformNode) : base (transformNode)
         {
-            _XArrow = RenderedPolygon.Create();
-            _YArrow = RenderedPolygon.Create();
+            _XArrowLine = RenderedPolygon.Create();
+            _YArrowLine = RenderedPolygon.Create();
+            _XArrowTriangle = RenderedPolygon.Create();
+            _YArrowTriangle = RenderedPolygon.Create();
             _CenterBox = RenderedPolygon.Create();
         }
 
@@ -39,17 +41,17 @@ namespace Altseed2.NodeEditor
                         {
                             _AdjustOffset = mousePosition - GetScreenPosition(_TransformNode.Position);
 
-                            if (MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrow.Vertexes) && MouseHit(mousePosition, _YArrow.Vertexes)))
+                            if (MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrowLine.Vertexes) && MouseHit(mousePosition, _YArrowLine.Vertexes)))
                             {
                                 _ControlState = ControlState.FreeDrag;
                                 return true;
                             }
-                            else if (MouseHit(mousePosition, _XArrow.Vertexes))
+                            else if (MouseHit(mousePosition, _XArrowLine.Vertexes))
                             {
                                 _ControlState = ControlState.Xdrag;
                                 return true;
                             }
-                            else if (MouseHit(mousePosition, _YArrow.Vertexes))
+                            else if (MouseHit(mousePosition, _YArrowLine.Vertexes))
                             {
                                 _ControlState = ControlState.Ydrag;
                                 return true;
@@ -88,18 +90,21 @@ namespace Altseed2.NodeEditor
 
             Color xColor = new Color(255, 255, 255), yColor = new Color(255, 255, 255);
 
-            if ((MouseHit(mousePosition, _XArrow.Vertexes) || _ControlState == ControlState.Xdrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.Ydrag)
+            if ((MouseHit(mousePosition, _XArrowLine.Vertexes) || _ControlState == ControlState.Xdrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.Ydrag)
             {
                 xColor = new Color(255, 0, 0);
 
             }
-            if ((MouseHit(mousePosition, _YArrow.Vertexes) || _ControlState == ControlState.Ydrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.Xdrag)
+            if ((MouseHit(mousePosition, _YArrowLine.Vertexes) || _ControlState == ControlState.Ydrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.Xdrag)
             {
                 yColor = new Color(0, 0, 255);
             }
 
-            SetLine(_XArrow, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, xColor);
-            SetLine(_YArrow, new Vector2F(pos.X, pos.Y), new Vector2F(0, 1) * length, yColor);
+            SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, xColor);
+            SetTriangle(_XArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(1, 0) * length, new Vector2F(length * 0.05f, 0), new Vector2F(0, length * 0.015f), new Vector2F(0, -length * 0.015f), xColor);
+            
+            SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(0, 1) * length, yColor);
+            SetTriangle(_YArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(0, 1) * length, new Vector2F(0, length * 0.05f), new Vector2F(length * 0.015f, 0), new Vector2F(-length * 0.015f, 0), yColor);
         }
 
         private void UpdateCenterBox()
@@ -120,8 +125,10 @@ namespace Altseed2.NodeEditor
                 Engine.Renderer.DrawPolygon(renderedPolygon);
             };
 
-            draw(_XArrow);
-            draw(_YArrow);
+            draw(_XArrowLine);
+            draw(_YArrowLine);
+            draw(_XArrowTriangle);
+            draw(_YArrowTriangle);
             draw(_CenterBox);
         }
 

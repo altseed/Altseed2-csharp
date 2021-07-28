@@ -82,6 +82,19 @@ namespace Altseed2.NodeEditor
             renderedPolygon.SetDefaultIndexBuffer();
         }
 
+        internal protected void SetTriangle(RenderedPolygon renderedPolygon, Vector2F centerPosition, Vector2F point1, Vector2F point2, Vector2F point3, Color color)
+        {
+            Span<Vector2F> points = stackalloc Vector2F[3];
+            points[0] = centerPosition + point1;
+            points[1] = centerPosition + point2;
+            points[2] = centerPosition + point3;
+
+            Engine.Vector2FArrayCache.FromSpan(points);
+            renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);
+            renderedPolygon.OverwriteVertexesColor(color);
+            renderedPolygon.SetDefaultIndexBuffer();
+        }
+
         internal protected void SetArrow(RenderedPolygon renderedPolygon, Vector2F rootPosition, Vector2F headPosition, float wedge, Color color)
         {
             Span<Vector2F> points = stackalloc Vector2F[4];

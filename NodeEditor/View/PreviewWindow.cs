@@ -172,10 +172,7 @@ namespace Altseed2.NodeEditor.View
                 rect[1] = GetScreenPosition(new Vector3F(upperRight.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
                 rect[2] = GetScreenPosition(new Vector3F(lowerLeft.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
                 rect[3] = GetScreenPosition(new Vector3F(lowerLeft.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                /*rect[0] = (new Vector2F(upperRight.X, upperRight.Y));
-                rect[1] = (new Vector2F(upperRight.X, lowerLeft.Y));
-                rect[2] = (new Vector2F(lowerLeft.X, lowerLeft.Y));
-                rect[3] = (new Vector2F(lowerLeft.X, upperRight.Y));*/
+
                 if (MouseHit(MousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push && IsInPreviewWindow(MousePosition))
                 {
                     _accessor.Selected = node;
