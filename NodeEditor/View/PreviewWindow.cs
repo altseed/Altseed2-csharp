@@ -82,6 +82,15 @@ namespace Altseed2.NodeEditor.View
             sprite2.AddChildNode(text);
             text.AddChildNode(childText);
 
+            var trip = new TriangleNode();
+            trip.Point2 = new Vector2F(0, 50);
+            trip.Point3 = new Vector2F(100, 0);
+            var tric = new TriangleNode();
+            tric.Point3 = new Vector2F(0, 50);
+            tric.Point2 = new Vector2F(200, 0);
+            tric.Color = new Color(0, 250, 0);
+            trip.AddChildNode(tric);
+            Engine.AddNode(trip);
         }
 
         private void ChangeManipulatee(TransformNode? target)
@@ -112,7 +121,7 @@ namespace Altseed2.NodeEditor.View
 
             RenderTransformNodeManipulatorMenu();
 
-            CheckMouseInput(mousePosition);
+            MouseInput(mousePosition);
 
             if(Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold)
             {
@@ -134,15 +143,28 @@ namespace Altseed2.NodeEditor.View
             Engine.Tool.PopStyleVar(1);
         }
 
-        private void CheckMouseInput(Vector2F MousePosition)
+        private void MouseInput(Vector2F MousePosition)
         {
+            if (_manipulator?.Input(MousePosition) ?? false)
+            {
+                _MouseControlState = MouseControlState.ControlManipulator;
+                return;
+            }
+
+            if (_MouseControlState == MouseControlState.ControlManipulator) _MouseControlState = MouseControlState.none;
+
             foreach (var node in Engine.GetNodes())
             {
                 if (!(node is TransformNode)) continue;
 
                 var transformNode = node as TransformNode;
 
-                var upperRight = transformNode.Position - transformNode.CenterPosition;
+                var mat = transformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
+                var pos = mat.Transform3D(new Vector3F(transformNode.Position.X, transformNode.Position.Y, 0));
+                
+                var pos2d = new Vector2F(pos.X, pos.Y);
+
+                var upperRight = pos2d - transformNode.CenterPosition;
                 var lowerLeft = upperRight + transformNode.ContentSize;
 
                 Vector2F[] rect = new Vector2F[4];
@@ -150,29 +172,33 @@ namespace Altseed2.NodeEditor.View
                 rect[1] = GetScreenPosition(new Vector3F(upperRight.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
                 rect[2] = GetScreenPosition(new Vector3F(lowerLeft.X, lowerLeft.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
                 rect[3] = GetScreenPosition(new Vector3F(lowerLeft.X, upperRight.Y, transformNode is SpriteNode ? (transformNode as SpriteNode).ZOrder : 0));
-                if (MouseHit(MousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
+                /*rect[0] = (new Vector2F(upperRight.X, upperRight.Y));
+                rect[1] = (new Vector2F(upperRight.X, lowerLeft.Y));
+                rect[2] = (new Vector2F(lowerLeft.X, lowerLeft.Y));
+                rect[3] = (new Vector2F(lowerLeft.X, upperRight.Y));*/
+                if (MouseHit(MousePosition, rect) && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push && IsInPreviewWindow(MousePosition))
                 {
                     _accessor.Selected = node;
                     return;
                 }
             }
 
-            if(_MouseControlState == MouseControlState.none && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
+            if(IsInPreviewWindow(MousePosition) && _MouseControlState == MouseControlState.none && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Push)
             {
                 _StartPoint = MousePosition;
-                _MouseControlState = MouseControlState.drag;
+                _MouseControlState = MouseControlState.CameraDrag;
                 
                 //ToDo カーソルのテクスチャをドラッグしてるかんじに変更できるように
                 Engine.Mouse.CursorMode = CursorMode.Normal;
             }
             
-            if(_MouseControlState == MouseControlState.drag && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Release)
+            if(_MouseControlState == MouseControlState.CameraDrag && Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft) == ButtonState.Release)
             {
                 _MouseControlState = MouseControlState.none;
                 Engine.Mouse.CursorMode = CursorMode.Normal;
             }
 
-            if(_MouseControlState == MouseControlState.drag)
+            if(_MouseControlState == MouseControlState.CameraDrag)
             {
                 const float error = 0.0001f;
 
@@ -183,6 +209,12 @@ namespace Altseed2.NodeEditor.View
                     Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(vec * new Vector2F(-1, 1) * 300f) * Engine._DefaultCamera.ViewMatrix;
                 }
                 _StartPoint = MousePosition;
+            }
+
+            if (Engine.Tool.BeginMainMenuBar())
+            {
+                Engine.Tool.Text(_MouseControlState.ToString());
+                Engine.Tool.EndMainMenuBar();
             }
         }
 
@@ -271,7 +303,7 @@ namespace Altseed2.NodeEditor.View
 
         enum MouseControlState
         {
-            none, drag,
+            none, CameraDrag, ControlManipulator
         }
     }
 }

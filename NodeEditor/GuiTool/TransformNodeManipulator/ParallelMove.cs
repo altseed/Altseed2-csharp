@@ -22,13 +22,11 @@ namespace Altseed2.NodeEditor
 
         internal override void Update(Vector2F mousePosition)
         {
-            Input(mousePosition);
-
             UpdateArrow(mousePosition);
             UpdateCenterBox();
         }
 
-        private void Input(Vector2F mousePosition)
+        internal override bool Input(Vector2F mousePosition)
         {
             var mouseLButton = Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft);
 
@@ -44,40 +42,46 @@ namespace Altseed2.NodeEditor
                             if (MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrow.Vertexes) && MouseHit(mousePosition, _YArrow.Vertexes)))
                             {
                                 _ControlState = ControlState.FreeDrag;
+                                return true;
                             }
                             else if (MouseHit(mousePosition, _XArrow.Vertexes))
                             {
                                 _ControlState = ControlState.Xdrag;
+                                return true;
                             }
                             else if (MouseHit(mousePosition, _YArrow.Vertexes))
                             {
                                 _ControlState = ControlState.Ydrag;
+                                return true;
                             }
                         }
                     }
-                    break;
+                    return false;
 
                 case ControlState.Xdrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
                     AdjustPosition(new Vector2F(mousePosition.X - _AdjustOffset.X, GetScreenPosition(_TransformNode.Position).Y));
-                    break;
+                    return true;
 
                 case ControlState.Ydrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
                     AdjustPosition(new Vector2F(GetScreenPosition(_TransformNode.Position).X, mousePosition.Y - _AdjustOffset.Y));
-                    break;
+                    return true;
 
                 case ControlState.FreeDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
                     AdjustPosition(mousePosition - _AdjustOffset);
-                    break;
+                    return true;
+
+                default:
+                    return false;
             }
         }
 
         private void UpdateArrow(Vector2F mousePosition)
         {
 
-            var mat = _TransformNode.GetAncestorSpecificNode<TransformerNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
 
             var length = 300;
@@ -100,8 +104,9 @@ namespace Altseed2.NodeEditor
 
         private void UpdateCenterBox()
         {
-            var mat = _TransformNode.GetAncestorSpecificNode<TransformerNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
+            
             SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(8, 8), new Color(100, 100, 100));
         }
 

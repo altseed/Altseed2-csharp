@@ -17,13 +17,11 @@
 
         internal override void Update(Vector2F mousePosition)
         {
-            Input(mousePosition);
-
             UpdateArrow(mousePosition);
             UpdateCenterBox(mousePosition);
         }
 
-        private void Input(Vector2F mousePosition)
+        internal override bool Input(Vector2F mousePosition)
         {
             var mouseLButton = Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft);
 
@@ -47,24 +45,28 @@
                             {
                                 _ControlState = ControlState.YDrag;
                             }
+
+                            return true;
                         }
                     }
-                    break;
+                    return false ;
                 case ControlState.XDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
                     AdjustScale(new Vector2F(mousePosition.X - _MousePositionBasis.X, 0));
                     _MousePositionBasis = mousePosition;
-                    break;
+                    return true;
                 case ControlState.YDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
                     AdjustScale(new Vector2F(0, mousePosition.Y - _MousePositionBasis.Y));
                     _MousePositionBasis = mousePosition;
-                    break;
+                    return true;
                 case ControlState.FreeDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
                     AdjustScale(mousePosition - _MousePositionBasis);
                     _MousePositionBasis = mousePosition;
-                    break;
+                    return true;
+                default:
+                    return true;
             }
         }
 
@@ -81,7 +83,7 @@
 
         private void UpdateArrow(Vector2F mousePosition)
         {
-            var mat = _TransformNode.GetAncestorSpecificNode<TransformerNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
 
             var length = 300;
@@ -103,7 +105,7 @@
 
         private void UpdateCenterBox(Vector2F mousePosition)
         {
-            var mat = _TransformNode.GetAncestorSpecificNode<TransformerNode>()?.InheritedTransform ?? Matrix44F.Identity;
+            var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
             SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(8, 8), new Color(100, 100, 100));
         }

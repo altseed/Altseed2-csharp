@@ -16,6 +16,8 @@ namespace Altseed2.NodeEditor
 
         internal abstract void Draw();
 
+        internal abstract bool Input(Vector2F mousePosition);
+
 
         internal protected bool MouseHit(Vector2F pos, VertexArray vertices)
         {
