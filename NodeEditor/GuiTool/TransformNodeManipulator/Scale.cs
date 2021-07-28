@@ -2,7 +2,7 @@
 {
     class Scale : TransformNodeManipulator
     {
-        private RenderedPolygon _XArrow, _YArrow;
+        private RenderedPolygon _XArrowLine, _YArrowLine, _XArrowHead, _YArrowHead;
         private RenderedPolygon _CenterBox;
 
         private ControlState _ControlState = ControlState.none;
@@ -10,8 +10,10 @@
 
         internal Scale(TransformNode transformNode) : base(transformNode)
         {
-            _XArrow = RenderedPolygon.Create();
-            _YArrow = RenderedPolygon.Create();
+            _XArrowLine = RenderedPolygon.Create();
+            _YArrowLine = RenderedPolygon.Create();
+            _XArrowHead = RenderedPolygon.Create();
+            _YArrowHead = RenderedPolygon.Create();
             _CenterBox = RenderedPolygon.Create();
         }
 
@@ -33,15 +35,15 @@
                         if(mouseLButton == ButtonState.Push)
                         {
                             _MousePositionBasis = mousePosition;
-                            if(MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrow.Vertexes) && MouseHit(mousePosition, _YArrow.Vertexes)))
+                            if(MouseHit(mousePosition, _CenterBox.Vertexes) || (MouseHit(mousePosition, _XArrowLine.Vertexes) && MouseHit(mousePosition, _YArrowLine.Vertexes)))
                             {
                                 _ControlState = ControlState.FreeDrag;
                             }
-                            else if(MouseHit(mousePosition, _XArrow.Vertexes))
+                            else if(MouseHit(mousePosition, _XArrowLine.Vertexes))
                             {
                                 _ControlState = ControlState.XDrag;
                             }
-                            else if(MouseHit(mousePosition, _YArrow.Vertexes))
+                            else if(MouseHit(mousePosition, _YArrowLine.Vertexes))
                             {
                                 _ControlState = ControlState.YDrag;
                             }
@@ -86,21 +88,24 @@
             var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
 
-            var length = 300;
+            var scale = Engine._DefaultCamera.ViewMatrix[1, 1] * Engine._DefaultCamera.ViewMatrix[2, 2];
+            var length = 300 / scale;
 
             Color xColor = new Color(255, 255, 255), yColor = new Color(255, 255, 255);
 
-            if((MouseHit(mousePosition, _XArrow.Vertexes) || _ControlState == ControlState.XDrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.YDrag)
+            if((MouseHit(mousePosition, _XArrowLine.Vertexes) || _ControlState == ControlState.XDrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.YDrag)
             {
                 xColor = new Color(255, 0, 0);
             }
-            if ((MouseHit(mousePosition, _YArrow.Vertexes) || _ControlState == ControlState.YDrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.XDrag)
+            if ((MouseHit(mousePosition, _YArrowLine.Vertexes) || _ControlState == ControlState.YDrag || _ControlState == ControlState.FreeDrag) && _ControlState != ControlState.XDrag)
             {
                 yColor = new Color(0, 0, 255);
             }
 
-            SetLine(_XArrow, new Vector2F(pos.X, pos.Y), new Vector2F(1f, 0f) * length, xColor);
-            SetLine(_YArrow, new Vector2F(pos.X, pos.Y), new Vector2F(0f, 1f) * length, yColor);
+            SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1f, 0f) * length, length / 150, xColor);
+            SetBox(_XArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(1, 0) * length, new Vector2F(1, 1) * length * 0.05f, xColor);
+            SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(0f, 1f) * length, length / 150, yColor);
+            SetBox(_YArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(0, 1) * length, new Vector2F(1, 1) * length * 0.05f, yColor);
         }
 
         private void UpdateCenterBox(Vector2F mousePosition)
@@ -117,8 +122,10 @@
                 Engine.Renderer.DrawPolygon(renderedPolygon);
             };
 
-            draw(_XArrow);
-            draw(_YArrow);
+            draw(_XArrowLine);
+            draw(_YArrowLine);
+            draw(_XArrowHead);
+            draw(_YArrowHead);
             draw(_CenterBox);
         }
 

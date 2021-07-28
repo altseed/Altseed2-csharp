@@ -86,7 +86,8 @@ namespace Altseed2.NodeEditor
             var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
 
-            var length = 300;
+            var scale = Engine._DefaultCamera.ViewMatrix[1, 1] * Engine._DefaultCamera.ViewMatrix[2, 2];
+            var length = 300 / scale;
 
             Color xColor = new Color(255, 255, 255), yColor = new Color(255, 255, 255);
 
@@ -100,10 +101,10 @@ namespace Altseed2.NodeEditor
                 yColor = new Color(0, 0, 255);
             }
 
-            SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, xColor);
+            SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, length / 150, xColor);
             SetTriangle(_XArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(1, 0) * length, new Vector2F(length * 0.05f, 0), new Vector2F(0, length * 0.015f), new Vector2F(0, -length * 0.015f), xColor);
             
-            SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(0, 1) * length, yColor);
+            SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(0, 1) * length, length / 150, yColor);
             SetTriangle(_YArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(0, 1) * length, new Vector2F(0, length * 0.05f), new Vector2F(length * 0.015f, 0), new Vector2F(-length * 0.015f, 0), yColor);
         }
 

@@ -51,11 +51,11 @@ namespace Altseed2.NodeEditor
         }
 
 
-        internal protected void SetLine(RenderedPolygon renderedPolygon, Vector2F rootPosition, Vector2F vector, Color color)
+        internal protected void SetLine(RenderedPolygon renderedPolygon, Vector2F rootPosition, Vector2F vector,float width, Color color)
         {
             Span<Vector2F> points = stackalloc Vector2F[4];
 
-            var side = new Vector2F(vector.Y, -vector.X).Normal * 2;
+            var side = new Vector2F(vector.Y, -vector.X).Normal * width;
 
             points[0] = rootPosition - side;
             points[1] = rootPosition + side;
