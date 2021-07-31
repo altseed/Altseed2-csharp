@@ -60,13 +60,19 @@ namespace Altseed2.NodeEditor
                     return false;
 
                 case ControlState.drag:
-                    if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
+                    if (mouseLButton == ButtonState.Release)
+                    {
+                        _ControlState = ControlState.none;
+                        return false;
+                    }
 
                     var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
                     var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
                     var currentVector = mousePosition - GetScreenPosition(pos);
+                    var angle =( -60f * (MathF.Atan((-_StartVector.Y / _StartVector.X + currentVector.Y / currentVector.X) / (1 + _StartVector.Y / _StartVector.X * currentVector.Y / currentVector.X))) )% 360;
                     
-                    RotateTarget(-60f * (MathF.Atan((-_StartVector.Y / _StartVector.X + currentVector.Y / currentVector.X) / (1 + _StartVector.Y / _StartVector.X * currentVector.Y / currentVector.X))) % 360);
+                    RotateTarget(angle);
+            
                     _StartVector = currentVector;
                     return true;
 
