@@ -1,4 +1,6 @@
-﻿namespace Altseed2.NodeEditor
+﻿using System;
+
+namespace Altseed2.NodeEditor
 {
     class Scale : TransformNodeManipulator
     {
@@ -103,10 +105,10 @@
                 yColor = new Color(255, 255, 255);
             }
 
-            SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1f, 0f) * length, length / 150, xColor);
-            SetBox(_XArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(1, 0) * length, new Vector2F(1, 1) * length * 0.05f, xColor);
-            SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(0f, 1f) * length, length / 150, yColor);
-            SetBox(_YArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(0, 1) * length, new Vector2F(1, 1) * length * 0.05f, yColor);
+            SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f)) * length, length / 150, xColor);
+            SetBox(_XArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f)) * length, new Vector2F(1, 1) * length * 0.05f, xColor);
+            SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)) * length, length / 150, yColor);
+            SetBox(_YArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)) * length, new Vector2F(1, 1) * length * 0.05f, yColor);
         }
 
         private void UpdateCenterBox(Vector2F mousePosition)
