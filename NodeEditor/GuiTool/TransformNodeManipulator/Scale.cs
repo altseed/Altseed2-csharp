@@ -57,12 +57,12 @@ namespace Altseed2.NodeEditor
                     return false ;
                 case ControlState.XDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
-                    AdjustScale(new Vector2F(mousePosition.X - _MousePositionBasis.X, 0));
+                    AdjustScale(new Vector2F(Vector2F.Dot((mousePosition - _MousePositionBasis), new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f))), 0));
                     _MousePositionBasis = mousePosition;
                     return true;
                 case ControlState.YDrag:
                     if (mouseLButton == ButtonState.Release) _ControlState = ControlState.none;
-                    AdjustScale(new Vector2F(0, mousePosition.Y - _MousePositionBasis.Y));
+                    AdjustScale(new Vector2F(0, Vector2F.Dot((mousePosition - _MousePositionBasis), new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)))));
                     _MousePositionBasis = mousePosition;
                     return true;
                 case ControlState.FreeDrag:
