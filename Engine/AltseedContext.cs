@@ -49,7 +49,12 @@ namespace Altseed2
         public void Update()
         {
             if (!IsUpdated) return;
-            while (actions.TryDequeue(out var e)) e.Invoke();
+            
+            var count = actions.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (actions.TryDequeue(out var e)) e.Invoke();
+            }
         }
     }
 }
