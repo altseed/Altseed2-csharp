@@ -106,10 +106,10 @@ namespace Altseed2.NodeEditor
             }
 
             SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0) * length, length / 150, xColor);
-            SetTriangle(_XArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(1, 0) * length, new Vector2F(length * 0.05f, 0), new Vector2F(0, length * 0.015f), new Vector2F(0, -length * 0.015f), xColor);
+            SetTriangle(_XArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(1, 0) * length, new Vector2F(length * 0.1f, 0), new Vector2F(0, length * 0.06f), new Vector2F(0, -length * 0.06f), xColor);
             
             SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(0, 1) * length, length / 150, yColor);
-            SetTriangle(_YArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(0, 1) * length, new Vector2F(0, length * 0.05f), new Vector2F(length * 0.015f, 0), new Vector2F(-length * 0.015f, 0), yColor);
+            SetTriangle(_YArrowTriangle, new Vector2F(pos.X, pos.Y) + new Vector2F(0, 1) * length, new Vector2F(0, length * 0.1f), new Vector2F(length * 0.06f, 0), new Vector2F(-length * 0.06f, 0), yColor);
         }
 
         private void UpdateCenterBox()

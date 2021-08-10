@@ -22,7 +22,7 @@ namespace Altseed2.NodeEditor.View
         private Texture2D _parallelMoveIcon;
         private Texture2D _scaleIcon;
         private Texture2D _rotateIcon;
-        private Color _unavailableIconColor = new Color(36, 36, 36);
+        private Color _unavailableIconColor = new Color(100, 100, 100);
         private Color _availableIconColor = new Color(255, 255, 255);
 
         public PreviewWindow(IEditorPropertyAccessor accessor, PreviewViewModel viewModel)
@@ -239,22 +239,31 @@ namespace Altseed2.NodeEditor.View
                     Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
                 }
 
-                if(selectedTransformNode && Engine.Tool.ImageButton(_parallelMoveIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
+                if(Engine.Tool.ImageButton(_parallelMoveIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
                 {
-                    if (_manipulator is ParallelMove) _manipulator = null;
-                    else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
+                    if (selectedTransformNode)
+                    {
+                        if (_manipulator is ParallelMove) _manipulator = null;
+                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
+                    }
                 }
 
-                if (selectedTransformNode && Engine.Tool.ImageButton(_scaleIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
+                if (Engine.Tool.ImageButton(_scaleIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
                 {
-                    if (_manipulator is Scale) _manipulator = null;
-                    else _manipulator = new Scale(_accessor.Selected as TransformNode);
+                    if (selectedTransformNode)
+                    {
+                        if (_manipulator is Scale) _manipulator = null;
+                        else _manipulator = new Scale(_accessor.Selected as TransformNode);
+                    }
                 }
 
-                if (selectedTransformNode &&  Engine.Tool.ImageButton(_rotateIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
+                if (Engine.Tool.ImageButton(_rotateIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
                 {
-                    if (_manipulator is Rotate) _manipulator = null;
-                    else _manipulator = new Rotate(_accessor.Selected as TransformNode);
+                    if (selectedTransformNode)
+                    {
+                        if (_manipulator is Rotate) _manipulator = null;
+                        else _manipulator = new Rotate(_accessor.Selected as TransformNode);
+                    }
                 }
 
                 if (Engine.Tool.MenuItem("Find", "", false, _accessor.Selected is TransformNode))
