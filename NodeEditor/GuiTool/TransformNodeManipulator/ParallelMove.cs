@@ -125,7 +125,7 @@ namespace Altseed2.NodeEditor
                 }
             }
 
-            SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(8, 8), new Color(100, 100, 100));
+            SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0), new Vector2F(8, 8), new Color(100, 100, 100));
         }
 
 

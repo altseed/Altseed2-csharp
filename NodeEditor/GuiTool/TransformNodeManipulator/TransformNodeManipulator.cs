@@ -68,13 +68,16 @@ namespace Altseed2.NodeEditor
             renderedPolygon.SetDefaultIndexBuffer();
         }
 
-        internal protected void SetBox(RenderedPolygon renderedPolygon, Vector2F position, Vector2F size, Color color)
+        internal protected void SetBox(RenderedPolygon renderedPolygon, Vector2F position, Vector2F direction,Vector2F size, Color color)
         {
+            var angle = direction / direction.Length;
+            var parpendicular = new Vector2F(-angle.Y, angle.X);
+
             Span<Vector2F> points = stackalloc Vector2F[4];
-            points[0] = position + new Vector2F(-1f, -1f) * size / 2f;
-            points[1] = position + new Vector2F(1f, -1f) * size / 2f;
-            points[2] = position + new Vector2F(1f, 1f) * size / 2f;
-            points[3] = position + new Vector2F(-1f, 1f) * size / 2f;
+            points[0] = position + angle * size / 2f + parpendicular * size / 2f;
+            points[1] = position + angle * size / 2f - parpendicular * size / 2f;
+            points[2] = position - angle * size / 2f - parpendicular * size / 2f;
+            points[3] = position - angle * size / 2f + parpendicular * size / 2f;
 
             Engine.Vector2FArrayCache.FromSpan(points);
             renderedPolygon.CreateVertexesByVector2F(Engine.Vector2FArrayCache);

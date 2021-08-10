@@ -115,9 +115,10 @@ namespace Altseed2.NodeEditor
             }
 
             SetLine(_XArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f)) * length, length / 150, xColor);
-            SetBox(_XArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f)) * length, new Vector2F(1, 1) * length * 0.05f, xColor);
+            SetBox(_XArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f)) * length, new Vector2F(MathF.Cos(2f * MathF.PI * _TransformNode.Angle / 360f), MathF.Sin(2f * MathF.PI * _TransformNode.Angle / 360f)) * length, new Vector2F(1, 1) * length * 0.05f, xColor);
+
             SetLine(_YArrowLine, new Vector2F(pos.X, pos.Y), new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)) * length, length / 150, yColor);
-            SetBox(_YArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)) * length, new Vector2F(1, 1) * length * 0.05f, yColor);
+            SetBox(_YArrowHead, new Vector2F(pos.X, pos.Y) + new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)) * length, new Vector2F(MathF.Cos(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f), MathF.Sin(2f * MathF.PI * (_TransformNode.Angle + 90f) / 360f)), new Vector2F(1, 1) * length * 0.05f, yColor);
         }
 
         private void UpdateCenterBox(Vector2F mousePosition)
@@ -125,16 +126,16 @@ namespace Altseed2.NodeEditor
             var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
 
-            foreach (var child in _TransformNode.Children)
+            foreach(var child in _TransformNode.Children)
             {
-                if (child is TransformerNode)
+                if(child is TransformerNode)
                 {
                     pos = _TransformNode.AbsoluteTransform.Transform3D(pos);
                     break;
                 }
             }
 
-            SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(8, 8), new Color(100, 100, 100));
+            SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(1, 0), new Vector2F(8, 8), new Color(100, 100, 100));
         }
 
         internal override void Draw()
