@@ -17,8 +17,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GUIAsset\**" />
     <Compile Remove="GUIManipulator\**" />
+    <EmbeddedResource Remove="GUIAsset\**" />
     <EmbeddedResource Remove="GUIManipulator\**" />
+    <None Remove="GUIAsset\**" />
     <None Remove="GUIManipulator\**" />
   </ItemGroup>
 
@@ -28,10 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="GUIAsset\" />
   </ItemGroup>
 
 </Project>

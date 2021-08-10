@@ -39,68 +39,6 @@ namespace Altseed2.NodeEditor.View
             _scaleIcon = Texture2D.Load(@"GUIAsset/Scale.png");
             _rotateIcon = Texture2D.Load(@"GUIAsset/Rotate.png");
 
-            var font = Font.LoadDynamicFont("TestData/Font/mplus-1m-regular.ttf", 64);
-            
-
-            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
-            
-
-            var sprite = new SpriteNode();
-            sprite.Texture = texture;
-            sprite.ZOrder = 5;
-
-            Vector2F rectSize = texture.Size;
-            var parent = new AnchorTransformerNode();
-            parent.Position = Engine.WindowSize / 2;
-            parent.Size = rectSize;
-            parent.AnchorMode = AnchorMode.Fill;
-            Engine.AddNode(sprite);
-            sprite.AddChildNode(parent);
-
-            var sprite2 = new SpriteNode();
-            sprite2.Texture = texture;
-            sprite2.Color = new Color(255, 0, 0, 200);
-            sprite2.ZOrder = 10;
-
-            var child = new AnchorTransformerNode();
-            child.Position = rectSize / 2;
-            child.Pivot = new Vector2F(0.5f, 0.5f);
-            child.AnchorMin = new Vector2F(0.0f, 0.0f);
-            child.AnchorMax = new Vector2F(0.5f, 1f);
-            child.HorizontalAlignment = HorizontalAlignment.Left;
-            child.VerticalAlignment = VerticalAlignment.Center;
-            child.Size = sprite2.ContentSize;
-            child.AnchorMode = AnchorMode.KeepAspect;
-            sprite.AddChildNode(sprite2);
-            sprite2.AddChildNode(child);
-
-            var text = new TextNode();
-            text.Font = font;
-            text.FontSize = 20;
-            text.Color = new Color(0, 0, 0);
-            text.Text = "あいうえお";
-            text.ZOrder = 15;
-
-            var childText = new AnchorTransformerNode();
-            childText.Pivot = new Vector2F(0.5f, 0.5f);
-            childText.AnchorMin = new Vector2F(0.5f, 0.5f);
-            childText.AnchorMax = new Vector2F(0.5f, 0.5f);
-            childText.Size = text.ContentSize;
-            //childText.HorizontalAlignment = HorizontalAlignment.Center;
-            //childText.VerticalAlignment = VerticalAlignment.Center;
-            childText.AnchorMode = AnchorMode.ContentSize;
-            sprite2.AddChildNode(text);
-            text.AddChildNode(childText);
-
-            var trip = new TriangleNode();
-            trip.Point2 = new Vector2F(0, 50);
-            trip.Point3 = new Vector2F(100, 0);
-            var tric = new TriangleNode();
-            tric.Point3 = new Vector2F(0, 50);
-            tric.Point2 = new Vector2F(200, 0);
-            tric.Color = new Color(0, 250, 0);
-            trip.AddChildNode(tric);
-            Engine.AddNode(trip);
         }
 
         private void ChangeManipulatee(TransformNode? target)

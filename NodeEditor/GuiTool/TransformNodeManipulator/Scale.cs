@@ -91,6 +91,15 @@ namespace Altseed2.NodeEditor
             var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
 
+            foreach (var child in _TransformNode.Children)
+            {
+                if (child is TransformerNode)
+                {
+                    pos = _TransformNode.AbsoluteTransform.Transform3D(pos);
+                    break;
+                }
+            }
+
             var scale = Engine._DefaultCamera.ViewMatrix[1, 1] * Engine._DefaultCamera.ViewMatrix[2, 2];
             var length = 300 / scale;
 
@@ -115,6 +124,16 @@ namespace Altseed2.NodeEditor
         {
             var mat = _TransformNode.GetAncestorSpecificNode<TransformNode>()?.InheritedTransform ?? Matrix44F.Identity;
             var pos = mat.Transform3D(new Vector3F(_TransformNode.Position.X, _TransformNode.Position.Y, 0));
+
+            foreach (var child in _TransformNode.Children)
+            {
+                if (child is TransformerNode)
+                {
+                    pos = _TransformNode.AbsoluteTransform.Transform3D(pos);
+                    break;
+                }
+            }
+
             SetBox(_CenterBox, new Vector2F(pos.X, pos.Y), new Vector2F(8, 8), new Color(100, 100, 100));
         }
 
