@@ -11,6 +11,7 @@ namespace Altseed2.NodeEditor.View
         private readonly NodeTreeWindow _nodeTreeWindow;
         private readonly SelectedNodeWindow _selectedNodeWindow;
         private readonly PreviewWindow _previewWindow;
+        private readonly SceneEditorWindow _sceneEditorWindow;
         private readonly TextureBrowserWindow _textureBrowserWindow;
         private readonly FontBrowserWindow _fontBrowserWindow;
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
@@ -29,6 +30,7 @@ namespace Altseed2.NodeEditor.View
             _nodeTreeWindow = new NodeTreeWindow(propertyAccessor, new NodeTreeViewModel(propertyAccessor));
             _selectedNodeWindow = new SelectedNodeWindow(propertyAccessor, t);
             _previewWindow = new PreviewWindow(propertyAccessor, viewModel.PreviewViewModel);
+            _sceneEditorWindow = new SceneEditorWindow(propertyAccessor, viewModel.SceneEditorViewModel);
             _textureBrowserWindow = new TextureBrowserWindow(viewModel.TextureBrowserViewModel);
             _fontBrowserWindow = new FontBrowserWindow(viewModel.FontBrowserViewModel);
         }
@@ -111,6 +113,7 @@ namespace Altseed2.NodeEditor.View
             UpdateMenu();
 
             _previewWindow.Render();
+            _sceneEditorWindow.Render();
             _nodeTreeWindow.Render();
             _selectedNodeWindow.Render();
 

@@ -9,10 +9,13 @@ namespace Altseed2.NodeEditor.ViewModel
             TextureBrowserViewModel = new TextureBrowserViewModel();
             FontBrowserViewModel = new FontBrowserViewModel();
             PreviewViewModel = new PreviewViewModel();
+            SceneEditorViewModel = new SceneEditorViewModel();
         }
         public TextureBrowserViewModel TextureBrowserViewModel { get; }
         public FontBrowserViewModel FontBrowserViewModel { get; }
         public PreviewViewModel PreviewViewModel { get; }
+
+        public SceneEditorViewModel SceneEditorViewModel { get; }
 
         public List<TextureBase> TextureOptions => TextureBrowserViewModel.Options;
         public List<Font> Fonts => FontBrowserViewModel.Options;

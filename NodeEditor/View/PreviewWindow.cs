@@ -70,12 +70,6 @@ namespace Altseed2.NodeEditor.View
 
             RenderTransformNodeManipulatorMenu();
 
-
-            if(Engine.Keyboard.GetKeyState(Key.Up) == ButtonState.Hold)
-            {
-                Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(new Vector2F(0, 5)) * Engine._DefaultCamera.ViewMatrix;
-            }
-
             _pane.Render(() =>
             {
                 AdjustWindowSize();
