@@ -6,6 +6,8 @@
         public Vector2F MousePosition { get; set; }
         public RenderTexture Main { get; set; }
 
+        public RenderedCamera Camera { get; set; }
+
         public void UpdateRenderTexture(bool condition, RenderTexture renderTexture)
         {
             if (condition)
@@ -13,7 +15,7 @@
                 Main = renderTexture;
             }
 
-            Engine._DefaultCamera.TargetTexture = Main;
+            Camera.TargetTexture = Main;
         }
     }
 }

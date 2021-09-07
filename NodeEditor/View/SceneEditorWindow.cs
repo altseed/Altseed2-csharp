@@ -25,20 +25,30 @@ namespace Altseed2.NodeEditor.View
         private Color _unavailableIconColor = new Color(100, 100, 100);
         private Color _availableIconColor = new Color(255, 255, 255);
 
+        private RenderedCamera _camera;
+
         public SceneEditorWindow(IEditorPropertyAccessor accessor, SceneEditorViewModel viewModel)
         {
             _accessor = accessor;
             _viewModel = viewModel;
 
+            _camera = RenderedCamera.Create();
+
+            _camera.ViewMatrix = Matrix44F.GetTranslation2D(-Engine.WindowSize / 2);
+            _camera.RenderPassParameter = new RenderPassParameter( new Color(50, 50, 50), true, true);
+
+            _viewModel.Camera = _camera;
+
             _viewModel.UpdateRenderTexture(true,
-                RenderTexture.Create(Engine.WindowSize - new Vector2I(600, 18), TextureFormat.R8G8B8A8_UNORM));
+                RenderTexture.Create(Engine.WindowSize, TextureFormat.R8G8B8A8_UNORM));
+
+            _camera.RenderPassParameter = new RenderPassParameter(new Color(50, 50, 0), true, true);
 
             _subscription = accessor.OnSelectedNodeChanged.Subscribe(_ => ChangeManipulatee(accessor.Selected as TransformNode));
 
             _parallelMoveIcon = Texture2D.Load(@"GUIAsset/ParallelMove.png");
             _scaleIcon = Texture2D.Load(@"GUIAsset/Scale.png");
             _rotateIcon = Texture2D.Load(@"GUIAsset/Rotate.png");
-
         }
 
         private void ChangeManipulatee(TransformNode? target)
@@ -60,6 +70,7 @@ namespace Altseed2.NodeEditor.View
 
         public void Render()
         {
+
             Engine.Tool.PushStyleVar(ToolStyleVar.WindowPadding, new Vector2F());
 
             var mousePosition = _viewModel.MousePosition;
@@ -77,6 +88,7 @@ namespace Altseed2.NodeEditor.View
 
                 _viewModel.MousePosition = GetMousePositionInPreiewWindow();
 
+                Engine.DrawCameraGroup(_camera, Engine._DrawnCollection.GetDrawns());
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());
 
@@ -167,7 +179,7 @@ namespace Altseed2.NodeEditor.View
 
                 if (vec.Length > error)
                 {
-                    Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(vec * new Vector2F(-1, 1) * 300f) * Engine._DefaultCamera.ViewMatrix;
+                    _camera.ViewMatrix = Matrix44F.GetTranslation2D(vec * new Vector2F(-1, 1) * 300f) * _camera.ViewMatrix;
                 }
                 _StartPoint = MousePosition;
             }
@@ -175,7 +187,7 @@ namespace Altseed2.NodeEditor.View
             if (IsInPreviewWindow(MousePosition))
             {
                 var wheelState = Engine.Mouse.Wheel;
-                Engine._DefaultCamera.ViewMatrix = Matrix44F.GetScale2D(new Vector2F(1, 1) * (1 + wheelState * 0.25f)) * Engine._DefaultCamera.ViewMatrix;
+                _camera.ViewMatrix = Matrix44F.GetScale2D(new Vector2F(1, 1) * (1 + wheelState * 0.25f)) * _camera.ViewMatrix;
             }
         }
 
@@ -207,7 +219,7 @@ namespace Altseed2.NodeEditor.View
 
             var pos2d = new Vector2F(worldPosition.X, worldPosition.Y);
 
-            Engine._DefaultCamera.ViewMatrix = Matrix44F.GetTranslation2D(-pos2d);
+            _camera.ViewMatrix = Matrix44F.GetTranslation2D(-pos2d);
         }
 
         private Vector2F EditorWindowPosition()
@@ -272,7 +284,7 @@ namespace Altseed2.NodeEditor.View
 
         private Vector2F GetScreenPosition(Vector3F worldPosition)
         {
-            var vector3 = Engine._DefaultCamera.ProjectionMatrix.Transform3D(Engine._DefaultCamera.ViewMatrix.Transform3D(worldPosition));
+            var vector3 = _camera.ProjectionMatrix.Transform3D(_camera.ViewMatrix.Transform3D(worldPosition));
             return new Vector2F(vector3.X, vector3.Y);
         }
 
