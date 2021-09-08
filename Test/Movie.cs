@@ -14,7 +14,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var texture = Texture2D.Create(new Vector2I(640, 480));
+            var texture = RenderTexture.Create(new Vector2I(640, 480), TextureFormat.R8G8B8A8_UNORM);
             Assert.NotNull(texture);
 
             var node = new SpriteNode();
@@ -26,7 +26,7 @@ namespace Altseed2.Test
 
             tc.LoopBody(c =>
             {
-                mp.WriteToTexture2D(texture);
+                mp.WriteToRenderTexture(texture);
             }
             , null);
 

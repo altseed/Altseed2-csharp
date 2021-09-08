@@ -66,6 +66,7 @@ namespace Altseed2.NodeEditor.View
             config ??= new Configuration();
             config.EnabledCoreModules |= CoreModules.Tool;
             config.IsResizable = true;
+            config.VisibleTransformInfo = true;
 
             var res = Engine.Initialize(title, width, height, config);
             Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);

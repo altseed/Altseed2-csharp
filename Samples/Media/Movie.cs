@@ -13,7 +13,7 @@ namespace Sample
             if (!Engine.Initialize("Movie", 640, 480)) return;
 
             // 空のテクスチャを読み込みます。
-            var texture = Texture2D.Create(new Vector2I(640, 480));
+            var texture = RenderTexture.Create(new Vector2I(640, 480), TextureFormat.R8G8B8A8_UNORM);
 
             // 映像を読み込みます。
             var mediaPlayer = MediaPlayer.Load(@"TestData/Movie/Test1.mp4");
@@ -35,7 +35,7 @@ namespace Sample
             while (Engine.DoEvents())
             {
                 // 現在の映像を画像に書き込みます。
-                mediaPlayer.WriteToTexture2D(texture);
+                mediaPlayer.WriteToRenderTexture(texture);
 
                 // Altseed を更新します。
                 Engine.Update();
