@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Text;
 using System.Collections.Generic;
 using Altseed2.NodeEditor.ViewModel;
 
@@ -9,6 +11,8 @@ namespace Altseed2.NodeEditor.View
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeTreeViewModel _viewModel;
         private readonly NodeEditorPane _pane = new NodeEditorPane("Node");
+
+        private List<Type> _userDefinedNodes = new();
 
         public NodeTreeWindow(IEditorPropertyAccessor accessor, NodeTreeViewModel viewModel)
         {
@@ -28,11 +32,54 @@ namespace Altseed2.NodeEditor.View
                 RenderButton("Rectangle", _viewModel.CreateRectangleNode);
                 RenderButton("Triangle", _viewModel.CreateTriangleNode);
 
+                RenderUserDefinedNodeCreateButtons(_userDefinedNodes);
+
+                RenderButton("+", OpenDLL);
                 RenderNodeTree(Engine.GetNodes());
             });
         }
 
-        private void RenderButton(string label, Action action, bool onNewLine = false)
+        private void OpenDLL()
+        {
+            if (Engine.Tool.OpenDialog("dll", "") is { } path)
+            {
+                _userDefinedNodes = LoadDLL(path);
+            }
+        }
+
+        public List<Type> LoadDLL(string path)
+        {
+            List<Type> nodes = new();
+
+            var asm = Assembly.LoadFrom(path);
+            var typeinfo = asm.GetTypes();
+
+            foreach (var type in typeinfo)
+            {
+                if (type.IsSubclassOf(typeof(Node)))
+                {
+                    nodes.Add(type);
+                }
+            }
+
+            return nodes;
+        }
+
+        private void RenderUserDefinedNodeCreateButtons(List<Type> types)
+        {
+            foreach (var type in types)
+            {
+                RenderButton(type.Name, () => { CreateUserDefinedNode(type); });
+            }
+        }
+
+        private void CreateUserDefinedNode(Type type)
+        {
+            dynamic node = Activator.CreateInstance(type);
+            Engine.AddNode(node);
+        }
+
+        private void RenderButton(string label, Action action, bool onNewLine = true)
         {
             if (!onNewLine)
             {

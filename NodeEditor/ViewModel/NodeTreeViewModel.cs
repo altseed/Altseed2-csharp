@@ -32,6 +32,7 @@
             Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0)
         });
 
+
         public ToolTreeNodeFlags GetNodeStatus(Node node)
         {
             var flags = ToolTreeNodeFlags.OpenOnArrow;
