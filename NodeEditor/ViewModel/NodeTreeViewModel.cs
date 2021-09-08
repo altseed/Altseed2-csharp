@@ -1,5 +1,4 @@
-﻿
-namespace Altseed2.NodeEditor.ViewModel
+﻿namespace Altseed2.NodeEditor.ViewModel
 {
     internal sealed class NodeTreeViewModel
     {
