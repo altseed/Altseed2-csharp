@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Subjects;
 using System;
+using System.Collections.Generic;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -26,6 +27,7 @@ namespace Altseed2.NodeEditor.View
         private Color _availableIconColor = new Color(255, 255, 255);
 
         private RenderedCamera _camera;
+        private List<RenderedPolygon> _manipulatorPolygon;
 
         public SceneEditorWindow(IEditorPropertyAccessor accessor, SceneEditorViewModel viewModel)
         {
@@ -33,6 +35,7 @@ namespace Altseed2.NodeEditor.View
             _viewModel = viewModel;
 
             _camera = RenderedCamera.Create();
+            _manipulatorPolygon = new();
 
             _camera.ViewMatrix = Matrix44F.GetTranslation2D(-Engine.WindowSize / 2);
             _camera.RenderPassParameter = new RenderPassParameter( new Color(50, 50, 50), true, true);
@@ -89,6 +92,11 @@ namespace Altseed2.NodeEditor.View
                 _viewModel.MousePosition = GetMousePositionInPreiewWindow();
 
                 Engine.DrawCameraGroup(_camera, Engine._DrawnCollection.GetDrawns());
+                foreach (var drawn in _manipulatorPolygon)
+                    Engine.Renderer.DrawPolygon(drawn);
+
+                Engine.Renderer.Render();
+
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());
 
@@ -250,7 +258,7 @@ namespace Altseed2.NodeEditor.View
                     if (selectedTransformNode)
                     {
                         if (_manipulator is ParallelMove) _manipulator = null;
-                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode, _camera);
+                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode, _camera, _manipulatorPolygon);
                     }
                 }
 

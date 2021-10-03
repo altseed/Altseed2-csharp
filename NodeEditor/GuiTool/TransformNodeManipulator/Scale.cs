@@ -17,6 +17,17 @@ namespace Altseed2.NodeEditor
             _XArrowHead = RenderedPolygon.Create();
             _YArrowHead = RenderedPolygon.Create();
             _CenterBox = RenderedPolygon.Create();
+
+            void draw(RenderedPolygon renderedPolygon)
+            {
+                Engine.Renderer.DrawPolygon(renderedPolygon);
+            };
+
+            draw(_XArrowLine);
+            draw(_YArrowLine);
+            draw(_XArrowHead);
+            draw(_YArrowHead);
+            draw(_CenterBox);
         }
 
         internal override void Update(Vector2F mousePosition)
@@ -140,16 +151,6 @@ namespace Altseed2.NodeEditor
 
         internal override void Draw()
         {
-            void draw(RenderedPolygon renderedPolygon)
-            {
-                Engine.Renderer.DrawPolygon(renderedPolygon);
-            };
-
-            draw(_XArrowLine);
-            draw(_YArrowLine);
-            draw(_XArrowHead);
-            draw(_YArrowHead);
-            draw(_CenterBox);
         }
 
         enum ControlState

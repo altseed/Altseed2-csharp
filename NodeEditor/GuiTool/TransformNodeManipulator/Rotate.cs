@@ -17,6 +17,14 @@ namespace Altseed2.NodeEditor
             {
                 _Ring[i] = RenderedPolygon.Create();
             }
+
+
+            void draw(RenderedPolygon renderedPolygon)
+            {
+                Engine.Renderer.DrawPolygon(renderedPolygon);
+            }
+
+            foreach (var part in _Ring) draw(part);
         }
 
         internal override void Update(Vector2F mousePosition)
@@ -119,12 +127,6 @@ namespace Altseed2.NodeEditor
 
         internal override void Draw()
         {
-            void draw(RenderedPolygon renderedPolygon)
-            {
-                Engine.Renderer.DrawPolygon(renderedPolygon);
-            }
-
-            foreach (var part in _Ring) draw(part);
         }
 
         private void RotateTarget(float angle)

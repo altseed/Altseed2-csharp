@@ -1,22 +1,37 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Altseed2.NodeEditor
 {
     internal class ParallelMove : TransformNodeManipulator
     {
+        List<RenderedPolygon> _drawns;
+
         private RenderedPolygon _XArrowLine, _YArrowLine, _XArrowTriangle, _YArrowTriangle;
         private RenderedPolygon _CenterBox;
 
         private ControlState _ControlState = ControlState.none;
         private Vector2F _AdjustOffset = new Vector2F(0, 0);
 
-        internal ParallelMove(TransformNode transformNode, RenderedCamera editorCamera) : base (transformNode, editorCamera )
+        internal ParallelMove(TransformNode transformNode, RenderedCamera editorCamera, List<RenderedPolygon> drawns) : base (transformNode, editorCamera )
         {
             _XArrowLine = RenderedPolygon.Create();
             _YArrowLine = RenderedPolygon.Create();
             _XArrowTriangle = RenderedPolygon.Create();
             _YArrowTriangle = RenderedPolygon.Create();
             _CenterBox = RenderedPolygon.Create();
+
+            _drawns = drawns;
+
+            void draw(RenderedPolygon renderedPolygon)
+            {
+                _drawns.Add(renderedPolygon);
+            };
+
+            draw(_XArrowLine);
+            draw(_YArrowLine);
+            draw(_XArrowTriangle);
+            draw(_YArrowTriangle);
+            draw(_CenterBox);
         }
 
         internal override void Update(Vector2F mousePosition)
@@ -133,16 +148,7 @@ namespace Altseed2.NodeEditor
 
         internal override void Draw()
         {
-            void draw(RenderedPolygon renderedPolygon)
-            {
-                Engine.Renderer.DrawPolygon(renderedPolygon);
-            };
-
-            draw(_XArrowLine);
-            draw(_YArrowLine);
-            draw(_XArrowTriangle);
-            draw(_YArrowTriangle);
-            draw(_CenterBox);
+            
         }
 
         internal protected void AdjustPosition(Vector2F referenceScreenPosition)
