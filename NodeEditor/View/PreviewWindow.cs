@@ -41,7 +41,6 @@ namespace Altseed2.NodeEditor.View
 
             _pane.Render(() =>
             {
-                AdjustWindowSize();
                 _viewModel.IsMainWindowFocus = Engine.Tool.IsWindowFocused(ToolFocusedFlags.None);
 
                 _viewModel.MousePosition = GetMousePositionInPreiewWindow();
