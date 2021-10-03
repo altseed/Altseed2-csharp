@@ -255,6 +255,7 @@ namespace Altseed2.NodeEditor.View
 
                 if (Engine.Tool.ImageButton(_parallelMoveIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
                 {
+                    _manipulatorPolygon.Clear();
                     if (selectedTransformNode)
                     {
                         if (_manipulator is ParallelMove) _manipulator = null;
@@ -264,19 +265,21 @@ namespace Altseed2.NodeEditor.View
 
                 if (Engine.Tool.ImageButton(_scaleIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
                 {
+                    _manipulatorPolygon.Clear();
                     if (selectedTransformNode)
                     {
                         if (_manipulator is Scale) _manipulator = null;
-                        else _manipulator = new Scale(_accessor.Selected as TransformNode, _camera);
+                        else _manipulator = new Scale(_accessor.Selected as TransformNode, _camera, _manipulatorPolygon);
                     }
                 }
 
                 if (Engine.Tool.ImageButton(_rotateIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
                 {
+                    _manipulatorPolygon.Clear(); 
                     if (selectedTransformNode)
                     {
                         if (_manipulator is Rotate) _manipulator = null;
-                        else _manipulator = new Rotate(_accessor.Selected as TransformNode, _camera);
+                        else _manipulator = new Rotate(_accessor.Selected as TransformNode, _camera, _manipulatorPolygon);
                     }
                 }
 

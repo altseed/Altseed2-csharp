@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Altseed2.NodeEditor
 {
@@ -10,7 +11,9 @@ namespace Altseed2.NodeEditor
         private ControlState _ControlState = ControlState.none;
         private Vector2F _MousePositionBasis = new Vector2F(0, 0);
 
-        internal Scale(TransformNode transformNode, RenderedCamera editorCamera) : base(transformNode, editorCamera)
+        private List<RenderedPolygon> _drawns;
+
+        internal Scale(TransformNode transformNode, RenderedCamera editorCamera, List<RenderedPolygon> drawns) : base(transformNode, editorCamera)
         {
             _XArrowLine = RenderedPolygon.Create();
             _YArrowLine = RenderedPolygon.Create();
@@ -18,9 +21,11 @@ namespace Altseed2.NodeEditor
             _YArrowHead = RenderedPolygon.Create();
             _CenterBox = RenderedPolygon.Create();
 
+            _drawns = drawns;
+
             void draw(RenderedPolygon renderedPolygon)
             {
-                Engine.Renderer.DrawPolygon(renderedPolygon);
+                _drawns.Add(renderedPolygon);
             };
 
             draw(_XArrowLine);

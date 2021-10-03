@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Altseed2.NodeEditor
 {
@@ -9,7 +10,9 @@ namespace Altseed2.NodeEditor
         private Vector2F _StartVector;
         private float _BeforeAngle;
 
-        internal Rotate(TransformNode transformNode, RenderedCamera editorCamera) : base(transformNode, editorCamera )
+        private List<RenderedPolygon> _drawns;
+
+        internal Rotate(TransformNode transformNode, RenderedCamera editorCamera, List<RenderedPolygon> drawns) : base(transformNode, editorCamera )
         {
             int ringSmoothness = 50;
             _Ring = new RenderedPolygon[ringSmoothness];
@@ -18,10 +21,11 @@ namespace Altseed2.NodeEditor
                 _Ring[i] = RenderedPolygon.Create();
             }
 
+            _drawns = drawns;
 
             void draw(RenderedPolygon renderedPolygon)
             {
-                Engine.Renderer.DrawPolygon(renderedPolygon);
+                _drawns.Add(renderedPolygon);
             }
 
             foreach (var part in _Ring) draw(part);
