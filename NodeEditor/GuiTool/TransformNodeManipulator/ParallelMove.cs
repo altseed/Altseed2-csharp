@@ -10,7 +10,7 @@ namespace Altseed2.NodeEditor
         private ControlState _ControlState = ControlState.none;
         private Vector2F _AdjustOffset = new Vector2F(0, 0);
 
-        internal ParallelMove(TransformNode transformNode) : base (transformNode)
+        internal ParallelMove(TransformNode transformNode, RenderedCamera editorCamera) : base (transformNode, editorCamera )
         {
             _XArrowLine = RenderedPolygon.Create();
             _YArrowLine = RenderedPolygon.Create();

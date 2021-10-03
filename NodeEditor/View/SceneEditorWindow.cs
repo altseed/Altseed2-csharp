@@ -250,7 +250,7 @@ namespace Altseed2.NodeEditor.View
                     if (selectedTransformNode)
                     {
                         if (_manipulator is ParallelMove) _manipulator = null;
-                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
+                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode, _camera);
                     }
                 }
 
@@ -259,7 +259,7 @@ namespace Altseed2.NodeEditor.View
                     if (selectedTransformNode)
                     {
                         if (_manipulator is Scale) _manipulator = null;
-                        else _manipulator = new Scale(_accessor.Selected as TransformNode);
+                        else _manipulator = new Scale(_accessor.Selected as TransformNode, _camera);
                     }
                 }
 
@@ -268,7 +268,7 @@ namespace Altseed2.NodeEditor.View
                     if (selectedTransformNode)
                     {
                         if (_manipulator is Rotate) _manipulator = null;
-                        else _manipulator = new Rotate(_accessor.Selected as TransformNode);
+                        else _manipulator = new Rotate(_accessor.Selected as TransformNode, _camera);
                     }
                 }
 

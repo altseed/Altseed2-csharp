@@ -11,19 +11,11 @@ namespace Altseed2.NodeEditor.View
         private readonly PreviewViewModel _viewModel;
         private readonly NodeEditorPane _pane = new NodeEditorPane("Main");
 
-
         private readonly IDisposable _subscription;
-        private TransformNodeManipulator _manipulator;
         private MouseControlState _MouseControlState;
         private Vector2F _StartPoint;
 
         private Vector2I _latestWindowSize = Engine.WindowSize;
-
-        private Texture2D _parallelMoveIcon;
-        private Texture2D _scaleIcon;
-        private Texture2D _rotateIcon;
-        private Color _unavailableIconColor = new Color(100, 100, 100);
-        private Color _availableIconColor = new Color(255, 255, 255);
 
         public PreviewWindow(IEditorPropertyAccessor accessor, PreviewViewModel viewModel)
         {
@@ -32,25 +24,6 @@ namespace Altseed2.NodeEditor.View
 
             _viewModel.UpdateRenderTexture(true,
                 RenderTexture.Create(Engine.WindowSize - new Vector2I(600, 18), TextureFormat.R8G8B8A8_UNORM));
-
-            _subscription = accessor.OnSelectedNodeChanged.Subscribe(_ => ChangeManipulatee(accessor.Selected as TransformNode));
-
-            _parallelMoveIcon = Texture2D.Load(@"GUIAsset/ParallelMove.png");
-            _scaleIcon = Texture2D.Load(@"GUIAsset/Scale.png");
-            _rotateIcon = Texture2D.Load(@"GUIAsset/Rotate.png");
-
-        }
-
-        private void ChangeManipulatee(TransformNode? target)
-        {
-            if (target != null)
-            {
-                _manipulator?.SetManipulatee(target);
-            }
-            else
-            {
-                _manipulator = null;
-            }
         }
 
         public void Dispose()
@@ -65,10 +38,6 @@ namespace Altseed2.NodeEditor.View
             var mousePosition = _viewModel.MousePosition;
             
             MouseInput(mousePosition);
-            _manipulator?.Update(mousePosition);
-            _manipulator?.Draw();
-
-            RenderTransformNodeManipulatorMenu();
 
             _pane.Render(() =>
             {
@@ -86,13 +55,7 @@ namespace Altseed2.NodeEditor.View
         }
 
         private void MouseInput(Vector2F MousePosition)
-        {
-            if (_manipulator?.Input(MousePosition) ?? false)
-            {
-                _MouseControlState = MouseControlState.ControlManipulator;
-                return;
-            }
-
+        { 
             if (_MouseControlState == MouseControlState.ControlManipulator) _MouseControlState = MouseControlState.none;
 
             void CheckMouseClick(Node node)
@@ -219,55 +182,6 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.EndMainMenuBar();
             }
             return pos;
-        }
-
-        private void RenderTransformNodeManipulatorMenu()
-        {
-            if (Engine.Tool.BeginMainMenuBar())
-            {
-                var selectedTransformNode = _accessor.Selected is TransformNode;
-                var IconColor = selectedTransformNode ? _availableIconColor : _unavailableIconColor;
-
-                if (Engine.Tool.MenuItem("VisibleTransformNodeInfo", "", Engine.Config.VisibleTransformInfo, selectedTransformNode))
-                {
-                    Engine.Config.VisibleTransformInfo = !Engine.Config.VisibleTransformInfo;
-                }
-
-                if(Engine.Tool.ImageButton(_parallelMoveIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
-                {
-                    if (selectedTransformNode)
-                    {
-                        if (_manipulator is ParallelMove) _manipulator = null;
-                        else _manipulator = new ParallelMove(_accessor.Selected as TransformNode);
-                    }
-                }
-
-                if (Engine.Tool.ImageButton(_scaleIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
-                {
-                    if (selectedTransformNode)
-                    {
-                        if (_manipulator is Scale) _manipulator = null;
-                        else _manipulator = new Scale(_accessor.Selected as TransformNode);
-                    }
-                }
-
-                if (Engine.Tool.ImageButton(_rotateIcon, new Vector2F(17, 17), new Vector2F(0, 0), new Vector2F(1, 1), 0, new Color(36, 36, 36), IconColor))
-                {
-                    if (selectedTransformNode)
-                    {
-                        if (_manipulator is Rotate) _manipulator = null;
-                        else _manipulator = new Rotate(_accessor.Selected as TransformNode);
-                    }
-                }
-
-                if (Engine.Tool.MenuItem("Find", "", false, _accessor.Selected is TransformNode))
-                {
-                    FindTransformNode(_accessor.Selected as TransformNode);
-                }
-
-                Engine.Tool.EndMainMenuBar();
-            }
-
         }
 
         private Vector2F GetScreenPosition(Vector3F worldPosition)

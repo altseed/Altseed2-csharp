@@ -10,7 +10,7 @@ namespace Altseed2.NodeEditor
         private ControlState _ControlState = ControlState.none;
         private Vector2F _MousePositionBasis = new Vector2F(0, 0);
 
-        internal Scale(TransformNode transformNode) : base(transformNode)
+        internal Scale(TransformNode transformNode, RenderedCamera editorCamera) : base(transformNode, editorCamera)
         {
             _XArrowLine = RenderedPolygon.Create();
             _YArrowLine = RenderedPolygon.Create();

@@ -398,7 +398,7 @@ namespace Altseed2
         /// <summary>
         /// レンダラのクラスを取得します。
         /// </summary>
-        /// <exception cref="InvalidOperationException">Rendererが初期されていなかったり終了していて操作を実行できなかった</exception>
+        /// <exception cref="InvalidOperationException">uerが初期されていなかったり終了していて操作を実行できなかった</exception>
         internal static Renderer Renderer => _renderer ?? throw new InvalidOperationException("Graphics機能が初期化されていません。");
         private static Renderer _renderer;
 

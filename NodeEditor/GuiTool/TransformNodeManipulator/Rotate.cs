@@ -9,7 +9,7 @@ namespace Altseed2.NodeEditor
         private Vector2F _StartVector;
         private float _BeforeAngle;
 
-        internal Rotate(TransformNode transformNode) : base(transformNode)
+        internal Rotate(TransformNode transformNode, RenderedCamera editorCamera) : base(transformNode, editorCamera )
         {
             int ringSmoothness = 50;
             _Ring = new RenderedPolygon[ringSmoothness];

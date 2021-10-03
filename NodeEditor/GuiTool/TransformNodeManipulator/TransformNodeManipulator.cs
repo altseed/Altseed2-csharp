@@ -6,10 +6,12 @@ namespace Altseed2.NodeEditor
     abstract class TransformNodeManipulator
     {
         protected TransformNode _TransformNode;
+        protected RenderedCamera _Camera;
 
-        internal protected TransformNodeManipulator(TransformNode transformNode)
+        internal protected TransformNodeManipulator(TransformNode transformNode, RenderedCamera EditorCamera)
         {
             _TransformNode = transformNode;
+            _Camera = EditorCamera; 
         }
 
         internal abstract void Update(Vector2F mousePosition);
@@ -39,14 +41,14 @@ namespace Altseed2.NodeEditor
 
         protected Vector2F GetScreenPosition(Vector2F worldPosition)
         {
-            var vector3 = Engine._DefaultCamera.ProjectionMatrix.Transform3D(Engine._DefaultCamera.ViewMatrix.Transform3D(new Vector3F(worldPosition.X, worldPosition.Y, 0)));
+            var vector3 = _Camera.ProjectionMatrix.Transform3D(_Camera.ViewMatrix.Transform3D(new Vector3F(worldPosition.X, worldPosition.Y, 0)));
             return new Vector2F(vector3.X, vector3.Y);
         }
 
 
         protected Vector2F GetScreenPosition(Vector3F worldPosition)
         {
-            var vector3 = Engine._DefaultCamera.ProjectionMatrix.Transform3D(Engine._DefaultCamera.ViewMatrix.Transform3D(worldPosition));
+            var vector3 = _Camera.ProjectionMatrix.Transform3D(_Camera.ViewMatrix.Transform3D(worldPosition));
             return new Vector2F(vector3.X, vector3.Y);
         }
 
