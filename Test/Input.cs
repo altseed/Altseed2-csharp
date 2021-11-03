@@ -53,7 +53,7 @@ namespace Altseed2.Test
             {
                 var left = Engine.Mouse.GetMouseButtonState(MouseButton.ButtonLeft);
                 var right = Engine.Mouse.GetMouseButtonState(MouseButton.ButtonRight);
-                node.Text = $"左:{left}\n右{right}";
+                node.Text = $"左:{left}\n右:{right}";
             }
             , null);
 
