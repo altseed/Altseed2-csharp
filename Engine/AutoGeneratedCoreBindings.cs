@@ -73,6 +73,18 @@ namespace Altseed2
     /// 
     /// </summary>
     [Serializable]
+    public enum BufferUsageType : int
+    {
+        Index = 1,
+        Vertex = 2,
+        Constant = 4,
+        Compute = 8,
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [Serializable]
     public enum ShaderStage : int
     {
         Vertex = 0,
@@ -160,18 +172,6 @@ namespace Altseed2
         OneMinusDstAlpha = 7,
         DstColor = 8,
         OneMinusDstColor = 9,
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    [Serializable]
-    public enum BufferUsageType : int
-    {
-        Index = 1,
-        Vertex = 2,
-        Constant = 4,
-        Compute = 8,
     }
     
     /// <summary>
@@ -3171,6 +3171,138 @@ namespace Altseed2
     }
     
     /// <summary>
+    /// 
+    /// </summary>
+    internal partial class Buffer
+    {
+        #region unmanaged
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<Buffer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Buffer>>();
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static  Buffer TryGetFromCache(IntPtr native)
+        {
+            if(native == IntPtr.Zero) return null;
+        
+            if(cacheRepo.ContainsKey(native))
+            {
+                Buffer cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if(cacheRet != null)
+                {
+                    cbg_Buffer_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+        
+            var newObject = new Buffer(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Buffer>(newObject);
+            return newObject;
+        }
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Buffer_Create(int usage, int size);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Buffer_Lock(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Buffer_Unlock(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Buffer_Read(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern int cbg_Buffer_GetSize(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern int cbg_Buffer_GetBufferUsage(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Buffer_Release(IntPtr selfPtr);
+        
+        #endregion
+        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal Buffer(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+        
+        public int Size
+        {
+            get
+            {
+                var ret = cbg_Buffer_GetSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        public BufferUsageType BufferUsage
+        {
+            get
+            {
+                var ret = cbg_Buffer_GetBufferUsage(selfPtr);
+                return (BufferUsageType)ret;
+            }
+        }
+        
+        public static Buffer Create(BufferUsageType usage, int size)
+        {
+            var ret = cbg_Buffer_Create((int)usage, size);
+            return Buffer.TryGetFromCache(ret);
+        }
+        
+        public IntPtr Lock()
+        {
+            var ret = cbg_Buffer_Lock(selfPtr);
+            return ret;
+        }
+        
+        public void Unlock()
+        {
+            cbg_Buffer_Unlock(selfPtr);
+        }
+        
+        public IntPtr Read()
+        {
+            var ret = cbg_Buffer_Read(selfPtr);
+            return ret;
+        }
+        
+        /// <summary>
+        /// <see cref="Buffer"/>のインスタンスを削除します。
+        /// </summary>
+        ~Buffer()
+        {
+            lock (this) 
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Buffer_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// シェーダのコンパイル結果を表すクラス
     /// </summary>
     internal sealed partial class ShaderCompileResult
@@ -3322,6 +3454,11 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector3I cbg_Shader_GetNumThreads(IntPtr selfPtr);
+        
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern IntPtr cbg_Shader_GetCode(IntPtr selfPtr);
         
         
@@ -3352,6 +3489,15 @@ namespace Altseed2
             get
             {
                 var ret = cbg_Shader_GetUniformSize(selfPtr);
+                return ret;
+            }
+        }
+        
+        public Vector3I NumThreads
+        {
+            get
+            {
+                var ret = cbg_Shader_GetNumThreads(selfPtr);
                 return ret;
             }
         }
@@ -4757,138 +4903,6 @@ namespace Altseed2
                 if (selfPtr != IntPtr.Zero)
                 {
                     cbg_Texture2D_Release(selfPtr);
-                    selfPtr = IntPtr.Zero;
-                }
-            }
-        }
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    internal partial class Buffer
-    {
-        #region unmanaged
-        
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static Dictionary<IntPtr, WeakReference<Buffer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Buffer>>();
-        
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Buffer TryGetFromCache(IntPtr native)
-        {
-            if(native == IntPtr.Zero) return null;
-        
-            if(cacheRepo.ContainsKey(native))
-            {
-                Buffer cacheRet;
-                cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
-                {
-                    cbg_Buffer_Release(native);
-                    return cacheRet;
-                }
-                else
-                {
-                    cacheRepo.Remove(native);
-                }
-            }
-        
-            var newObject = new Buffer(new MemoryHandle(native));
-            cacheRepo[native] = new WeakReference<Buffer>(newObject);
-            return newObject;
-        }
-        
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IntPtr selfPtr = IntPtr.Zero;
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Buffer_Create(int usage, int size);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Buffer_Lock(IntPtr selfPtr);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Buffer_Unlock(IntPtr selfPtr);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Buffer_Read(IntPtr selfPtr);
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Buffer_GetSize(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern int cbg_Buffer_GetBufferUsage(IntPtr selfPtr);
-        
-        
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Buffer_Release(IntPtr selfPtr);
-        
-        #endregion
-        
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        internal Buffer(MemoryHandle handle)
-        {
-            selfPtr = handle.selfPtr;
-        }
-        
-        public int Size
-        {
-            get
-            {
-                var ret = cbg_Buffer_GetSize(selfPtr);
-                return ret;
-            }
-        }
-        
-        public BufferUsageType BufferUsage
-        {
-            get
-            {
-                var ret = cbg_Buffer_GetBufferUsage(selfPtr);
-                return (BufferUsageType)ret;
-            }
-        }
-        
-        public static Buffer Create(BufferUsageType usage, int size)
-        {
-            var ret = cbg_Buffer_Create((int)usage, size);
-            return Buffer.TryGetFromCache(ret);
-        }
-        
-        public IntPtr Lock()
-        {
-            var ret = cbg_Buffer_Lock(selfPtr);
-            return ret;
-        }
-        
-        public void Unlock()
-        {
-            cbg_Buffer_Unlock(selfPtr);
-        }
-        
-        public IntPtr Read()
-        {
-            var ret = cbg_Buffer_Read(selfPtr);
-            return ret;
-        }
-        
-        /// <summary>
-        /// <see cref="Buffer"/>のインスタンスを削除します。
-        /// </summary>
-        ~Buffer()
-        {
-            lock (this) 
-            {
-                if (selfPtr != IntPtr.Zero)
-                {
-                    cbg_Buffer_Release(selfPtr);
                     selfPtr = IntPtr.Zero;
                 }
             }
