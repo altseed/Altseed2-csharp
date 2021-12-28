@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using PartsTreeSystem;
 
 namespace Altseed2
 {
@@ -9,7 +10,7 @@ namespace Altseed2
     /// ゲームシーンを構成するノードを表します。
     /// </summary>
     [Serializable]
-    public class Node : Registerable<Node>
+    public class Node : Registerable<Node>, INode
     {
         /// <summary>
         /// <see cref="Node"/>の新しいインスタンスを生成します。
@@ -408,5 +409,39 @@ namespace Altseed2
 
             _IsEnumeratingChildren = false;
         }
+
+        /// <summary>
+        /// エディタ向けのメソッド
+        /// </summary>
+        /// <param name="node"></param>
+        public void AddChild(INode node)
+        {
+            AddChildNode(node as Node);
+        }
+
+        /// <summary>
+        /// エディタ向けのメソッド
+        /// </summary>
+        /// <param name="instanceID"></param>
+        public void RemoveChild(int instanceID)
+        {
+            foreach (var child in GetChildren())
+                if (child.InstanceID == instanceID)
+                    RemoveChildNode(child as Node);
+        }
+
+        /// <summary>
+        /// エディタ向けのメソッド
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyCollection<INode> GetChildren()
+        {
+            return Children;
+        }
+
+        /// <summary>
+        /// エディタ向けのメソッド
+        /// </summary>
+        public int InstanceID { get; set; }
     }
 }
