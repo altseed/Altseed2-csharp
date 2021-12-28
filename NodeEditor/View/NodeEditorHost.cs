@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Altseed2.NodeEditor.ViewModel;
+using PartsTreeSystem;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -52,6 +53,15 @@ namespace Altseed2.NodeEditor.View
             set => _nodeEditor.Selected = value;
         }
 
+        #region PartsTreeSystem
+        public static CommandManager CommandManager;
+
+        public static Environment Environment;
+
+        public static NodeTreeGroup NodeTreeGroup;
+
+        public static NodeTree NodeTree;
+        #endregion
 
         /// <summary>
         /// エディターを初期化する
@@ -74,6 +84,18 @@ namespace Altseed2.NodeEditor.View
 
             _nodeEditorViewModel = new NodeEditorViewModel();
             _nodeEditor = new NodeEditor(_nodeEditorViewModel);
+
+            EngineNode.GetInstance();
+
+            Environment = new();
+            CommandManager = new();
+
+            NodeTreeGroup = new();
+            NodeTreeGroup.Init(typeof(Node), Environment);
+
+            NodeTree = Utility.CreateNodeFromNodeTreeGroup(NodeTreeGroup, Environment);
+            NodeTree = new();
+            NodeTree.Root = EngineNode.GetInstance();
 
             return res;
         }

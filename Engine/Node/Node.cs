@@ -410,6 +410,7 @@ namespace Altseed2
             _IsEnumeratingChildren = false;
         }
 
+        #region PartsTreeSystem
         /// <summary>
         /// エディタ向けのメソッド
         /// </summary>
@@ -417,6 +418,7 @@ namespace Altseed2
         public void AddChild(INode node)
         {
             AddChildNode(node as Node);
+
         }
 
         /// <summary>
@@ -443,5 +445,6 @@ namespace Altseed2
         /// エディタ向けのメソッド
         /// </summary>
         public int InstanceID { get; set; }
+        #endregion
     }
 }
