@@ -9,25 +9,47 @@
             _accessor = accessor;
         }
 
-        public void CreateSpriteNode() => Engine.AddNode(new SpriteNode());
-        public void CreateTextNode() => Engine.AddNode(new TextNode());
-        public void CreateArcNode() => Engine.AddNode(new ArcNode
+        public void CreateSpriteNode() 
         {
-            Radius = 100, StartDegree = 0, EndDegree = 90
-        });
-        public void CreateCircleNode() => Engine.AddNode(new CircleNode
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup, 
+                View.NodeEditorHost.NodeTree, 
+                View.NodeEditorHost.NodeTree.Root.InstanceID, 
+                typeof(SpriteNode), 
+                View.NodeEditorHost.Environment);
+        }
+        public void CreateTextNode() => 
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup,
+                View.NodeEditorHost.NodeTree,
+                EngineNode.GetInstance().InstanceID,
+                typeof(TextNode),
+                View.NodeEditorHost.Environment);
+        public void CreateArcNode() 
+        {
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup,
+                View.NodeEditorHost.NodeTree,
+                EngineNode.GetInstance().InstanceID,
+                typeof(ArcNode),
+                View.NodeEditorHost.Environment);
+
+            //ToDo
+            //ここで初期値を設定できるようにしたい
+        } 
+        public void CreateCircleNode() => EngineNode.GetInstance().AddChild(new CircleNode
         {
             Radius = 100
         });
-        public void CreateLineNode() => Engine.AddNode(new LineNode
+        public void CreateLineNode() => EngineNode.GetInstance().AddChild(new LineNode
         {
             Point2 = new Vector2F(100, 100)
         });
-        public void CreateRectangleNode() => Engine.AddNode(new RectangleNode
+        public void CreateRectangleNode() => EngineNode.GetInstance().AddChild(new RectangleNode
         {
             RectangleSize = new Vector2F(100, 100)
         });
-        public void CreateTriangleNode() => Engine.AddNode(new TriangleNode
+        public void CreateTriangleNode() => EngineNode.GetInstance().AddChild(new TriangleNode
         {
             Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0)
         });

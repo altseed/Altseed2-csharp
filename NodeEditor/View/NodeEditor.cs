@@ -137,6 +137,14 @@ namespace Altseed2.NodeEditor.View
                     Engine.Tool.MenuItem("Paste", "", false, true);
                     Engine.Tool.EndMenu();
                 }
+                if(Engine.Tool.MenuItem("Undo", "", false, true))
+                {
+                    NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
+                }
+                if(Engine.Tool.MenuItem("Redo", "", false, true))
+                {
+                    NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
+                }
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }
