@@ -30,9 +30,9 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -40,6 +40,7 @@ namespace Altseed2
             if (Engine.Tool.ColorEdit4(Name, ref color, Flags))
             {
                 PropertyInfo.SetValue(Source, color);
+                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
             }
         }
 

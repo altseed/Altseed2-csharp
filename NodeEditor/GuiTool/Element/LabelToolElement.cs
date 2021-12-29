@@ -24,9 +24,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node ownere)
         {
-            base.Update();
+            base.Update(ownere);
 
             if (Source == null || PropertyInfo == null) return;
 

@@ -24,17 +24,23 @@ namespace Altseed2.NodeEditor.View
         {
             _pane.Render(() =>
             {
+                if(_accessor.Selected != null)
+                    View.NodeEditorHost.CommandManager.StartEditFields(NodeEditorHost.NodeTreeGroup, NodeEditorHost.NodeTree, _accessor.Selected , NodeEditorHost.Environment); 
                 if (_selectedToolElements != null)
                 {
                     Engine.Tool.PushID("Selected".GetHashCode());
                     foreach (var toolElement in _selectedToolElements)
                     {
                         Engine.Tool.PushID(toolElement.GetHashCode());
-                        toolElement.Update();
+                        toolElement.Update(_accessor.Selected);
                         Engine.Tool.PopID();
                     }
                     Engine.Tool.PopID();
+                        
                 }
+
+                if (_accessor.Selected != null)
+                    View.NodeEditorHost.CommandManager.EndEditFields(_accessor.Selected, NodeEditorHost.Environment);
             });
         }
 

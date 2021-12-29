@@ -16,7 +16,7 @@ namespace Altseed2.NodeEditor.View
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
         private bool _first;
-        private object _selected;
+        private Node _selected;
 
         public NodeEditor(NodeEditorViewModel viewModel)
         {
@@ -36,7 +36,7 @@ namespace Altseed2.NodeEditor.View
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
-        public object Selected
+        public Node Selected
         {
             get => _selected;
             set
@@ -62,6 +62,23 @@ namespace Altseed2.NodeEditor.View
 
             UpdateCameraGroup();
             UpdateComponents();
+            if (Altseed2.Engine.Tool.Begin("History", Altseed2.ToolWindowFlags.NoCollapse))
+            {
+                for (int i = NodeEditorHost.CommandManager.Commands.Count() - 1; i >= Math.Max(0, NodeEditorHost.CommandManager.Commands.Count() - 20); i--)
+                {
+                    var info = NodeEditorHost.CommandManager.Commands[i].GetInformation();
+
+                    var text = string.Empty;
+                    if (i == NodeEditorHost.CommandManager.CurrentCommandIndex)
+                    {
+                        text += "-";
+                    }
+                    text += info.Name;
+                    Altseed2.Engine.Tool.Text(text);
+                    Altseed2.Engine.Tool.Text(info.Detail);
+                }
+                Engine.Tool.End();
+            }
         }
 
         public void Dispose()

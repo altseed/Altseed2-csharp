@@ -32,9 +32,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -47,11 +47,13 @@ namespace Altseed2
                 if ((newStr = Engine.Tool.InputTextMultiline(Name, text, MaxLength, new Vector2F(-1, -1), ToolInputTextFlags.None)) != null)
                 {
                     PropertyInfo.SetValue(Source, newStr);
+                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
                 }
             }
             else if ((newStr = Engine.Tool.InputText(Name, text, MaxLength, ToolInputTextFlags.None)) != null)
             {
                 PropertyInfo.SetValue(Source, newStr);
+                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
             }
         }
 
