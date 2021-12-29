@@ -25,9 +25,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -44,6 +44,7 @@ namespace Altseed2
                 {
                     NodeEditorHost.TextureBrowserTarget = this;
                     Engine.Tool.SetWindowFocus("Texture Browser");
+                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
                 }
             }
             else
@@ -52,6 +53,7 @@ namespace Altseed2
                 {
                     NodeEditorHost.TextureBrowserTarget = this;
                     Engine.Tool.SetWindowFocus("Texture Browser");
+                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
                 }
             }
             Engine.Tool.SameLine(0, -1);

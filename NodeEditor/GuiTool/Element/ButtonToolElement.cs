@@ -47,15 +47,16 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || MethodInfo == null) return;
 
             if (Engine.Tool.Button(Name))
             {
                 MethodInfo?.Invoke(Source, new object[] { });
+                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
             }
         }
 

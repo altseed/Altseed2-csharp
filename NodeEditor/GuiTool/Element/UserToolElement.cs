@@ -49,9 +49,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
             Engine.Tool.PushID(MethodInfo.GetHashCode());
             MethodInfo?.Invoke(Source, new object[] { });
             Engine.Tool.PopID();

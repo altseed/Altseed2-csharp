@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Altseed2
 {
@@ -26,7 +27,7 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public virtual void Update() { }
+        public virtual void Update(Node owner) { }
 
         /// <summary>
         /// 
