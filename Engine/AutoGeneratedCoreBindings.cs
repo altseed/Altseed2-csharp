@@ -1,11 +1,11 @@
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+﻿// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
 //   このファイルは自動生成されました。
 //   このファイルへの変更は消失することがあります。
 //
 //   THIS FILE IS AUTO GENERATED.
-//   YOUR COMMITMENT ON THIS FILE WILL BE WIPED.
+//   YOUR COMMITMENT ON THIS FILE WILL BE WIPED. 
 //
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -70,13 +70,26 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum BufferUsageType : int
+    {
+        Index = 1,
+        Vertex = 2,
+        Constant = 4,
+        Compute = 8,
+    }
+
+    /// <summary>
+    /// 
     /// </summary>
     [Serializable]
     public enum ShaderStage : int
     {
         Vertex = 0,
         Pixel = 1,
+        Compute = 2,
     }
 
     /// <summary>
@@ -114,7 +127,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum TextureFormat : int
@@ -131,7 +144,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum BlendEquation : int
@@ -144,7 +157,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum BlendFunction : int
@@ -174,7 +187,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum CoreModules : int
@@ -216,7 +229,21 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
+    /// </summary>
+    [Serializable]
+    public enum VertexLayoutFormat : int
+    {
+        R32G32B32_FLOAT = 0,
+        R32G32B32A32_FLOAT = 1,
+        R8G8B8A8_UNORM = 2,
+        R8G8B8A8_UINT = 3,
+        R32G32_FLOAT = 4,
+        R32_FLOAT = 5,
+    }
+
+    /// <summary>
+    /// 
     /// </summary>
     [Serializable]
     public enum RenderTargetCareType : int
@@ -579,7 +606,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolPopupFlags : int
@@ -643,7 +670,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolTabItemFlags : int
@@ -660,7 +687,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolFocusedFlags : int
@@ -673,7 +700,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolHoveredFlags : int
@@ -691,7 +718,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolDockNodeFlags : int
@@ -706,7 +733,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolDragDropFlags : int
@@ -725,7 +752,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolDataType : int
@@ -758,7 +785,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolKey : int
@@ -789,7 +816,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolKeyModFlags : int
@@ -802,7 +829,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolNavInput : int
@@ -827,7 +854,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolConfigFlags : int
@@ -848,7 +875,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolBackendFlags : int
@@ -864,7 +891,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolCol : int
@@ -923,7 +950,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolStyleVar : int
@@ -955,7 +982,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolButtonFlags : int
@@ -1004,7 +1031,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolSliderFlags : int
@@ -1017,7 +1044,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolMouseButton : int
@@ -1029,7 +1056,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolMouseCursor : int
@@ -1061,7 +1088,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolDrawCornerFlags : int
@@ -1079,7 +1106,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolDrawListFlags : int
@@ -1092,7 +1119,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolFontAtlasFlags : int
@@ -1104,7 +1131,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     [Serializable]
     public enum ToolViewportFlags : int
@@ -1134,15 +1161,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Int8Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int8Array>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Int8Array TryGetFromCache(IntPtr native)
+        public static Int8Array TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Int8Array cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Int8Array_Release(native);
                     return cacheRet;
@@ -1425,15 +1452,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Int32Array>> cacheRepo = new Dictionary<IntPtr, WeakReference<Int32Array>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Int32Array TryGetFromCache(IntPtr native)
+        public static Int32Array TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Int32Array cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Int32Array_Release(native);
                     return cacheRet;
@@ -1716,15 +1743,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<VertexArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<VertexArray>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  VertexArray TryGetFromCache(IntPtr native)
+        public static VertexArray TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 VertexArray cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_VertexArray_Release(native);
                     return cacheRet;
@@ -2007,15 +2034,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<FloatArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<FloatArray>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  FloatArray TryGetFromCache(IntPtr native)
+        public static FloatArray TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 FloatArray cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_FloatArray_Release(native);
                     return cacheRet;
@@ -2298,15 +2325,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Vector2FArray>> cacheRepo = new Dictionary<IntPtr, WeakReference<Vector2FArray>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Vector2FArray TryGetFromCache(IntPtr native)
+        public static Vector2FArray TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Vector2FArray cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Vector2FArray_Release(native);
                     return cacheRet;
@@ -2588,15 +2615,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Log>> cacheRepo = new Dictionary<IntPtr, WeakReference<Log>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Log TryGetFromCache(IntPtr native)
+        public static Log TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Log cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Log_Release(native);
                     return cacheRet;
@@ -2762,15 +2789,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Core>> cacheRepo = new Dictionary<IntPtr, WeakReference<Core>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Core TryGetFromCache(IntPtr native)
+        public static Core TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Core cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Core_Release(native);
                     return cacheRet;
@@ -2994,7 +3021,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     internal sealed partial class Window
     {
@@ -3004,15 +3031,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Window>> cacheRepo = new Dictionary<IntPtr, WeakReference<Window>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Window TryGetFromCache(IntPtr native)
+        public static Window TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Window cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Window_Release(native);
                     return cacheRet;
@@ -3144,6 +3171,138 @@ namespace Altseed2
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    internal partial class Buffer
+    {
+        #region unmanaged
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<Buffer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Buffer>>();
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Buffer TryGetFromCache(IntPtr native)
+        {
+            if (native == IntPtr.Zero) return null;
+
+            if (cacheRepo.ContainsKey(native))
+            {
+                Buffer cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if (cacheRet != null)
+                {
+                    cbg_Buffer_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+
+            var newObject = new Buffer(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<Buffer>(newObject);
+            return newObject;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Buffer_Create(int usage, int size);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Buffer_Lock(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Buffer_Unlock(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_Buffer_Read(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern int cbg_Buffer_GetSize(IntPtr selfPtr);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern int cbg_Buffer_GetBufferUsage(IntPtr selfPtr);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Buffer_Release(IntPtr selfPtr);
+
+        #endregion
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal Buffer(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+
+        public int Size
+        {
+            get
+            {
+                var ret = cbg_Buffer_GetSize(selfPtr);
+                return ret;
+            }
+        }
+
+        public BufferUsageType BufferUsage
+        {
+            get
+            {
+                var ret = cbg_Buffer_GetBufferUsage(selfPtr);
+                return (BufferUsageType)ret;
+            }
+        }
+
+        public static Buffer Create(BufferUsageType usage, int size)
+        {
+            var ret = cbg_Buffer_Create((int)usage, size);
+            return Buffer.TryGetFromCache(ret);
+        }
+
+        public IntPtr Lock()
+        {
+            var ret = cbg_Buffer_Lock(selfPtr);
+            return ret;
+        }
+
+        public void Unlock()
+        {
+            cbg_Buffer_Unlock(selfPtr);
+        }
+
+        public IntPtr Read()
+        {
+            var ret = cbg_Buffer_Read(selfPtr);
+            return ret;
+        }
+
+        /// <summary>
+        /// <see cref="Buffer"/>のインスタンスを削除します。
+        /// </summary>
+        ~Buffer()
+        {
+            lock (this)
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_Buffer_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// シェーダのコンパイル結果を表すクラス
     /// </summary>
     internal sealed partial class ShaderCompileResult
@@ -3154,15 +3313,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<ShaderCompileResult>> cacheRepo = new Dictionary<IntPtr, WeakReference<ShaderCompileResult>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  ShaderCompileResult TryGetFromCache(IntPtr native)
+        public static ShaderCompileResult TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 ShaderCompileResult cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_ShaderCompileResult_Release(native);
                     return cacheRet;
@@ -3254,15 +3413,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Shader>> cacheRepo = new Dictionary<IntPtr, WeakReference<Shader>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Shader TryGetFromCache(IntPtr native)
+        public static Shader TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Shader cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Shader_Release(native);
                     return cacheRet;
@@ -3291,6 +3450,11 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Shader_GetUniformSize(IntPtr selfPtr);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector3I cbg_Shader_GetNumThreads(IntPtr selfPtr);
 
 
         [DllImport("Altseed2_Core")]
@@ -3325,6 +3489,15 @@ namespace Altseed2
             get
             {
                 var ret = cbg_Shader_GetUniformSize(selfPtr);
+                return ret;
+            }
+        }
+
+        public Vector3I NumThreads
+        {
+            get
+            {
+                var ret = cbg_Shader_GetNumThreads(selfPtr);
                 return ret;
             }
         }
@@ -3539,15 +3712,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Resources>> cacheRepo = new Dictionary<IntPtr, WeakReference<Resources>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Resources TryGetFromCache(IntPtr native)
+        public static Resources TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Resources cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Resources_Release(native);
                     return cacheRet;
@@ -3656,15 +3829,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<TextureBase>> cacheRepo = new Dictionary<IntPtr, WeakReference<TextureBase>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  TextureBase TryGetFromCache(IntPtr native)
+        public static TextureBase TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 TextureBase cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_TextureBase_Release(native);
                     return cacheRet;
@@ -3973,7 +4146,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     public partial class MaterialPropertyBlock
     {
@@ -3983,15 +4156,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<MaterialPropertyBlock>> cacheRepo = new Dictionary<IntPtr, WeakReference<MaterialPropertyBlock>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  MaterialPropertyBlock TryGetFromCache(IntPtr native)
+        public static MaterialPropertyBlock TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 MaterialPropertyBlock cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_MaterialPropertyBlock_Release(native);
                     return cacheRet;
@@ -4101,7 +4274,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     public partial class MaterialPropertyBlockCollection
     {
@@ -4111,15 +4284,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<MaterialPropertyBlockCollection>> cacheRepo = new Dictionary<IntPtr, WeakReference<MaterialPropertyBlockCollection>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  MaterialPropertyBlockCollection TryGetFromCache(IntPtr native)
+        public static MaterialPropertyBlockCollection TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 MaterialPropertyBlockCollection cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_MaterialPropertyBlockCollection_Release(native);
                     return cacheRet;
@@ -4228,15 +4401,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Material>> cacheRepo = new Dictionary<IntPtr, WeakReference<Material>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Material TryGetFromCache(IntPtr native)
+        public static Material TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Material cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Material_Release(native);
                     return cacheRet;
@@ -4493,13 +4666,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new Texture2D TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Texture2D cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Texture2D_Release(native);
                     return cacheRet;
@@ -4747,15 +4920,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<BuiltinShader>> cacheRepo = new Dictionary<IntPtr, WeakReference<BuiltinShader>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  BuiltinShader TryGetFromCache(IntPtr native)
+        public static BuiltinShader TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 BuiltinShader cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_BuiltinShader_Release(native);
                     return cacheRet;
@@ -4924,15 +5097,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<CommandList>> cacheRepo = new Dictionary<IntPtr, WeakReference<CommandList>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  CommandList TryGetFromCache(IntPtr native)
+        public static CommandList TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 CommandList cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_CommandList_Release(native);
                     return cacheRet;
@@ -4956,6 +5129,38 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_Begin(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_End(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_EndRenderPass(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_PauseRenderPass(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_ResumeRenderPass(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_UploadBuffer(IntPtr selfPtr, IntPtr buffer);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_ReadbackBuffer(IntPtr selfPtr, IntPtr buffer);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_CopyBuffer(IntPtr selfPtr, IntPtr src, IntPtr dst);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_SetRenderTarget(IntPtr selfPtr, IntPtr target, RenderPassParameter renderPassParameter);
 
         [DllImport("Altseed2_Core")]
@@ -4968,7 +5173,43 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_Draw(IntPtr selfPtr, int instanceCount);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetVertexBuffer(IntPtr selfPtr, IntPtr vb, int stride, int offset);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetIndexBuffer(IntPtr selfPtr, IntPtr ib, int stride, int offset);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_BeginComputePass(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_EndComputePass(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetComputeBuffer(IntPtr selfPtr, IntPtr buffer, int stride, int unit);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_Dispatch(IntPtr selfPtr, int x, int y, int z);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_CopyTexture(IntPtr selfPtr, IntPtr src, IntPtr dst);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_ResetTextures(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_ResetComputeBuffers(IntPtr selfPtr);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -4981,10 +5222,25 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetScissor(IntPtr selfPtr, RectI value);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_CommandList_GetScreenTextureFormat(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_SetScreenTextureFormat(IntPtr selfPtr, int value);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetMaterial(IntPtr selfPtr, IntPtr value);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetComputePipelineState(IntPtr selfPtr, IntPtr value);
 
 
         [DllImport("Altseed2_Core")]
@@ -5005,6 +5261,14 @@ namespace Altseed2
             {
                 var ret = cbg_CommandList_GetScreenTexture(selfPtr);
                 return RenderTexture.TryGetFromCache(ret);
+            }
+        }
+
+        public RectI Scissor
+        {
+            set
+            {
+                cbg_CommandList_SetScissor(selfPtr, value);
             }
         }
 
@@ -5030,10 +5294,58 @@ namespace Altseed2
         }
         private TextureFormat? _ScreenTextureFormat;
 
+        public ComputePipelineState ComputePipelineState
+        {
+            set
+            {
+                cbg_CommandList_SetComputePipelineState(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+
         public static CommandList Create()
         {
             var ret = cbg_CommandList_Create();
             return CommandList.TryGetFromCache(ret);
+        }
+
+        public void Begin()
+        {
+            cbg_CommandList_Begin(selfPtr);
+        }
+
+        public void End()
+        {
+            cbg_CommandList_End(selfPtr);
+        }
+
+        public void EndRenderPass()
+        {
+            cbg_CommandList_EndRenderPass(selfPtr);
+        }
+
+        public void PauseRenderPass()
+        {
+            cbg_CommandList_PauseRenderPass(selfPtr);
+        }
+
+        public void ResumeRenderPass()
+        {
+            cbg_CommandList_ResumeRenderPass(selfPtr);
+        }
+
+        internal void UploadBuffer(Buffer buffer)
+        {
+            cbg_CommandList_UploadBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero);
+        }
+
+        internal void ReadbackBuffer(Buffer buffer)
+        {
+            cbg_CommandList_ReadbackBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero);
+        }
+
+        internal void CopyBuffer(Buffer src, Buffer dst)
+        {
+            cbg_CommandList_CopyBuffer(selfPtr, src != null ? src.selfPtr : IntPtr.Zero, dst != null ? dst.selfPtr : IntPtr.Zero);
         }
 
         /// <summary>
@@ -5065,6 +5377,41 @@ namespace Altseed2
             cbg_CommandList_RenderToRenderTarget(selfPtr, material != null ? material.selfPtr : IntPtr.Zero);
         }
 
+        public void Draw(int instanceCount)
+        {
+            cbg_CommandList_Draw(selfPtr, instanceCount);
+        }
+
+        internal void SetVertexBuffer(Buffer vb, int stride, int offset)
+        {
+            cbg_CommandList_SetVertexBuffer(selfPtr, vb != null ? vb.selfPtr : IntPtr.Zero, stride, offset);
+        }
+
+        internal void SetIndexBuffer(Buffer ib, int stride, int offset)
+        {
+            cbg_CommandList_SetIndexBuffer(selfPtr, ib != null ? ib.selfPtr : IntPtr.Zero, stride, offset);
+        }
+
+        public void BeginComputePass()
+        {
+            cbg_CommandList_BeginComputePass(selfPtr);
+        }
+
+        public void EndComputePass()
+        {
+            cbg_CommandList_EndComputePass(selfPtr);
+        }
+
+        internal void SetComputeBuffer(Buffer buffer, int stride, int unit)
+        {
+            cbg_CommandList_SetComputeBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero, stride, unit);
+        }
+
+        public void Dispatch(int x, int y, int z)
+        {
+            cbg_CommandList_Dispatch(selfPtr, x, y, z);
+        }
+
         /// <summary>
         /// テクスチャの内容をコピーします。
         /// </summary>
@@ -5076,6 +5423,16 @@ namespace Altseed2
             if (src == null) throw new ArgumentNullException(nameof(src), "引数がnullです");
             if (dst == null) throw new ArgumentNullException(nameof(dst), "引数がnullです");
             cbg_CommandList_CopyTexture(selfPtr, src != null ? src.selfPtr : IntPtr.Zero, dst != null ? dst.selfPtr : IntPtr.Zero);
+        }
+
+        public void ResetTextures()
+        {
+            cbg_CommandList_ResetTextures(selfPtr);
+        }
+
+        public void ResetComputeBuffers()
+        {
+            cbg_CommandList_ResetComputeBuffers(selfPtr);
         }
 
         public void SaveRenderTexture(string path, RenderTexture texture)
@@ -5110,15 +5467,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Graphics>> cacheRepo = new Dictionary<IntPtr, WeakReference<Graphics>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Graphics TryGetFromCache(IntPtr native)
+        public static Graphics TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Graphics cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Graphics_Release(native);
                     return cacheRet;
@@ -5158,6 +5515,14 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Graphics_Terminate();
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Graphics_ExecuteCommandList(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Graphics_WaitFinish(IntPtr selfPtr);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5250,6 +5615,16 @@ namespace Altseed2
             cbg_Graphics_Terminate();
         }
 
+        public void ExecuteCommandList()
+        {
+            cbg_Graphics_ExecuteCommandList(selfPtr);
+        }
+
+        public void WaitFinish()
+        {
+            cbg_Graphics_WaitFinish(selfPtr);
+        }
+
         /// <summary>
         /// スクリーンショットを保存します。
         /// </summary>
@@ -5289,15 +5664,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Configuration>> cacheRepo = new Dictionary<IntPtr, WeakReference<Configuration>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Configuration TryGetFromCache(IntPtr native)
+        public static Configuration TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Configuration cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Configuration_Release(native);
                     return cacheRet;
@@ -5740,15 +6115,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<File>> cacheRepo = new Dictionary<IntPtr, WeakReference<File>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  File TryGetFromCache(IntPtr native)
+        public static File TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 File cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_File_Release(native);
                     return cacheRet;
@@ -5939,15 +6314,15 @@ namespace Altseed2
         private static ConcurrentDictionary<IntPtr, WeakReference<StaticFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StaticFile>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-                internal static  StaticFile TryGetFromCache(IntPtr native)
+        internal static StaticFile TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 StaticFile cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_StaticFile_Release(native);
                     return cacheRet;
@@ -6209,15 +6584,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Profiler>> cacheRepo = new Dictionary<IntPtr, WeakReference<Profiler>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Profiler TryGetFromCache(IntPtr native)
+        public static Profiler TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Profiler cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Profiler_Release(native);
                     return cacheRet;
@@ -6370,6 +6745,160 @@ namespace Altseed2
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public partial class ComputePipelineState
+    {
+        #region unmanaged
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static Dictionary<IntPtr, WeakReference<ComputePipelineState>> cacheRepo = new Dictionary<IntPtr, WeakReference<ComputePipelineState>>();
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static ComputePipelineState TryGetFromCache(IntPtr native)
+        {
+            if (native == IntPtr.Zero) return null;
+
+            if (cacheRepo.ContainsKey(native))
+            {
+                ComputePipelineState cacheRet;
+                cacheRepo[native].TryGetTarget(out cacheRet);
+                if (cacheRet != null)
+                {
+                    cbg_ComputePipelineState_Release(native);
+                    return cacheRet;
+                }
+                else
+                {
+                    cacheRepo.Remove(native);
+                }
+            }
+
+            var newObject = new ComputePipelineState(new MemoryHandle(native));
+            cacheRepo[native] = new WeakReference<ComputePipelineState>(newObject);
+            return newObject;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal IntPtr selfPtr = IntPtr.Zero;
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_ComputePipelineState_Create();
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Vector4F cbg_ComputePipelineState_GetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_ComputePipelineState_SetVector4F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Vector4F value);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern Matrix44F cbg_ComputePipelineState_GetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_ComputePipelineState_SetMatrix44F(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string key, Matrix44F value);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_ComputePipelineState_GetShader(IntPtr selfPtr);
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_ComputePipelineState_SetShader(IntPtr selfPtr, IntPtr value);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern IntPtr cbg_ComputePipelineState_GetPropertyBlock(IntPtr selfPtr);
+
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_ComputePipelineState_Release(IntPtr selfPtr);
+
+        #endregion
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal ComputePipelineState(MemoryHandle handle)
+        {
+            selfPtr = handle.selfPtr;
+        }
+
+        public Shader Shader
+        {
+            get
+            {
+                if (_Shader != null)
+                {
+                    return _Shader;
+                }
+                var ret = cbg_ComputePipelineState_GetShader(selfPtr);
+                return Shader.TryGetFromCache(ret);
+            }
+            set
+            {
+                _Shader = value;
+                cbg_ComputePipelineState_SetShader(selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
+            }
+        }
+        private Shader _Shader;
+
+        public MaterialPropertyBlock PropertyBlock
+        {
+            get
+            {
+                var ret = cbg_ComputePipelineState_GetPropertyBlock(selfPtr);
+                return MaterialPropertyBlock.TryGetFromCache(ret);
+            }
+        }
+
+        public static ComputePipelineState Create()
+        {
+            var ret = cbg_ComputePipelineState_Create();
+            return ComputePipelineState.TryGetFromCache(ret);
+        }
+
+        public Vector4F GetVector4F(string key)
+        {
+            var ret = cbg_ComputePipelineState_GetVector4F(selfPtr, key);
+            return ret;
+        }
+
+        public void SetVector4F(string key, Vector4F value)
+        {
+            cbg_ComputePipelineState_SetVector4F(selfPtr, key, value);
+        }
+
+        public Matrix44F GetMatrix44F(string key)
+        {
+            var ret = cbg_ComputePipelineState_GetMatrix44F(selfPtr, key);
+            return ret;
+        }
+
+        public void SetMatrix44F(string key, Matrix44F value)
+        {
+            cbg_ComputePipelineState_SetMatrix44F(selfPtr, key, value);
+        }
+
+        /// <summary>
+        /// <see cref="ComputePipelineState"/>のインスタンスを削除します。
+        /// </summary>
+        ~ComputePipelineState()
+        {
+            lock (this)
+            {
+                if (selfPtr != IntPtr.Zero)
+                {
+                    cbg_ComputePipelineState_Release(selfPtr);
+                    selfPtr = IntPtr.Zero;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// ポストエフェクトやカメラにおける描画先のクラス
     /// </summary>
     [Serializable]
@@ -6383,13 +6912,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new RenderTexture TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 RenderTexture cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_RenderTexture_Release(native);
                     return cacheRet;
@@ -6603,15 +7132,15 @@ namespace Altseed2
         private static ConcurrentDictionary<IntPtr, WeakReference<Glyph>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Glyph>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-                internal static  Glyph TryGetFromCache(IntPtr native)
+        internal static Glyph TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Glyph cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Glyph_Release(native);
                     return cacheRet;
@@ -6782,15 +7311,15 @@ namespace Altseed2
         private static ConcurrentDictionary<IntPtr, WeakReference<Font>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<Font>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-                internal static  Font TryGetFromCache(IntPtr native)
+        internal static Font TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Font cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Font_Release(native);
                     return cacheRet;
@@ -7218,7 +7747,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     public partial class ImageFont
     {
@@ -7228,15 +7757,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<ImageFont>> cacheRepo = new Dictionary<IntPtr, WeakReference<ImageFont>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  ImageFont TryGetFromCache(IntPtr native)
+        public static ImageFont TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 ImageFont cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_ImageFont_Release(native);
                     return cacheRet;
@@ -7427,15 +7956,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<CullingSystem>> cacheRepo = new Dictionary<IntPtr, WeakReference<CullingSystem>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  CullingSystem TryGetFromCache(IntPtr native)
+        public static CullingSystem TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 CullingSystem cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_CullingSystem_Release(native);
                     return cacheRet;
@@ -7607,15 +8136,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Rendered>> cacheRepo = new Dictionary<IntPtr, WeakReference<Rendered>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Rendered TryGetFromCache(IntPtr native)
+        public static Rendered TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Rendered cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Rendered_Release(native);
                     return cacheRet;
@@ -7821,15 +8350,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<RenderedCamera>> cacheRepo = new Dictionary<IntPtr, WeakReference<RenderedCamera>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  RenderedCamera TryGetFromCache(IntPtr native)
+        public static RenderedCamera TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 RenderedCamera cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_RenderedCamera_Release(native);
                     return cacheRet;
@@ -8115,13 +8644,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new RenderedSprite TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 RenderedSprite cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_RenderedSprite_Release(native);
                     return cacheRet;
@@ -8460,13 +8989,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new RenderedText TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 RenderedText cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_RenderedText_Release(native);
                     return cacheRet;
@@ -9021,13 +9550,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new RenderedPolygon TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 RenderedPolygon cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_RenderedPolygon_Release(native);
                     return cacheRet;
@@ -9403,15 +9932,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Renderer>> cacheRepo = new Dictionary<IntPtr, WeakReference<Renderer>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Renderer TryGetFromCache(IntPtr native)
+        public static Renderer TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Renderer cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Renderer_Release(native);
                     return cacheRet;
@@ -9567,7 +10096,7 @@ namespace Altseed2
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     public partial class ShaderCompiler
     {
@@ -9577,15 +10106,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<ShaderCompiler>> cacheRepo = new Dictionary<IntPtr, WeakReference<ShaderCompiler>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  ShaderCompiler TryGetFromCache(IntPtr native)
+        public static ShaderCompiler TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 ShaderCompiler cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_ShaderCompiler_Release(native);
                     return cacheRet;
@@ -9673,15 +10202,15 @@ namespace Altseed2
         private static ConcurrentDictionary<IntPtr, WeakReference<StreamFile>> cacheRepo = new ConcurrentDictionary<IntPtr, WeakReference<StreamFile>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-                internal static  StreamFile TryGetFromCache(IntPtr native)
+        internal static StreamFile TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 StreamFile cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_StreamFile_Release(native);
                     return cacheRet;
@@ -10021,15 +10550,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Cursor>> cacheRepo = new Dictionary<IntPtr, WeakReference<Cursor>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Cursor TryGetFromCache(IntPtr native)
+        public static Cursor TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Cursor cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Cursor_Release(native);
                     return cacheRet;
@@ -10103,15 +10632,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<JoystickInfo>> cacheRepo = new Dictionary<IntPtr, WeakReference<JoystickInfo>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  JoystickInfo TryGetFromCache(IntPtr native)
+        public static JoystickInfo TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 JoystickInfo cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_JoystickInfo_Release(native);
                     return cacheRet;
@@ -10341,15 +10870,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Joystick>> cacheRepo = new Dictionary<IntPtr, WeakReference<Joystick>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Joystick TryGetFromCache(IntPtr native)
+        public static Joystick TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Joystick cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Joystick_Release(native);
                     return cacheRet;
@@ -10490,15 +11019,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Keyboard>> cacheRepo = new Dictionary<IntPtr, WeakReference<Keyboard>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Keyboard TryGetFromCache(IntPtr native)
+        public static Keyboard TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Keyboard cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Keyboard_Release(native);
                     return cacheRet;
@@ -10591,15 +11120,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Mouse>> cacheRepo = new Dictionary<IntPtr, WeakReference<Mouse>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Mouse TryGetFromCache(IntPtr native)
+        public static Mouse TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Mouse cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Mouse_Release(native);
                     return cacheRet;
@@ -10628,6 +11157,10 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Mouse_GetMouseButtonState(IntPtr selfPtr, int button);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Mouse_SetMouseButtonState(IntPtr selfPtr, int button, int state);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -10755,6 +11288,11 @@ namespace Altseed2
             return (ButtonState)ret;
         }
 
+        public void SetMouseButtonState(MouseButton button, ButtonState state)
+        {
+            cbg_Mouse_SetMouseButtonState(selfPtr, (int)button, (int)state);
+        }
+
         /// <summary>
         /// <see cref="Mouse"/>のインスタンスを削除します。
         /// </summary>
@@ -10782,15 +11320,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<MediaPlayer>> cacheRepo = new Dictionary<IntPtr, WeakReference<MediaPlayer>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  MediaPlayer TryGetFromCache(IntPtr native)
+        public static MediaPlayer TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 MediaPlayer cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_MediaPlayer_Release(native);
                     return cacheRet;
@@ -10926,15 +11464,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Collider>> cacheRepo = new Dictionary<IntPtr, WeakReference<Collider>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Collider TryGetFromCache(IntPtr native)
+        public static Collider TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Collider cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Collider_Release(native);
                     return cacheRet;
@@ -11124,13 +11662,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new ShapeCollider TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 ShapeCollider cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_ShapeCollider_Release(native);
                     return cacheRet;
@@ -11322,13 +11860,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new PolygonCollider TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 PolygonCollider cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_PolygonCollider_Release(native);
                     return cacheRet;
@@ -11515,13 +12053,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new EdgeCollider TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 EdgeCollider cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_EdgeCollider_Release(native);
                     return cacheRet;
@@ -11756,13 +12294,13 @@ namespace Altseed2
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static new CircleCollider TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 CircleCollider cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_CircleCollider_Release(native);
                     return cacheRet;
@@ -11961,15 +12499,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Sound>> cacheRepo = new Dictionary<IntPtr, WeakReference<Sound>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Sound TryGetFromCache(IntPtr native)
+        public static Sound TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Sound cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Sound_Release(native);
                     return cacheRet;
@@ -12323,15 +12861,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<SoundMixer>> cacheRepo = new Dictionary<IntPtr, WeakReference<SoundMixer>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  SoundMixer TryGetFromCache(IntPtr native)
+        public static SoundMixer TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 SoundMixer cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_SoundMixer_Release(native);
                     return cacheRet;
@@ -12673,15 +13211,15 @@ namespace Altseed2
         private static Dictionary<IntPtr, WeakReference<Tool>> cacheRepo = new Dictionary<IntPtr, WeakReference<Tool>>();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static  Tool TryGetFromCache(IntPtr native)
+        public static Tool TryGetFromCache(IntPtr native)
         {
-            if(native == IntPtr.Zero) return null;
+            if (native == IntPtr.Zero) return null;
 
-            if(cacheRepo.ContainsKey(native))
+            if (cacheRepo.ContainsKey(native))
             {
                 Tool cacheRet;
                 cacheRepo[native].TryGetTarget(out cacheRet);
-                if(cacheRet != null)
+                if (cacheRet != null)
                 {
                     cbg_Tool_Release(native);
                     return cacheRet;
@@ -12818,7 +13356,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_Begin_char16p_boolp_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        private static extern bool cbg_Tool_Begin_char16p_boolp_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open, int flags);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -12828,7 +13366,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_BeginPopupModal_char16p_boolp_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        private static extern bool cbg_Tool_BeginPopupModal_char16p_boolp_ToolWindowFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open, int flags);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -12838,7 +13376,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_BeginTabItem_char16p_boolp_ToolTabItemFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        private static extern bool cbg_Tool_BeginTabItem_char16p_boolp_ToolTabItemFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open, int flags);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -12858,15 +13396,25 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Tool_ShowDemoWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SetDragDropPayload(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string type, IntPtr data, int cond);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Tool_ShowAboutWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open);
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_AcceptDragDropPayload(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string type, int dragDropFlags, IntPtr result);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Tool_ShowMetricsWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open);
+        private static extern void cbg_Tool_ShowDemoWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_ShowAboutWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Tool_ShowMetricsWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13322,7 +13870,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_Checkbox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool v);
+        private static extern bool cbg_Tool_Checkbox(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool v);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13550,7 +14098,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_CollapsingHeader_char16p_boolp_ToolTreeNodeFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open, int flags);
+        private static extern bool cbg_Tool_CollapsingHeader_char16p_boolp_ToolTreeNodeFlags(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_open, int flags);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13564,7 +14112,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_Selectable_char16p_boolp_ToolSelectableFlags_Vector2F_C(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_selected, int flags, Vector2F size);
+        private static extern bool cbg_Tool_Selectable_char16p_boolp_ToolSelectableFlags_Vector2F_C(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_selected, int flags, Vector2F size);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -13627,7 +14175,7 @@ namespace Altseed2
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool cbg_Tool_MenuItem_char16p_char16p_boolp_bool(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string shortcut, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_selected, [MarshalAs(UnmanagedType.Bool)] bool enabled);
+        private static extern bool cbg_Tool_MenuItem_char16p_char16p_boolp_bool(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string label, [MarshalAs(UnmanagedType.LPWStr)] string shortcut, [MarshalAs(UnmanagedType.Bool)][In, Out] ref bool p_selected, [MarshalAs(UnmanagedType.Bool)] bool enabled);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -14435,6 +14983,20 @@ namespace Altseed2
             if (defaultPath == null) throw new ArgumentNullException(nameof(defaultPath), "引数がnullです");
             var ret = cbg_Tool_PickFolder(selfPtr, defaultPath);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+
+        internal bool SetDragDropPayload(string type, Int8Array data, ToolCond cond)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type), "引数がnullです");
+            var ret = cbg_Tool_SetDragDropPayload(selfPtr, type, data != null ? data.selfPtr : IntPtr.Zero, (int)cond);
+            return ret;
+        }
+
+        internal bool AcceptDragDropPayload(string type, ToolDragDropFlags dragDropFlags, Int8Array result)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type), "引数がnullです");
+            var ret = cbg_Tool_AcceptDragDropPayload(selfPtr, type, (int)dragDropFlags, result != null ? result.selfPtr : IntPtr.Zero);
+            return ret;
         }
 
         public void ShowDemoWindow(ref bool p_open)
