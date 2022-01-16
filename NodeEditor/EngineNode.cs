@@ -7,7 +7,7 @@ using PartsTreeSystem;
 
 namespace Altseed2.NodeEditor
 {
-    class EngineNode : INode
+    class EngineNode : Node
     {
         public EngineNode()
         {
@@ -22,31 +22,25 @@ namespace Altseed2.NodeEditor
 
         private static EngineNode _instance;
 
-        public List<Node> children = new();
-
-        public int InstanceID { get; set; }
-
-        public void AddChild(INode node)
+        public override void AddChild(INode node)
         {
             Engine.AddNode(node as Node);
-            children.Add(node as Node);
         }
 
-        public void RemoveChild(int instanceID)
+        public override void RemoveChild(int instanceID)
         {
+            var removelist = new List<INode>();
+            foreach (var c in GetChildren())
+                if (c.InstanceID == instanceID)
+                    removelist.Add(c);
 
-            children.ForEach(_ => {
-                if (_.InstanceID == instanceID) 
-                { 
-                    Engine.RemoveNode(_);
-                }
-            });
-            children.RemoveAll(_ => _.InstanceID == instanceID);
+            foreach (var c in removelist)
+                Engine.RemoveNode(c as Node);
         }
 
-        public IReadOnlyCollection<INode> GetChildren()
+        public override IReadOnlyCollection<INode> GetChildren()
         {
-            return children;
+            return Engine.GetNodes() as IReadOnlyCollection<INode>;
         }
     }
 }

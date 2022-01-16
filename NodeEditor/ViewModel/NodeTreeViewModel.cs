@@ -14,7 +14,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup, 
                 View.NodeEditorHost.NodeTree, 
-                View.NodeEditorHost.NodeTree.Root.InstanceID, 
+                EngineNode.GetInstance().InstanceID, 
                 typeof(SpriteNode), 
                 View.NodeEditorHost.Environment);
         }

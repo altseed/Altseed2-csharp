@@ -157,10 +157,12 @@ namespace Altseed2.NodeEditor.View
                 if(Engine.Tool.MenuItem("Undo", "", false, true))
                 {
                     NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
+                    NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
                 }
                 if(Engine.Tool.MenuItem("Redo", "", false, true))
                 {
                     NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
+                    NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
                 }
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();

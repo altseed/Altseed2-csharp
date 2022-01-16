@@ -100,6 +100,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
+        [SerializeField]
         private Vector2F _Position = new Vector2F();
 
         /// <summary>
@@ -183,6 +184,13 @@ namespace Altseed2
                 UpdateTransform();
 
             base.Update();
+        }
+
+        internal override void ForceUpdate()
+        {
+            UpdateTransform();
+
+            base.ForceUpdate();
         }
 
         /// <summary>

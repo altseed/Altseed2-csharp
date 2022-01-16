@@ -41,6 +41,22 @@ namespace Altseed2
 
         }
 
+        internal virtual void ForceUpdate()
+        {
+            
+            OnUpdate();
+
+            _IsEnumeratingChildren = true;
+
+            _Children.Update();
+            foreach (var c in Children)
+            {
+                c.ForceUpdate();
+            }
+
+            _IsEnumeratingChildren = false;
+        }
+
         #region Registerable (子として)
 
         /// <summary>
@@ -412,20 +428,20 @@ namespace Altseed2
 
         #region PartsTreeSystem
         /// <summary>
-        /// エディタ向けのメソッド
+        /// エディタ向け
         /// </summary>
         /// <param name="node"></param>
-        public void AddChild(INode node)
+        public virtual void AddChild(INode node)
         {
             AddChildNode(node as Node);
-
+            
         }
 
         /// <summary>
-        /// エディタ向けのメソッド
+        /// エディタ向け
         /// </summary>
         /// <param name="instanceID"></param>
-        public void RemoveChild(int instanceID)
+        public virtual void RemoveChild(int instanceID)
         {
             foreach (var child in GetChildren())
                 if (child.InstanceID == instanceID)
@@ -433,16 +449,16 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// エディタ向けのメソッド
+        /// エディタ向け
         /// </summary>
         /// <returns></returns>
-        public IReadOnlyCollection<INode> GetChildren()
+        public virtual IReadOnlyCollection<INode> GetChildren()
         {
             return Children;
         }
 
         /// <summary>
-        /// エディタ向けのメソッド
+        /// エディタ向け
         /// </summary>
         public int InstanceID { get; set; }
         #endregion

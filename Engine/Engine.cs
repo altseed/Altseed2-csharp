@@ -69,6 +69,12 @@ namespace Altseed2
         private static Color _ClearColor = new Color(50, 50, 50, 255);
 
         /// <summary>
+        /// trueにすると必要性に関わらず、すべてのNodeを更新します。
+        /// パフォーマンスに悪影響を及ぼす可能性が高いです。
+        /// </summary>
+        public static bool ForceNodeUpdate { get; set; }
+
+        /// <summary>
         /// エンジンを初期化します。
         /// </summary>
         /// <param name="title">ウィンドウタイトル</param>
@@ -163,7 +169,10 @@ namespace Altseed2
         internal static bool UpdateComponents(bool drawDefaultCameraGroup, bool drawCustomCameraGroup)
         {
             // ノードの更新
-            _UpdatedNode?.Update();
+            if(ForceNodeUpdate)
+                _UpdatedNode?.ForceUpdate();
+            else
+                _UpdatedNode?.Update();
 
             // Contextの更新
             Context.Update();
