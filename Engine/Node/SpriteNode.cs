@@ -2,12 +2,19 @@
 
 namespace Altseed2
 {
+    [AttributeUsage(AttributeTargets.Field)]
+    public class SerializeField : Attribute
+    {
+        public SerializeField() { }
+    }
+
     /// <summary>
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
     public class SpriteNode : TransformNode, ICullableDrawn/*, ISized*/
     {
+        [SerializeField]
         private readonly RenderedSprite _RenderedSprite;
 
         /// <summary>

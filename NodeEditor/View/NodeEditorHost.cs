@@ -13,7 +13,7 @@ namespace Altseed2.NodeEditor.View
     {
         private static NodeEditorViewModel _nodeEditorViewModel;
         private static NodeEditor _nodeEditor;
-        
+
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
@@ -63,6 +63,8 @@ namespace Altseed2.NodeEditor.View
         public static NodeTreeGroup NodeTreeGroup;
 
         public static NodeTree NodeTree;
+
+        public static NodeTreeGroupEditorProperty NodeTreeGroupEditorProperty;
         #endregion
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace Altseed2.NodeEditor.View
         /// <param name="height"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static bool Initialize(string title, int width, int height, Configuration config = null)
+        public static bool Initialize(string title, int width, int height, Configuration config = null )
         {
             config ??= new Configuration();
             config.EnabledCoreModules |= CoreModules.Tool;
@@ -98,6 +100,8 @@ namespace Altseed2.NodeEditor.View
             NodeTree = Utility.CreateNodeFromNodeTreeGroup(NodeTreeGroup, Environment);
             NodeTree = new();
             NodeTree.Root = EngineNode.GetInstance();
+
+            NodeTreeGroupEditorProperty = new NodeTreeGroupEditorProperty(NodeTreeGroup, Environment);
 
             return res;
         }

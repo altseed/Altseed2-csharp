@@ -73,6 +73,12 @@ namespace Altseed2
         public static bool ForceNodeUpdate { get; set; }
 
         /// <summary>
+        /// trueにすると必要性に関わらず、すべてのNodeを更新します。
+        /// パフォーマンスに悪影響を及ぼす可能性が高いです。
+        /// </summary>
+        public static bool ForceNodeUpdate { get; set; }
+
+        /// <summary>
         /// エンジンを初期化します。
         /// </summary>
         /// <param name="title">ウィンドウタイトル</param>
