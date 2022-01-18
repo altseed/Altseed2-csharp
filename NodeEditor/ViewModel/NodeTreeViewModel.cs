@@ -18,13 +18,15 @@
                 typeof(SpriteNode), 
                 View.NodeEditorHost.Environment);
         }
-        public void CreateTextNode() => 
+        public void CreateTextNode()
+        {
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
                 EngineNode.GetInstance().InstanceID,
                 typeof(TextNode),
                 View.NodeEditorHost.Environment);
+        }
         public void CreateArcNode() 
         {
             View.NodeEditorHost.CommandManager.AddNode(
@@ -33,26 +35,43 @@
                 EngineNode.GetInstance().InstanceID,
                 typeof(ArcNode),
                 View.NodeEditorHost.Environment);
-
-            //ToDo
-            //ここで初期値を設定できるようにしたい
         } 
-        public void CreateCircleNode() => EngineNode.GetInstance().AddChild(new CircleNode
+        public void CreateCircleNode()
         {
-            Radius = 100
-        });
-        public void CreateLineNode() => EngineNode.GetInstance().AddChild(new LineNode
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup,
+                View.NodeEditorHost.NodeTree,
+                EngineNode.GetInstance().InstanceID,
+                typeof(CircleNode),
+                View.NodeEditorHost.Environment);
+        }
+        public void CreateLineNode()
         {
-            Point2 = new Vector2F(100, 100)
-        });
-        public void CreateRectangleNode() => EngineNode.GetInstance().AddChild(new RectangleNode
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup,
+                View.NodeEditorHost.NodeTree,
+                EngineNode.GetInstance().InstanceID,
+                typeof(LineNode),
+                View.NodeEditorHost.Environment);
+        }
+        public void CreateRectangleNode() 
         {
-            RectangleSize = new Vector2F(100, 100)
-        });
-        public void CreateTriangleNode() => EngineNode.GetInstance().AddChild(new TriangleNode
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup,
+                View.NodeEditorHost.NodeTree,
+                EngineNode.GetInstance().InstanceID,
+                typeof(RectangleNode),
+                View.NodeEditorHost.Environment);
+        }
+        public void CreateTriangleNode() 
         {
-            Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0)
-        });
+            View.NodeEditorHost.CommandManager.AddNode(
+                View.NodeEditorHost.NodeTreeGroup,
+                View.NodeEditorHost.NodeTree,
+                EngineNode.GetInstance().InstanceID,
+                typeof(TriangleNode),
+                View.NodeEditorHost.Environment);
+        }
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
         {
