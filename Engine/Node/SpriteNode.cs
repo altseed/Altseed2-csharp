@@ -97,7 +97,7 @@ namespace Altseed2
         /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
-        [PartsTreeSystem.SerializeField]
+        
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion

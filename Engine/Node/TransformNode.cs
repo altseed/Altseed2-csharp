@@ -71,7 +71,6 @@ namespace Altseed2
         [PartsTreeSystem.SerializeField]
         private Matrix44F _AbsoluteTransform = Matrix44F.Identity;
 
-        [PartsTreeSystem.SerializeField]
         internal TransformerNode Transfomer { get; set; }
 
         /// <summary>
@@ -251,7 +250,6 @@ namespace Altseed2
         /// </summary>
         private TransformNodeInfo _TransformNodeInfo { get; }
 
-        [PartsTreeSystem.SerializeField]
         public bool VisibleTransformNodeInfo { get; set; } = Engine.Config.VisibleTransformInfo;
 
         internal void DrawTransformInfo()
