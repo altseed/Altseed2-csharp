@@ -71,6 +71,7 @@ namespace Altseed2
                     Engine.UpdateDrawnZOrder(this, old);
             }
         }
+        [PartsTreeSystem.SerializeField]
         private int _ZOrder;
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace Altseed2
 
             }
         }
+        [PartsTreeSystem.SerializeField]
         private bool _IsDrawn = true;
 
         /// <summary>

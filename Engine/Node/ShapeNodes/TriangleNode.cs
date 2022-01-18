@@ -9,6 +9,7 @@ namespace Altseed2
     public class TriangleNode : ShapeNode
     {
         private bool _RequireUpdateVertexes = true;
+        [PartsTreeSystem.SerializeField]
         private Vector2F[] _Points;
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace Altseed2
                 OverwriteVertexColor(value);
             }
         }
+        [PartsTreeSystem.SerializeField]
         private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
@@ -93,6 +95,13 @@ namespace Altseed2
             }
 
             base.Update();
+        }
+
+        internal override void ForceUpdate()
+        {
+            UpdateVertexes();
+
+            base.ForceUpdate();
         }
     }
 }

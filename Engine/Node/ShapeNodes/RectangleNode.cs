@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -24,6 +24,7 @@ namespace Altseed2
                 _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
+        [PartsTreeSystem.SerializeField]
         private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private Vector2F _RectangleSize = new Vector2F();
 
         /// <summary>
@@ -67,6 +69,13 @@ namespace Altseed2
             }
 
             base.Update();
+        }
+
+        internal override void ForceUpdate()
+        {
+            UpdateVertexes();
+
+            base.ForceUpdate();
         }
     }
 }
