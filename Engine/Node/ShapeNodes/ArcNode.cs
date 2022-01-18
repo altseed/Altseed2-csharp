@@ -183,5 +183,12 @@ namespace Altseed2
 
             base.Update();
         }
+
+        internal override void ForceUpdate()
+        {
+            UpdateVertexes();
+
+            base.ForceUpdate();
+        }
     }
 }
