@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -23,6 +23,7 @@ namespace Altseed2
                 OverwriteVertexColor(value);
             }
         }
+        [PartsTreeSystem.SerializeField]
         private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private float _EndDegree = 360f;
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private float _radius = 1.0f;
 
         /// <summary>
@@ -71,6 +74,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private float _StartDegree = 0.0f;
 
         /// <summary>
@@ -88,6 +92,7 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private int _VertNum = 3;
 
         /// <summary>

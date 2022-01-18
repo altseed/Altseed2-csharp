@@ -26,7 +26,7 @@ namespace Altseed2
                     _Transform = value;
             }
         }
-        [NonSerialized]
+        [NonSerialized, PartsTreeSystem.SerializeField]
         private Matrix44F _Transform = Matrix44F.Identity;
 
         private protected bool _RequireCalcTransform = true;
@@ -53,6 +53,8 @@ namespace Altseed2
                 }
             }
         }
+
+        [PartsTreeSystem.SerializeField]
         private Matrix44F _InheritedTransform = Matrix44F.Identity;
 
         /// <summary>
@@ -66,8 +68,10 @@ namespace Altseed2
                 _AbsoluteTransform = value;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private Matrix44F _AbsoluteTransform = Matrix44F.Identity;
 
+        [PartsTreeSystem.SerializeField]
         internal TransformerNode Transfomer { get; set; }
 
         /// <summary>
@@ -84,6 +88,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private float _Angle = 0.0f;
 
         /// <summary>
@@ -100,7 +105,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        [SerializeField]
+        [PartsTreeSystem.SerializeField]
         private Vector2F _Position = new Vector2F();
 
         /// <summary>
@@ -117,6 +122,8 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
+
+        [PartsTreeSystem.SerializeField]
         private Vector2F _CenterPosition;
 
         /// <summary>
@@ -133,6 +140,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
@@ -154,6 +162,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private bool _HorizontalFlip = false;
 
         /// <summary>
@@ -170,6 +179,7 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
+        [PartsTreeSystem.SerializeField]
         private bool _VerticalFlip = false;
 
         internal override void Registered()
@@ -241,6 +251,7 @@ namespace Altseed2
         /// </summary>
         private TransformNodeInfo _TransformNodeInfo { get; }
 
+        [PartsTreeSystem.SerializeField]
         public bool VisibleTransformNodeInfo { get; set; } = Engine.Config.VisibleTransformInfo;
 
         internal void DrawTransformInfo()
