@@ -2,19 +2,13 @@
 
 namespace Altseed2
 {
-    [AttributeUsage(AttributeTargets.Field)]
-    public class SerializeField : Attribute
-    {
-        public SerializeField() { }
-    }
-
     /// <summary>
     /// テクスチャを描画するノードを表します。
     /// </summary>
     [Serializable]
     public class SpriteNode : TransformNode, ICullableDrawn/*, ISized*/
     {
-        [SerializeField]
+        [PartsTreeSystem.SerializeField]
         private readonly RenderedSprite _RenderedSprite;
 
         /// <summary>
@@ -80,6 +74,7 @@ namespace Altseed2
                     Engine.UpdateDrawnZOrder(this, old);
             }
         }
+        [PartsTreeSystem.SerializeField]
         private int _ZOrder;
 
         /// <summary>
@@ -95,12 +90,14 @@ namespace Altseed2
                 this.UpdateIsDrawnActuallyOfDescendants();
             }
         }
+        [PartsTreeSystem.SerializeField]
         private bool _IsDrawn = true;
 
         /// <summary>
         /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
+        [PartsTreeSystem.SerializeField]
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion
