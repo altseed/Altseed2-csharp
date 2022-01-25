@@ -9,12 +9,13 @@ namespace Altseed2
     public class TriangleNode : ShapeNode
     {
         private bool _RequireUpdateVertexes = true;
-        [PartsTreeSystem.SerializeField]
+        
         private Vector2F[] _Points;
 
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _Color;
@@ -26,12 +27,12 @@ namespace Altseed2
                 OverwriteVertexColor(value);
             }
         }
-        [PartsTreeSystem.SerializeField]
         private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 頂点1を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F Point1
         {
             get => _Points[0];
@@ -47,6 +48,7 @@ namespace Altseed2
         /// <summary>
         /// 頂点2を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F Point2
         {
             get => _Points[1];
@@ -62,6 +64,7 @@ namespace Altseed2
         /// <summary>
         /// 頂点3を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F Point3
         {
             get => _Points[2];

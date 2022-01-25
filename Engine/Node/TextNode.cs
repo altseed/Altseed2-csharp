@@ -41,6 +41,7 @@ namespace Altseed2
         /// <summary>
         /// カメラグループを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public ulong CameraGroup
         {
             get => _CameraGroup; set
@@ -57,6 +58,7 @@ namespace Altseed2
         /// <summary>
         /// 描画時の重ね順を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public int ZOrder
         {
             get => _ZOrder;
@@ -71,12 +73,12 @@ namespace Altseed2
                     Engine.UpdateDrawnZOrder(this, old);
             }
         }
-        [PartsTreeSystem.SerializeField]
         private int _ZOrder;
 
         /// <summary>
         /// このノードを描画するかどうかを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool IsDrawn
         {
             get => _IsDrawn;
@@ -88,13 +90,14 @@ namespace Altseed2
 
             }
         }
-        [PartsTreeSystem.SerializeField]
         private bool _IsDrawn = true;
 
         /// <summary>
         /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
+        [PartsTreeSystem.SerializeField]
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion
@@ -123,6 +126,7 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
+        [PartsTreeSystem.SerializeField]
         public sealed override Matrix44F InheritedTransform
         {
             get => base.InheritedTransform;
@@ -141,6 +145,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _RenderedText.Color;
@@ -154,6 +159,7 @@ namespace Altseed2
         /// <summary>
         /// ブレンドモードを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public AlphaBlend AlphaBlend
         {
             get => _RenderedText.AlphaBlend;
@@ -167,6 +173,7 @@ namespace Altseed2
         /// <summary>
         /// 描画する文字列を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public string Text
         {
             get => _RenderedText.Text;
@@ -182,6 +189,7 @@ namespace Altseed2
         /// <summary>
         /// 文字列の描画に使用するフォントを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Font Font
         {
             get => _RenderedText.Font;
@@ -197,6 +205,7 @@ namespace Altseed2
         /// <summary>
         /// 文字の描画に使用するマテリアルを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Material MaterialGlyph
         {
             get => _RenderedText.MaterialGlyph;
@@ -210,6 +219,7 @@ namespace Altseed2
         /// <summary>
         /// 文字テクスチャの描画に使用するマテリアルを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Material MaterialImage
         {
             get => _RenderedText.MaterialImage;
@@ -223,6 +233,7 @@ namespace Altseed2
         /// <summary>
         /// 文字の大きさを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float FontSize
         {
             get => _RenderedText.FontSize;
@@ -238,6 +249,7 @@ namespace Altseed2
         /// <summary>
         /// 字間をピクセル単位で取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float CharacterSpace
         {
             get => _RenderedText.CharacterSpace;
@@ -254,6 +266,7 @@ namespace Altseed2
         /// 行間をピクセル単位で取得または設定します。
         /// Nullを指定するとフォント標準の行間を使用します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float? LineGap
         {
             get => _LineGap;
@@ -272,6 +285,7 @@ namespace Altseed2
         /// <summary>
         /// カーニングの有無を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool IsEnableKerning
         {
             get => _RenderedText.IsEnableKerning;
@@ -287,6 +301,7 @@ namespace Altseed2
         /// <summary>
         /// 行の方向を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public WritingDirection WritingDirection
         {
             get => _RenderedText.WritingDirection;
@@ -302,6 +317,7 @@ namespace Altseed2
         #endregion
 
         /// <inheritdoc/>
+        [PartsTreeSystem.SerializeField]
         public sealed override Vector2F ContentSize => _RenderedText.RenderingSize;
     }
 }

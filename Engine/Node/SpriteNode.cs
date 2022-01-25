@@ -8,7 +8,6 @@ namespace Altseed2
     [Serializable]
     public class SpriteNode : TransformNode, ICullableDrawn/*, ISized*/
     {
-        [PartsTreeSystem.SerializeField]
         private readonly RenderedSprite _RenderedSprite;
 
         /// <summary>
@@ -42,6 +41,7 @@ namespace Altseed2
         /// <summary>
         /// カメラグループを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public ulong CameraGroup
         {
             get => _CameraGroup;
@@ -60,6 +60,7 @@ namespace Altseed2
         /// <summary>
         /// 描画時の重ね順を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public int ZOrder
         {
             get => _ZOrder;
@@ -74,12 +75,12 @@ namespace Altseed2
                     Engine.UpdateDrawnZOrder(this, old);
             }
         }
-        [PartsTreeSystem.SerializeField]
         private int _ZOrder;
 
         /// <summary>
         /// このノードを描画するかどうかを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool IsDrawn
         {
             get => _IsDrawn;
@@ -90,27 +91,25 @@ namespace Altseed2
                 this.UpdateIsDrawnActuallyOfDescendants();
             }
         }
-        [PartsTreeSystem.SerializeField]
         private bool _IsDrawn = true;
 
         /// <summary>
         /// 先祖の<see cref="IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool IsDrawnActually => (this as ICullableDrawn).IsDrawnActually;
-        
+        [PartsTreeSystem.SerializeField]
         bool ICullableDrawn.IsDrawnActually { get; set; } = true;
 
         #endregion
 
         #region Node
-
         internal override void Registered()
         {
             base.Registered();
             Engine.RegisterDrawn(this);
             Engine.CullingSystem.Register(_RenderedSprite);
         }
-
         internal override void Unregistered()
         {
             base.Unregistered();
@@ -132,6 +131,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _RenderedSprite.Color;
@@ -145,6 +145,7 @@ namespace Altseed2
         /// <summary>
         /// ブレンドモードを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public AlphaBlend AlphaBlend
         {
             get => _RenderedSprite.AlphaBlend;
@@ -158,6 +159,7 @@ namespace Altseed2
         /// <summary>
         /// 描画範囲を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public RectF Src
         {
             get => _RenderedSprite.Src;
@@ -172,6 +174,7 @@ namespace Altseed2
         /// <summary>
         /// 描画するテクスチャを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public TextureBase Texture
         {
             get => _RenderedSprite.Texture;
@@ -188,6 +191,7 @@ namespace Altseed2
         /// <summary>
         /// 使用するマテリアルを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Material Material
         {
             get => _RenderedSprite.Material;
@@ -200,6 +204,7 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
+        [PartsTreeSystem.SerializeField]
         public sealed override Matrix44F InheritedTransform
         {
             get => base.InheritedTransform;
@@ -214,6 +219,7 @@ namespace Altseed2
         #endregion
 
         /// <inheritdoc/>
+        [PartsTreeSystem.SerializeField]
         public sealed override Vector2F ContentSize => Src.Size;
     }
 }
