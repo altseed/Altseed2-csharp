@@ -28,7 +28,6 @@ namespace Altseed2
         }
         [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
-
         private protected bool _RequireCalcTransform = true;
 
         /// <summary>
