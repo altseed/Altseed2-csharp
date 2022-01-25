@@ -53,10 +53,14 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             float num = (float)PropertyInfo.GetValue(Source);
-            if (Engine.Tool.DragFloat(Name, ref num, Speed, Min, Max, "%d", ToolSliderFlags.None))
+            if (Engine.Tool.DragFloat(Name, ref num, Speed, Min, Max, "%.1f", ToolSliderFlags.None))
             {
                 PropertyInfo.SetValue(Source, num);
                 NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+            }
+            else
+            {
+                //huga
             }
         }
 
