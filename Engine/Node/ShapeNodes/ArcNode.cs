@@ -13,6 +13,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _Color;
@@ -23,12 +24,12 @@ namespace Altseed2
                 OverwriteVertexColor(value);
             }
         }
-        [PartsTreeSystem.SerializeField]
         private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 描画を終了する角度を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float EndDegree
         {
             get => _EndDegree;
@@ -40,12 +41,12 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private float _EndDegree = 360f;
 
         /// <summary>
         /// 半径を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float Radius
         {
             get => _radius;
@@ -57,12 +58,12 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private float _radius = 1.0f;
 
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float StartDegree
         {
             get => _StartDegree;
@@ -74,12 +75,12 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private float _StartDegree = 0.0f;
 
         /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public int VertNum
         {
             get => _VertNum;
@@ -92,7 +93,6 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private int _VertNum = 3;
 
         /// <summary>

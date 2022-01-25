@@ -13,6 +13,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _Color;
@@ -24,12 +25,12 @@ namespace Altseed2
                 _RenderedPolygon.OverwriteVertexesColor(value);
             }
         }
-        [PartsTreeSystem.SerializeField]
         private Color _Color = new Color(255, 255, 255);
 
         /// <summary>
         /// 短形のサイズを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F RectangleSize
         {
             get => _RectangleSize;
@@ -41,7 +42,6 @@ namespace Altseed2
                 _RequireUpdateVertexes = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private Vector2F _RectangleSize = new Vector2F();
 
         /// <summary>

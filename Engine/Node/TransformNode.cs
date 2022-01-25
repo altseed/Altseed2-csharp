@@ -16,7 +16,7 @@ namespace Altseed2
             if (Engine.Config.VisibleTransformInfo)
                 _TransformNodeInfo = new TransformNodeInfo(this);
         }
-
+        [PartsTreeSystem.SerializeField]
         internal Matrix44F Transform
         {
             get => Transfomer?.Transform ?? _Transform;
@@ -26,7 +26,7 @@ namespace Altseed2
                     _Transform = value;
             }
         }
-        [NonSerialized, PartsTreeSystem.SerializeField]
+        [NonSerialized]
         private Matrix44F _Transform = Matrix44F.Identity;
 
         private protected bool _RequireCalcTransform = true;
@@ -34,6 +34,7 @@ namespace Altseed2
         /// <summary>
         /// 先祖の変形を加味した変形行列を取得します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public virtual Matrix44F InheritedTransform
         {
             get => Transfomer?.InheritedTransform ?? _InheritedTransform;
@@ -54,12 +55,12 @@ namespace Altseed2
             }
         }
 
-        [PartsTreeSystem.SerializeField]
         private Matrix44F _InheritedTransform = Matrix44F.Identity;
 
         /// <summary>
         /// 先祖の変形および<see cref="CenterPosition"/>を加味した最終的な変形行列を取得します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Matrix44F AbsoluteTransform
         {
             get => Transfomer?.AbsoluteTransform ?? _AbsoluteTransform;
@@ -68,14 +69,15 @@ namespace Altseed2
                 _AbsoluteTransform = value;
             }
         }
-        [PartsTreeSystem.SerializeField]
-        private Matrix44F _AbsoluteTransform = Matrix44F.Identity;
 
+        private Matrix44F _AbsoluteTransform = Matrix44F.Identity;
+        [PartsTreeSystem.SerializeField]
         internal TransformerNode Transfomer { get; set; }
 
         /// <summary>
         /// 角度(度数法)を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float Angle
         {
             get => _Angle;
@@ -87,12 +89,12 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private float _Angle = 0.0f;
 
         /// <summary>
         /// 座標を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F Position
         {
             get => _Position;
@@ -104,12 +106,12 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private Vector2F _Position = new Vector2F();
 
         /// <summary>
         /// 中心となる座標をピクセル単位で取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F CenterPosition
         {
             get => _CenterPosition;
@@ -122,12 +124,12 @@ namespace Altseed2
             }
         }
 
-        [PartsTreeSystem.SerializeField]
         private Vector2F _CenterPosition;
 
         /// <summary>
         /// 拡大率を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F Scale
         {
             get => _Scale;
@@ -139,17 +141,18 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private Vector2F _Scale = new Vector2F(1.0f, 1.0f);
 
         /// <summary>
         /// コンテンツのサイズを取得します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public virtual Vector2F ContentSize { get; }
 
         /// <summary>
         /// 左右を反転するかどうかを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool HorizontalFlip
         {
             get => _HorizontalFlip;
@@ -161,12 +164,12 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private bool _HorizontalFlip = false;
 
         /// <summary>
         /// 上下を反転するかどうかを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public bool VerticalFlip
         {
             get => _VerticalFlip;
@@ -178,7 +181,6 @@ namespace Altseed2
                 _RequireCalcTransform = true;
             }
         }
-        [PartsTreeSystem.SerializeField]
         private bool _VerticalFlip = false;
 
         internal override void Registered()
@@ -248,6 +250,7 @@ namespace Altseed2
         /// <summary>
         /// 変形に関する情報
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         private TransformNodeInfo _TransformNodeInfo { get; }
 
         public bool VisibleTransformNodeInfo = Engine.Config.VisibleTransformInfo;
