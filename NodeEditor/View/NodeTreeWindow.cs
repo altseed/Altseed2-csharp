@@ -8,6 +8,7 @@ namespace Altseed2.NodeEditor.View
     {
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeTreeViewModel _viewModel;
+        public NodeTreeViewModel ViewModel { get { return _viewModel; } }
         private readonly NodeEditorPane _pane = new NodeEditorPane("Node");
 
         public NodeTreeWindow(IEditorPropertyAccessor accessor, NodeTreeViewModel viewModel)
