@@ -11,54 +11,36 @@ namespace Altseed2.NodeEditor
     {
         public EngineNode()
         {
-            
-            Engine.RemoveNode(_root);
-            _root = this;
-            Engine.AddNode(_root);
-            
-            _instances.Add(this);
+            _instance = this;
         }
 
-        public static void Reflesh()
+        public static EngineNode GetInstance()
         {
-            foreach(var instance in _instances)
-            {
-                if (View.NodeEditorHost.NodeTree.Root != instance)
-                    Engine.RemoveNode(instance);
-                else
-                    Engine.AddNode(instance);
-            }
+            if (_instance == null) _instance = new EngineNode();
+            return _instance;
         }
 
-        private static EngineNode _root = null;
-        private static List<EngineNode> _instances = new();
+        private static EngineNode _instance;
 
         public override void AddChild(INode node)
         {
-            this.AddChildNode(node as Node);
-            _children.Add(node as Node);
+            Engine.AddNode(node as Node);
         }
 
         public override void RemoveChild(int instanceID)
         {
-            foreach (var c in _children)
-            {
+            var removelist = new List<INode>();
+            foreach (var c in GetChildren())
                 if (c.InstanceID == instanceID)
-                {
-                    _children.Remove(c);
-                    this.RemoveChildNode(c);
-                    return;
-                }
-            }
-        }
+                    removelist.Add(c);
 
-        [SerializeField]
-        private List<Node> _children = new();
+            foreach (var c in removelist)
+                Engine.RemoveNode(c as Node);
+        }
 
         public override IReadOnlyCollection<INode> GetChildren()
         {
-            //return Engine.GetNodes() as IReadOnlyCollection<INode>;
-            return _children;
+            return Engine.GetNodes() as IReadOnlyCollection<INode>;
         }
     }
 }

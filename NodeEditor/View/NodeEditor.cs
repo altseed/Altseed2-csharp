@@ -140,14 +140,12 @@ namespace Altseed2.NodeEditor.View
             if(LoadFilePath != "")
             {
                 var text = System.IO.File.ReadAllText(LoadFilePath);
-                NodeEditorHost.CommandManager = new PartsTreeSystem.CommandManager();
                 NodeEditorHost.NodeTreeGroup = PartsTreeSystem.NodeTreeGroup.Deserialize(text);
                 NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+                NodeEditorHost.CommandManager = new PartsTreeSystem.CommandManager();
 
                 LoadFilePath = "";
             }
-
-            //EngineNode.Reflesh();
         }
 
         private void UpdateMenu()
@@ -199,11 +197,6 @@ namespace Altseed2.NodeEditor.View
                     {
                         LoadFilePath = path;
                     }
-                }
-                if(Engine.Tool.MenuItem("DbgBttuon", "", false, true))
-                {
-                    var actnodes = Engine.GetNodes();
-                    var nodes = NodeEditorHost.NodeTree.Root;
                 }
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();

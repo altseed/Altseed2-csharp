@@ -14,7 +14,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup, 
                 View.NodeEditorHost.NodeTree, 
-                View.NodeEditorHost.NodeTree.Root.InstanceID, 
+                EngineNode.GetInstance().InstanceID, 
                 typeof(SpriteNode), 
                 View.NodeEditorHost.Environment);
         }
@@ -23,7 +23,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
+                EngineNode.GetInstance().InstanceID,
                 typeof(TextNode),
                 View.NodeEditorHost.Environment);
         }
@@ -32,7 +32,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
+                EngineNode.GetInstance().InstanceID,
                 typeof(ArcNode),
                 View.NodeEditorHost.Environment);
         } 
@@ -41,7 +41,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
+                EngineNode.GetInstance().InstanceID,
                 typeof(CircleNode),
                 View.NodeEditorHost.Environment);
         }
@@ -50,7 +50,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
+                EngineNode.GetInstance().InstanceID,
                 typeof(LineNode),
                 View.NodeEditorHost.Environment);
         }
@@ -59,7 +59,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
+                EngineNode.GetInstance().InstanceID,
                 typeof(RectangleNode),
                 View.NodeEditorHost.Environment);
         }
@@ -68,7 +68,7 @@
             View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
+                EngineNode.GetInstance().InstanceID,
                 typeof(TriangleNode),
                 View.NodeEditorHost.Environment);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Altseed2.NodeEditor.ViewModel;
-using System.Linq;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -29,9 +28,7 @@ namespace Altseed2.NodeEditor.View
                 RenderButton("Rectangle", _viewModel.CreateRectangleNode);
                 RenderButton("Triangle", _viewModel.CreateTriangleNode);
 
-                Engine.GetNodes().ToList().ForEach(engineNode => RenderNodeTree(engineNode.Children));
-                //RenderNodeTree(Engine.GetNodes());
-                //RenderNodeTree(NodeEditorHost.NodeTree.Root.GetChildren().Select(n => n as Node));
+                RenderNodeTree(Engine.GetNodes());
             });
         }
 
