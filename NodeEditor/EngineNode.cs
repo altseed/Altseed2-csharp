@@ -11,36 +11,54 @@ namespace Altseed2.NodeEditor
     {
         public EngineNode()
         {
-            _instance = this;
+            
+            Engine.RemoveNode(_root);
+            _root = this;
+            Engine.AddNode(_root);
+            
+            _instances.Add(this);
         }
 
-        public static EngineNode GetInstance()
+        public static void Reflesh()
         {
-            if (_instance == null) _instance = new EngineNode();
-            return _instance;
+            foreach(var instance in _instances)
+            {
+                if (View.NodeEditorHost.NodeTree.Root != instance)
+                    Engine.RemoveNode(instance);
+                else
+                    Engine.AddNode(instance);
+            }
         }
 
-        private static EngineNode _instance;
+        private static EngineNode _root = null;
+        private static List<EngineNode> _instances = new();
 
         public override void AddChild(INode node)
         {
-            Engine.AddNode(node as Node);
+            this.AddChildNode(node as Node);
+            _children.Add(node as Node);
         }
 
         public override void RemoveChild(int instanceID)
         {
-            var removelist = new List<INode>();
-            foreach (var c in GetChildren())
+            foreach (var c in _children)
+            {
                 if (c.InstanceID == instanceID)
-                    removelist.Add(c);
-
-            foreach (var c in removelist)
-                Engine.RemoveNode(c as Node);
+                {
+                    _children.Remove(c);
+                    this.RemoveChildNode(c);
+                    return;
+                }
+            }
         }
+
+        [SerializeField]
+        private List<Node> _children = new();
 
         public override IReadOnlyCollection<INode> GetChildren()
         {
-            return Engine.GetNodes() as IReadOnlyCollection<INode>;
+            //return Engine.GetNodes() as IReadOnlyCollection<INode>;
+            return _children;
         }
     }
 }
