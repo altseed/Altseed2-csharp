@@ -11,6 +11,13 @@ namespace Altseed2.NodeEditor
     {
         public EngineNode()
         {
+            if(_instance != null)
+            {
+                foreach(var node in _instance.GetChildren())
+                {
+                    Engine.RemoveNode(node as Node);
+                }
+            }
             _instance = this;
         }
 
