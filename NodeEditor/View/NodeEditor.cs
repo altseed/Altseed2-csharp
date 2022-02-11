@@ -136,6 +136,16 @@ namespace Altseed2.NodeEditor.View
 
             if (_fontBrowserWindow.IsActive)
                 _fontBrowserWindow.UpdateFontBrowser();
+
+            if(LoadFilePath != "")
+            {
+                var text = System.IO.File.ReadAllText(LoadFilePath);
+                NodeEditorHost.NodeTreeGroup = PartsTreeSystem.NodeTreeGroup.Deserialize(text);
+                NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+                NodeEditorHost.CommandManager = new PartsTreeSystem.CommandManager();
+
+                LoadFilePath = "";
+            }
         }
 
         private void UpdateMenu()
@@ -164,10 +174,35 @@ namespace Altseed2.NodeEditor.View
                     NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
                     NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
                 }
+                if(Engine.Tool.MenuItem("Save", "", false, true))
+                {
+                    var path = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var text = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
+                        var ext = System.IO.Path.GetExtension(path).ToLower();
+
+                        if (ext != ".nodes")
+                        {
+                            path += ".nodes";
+                        }
+
+                        System.IO.File.WriteAllText(path, text);
+                    }
+                }
+                if(Engine.Tool.MenuItem("Load", "", false, true))
+                {
+                    var path = Altseed2.Engine.Tool.OpenDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        LoadFilePath = path;
+                    }
+                }
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }
             MenuHeight = Engine.Tool.GetFrameHeight();
         }
+        string LoadFilePath = "";
     }
 }
