@@ -95,10 +95,9 @@ namespace Altseed2.NodeEditor.View
             CommandManager = new();
 
             NodeTreeGroup = new();
-            NodeTreeGroup.Init(typeof(Node), Environment);
+            NodeTreeGroup.Init(typeof(EngineNode), Environment);
 
             NodeTree = Utility.CreateNodeFromNodeTreeGroup(NodeTreeGroup, Environment);
-            NodeTree = new();
             NodeTree.Root = EngineNode.GetInstance();
 
             NodeTreeGroupEditorProperty = new NodeTreeGroupEditorProperty(NodeTreeGroup, Environment);

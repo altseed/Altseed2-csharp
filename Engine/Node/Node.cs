@@ -461,6 +461,11 @@ namespace Altseed2
         /// エディタ向け
         /// </summary>
         public int InstanceID { get; set; }
+
+        void INode.InsertChild(int index, INode node)
+        {
+
+        }
         #endregion
     }
 }
