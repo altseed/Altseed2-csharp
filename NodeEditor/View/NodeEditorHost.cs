@@ -14,6 +14,9 @@ namespace Altseed2.NodeEditor.View
         private static NodeEditorViewModel _nodeEditorViewModel;
         private static NodeEditor _nodeEditor;
 
+        internal static NodeEditorViewModel NodeEditorViewModel { get { return _nodeEditorViewModel; } }
+        internal static NodeEditor NodeEditor { get { return _nodeEditor; } }
+
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
@@ -89,16 +92,14 @@ namespace Altseed2.NodeEditor.View
             _nodeEditorViewModel = new NodeEditorViewModel();
             _nodeEditor = new NodeEditor(_nodeEditorViewModel);
 
-            EngineNode.GetInstance();
-
             Environment = new();
             CommandManager = new();
 
             NodeTreeGroup = new();
-            NodeTreeGroup.Init(typeof(EngineNode), Environment);
+            NodeTreeGroup.Init(typeof(PrefabNode), Environment);
 
             NodeTree = Utility.CreateNodeFromNodeTreeGroup(NodeTreeGroup, Environment);
-            NodeTree.Root = EngineNode.GetInstance();
+            Engine.AddNode(NodeTree.Root as PrefabNode);
 
             NodeTreeGroupEditorProperty = new NodeTreeGroupEditorProperty(NodeTreeGroup, Environment);
 

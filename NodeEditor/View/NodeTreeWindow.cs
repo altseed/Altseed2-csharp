@@ -8,6 +8,7 @@ namespace Altseed2.NodeEditor.View
     {
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeTreeViewModel _viewModel;
+        public NodeTreeViewModel ViewModel { get { return _viewModel; } }
         private readonly NodeEditorPane _pane = new NodeEditorPane("Node");
 
         public NodeTreeWindow(IEditorPropertyAccessor accessor, NodeTreeViewModel viewModel)
@@ -53,9 +54,27 @@ namespace Altseed2.NodeEditor.View
 
                 bool treeNode = Engine.Tool.TreeNodeEx(node.ToString(), _viewModel.GetNodeStatus(node));
 
-                if (Engine.Tool.IsItemClicked(0))
+                if (Engine.Tool.IsItemClicked(ToolMouseButton.Left))
                 {
                     _viewModel.OnNodeSelected(node);
+                }
+
+                if (Engine.Tool.IsItemClicked(ToolMouseButton.Right))
+                {
+                    var filepath = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+                    if (!string.IsNullOrEmpty(filepath))
+                    {
+                        var t = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
+                        var text = System.IO.Path.GetExtension(filepath).ToLower();
+
+                        if (text != ".nodes")
+                        {
+                            filepath += ".nodes";
+                        }
+
+                        System.IO.File.WriteAllText(filepath, text);
+                    }
+                    NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
                 }
 
                 if (treeNode)

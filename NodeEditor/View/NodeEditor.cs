@@ -15,6 +15,12 @@ namespace Altseed2.NodeEditor.View
         private readonly FontBrowserWindow _fontBrowserWindow;
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
+        public NodeTreeWindow NodeTreeWindow { get { return _nodeTreeWindow; } }
+        public SelectedNodeWindow SelectedNodeWindow { get { return _selectedNodeWindow; } }
+        public PreviewWindow PreviewWindow { get { return _previewWindow; } }
+        public TextureBrowserWindow TextureBrowserWindow { get { return _textureBrowserWindow; } }
+        public FontBrowserWindow FontBrowserWindow { get { return _fontBrowserWindow; }}
+
         private bool _first;
         private Node _selected;
 
@@ -143,7 +149,6 @@ namespace Altseed2.NodeEditor.View
                 NodeEditorHost.NodeTreeGroup = PartsTreeSystem.NodeTreeGroup.Deserialize(text);
                 NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
                 NodeEditorHost.CommandManager = new PartsTreeSystem.CommandManager();
-
                 LoadFilePath = "";
             }
         }
@@ -166,37 +171,19 @@ namespace Altseed2.NodeEditor.View
                 }
                 if(Engine.Tool.MenuItem("Undo", "", false, true))
                 {
-                    NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
-                    NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
+                    Undo();
                 }
                 if(Engine.Tool.MenuItem("Redo", "", false, true))
                 {
-                    NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
-                    NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
+                    Redo();
                 }
                 if(Engine.Tool.MenuItem("Save", "", false, true))
                 {
-                    var path = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        var text = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
-                        var ext = System.IO.Path.GetExtension(path).ToLower();
-
-                        if (ext != ".nodes")
-                        {
-                            path += ".nodes";
-                        }
-
-                        System.IO.File.WriteAllText(path, text);
-                    }
+                    Save();
                 }
                 if(Engine.Tool.MenuItem("Load", "", false, true))
                 {
-                    var path = Altseed2.Engine.Tool.OpenDialog("nodes", System.IO.Directory.GetCurrentDirectory());
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        LoadFilePath = path;
-                    }
+                    Load();
                 }
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
@@ -204,5 +191,52 @@ namespace Altseed2.NodeEditor.View
             MenuHeight = Engine.Tool.GetFrameHeight();
         }
         string LoadFilePath = "";
+
+        public void Undo()
+        {
+            NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
+        }
+
+        public void Redo() 
+        {
+            NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
+        }
+
+        public void Save()
+        {
+            var path = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+            Save(path);
+        }
+
+        public void Save(string filepath)
+        {
+            if (!string.IsNullOrEmpty(filepath))
+            {
+                var text = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
+                var ext = System.IO.Path.GetExtension(filepath).ToLower();
+
+                if (ext != ".nodes")
+                {
+                    filepath += ".nodes";
+                }
+
+                System.IO.File.WriteAllText(filepath, text);
+            }
+            NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+        }
+
+        public void Load()
+        {
+            var path = Altseed2.Engine.Tool.OpenDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+            Load(path);
+        }
+
+        public void Load(string filepath)
+        {
+            if (!string.IsNullOrEmpty(filepath))
+            {
+                LoadFilePath = filepath;
+            }
+        }
     }
 }
