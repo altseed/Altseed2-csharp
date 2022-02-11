@@ -14,6 +14,9 @@ namespace Altseed2.NodeEditor.View
         private static NodeEditorViewModel _nodeEditorViewModel;
         private static NodeEditor _nodeEditor;
 
+        internal static NodeEditorViewModel NodeEditorViewModel { get { return _nodeEditorViewModel; } }
+        internal static NodeEditor NodeEditor { get { return _nodeEditor; } }
+
         /// <summary>
         /// テクスチャ一覧
         /// </summary>

@@ -66,5 +66,67 @@ namespace Altseed2.Test
 
             NodeEditorHost.Terminate();
         }
+
+        [Test, Apartment (ApartmentState.STA)]
+        public void SaveLoad()
+        {
+            NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+
+            var editor = new NodeEditorCSInterface();
+
+            //ToDo : Update挟まなくても大丈夫なように変更。
+            var spriteID = editor.AddNode<SpriteNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var textID = editor.AddNode<TextNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var arcID = editor.AddNode<ArcNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            
+            var circleID = editor.AddNode<CircleNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var lineID = editor.AddNode<LineNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var rectID = editor.AddNode<RectangleNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var triangleID = editor.AddNode<TriangleNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            
+            var sprite = NodeEditorHost.NodeTree.FindInstance(spriteID) as SpriteNode;
+
+            var circle = NodeEditorHost.NodeTree.FindInstance(circleID) as CircleNode;
+            NodeEditorHost.CommandManager.StartEditFields(NodeEditorHost.NodeTreeGroup, NodeEditorHost.NodeTree, circle, NodeEditorHost.Environment);
+            NodeEditorHost.CommandManager.NotifyEditFields(circle);
+            circle.Radius = 100;
+            circle.Position = new Vector2F(500, 500);
+            circle.Color = new Color(255, 0, 100, 255);
+            NodeEditorHost.CommandManager.EndEditFields(circle, NodeEditorHost.Environment);
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            editor.Save("TestData/SaveLoadTest");
+            var before = NodeEditorHost.NodeTree;
+            NodeEditorHost.Terminate();
+
+            NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+            editor = new NodeEditorCSInterface();
+            editor.Load("TestData/SaveLoadTest.nodes");
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            var after = NodeEditorHost.NodeTree;
+
+            NodeEditorHost.Terminate();
+            Assert.True(PartsTreeSystemTest.Helper.IsValueEqual(before, after));
+        }
     }
 }

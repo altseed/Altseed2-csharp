@@ -7,10 +7,17 @@ using PartsTreeSystem;
 
 namespace Altseed2.NodeEditor
 {
-    class EngineNode : Node
+    class EngineNode : INode
     {
         public EngineNode()
         {
+            if(_instance != null)
+            {
+                foreach(var node in _instance.GetChildren())
+                {
+                    Engine.RemoveNode(node as Node);
+                }
+            }
             _instance = this;
         }
 
@@ -22,12 +29,12 @@ namespace Altseed2.NodeEditor
 
         private static EngineNode _instance;
 
-        public override void AddChild(INode node)
+        public void AddChild(INode node)
         {
             Engine.AddNode(node as Node);
         }
 
-        public override void RemoveChild(int instanceID)
+        public void RemoveChild(int instanceID)
         {
             var removelist = new List<INode>();
             foreach (var c in GetChildren())
@@ -38,9 +45,13 @@ namespace Altseed2.NodeEditor
                 Engine.RemoveNode(c as Node);
         }
 
-        public override IReadOnlyCollection<INode> GetChildren()
+        public IReadOnlyCollection<INode> GetChildren()
         {
             return Engine.GetNodes() as IReadOnlyCollection<INode>;
         }
+
+        public void InsertChild(int id, INode node) { }
+
+        public int InstanceID { get; set; }
     }
 }
