@@ -143,7 +143,6 @@ namespace Altseed2.NodeEditor.View
                 NodeEditorHost.NodeTreeGroup = PartsTreeSystem.NodeTreeGroup.Deserialize(text);
                 NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
                 NodeEditorHost.CommandManager = new PartsTreeSystem.CommandManager();
-
                 LoadFilePath = "";
             }
         }
@@ -166,37 +165,19 @@ namespace Altseed2.NodeEditor.View
                 }
                 if(Engine.Tool.MenuItem("Undo", "", false, true))
                 {
-                    NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
-                    NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
+                    Undo();
                 }
                 if(Engine.Tool.MenuItem("Redo", "", false, true))
                 {
-                    NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
-                    NodeEditorHost.NodeTreeGroupEditorProperty.Rebuild();
+                    Redo();
                 }
                 if(Engine.Tool.MenuItem("Save", "", false, true))
                 {
-                    var path = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        var text = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
-                        var ext = System.IO.Path.GetExtension(path).ToLower();
-
-                        if (ext != ".nodes")
-                        {
-                            path += ".nodes";
-                        }
-
-                        System.IO.File.WriteAllText(path, text);
-                    }
+                    Save();
                 }
                 if(Engine.Tool.MenuItem("Load", "", false, true))
                 {
-                    var path = Altseed2.Engine.Tool.OpenDialog("nodes", System.IO.Directory.GetCurrentDirectory());
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        LoadFilePath = path;
-                    }
+                    Load();
                 }
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
@@ -204,5 +185,42 @@ namespace Altseed2.NodeEditor.View
             MenuHeight = Engine.Tool.GetFrameHeight();
         }
         string LoadFilePath = "";
+
+        public void Undo()
+        {
+            NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
+        }
+
+        public void Redo() 
+        {
+            NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
+        }
+
+        public void Save()
+        {
+            var path = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+            if (!string.IsNullOrEmpty(path))
+            {
+                var text = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
+                var ext = System.IO.Path.GetExtension(path).ToLower();
+
+                if (ext != ".nodes")
+                {
+                    path += ".nodes";
+                }
+
+                System.IO.File.WriteAllText(path, text);
+            }
+            NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+        }
+
+        public void Load()
+        {
+            var path = Altseed2.Engine.Tool.OpenDialog("nodes", System.IO.Directory.GetCurrentDirectory());
+            if (!string.IsNullOrEmpty(path))
+            {
+                LoadFilePath = path;
+            }
+        }
     }
 }
