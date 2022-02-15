@@ -5185,6 +5185,10 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetMaterialWithConstantBuffer(IntPtr selfPtr, IntPtr material, IntPtr constantBuffer);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_BeginComputePass(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
@@ -5193,7 +5197,11 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_CommandList_SetComputeBuffer(IntPtr selfPtr, IntPtr buffer, int stride, int unit);
+        private static extern void cbg_CommandList_SetComputeBuffer(IntPtr selfPtr, IntPtr buffer, int stride, int unit, int shaderStage);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetComputePipelineStateWithConstantBuffer(IntPtr selfPtr, IntPtr computePipelineState, IntPtr constantBuffer);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5392,6 +5400,11 @@ namespace Altseed2
             cbg_CommandList_SetIndexBuffer(selfPtr, ib != null ? ib.selfPtr : IntPtr.Zero, stride, offset);
         }
         
+        internal void SetMaterialWithConstantBuffer(Material material, Buffer constantBuffer)
+        {
+            cbg_CommandList_SetMaterialWithConstantBuffer(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, constantBuffer != null ? constantBuffer.selfPtr : IntPtr.Zero);
+        }
+        
         public void BeginComputePass()
         {
             cbg_CommandList_BeginComputePass(selfPtr);
@@ -5402,9 +5415,14 @@ namespace Altseed2
             cbg_CommandList_EndComputePass(selfPtr);
         }
         
-        internal void SetComputeBuffer(Buffer buffer, int stride, int unit)
+        internal void SetComputeBuffer(Buffer buffer, int stride, int unit, ShaderStage shaderStage)
         {
-            cbg_CommandList_SetComputeBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero, stride, unit);
+            cbg_CommandList_SetComputeBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero, stride, unit, (int)shaderStage);
+        }
+        
+        internal void SetComputePipelineStateWithConstantBuffer(ComputePipelineState computePipelineState, Buffer constantBuffer)
+        {
+            cbg_CommandList_SetComputePipelineStateWithConstantBuffer(selfPtr, computePipelineState != null ? computePipelineState.selfPtr : IntPtr.Zero, constantBuffer != null ? constantBuffer.selfPtr : IntPtr.Zero);
         }
         
         public void Dispatch(int x, int y, int z)
@@ -5518,11 +5536,19 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Graphics_ExecuteCommandList(IntPtr selfPtr);
+        private static extern void cbg_Graphics_ExecuteCommandList_(IntPtr selfPtr);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Graphics_WaitFinish(IntPtr selfPtr);
+        private static extern void cbg_Graphics_ExecuteCommandList_CommandList(IntPtr selfPtr, IntPtr commandList);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Graphics_WaitFinish_(IntPtr selfPtr);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Graphics_WaitFinish_CommandList(IntPtr selfPtr, IntPtr commandList);
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5617,12 +5643,22 @@ namespace Altseed2
         
         public void ExecuteCommandList()
         {
-            cbg_Graphics_ExecuteCommandList(selfPtr);
+            cbg_Graphics_ExecuteCommandList_(selfPtr);
+        }
+        
+        public void ExecuteCommandList(CommandList commandList)
+        {
+            cbg_Graphics_ExecuteCommandList_CommandList(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
         
         public void WaitFinish()
         {
-            cbg_Graphics_WaitFinish(selfPtr);
+            cbg_Graphics_WaitFinish_(selfPtr);
+        }
+        
+        public void WaitFinish(CommandList commandList)
+        {
+            cbg_Graphics_WaitFinish_CommandList(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
         
         /// <summary>
@@ -11160,6 +11196,10 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Mouse_SetMouseButtonState(IntPtr selfPtr, int button, int state);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern Vector2F cbg_Mouse_GetPosition(IntPtr selfPtr);
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -11282,6 +11322,11 @@ namespace Altseed2
         {
             var ret = cbg_Mouse_GetMouseButtonState(selfPtr, (int)button);
             return (ButtonState)ret;
+        }
+        
+        public void SetMouseButtonState(MouseButton button, ButtonState state)
+        {
+            cbg_Mouse_SetMouseButtonState(selfPtr, (int)button, (int)state);
         }
         
         /// <summary>
@@ -13387,6 +13432,16 @@ namespace Altseed2
         
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_SetDragDropPayload(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string type, IntPtr data, int cond);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool cbg_Tool_AcceptDragDropPayload(IntPtr selfPtr, [MarshalAs(UnmanagedType.LPWStr)] string type, int dragDropFlags, IntPtr result);
+        
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Tool_ShowDemoWindow(IntPtr selfPtr, [MarshalAs(UnmanagedType.Bool)] [In, Out] ref bool p_open);
         
         [DllImport("Altseed2_Core")]
@@ -14964,6 +15019,20 @@ namespace Altseed2
             if (defaultPath == null) throw new ArgumentNullException(nameof(defaultPath), "引数がnullです");
             var ret = cbg_Tool_PickFolder(selfPtr, defaultPath);
             return System.Runtime.InteropServices.Marshal.PtrToStringUni(ret);
+        }
+        
+        internal bool SetDragDropPayload(string type, Int8Array data, ToolCond cond)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type), "引数がnullです");
+            var ret = cbg_Tool_SetDragDropPayload(selfPtr, type, data != null ? data.selfPtr : IntPtr.Zero, (int)cond);
+            return ret;
+        }
+        
+        internal bool AcceptDragDropPayload(string type, ToolDragDropFlags dragDropFlags, Int8Array result)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type), "引数がnullです");
+            var ret = cbg_Tool_AcceptDragDropPayload(selfPtr, type, (int)dragDropFlags, result != null ? result.selfPtr : IntPtr.Zero);
+            return ret;
         }
         
         public void ShowDemoWindow(ref bool p_open)

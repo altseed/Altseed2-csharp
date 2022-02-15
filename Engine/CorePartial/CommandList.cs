@@ -67,12 +67,12 @@ namespace Altseed2
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="computeBuffer"></param>
-        /// <param name="stride"></param>
         /// <param name="unit"></param>
-        public void SetComputeBuffer<T>(Buffer<T> computeBuffer, int unit) where T : struct
+        /// <param name="shaderStage"></param>
+        public void SetComputeBuffer<T>(Buffer<T> computeBuffer, int unit, ShaderStage shaderStage = ShaderStage.Compute) where T : struct
         {
             int stride = Marshal.SizeOf<T>();
-            SetComputeBuffer(computeBuffer.InternalBuffer, stride, unit);
+            SetComputeBuffer(computeBuffer.InternalBuffer, stride, unit, shaderStage);
         }
 
         public Material Material
@@ -83,6 +83,22 @@ namespace Altseed2
                 value.SetMatrix44F("matProjection", Engine.CurrentCamera.ProjectionMatrix);
                 cbg_CommandList_SetMaterial(this.selfPtr, value != null ? value.selfPtr : IntPtr.Zero);
             }
+        }
+
+        public void SetMaterialWithConstantBuffer<T>(Material material, Buffer<T> constantBuffer) where T : struct
+        {
+            cbg_CommandList_SetMaterialWithConstantBuffer(
+                this.selfPtr,
+                material != null ? material.selfPtr : IntPtr.Zero,
+                constantBuffer != null ? constantBuffer.InternalBuffer.selfPtr : IntPtr.Zero);
+        }
+
+        public void SetComputePipelineStateWithConstantBuffer<T>(ComputePipelineState computePipelineState, Buffer<T> constantBuffer) where T : struct
+        {
+            cbg_CommandList_SetComputePipelineStateWithConstantBuffer(
+                this.selfPtr,
+                computePipelineState != null ? computePipelineState.selfPtr : IntPtr.Zero,
+                constantBuffer != null ? constantBuffer.InternalBuffer.selfPtr : IntPtr.Zero);
         }
     }
 }
