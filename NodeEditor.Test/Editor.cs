@@ -112,7 +112,7 @@ namespace Altseed2.Test
             circle.Position = new Vector2F(500, 500);
             circle.Color = new Color(255, 0, 100, 255);
             NodeEditorHost.CommandManager.EndEditFields(circle, NodeEditorHost.Environment);
-            if (Engine.DoEvents())
+            while (Engine.DoEvents())
                 NodeEditorHost.Update();
             editor.Save("TestData/SaveLoadTest");
             var before = NodeEditorHost.NodeTree;
@@ -121,7 +121,7 @@ namespace Altseed2.Test
             NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
             editor = new NodeEditorCSInterface();
             editor.Load("TestData/SaveLoadTest.nodes");
-            if (Engine.DoEvents())
+            while (Engine.DoEvents())
                 NodeEditorHost.Update();
             var after = NodeEditorHost.NodeTree;
 
