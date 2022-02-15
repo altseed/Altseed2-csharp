@@ -66,5 +66,61 @@ namespace Altseed2.Test
 
             NodeEditorHost.Terminate();
         }
+
+        [Test, Apartment (ApartmentState.STA)]
+        public void Save()
+        {
+            NodeEditorHost.Initialize("Save", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+
+            var editor = new NodeEditorCSInterface();
+
+            var spriteID = editor.AddNode<SpriteNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var textID = editor.AddNode<TextNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var arcID = editor.AddNode<ArcNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            
+            var circleID = editor.AddNode<CircleNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var lineID = editor.AddNode<LineNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var rectID = editor.AddNode<RectangleNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var triangleID = editor.AddNode<TriangleNode>();
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            
+            var sprite = NodeEditorHost.NodeTree.FindInstance(spriteID) as SpriteNode;
+
+            var circle = NodeEditorHost.NodeTree.FindInstance(circleID) as CircleNode;
+            circle.Radius = 100;
+
+            while (Engine.DoEvents()) 
+            {
+                
+
+                NodeEditorHost.Update();
+            }
+
+            NodeEditorHost.Terminate();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void Load()
+        {
+            NodeEditorHost.Initialize("Load", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+        }
     }
 }

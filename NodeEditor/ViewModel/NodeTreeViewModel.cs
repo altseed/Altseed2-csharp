@@ -11,66 +11,42 @@
 
         public void CreateSpriteNode() 
         {
-            View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup, 
-                View.NodeEditorHost.NodeTree, 
-                EngineNode.GetInstance().InstanceID, 
-                typeof(SpriteNode), 
-                View.NodeEditorHost.Environment);
+            CreateNode<SpriteNode>();
         }
         public void CreateTextNode()
         {
-            View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup,
-                View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
-                typeof(TextNode),
-                View.NodeEditorHost.Environment);
+            CreateNode<TextNode>();
         }
         public void CreateArcNode() 
         {
-            View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup,
-                View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
-                typeof(ArcNode),
-                View.NodeEditorHost.Environment);
+            CreateNode<ArcNode>();
         } 
         public void CreateCircleNode()
         {
-            View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup,
-                View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
-                typeof(CircleNode),
-                View.NodeEditorHost.Environment);
+            CreateNode<CircleNode>();
         }
         public void CreateLineNode()
         {
-            View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup,
-                View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
-                typeof(LineNode),
-                View.NodeEditorHost.Environment);
+            CreateNode<LineNode>();
         }
         public void CreateRectangleNode() 
         {
-            View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup,
-                View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
-                typeof(RectangleNode),
-                View.NodeEditorHost.Environment);
+            CreateNode<RectangleNode>();
         }
         public void CreateTriangleNode() 
         {
-            View.NodeEditorHost.CommandManager.AddNode(
+            CreateNode<TriangleNode>();
+        }
+
+        public int CreateNode<NodeType>() where NodeType : Node
+        {
+            return View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
                 EngineNode.GetInstance().InstanceID,
-                typeof(TriangleNode),
-                View.NodeEditorHost.Environment);
+                typeof(NodeType),
+                View.NodeEditorHost.Environment
+            );
         }
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
