@@ -68,12 +68,13 @@ namespace Altseed2.Test
         }
 
         [Test, Apartment (ApartmentState.STA)]
-        public void Save()
+        public void SaveLoad()
         {
-            NodeEditorHost.Initialize("Save", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+            NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
 
             var editor = new NodeEditorCSInterface();
 
+            //ToDo : Update挟まなくても大丈夫なように変更。
             var spriteID = editor.AddNode<SpriteNode>();
             if (Engine.DoEvents())
                 NodeEditorHost.Update();
@@ -105,22 +106,27 @@ namespace Altseed2.Test
             var sprite = NodeEditorHost.NodeTree.FindInstance(spriteID) as SpriteNode;
 
             var circle = NodeEditorHost.NodeTree.FindInstance(circleID) as CircleNode;
+            NodeEditorHost.CommandManager.StartEditFields(NodeEditorHost.NodeTreeGroup, NodeEditorHost.NodeTree, circle, NodeEditorHost.Environment);
+            NodeEditorHost.CommandManager.NotifyEditFields(circle);
             circle.Radius = 100;
-
-            while (Engine.DoEvents()) 
-            {
-                
-
+            circle.Position = new Vector2F(500, 500);
+            circle.Color = new Color(255, 0, 100, 255);
+            NodeEditorHost.CommandManager.EndEditFields(circle, NodeEditorHost.Environment);
+            if (Engine.DoEvents())
                 NodeEditorHost.Update();
-            }
+            editor.Save("TestData/SaveLoadTest");
+            var before = NodeEditorHost.NodeTree;
+            NodeEditorHost.Terminate();
+
+            NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+            editor = new NodeEditorCSInterface();
+            editor.Load("TestData/SaveLoadTest.nodes");
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+            var after = NodeEditorHost.NodeTree;
 
             NodeEditorHost.Terminate();
-        }
-
-        [Test, Apartment(ApartmentState.STA)]
-        public void Load()
-        {
-            NodeEditorHost.Initialize("Load", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+            Assert.True(PartsTreeSystemTest.Helper.IsValueEqual(before, after));
         }
     }
 }

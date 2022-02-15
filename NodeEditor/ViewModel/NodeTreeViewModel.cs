@@ -12,6 +12,7 @@
         public void CreateSpriteNode() 
         {
             CreateNode<SpriteNode>();
+            CreateNode<SpriteNode>();
         }
         public void CreateTextNode()
         {
@@ -40,13 +41,14 @@
 
         public int CreateNode<NodeType>() where NodeType : Node
         {
-            return View.NodeEditorHost.CommandManager.AddNode(
+            var id = View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
                 EngineNode.GetInstance().InstanceID,
                 typeof(NodeType),
                 View.NodeEditorHost.Environment
             );
+            return id;
         }
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
