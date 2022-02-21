@@ -44,10 +44,14 @@
             var id = View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
+                View.NodeEditorHost.NodeTree.Root.InstanceID,
                 typeof(NodeType),
                 View.NodeEditorHost.Environment
             );
+            var newtree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(View.NodeEditorHost.NodeTreeGroup, View.NodeEditorHost.Environment);
+            Engine.RemoveNode(View.NodeEditorHost.NodeTree.Root as Node);
+            View.NodeEditorHost.NodeTree = newtree;
+            Engine.AddNode(View.NodeEditorHost.NodeTree.Root as Node);
             return id;
         }
 
