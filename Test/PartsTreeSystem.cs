@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+using NUnit.Framework;
+using System.Reflection;
+
+namespace Altseed2.Test
+{
+    [TestFixture]
+    class PartsTreeSystem
+    {
+        [Test, Apartment(ApartmentState.STA)]
+        public void Instantiate()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            for(var i = 0; i < 10; i++)
+            {
+                var nodes = PartsTreeInstantiator.Instantiate("testsave.nodes");
+                Engine.AddNode(nodes[0]);
+            }
+
+            var n = new CircleNode();
+
+            for(var j = 0; j < 10; j++)
+                Engine.AddNode(n);
+
+            tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment (ApartmentState.STA)]
+        public void PartsTree()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var partstree = new PartsTree();
+            partstree.Load("testsave.nodes");
+
+            tc.Duration = 200;
+            int spornCount = 5;
+            tc.LoopBody(
+                (_) =>
+                {
+                    for(var i = 0;i < 5;i++)
+                        partstree.InstantiateAndAddToEngine();
+
+                },
+                null
+            );
+
+            Assert.IsTrue(Engine.GetNodes().Count() == spornCount * tc.Duration);
+            tc.End();
+        }
+    }
+}
