@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PartsTreeSystem;
+using System.Reflection;
 
 namespace Altseed2.NodeEditor
 {
@@ -31,7 +32,11 @@ namespace Altseed2.NodeEditor
 
         public void AddChild(INode node)
         {
-            Engine.AddNode(node as Node);
+            nodes.Add(node);
+            if(View.NodeEditorHost.CommandManager != null)
+                Engine.AddNode(node as Node);
+
+            //Hack...
         }
 
         public void RemoveChild(int instanceID)
@@ -42,12 +47,19 @@ namespace Altseed2.NodeEditor
                     removelist.Add(c);
 
             foreach (var c in removelist)
+            {
+                nodes.Remove(c);
                 Engine.RemoveNode(c as Node);
+            }
         }
+
+        [SerializeField]
+        List<INode> nodes = new List<INode>();
 
         public IReadOnlyCollection<INode> GetChildren()
         {
             return Engine.GetNodes() as IReadOnlyCollection<INode>;
+            return nodes;
         }
 
         public void InsertChild(int id, INode node) { }
