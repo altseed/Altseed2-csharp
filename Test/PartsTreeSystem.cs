@@ -27,7 +27,35 @@ namespace Altseed2.Test
                 Engine.AddNode(node);
             }
 
+            var n = new CircleNode();
+
+            for(var j = 0; j < 10; j++)
+                Engine.AddNode(n);
+
             tc.LoopBody(null, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment (ApartmentState.STA)]
+        public void PartsTree()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var partstree = new PartsTree();
+            partstree.Load("testsave.nodes");
+
+            tc.Duration = 200;
+
+            tc.LoopBody(
+                (_) =>
+                {
+                    for(var i = 0;i < 10;i++)
+                        partstree.InstantiateAndAddToEngine();
+                },
+                null
+            );
 
             tc.End();
         }
