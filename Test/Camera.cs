@@ -41,6 +41,36 @@ namespace Altseed2.Test
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void CameraGroup()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Texture = texture;
+            node.CenterPosition = texture.Size / 2;
+            node.CameraGroup = 0b1L << 40;
+            Engine.AddNode(node);
+
+            var camera = new CameraNode();
+            camera.Position = new Vector2F(100, 0);
+            camera.Scale = new Vector2F(2, 2);
+            camera.Group = 0b1L << 40;
+            Engine.AddNode(camera);
+
+            tc.LoopBody(c =>
+            {
+                node.Angle++;
+            }
+            , null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void _RenderTexture()
         {
             var tc = new TestCore();
