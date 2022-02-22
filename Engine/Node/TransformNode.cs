@@ -179,10 +179,10 @@ namespace Altseed2
 
         internal override void Update()
         {
+            base.Update();
+
             if (_RequireCalcTransform || (Transfomer?.RequireCalcTransform ?? false))
                 UpdateTransform();
-
-            base.Update();
         }
 
         /// <summary>
