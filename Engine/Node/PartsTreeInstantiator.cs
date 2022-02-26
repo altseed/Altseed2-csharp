@@ -39,15 +39,6 @@ namespace Altseed2
             {
                 nodes.Add(node);
             }
-            else if (instance.Root.GetType().Name == "PartsTreeNode")
-            {
-                var type = instance.Root.GetType();
-                var children = (List<PartsTreeSystem.INode>)type.GetField("nodes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instance.Root);
-                foreach (var child in children)
-                {
-                    nodes.Add(child as Node);
-                }
-            }
             else
             {
                 throw new Exception();

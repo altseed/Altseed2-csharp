@@ -21,10 +21,7 @@ namespace Altseed2.Test
             for(var i = 0; i < 10; i++)
             {
                 var nodes = PartsTreeInstantiator.Instantiate("testsave.nodes");
-                var node = nodes[0] as CircleNode;
-                node.Position += new Vector2F(i, i) * 20;
-                node.Color = new Color(i * 10, i * 5, i * 2, i * 10);
-                Engine.AddNode(node);
+                Engine.AddNode(nodes[0]);
             }
 
             var n = new CircleNode();
