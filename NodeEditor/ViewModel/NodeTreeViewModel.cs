@@ -44,7 +44,7 @@
             var id = View.NodeEditorHost.CommandManager.AddNode(
                 View.NodeEditorHost.NodeTreeGroup,
                 View.NodeEditorHost.NodeTree,
-                EngineNode.GetInstance().InstanceID,
+                PartsTreeNode.GetInstance().InstanceID,
                 typeof(NodeType),
                 View.NodeEditorHost.Environment
             );

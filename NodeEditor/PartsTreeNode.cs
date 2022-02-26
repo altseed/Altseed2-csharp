@@ -8,27 +8,30 @@ using System.Reflection;
 
 namespace Altseed2.NodeEditor
 {
-    class EngineNode : INode
+    class PartsTreeNode : INode
     {
-        public EngineNode()
+        public PartsTreeNode()
         {
-            if(_instance != null)
+            if (inEditor())
             {
-                foreach(var node in _instance.GetChildren())
+                if(_instance != null)
                 {
-                    Engine.RemoveNode(node as Node);
+                    foreach(var node in _instance.GetChildren())
+                    {
+                        Engine.RemoveNode(node as Node);
+                    }
                 }
+                _instance = this;
             }
-            _instance = this;
         }
 
-        public static EngineNode GetInstance()
+        public static PartsTreeNode GetInstance()
         {
-            if (_instance == null) _instance = new EngineNode();
+            if (_instance == null) _instance = new PartsTreeNode();
             return _instance;
         }
 
-        private static EngineNode _instance;
+        private static PartsTreeNode _instance;
 
         public void AddChild(INode node)
         {
@@ -53,13 +56,19 @@ namespace Altseed2.NodeEditor
             }
         }
 
-        [SerializeField]
         List<INode> nodes = new List<INode>();
 
         public IReadOnlyCollection<INode> GetChildren()
         {
-            return Engine.GetNodes() as IReadOnlyCollection<INode>;
-            return nodes;
+            if (inEditor())
+                return Engine.GetNodes() as IReadOnlyCollection<INode>;
+            else
+                return nodes;
+        }
+
+        private bool inEditor()
+        {
+            return View.NodeEditorHost.CommandManager != null;
         }
 
         public void InsertChild(int id, INode node) { }

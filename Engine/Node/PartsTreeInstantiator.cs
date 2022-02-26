@@ -26,29 +26,7 @@ namespace Altseed2
         public static List<Node> Instantiate(PartsTreeSystem.NodeTreeGroup nodeTreeGroup)
         {
             var env = new PartsTreeSystem.Environment();
-            var instance = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(nodeTreeGroup, env);
-
-            var nodes = new List<Node>();
-
-            if (instance.Root is Node node)
-            {
-                nodes.Add(node);
-            }
-            else if(instance.Root.GetType().Name == "EngineNode")
-            {
-                var type = instance.Root.GetType();
-                var children = (List<PartsTreeSystem.INode>)type.GetField("nodes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instance.Root);
-                foreach(var child in children)
-                {
-                    nodes.Add(child as Node);
-                }
-            }
-            else
-            {
-                throw new Exception();
-            }
-
-            return nodes;
+            return Instantiate(nodeTreeGroup, env);
         }
 
         public static List<Node> Instantiate(PartsTreeSystem.NodeTreeGroup nodeTreeGroup, PartsTreeSystem.Environment environment)
@@ -61,7 +39,7 @@ namespace Altseed2
             {
                 nodes.Add(node);
             }
-            else if (instance.Root.GetType().Name == "EngineNode")
+            else if (instance.Root.GetType().Name == "PartsTreeNode")
             {
                 var type = instance.Root.GetType();
                 var children = (List<PartsTreeSystem.INode>)type.GetField("nodes", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(instance.Root);

@@ -47,16 +47,18 @@ namespace Altseed2.Test
             partstree.Load("testsave.nodes");
 
             tc.Duration = 200;
-
+            int spornCount = 5;
             tc.LoopBody(
                 (_) =>
                 {
-                    for(var i = 0;i < 10;i++)
+                    for(var i = 0;i < 5;i++)
                         partstree.InstantiateAndAddToEngine();
+
                 },
                 null
             );
 
+            Assert.IsTrue(Engine.GetNodes().Count() == spornCount * tc.Duration);
             tc.End();
         }
     }
