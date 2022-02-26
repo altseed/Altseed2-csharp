@@ -22,7 +22,7 @@ namespace Altseed2
 
         public List<Node> Instantiate()
         {
-            return PartsTreeInstantiator.Instantiate(nodeTreeGroup);
+            return PartsTreeInstantiator.Instantiate(nodeTreeGroup, environment);
         }
 
         private PartsTreeSystem.NodeTreeGroup nodeTreeGroup;

@@ -36,7 +36,7 @@ namespace Altseed2.NodeEditor
         public void AddChild(INode node)
         {
             nodes.Add(node);
-            if(View.NodeEditorHost.CommandManager != null)
+            if(inEditor())
                 Engine.AddNode(node as Node);
 
             //Hack...
