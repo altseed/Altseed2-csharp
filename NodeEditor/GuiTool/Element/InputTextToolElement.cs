@@ -47,13 +47,13 @@ namespace Altseed2
                 if ((newStr = Engine.Tool.InputTextMultiline(Name, text, MaxLength, new Vector2F(-1, -1), ToolInputTextFlags.None)) != null)
                 {
                     PropertyInfo.SetValue(Source, newStr);
-                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                    NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
                 }
             }
             else if ((newStr = Engine.Tool.InputText(Name, text, MaxLength, ToolInputTextFlags.None)) != null)
             {
                 PropertyInfo.SetValue(Source, newStr);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

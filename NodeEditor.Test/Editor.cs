@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Altseed2.NodeEditor.View;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2.Test
 {
@@ -72,47 +73,44 @@ namespace Altseed2.Test
         {
             NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
 
-            var editor = new NodeEditorCSInterface();
-
             //ToDo : Update挟まなくても大丈夫なように変更。
-            var spriteID = editor.AddNode<SpriteNode>();
+            var spriteID = NodeEditorModel.AddNode<SpriteNode>();
 
-            var textID = editor.AddNode<TextNode>();
+            var textID = NodeEditorModel.AddNode<TextNode>();
 
-            var arcID = editor.AddNode<ArcNode>();
+            var arcID = NodeEditorModel.AddNode<ArcNode>();
             
-            var circleID = editor.AddNode<CircleNode>();
+            var circleID = NodeEditorModel.AddNode<CircleNode>();
 
-            var lineID = editor.AddNode<LineNode>();
+            var lineID = NodeEditorModel.AddNode<LineNode>();
 
-            var rectID = editor.AddNode<RectangleNode>();
+            var rectID = NodeEditorModel.AddNode<RectangleNode>();
 
-            var triangleID = editor.AddNode<TriangleNode>();
+            var triangleID = NodeEditorModel.AddNode<TriangleNode>();
 
             if (Engine.DoEvents())
                 NodeEditorHost.Update();
 
-            var sprite = NodeEditorHost.NodeTree.FindInstance(spriteID) as SpriteNode;
+            var sprite = NodeEditorModel.FindInstance(spriteID) as SpriteNode;
 
-            var circle = NodeEditorHost.NodeTree.FindInstance(circleID) as CircleNode;
-            NodeEditorHost.CommandManager.StartEditFields(NodeEditorHost.NodeTreeGroup, NodeEditorHost.NodeTree, circle, NodeEditorHost.Environment);
-            NodeEditorHost.CommandManager.NotifyEditFields(circle);
+            var circle = NodeEditorModel.FindInstance(circleID) as CircleNode;
+            NodeEditorModel.StartEditFields(circle);
+            NodeEditorModel.NotifyEditFields(circle);
             circle.Radius = 100;
             circle.Position = new Vector2F(500, 500);
             circle.Color = new Color(255, 0, 100, 255);
-            NodeEditorHost.CommandManager.EndEditFields(circle, NodeEditorHost.Environment);
+            NodeEditorModel.EndEditFields(circle);
             while (Engine.DoEvents())
                 NodeEditorHost.Update();
-            editor.Save("TestData/SaveLoadTest");
-            var before = NodeEditorHost.NodeTree;
+            NodeEditorModel.Save("TestData/SaveLoadTest");
+            var before = NodeEditorModel.NodeTree;
             NodeEditorHost.Terminate();
 
             NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
-            editor = new NodeEditorCSInterface();
-            editor.Load("TestData/SaveLoadTest.nodes");
+            NodeEditorModel.Load("TestData/SaveLoadTest.nodes");
             while (Engine.DoEvents())
                 NodeEditorHost.Update();
-            var after = NodeEditorHost.NodeTree;
+            var after = NodeEditorModel.NodeTree;
 
             NodeEditorHost.Terminate();
             Assert.True(PartsTreeSystemTest.Helper.IsValueEqual(before, after));

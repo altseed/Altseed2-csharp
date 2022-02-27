@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Altseed2.GuiTool.Factory;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -25,7 +26,7 @@ namespace Altseed2.NodeEditor.View
             _pane.Render(() =>
             {
                 if(_accessor.Selected != null)
-                    View.NodeEditorHost.CommandManager.StartEditFields(NodeEditorHost.NodeTreeGroup, NodeEditorHost.NodeTree, _accessor.Selected , NodeEditorHost.Environment); 
+                    NodeEditorModel.StartEditFields(_accessor.Selected);
                 if (_selectedToolElements != null)
                 {
                     Engine.Tool.PushID("Selected".GetHashCode());
@@ -43,7 +44,7 @@ namespace Altseed2.NodeEditor.View
                 }
 
                 if (_accessor.Selected != null)
-                    View.NodeEditorHost.CommandManager.EndEditFields(_accessor.Selected, NodeEditorHost.Environment);
+                    NodeEditorModel.EndEditFields(_accessor.Selected);
             });
         }
 

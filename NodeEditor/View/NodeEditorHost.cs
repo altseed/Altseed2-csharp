@@ -14,9 +14,6 @@ namespace Altseed2.NodeEditor.View
         private static NodeEditorViewModel _nodeEditorViewModel;
         private static NodeEditor _nodeEditor;
 
-        internal static NodeEditorViewModel NodeEditorViewModel { get { return _nodeEditorViewModel; } }
-        internal static NodeEditor NodeEditor { get { return _nodeEditor; } }
-
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
@@ -58,18 +55,6 @@ namespace Altseed2.NodeEditor.View
             set => _nodeEditor.Selected = value as Node;
         }
 
-        #region PartsTreeSystem
-        public static CommandManager CommandManager;
-
-        public static PartsTreeSystem.Environment Environment;
-
-        public static NodeTreeGroup NodeTreeGroup;
-
-        public static NodeTree NodeTree;
-
-        public static NodeTreeGroupEditorProperty NodeTreeGroupEditorProperty;
-        #endregion
-
         /// <summary>
         /// エディターを初期化する
         /// </summary>
@@ -80,37 +65,13 @@ namespace Altseed2.NodeEditor.View
         /// <returns></returns>
         public static bool Initialize(string title, int width, int height, Configuration config = null )
         {
-            config ??= new Configuration();
-            config.EnabledCoreModules |= CoreModules.Tool;
-            config.IsResizable = true;
-            config.VisibleTransformInfo = true;
-
-            var res = Engine.Initialize(title, width, height, config);
-            Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
-            Engine.Tool.ToolUsage = ToolUsage.Main;
-
+            var res = Model.NodeEditorModel.Initialize( title, width, height, config );
+            if (!res)
+                return false;
             _nodeEditorViewModel = new NodeEditorViewModel();
             _nodeEditor = new NodeEditor(_nodeEditorViewModel);
 
-            Environment = new();
-            CommandManager = new();
-
-            NodeTreeGroup = new();
-            NodeTreeGroup.Init(typeof(Node), Environment);
-
-            NodeTree = Utility.CreateNodeFromNodeTreeGroup(NodeTreeGroup, Environment);
-            Engine.AddNode(NodeTree.Root as Node);
-
-            NodeTreeGroupEditorProperty = new NodeTreeGroupEditorProperty(NodeTreeGroup, Environment);
-
             return res;
-        }
-
-        public static void ReconstructNodeTree()
-        {
-            var newtree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(View.NodeEditorHost.NodeTreeGroup, View.NodeEditorHost.Environment);
-            NodeTree = newtree;
-            Engine.AddNode(View.NodeEditorHost.NodeTree.Root as Node);
         }
 
         /// <summary>
@@ -119,17 +80,9 @@ namespace Altseed2.NodeEditor.View
         /// <returns></returns>
         public static bool Update()
         {
-            foreach(var node in Engine.GetNodes())
-            {
-                if(node != NodeTree.Root)
-                {
-                    Engine.RemoveNode(node);
-                }
-            }
-
             _nodeEditor.Render();
 
-            return Engine.UpdateComponents(true, true);
+            return Model.NodeEditorModel.Update();
         }
 
         /// <summary>
@@ -138,7 +91,8 @@ namespace Altseed2.NodeEditor.View
         public static void Terminate()
         {
             _nodeEditor.Dispose();
-            Engine.Terminate();
+            
+            Model.NodeEditorModel.Terminate();
         }
     }
 }
