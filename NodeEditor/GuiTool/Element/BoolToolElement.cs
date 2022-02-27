@@ -1,4 +1,5 @@
 ﻿using System;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2
 {
@@ -32,7 +33,7 @@ namespace Altseed2
             if (Engine.Tool.Checkbox(Name, ref flag))
             {
                 PropertyInfo.SetValue(Source, flag);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

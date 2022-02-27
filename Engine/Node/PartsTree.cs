@@ -23,8 +23,6 @@ namespace Altseed2
         public void Load(Node original)
         {
             throw new NotImplementedException();
-            data = PartsTreeSystem.JsonSerializer.Serialize(original);
-            type = PartsTreeOriginalType.Instance;
         }
 
         public void InstantiateAndAddToEngine()
@@ -40,7 +38,7 @@ namespace Altseed2
                     return PartsTreeInstantiator.Instantiate(nodeTreeGroup, environment);
 
                 case PartsTreeOriginalType.Instance:
-                    return PartsTreeSystem.JsonSerializer.Deserialize<Node>(data);
+                    throw new NotImplementedException();
 
                 default:
                     return null;

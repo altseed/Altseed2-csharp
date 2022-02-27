@@ -45,7 +45,7 @@ namespace Altseed2
                 {
                     NodeEditorHost.FontBrowserTarget = this;
                     Engine.Tool.SetWindowFocus("Font Browser");
-                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                    NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
                 }
             }
             else
@@ -54,7 +54,7 @@ namespace Altseed2
                 {
                     NodeEditorHost.FontBrowserTarget = this;
                     Engine.Tool.SetWindowFocus("Font Browser");
-                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                    NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
                 }
             }
             Engine.Tool.SameLine(0, -1);

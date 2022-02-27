@@ -1,4 +1,6 @@
-﻿namespace Altseed2.NodeEditor.ViewModel
+﻿using Altseed2.NodeEditor.Model;
+
+namespace Altseed2.NodeEditor.ViewModel
 {
     internal sealed class NodeTreeViewModel
     {
@@ -11,45 +13,31 @@
 
         public void CreateSpriteNode() 
         {
-            CreateNode<SpriteNode>();
-            CreateNode<SpriteNode>();
+            NodeEditorModel.AddNode<SpriteNode>();
         }
         public void CreateTextNode()
         {
-            CreateNode<TextNode>();
+            NodeEditorModel.AddNode<TextNode>();
         }
         public void CreateArcNode() 
         {
-            CreateNode<ArcNode>();
+            NodeEditorModel.AddNode<ArcNode>();
         } 
         public void CreateCircleNode()
         {
-            CreateNode<CircleNode>();
+            NodeEditorModel.AddNode<CircleNode>();
         }
         public void CreateLineNode()
         {
-            CreateNode<LineNode>();
+            NodeEditorModel.AddNode<LineNode>();
         }
         public void CreateRectangleNode() 
         {
-            CreateNode<RectangleNode>();
+            NodeEditorModel.AddNode<RectangleNode>();
         }
         public void CreateTriangleNode() 
         {
-            CreateNode<TriangleNode>();
-        }
-
-        public int CreateNode<NodeType>() where NodeType : Node
-        {
-            var id = View.NodeEditorHost.CommandManager.AddNode(
-                View.NodeEditorHost.NodeTreeGroup,
-                View.NodeEditorHost.NodeTree,
-                View.NodeEditorHost.NodeTree.Root.InstanceID,
-                typeof(NodeType),
-                View.NodeEditorHost.Environment
-            );
-            View.NodeEditorHost.ReconstructNodeTree();
-            return id;
+            NodeEditorModel.AddNode<TriangleNode>();
         }
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)

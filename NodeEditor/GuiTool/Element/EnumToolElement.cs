@@ -34,7 +34,7 @@ namespace Altseed2
             if (Engine.Tool.Combo(Name, ref current, Enum.GetNames(PropertyInfo.PropertyType), -1))
             {
                 PropertyInfo.SetValue(Source, current);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

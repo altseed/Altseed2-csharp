@@ -196,7 +196,7 @@ namespace Altseed2
                     SelectedItemPropertyInfo?.SetValue(Source, list[current]);
 
                 SelectedItemIndexPropertyInfo?.SetValue(Source, current);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
 
             if (AddMethodInfo != null && Engine.Tool.SmallButton("+"))

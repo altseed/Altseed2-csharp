@@ -56,7 +56,7 @@ namespace Altseed2
             if (Engine.Tool.DragFloat(Name, ref num, Speed, Min, Max, "%.1f", ToolSliderFlags.None))
             {
                 PropertyInfo.SetValue(Source, num);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
             else
             {
