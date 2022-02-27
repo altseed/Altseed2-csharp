@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Altseed2
 {
-    public static class PartsTreeInstantiator
+    internal static class PartsTreeInstantiator
     {
         public static PartsTreeSystem.NodeTreeGroup LoadNodeTree(string path)
         {
