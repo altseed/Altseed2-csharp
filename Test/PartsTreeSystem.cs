@@ -20,8 +20,8 @@ namespace Altseed2.Test
 
             for(var i = 0; i < 10; i++)
             {
-                var nodes = PartsTreeInstantiator.Instantiate("testsave.nodes");
-                Engine.AddNode(nodes[0]);
+                var node = PartsTreeInstantiator.Instantiate("testsave.nodes");
+                Engine.AddNode(node);
             }
 
             var n = new CircleNode();
