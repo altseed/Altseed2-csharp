@@ -48,10 +48,7 @@
                 typeof(NodeType),
                 View.NodeEditorHost.Environment
             );
-            var newtree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(View.NodeEditorHost.NodeTreeGroup, View.NodeEditorHost.Environment);
-            Engine.RemoveNode(View.NodeEditorHost.NodeTree.Root as Node);
-            View.NodeEditorHost.NodeTree = newtree;
-            Engine.AddNode(View.NodeEditorHost.NodeTree.Root as Node);
+            View.NodeEditorHost.ReconstructNodeTree();
             return id;
         }
 

@@ -147,9 +147,9 @@ namespace Altseed2.NodeEditor.View
             {
                 var text = System.IO.File.ReadAllText(LoadFilePath);
                 NodeEditorHost.NodeTreeGroup = PartsTreeSystem.NodeTreeGroup.Deserialize(text);
-                NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
-                NodeEditorHost.CommandManager = new PartsTreeSystem.CommandManager();
+                
                 LoadFilePath = "";
+                NodeEditorHost.ReconstructNodeTree();
             }
         }
 
@@ -195,11 +195,17 @@ namespace Altseed2.NodeEditor.View
         public void Undo()
         {
             NodeEditorHost.CommandManager.Undo(NodeEditorHost.Environment);
+            Engine.RemoveNode(NodeEditorHost.NodeTree.Root as Node);
+            NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+            Engine.AddNode(NodeEditorHost.NodeTree.Root as Node);
         }
 
         public void Redo() 
         {
             NodeEditorHost.CommandManager.Redo(NodeEditorHost.Environment);
+            Engine.RemoveNode(NodeEditorHost.NodeTree.Root as Node);
+            NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+            Engine.AddNode(NodeEditorHost.NodeTree.Root as Node);
         }
 
         public void Save()
@@ -222,7 +228,7 @@ namespace Altseed2.NodeEditor.View
 
                 System.IO.File.WriteAllText(filepath, text);
             }
-            NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
+            NodeEditorHost.ReconstructNodeTree();
         }
 
         public void Load()
