@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2
 {
@@ -56,7 +57,7 @@ namespace Altseed2
             if (Engine.Tool.Button(Name))
             {
                 MethodInfo?.Invoke(Source, new object[] { });
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

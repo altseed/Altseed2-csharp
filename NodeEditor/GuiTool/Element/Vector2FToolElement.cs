@@ -60,7 +60,7 @@ namespace Altseed2
                 vector.X = vectorArray[0];
                 vector.Y = vectorArray[1];
                 PropertyInfo.SetValue(Source, vector);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 
