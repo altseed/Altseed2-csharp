@@ -56,7 +56,7 @@ namespace Altseed2
             if (Engine.Tool.DragInt(Name, ref num, Speed, Min, Max, "%d", ToolSliderFlags.None))
             {
                 PropertyInfo.SetValue(Source, num);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

@@ -40,7 +40,7 @@ namespace Altseed2
             if (Engine.Tool.ColorEdit4(Name, ref color, Flags))
             {
                 PropertyInfo.SetValue(Source, color);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

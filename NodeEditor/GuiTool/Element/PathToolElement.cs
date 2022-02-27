@@ -94,7 +94,7 @@ namespace Altseed2
             if ((newPath = Engine.Tool.InputText(Name, path, MaxLength, ToolInputTextFlags.None)) != null)
             {
                 PropertyInfo.SetValue(Source, newPath);
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                Altseed2.NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
 
             if (Engine.Tool.SmallButton("..."))
@@ -107,7 +107,7 @@ namespace Altseed2
                 {
                     SetPath(newPath);
                 }
-                NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

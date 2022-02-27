@@ -44,7 +44,7 @@ namespace Altseed2
                 {
                     NodeEditorHost.TextureBrowserTarget = this;
                     Engine.Tool.SetWindowFocus("Texture Browser");
-                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                    NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
                 }
             }
             else
@@ -53,7 +53,7 @@ namespace Altseed2
                 {
                     NodeEditorHost.TextureBrowserTarget = this;
                     Engine.Tool.SetWindowFocus("Texture Browser");
-                    NodeEditor.View.NodeEditorHost.CommandManager.NotifyEditFields(owner);
+                    NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
                 }
             }
             Engine.Tool.SameLine(0, -1);

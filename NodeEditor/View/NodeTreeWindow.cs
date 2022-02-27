@@ -59,24 +59,6 @@ namespace Altseed2.NodeEditor.View
                     _viewModel.OnNodeSelected(node);
                 }
 
-                if (Engine.Tool.IsItemClicked(ToolMouseButton.Right))
-                {
-                    var filepath = Altseed2.Engine.Tool.SaveDialog("nodes", System.IO.Directory.GetCurrentDirectory());
-                    if (!string.IsNullOrEmpty(filepath))
-                    {
-                        var t = NodeEditorHost.NodeTreeGroup.Serialize(NodeEditorHost.Environment);
-                        var text = System.IO.Path.GetExtension(filepath).ToLower();
-
-                        if (text != ".nodes")
-                        {
-                            filepath += ".nodes";
-                        }
-
-                        System.IO.File.WriteAllText(filepath, text);
-                    }
-                    NodeEditorHost.NodeTree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(NodeEditorHost.NodeTreeGroup, NodeEditorHost.Environment);
-                }
-
                 if (treeNode)
                 {
                     RenderNodeTree(node.Children);
