@@ -17,34 +17,31 @@ namespace Altseed2
             return group;
         }
 
-        public static List<Node> Instantiate(string path)
+        public static Node Instantiate(string path)
         {
             var group = LoadNodeTree(path);
             return Instantiate(group);
         }
 
-        public static List<Node> Instantiate(PartsTreeSystem.NodeTreeGroup nodeTreeGroup)
+        public static Node Instantiate(PartsTreeSystem.NodeTreeGroup nodeTreeGroup)
         {
             var env = new PartsTreeSystem.Environment();
             return Instantiate(nodeTreeGroup, env);
         }
 
-        public static List<Node> Instantiate(PartsTreeSystem.NodeTreeGroup nodeTreeGroup, PartsTreeSystem.Environment environment)
+        public static Node Instantiate(PartsTreeSystem.NodeTreeGroup nodeTreeGroup, PartsTreeSystem.Environment environment)
         {
             var instance = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(nodeTreeGroup, environment);
 
-            var nodes = new List<Node>();
 
             if (instance.Root is Node node)
             {
-                nodes.Add(node);
+                return node;
             }
             else
             {
                 throw new Exception();
             }
-
-            return nodes;
         }
     }
 }
