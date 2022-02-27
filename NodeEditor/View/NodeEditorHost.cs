@@ -106,12 +106,27 @@ namespace Altseed2.NodeEditor.View
             return res;
         }
 
+        public static void ReconstructNodeTree()
+        {
+            var newtree = PartsTreeSystem.Utility.CreateNodeFromNodeTreeGroup(View.NodeEditorHost.NodeTreeGroup, View.NodeEditorHost.Environment);
+            NodeTree = newtree;
+            Engine.AddNode(View.NodeEditorHost.NodeTree.Root as Node);
+        }
+
         /// <summary>
         /// 更新処理を行う。
         /// </summary>
         /// <returns></returns>
         public static bool Update()
         {
+            foreach(var node in Engine.GetNodes())
+            {
+                if(node != NodeTree.Root)
+                {
+                    Engine.RemoveNode(node);
+                }
+            }
+
             _nodeEditor.Render();
 
             return Engine.UpdateComponents(true, true);
