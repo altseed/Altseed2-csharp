@@ -11,10 +11,7 @@ namespace Altseed2
     /// </summary>
     public class PartsTree
     {
-        /// <summary>
-        /// <see cref="PartsTree"/>の新しいインスタンスを生成します。
-        /// </summary>
-        public enum PartsTreeOriginalType
+        enum PartsTreeOriginalType
         {
             File,
             Instance,
