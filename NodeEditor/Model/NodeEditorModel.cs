@@ -124,9 +124,9 @@ namespace Altseed2.NodeEditor.Model
             return id;
         }
 
-        public static IInstanceID FindInstance(int instanceID)
+        public static Node FindInstance(int instanceID)
         {
-            return _nodeTree.FindInstance(instanceID);
+            return _nodeTree.FindInstance(instanceID) as Node;
         }
 
         public static void NotifyEditFields(IInstanceID node)
