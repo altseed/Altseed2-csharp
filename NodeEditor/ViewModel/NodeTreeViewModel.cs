@@ -42,10 +42,34 @@ namespace Altseed2.NodeEditor.ViewModel
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
         {
-            var flags = ToolTreeNodeFlags.OpenOnArrow;
-
+            var flags = new ToolTreeNodeFlags();
             if (node == _accessor.Selected)
+            {
                 flags |= ToolTreeNodeFlags.Selected;
+            } 
+
+            bool hasSelectedChild(Node node)
+            {
+                if (node == null)
+                    return false;
+
+                if (node == _accessor.Selected)
+                    return true;
+
+                if (node.Children.Count == 0)
+                    return false;
+
+                foreach (var child in node.Children)
+                    if(hasSelectedChild(child))
+                        return true;
+
+                return false;
+            }
+
+            if (hasSelectedChild(_accessor.Selected))
+                flags |= ToolTreeNodeFlags.DefaultOpen;
+            else
+                flags |= ToolTreeNodeFlags.OpenOnArrow;
 
             if (node.Children.Count == 0)
                 flags |= ToolTreeNodeFlags.Leaf;
