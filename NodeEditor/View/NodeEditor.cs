@@ -45,16 +45,29 @@ namespace Altseed2.NodeEditor.View
         /// </summary>
         public Node Selected
         {
-            get => _selected;
+            get
+            {
+                if(_selected == null)
+                    return null;
+
+                if (!_selected.IsRegistered)
+                {
+                    _selected = NodeEditorModel.FindInstance(_selectedNodeInstanceID);
+                    _onSelectedNodeChanged.OnNext(Unit.Default);
+                }
+                    
+                return _selected;
+            }
             set
             {
-                if (value == _selected)
+                if (value.InstanceID == _selectedNodeInstanceID)
                     return;
                 _selected = value;
-
+                _selectedNodeInstanceID = value.InstanceID;
                 _onSelectedNodeChanged.OnNext(Unit.Default);
             }
         }
+        private int _selectedNodeInstanceID = -1;
 
         public float MenuHeight { get; private set; } = 20;
 
