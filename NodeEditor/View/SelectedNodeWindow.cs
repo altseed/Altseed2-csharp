@@ -30,9 +30,6 @@ namespace Altseed2.NodeEditor.View
                 if (_selectedToolElements != null)
                 {
                     Engine.Tool.PushID("Selected".GetHashCode());
-#if DEBUG
-                    Engine.Tool.Text(_accessor.Selected.InstanceID.ToString());
-#endif
                     foreach (var toolElement in _selectedToolElements)
                     {
                         Engine.Tool.PushID(toolElement.GetHashCode());
