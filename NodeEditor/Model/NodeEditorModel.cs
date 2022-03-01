@@ -105,7 +105,6 @@ namespace Altseed2.NodeEditor.Model
             {
                 var text = System.IO.File.ReadAllText(filepath);
                 _nodeTreeGroup = NodeTreeGroup.Deserialize(text);
-
             }
             
             ReconstructNodeTree();
@@ -113,15 +112,45 @@ namespace Altseed2.NodeEditor.Model
 
         public static int AddNode<NodeType>() where NodeType : Node
         {
+            var id = AddNode<NodeType>(_nodeTree.Root as Node);
+            return id;
+        }
+
+        public static int AddNode<NodeType>(Node parent) where NodeType : Node
+        {
             var id = _commandManager.AddNode(
                 _nodeTreeGroup,
                 _nodeTree,
-                _nodeTree.Root.InstanceID,
+                parent.InstanceID,
                 typeof(NodeType),
                 _environment
             );
             ReconstructNodeTree();
             return id;
+        }
+
+        public static void RemoveNode(Node node)
+        {
+            //_commandManager.RemoveNode(_nodeTreeGroup, _nodeTree, node.InstanceID, _environment);
+
+            void removeLeaf(Node node)
+            {
+                if (node == null)
+                    return;
+
+                foreach(var child in node.GetChildren())
+                    removeLeaf(child as Node);
+
+                _commandManager.RemoveNode(_nodeTreeGroup, _nodeTree, node.InstanceID, _environment);
+            }
+
+            removeLeaf(node);
+            ReconstructNodeTree();
+        }
+
+        public static bool isRemovable(Node node)
+        {
+            return _nodeTree.Root != node;
         }
 
         public static Node FindInstance(int instanceID)
