@@ -59,6 +59,13 @@ namespace Altseed2.NodeEditor.View
                     _viewModel.OnNodeSelected(node);
                 }
 
+                if (Engine.Tool.IsItemClicked(ToolMouseButton.Right))
+                {
+                    Engine.Tool.OpenPopup(menuKey, ToolPopupFlags.None);
+                }
+
+                RenderPopupMenu(node);
+
                 if (treeNode)
                 {
                     RenderNodeTree(node.Children);
@@ -68,5 +75,45 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.PopID();
             }
         }
+
+        private void RenderPopupMenu(Node clicked)
+        {
+            if(Altseed2.Engine.Tool.BeginPopup(menuKey, Altseed2.ToolWindowFlags.None))
+            {
+                //add node
+                if(Altseed2.Engine.Tool.BeginMenu("add child node", true))
+                {
+                    void render<NodeType>() where NodeType : Node
+                    {
+                        if (Engine.Tool.MenuItem(typeof(NodeType).Name, "", false, true))
+                        {
+                            Model.NodeEditorModel.AddNode<NodeType>(clicked);
+                            Engine.Tool.CloseCurrentPopup();
+                        }
+                    }
+
+                    render<SpriteNode>();
+                    render<TextNode>();
+                    render<ArcNode>();
+                    render<CircleNode>();
+                    render<LineNode>();
+                    render<RectangleNode>();
+                    render<TriangleNode>();
+                    
+
+                    Engine.Tool.EndMenu();
+                }
+
+                //remove
+                if (Model.NodeEditorModel.isRemovable(clicked))
+                    if(Engine.Tool.MenuItem("remove", "", false, true))
+                    {
+                        Model.NodeEditorModel.RemoveNode(clicked);
+                    }
+
+                Altseed2.Engine.Tool.EndPopup();
+            }
+        }
+        string menuKey = "popupmenu";
     }
 }
