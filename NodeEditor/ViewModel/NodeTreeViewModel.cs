@@ -13,31 +13,38 @@ namespace Altseed2.NodeEditor.ViewModel
 
         public void CreateSpriteNode() 
         {
-            NodeEditorModel.AddNode<SpriteNode>();
+            var newnodeid = NodeEditorModel.AddNode<SpriteNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
         public void CreateTextNode()
         {
-            NodeEditorModel.AddNode<TextNode>();
+            var newnodeid = NodeEditorModel.AddNode<TextNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
         public void CreateArcNode() 
         {
-            NodeEditorModel.AddNode<ArcNode>();
+            var newnodeid = NodeEditorModel.AddNode<ArcNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         } 
         public void CreateCircleNode()
         {
-            NodeEditorModel.AddNode<CircleNode>();
+            var newnodeid = NodeEditorModel.AddNode<CircleNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
         public void CreateLineNode()
         {
-            NodeEditorModel.AddNode<LineNode>();
+            var newnodeid = NodeEditorModel.AddNode<LineNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
         public void CreateRectangleNode() 
         {
-            NodeEditorModel.AddNode<RectangleNode>();
+            var newnodeid = NodeEditorModel.AddNode<RectangleNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
         public void CreateTriangleNode() 
         {
-            NodeEditorModel.AddNode<TriangleNode>();
+            var newnodeid = NodeEditorModel.AddNode<TriangleNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
