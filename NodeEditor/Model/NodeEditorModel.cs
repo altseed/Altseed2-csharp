@@ -7,10 +7,38 @@ using PartsTreeSystem;
 
 namespace Altseed2.NodeEditor.Model
 {
+    class Environment : PartsTreeSystem.Environment
+    {
+        Dictionary<PartsTreeSystem.Asset, string> pathes = new Dictionary<PartsTreeSystem.Asset, string>();
+        public Dictionary<PartsTreeSystem.Asset, int> instantIDs = new Dictionary<PartsTreeSystem.Asset,int>();
+
+        public override PartsTreeSystem.Asset GetAsset(string path)
+        {
+            if (pathes.ContainsValue(path))
+            {
+                return pathes.Where(_ => _.Value == path).FirstOrDefault().Key;
+            }
+            var text = System.IO.File.ReadAllText(path);
+            var nodeTreeGroup = PartsTreeSystem.NodeTreeGroup.Deserialize(text);
+
+            pathes.Add(nodeTreeGroup, path);
+            return nodeTreeGroup;
+        }
+
+        public override string GetAssetPath(PartsTreeSystem.Asset asset)
+        {
+            if (pathes.TryGetValue(asset, out var path))
+            {
+                return System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), path);
+            }
+            return System.IO.Directory.GetCurrentDirectory();
+        }
+    }
+
     public static class NodeEditorModel
     {
         private static CommandManager _commandManager;
-        private static PartsTreeSystem.Environment _environment;
+        private static Environment _environment;
         private static NodeTreeGroup _nodeTreeGroup;
         private static NodeTree _nodeTree;
 
@@ -25,7 +53,9 @@ namespace Altseed2.NodeEditor.Model
             Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
             Engine.Tool.ToolUsage = ToolUsage.Main;
 
-            _environment = new PartsTreeSystem.Environment();
+            LoadPartsFile("./");
+
+            _environment = new Environment();
             _commandManager = new CommandManager();
             _nodeTreeGroup = new();
             _nodeTreeGroup.Init(typeof(Node), _environment);
@@ -171,6 +201,42 @@ namespace Altseed2.NodeEditor.Model
         public static void EndEditFields(IInstanceID node)
         {
             _commandManager.EndEditFields(node, _environment);
+        }
+
+
+        static List<string> partsfilepathes = new() ;
+        public static void LoadPartsFile(string path)
+        {
+            foreach (var p in System.IO.Directory.GetFiles(path, "*.nodes"))
+                partsfilepathes.Add(p);
+        }
+
+        public static List<string> GetPartsPathes()
+        {
+            return partsfilepathes ;
+        }
+
+        public static void AddNodeTreeGroup(string path, int parentID)
+        {
+            var addingNodeTreeGroup = _environment.GetAsset(path) as PartsTreeSystem.NodeTreeGroup;
+            var id = _commandManager.AddNode(_nodeTreeGroup, _nodeTree, parentID, addingNodeTreeGroup, _environment);
+            _environment.instantIDs.Add(addingNodeTreeGroup, id );
+            ReconstructNodeTree();
+        }
+
+        public static bool IsAsset(Node node, out string path)
+        {
+            foreach(var o in _environment.instantIDs)
+            {
+                if(node.InstanceID == o.Value)
+                {
+                    path = _environment.GetAssetPath(o.Key);
+                    return true;
+                }
+            }
+
+            path = String.Empty;
+            return false;
         }
     }
 }
