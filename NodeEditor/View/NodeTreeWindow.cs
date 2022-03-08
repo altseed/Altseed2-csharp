@@ -103,6 +103,22 @@ namespace Altseed2.NodeEditor.View
 
                     Engine.Tool.EndMenu();
                 }
+                //add parts
+                if (Engine.Tool.BeginMenu("add parts", true))
+                {
+                    void render(string path)
+                    {
+                        if(Engine.Tool.MenuItem(path, "", false, true))
+                        {
+                            Model.NodeEditorModel.AddNodeTreeGroup(path, clicked.InstanceID);
+                        }
+                    }
+
+                    foreach(var p in Model.NodeEditorModel.GetPartsPathes())
+                        render(p);
+
+                    Engine.Tool.EndMenu();
+                }
 
                 //remove
                 if (Model.NodeEditorModel.isRemovable(clicked))
@@ -110,6 +126,15 @@ namespace Altseed2.NodeEditor.View
                     {
                         Model.NodeEditorModel.RemoveNode(clicked);
                     }
+
+                //mod partstree
+                if (Model.NodeEditorModel.IsAsset(clicked, out string path))
+                {
+                    if(Engine.Tool.MenuItem("modify asset", "", false, true))
+                    {
+                        Model.NodeEditorModel.Load(path);
+                    }
+                }
 
                 Altseed2.Engine.Tool.EndPopup();
             }
