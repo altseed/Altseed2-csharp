@@ -145,7 +145,6 @@ namespace Altseed2
         /// <summary>
         /// コンテンツのサイズを取得します。
         /// </summary>
-        [PartsTreeSystem.SerializeField]
         public virtual Vector2F ContentSize { get; }
 
         /// <summary>

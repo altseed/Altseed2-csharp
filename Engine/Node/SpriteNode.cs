@@ -219,7 +219,6 @@ namespace Altseed2
         #endregion
 
         /// <inheritdoc/>
-        [PartsTreeSystem.SerializeField]
         public sealed override Vector2F ContentSize => Src.Size;
     }
 }

@@ -250,7 +250,6 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
-        [PartsTreeSystem.SerializeField]
         public sealed override Vector2F ContentSize
         {
             get
