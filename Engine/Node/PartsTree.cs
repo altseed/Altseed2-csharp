@@ -18,10 +18,10 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// ノードファイルを読み込みます。
+        /// ノードファイルから<see cref="PartsTree"/>を作成します。
         /// </summary>
         /// <param name="filepath"></param>
-        public void Load(string filepath)
+        public PartsTree(string filepath)
         {
             nodeTreeGroup = PartsTreeInstantiator.LoadNodeTree(filepath);
             type = PartsTreeOriginalType.File;
@@ -32,7 +32,7 @@ namespace Altseed2
         /// </summary>
         /// <param name="original"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void Load(Node original)
+        public PartsTree(Node original)
         {
             throw new NotImplementedException();
         }
@@ -40,9 +40,11 @@ namespace Altseed2
         /// <summary>
         /// 新しいインスタンスを生成し、エンジンに追加します。
         /// </summary>
-        public void InstantiateAndAddToEngine()
+        public Node InstantiateAndAddToEngine()
         {
-            Engine.AddNode(Instantiate());
+            var node = Instantiate();
+            Engine.AddNode(node);
+            return node;
         }
 
         /// <summary>
