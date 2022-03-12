@@ -20,14 +20,9 @@ namespace Altseed2.Test
 
             for(var i = 0; i < 10; i++)
             {
-                var node = PartsTreeInstantiator.Instantiate("testsave.nodes");
+                var node = PartsTreeInstantiator.Instantiate("TestData/PartsTreeSystem/Parts.nodes");
                 Engine.AddNode(node);
             }
-
-            var n = new CircleNode();
-
-            for(var j = 0; j < 10; j++)
-                Engine.AddNode(n);
 
             tc.LoopBody(null, null);
 
@@ -40,22 +35,24 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var partstree = new PartsTree();
-            partstree.Load("testsave.nodes");
+            var partstree = new PartsTree("TestData/PartsTreeSystem/Parts.nodes");
 
             tc.Duration = 200;
-            int spornCount = 5;
+            Altseed2.Node added = new Altseed2.Node();
             tc.LoopBody(
                 (_) =>
                 {
-                    for(var i = 0;i < 5;i++)
-                        partstree.InstantiateAndAddToEngine();
-
+                        added = partstree.InstantiateAndAddToEngine();
                 },
-                null
+                (_) =>
+                {
+                    foreach(var c in added.Children)
+                    {
+                        if (c is TransformNode tc)
+                            tc.Position += new Vector2F(_ * 2f, 0f);
+                    }
+                }
             );
-
-            Assert.IsTrue(Engine.GetNodes().Count() == spornCount * tc.Duration);
             tc.End();
         }
     }
