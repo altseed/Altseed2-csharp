@@ -49,7 +49,7 @@ namespace Altseed2.Test
                     foreach(var c in added.Children)
                     {
                         if (c is TransformNode tc)
-                            tc.Position += new Vector2F(_ * 2f, 0f);
+                            tc.Position += new Vector2F(_ * 2f, _ * 2f);
                     }
                 }
             );
