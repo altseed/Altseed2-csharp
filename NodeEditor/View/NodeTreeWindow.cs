@@ -21,6 +21,7 @@ namespace Altseed2.NodeEditor.View
         {
             _pane.Render(() =>
             {
+                /*
                 RenderButton("Sprite", _viewModel.CreateSpriteNode, true);
                 RenderButton("Text", _viewModel.CreateTextNode);
                 RenderButton("Arc", _viewModel.CreateArcNode);
@@ -28,7 +29,7 @@ namespace Altseed2.NodeEditor.View
                 RenderButton("Line", _viewModel.CreateLineNode, true);
                 RenderButton("Rectangle", _viewModel.CreateRectangleNode);
                 RenderButton("Triangle", _viewModel.CreateTriangleNode);
-
+                */
                 RenderNodeTree(Engine.GetNodes());
             });
         }
