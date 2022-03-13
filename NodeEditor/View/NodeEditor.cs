@@ -152,32 +152,30 @@ namespace Altseed2.NodeEditor.View
             {
                 if (Engine.Tool.BeginMenu("File", true))
                 {
-                    Engine.Tool.MenuItem("New", "", false, true);
-                    Engine.Tool.MenuItem("Open", "", false, true);
+                    if (Engine.Tool.MenuItem("Save", "", false, true))
+                    {
+                        NodeEditorModel.Save();
+                    }
+                    if (Engine.Tool.MenuItem("Load", "", false, true))
+                    {
+                        NodeEditorModel.Load();
+                    }
                     Engine.Tool.EndMenu();
                 }
                 if (Engine.Tool.BeginMenu("Edit", true))
                 {
-                    Engine.Tool.MenuItem("Copy", "", false, true);
-                    Engine.Tool.MenuItem("Paste", "", false, true);
+                    if (Engine.Tool.MenuItem("Undo", "", false, true))
+                    {
+                        NodeEditorModel.Undo();
+                    }
+                    if (Engine.Tool.MenuItem("Redo", "", false, true))
+                    {
+                        NodeEditorModel.Redo();
+                    }
                     Engine.Tool.EndMenu();
                 }
-                if(Engine.Tool.MenuItem("Undo", "", false, true))
-                {
-                    NodeEditorModel.Undo();
-                }
-                if(Engine.Tool.MenuItem("Redo", "", false, true))
-                {
-                    NodeEditorModel.Redo();
-                }
-                if(Engine.Tool.MenuItem("Save", "", false, true))
-                {
-                    NodeEditorModel.Save();
-                }
-                if(Engine.Tool.MenuItem("Load", "", false, true))
-                {
-                    NodeEditorModel.Load();
-                }
+                
+                
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }
