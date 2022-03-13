@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using PartsTreeSystem;
+using System.ComponentModel;
 
 namespace Altseed2
 {
@@ -431,6 +432,7 @@ namespace Altseed2
         /// エディタ向け
         /// </summary>
         /// <param name="node"></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void AddChild(INode node)
         {
             AddChildNode(node as Node);
@@ -441,6 +443,7 @@ namespace Altseed2
         /// エディタ向け
         /// </summary>
         /// <param name="instanceID"></param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual void RemoveChild(int instanceID)
         {
             foreach (var child in GetChildren())
@@ -452,6 +455,7 @@ namespace Altseed2
         /// エディタ向け
         /// </summary>
         /// <returns></returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual IReadOnlyCollection<INode> GetChildren()
         {
             return Children;
@@ -460,8 +464,10 @@ namespace Altseed2
         /// <summary>
         /// エディタ向け
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int InstanceID { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void INode.InsertChild(int index, INode node)
         {
 
