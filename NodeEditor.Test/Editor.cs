@@ -73,25 +73,16 @@ namespace Altseed2.Test
         {
             NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
 
-            //ToDo : Update挟まなくても大丈夫なように変更。
             var spriteID = NodeEditorModel.AddNode<SpriteNode>();
-
             var textID = NodeEditorModel.AddNode<TextNode>();
-
             var arcID = NodeEditorModel.AddNode<ArcNode>();
-            
             var circleID = NodeEditorModel.AddNode<CircleNode>();
-
             var lineID = NodeEditorModel.AddNode<LineNode>();
-
             var rectID = NodeEditorModel.AddNode<RectangleNode>();
-
             var triangleID = NodeEditorModel.AddNode<TriangleNode>();
 
             if (Engine.DoEvents())
                 NodeEditorHost.Update();
-
-            var sprite = NodeEditorModel.FindInstance(spriteID) as SpriteNode;
 
             var circle = NodeEditorModel.FindInstance(circleID) as CircleNode;
             NodeEditorModel.StartEditFields(circle);
@@ -102,17 +93,18 @@ namespace Altseed2.Test
             NodeEditorModel.EndEditFields(circle);
             while (Engine.DoEvents())
                 NodeEditorHost.Update();
-            NodeEditorModel.Save("TestData/SaveLoadTest");
+            NodeEditorModel.Save("TestData/Editor/SaveLoadTest");
             var before = NodeEditorModel.NodeTree;
             NodeEditorHost.Terminate();
 
             NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
-            NodeEditorModel.Load("TestData/SaveLoadTest.nodes");
+            NodeEditorModel.Load("TestData/Editor/SaveLoadTest.nodes");
             while (Engine.DoEvents())
                 NodeEditorHost.Update();
             var after = NodeEditorModel.NodeTree;
 
             NodeEditorHost.Terminate();
+
             Assert.True(PartsTreeSystemTest.Helper.IsValueEqual(before, after));
         }
     }
