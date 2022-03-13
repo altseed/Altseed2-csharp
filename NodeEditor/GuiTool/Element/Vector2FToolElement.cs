@@ -53,7 +53,7 @@ namespace Altseed2
             if (Source == null || PropertyInfo == null) return;
 
             Vector2F vector = (Vector2F)PropertyInfo.GetValue(Source);
-            float[] vectorArray =  new float[2] { vector.X, vector.Y };
+            float[] vectorArray = new float[2] { vector.X, vector.Y };
 
             if (Engine.Tool.DragFloat2(Name, vectorArray, Speed, Min, Max, "%f", ToolSliderFlags.None))
             {

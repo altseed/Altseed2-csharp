@@ -20,7 +20,7 @@ namespace Altseed2.NodeEditor.View
         public SelectedNodeWindow SelectedNodeWindow { get { return _selectedNodeWindow; } }
         public PreviewWindow PreviewWindow { get { return _previewWindow; } }
         public TextureBrowserWindow TextureBrowserWindow { get { return _textureBrowserWindow; } }
-        public FontBrowserWindow FontBrowserWindow { get { return _fontBrowserWindow; }}
+        public FontBrowserWindow FontBrowserWindow { get { return _fontBrowserWindow; } }
 
         private bool _first;
         private Node _selected;
@@ -47,7 +47,7 @@ namespace Altseed2.NodeEditor.View
         {
             get
             {
-                if(_selected == null)
+                if (_selected == null)
                     return null;
 
                 if (!_selected.IsRegistered)
@@ -55,7 +55,7 @@ namespace Altseed2.NodeEditor.View
                     _selected = NodeEditorModel.FindInstance(_selectedNodeInstanceID);
                     _onSelectedNodeChanged.OnNext(Unit.Default);
                 }
-                    
+
                 return _selected;
             }
             set
@@ -140,7 +140,7 @@ namespace Altseed2.NodeEditor.View
             if (_fontBrowserWindow.IsActive)
                 _fontBrowserWindow.UpdateFontBrowser();
 
-            if(LoadFilePath != "")
+            if (LoadFilePath != "")
             {
                 NodeEditorModel.Load(LoadFilePath);
             }
@@ -174,8 +174,8 @@ namespace Altseed2.NodeEditor.View
                     }
                     Engine.Tool.EndMenu();
                 }
-                
-                
+
+
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }

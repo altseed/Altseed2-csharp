@@ -79,10 +79,10 @@ namespace Altseed2.NodeEditor.View
 
         private void RenderPopupMenu(Node clicked)
         {
-            if(Altseed2.Engine.Tool.BeginPopup(menuKey, Altseed2.ToolWindowFlags.None))
+            if (Altseed2.Engine.Tool.BeginPopup(menuKey, Altseed2.ToolWindowFlags.None))
             {
                 //add node
-                if(Altseed2.Engine.Tool.BeginMenu("add child node", true))
+                if (Altseed2.Engine.Tool.BeginMenu("add child node", true))
                 {
                     void render<NodeType>() where NodeType : Node
                     {
@@ -100,7 +100,7 @@ namespace Altseed2.NodeEditor.View
                     render<LineNode>();
                     render<RectangleNode>();
                     render<TriangleNode>();
-                    
+
 
                     Engine.Tool.EndMenu();
                 }
@@ -109,13 +109,13 @@ namespace Altseed2.NodeEditor.View
                 {
                     void render(string path)
                     {
-                        if(Engine.Tool.MenuItem(path, "", false, true))
+                        if (Engine.Tool.MenuItem(path, "", false, true))
                         {
                             Model.NodeEditorModel.AddNodeTreeGroup(path, clicked.InstanceID);
                         }
                     }
 
-                    foreach(var p in Model.NodeEditorModel.GetPartsPathes())
+                    foreach (var p in Model.NodeEditorModel.GetPartsPathes())
                         render(p);
 
                     Engine.Tool.EndMenu();
@@ -123,7 +123,7 @@ namespace Altseed2.NodeEditor.View
 
                 //remove
                 if (Model.NodeEditorModel.isRemovable(clicked))
-                    if(Engine.Tool.MenuItem("remove", "", false, true))
+                    if (Engine.Tool.MenuItem("remove", "", false, true))
                     {
                         Model.NodeEditorModel.RemoveNode(clicked);
                     }
@@ -131,7 +131,7 @@ namespace Altseed2.NodeEditor.View
                 //mod partstree
                 if (Model.NodeEditorModel.IsAsset(clicked, out string path))
                 {
-                    if(Engine.Tool.MenuItem("modify asset", "", false, true))
+                    if (Engine.Tool.MenuItem("modify asset", "", false, true))
                     {
                         Model.NodeEditorModel.Load(path);
                     }

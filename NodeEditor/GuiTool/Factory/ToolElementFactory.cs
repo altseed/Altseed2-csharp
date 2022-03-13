@@ -47,7 +47,7 @@ namespace Altseed2.GuiTool.Factory
 
             if (info.PropertyType == typeof(IList))
                 return new ListToolElement(info.Name, source, info.Name);
-            
+
             if (info.PropertyType == typeof(TextureBase))
                 return new TextureBaseToolElement(info.Name, source, info.Name);
 

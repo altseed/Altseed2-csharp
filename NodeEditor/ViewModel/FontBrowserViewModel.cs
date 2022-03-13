@@ -17,9 +17,9 @@ namespace Altseed2.NodeEditor.ViewModel
         public void LoadFont(string fontPath)
         {
             var font = Font.LoadDynamicFont(fontPath, SamplingSize);
-            font.GetGlyph((int) 'a');
-            font.GetGlyph((int) 'あ');
-            font.GetGlyph((int) '阿');
+            font.GetGlyph((int)'a');
+            font.GetGlyph((int)'あ');
+            font.GetGlyph((int)'阿');
             Options.Add(font);
         }
     }

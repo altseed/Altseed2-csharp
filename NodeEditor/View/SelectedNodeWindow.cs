@@ -25,7 +25,7 @@ namespace Altseed2.NodeEditor.View
         {
             _pane.Render(() =>
             {
-                if(_accessor.Selected != null)
+                if (_accessor.Selected != null)
                     NodeEditorModel.StartEditFields(_accessor.Selected);
                 if (_selectedToolElements != null)
                 {
@@ -37,7 +37,7 @@ namespace Altseed2.NodeEditor.View
                         Engine.Tool.PopID();
                     }
                     Engine.Tool.PopID();
-                        
+
                 }
 
                 if (_accessor.Selected != null)

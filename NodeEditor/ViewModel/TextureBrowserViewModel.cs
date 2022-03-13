@@ -6,7 +6,7 @@ namespace Altseed2.NodeEditor.ViewModel
     {
         public List<TextureBase> Options { get; } = new List<TextureBase>();
         public TextureBaseToolElement Selected { get; set; }
-        
+
         public void SetSelection(TextureBase item)
         {
             Selected?.PropertyInfo.SetValue(Selected.Source, item);
@@ -15,7 +15,7 @@ namespace Altseed2.NodeEditor.ViewModel
 
         public void LoadImage(string texturePath)
         {
-            if (Texture2D.Load(texturePath) is {} newTexture)
+            if (Texture2D.Load(texturePath) is { } newTexture)
             {
                 Options.Add(newTexture);
             }

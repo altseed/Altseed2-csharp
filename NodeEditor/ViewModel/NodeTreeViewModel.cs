@@ -11,7 +11,7 @@ namespace Altseed2.NodeEditor.ViewModel
             _accessor = accessor;
         }
 
-        public void CreateSpriteNode() 
+        public void CreateSpriteNode()
         {
             var newnodeid = NodeEditorModel.AddNode<SpriteNode>();
             _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
@@ -21,11 +21,11 @@ namespace Altseed2.NodeEditor.ViewModel
             var newnodeid = NodeEditorModel.AddNode<TextNode>();
             _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
-        public void CreateArcNode() 
+        public void CreateArcNode()
         {
             var newnodeid = NodeEditorModel.AddNode<ArcNode>();
             _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
-        } 
+        }
         public void CreateCircleNode()
         {
             var newnodeid = NodeEditorModel.AddNode<CircleNode>();
@@ -36,12 +36,12 @@ namespace Altseed2.NodeEditor.ViewModel
             var newnodeid = NodeEditorModel.AddNode<LineNode>();
             _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
-        public void CreateRectangleNode() 
+        public void CreateRectangleNode()
         {
             var newnodeid = NodeEditorModel.AddNode<RectangleNode>();
             _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
         }
-        public void CreateTriangleNode() 
+        public void CreateTriangleNode()
         {
             var newnodeid = NodeEditorModel.AddNode<TriangleNode>();
             _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
@@ -53,7 +53,7 @@ namespace Altseed2.NodeEditor.ViewModel
             if (node == _accessor.Selected)
             {
                 flags |= ToolTreeNodeFlags.Selected;
-            } 
+            }
 
             bool hasSelectedChild(Node node)
             {
@@ -67,7 +67,7 @@ namespace Altseed2.NodeEditor.ViewModel
                     return false;
 
                 foreach (var child in node.Children)
-                    if(hasSelectedChild(child))
+                    if (hasSelectedChild(child))
                         return true;
 
                 return false;

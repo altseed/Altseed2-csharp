@@ -70,7 +70,7 @@ namespace Altseed2
                     if (System.Attribute.IsDefined(info, typeof(ToolHiddenAttribute)))
                         continue;
 
-                    if (_toolElementFactory.FromPropertyMetadata(info, source) is {} element)
+                    if (_toolElementFactory.FromPropertyMetadata(info, source) is { } element)
                     {
                         res[info.Name] = element;
                     }
@@ -101,7 +101,7 @@ namespace Altseed2
 
                     try
                     {
-                        if (_toolElementFactory.FromPropertyAttribute(toolAttribute, info, source) is {} element)
+                        if (_toolElementFactory.FromPropertyAttribute(toolAttribute, info, source) is { } element)
                         {
                             res[toolAttribute.Name ?? info.Name] = element;
                         }
@@ -126,7 +126,7 @@ namespace Altseed2
 
                     try
                     {
-                        if (_toolElementFactory.FromMethodAttribute(commandAttribute, info, source) is {} element)
+                        if (_toolElementFactory.FromMethodAttribute(commandAttribute, info, source) is { } element)
                         {
                             res[commandAttribute.Name ?? info.Name] = element;
                         }

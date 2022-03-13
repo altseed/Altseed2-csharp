@@ -10,7 +10,7 @@ namespace Altseed2.NodeEditor.Model
     class Environment : PartsTreeSystem.Environment
     {
         Dictionary<PartsTreeSystem.Asset, string> pathes = new Dictionary<PartsTreeSystem.Asset, string>();
-        public Dictionary<PartsTreeSystem.Asset, int> instantIDs = new Dictionary<PartsTreeSystem.Asset,int>();
+        public Dictionary<PartsTreeSystem.Asset, int> instantIDs = new Dictionary<PartsTreeSystem.Asset, int>();
 
         public override PartsTreeSystem.Asset GetAsset(string path)
         {
@@ -48,7 +48,7 @@ namespace Altseed2.NodeEditor.Model
         {
             config ??= new Configuration();
             config.EnabledCoreModules |= CoreModules.Tool;
-            
+
             var res = Engine.Initialize(title, width, height, config);
             Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
             Engine.Tool.ToolUsage = ToolUsage.Main;
@@ -66,9 +66,10 @@ namespace Altseed2.NodeEditor.Model
 
         public static bool Update()
         {
-            foreach(var node in Engine.GetNodes())
+            foreach (var node in Engine.GetNodes())
             {
-                if(node != _nodeTree.Root){
+                if (node != _nodeTree.Root)
+                {
                     Engine.RemoveNode(node);
                 }
             }
@@ -136,7 +137,7 @@ namespace Altseed2.NodeEditor.Model
                 var text = System.IO.File.ReadAllText(filepath);
                 _nodeTreeGroup = NodeTreeGroup.Deserialize(text);
             }
-            
+
             ReconstructNodeTree();
         }
 
@@ -168,7 +169,7 @@ namespace Altseed2.NodeEditor.Model
                 if (node == null)
                     return;
 
-                foreach(var child in node.GetChildren())
+                foreach (var child in node.GetChildren())
                     removeLeaf(child as Node);
 
                 _commandManager.RemoveNode(_nodeTreeGroup, _nodeTree, node.InstanceID, _environment);
@@ -204,7 +205,7 @@ namespace Altseed2.NodeEditor.Model
         }
 
 
-        static List<string> partsfilepathes = new() ;
+        static List<string> partsfilepathes = new();
         public static void LoadPartsFile(string path)
         {
             foreach (var p in System.IO.Directory.GetFiles(path, "*.nodes"))
@@ -213,22 +214,22 @@ namespace Altseed2.NodeEditor.Model
 
         public static List<string> GetPartsPathes()
         {
-            return partsfilepathes ;
+            return partsfilepathes;
         }
 
         public static void AddNodeTreeGroup(string path, int parentID)
         {
             var addingNodeTreeGroup = _environment.GetAsset(path) as PartsTreeSystem.NodeTreeGroup;
             var id = _commandManager.AddNode(_nodeTreeGroup, _nodeTree, parentID, addingNodeTreeGroup, _environment);
-            _environment.instantIDs.Add(addingNodeTreeGroup, id );
+            _environment.instantIDs.Add(addingNodeTreeGroup, id);
             ReconstructNodeTree();
         }
 
         public static bool IsAsset(Node node, out string path)
         {
-            foreach(var o in _environment.instantIDs)
+            foreach (var o in _environment.instantIDs)
             {
-                if(node.InstanceID == o.Value)
+                if (node.InstanceID == o.Value)
                 {
                     path = _environment.GetAssetPath(o.Key);
                     return true;

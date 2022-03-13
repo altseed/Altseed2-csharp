@@ -3,25 +3,25 @@ using System;
 
 namespace Altseed2.NodeEditor
 {
-	class Program
-	{
-		[STAThread]
-		static void Main(string[] args)
-		{
-			var config = new Configuration()
-			{
-				WaitVSync = true,
-			};
+    class Program
+    {
+        [STAThread]
+        static void Main(string[] args)
+        {
+            var config = new Configuration()
+            {
+                WaitVSync = true,
+            };
 
-			NodeEditorHost.Initialize("AltseedEditor", 1280, 960, config);
-			Engine.ForceNodeUpdate = true;
+            NodeEditorHost.Initialize("AltseedEditor", 1280, 960, config);
+            Engine.ForceNodeUpdate = true;
 
-			while (Engine.DoEvents())
-			{
-				NodeEditorHost.Update();
-			}
+            while (Engine.DoEvents())
+            {
+                NodeEditorHost.Update();
+            }
 
-			NodeEditorHost.Terminate();
-		}
-	}
+            NodeEditorHost.Terminate();
+        }
+    }
 }

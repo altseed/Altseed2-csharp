@@ -63,9 +63,9 @@ namespace Altseed2.NodeEditor.View
         /// <param name="height"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static bool Initialize(string title, int width, int height, Configuration config = null )
+        public static bool Initialize(string title, int width, int height, Configuration config = null)
         {
-            var res = Model.NodeEditorModel.Initialize( title, width, height, config );
+            var res = Model.NodeEditorModel.Initialize(title, width, height, config);
             if (!res)
                 return false;
             _nodeEditorViewModel = new NodeEditorViewModel();
@@ -91,7 +91,7 @@ namespace Altseed2.NodeEditor.View
         public static void Terminate()
         {
             _nodeEditor.Dispose();
-            
+
             Model.NodeEditorModel.Terminate();
         }
     }

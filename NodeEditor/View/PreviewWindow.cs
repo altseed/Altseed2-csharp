@@ -32,9 +32,9 @@ namespace Altseed2.NodeEditor.View
 
                 Engine.Tool.Image(_viewModel.Main, _viewModel.Main.Size, default,
                     new Vector2F(1, 1), new Color(255, 255, 255), new Color());
-                
+
             }, ToolWindowFlags.NoScrollbar);
-            
+
             Engine.Tool.PopStyleVar(1);
         }
 
