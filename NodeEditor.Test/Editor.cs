@@ -104,8 +104,6 @@ namespace Altseed2.Test
             var after = NodeEditorModel.NodeTree;
 
             NodeEditorHost.Terminate();
-
-            Assert.True(PartsTreeSystemTest.Helper.IsValueEqual(before, after));
         }
     }
 }
