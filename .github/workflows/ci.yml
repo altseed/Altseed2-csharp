@@ -175,7 +175,9 @@ jobs:
         dotnet-version: 5.0.x
     - name: Build
       run: |
-        mkdir ./Core/build/DEBUG
+        cd Core
+        cd build
+        mkdir DEBUG
         cp ./Core/build/RELEASE/libAltseed2_Core.dylib ./Core/build/DEBUG/ #PartsTreeSystemのビルドに必要
         dotnet build Altseed2.sln --configuration CI
     - name: Test
