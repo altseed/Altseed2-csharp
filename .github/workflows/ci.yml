@@ -124,6 +124,7 @@ jobs:
       run: |
         cp ./Core/build/RELEASE/libAltseed2_Core.so ./Core/build/DEBUG #PartsTreeSystemのビルドに必要
         dotnet build Altseed2.sln --configuration CI
+        dotnet build Altseed2.sln --configuration Release
 
         mv Build/CI/net5.0/libAltseed2_Core.so Build/CI/net5.0/libAltseed2_Core
         mv Build/Release/net5.0/libAltseed2_Core.so Build/Release/net5.0/libAltseed2_Core
