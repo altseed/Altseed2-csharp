@@ -221,7 +221,6 @@ jobs:
           
           cp Core/LICENSE Altseed2/
           cp test-windows/Release/Altseed2.xml Altseed2/.
-          cp test-windows/Release/netstandard2.1/Altseed2.dll Altseed2/.
           
           cp test-windows/Release/net5.0/Altseed2_Core.dll Altseed2/.
           cp test-mac/Release/net5.0/libAltseed2_Core.dylib Altseed2/.
