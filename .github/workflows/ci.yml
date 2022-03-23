@@ -124,7 +124,6 @@ jobs:
 
         mv Build/CI/net5.0/libAltseed2_Core.so Build/CI/net5.0/libAltseed2_Core
         mv Build/Release/net5.0/libAltseed2_Core.so Build/Release/net5.0/libAltseed2_Core
-        mv Build/Release/netstandard2.1/libAltseed2_Core.so Build/Release/netstandard2.1/libAltseed2_Core
     - name: Test
       continue-on-error: true
       run: |
