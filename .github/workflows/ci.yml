@@ -9,7 +9,7 @@ on:
 
 jobs:
   windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2
     - name: Update Submodules
@@ -46,7 +46,7 @@ jobs:
         path: Build
   
   test:
-    runs-on: windows-latest
+    runs-on: windows-2019
     needs: [windows]
     steps:
       - uses: actions/checkout@v2
@@ -239,7 +239,7 @@ jobs:
 
 
   make_nuget:
-    runs-on: windows-latest
+    runs-on: windows-2019
     needs: [merge]
     steps:
       - uses: actions/checkout@v2
