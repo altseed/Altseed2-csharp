@@ -19,7 +19,7 @@ jobs:
       id: changed-files
       uses: tj-actions/changed-files@v18.3
     - name: Cache Core
-      if: contains(steps.changed-files.outputs.modified_files, 'ci.yml')
+      if: ! contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       uses: actions/cache@v1
       id: cache-core
       env:
@@ -92,7 +92,7 @@ jobs:
       id: changed-files
       uses: tj-actions/changed-files@v18.3
     - name: Cache Core
-      if: contains(steps.changed-files.outputs.modified_files, 'ci.yml')
+      if: ! contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       uses: actions/cache@v1
       id: cache-core
       env:
@@ -160,7 +160,7 @@ jobs:
       id: changed-files
       uses: tj-actions/changed-files@v18.3
     - name: Cache Core
-      if: contains(steps.changed-files.outputs.modified_files, 'ci.yml')
+      if: ! contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       uses: actions/cache@v1
       id: cache-core
       env:
