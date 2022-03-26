@@ -15,7 +15,11 @@ jobs:
     - name: Update Submodules
       run: |
         git submodule update --init --recursive
+    - name: Get changed filed
+      id: changed-files
+      uses: tj-actions/changed-files@v18.3
     - name: Cache Core
+      if: contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       uses: actions/cache@v1
       id: cache-core
       env:
@@ -23,9 +27,6 @@ jobs:
       with:
         path: Core/build
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/core/**') }}
-    - name: Get changed filed
-      id: changed-files
-      uses: tj-actions/changed-files@v18.3
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true' || contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       run: |
@@ -87,7 +88,11 @@ jobs:
     - name: Update Submodules
       run: |
         git submodule update --init --recursive
+    - name: Get changed filed
+      id: changed-files
+      uses: tj-actions/changed-files@v18.3
     - name: Cache Core
+      if: contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       uses: actions/cache@v1
       id: cache-core
       env:
@@ -151,7 +156,11 @@ jobs:
     - name: Update Submodules
       run: |
         git submodule update --init --recursive
+    - name: Get changed filed
+      id: changed-files
+      uses: tj-actions/changed-files@v18.3
     - name: Cache Core
+      if: contains(steps.changed-files.outputs.modified_files, 'ci.yml')
       uses: actions/cache@v1
       id: cache-core
       env:
