@@ -636,6 +636,7 @@ namespace Altseed2.Test
 
             camera1.ViewMatrix = Matrix44F.GetTranslation2D(new Vector2F(10, 10));
             camera1.TargetTexture = texture;
+            camera1.RenderPassParameter = new RenderPassParameter();
 
             const string path = "Serialization/RenderedCamera.bin";
 
