@@ -22,7 +22,7 @@ jobs:
         cache-name: cache-core
       with:
         path: Core/build
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/core/**') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/**') }}
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
@@ -91,7 +91,7 @@ jobs:
         cache-name: cache-core
       with:
         path: Core/build
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/core/**') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/**') }}
     - name: Build CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       run: |
@@ -155,7 +155,7 @@ jobs:
         cache-name: cache-core
       with:
         path: Core/build
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/core/**') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Core/**') }}
     - name: Setup CMake
       if: steps.cache-core.outputs.cache-hit != 'true'
       uses: jwlawson/actions-setup-cmake@v1.4
