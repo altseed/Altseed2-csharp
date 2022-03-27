@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Altseed2
 {
@@ -67,9 +66,6 @@ namespace Altseed2
             }
         }
         private static Color _ClearColor = new Color(50, 50, 50, 255);
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool ForceNodeUpdate { get; set; }
 
         /// <summary>
         /// エンジンを初期化します。
@@ -166,10 +162,7 @@ namespace Altseed2
         internal static bool UpdateComponents(bool drawDefaultCameraGroup, bool drawCustomCameraGroup)
         {
             // ノードの更新
-            if(ForceNodeUpdate)
-                _UpdatedNode?.ForceUpdate();
-            else
-                _UpdatedNode?.Update();
+            _UpdatedNode?.Update();
 
             // Contextの更新
             Context.Update();

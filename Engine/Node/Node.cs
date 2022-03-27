@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
-using System.ComponentModel;
 
 namespace Altseed2
 {
@@ -10,7 +9,7 @@ namespace Altseed2
     /// ゲームシーンを構成するノードを表します。
     /// </summary>
     [Serializable]
-    public class Node : Registerable<Node>, PartsTreeSystem.INode
+    public class Node : Registerable<Node>
     {
         /// <summary>
         /// <see cref="Node"/>の新しいインスタンスを生成します。
@@ -38,21 +37,7 @@ namespace Altseed2
             }
 
             _IsEnumeratingChildren = false;
-        }
 
-        internal virtual void ForceUpdate()
-        {
-            OnUpdate();
-
-            _IsEnumeratingChildren = true;
-
-            _Children.Update();
-            foreach(var c in Children)
-            {
-                c.ForceUpdate();
-            }
-
-            _IsEnumeratingChildren = false;
         }
 
         #region Registerable (子として)
@@ -423,37 +408,5 @@ namespace Altseed2
 
             _IsEnumeratingChildren = false;
         }
-
-        #region PartsTreeSystem
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void AddChild(PartsTreeSystem.INode node)
-        {
-            AddChildNode(node as Node);
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void RemoveChild(int instanceID)
-        {
-            foreach(var child in GetChildren())
-            {
-                if(child.InstanceID == instanceID)
-                {
-                    RemoveChildNode(child as Node);
-                }
-            }
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public IReadOnlyCollection<PartsTreeSystem.INode> GetChildren() => Children;
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int InstanceID { get; set; }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void InsertChild(int index, PartsTreeSystem.INode node)
-        {
-
-        }
-        #endregion
     }
 }
