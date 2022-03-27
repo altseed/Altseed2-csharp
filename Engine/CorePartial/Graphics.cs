@@ -267,10 +267,10 @@ namespace Altseed2
     {
         public Color ClearColor;
 
-        [MarshalAs(UnmanagedType.Bool)]
+        [MarshalAs(UnmanagedType.U1)]
         public bool IsColorCleared;
 
-        [MarshalAs(UnmanagedType.Bool)]
+        [MarshalAs(UnmanagedType.U1)]
         public bool IsDepthCleared;
 
         /// <summary>
