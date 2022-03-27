@@ -72,8 +72,4 @@
 
   </Choose>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PartsTreeSystem\PartsTreeSystem\PartsTreeSystem.csproj" />
-  </ItemGroup>
-
 </Project>
