@@ -31,7 +31,7 @@ jobs:
         cd build
         cmake .. -A x64 -D USE_MSVC_RUNTIME_LIBRARY_DLL=OFF
         cmake --build . --config Release
-        cmake --build . --conig Debug
+        cmake --build . --config Debug
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -177,8 +177,8 @@ jobs:
         dotnet-version: 5.0.x
     - name: Build
       run: |
-        dotnet build Altseed2.sln --configuration CI
         dotnet build Altseed2.sln --configuration Release
+        dotnet build Altseed2.sln --configuration CI
     - name: Test
       continue-on-error: true
       run: |
