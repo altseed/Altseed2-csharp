@@ -69,13 +69,11 @@ namespace Altseed2
         }
         private static Color _ClearColor = new Color(50, 50, 50, 255);
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool ForceNodeUpdate { get; set; }
-
         /// <summary>
         /// trueにすると必要性に関わらず、すべてのNodeを更新します。
         /// パフォーマンスに悪影響を及ぼす可能性が高いです。
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool ForceNodeUpdate { get; set; }
 
         /// <summary>
