@@ -429,6 +429,7 @@ namespace Altseed2
         public void AddChild(PartsTreeSystem.INode node)
         {
             AddChildNode(node as Node);
+            
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

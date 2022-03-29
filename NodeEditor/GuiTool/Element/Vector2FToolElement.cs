@@ -46,9 +46,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -60,6 +60,7 @@ namespace Altseed2
                 vector.X = vectorArray[0];
                 vector.Y = vectorArray[1];
                 PropertyInfo.SetValue(Source, vector);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

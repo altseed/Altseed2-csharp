@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Buffers;
 
 namespace Altseed2
@@ -14,6 +14,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _Color;
@@ -30,6 +31,7 @@ namespace Altseed2
         /// <summary>
         /// 半径を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float Radius
         {
             get => _Radius;
@@ -47,6 +49,7 @@ namespace Altseed2
         /// 頂点の個数を取得または設定します。
         /// </summary>
         /// <exception cref="ArgumentException">設定しようとした値が 3 未満</exception>
+        [PartsTreeSystem.SerializeField]
         public int VertNum
         {
             get => _VertNum;
@@ -87,6 +90,13 @@ namespace Altseed2
             }
 
             base.Update();
+        }
+
+        internal override void ForceUpdate()
+        {
+            UpdateVertexes();
+
+            base.ForceUpdate();
         }
     }
 }

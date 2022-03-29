@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -13,6 +13,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _Color;
@@ -28,6 +29,7 @@ namespace Altseed2
         /// <summary>
         /// 描画を終了する角度を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float EndDegree
         {
             get => _EndDegree;
@@ -44,6 +46,7 @@ namespace Altseed2
         /// <summary>
         /// 半径を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float Radius
         {
             get => _radius;
@@ -60,6 +63,7 @@ namespace Altseed2
         /// <summary>
         /// 描画を開始する頂点を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public float StartDegree
         {
             get => _StartDegree;
@@ -76,6 +80,7 @@ namespace Altseed2
         /// <summary>
         /// 頂点の個数を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public int VertNum
         {
             get => _VertNum;
@@ -177,6 +182,13 @@ namespace Altseed2
             }
 
             base.Update();
+        }
+
+        internal override void ForceUpdate()
+        {
+            UpdateVertexes();
+
+            base.ForceUpdate();
         }
     }
 }

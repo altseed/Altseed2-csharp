@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "thirdparty", "thirdparty", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartsTreeSystem", "PartsTreeSystem\PartsTreeSystem\PartsTreeSystem.csproj", "{E1F064B3-81FD-42B8-BD35-8414AE5608CC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartsTreeSystemTest", "PartsTreeSystem\PartsTreeSystemTest\PartsTreeSystemTest.csproj", "{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CI|Any CPU = CI|Any CPU
@@ -129,6 +131,18 @@ Global
 		{E1F064B3-81FD-42B8-BD35-8414AE5608CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E1F064B3-81FD-42B8-BD35-8414AE5608CC}.Release|x64.ActiveCfg = Release|Any CPU
 		{E1F064B3-81FD-42B8-BD35-8414AE5608CC}.Release|x64.Build.0 = Release|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.CI|Any CPU.ActiveCfg = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.CI|Any CPU.Build.0 = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.CI|x64.ActiveCfg = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.CI|x64.Build.0 = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Debug|x64.Build.0 = Debug|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Release|x64.ActiveCfg = Release|Any CPU
+		{099D1906-9F5A-49BA-8CCF-8E3CFEC0B185}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

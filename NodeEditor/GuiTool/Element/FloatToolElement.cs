@@ -46,16 +46,21 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
             float num = (float)PropertyInfo.GetValue(Source);
-            if (Engine.Tool.DragFloat(Name, ref num, Speed, Min, Max, "%d", ToolSliderFlags.None))
+            if (Engine.Tool.DragFloat(Name, ref num, Speed, Min, Max, "%.1f", ToolSliderFlags.None))
             {
                 PropertyInfo.SetValue(Source, num);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
+            }
+            else
+            {
+                //huga
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Altseed2.NodeEditor.View;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2.Test
 {
@@ -65,6 +66,46 @@ namespace Altseed2.Test
             }
 
             NodeEditorHost.Terminate();
+        }
+
+        [Test, Apartment (ApartmentState.STA)]
+        public void SaveLoad()
+        {
+            NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+
+            var spriteID = NodeEditorModel.AddNode<SpriteNode>();
+            var textID = NodeEditorModel.AddNode<TextNode>();
+            var arcID = NodeEditorModel.AddNode<ArcNode>();
+            var circleID = NodeEditorModel.AddNode<CircleNode>();
+            var lineID = NodeEditorModel.AddNode<LineNode>();
+            var rectID = NodeEditorModel.AddNode<RectangleNode>();
+            var triangleID = NodeEditorModel.AddNode<TriangleNode>();
+
+            if (Engine.DoEvents())
+                NodeEditorHost.Update();
+
+            var circle = NodeEditorModel.FindInstance(circleID) as CircleNode;
+            NodeEditorModel.StartEditFields(circle);
+            NodeEditorModel.NotifyEditFields(circle);
+            circle.Radius = 100;
+            circle.Position = new Vector2F(500, 500);
+            circle.Color = new Color(255, 0, 100, 255);
+            NodeEditorModel.EndEditFields(circle);
+            while (Engine.DoEvents())
+                NodeEditorHost.Update();
+            NodeEditorModel.Save("TestData/Editor/SaveLoadTest");
+            var before = NodeEditorModel.NodeTree;
+            NodeEditorHost.Terminate();
+
+            NodeEditorHost.Initialize("SaveLoad", 1500, 800, new Configuration() { ConsoleLoggingEnabled = true, IsResizable = true });
+            NodeEditorModel.Load("TestData/Editor/SaveLoadTest.nodes");
+            while (Engine.DoEvents())
+                NodeEditorHost.Update();
+            var after = NodeEditorModel.NodeTree;
+
+            NodeEditorHost.Terminate();
+
+            Assert.True(PartsTreeSystemTest.Helper.IsValueEqual(before, after));
         }
     }
 }

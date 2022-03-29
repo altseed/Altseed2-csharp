@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Altseed2
 {
@@ -13,6 +13,7 @@ namespace Altseed2
         /// <summary>
         /// 色を取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Color Color
         {
             get => _Color;
@@ -29,6 +30,7 @@ namespace Altseed2
         /// <summary>
         /// 短形のサイズを取得または設定します。
         /// </summary>
+        [PartsTreeSystem.SerializeField]
         public Vector2F RectangleSize
         {
             get => _RectangleSize;
@@ -67,6 +69,13 @@ namespace Altseed2
             }
 
             base.Update();
+        }
+
+        internal override void ForceUpdate()
+        {
+            UpdateVertexes();
+
+            base.ForceUpdate();
         }
     }
 }
