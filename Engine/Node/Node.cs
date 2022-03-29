@@ -55,22 +55,6 @@ namespace Altseed2
             _IsEnumeratingChildren = false;
         }
 
-        internal virtual void ForceUpdate()
-        {
-            
-            OnUpdate();
-
-            _IsEnumeratingChildren = true;
-
-            _Children.Update();
-            foreach (var c in Children)
-            {
-                c.ForceUpdate();
-            }
-
-            _IsEnumeratingChildren = false;
-        }
-
         #region Registerable (子として)
 
         /// <summary>
