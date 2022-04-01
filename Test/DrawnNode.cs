@@ -642,6 +642,60 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void IsDrawnActuallyWithNoDrawnNode()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var texture = Texture2D.Load(@"TestData/IO/AltseedPink.png");
+            Assert.NotNull(texture);
+
+            var node = new SpriteNode();
+            node.Texture = texture;
+            node.CenterPosition = texture.Size / 2;
+            node.Position = new Vector2F(100, 100);
+            Engine.AddNode(node);
+
+            var node2 = new TransformNode();
+            node2.CenterPosition = texture.Size / 2;
+            node2.Position = new Vector2F(200, 200);
+
+            var node3 = new RectangleNode();
+            node3.RectangleSize = texture.Size;
+            node3.Texture = texture;
+            node3.CenterPosition = texture.Size / 2;
+            node3.Position = new Vector2F(300, 300);
+
+            tc.LoopBody(c =>
+            {
+                if (c == 2)
+                {
+                    node.AddChildNode(node2);
+                }
+                else if (c == 4)
+                {
+                    node.IsDrawn = false;
+                    Assert.IsFalse(node.IsDrawnActually);
+                }
+
+                else if (c == 6)
+                {
+                    node2.AddChildNode(node3);
+                }
+
+                else if (c == 8)
+                {
+                    node.IsDrawn = true;
+
+                    Assert.IsTrue(node.IsDrawnActually);
+                    Assert.IsTrue(node3.IsDrawnActually);
+                }
+            }, null);
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void ZOrder()
         {
             var tc = new TestCore();
