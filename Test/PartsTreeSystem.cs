@@ -35,7 +35,7 @@ namespace Altseed2.Test
             var tc = new TestCore();
             tc.Init();
 
-            var partstree = new PartsTree("TestData/PartsTreeSystem/Parts.nodes");
+            var partstree = new PartsTree<Altseed2.Node>("TestData/PartsTreeSystem/Parts.nodes");
 
             tc.Duration = 200;
             Altseed2.Node added = new Altseed2.Node();

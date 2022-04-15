@@ -9,7 +9,7 @@ namespace Altseed2
     /// <summary>
     /// エディタで編集したノードファイルのインスタンスを生成するシステムです。
     /// </summary>
-    public class PartsTree
+    public class PartsTree<T> where T : Node
     {
         enum PartsTreeOriginalType
         {
@@ -40,11 +40,15 @@ namespace Altseed2
         /// <summary>
         /// 新しいインスタンスを生成し、エンジンに追加します。
         /// </summary>
-        public Node InstantiateAndAddToEngine()
+        public T InstantiateAndAddToEngine()
         {
             var node = Instantiate();
-            Engine.AddNode(node);
-            return node;
+            if(node is T)
+            {
+                Engine.AddNode(node);
+                return node;
+            }
+            throw new Exception("This PartsTree's root node type is " + node.GetType().Name + ", not " + typeof(T).Name + ".");
         }
 
         /// <summary>
@@ -52,12 +56,15 @@ namespace Altseed2
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Node Instantiate()
+        public T Instantiate()
         {
             switch (type)
             {
                 case PartsTreeOriginalType.File:
-                    return PartsTreeInstantiator.Instantiate(nodeTreeGroup, environment);
+                    var node = Instantiate();
+                    if (node is T)
+                        return node;
+                    throw new Exception("This PartsTree's root node type is " + node.GetType().Name + ", not " + typeof(T).Name + ".");
 
                 case PartsTreeOriginalType.Instance:
                     throw new NotImplementedException();
