@@ -61,9 +61,9 @@ namespace Altseed2
             switch (type)
             {
                 case PartsTreeOriginalType.File:
-                    var node = Instantiate();
-                    if (node is T)
-                        return node;
+                    var node =  PartsTreeInstantiator.Instantiate(nodeTreeGroup, environment);
+                    if (node is T casted)
+                        return casted;
                     throw new Exception("This PartsTree's root node type is " + node.GetType().Name + ", not " + typeof(T).Name + ".");
 
                 case PartsTreeOriginalType.Instance:
