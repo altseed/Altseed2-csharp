@@ -75,7 +75,6 @@ namespace Altseed2
         }
 
         private PartsTreeOriginalType type;
-        private string data;
         private PartsTreeSystem.NodeTreeGroup nodeTreeGroup;
         private PartsTreeSystem.Environment environment = new();
     }
