@@ -25,10 +25,15 @@ namespace Altseed2
         {
             nodeTreeGroup = PartsTreeInstantiator.LoadNodeTree(filepath);
             type = PartsTreeOriginalType.File;
+
+            //Root node type check
+            var node = Instantiate();
+            if (node.GetType() != typeof(T))
+                throw new Exception("This PartsTree's root node type is " + node.GetType().Name + ", not " + typeof(T).Name + ".");
         }
 
         /// <summary>
-        /// ノードのインスタンスから<see cref="PartsTree"/>を作成します。
+        /// ノードのインスタンスから<see cref="PartsTree{T}"/>を作成します。
         /// </summary>
         /// <param name="original"></param>
         /// <exception cref="NotImplementedException"></exception>
@@ -43,12 +48,8 @@ namespace Altseed2
         public T InstantiateAndAddToEngine()
         {
             var node = Instantiate();
-            if(node is T)
-            {
-                Engine.AddNode(node);
-                return node;
-            }
-            throw new Exception("This PartsTree's root node type is " + node.GetType().Name + ", not " + typeof(T).Name + ".");
+            Engine.AddNode(node);
+            return node;
         }
 
         /// <summary>
@@ -62,9 +63,7 @@ namespace Altseed2
             {
                 case PartsTreeOriginalType.File:
                     var node =  PartsTreeInstantiator.Instantiate(nodeTreeGroup, environment);
-                    if (node is T casted)
-                        return casted;
-                    throw new Exception("This PartsTree's root node type is " + node.GetType().Name + ", not " + typeof(T).Name + ".");
+                    return node as T;
 
                 case PartsTreeOriginalType.Instance:
                     throw new NotImplementedException();
