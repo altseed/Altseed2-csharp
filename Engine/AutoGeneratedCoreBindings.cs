@@ -1,4 +1,4 @@
-﻿// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
 //   このファイルは自動生成されました。
@@ -7190,11 +7190,6 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern float cbg_Glyph_GetScale(IntPtr selfPtr);
-
-
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_Glyph_Release(IntPtr selfPtr);
 
         #endregion
@@ -7270,15 +7265,6 @@ namespace Altseed2
             get
             {
                 var ret = cbg_Glyph_GetAdvance(selfPtr);
-                return ret;
-            }
-        }
-
-        public float Scale
-        {
-            get
-            {
-                var ret = cbg_Glyph_GetScale(selfPtr);
                 return ret;
             }
         }
