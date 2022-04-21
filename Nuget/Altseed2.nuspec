@@ -22,6 +22,6 @@
         <file src="libAltseed2_Core.dylib" target="runtimes\osx-x64\native\libAltseed2_Core.dylib" />
         <file src="libAltseed2_Core" target="runtimes\linux-x64\native\libAltseed2_Core" />
         <file src="Altseed2.dll" target="lib\net5.0" />
-        <file src="ParsTreeSytem.dll" target="lib\net5.0"/>
+        <file src="PartsTreeSystem.dll" target="lib\net5.0"/>
     </files>
 </package>
