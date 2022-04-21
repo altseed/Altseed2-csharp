@@ -14,16 +14,10 @@
 
     <AssemblyTitle>Altseed2.Tools</AssemblyTitle>
     <Copyright>Copyright © 2021 Altseed</Copyright>
-    <Version>2.2.0</Version>
-    <AssemblyVersion>2.2.0.0</AssemblyVersion>
-    <FileVersion>2.2.0.0</FileVersion>
-    <InformationalVersion>2.2.0</InformationalVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Version>2.2.1</Version>
+    <AssemblyVersion>2.2.1.0</AssemblyVersion>
+    <FileVersion>2.2.1.0</FileVersion>
+    <InformationalVersion>2.2.1</InformationalVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='CI'">
@@ -38,6 +32,7 @@
   <ItemGroup Condition="'$(Configuration)'=='CI'">
     <None Include="LICENSE.txt" Pack="true" PackagePath=""/>
 
+    <Reference Include="PartsTreeSystem.dll" />
     <Reference Include="Altseed2.dll" />
 
     <None Include="Altseed2_Core.dll">
