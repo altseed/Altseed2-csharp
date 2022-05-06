@@ -696,6 +696,49 @@ float4 main(PS_INPUT input) : SV_TARGET
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void IsDrawnActuallyOnAdded()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            var node = new CircleNode()
+            {
+                Color = new Color(255, 255, 255, 255),
+                Position = new Vector2F(320, 240),
+                Radius = 5
+            };
+
+            var node2 = new CircleNode()
+            {
+                Color = new Color(255, 0, 0, 255),
+                Position = new Vector2F(40, 40),
+                Radius = 5
+            };
+
+            node.AddChildNode(node2);
+            node.IsDrawn = false;
+            Engine.AddNode(node);
+
+            tc.LoopBody(c => {
+                if (c == 2)
+                {
+                    Assert.IsFalse(node2.IsDrawnActually);
+                }
+                else if (c == 4)
+                {
+                    node.IsDrawn = true;
+                    Assert.IsTrue(node2.IsDrawnActually);
+                }
+                else if (c == 6)
+                {
+                    node.IsDrawn = false;
+                    Assert.IsFalse(node2.IsDrawnActually);
+                }
+            }, null);
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void ZOrder()
         {
             var tc = new TestCore();
