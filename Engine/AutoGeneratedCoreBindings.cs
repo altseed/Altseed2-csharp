@@ -3221,10 +3221,6 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern IntPtr cbg_Buffer_Read(IntPtr selfPtr);
-
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern int cbg_Buffer_GetSize(IntPtr selfPtr);
 
 
@@ -3278,12 +3274,6 @@ namespace Altseed2
         public void Unlock()
         {
             cbg_Buffer_Unlock(selfPtr);
-        }
-
-        public IntPtr Read()
-        {
-            var ret = cbg_Buffer_Read(selfPtr);
-            return ret;
         }
 
         /// <summary>
