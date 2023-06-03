@@ -111,6 +111,7 @@ namespace Altseed2
         internal override void Registered()
         {
             base.Registered();
+            this.UpdateIsDrawnActuallyFromAncestors();
             Engine.RegisterDrawn(this);
             Engine.CullingSystem.Register(_RenderedPolygon);
         }
@@ -120,13 +121,6 @@ namespace Altseed2
             base.Unregistered();
             Engine.UnregisterDrawn(this);
             Engine.CullingSystem.Unregister(_RenderedPolygon);
-        }
-
-        /// <inheritdoc/>
-        public override void FlushQueue()
-        {
-            base.FlushQueue();
-            this.UpdateIsDrawnActuallyOfDescendants();
         }
 
         #endregion
