@@ -69,10 +69,9 @@ namespace Sample
             Engine.TargetFPS = 240;
             var density = CalcRestDensity(EffectiveRadius);
 
-            var particles = Buffer<Particle>.Create(BufferUsageType.Compute, 2048);
+            var particlesInput = Buffer<Particle>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, 2048);
+            using (var data = particlesInput.LockStrict())
             {
-                var data = particles.Lock();
-
                 int ind = 0;
                 for (int y = 0; y < 300 / (ParticleRadius * 2); y++)
                 {
@@ -83,7 +82,7 @@ namespace Sample
                             y * (ParticleRadius * 2) + ParticleRadius < 8 ||
                             y * (ParticleRadius * 2) + ParticleRadius > 300 - 8)
                         {
-                            data[ind++] = new Particle()
+                            data.Span[ind++] = new Particle()
                             {
                                 Current = new Vector2F(x * (ParticleRadius * 2) + ParticleRadius, y * (ParticleRadius * 2) + ParticleRadius),
                                 Next = new Vector2F(x * (ParticleRadius * 2) + ParticleRadius, y * (ParticleRadius * 2) + ParticleRadius),
@@ -94,24 +93,28 @@ namespace Sample
                         }
                     }
                 }
-                for (int i = ind; i < particles.Count; i++)
+
+                for (int i = ind; i < particlesInput.Count; i++)
                 {
-                    data[i] = new Particle()
+                    data.Span[i] = new Particle()
                     {
                         Current = new Vector2F(i % 50 * 4 + 10, i / 50 * 4 + 20),
                         Velocity = new Vector2F(0, 0),
                         Pscl = 0,
                     };
                 }
-                particles.Unlock();
             }
 
-            var gridTable = Buffer<Vector2I>.Create(BufferUsageType.Compute, 2048);
-            var gridIndicesTable = Buffer<Vector2I>.Create(BufferUsageType.Compute, 60 * 60);
-            var particleComputeVertex = Buffer<Vertex>.Create(BufferUsageType.Compute, particles.Count * 4);
-            var particleVertex = Buffer<Vertex>.Create(BufferUsageType.Vertex, particles.Count * 4);
-            var particleComputeIndex = Buffer<int>.Create(BufferUsageType.Compute, particles.Count * 6);
-            var particleIndex = Buffer<int>.Create(BufferUsageType.Index, particles.Count * 6);
+            var particles = Buffer<Particle>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, 2048);
+
+            var gridTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, 2048);
+            var gridIndicesTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, 60 * 60);
+            
+            var particleComputeVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, particles.Count * 4);
+            var particleComputeIndex = Buffer<int>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, particles.Count * 6);
+            
+            var particleVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Vertex, particles.Count * 4);
+            var particleIndex = Buffer<int>.CreateStrict(BufferUsageType.Index, particles.Count * 6);
 
             var csCalcExternalForces = @"
 struct Particle
@@ -214,22 +217,22 @@ void main(uint3 dtid : SV_DispatchThreadID)
     int inc = (int)Inc.x;
     int dir = (int)Dir.x;
     int t = dtid.x; // thread index
-	int low = t & (inc - 1); // low order bits (below INC)
-	int i = (t << 1) - low; // insert 0 at position INC
+    int low = t & (inc - 1); // low order bits (below INC)
+    int i = (t << 1) - low; // insert 0 at position INC
     bool reverse = ((dir & i) == 0);
 
-	// Load
-	int2 x0 = gridTable[i];
-	int2 x1 = gridTable[inc + i];
+    // Load
+    int2 x0 = gridTable[i];
+    int2 x1 = gridTable[inc + i];
 
-	// Sort
-	int2 auxa = x0;
-	int2 auxb = x1;
-	if ((x0.x < x1.x) ^ reverse) { x0 = auxb; x1 = auxa; }
+    // Sort
+    int2 auxa = x0;
+    int2 auxb = x1;
+    if ((x0.x < x1.x) ^ reverse) { x0 = auxb; x1 = auxa; }
 
-	// Store
-	gridTable[i] = x0;
-	gridTable[inc + i] = x1;
+    // Store
+    gridTable[i] = x0;
+    gridTable[inc + i] = x1;
 }
 ";
 
@@ -329,96 +332,96 @@ float2 CalcDensityCellPB(int2 gridPos, int i, float2 pos0)
     int startIndex = gridIndicesTable[gridHash].x;
 
     float h = EffectiveRadius.x;
-	float dens = 0.0f;
-	if(startIndex != 0xffffffff){	// セルが空でないかのチェック
-		// セル内のパーティクルで反復
-		int endIndex = gridIndicesTable[gridHash].y;
-		for(int j = startIndex; j < endIndex; ++j){
-			//if(j == i) continue;
+    float dens = 0.0f;
+    if(startIndex != 0xffffffff){	// セルが空でないかのチェック
+        // セル内のパーティクルで反復
+        int endIndex = gridIndicesTable[gridHash].y;
+        for(int j = startIndex; j < endIndex; ++j){
+            //if(j == i) continue;
 
-			float2 pos1 = particles[gridTable[j].y].Next;
+            float2 pos1 = particles[gridTable[j].y].Next;
 
-			float2 rij = pos0 - pos1;
-			float r = length(rij);
+            float2 rij = pos0 - pos1;
+            float r = length(rij);
 
-			if(r <= h){
-				float q = h * h - r * r;
-				dens += Wpoly6.x * q * q * q;
-			}
-		}
-	}
+            if(r <= h){
+                float q = h * h - r * r;
+                dens += Wpoly6.x * q * q * q;
+            }
+        }
+    }
 
-	return dens;
+    return dens;
 }
 
 float CalcScalingFactorCell(int2 gridPos, int i, float2 pos0)
 {
-	int gridHash = gridPos.x + gridPos.y * (int)GridNum.x;
+    int gridHash = gridPos.x + gridPos.y * (int)GridNum.x;
     int startIndex = gridIndicesTable[gridHash].x;
 
-	float h = EffectiveRadius.x;
-	float r0 = Density.x;
-	float sd = 0.0f;
-	float sd2 = 0.0f;
-	if(startIndex != 0xffffffff){	// セルが空でないかのチェック
-		// セル内のパーティクルで反復
-		uint endIndex = gridIndicesTable[gridHash].y;
-		for(uint j = startIndex; j < endIndex; ++j){
+    float h = EffectiveRadius.x;
+    float r0 = Density.x;
+    float sd = 0.0f;
+    float sd2 = 0.0f;
+    if(startIndex != 0xffffffff){	// セルが空でないかのチェック
+        // セル内のパーティクルで反復
+        uint endIndex = gridIndicesTable[gridHash].y;
+        for(uint j = startIndex; j < endIndex; ++j){
 
-			float2 pos1 = particles[gridTable[j].y].Next;
+            float2 pos1 = particles[gridTable[j].y].Next;
 
-			float2 rij = pos0-pos1;
-			float r = length(rij);
+            float2 rij = pos0-pos1;
+            float r = length(rij);
 
-			if(r <= h && r > 0.0){
-				float q = h - r;
+            if(r <= h && r > 0.0){
+                float q = h - r;
 
-				// Spikyカーネルで位置変動を計算
-				float2 dp = -(GWspiky.x * q * q * rij / r) / r0;
+                // Spikyカーネルで位置変動を計算
+                float2 dp = -(GWspiky.x * q * q * rij / r) / r0;
                 sd2 -= dp;
 
-			    if(gridTable[j].y != i)
-				    sd += dot(dp, dp);
-			}
-		}
-	}
-	return sd + dot(sd2, sd2);
+                if(gridTable[j].y != i)
+                    sd += dot(dp, dp);
+            }
+        }
+    }
+    return sd + dot(sd2, sd2);
 }
 
 void CalcScalingFactor(int id)
 {
-	float2 pos = particles[id].Next;	// パーティクル位置
-	float h = EffectiveRadius.x;
+    float2 pos = particles[id].Next;	// パーティクル位置
+    float h = EffectiveRadius.x;
     float r0 = Density.x;
 
-	// パーティクル周囲のグリッド
-	int2 grid_pos0, grid_pos1;
-	grid_pos0 = GetGridPos(pos-h);
-	grid_pos1 = GetGridPos(pos+h);
+    // パーティクル周囲のグリッド
+    int2 grid_pos0, grid_pos1;
+    grid_pos0 = GetGridPos(pos-h);
+    grid_pos1 = GetGridPos(pos+h);
 
-	// 周囲のグリッドも含めて近傍探索，密度計算
-	float dens = 0.0f;
-	for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
-		for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
-			int2 n_grid_pos = int2(x, y);
-			dens += CalcDensityCellPB(n_grid_pos, id, pos);
-		}
-	}
+    // 周囲のグリッドも含めて近傍探索，密度計算
+    float dens = 0.0f;
+    for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
+        for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
+            int2 n_grid_pos = int2(x, y);
+            dens += CalcDensityCellPB(n_grid_pos, id, pos);
+        }
+    }
     
-	// 密度拘束条件(式(1))
-	float C = dens/r0-1.0;
+    // 密度拘束条件(式(1))
+    float C = dens/r0-1.0;
 
-	// 周囲のグリッドも含めて近傍探索，スケーリングファクタの分母項計算
-	float sd = 0.0f;
-	for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
-		for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
-			int2 n_grid_pos = int2(x, y);
-			sd += CalcScalingFactorCell(n_grid_pos, id, pos);
-		}
-	}
+    // 周囲のグリッドも含めて近傍探索，スケーリングファクタの分母項計算
+    float sd = 0.0f;
+    for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
+        for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
+            int2 n_grid_pos = int2(x, y);
+            sd += CalcScalingFactorCell(n_grid_pos, id, pos);
+        }
+    }
 
-	// スケーリングファクタの計算(式(11))
-	particles[id].Pscl = -C/(sd+Eps);
+    // スケーリングファクタの計算(式(11))
+    particles[id].Pscl = -C/(sd+Eps);
 }
 
 [numthreads(1, 1, 1)]
@@ -478,70 +481,70 @@ int2 GetGridPos(float2 pos)
 
 float2 CalcPositionCorrectionCell(int2 gridPos, int i, float2 pos0)
 {
-	int gridHash = gridPos.x + gridPos.y * (int)GridNum.x;
+    int gridHash = gridPos.x + gridPos.y * (int)GridNum.x;
     int startIndex = gridIndicesTable[gridHash].x;
 
-	float h = EffectiveRadius.x;
-	float r0 = Density.x;
-	float2 dp = float2(0.0);
+    float h = EffectiveRadius.x;
+    float r0 = Density.x;
+    float2 dp = float2(0.0);
 
-	float dt = Dt.x;
+    float dt = Dt.x;
 
-	float si = particles[i].Pscl;
+    float si = particles[i].Pscl;
 
-	if(startIndex != 0xffffffff){	// セルが空でないかのチェック
-		// セル内のパーティクルで反復
-		uint endIndex = gridIndicesTable[gridHash].y;
-		for(uint j = startIndex; j < endIndex; ++j){
-			if(gridTable[j].y == i) continue;
+    if(startIndex != 0xffffffff){	// セルが空でないかのチェック
+        // セル内のパーティクルで反復
+        uint endIndex = gridIndicesTable[gridHash].y;
+        for(uint j = startIndex; j < endIndex; ++j){
+            if(gridTable[j].y == i) continue;
 
-			float2 pos1 = particles[gridTable[j].y].Next;
+            float2 pos1 = particles[gridTable[j].y].Next;
 
-			float2 rij = pos0 - pos1;
-			float r = length(rij);
+            float2 rij = pos0 - pos1;
+            float r = length(rij);
 
-			if(r <= h && r > 0.0){
+            if(r <= h && r > 0.0){
                 float scorr = 0;
                 {
-				    float q = h * h - r * r;
-				    float q2 = h * h - 0.04 * h * h;
+                    float q = h * h - r * r;
+                    float q2 = h * h - 0.04 * h * h;
 
                     float ww = Wpoly6.x * q * q * q / (Wpoly6.x * q2 * q2 * q2);
                     scorr = -0.1 * pow(ww, 4) * dt * dt;
                 }
 
                 {
-				    float q = h - r;
-				    float sj = particles[gridTable[j].y].Pscl;
+                    float q = h - r;
+                    float sj = particles[gridTable[j].y].Pscl;
 
-				    // Spikyカーネルで位置修正量を計算
-				    dp += (si + sj + scorr) * (GWspiky.x * q * q * rij / r) / r0;
+                    // Spikyカーネルで位置修正量を計算
+                    dp += (si + sj + scorr) * (GWspiky.x * q * q * rij / r) / r0;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
-	return dp;
+    return dp;
 }
 
 float2 CalcPositionCorrection(int id)
 {
-	float2 pos = particles[id].Next;	// パーティクル位置
-	float h = EffectiveRadius.x;
+    float2 pos = particles[id].Next;	// パーティクル位置
+    float h = EffectiveRadius.x;
 
-	// パーティクル周囲のグリッド
-	int2 grid_pos0, grid_pos1;
-	grid_pos0 = GetGridPos(pos - h);
-	grid_pos1 = GetGridPos(pos + h);
+    // パーティクル周囲のグリッド
+    int2 grid_pos0, grid_pos1;
+    grid_pos0 = GetGridPos(pos - h);
+    grid_pos1 = GetGridPos(pos + h);
 
-	// 周囲のグリッドも含めて近傍探索，位置修正量を計算
-	float2 dpij = float2(0.0f);
-	for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
-		for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
-			int2 n_grid_pos = int2(x, y);
-			dpij += CalcPositionCorrectionCell(n_grid_pos, id, pos);
-	    }
-	}
+    // 周囲のグリッドも含めて近傍探索，位置修正量を計算
+    float2 dpij = float2(0.0f);
+    for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
+        for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
+            int2 n_grid_pos = int2(x, y);
+            dpij += CalcPositionCorrectionCell(n_grid_pos, id, pos);
+        }
+    }
 
     return dpij;
 }
@@ -749,7 +752,9 @@ float4 main(PS_INPUT input) : SV_TARGET
             Engine.AddNode(text);
 
             Engine.Graphics.CommandList.Begin();
-            Engine.Graphics.CommandList.UploadBuffer(particles);
+
+            Engine.Graphics.CommandList.CopyBuffer(particlesInput, particles);
+
             Engine.Graphics.CommandList.End();
             Engine.Graphics.ExecuteCommandList();
             Engine.Graphics.WaitFinish();
