@@ -120,12 +120,6 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
-        public override void FlushQueue()
-        {
-            base.FlushQueue();
-        }
-
-        /// <inheritdoc/>
         [PartsTreeSystem.SerializeField]
         public sealed override Matrix44F InheritedTransform
         {

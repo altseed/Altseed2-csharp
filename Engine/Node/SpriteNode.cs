@@ -118,12 +118,6 @@ namespace Altseed2
             Engine.CullingSystem.Unregister(_RenderedSprite);
         }
 
-        /// <inheritdoc/>
-        public override void FlushQueue()
-        {
-            base.FlushQueue();
-        }
-
         #endregion
 
         #region RenderedSprite
