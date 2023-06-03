@@ -5,7 +5,7 @@ namespace Altseed2.NodeEditor
 {
     internal interface IEditorPropertyAccessor
     {
-        object Selected { get; set; }
+        Node Selected { get; set; }
         float MenuHeight { get; }
 
         IObservable<Unit> OnSelectedNodeChanged { get; }

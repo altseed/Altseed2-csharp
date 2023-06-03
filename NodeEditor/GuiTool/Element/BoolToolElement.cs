@@ -1,4 +1,5 @@
 ﻿using System;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2
 {
@@ -22,9 +23,9 @@ namespace Altseed2
         }
 
         /// <inheritdoc/>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -32,6 +33,7 @@ namespace Altseed2
             if (Engine.Tool.Checkbox(Name, ref flag))
             {
                 PropertyInfo.SetValue(Source, flag);
+                NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

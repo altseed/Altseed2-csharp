@@ -81,9 +81,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -94,6 +94,7 @@ namespace Altseed2
             if ((newPath = Engine.Tool.InputText(Name, path, MaxLength, ToolInputTextFlags.None)) != null)
             {
                 PropertyInfo.SetValue(Source, newPath);
+                Altseed2.NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
 
             if (Engine.Tool.SmallButton("..."))
@@ -106,6 +107,7 @@ namespace Altseed2
                 {
                     SetPath(newPath);
                 }
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

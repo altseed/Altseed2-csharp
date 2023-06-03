@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Subjects;
 using Altseed2.NodeEditor.ViewModel;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -15,8 +16,14 @@ namespace Altseed2.NodeEditor.View
         private readonly FontBrowserWindow _fontBrowserWindow;
         private readonly Subject<Unit> _onSelectedNodeChanged = new Subject<Unit>();
 
+        public NodeTreeWindow NodeTreeWindow { get { return _nodeTreeWindow; } }
+        public SelectedNodeWindow SelectedNodeWindow { get { return _selectedNodeWindow; } }
+        public PreviewWindow PreviewWindow { get { return _previewWindow; } }
+        public TextureBrowserWindow TextureBrowserWindow { get { return _textureBrowserWindow; } }
+        public FontBrowserWindow FontBrowserWindow { get { return _fontBrowserWindow; }}
+
         private bool _first;
-        private object _selected;
+        private Node _selected;
 
         public NodeEditor(NodeEditorViewModel viewModel)
         {
@@ -36,18 +43,31 @@ namespace Altseed2.NodeEditor.View
         /// <summary>
         /// 選択されたオブジェクト
         /// </summary>
-        public object Selected
+        public Node Selected
         {
-            get => _selected;
+            get
+            {
+                if(_selected == null)
+                    return null;
+
+                if (!_selected.IsRegistered)
+                {
+                    _selected = NodeEditorModel.FindInstance(_selectedNodeInstanceID);
+                    _onSelectedNodeChanged.OnNext(Unit.Default);
+                }
+                    
+                return _selected;
+            }
             set
             {
-                if (value == _selected)
+                if (value.InstanceID == _selectedNodeInstanceID)
                     return;
                 _selected = value;
-
+                _selectedNodeInstanceID = value.InstanceID;
                 _onSelectedNodeChanged.OnNext(Unit.Default);
             }
         }
+        private int _selectedNodeInstanceID = -1;
 
         public float MenuHeight { get; private set; } = 20;
 
@@ -119,6 +139,11 @@ namespace Altseed2.NodeEditor.View
 
             if (_fontBrowserWindow.IsActive)
                 _fontBrowserWindow.UpdateFontBrowser();
+
+            if(LoadFilePath != "")
+            {
+                NodeEditorModel.Load(LoadFilePath);
+            }
         }
 
         private void UpdateMenu()
@@ -127,20 +152,35 @@ namespace Altseed2.NodeEditor.View
             {
                 if (Engine.Tool.BeginMenu("File", true))
                 {
-                    Engine.Tool.MenuItem("New", "", false, true);
-                    Engine.Tool.MenuItem("Open", "", false, true);
+                    if (Engine.Tool.MenuItem("Save", "", false, true))
+                    {
+                        NodeEditorModel.Save();
+                    }
+                    if (Engine.Tool.MenuItem("Load", "", false, true))
+                    {
+                        NodeEditorModel.Load();
+                    }
                     Engine.Tool.EndMenu();
                 }
                 if (Engine.Tool.BeginMenu("Edit", true))
                 {
-                    Engine.Tool.MenuItem("Copy", "", false, true);
-                    Engine.Tool.MenuItem("Paste", "", false, true);
+                    if (Engine.Tool.MenuItem("Undo", "", false, true))
+                    {
+                        NodeEditorModel.Undo();
+                    }
+                    if (Engine.Tool.MenuItem("Redo", "", false, true))
+                    {
+                        NodeEditorModel.Redo();
+                    }
                     Engine.Tool.EndMenu();
                 }
+                
+                
                 Engine.Tool.Text(Engine.CurrentFPS.ToString());
                 Engine.Tool.EndMainMenuBar();
             }
             MenuHeight = Engine.Tool.GetFrameHeight();
         }
+        string LoadFilePath = "";
     }
 }

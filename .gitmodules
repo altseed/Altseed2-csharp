@@ -4,3 +4,6 @@
 [submodule "TestResult"]
 	path = TestResult
 	url = https://github.com/altseed/Altseed2-csharp-test-result.git
+[submodule "PartsTreeSystem"]
+	path = PartsTreeSystem
+	url = https://github.com/effekseer/PartsTreeSystem.git

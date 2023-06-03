@@ -8,6 +8,7 @@ namespace Altseed2.NodeEditor.View
     {
         private readonly IEditorPropertyAccessor _accessor;
         private readonly NodeTreeViewModel _viewModel;
+        public NodeTreeViewModel ViewModel { get { return _viewModel; } }
         private readonly NodeEditorPane _pane = new NodeEditorPane("Node");
 
         public NodeTreeWindow(IEditorPropertyAccessor accessor, NodeTreeViewModel viewModel)
@@ -20,6 +21,7 @@ namespace Altseed2.NodeEditor.View
         {
             _pane.Render(() =>
             {
+                /*
                 RenderButton("Sprite", _viewModel.CreateSpriteNode, true);
                 RenderButton("Text", _viewModel.CreateTextNode);
                 RenderButton("Arc", _viewModel.CreateArcNode);
@@ -27,7 +29,7 @@ namespace Altseed2.NodeEditor.View
                 RenderButton("Line", _viewModel.CreateLineNode, true);
                 RenderButton("Rectangle", _viewModel.CreateRectangleNode);
                 RenderButton("Triangle", _viewModel.CreateTriangleNode);
-
+                */
                 RenderNodeTree(Engine.GetNodes());
             });
         }
@@ -53,10 +55,17 @@ namespace Altseed2.NodeEditor.View
 
                 bool treeNode = Engine.Tool.TreeNodeEx(node.ToString(), _viewModel.GetNodeStatus(node));
 
-                if (Engine.Tool.IsItemClicked(0))
+                if (Engine.Tool.IsItemClicked(ToolMouseButton.Left))
                 {
                     _viewModel.OnNodeSelected(node);
                 }
+
+                if (Engine.Tool.IsItemClicked(ToolMouseButton.Right))
+                {
+                    Engine.Tool.OpenPopup(menuKey, ToolPopupFlags.None);
+                }
+
+                RenderPopupMenu(node);
 
                 if (treeNode)
                 {
@@ -67,5 +76,70 @@ namespace Altseed2.NodeEditor.View
                 Engine.Tool.PopID();
             }
         }
+
+        private void RenderPopupMenu(Node clicked)
+        {
+            if(Altseed2.Engine.Tool.BeginPopup(menuKey, Altseed2.ToolWindowFlags.None))
+            {
+                //add node
+                if(Altseed2.Engine.Tool.BeginMenu("add child node", true))
+                {
+                    void render<NodeType>() where NodeType : Node
+                    {
+                        if (Engine.Tool.MenuItem(typeof(NodeType).Name, "", false, true))
+                        {
+                            Model.NodeEditorModel.AddNode<NodeType>(clicked);
+                            Engine.Tool.CloseCurrentPopup();
+                        }
+                    }
+
+                    render<SpriteNode>();
+                    render<TextNode>();
+                    render<ArcNode>();
+                    render<CircleNode>();
+                    render<LineNode>();
+                    render<RectangleNode>();
+                    render<TriangleNode>();
+                    
+
+                    Engine.Tool.EndMenu();
+                }
+                //add parts
+                if (Engine.Tool.BeginMenu("add parts", true))
+                {
+                    void render(string path)
+                    {
+                        if(Engine.Tool.MenuItem(path, "", false, true))
+                        {
+                            Model.NodeEditorModel.AddNodeTreeGroup(path, clicked.InstanceID);
+                        }
+                    }
+
+                    foreach(var p in Model.NodeEditorModel.GetPartsPathes())
+                        render(p);
+
+                    Engine.Tool.EndMenu();
+                }
+
+                //remove
+                if (Model.NodeEditorModel.isRemovable(clicked))
+                    if(Engine.Tool.MenuItem("remove", "", false, true))
+                    {
+                        Model.NodeEditorModel.RemoveNode(clicked);
+                    }
+
+                //mod partstree
+                if (Model.NodeEditorModel.IsAsset(clicked, out string path))
+                {
+                    if(Engine.Tool.MenuItem("modify asset", "", false, true))
+                    {
+                        Model.NodeEditorModel.Load(path);
+                    }
+                }
+
+                Altseed2.Engine.Tool.EndPopup();
+            }
+        }
+        string menuKey = "popupmenu";
     }
 }

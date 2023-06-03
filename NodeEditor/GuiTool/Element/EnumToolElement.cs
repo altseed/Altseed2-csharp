@@ -24,9 +24,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -34,6 +34,7 @@ namespace Altseed2
             if (Engine.Tool.Combo(Name, ref current, Enum.GetNames(PropertyInfo.PropertyType), -1))
             {
                 PropertyInfo.SetValue(Source, current);
+                NodeEditor.Model.NodeEditorModel.NotifyEditFields(owner);
             }
         }
 

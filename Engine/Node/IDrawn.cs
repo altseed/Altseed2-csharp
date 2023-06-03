@@ -52,28 +52,27 @@ namespace Altseed2
         /// <summary>
         /// 自身と子孫ノードの IsDrawnActually プロパティを更新します。
         /// </summary>
-        internal static void UpdateIsDrawnActuallyOfDescendants(this Node node)
+        internal static void UpdateIsDrawnActuallyOfDescendants<T>(this T node)
+            where T : Node, ICullableDrawn
         {
             static void UpdateRecursive(Node n, bool ancestorsIsDawnActually)
             {
-                var dn = (ICullableDrawn)n;
+                var isDrawnActually = ancestorsIsDawnActually;
 
-                var isDrawnActually = dn.IsDrawn && ancestorsIsDawnActually;
-                dn.IsDrawnActually = isDrawnActually;
+                if (n is ICullableDrawn dn)
+                {
+                    isDrawnActually = dn.IsDrawn && ancestorsIsDawnActually;
+                    dn.IsDrawnActually = isDrawnActually;
+                }
+
                 foreach (var child in n.Children)
                 {
-                    if (child is ICullableDrawn)
-                    {
-                        UpdateRecursive(child, isDrawnActually);
-                    }
+                    UpdateRecursive(child, isDrawnActually);
                 }
             }
 
-            if (node is ICullableDrawn)
-            {
-                var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<ICullableDrawn>()?.IsDrawnActually ?? true;
-                UpdateRecursive(node, ancestorsIsDrawnActually);
-            }
+            var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<ICullableDrawn>()?.IsDrawnActually ?? true;
+            UpdateRecursive(node, ancestorsIsDrawnActually);
         }
     }
 }

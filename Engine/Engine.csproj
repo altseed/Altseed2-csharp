@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Altseed2</RootNamespace>
     <AssemblyName>Altseed2</AssemblyName>
-    <TargetFramework>netstandard2.1</TargetFramework>
+     <TargetFramework>net5.0</TargetFramework>
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -16,13 +16,17 @@
   <PropertyGroup>
     <AssemblyTitle>Altseed2</AssemblyTitle>
     <Copyright>Copyright © 2020 Altseed</Copyright>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
-    <FileVersion>2.1.0.0</FileVersion>
-    <InformationalVersion>2.1.0</InformationalVersion>
+    <AssemblyVersion>2.2.2.0</AssemblyVersion>
+    <FileVersion>2.2.2.0</FileVersion>
+    <InformationalVersion>2.2.2</InformationalVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='CI'">
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <Choose>
-    <When Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
+    <When Condition="'$(Platform)' == 'x64' And '$(Configuration)'=='Debug' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
         <Content Include="..\Core\build\DEBUG\Altseed2_Core.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -30,7 +34,7 @@
       </ItemGroup>
     </When>
 
-    <When Condition="'$(Configuration)|$(Platform)'=='Release|x64' And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
+    <When Condition="'$(Platform)' == 'x64' And ('$(Configuration)'=='Release' Or '$(Configuration)' == 'CI') And ('$(OS)' == 'Windows' Or '$(OS)' == 'Windows_NT')">
       <ItemGroup>
         <Content Include="..\Core\build\RELEASE\Altseed2_Core.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -38,7 +42,7 @@
       </ItemGroup>
     </When>
 
-    <When Condition=" '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('OSX')) ">
+    <When Condition="'$(Platform)' == 'x64' And '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('OSX')) ">
       <ItemGroup>
         <Content Include="..\Core\build\DEBUG\libAltseed2_Core.dylib">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -46,7 +50,7 @@
       </ItemGroup>
     </When>
 
-    <When Condition=" '$(Configuration)'=='Release' And $([MSBuild]::IsOsPlatform('OSX')) ">
+    <When Condition="'$(Platform)' == 'x64' And ('$(Configuration)'=='Release' Or '$(Configuration)' == 'CI') And $([MSBuild]::IsOsPlatform('OSX')) ">
       <ItemGroup>
         <Content Include="..\Core\build\RELEASE\libAltseed2_Core.dylib">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -54,7 +58,7 @@
       </ItemGroup>
     </When>
 
-    <When Condition=" '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('Linux')) ">
+    <When Condition="'$(Platform)' == 'x64' And '$(Configuration)'=='Debug' And $([MSBuild]::IsOsPlatform('Linux')) ">
       <ItemGroup>
         <Content Include="..\Core\build\DEBUG\libAltseed2_Core.so">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -62,7 +66,7 @@
       </ItemGroup>
     </When>
 
-    <When Condition=" '$(Configuration)'=='Release' And $([MSBuild]::IsOsPlatform('Linux')) ">
+    <When Condition="'$(Platform)' == 'x64' And ('$(Configuration)'=='Release' Or '$(Configuration)' == 'CI') And $([MSBuild]::IsOsPlatform('Linux')) ">
       <ItemGroup>
         <Content Include="..\Core\build\RELEASE\libAltseed2_Core.so">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -71,5 +75,9 @@
     </When>
 
   </Choose>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PartsTreeSystem\PartsTreeSystem\PartsTreeSystem.csproj" />
+  </ItemGroup>
 
 </Project>

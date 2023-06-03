@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using Altseed2.NodeEditor.ViewModel;
+using PartsTreeSystem;
+using System;
+using System.Linq;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -10,7 +13,7 @@ namespace Altseed2.NodeEditor.View
     {
         private static NodeEditorViewModel _nodeEditorViewModel;
         private static NodeEditor _nodeEditor;
-        
+
         /// <summary>
         /// テクスチャ一覧
         /// </summary>
@@ -49,9 +52,8 @@ namespace Altseed2.NodeEditor.View
         public static object Selected
         {
             get => _nodeEditor.Selected;
-            set => _nodeEditor.Selected = value;
+            set => _nodeEditor.Selected = value as Node;
         }
-
 
         /// <summary>
         /// エディターを初期化する
@@ -61,17 +63,11 @@ namespace Altseed2.NodeEditor.View
         /// <param name="height"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static bool Initialize(string title, int width, int height, Configuration config = null)
+        public static bool Initialize(string title, int width, int height, Configuration config = null )
         {
-            config ??= new Configuration();
-            config.EnabledCoreModules |= CoreModules.Tool;
-            config.IsResizable = true;
-            config.VisibleTransformInfo = true;
-
-            var res = Engine.Initialize(title, width, height, config);
-            Engine.Tool.AddFontFromFileTTF("../TestData/Font/mplus-1m-regular.ttf", 20, ToolGlyphRange.Japanese);
-            Engine.Tool.ToolUsage = ToolUsage.Main;
-
+            var res = Model.NodeEditorModel.Initialize( title, width, height, config );
+            if (!res)
+                return false;
             _nodeEditorViewModel = new NodeEditorViewModel();
             _nodeEditor = new NodeEditor(_nodeEditorViewModel);
 
@@ -85,7 +81,8 @@ namespace Altseed2.NodeEditor.View
         public static bool Update()
         {
             _nodeEditor.Render();
-            return Engine.UpdateComponents(true, true);
+
+            return Model.NodeEditorModel.Update();
         }
 
         /// <summary>
@@ -94,7 +91,8 @@ namespace Altseed2.NodeEditor.View
         public static void Terminate()
         {
             _nodeEditor.Dispose();
-            Engine.Terminate();
+            
+            Model.NodeEditorModel.Terminate();
         }
     }
 }

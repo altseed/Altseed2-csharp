@@ -37,9 +37,9 @@ namespace Altseed2
         /// <summary>
         /// 
         /// </summary>
-        public override void Update()
+        public override void Update(Node owner)
         {
-            base.Update();
+            base.Update(owner);
 
             if (Source == null || PropertyInfo == null) return;
 
@@ -56,7 +56,7 @@ namespace Altseed2
                 foreach (var toolElement in ToolElements ?? Enumerable.Empty<ToolElement>())
                 {
                     Engine.Tool.PushID(toolElement.GetHashCode());
-                    toolElement.Update();
+                    toolElement.Update(owner);
                     Engine.Tool.PopID();
                 }
                 Engine.Tool.Spacing();

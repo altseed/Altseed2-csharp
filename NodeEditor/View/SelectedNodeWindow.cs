@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Altseed2.GuiTool.Factory;
+using Altseed2.NodeEditor.Model;
 
 namespace Altseed2.NodeEditor.View
 {
@@ -24,17 +25,23 @@ namespace Altseed2.NodeEditor.View
         {
             _pane.Render(() =>
             {
+                if(_accessor.Selected != null)
+                    NodeEditorModel.StartEditFields(_accessor.Selected);
                 if (_selectedToolElements != null)
                 {
                     Engine.Tool.PushID("Selected".GetHashCode());
                     foreach (var toolElement in _selectedToolElements)
                     {
                         Engine.Tool.PushID(toolElement.GetHashCode());
-                        toolElement.Update();
+                        toolElement.Update(_accessor.Selected);
                         Engine.Tool.PopID();
                     }
                     Engine.Tool.PopID();
+                        
                 }
+
+                if (_accessor.Selected != null)
+                    NodeEditorModel.EndEditFields(_accessor.Selected);
             });
         }
 

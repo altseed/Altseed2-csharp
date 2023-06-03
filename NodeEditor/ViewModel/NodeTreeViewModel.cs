@@ -1,4 +1,6 @@
-﻿namespace Altseed2.NodeEditor.ViewModel
+﻿using Altseed2.NodeEditor.Model;
+
+namespace Altseed2.NodeEditor.ViewModel
 {
     internal sealed class NodeTreeViewModel
     {
@@ -9,35 +11,72 @@
             _accessor = accessor;
         }
 
-        public void CreateSpriteNode() => Engine.AddNode(new SpriteNode());
-        public void CreateTextNode() => Engine.AddNode(new TextNode());
-        public void CreateArcNode() => Engine.AddNode(new ArcNode
+        public void CreateSpriteNode() 
         {
-            Radius = 100, StartDegree = 0, EndDegree = 90
-        });
-        public void CreateCircleNode() => Engine.AddNode(new CircleNode
+            var newnodeid = NodeEditorModel.AddNode<SpriteNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        }
+        public void CreateTextNode()
         {
-            Radius = 100
-        });
-        public void CreateLineNode() => Engine.AddNode(new LineNode
+            var newnodeid = NodeEditorModel.AddNode<TextNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        }
+        public void CreateArcNode() 
         {
-            Point2 = new Vector2F(100, 100)
-        });
-        public void CreateRectangleNode() => Engine.AddNode(new RectangleNode
+            var newnodeid = NodeEditorModel.AddNode<ArcNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        } 
+        public void CreateCircleNode()
         {
-            RectangleSize = new Vector2F(100, 100)
-        });
-        public void CreateTriangleNode() => Engine.AddNode(new TriangleNode
+            var newnodeid = NodeEditorModel.AddNode<CircleNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        }
+        public void CreateLineNode()
         {
-            Point2 = new Vector2F(50, 50), Point3 = new Vector2F(100, 0)
-        });
+            var newnodeid = NodeEditorModel.AddNode<LineNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        }
+        public void CreateRectangleNode() 
+        {
+            var newnodeid = NodeEditorModel.AddNode<RectangleNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        }
+        public void CreateTriangleNode() 
+        {
+            var newnodeid = NodeEditorModel.AddNode<TriangleNode>();
+            _accessor.Selected = NodeEditorModel.FindInstance(newnodeid);
+        }
 
         public ToolTreeNodeFlags GetNodeStatus(Node node)
         {
-            var flags = ToolTreeNodeFlags.OpenOnArrow;
-
+            var flags = new ToolTreeNodeFlags();
             if (node == _accessor.Selected)
+            {
                 flags |= ToolTreeNodeFlags.Selected;
+            } 
+
+            bool hasSelectedChild(Node node)
+            {
+                if (node == null)
+                    return false;
+
+                if (node == _accessor.Selected)
+                    return true;
+
+                if (node.Children.Count == 0)
+                    return false;
+
+                foreach (var child in node.Children)
+                    if(hasSelectedChild(child))
+                        return true;
+
+                return false;
+            }
+
+            if (hasSelectedChild(_accessor.Selected))
+                flags |= ToolTreeNodeFlags.DefaultOpen;
+            else
+                flags |= ToolTreeNodeFlags.OpenOnArrow;
 
             if (node.Children.Count == 0)
                 flags |= ToolTreeNodeFlags.Leaf;

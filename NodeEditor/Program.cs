@@ -14,6 +14,7 @@ namespace Altseed2.NodeEditor
 			};
 
 			NodeEditorHost.Initialize("AltseedEditor", 1280, 960, config);
+			Engine.ForceNodeUpdate = true;
 
 			while (Engine.DoEvents())
 			{
