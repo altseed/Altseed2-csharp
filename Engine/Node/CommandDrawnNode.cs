@@ -66,7 +66,8 @@ namespace Altseed2
         public override void FlushQueue()
         {
             base.FlushQueue();
-            this.UpdateIsDrawnActuallyOfDescendants();
+            // TODO
+            // this.UpdateIsDrawnActuallyOfDescendants();
         }
 
         #endregion
