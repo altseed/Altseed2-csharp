@@ -39,13 +39,13 @@ namespace Altseed2
         /// </summary>
         /// <param name="usage">バッファの使途</param>
         /// <param name="count">要素数</param>
-        /// <returns></returns>
+        /// <returns><see cref="Buffer{T}"/>のインスタンス</returns>
         public static Buffer<T> Create(BufferUsageType usage, int count)
         {
             var internalBuffer = Buffer.Create(usage, Marshal.SizeOf<T>() * count);
             if (internalBuffer == null)
             {
-                Engine.Log.Error(LogCategory.Engine, "Buffer<T>::Create: can't create internal buffer.");
+                Engine.Log.Error(LogCategory.Engine, "Buffer<T>::Create: bufferの作成に失敗しました。");
                 return null;
             }
 
@@ -53,36 +53,81 @@ namespace Altseed2
         }
 
         /// <summary>
+        /// バッファを生成します
+        /// </summary>
+        /// <param name="usage">バッファの使途</param>
+        /// <param name="count">要素数</param>
+        /// <returns><see cref="Buffer{T}"/>のインスタンス</returns>
+        /// <exceptions><see cref="ArgumentException"/>バッファの作成に失敗</exceptions>
+        public static Buffer<T> CreateStrict(BufferUsageType usage, int count)
+        {
+            var internalBuffer = Buffer.Create(usage, Marshal.SizeOf<T>() * count);
+            if (internalBuffer == null)
+            {
+                throw new ArgumentException("Bufferの作成に失敗しました。");
+            }
+
+            return new Buffer<T>(internalBuffer, count);
+        }
+
+        /// <summary>
+        /// バッファのデータへアクセスする
+        /// </summary>
+        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="Container"/></returns>
+        public Container Lock()
+        {
+            unsafe
+            {
+                var lockPtr = InternalBuffer.Lock();
+                if (lockPtr == IntPtr.Zero)
+                {
+                    return new Container(null, null);
+                }
+                return new Container(this, new Span<T>(lockPtr.ToPointer(), Count));
+            }
+        }
+
+        /// <summary>
+        /// バッファのデータへアクセスする。
+        /// </summary>
+        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="Container"/></returns>
+        /// <exception cref="InvalidOperationException">バッファのロックに失敗</exception>
+        public Container LockStrict()
+        {
+            var container = Lock();
+
+            if (container.Span == null)
+            {
+                throw new InvalidOperationException("バッファのロックに失敗しました。");
+            }
+
+            return container;
+        }
+
+        /// <summary>
         /// バッファへの書き込みを開始します
         /// </summary>
         /// <returns></returns>
-        public Span<T> Lock()
+        public ref struct Container
         {
-            unsafe
-            {
-                return new Span<T>(InternalBuffer.Lock().ToPointer(), Count);
-            }
-        }
+            private Buffer<T> buffer;
 
-        /// <summary>
-        /// バッファへの書き込みを終了します
-        /// </summary>
-        public void Unlock()
-        {
-            InternalBuffer.Unlock();
-        }
+            /// <summary>
+            /// バッファのデータ
+            /// </summary>
+            /// <returns></returns>
+            public Span<T> Span { get; init; }
 
-        /// <summary>
-        /// バッファから値を取得します
-        /// </summary>
-        /// <returns></returns>
-        public ReadOnlySpan<T> Read()
-        {
-            unsafe
+            internal Container(Buffer<T> buffer, Span<T> span)
             {
-                var readback = new ReadOnlySpan<T>(InternalBuffer.Read().ToPointer(), Count);
-                return readback;
+                this.buffer = buffer;
+                Span = span;
             }
+
+            /// <summary>
+            /// バッファのアンロックを行う
+            /// </summary>
+            public void Dispose() => buffer?.InternalBuffer.Unlock();
         }
     }
 }
