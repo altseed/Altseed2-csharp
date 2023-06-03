@@ -26,6 +26,32 @@ namespace Altseed2.Test
         };
 
         [Test, Apartment(ApartmentState.STA)]
+        public void Buffer()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            int dataSize = 256;
+
+            var input = Buffer<InputData>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, dataSize);
+            Assert.NotNull(input);
+
+            using (var data = input.LockStrict())
+            {
+                for (int i = 0; i < input.Count; i++)
+                {
+                    data.Span[i] = new InputData()
+                    {
+                        value1 = i * 2,
+                        value2 = i * 2 + 1,
+                    };
+                }
+            }
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void ComputeShaderBasic()
         {
             var tc = new TestCore();
@@ -81,9 +107,10 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
+            int offset = 100;
+
             var pip1 = ComputePipelineState.Create();
             pip1.Shader = Shader.Create("cs1", csCode1, ShaderStage.Compute);
-            int offset = 100;
             pip1.SetVector4F("offset", new Vector4F(offset, 0, 0, 0));
 
             var pip2 = ComputePipelineState.Create();
@@ -92,57 +119,75 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             int dataSize = 256;
 
-            var read = Buffer<InputData>.Create(BufferUsageType.Compute, dataSize);
+            var input = Buffer<InputData>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, dataSize);
+            Assert.NotNull(input);
+
+            using (var data = input.LockStrict())
             {
-                var data = read.Lock();
-                for (int i = 0; i < read.Count; i++)
+                for (int i = 0; i < input.Count; i++)
                 {
-                    data[i] = new InputData()
+                    data.Span[i] = new InputData()
                     {
                         value1 = i * 2,
                         value2 = i * 2 + 1,
                     };
                 }
-                read.Unlock();
             }
 
-            var write1 = Buffer<OutputData>.Create(BufferUsageType.Compute, dataSize);
-            var write2 = Buffer<OutputData>.Create(BufferUsageType.Compute, dataSize);
+            var inputBuffer = Buffer<InputData>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, dataSize);
+
+            var write1 = Buffer<OutputData>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, dataSize);
+            var write2 = Buffer<OutputData>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, dataSize);
+
+            Assert.NotNull(inputBuffer);
+            Assert.NotNull(write1);
+            Assert.NotNull(write2);
+
+            var write1Dst = Buffer<OutputData>.Create(BufferUsageType.MapRead | BufferUsageType.CopyDst, dataSize);
+            var write2Dst = Buffer<OutputData>.Create(BufferUsageType.MapRead | BufferUsageType.CopyDst, dataSize);
+
+            Assert.NotNull(write1Dst);
+            Assert.NotNull(write2Dst);
 
             Engine.Graphics.CommandList.Begin();
-            Engine.Graphics.CommandList.UploadBuffer(read);
+
+            Engine.Graphics.CommandList.CopyBuffer(input, inputBuffer);
 
             Engine.Graphics.CommandList.BeginComputePass();
 
-            Engine.Graphics.CommandList.SetComputeBuffer(read, 0);
+            Engine.Graphics.CommandList.SetComputeBuffer(inputBuffer, 0);
             Engine.Graphics.CommandList.SetComputeBuffer(write1, 1);
             Engine.Graphics.CommandList.ComputePipelineState = pip1;
             Engine.Graphics.CommandList.Dispatch(dataSize, 1, 1);
 
-            Engine.Graphics.CommandList.SetComputeBuffer(read, 0);
+            Engine.Graphics.CommandList.SetComputeBuffer(inputBuffer, 0);
             Engine.Graphics.CommandList.SetComputeBuffer(write2, 1);
             Engine.Graphics.CommandList.ComputePipelineState = pip2;
             Engine.Graphics.CommandList.Dispatch(dataSize, 1, 1);
 
             Engine.Graphics.CommandList.EndComputePass();
 
-            Engine.Graphics.CommandList.ReadbackBuffer(read);
-            Engine.Graphics.CommandList.ReadbackBuffer(write1);
-            Engine.Graphics.CommandList.ReadbackBuffer(write2);
+            Engine.Graphics.CommandList.CopyBuffer(write1, write1Dst);
+            Engine.Graphics.CommandList.CopyBuffer(write2, write2Dst);
 
             Engine.Graphics.CommandList.End();
             Engine.Graphics.ExecuteCommandList();
             Engine.Graphics.WaitFinish();
 
 
-            var readValues = read.Read();
-            var write1Values = write1.Read();
-            var write2Values = write2.Read();
-
-            for (int i = 0; i < readValues.Length; i++)
+            using (var readValues = input.LockStrict())
+            using (var write1Values = write1Dst.LockStrict())
+            using (var write2Values = write2Dst.LockStrict())
             {
-                Assert.AreEqual(write1Values[i].value, readValues[i].value1 * readValues[i].value2 + offset);
-                Assert.AreEqual(write2Values[i].value, readValues[i].value1 * readValues[i].value2 * offset);
+                for (int i = 0; i < readValues.Span.Length; i++)
+                {
+                    Assert.AreEqual(
+                        write1Values.Span[i].value,
+                        readValues.Span[i].value1 * readValues.Span[i].value2 + offset);
+                    Assert.AreEqual(
+                        write2Values.Span[i].value,
+                        readValues.Span[i].value1 * readValues.Span[i].value2 * offset);
+                }
             }
 
             tc.End();
