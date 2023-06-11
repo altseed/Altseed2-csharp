@@ -1,4 +1,4 @@
-using Altseed2;
+﻿using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -212,7 +212,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
                 const string csClearGridIndices = @"
 RWStructuredBuffer<int2> gridIndicesTable : register(u0);
 
-[numthreads(64, 1, 1)]
+[numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
     gridIndicesTable[dtid.x] = int2(0xffffffff, 0xffffffff);
@@ -376,7 +376,7 @@ void CalcScalingFactor(int id)
             dens += CalcDensityCellPB(n_grid_pos, id, pos);
         }
     }
-    
+
     // 密度拘束条件(式(1))
     float C = dens/r0-1.0;
 
@@ -811,7 +811,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             Engine.Initialize("Fluids Sim", 640, 480);
             Engine.FramerateMode = FramerateMode.Variable;
             Engine.TargetFPS = 240;
-            
+
 
             var renderTexture = RenderTexture.Create(new Vector2I(300, 300), TextureFormat.R8G8B8A8_UNORM);
 
