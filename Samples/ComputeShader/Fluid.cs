@@ -1,4 +1,4 @@
-﻿using Altseed2;
+using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -726,7 +726,8 @@ float4 main(PS_INPUT input) : SV_TARGET
                     Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
                     Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
 
-                    for (int l = 0; l < 8; l++)
+                    // TODO: 2以上にすると死ぬ
+                    for (int l = 0; l < 1; l++)
                     {
                         Engine.Graphics.CommandList.ComputePipelineState = buildGridPipeline;
                         Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
@@ -762,19 +763,17 @@ float4 main(PS_INPUT input) : SV_TARGET
                         Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 1);
                         Engine.Graphics.CommandList.Dispatch(gridTable.Count, 1, 1);
 
-                        // TODO
+                        Engine.Graphics.CommandList.ComputePipelineState = calcScalingFactorPipeline;
+                        Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
+                        Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
 
-                        //Engine.Graphics.CommandList.ComputePipelineState = calcScalingFactorPipeline;
-                        //Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                        //Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
-                        //Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
-                        //Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
-
-                        //Engine.Graphics.CommandList.ComputePipelineState = calcCorrectPositionPipeline;
-                        //Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                        //Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
-                        //Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
-                        //Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
+                        Engine.Graphics.CommandList.ComputePipelineState = calcCorrectPositionPipeline;
+                        Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
+                        Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
                     }
 
                     Engine.Graphics.CommandList.ComputePipelineState = integratePipeline;
