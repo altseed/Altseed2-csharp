@@ -1,4 +1,4 @@
-﻿using Altseed2;
+using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,12 +53,12 @@ namespace Sample
             public Buffer<int> IndexBuffer { get; set; }
             public Buffer<Vertex> VertexBuffer { get; set; }
 
-            protected override void Draw(CommandList commandList)
+            protected override void Draw()
             {
-                commandList.Material = Material;
-                commandList.SetIndexBuffer(IndexBuffer);
-                commandList.SetVertexBuffer(VertexBuffer);
-                commandList.Draw(IndexBuffer.Count / 3);
+                Engine.Graphics.CommandList.Material = Material;
+                Engine.Graphics.CommandList.SetIndexBuffer(IndexBuffer);
+                Engine.Graphics.CommandList.SetVertexBuffer(VertexBuffer);
+                Engine.Graphics.CommandList.Draw(IndexBuffer.Count / 3);
             }
         }
 

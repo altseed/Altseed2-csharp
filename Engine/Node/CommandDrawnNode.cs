@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -110,12 +110,8 @@ namespace Altseed2
         /// <summary>
         /// 描画時に実行されます．
         /// </summary>
-        /// <param name="commandList">現在の<see cref="CommandList"/></param>
-        protected abstract void Draw(CommandList commandList);
+        protected abstract void Draw();
 
-        void IDrawn.Draw()
-        {
-            Draw(Engine.Graphics.CommandList);
-        }
+        void IDrawn.Draw() => Draw();
     }
 }
