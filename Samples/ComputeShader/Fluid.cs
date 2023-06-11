@@ -1,4 +1,4 @@
-using Altseed2;
+﻿using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -303,7 +303,7 @@ float2 CalcDensityCellPB(int2 gridPos, int i, float2 pos0)
 
     float h = EffectiveRadius.x;
     float dens = 0.0f;
-    if(startIndex != 0xffffffff){	// セルが空でないかのチェック
+    if(startIndex != 0xffffffff){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         int endIndex = gridIndicesTable[gridHash].y;
         for(int j = startIndex; j < endIndex; ++j){
@@ -332,8 +332,8 @@ float CalcScalingFactorCell(int2 gridPos, int i, float2 pos0)
     float h = EffectiveRadius.x;
     float r0 = Density.x;
     float sd = 0.0f;
-    float sd2 = 0.0f;
-    if(startIndex != 0xffffffff){	// セルが空でないかのチェック
+    float2 sd2 = 0.0f;
+    if(startIndex != 0xffffffff){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         uint endIndex = gridIndicesTable[gridHash].y;
         for(uint j = startIndex; j < endIndex; ++j){
@@ -360,14 +360,13 @@ float CalcScalingFactorCell(int2 gridPos, int i, float2 pos0)
 
 void CalcScalingFactor(int id)
 {
-    float2 pos = particles[id].Next;	// パーティクル位置
+    float2 pos = particles[id].Next; // パーティクル位置
     float h = EffectiveRadius.x;
     float r0 = Density.x;
 
     // パーティクル周囲のグリッド
-    int2 grid_pos0, grid_pos1;
-    grid_pos0 = GetGridPos(pos-h);
-    grid_pos1 = GetGridPos(pos+h);
+    int2 grid_pos0 = GetGridPos(pos-h);
+    int2 grid_pos1 = GetGridPos(pos+h);
 
     // 周囲のグリッドも含めて近傍探索，密度計算
     float dens = 0.0f;
@@ -391,7 +390,7 @@ void CalcScalingFactor(int id)
     }
 
     // スケーリングファクタの計算(式(11))
-    particles[id].Pscl = -C/(sd+Eps);
+    particles[id].Pscl = -C/(sd+Eps.x);
 }
 
 [numthreads(1, 1, 1)]
@@ -503,9 +502,8 @@ float2 CalcPositionCorrection(int id)
     float h = EffectiveRadius.x;
 
     // パーティクル周囲のグリッド
-    int2 grid_pos0, grid_pos1;
-    grid_pos0 = GetGridPos(pos - h);
-    grid_pos1 = GetGridPos(pos + h);
+    int2 grid_pos0 = GetGridPos(pos - h);
+    int2 grid_pos1 = GetGridPos(pos + h);
 
     // 周囲のグリッドも含めて近傍探索，位置修正量を計算
     float2 dpij = float2(0.0f);
@@ -522,9 +520,8 @@ float2 CalcPositionCorrection(int id)
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
-    if (particles[dtid.x].IsFix)
-        return;
     int id = dtid.x;
+    if (particles[id].IsFix) return;
     particles[id].Next += CalcPositionCorrection(id);
 }
 ";
@@ -613,10 +610,10 @@ int DecodeFloatRGBA(float4 rgba) {
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
+    int c = DecodeFloatRGBA(lerp(Color, FixedColor, particles[dtid.x].IsFix));
     for (int i = 0; i < 4; i++)
-    {
-        float4 c = lerp(Color, FixedColor, particles[dtid.x].IsFix);
-        vertex[dtid.x * 4 + i].Color = DecodeFloatRGBA(c);
+    { 
+        vertex[dtid.x * 4 + i].Color = c;
     }
 
     vertex[dtid.x * 4].Position = float3(particles[dtid.x].Current, 0.5) + float3(-1, -1, 0) * ParticleRadius.x * 3;
