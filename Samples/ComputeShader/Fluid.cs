@@ -25,98 +25,69 @@ namespace Sample
             public bool IsFix;
         };
 
-        public static float CalcRestDensity(float h)
-        {
-            var a = 4f / (MathF.PI * MathF.Pow(h, 8f));
-            var r0 = 0.0f;
-            var l = 2 * ParticleRadius;
-            int n = (int)MathF.Ceiling(h / l) + 1;
-            for (int x = -n; x <= n; ++x)
-            {
-                for (int y = -n; y <= n; ++y)
-                {
-                    Vector2F rij = new Vector2F(x * l, y * l);
-                    var r = rij.Length;
-                    if (r >= 0.0 && r <= h)
-                    {
-                        var q = h * h - r * r;
-                        r0 += a * q * q * q;
-                    }
-                }
-            }
-            return r0;
-        }
-
         class ParticleNode : CommandDrawnNode
         {
-            public Material Material { get; set; }
-            public Buffer<int> IndexBuffer { get; set; }
-            public Buffer<Vertex> VertexBuffer { get; set; }
+            public bool Step { get; set; } = false;
 
-            protected override void Draw()
+            private const int ParticlesCount = 2048;
+
+            private readonly Material material;
+
+            private readonly Buffer<int> particleComputeIndex;
+            private readonly Buffer<Vertex> particleComputeVertex;
+            private readonly Buffer<int> particleIndex;
+            private readonly Buffer<Vertex> particleVertex;
+            private readonly Buffer<Particle> particles;
+            private readonly Buffer<Vector2I> gridTable;
+            private readonly Buffer<Vector2I> gridIndicesTable;
+
+            private readonly ComputePipelineState calcExternalPipeline;
+            private readonly ComputePipelineState buildGridPipeline;
+            private readonly ComputePipelineState bitonicSortPipeline;
+            private readonly ComputePipelineState clearGridIndicesPipeline;
+            private readonly ComputePipelineState buildGridIndicesPipeline;
+            private readonly ComputePipelineState calcScalingFactorPipeline;
+            private readonly ComputePipelineState calcCorrectPositionPipeline;
+            private readonly ComputePipelineState integratePipeline;
+            private readonly ComputePipelineState buildVBIB;
+
+            public static float CalcRestDensity(float h)
             {
-                Engine.Graphics.CommandList.Material = Material;
-                Engine.Graphics.CommandList.SetIndexBuffer(IndexBuffer);
-                Engine.Graphics.CommandList.SetVertexBuffer(VertexBuffer);
-                Engine.Graphics.CommandList.Draw(IndexBuffer.Count / 3);
-            }
-        }
-
-        public static void Main(string[] args)
-        {
-            Engine.Initialize("Fluids Sim", 640, 480);
-            Engine.FramerateMode = FramerateMode.Variable;
-            Engine.TargetFPS = 240;
-            var density = CalcRestDensity(EffectiveRadius);
-
-            var particlesInput = Buffer<Particle>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, 2048);
-            using (var data = particlesInput.LockStrict())
-            {
-                int ind = 0;
-                for (int y = 0; y < 300 / (ParticleRadius * 2); y++)
+                var a = 4f / (MathF.PI * MathF.Pow(h, 8f));
+                var r0 = 0.0f;
+                var l = 2 * ParticleRadius;
+                int n = (int)MathF.Ceiling(h / l) + 1;
+                for (int x = -n; x <= n; ++x)
                 {
-                    for (int x = 0; x < 300 / (ParticleRadius * 2); x++)
+                    for (int y = -n; y <= n; ++y)
                     {
-                        if (x * (ParticleRadius * 2) + ParticleRadius < 8 ||
-                            x * (ParticleRadius * 2) + ParticleRadius > 300 - 8 ||
-                            y * (ParticleRadius * 2) + ParticleRadius < 8 ||
-                            y * (ParticleRadius * 2) + ParticleRadius > 300 - 8)
+                        Vector2F rij = new Vector2F(x * l, y * l);
+                        var r = rij.Length;
+                        if (r >= 0.0 && r <= h)
                         {
-                            data.Span[ind++] = new Particle()
-                            {
-                                Current = new Vector2F(x * (ParticleRadius * 2) + ParticleRadius, y * (ParticleRadius * 2) + ParticleRadius),
-                                Next = new Vector2F(x * (ParticleRadius * 2) + ParticleRadius, y * (ParticleRadius * 2) + ParticleRadius),
-                                Velocity = new Vector2F(0, 0),
-                                Pscl = 0,
-                                IsFix = true,
-                            };
+                            var q = h * h - r * r;
+                            r0 += a * q * q * q;
                         }
                     }
                 }
-
-                for (int i = ind; i < particlesInput.Count; i++)
-                {
-                    data.Span[i] = new Particle()
-                    {
-                        Current = new Vector2F(i % 50 * 4 + 10, i / 50 * 4 + 20),
-                        Velocity = new Vector2F(0, 0),
-                        Pscl = 0,
-                    };
-                }
+                return r0;
             }
 
-            var particles = Buffer<Particle>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, 2048);
+            public ParticleNode()
+            {
+                var density = CalcRestDensity(EffectiveRadius);
 
-            var gridTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, 2048);
-            var gridIndicesTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, 60 * 60);
-            
-            var particleComputeVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, particles.Count * 4);
-            var particleComputeIndex = Buffer<int>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, particles.Count * 6);
-            
-            var particleVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Vertex, particles.Count * 4);
-            var particleIndex = Buffer<int>.CreateStrict(BufferUsageType.Index, particles.Count * 6);
+                particles = Buffer<Particle>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, ParticlesCount);
+                gridTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, ParticlesCount);
+                gridIndicesTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, 60 * 60);
 
-            var csCalcExternalForces = @"
+                particleComputeVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, ParticlesCount * 4);
+                particleComputeIndex = Buffer<int>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, ParticlesCount * 6);
+
+                particleVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Vertex, ParticlesCount * 4);
+                particleIndex = Buffer<int>.CreateStrict(BufferUsageType.Index, ParticlesCount * 6);
+
+                const string csCalcExternalForces = @"
 struct Particle
 {
     float2 Current;
@@ -139,8 +110,7 @@ RWStructuredBuffer<Particle> particles : register(u0);
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
-    if (particles[dtid.x].IsFix)
-        return;
+    if (particles[dtid.x].IsFix) return;
     particles[dtid.x].Velocity += (Gravity.xy + Force.xy) * (1.0 / 60);
     particles[dtid.x].Next = particles[dtid.x].Current + particles[dtid.x].Velocity * (1.0 / 60);
     particles[dtid.x].Next.x = clamp(particles[dtid.x].Next.x, 8, GridNum.x * GridSize.x - 8);
@@ -148,14 +118,14 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var calcExternalPipeline = ComputePipelineState.Create();
-            calcExternalPipeline.Shader = Shader.Create("csCalcExternalForces", csCalcExternalForces, ShaderStage.Compute);
-            calcExternalPipeline.SetVector4F("Force", new Vector4F(0, 0, 0, 0));
-            calcExternalPipeline.SetVector4F("Gravity", new Vector4F(0, 100, 0, 0));
-            calcExternalPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-            calcExternalPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                calcExternalPipeline = ComputePipelineState.Create();
+                calcExternalPipeline.Shader = Shader.CreateStrict("csCalcExternalForces", csCalcExternalForces, ShaderStage.Compute);
+                calcExternalPipeline.SetVector4F("Force", new Vector4F(0, 0, 0, 0));
+                calcExternalPipeline.SetVector4F("Gravity", new Vector4F(0, 100, 0, 0));
+                calcExternalPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
+                calcExternalPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
 
-            var csBuildGrid = @"
+                const string csBuildGrid = @"
 struct Particle
 {
     float2 Current;
@@ -196,13 +166,13 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var buildGridPipeline = ComputePipelineState.Create();
-            buildGridPipeline.Shader = Shader.Create("csBuildGrid", csBuildGrid, ShaderStage.Compute);
-            buildGridPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-            buildGridPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
-            buildGridPipeline.SetVector4F("ParticleNum", new Vector4F(particles.Count, 0, 0, 0));
+                buildGridPipeline = ComputePipelineState.Create();
+                buildGridPipeline.Shader = Shader.CreateStrict("csBuildGrid", csBuildGrid, ShaderStage.Compute);
+                buildGridPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
+                buildGridPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                buildGridPipeline.SetVector4F("ParticleNum", new Vector4F(ParticlesCount, 0, 0, 0));
 
-            var csBitonicSort = @"
+                const string csBitonicSort = @"
 cbuffer CB : register(b0)
 {
     float4 Inc;
@@ -236,10 +206,10 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var bitonicSortPipeline = ComputePipelineState.Create();
-            bitonicSortPipeline.Shader = Shader.Create("csBitonicSort", csBitonicSort, ShaderStage.Compute);
+                bitonicSortPipeline = ComputePipelineState.Create();
+                bitonicSortPipeline.Shader = Shader.CreateStrict("csBitonicSort", csBitonicSort, ShaderStage.Compute);
 
-            var csClearGridIndices = @"
+                const string csClearGridIndices = @"
 RWStructuredBuffer<int2> gridIndicesTable : register(u0);
 
 [numthreads(64, 1, 1)]
@@ -249,10 +219,10 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var clearGridIndicesPipeline = ComputePipelineState.Create();
-            clearGridIndicesPipeline.Shader = Shader.Create("clearGridIndicesPipeline", csClearGridIndices, ShaderStage.Compute);
+                clearGridIndicesPipeline = ComputePipelineState.Create();
+                clearGridIndicesPipeline.Shader = Shader.CreateStrict("clearGridIndicesPipeline", csClearGridIndices, ShaderStage.Compute);
 
-            var csBuildGridIndices = @"
+                const string csBuildGridIndices = @"
 cbuffer CB : register(b0)
 {
     float4 ParticleNum;
@@ -286,11 +256,11 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var buildGridIndicesPipeline = ComputePipelineState.Create();
-            buildGridIndicesPipeline.Shader = Shader.Create("csBuildGridIndices", csBuildGridIndices, ShaderStage.Compute);
-            buildGridIndicesPipeline.SetVector4F("ParticleNum", new Vector4F(particles.Count, 0, 0, 0));
+                buildGridIndicesPipeline = ComputePipelineState.Create();
+                buildGridIndicesPipeline.Shader = Shader.CreateStrict("csBuildGridIndices", csBuildGridIndices, ShaderStage.Compute);
+                buildGridIndicesPipeline.SetVector4F("ParticleNum", new Vector4F(ParticlesCount, 0, 0, 0));
 
-            var csCalcScalingFactor = @"
+                const string csCalcScalingFactor = @"
 struct Particle
 {
     float2 Current;
@@ -432,18 +402,18 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var calcScalingFactorPipeline = ComputePipelineState.Create();
-            calcScalingFactorPipeline.Shader = Shader.Create("csCalcScalingFactor", csCalcScalingFactor, ShaderStage.Compute);
-            calcScalingFactorPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("EffectiveRadius", new Vector4F(EffectiveRadius, 0, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("Density", new Vector4F(density, 0, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("Eps", new Vector4F(0.1f, 0, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("Wpoly6", new Vector4F(4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f)), 0, 0, 0));
-            calcScalingFactorPipeline.SetVector4F("GWspiky", new Vector4F(-30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f)), 0, 0, 0));
+                calcScalingFactorPipeline = ComputePipelineState.Create();
+                calcScalingFactorPipeline.Shader = Shader.CreateStrict("csCalcScalingFactor", csCalcScalingFactor, ShaderStage.Compute);
+                calcScalingFactorPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("EffectiveRadius", new Vector4F(EffectiveRadius, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Density", new Vector4F(density, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Eps", new Vector4F(0.1f, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Wpoly6", new Vector4F(4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f)), 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("GWspiky", new Vector4F(-30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f)), 0, 0, 0));
 
-            var csCalcCorrectPosition = @"
+                const string csCalcCorrectPosition = @"
 struct Particle
 {
     float2 Current;
@@ -492,7 +462,7 @@ float2 CalcPositionCorrectionCell(int2 gridPos, int i, float2 pos0)
 
     float si = particles[i].Pscl;
 
-    if(startIndex != 0xffffffff){	// セルが空でないかのチェック
+    if(startIndex != 0xffffffff){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         uint endIndex = gridIndicesTable[gridHash].y;
         for(uint j = startIndex; j < endIndex; ++j){
@@ -529,7 +499,7 @@ float2 CalcPositionCorrectionCell(int2 gridPos, int i, float2 pos0)
 
 float2 CalcPositionCorrection(int id)
 {
-    float2 pos = particles[id].Next;	// パーティクル位置
+    float2 pos = particles[id].Next; // パーティクル位置
     float h = EffectiveRadius.x;
 
     // パーティクル周囲のグリッド
@@ -559,18 +529,18 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var calcCorrectPositionPipeline = ComputePipelineState.Create();
-            calcCorrectPositionPipeline.Shader = Shader.Create("csCalcCorrectPosition", csCalcCorrectPosition, ShaderStage.Compute);
-            calcCorrectPositionPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("EffectiveRadius", new Vector4F(EffectiveRadius, 0, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("Density", new Vector4F(density, 0, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("Eps", new Vector4F(0.1f, 0, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("Wpoly6", new Vector4F(4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f)), 0, 0, 0));
-            calcCorrectPositionPipeline.SetVector4F("GWspiky", new Vector4F(-30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f)), 0, 0, 0));
+                calcCorrectPositionPipeline = ComputePipelineState.Create();
+                calcCorrectPositionPipeline.Shader = Shader.CreateStrict("csCalcCorrectPosition", csCalcCorrectPosition, ShaderStage.Compute);
+                calcCorrectPositionPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("EffectiveRadius", new Vector4F(EffectiveRadius, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Density", new Vector4F(density, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Eps", new Vector4F(0.1f, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Wpoly6", new Vector4F(4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f)), 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("GWspiky", new Vector4F(-30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f)), 0, 0, 0));
 
-            var csIntegrate = @"
+                const string csIntegrate = @"
 struct Particle
 {
     float2 Current;
@@ -595,11 +565,11 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var integratePipeline = ComputePipelineState.Create();
-            integratePipeline.Shader = Shader.Create("csIntegrate", csIntegrate, ShaderStage.Compute);
-            integratePipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
+                integratePipeline = ComputePipelineState.Create();
+                integratePipeline.Shader = Shader.CreateStrict("csIntegrate", csIntegrate, ShaderStage.Compute);
+                integratePipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
 
-            var csBuildVBIB = @"
+                const string csBuildVBIB = @"
 struct Particle
 {
     float2 Current;
@@ -609,7 +579,8 @@ struct Particle
     bool IsFix;
 };
 
-struct Vertex{
+struct Vertex
+{
     float3 Position;
     int Color;
     float2 UV1;
@@ -620,6 +591,7 @@ cbuffer CB : register(b0)
 {
     float4 ParticleRadius;
     float4 Color;
+    float4 FixedColor;
 };
 
 RWStructuredBuffer<Particle> particles : register(u0);
@@ -643,9 +615,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
 {
     for (int i = 0; i < 4; i++)
     {
-        float4 c = Color;
-        if (particles[dtid.x].IsFix)
-            c.a = 0;
+        float4 c = lerp(Color, FixedColor, particles[dtid.x].IsFix);
         vertex[dtid.x * 4 + i].Color = DecodeFloatRGBA(c);
     }
 
@@ -667,10 +637,182 @@ void main(uint3 dtid : SV_DispatchThreadID)
 }
 ";
 
-            var buildVBIB = ComputePipelineState.Create();
-            buildVBIB.Shader = Shader.Create("csIntegrate", csBuildVBIB, ShaderStage.Compute);
-            buildVBIB.SetVector4F("ParticleRadius", new Vector4F(ParticleRadius, 0, 0, 0));
-            buildVBIB.SetVector4F("Color", new Vector4F(0.2f, 0.2f, 1f, 1f));
+                buildVBIB = ComputePipelineState.Create();
+                buildVBIB.Shader = Shader.CreateStrict("csIntegrate", csBuildVBIB, ShaderStage.Compute);
+                buildVBIB.SetVector4F("ParticleRadius", new Vector4F(ParticleRadius, 0, 0, 0));
+                buildVBIB.SetVector4F("Color", new Vector4F(0.2f, 0.2f, 1f, 1f));
+                buildVBIB.SetVector4F("FixedColor", new Vector4F(0f, 0f, 0f, 1f));
+
+                material = Material.Create();
+                var blend = AlphaBlend.Add;
+                blend.BlendEquationRGB = BlendEquation.Max;
+                material.AlphaBlend = blend;
+
+                const string psCode = @"
+struct PS_INPUT
+{
+    float4  Position : SV_POSITION;
+    float4  Color    : COLOR0;
+    float2  UV1 : UV0;
+    float2  UV2 : UV1;
+};
+float4 main(PS_INPUT input) : SV_TARGET
+{
+    float4 c;
+    float r = length((input.UV1 - 0.5) * 2);
+    float a = r > 1 ? 0 : (-4 / 9 * pow(r, 6) + 17 / 9 * pow(r, 4) - 22 / 9 * pow(r, 2) + 1);
+    c = float4(input.Color.rgb, input.Color.a * a);
+    return c;
+}";
+                material.SetShader(Shader.CreateStrict("ps", psCode, ShaderStage.Pixel));
+            }
+
+            protected override void OnAdded()
+            {
+                var particlesInput = Buffer<Particle>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, ParticlesCount);
+                using (var data = particlesInput.LockStrict())
+                {
+                    int ind = 0;
+                    for (int y = 0; y < 300 / (ParticleRadius * 2); y++)
+                    {
+                        for (int x = 0; x < 300 / (ParticleRadius * 2); x++)
+                        {
+                            if (x * (ParticleRadius * 2) + ParticleRadius < 8 ||
+                                x * (ParticleRadius * 2) + ParticleRadius > 300 - 8 ||
+                                y * (ParticleRadius * 2) + ParticleRadius < 8 ||
+                                y * (ParticleRadius * 2) + ParticleRadius > 300 - 8)
+                            {
+                                data.Span[ind++] = new Particle()
+                                {
+                                    Current = new Vector2F(x * (ParticleRadius * 2) + ParticleRadius, y * (ParticleRadius * 2) + ParticleRadius),
+                                    Next = new Vector2F(x * (ParticleRadius * 2) + ParticleRadius, y * (ParticleRadius * 2) + ParticleRadius),
+                                    Velocity = new Vector2F(0, 0),
+                                    Pscl = 0,
+                                    IsFix = true,
+                                };
+                            }
+                        }
+                    }
+
+                    for (int i = ind; i < particlesInput.Count; i++)
+                    {
+                        data.Span[i] = new Particle()
+                        {
+                            Current = new Vector2F(i % 50 * 4 + 10, i / 50 * 4 + 20),
+                            Velocity = new Vector2F(0, 0),
+                            Pscl = 0,
+                        };
+                    }
+                }
+
+                Engine.Graphics.CommandList.Begin();
+
+                Engine.Graphics.CommandList.CopyBuffer(particlesInput, particles);
+
+                Engine.Graphics.CommandList.End();
+                Engine.Graphics.ExecuteCommandList();
+                Engine.Graphics.WaitFinish();
+            }
+
+            protected override void OnUpdate()
+            {
+                Engine.Graphics.CommandList.Begin();
+                Engine.Graphics.CommandList.BeginComputePass();
+
+                if (Step)
+                {
+
+                    Engine.Graphics.CommandList.ComputePipelineState = calcExternalPipeline;
+                    Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                    Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
+
+                    for (int l = 0; l < 8; l++)
+                    {
+                        Engine.Graphics.CommandList.ComputePipelineState = buildGridPipeline;
+                        Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
+                        Engine.Graphics.CommandList.Dispatch(gridTable.Count, 1, 1);
+
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 0);
+
+                        int nlog = (int)MathF.Log(gridTable.Count, 2);
+                        int inc;
+
+                        for (int i = 0; i < nlog; i++)
+                        {
+                            inc = 1 << i;
+
+                            bitonicSortPipeline.SetVector4F("Dir", new Vector4F(2 << i, 0, 0, 0));
+
+                            for (int j = 0; j < i + 1; j++)
+                            {
+                                bitonicSortPipeline.SetVector4F("Inc", new Vector4F(inc, 0, 0, 0));
+                                Engine.Graphics.CommandList.ComputePipelineState = bitonicSortPipeline;
+                                Engine.Graphics.CommandList.Dispatch(gridTable.Count / 2 / 64, 1, 1);
+                                inc /= 2;
+                            }
+                        }
+
+                        Engine.Graphics.CommandList.ComputePipelineState = clearGridIndicesPipeline;
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 0);
+                        Engine.Graphics.CommandList.Dispatch(gridIndicesTable.Count, 1, 1);
+
+                        Engine.Graphics.CommandList.ComputePipelineState = buildGridIndicesPipeline;
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 0);
+                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 1);
+                        Engine.Graphics.CommandList.Dispatch(gridTable.Count, 1, 1);
+
+                        // TODO
+
+                        //Engine.Graphics.CommandList.ComputePipelineState = calcScalingFactorPipeline;
+                        //Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                        //Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
+                        //Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
+                        //Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
+
+                        //Engine.Graphics.CommandList.ComputePipelineState = calcCorrectPositionPipeline;
+                        //Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                        //Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
+                        //Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
+                        //Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
+                    }
+
+                    Engine.Graphics.CommandList.ComputePipelineState = integratePipeline;
+                    Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                    Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
+                }
+
+                Engine.Graphics.CommandList.ComputePipelineState = buildVBIB;
+                Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
+                Engine.Graphics.CommandList.SetComputeBuffer(particleComputeVertex, 1);
+                Engine.Graphics.CommandList.SetComputeBuffer(particleComputeIndex, 2);
+                Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
+
+                Engine.Graphics.CommandList.EndComputePass();
+
+                Engine.Graphics.CommandList.CopyBuffer(particleComputeIndex, particleIndex);
+                Engine.Graphics.CommandList.CopyBuffer(particleComputeVertex, particleVertex);
+
+                Engine.Graphics.CommandList.End();
+                Engine.Graphics.ExecuteCommandList();
+                Engine.Graphics.WaitFinish();
+            }
+
+            protected override void Draw()
+            {
+                Engine.Graphics.CommandList.Material = material;
+                Engine.Graphics.CommandList.SetIndexBuffer(particleIndex);
+                Engine.Graphics.CommandList.SetVertexBuffer(particleVertex);
+                Engine.Graphics.CommandList.Draw(particleIndex.Count / 3);
+            }
+        }
+
+        public static void Main(string[] args)
+        {
+            Engine.Initialize("Fluids Sim", 640, 480);
+            Engine.FramerateMode = FramerateMode.Variable;
+            Engine.TargetFPS = 240;
+            
 
             var renderTexture = RenderTexture.Create(new Vector2I(300, 300), TextureFormat.R8G8B8A8_UNORM);
 
@@ -692,32 +834,10 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             var particlesNode = new ParticleNode
             {
-                Material = Material.Create(),
-                CameraGroup = 1
+                CameraGroup = 1,
+                Step = false,
             };
-            var blend = AlphaBlend.Add;
-            blend.BlendEquationRGB = BlendEquation.Max;
-            particlesNode.Material.AlphaBlend = blend;
 
-            var psCode = @"
-struct PS_INPUT
-{
-    float4  Position : SV_POSITION;
-    float4  Color    : COLOR0;
-    float2  UV1 : UV0;
-    float2  UV2 : UV1;
-};
-float4 main(PS_INPUT input) : SV_TARGET
-{
-    float4 c;
-    float r = length((input.UV1 - 0.5) * 2);
-    float a = r > 1 ? 0 : (-4 / 9 * pow(r, 6) + 17 / 9 * pow(r, 4) - 22 / 9 * pow(r, 2) + 1);
-    c = float4(input.Color.rgb, input.Color.a * a);
-    return c;
-}";
-            particlesNode.Material.SetShader(Shader.Create("ps", psCode, ShaderStage.Pixel));
-            particlesNode.VertexBuffer = particleVertex;
-            particlesNode.IndexBuffer = particleIndex;
             Engine.AddNode(particlesNode);
 
             var finalizeNode = new SpriteNode()
@@ -727,7 +847,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 CameraGroup = 2,
             };
             finalizeNode.Material = Material.Create();
-            var psCode2 = @"
+            const string psCode2 = @"
 Texture2D mainTex : register(t0);
 SamplerState mainSamp : register(s0);
 struct PS_INPUT
@@ -745,7 +865,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     c = float4(mainTex.Sample(mainSamp, input.UV1).rgb, 1);
     return c;
 }";
-            finalizeNode.Material.SetShader(Shader.Create("ps2", psCode2, ShaderStage.Pixel));
+            finalizeNode.Material.SetShader(Shader.CreateStrict("ps2", psCode2, ShaderStage.Pixel));
             finalizeNode.Material.SetTexture("mainTex", renderTexture);
             Engine.AddNode(finalizeNode);
 
@@ -753,100 +873,14 @@ float4 main(PS_INPUT input) : SV_TARGET
             var text = new TextNode() { Font = font, FontSize = 30, Text = "", ZOrder = 10, CameraGroup = 2 };
             Engine.AddNode(text);
 
-            Engine.Graphics.CommandList.Begin();
-
-            Engine.Graphics.CommandList.CopyBuffer(particlesInput, particles);
-
-            Engine.Graphics.CommandList.End();
-            Engine.Graphics.ExecuteCommandList();
-            Engine.Graphics.WaitFinish();
-
-            bool step = false;
             while (Engine.DoEvents())
             {
-                Engine.Graphics.CommandList.Begin();
-
-                Engine.Graphics.CommandList.BeginComputePass();
-
-                if (step)
-                {
-                    Engine.Graphics.CommandList.ComputePipelineState = calcExternalPipeline;
-                    Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                    Engine.Graphics.CommandList.Dispatch(particles.Count, 1, 1);
-
-                    for (int l = 0; l < 8; l++)
-                    {
-                        Engine.Graphics.CommandList.ComputePipelineState = buildGridPipeline;
-                        Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
-                        Engine.Graphics.CommandList.Dispatch(gridTable.Count, 1, 1);
-
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 0);
-
-                        int nlog = (int)MathF.Log(gridTable.Count, 2);
-                        int inc;
-
-                        for (int i = 0; i < nlog; i++)
-                        {
-                            inc = 1 << i;
-                            for (int j = 0; j < i + 1; j++)
-                            {
-                                bitonicSortPipeline.SetVector4F("Dir", new Vector4F(2 << i, 0, 0, 0));
-                                bitonicSortPipeline.SetVector4F("Inc", new Vector4F(inc, 0, 0, 0));
-                                Engine.Graphics.CommandList.ComputePipelineState = bitonicSortPipeline;
-                                Engine.Graphics.CommandList.Dispatch(gridTable.Count / 2 / 64, 1, 1);
-                                inc /= 2;
-                            }
-                        }
-
-                        Engine.Graphics.CommandList.ComputePipelineState = clearGridIndicesPipeline;
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 0);
-                        Engine.Graphics.CommandList.Dispatch(gridIndicesTable.Count, 1, 1);
-
-                        Engine.Graphics.CommandList.ComputePipelineState = buildGridIndicesPipeline;
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 0);
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 1);
-                        Engine.Graphics.CommandList.Dispatch(gridTable.Count, 1, 1);
-
-                        Engine.Graphics.CommandList.ComputePipelineState = calcScalingFactorPipeline;
-                        Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
-                        Engine.Graphics.CommandList.Dispatch(particles.Count, 1, 1);
-
-                        Engine.Graphics.CommandList.ComputePipelineState = calcCorrectPositionPipeline;
-                        Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridTable, 1);
-                        Engine.Graphics.CommandList.SetComputeBuffer(gridIndicesTable, 2);
-                        Engine.Graphics.CommandList.Dispatch(particles.Count, 1, 1);
-                    }
-
-                    Engine.Graphics.CommandList.ComputePipelineState = integratePipeline;
-                    Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                    Engine.Graphics.CommandList.Dispatch(particles.Count, 1, 1);
-                }
-
-                Engine.Graphics.CommandList.ComputePipelineState = buildVBIB;
-                Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
-                Engine.Graphics.CommandList.SetComputeBuffer(particleComputeVertex, 1);
-                Engine.Graphics.CommandList.SetComputeBuffer(particleComputeIndex, 2);
-                Engine.Graphics.CommandList.Dispatch(particles.Count, 1, 1);
-
-                Engine.Graphics.CommandList.EndComputePass();
-
-                Engine.Graphics.CommandList.CopyBuffer(particleComputeIndex, particleIndex);
-                Engine.Graphics.CommandList.CopyBuffer(particleComputeVertex, particleVertex);
-
-                Engine.Graphics.CommandList.End();
-                Engine.Graphics.ExecuteCommandList();
-                Engine.Graphics.WaitFinish();
-
-                text.Text = Engine.CurrentFPS.ToString();
-
                 if (Engine.Keyboard.GetKeyState(Key.Space) == ButtonState.Push)
                 {
-                    step = !step;
+                    particlesNode.Step = !particlesNode.Step;
                 }
+
+                text.Text = $"FPS: {Engine.CurrentFPS}\nIsUpdated: {particlesNode.IsUpdated}";
 
                 Engine.Update();
             }
