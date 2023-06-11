@@ -10,9 +10,6 @@ namespace Sample
 {
     public class Fluid
     {
-        const float EffectiveRadius = 6;
-        const float ParticleRadius = 2;
-
         [StructLayout(LayoutKind.Sequential, Size = 32)]
         public struct Particle
         {
@@ -31,6 +28,8 @@ namespace Sample
 
             public int IterationCount { get; private init; }
 
+            private const float EffectiveRadius = 6;
+            private const float ParticleRadius = 2;
             private const int ParticlesCount = 2048;
 
             private readonly Material material;
@@ -414,7 +413,7 @@ RWStructuredBuffer<int2> gridIndicesTable : register(u2);
 
 float2 CalcPositionCorrectionCell(int2 gridPos, int i, float2 pos0)
 {
-    int gridHash = gridPos.x + gridPos.y * (int)GridNum.x;
+    int gridHash = GetHash(gridPos, GridNum.x);
     int startIndex = gridIndicesTable[gridHash].x;
 
     float h = EffectiveRadius.x;
