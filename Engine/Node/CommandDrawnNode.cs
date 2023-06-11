@@ -8,7 +8,7 @@ namespace Altseed2
     /// <see cref="CommandList"/>を呼び出すことで描画するノードを表します。
     /// </summary>
     [Serializable]
-    public class CommandDrawnNode : Node, IDrawn
+    public abstract class CommandDrawnNode : Node, IDrawn
     {
         #region IDrawn
         /// <summary>
@@ -47,6 +47,30 @@ namespace Altseed2
         }
         private int _ZOrder;
 
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        [PartsTreeSystem.SerializeField]
+        public bool IsDrawn
+        {
+            get => _IsDrawn;
+            set
+            {
+                if (_IsDrawn == value) return;
+                _IsDrawn = value;
+                this.UpdateIsDrawnActuallyOfDescendants();
+            }
+        }
+        private bool _IsDrawn = true;
+
+        /// <summary>
+        /// 先祖の<see cref="IDrawn.IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+        [PartsTreeSystem.SerializeField]
+        public bool IsDrawnActually => (this as IDrawn).IsDrawnActually;
+        [PartsTreeSystem.SerializeField]
+        bool IDrawn.IsDrawnActually { get; set; } = true;
+
         #endregion
         #region Node
 
@@ -66,8 +90,7 @@ namespace Altseed2
         public override void FlushQueue()
         {
             base.FlushQueue();
-            // TODO
-            // this.UpdateIsDrawnActuallyOfDescendants();
+            this.UpdateIsDrawnActuallyOfDescendants();
         }
 
         #endregion
@@ -76,7 +99,7 @@ namespace Altseed2
         /// 描画時に実行されます．
         /// </summary>
         /// <param name="commandList">現在の<see cref="CommandList"/></param>
-        protected virtual void Draw(CommandList commandList) { }
+        protected abstract void Draw(CommandList commandList);
 
         void IDrawn.Draw()
         {

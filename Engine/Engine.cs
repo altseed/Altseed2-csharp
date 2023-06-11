@@ -249,6 +249,9 @@ namespace Altseed2
             {
                 foreach (var node in znodes)
                 {
+                    // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
+                    if (!node.IsDrawnActually) continue;
+
                     if (node is PostEffectNode)
                     {
                         if (requireRender)
@@ -265,20 +268,17 @@ namespace Altseed2
                     }
                     else if (node is ICullableDrawn cdrawn)
                     {
-                        if (!cdrawn.IsDrawnActually) continue;
-                        // NOTE: WhereIterator を生成させないために foreach (var node in nodes.Where(n => n.IsDrawnActually)) などとしない
 
                         if (cullingIds.BinarySearch(cdrawn.CullingId) < 0) continue;
 
                         node.Draw();
                         requireRender = true;
                     }
-                    else if (node is IDrawn drawn)
+                    else
                     {
                         node.Draw();
                         requireRender = true;
                     }
-                    else throw new InvalidOperationException();
                 }
             }
 
