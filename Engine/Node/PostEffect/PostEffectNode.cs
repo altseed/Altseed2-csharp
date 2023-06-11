@@ -108,13 +108,6 @@ namespace Altseed2
         [PartsTreeSystem.SerializeField]
         bool IDrawn.IsDrawnActually { get; set; } = true;
 
-        /// <inheritdoc/>
-        public override void FlushQueue()
-        {
-            base.FlushQueue();
-            this.UpdateIsDrawnActuallyOfDescendants();
-        }
-
         /// <summary>
         /// <see cref="PostEffectNode"/>の新しいインスタンスを生成します。
         /// </summary>

@@ -98,13 +98,6 @@ namespace Altseed2
             Engine.UnregisterDrawn(this);
         }
 
-        /// <inheritdoc/>
-        public override void FlushQueue()
-        {
-            base.FlushQueue();
-            this.UpdateIsDrawnActuallyOfDescendants();
-        }
-
         #endregion
 
         /// <summary>
