@@ -876,7 +876,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                     particlesNode.Step = !particlesNode.Step;
                 }
 
-                text.Text = $"FPS: {Engine.CurrentFPS}\nIsUpdated: {particlesNode.IsUpdated}";
+                text.Text = $"FPS: {Engine.CurrentFPS}\nStep: {particlesNode.Step}";
 
                 Engine.Update();
             }
