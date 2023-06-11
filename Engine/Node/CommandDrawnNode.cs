@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +10,18 @@ namespace Altseed2
     [Serializable]
     public abstract class CommandDrawnNode : Node, IDrawn
     {
+        /// <summary>
+        /// <see cref="CommandDrawnNode"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Graphics機能が初期化されていない。</exception>
+        public CommandDrawnNode()
+        {
+            if (!Engine.Config.EnabledCoreModules.HasFlag(CoreModules.Graphics))
+            {
+                throw new InvalidOperationException("Graphivs機能が初期化されていません。");
+            }
+        }
+
         #region IDrawn
         /// <summary>
         /// カメラグループを取得または設定します。
