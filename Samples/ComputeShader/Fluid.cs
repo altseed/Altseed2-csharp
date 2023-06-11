@@ -1,4 +1,4 @@
-using Altseed2;
+﻿using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -690,12 +690,14 @@ void main(uint3 dtid : SV_DispatchThreadID)
             };
             Engine.AddNode(camera2);
 
-            var particlesNode = new ParticleNode();
-            particlesNode.Material = Material.Create();
+            var particlesNode = new ParticleNode
+            {
+                Material = Material.Create(),
+                CameraGroup = 1
+            };
             var blend = AlphaBlend.Add;
             blend.BlendEquationRGB = BlendEquation.Max;
             particlesNode.Material.AlphaBlend = blend;
-            particlesNode.CameraGroup = 1;
 
             var psCode = @"
 struct PS_INPUT

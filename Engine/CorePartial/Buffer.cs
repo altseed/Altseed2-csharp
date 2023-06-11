@@ -43,7 +43,7 @@ namespace Altseed2
         public static Buffer<T> Create(BufferUsageType usage, int count)
         {
             var internalBuffer = Buffer.Create(usage, Marshal.SizeOf<T>() * count);
-            if (internalBuffer == null)
+            if (internalBuffer is null)
             {
                 Engine.Log.Error(LogCategory.Engine, "Buffer<T>::Create: bufferの作成に失敗しました。");
                 return null;
@@ -62,7 +62,7 @@ namespace Altseed2
         public static Buffer<T> CreateStrict(BufferUsageType usage, int count)
         {
             var internalBuffer = Buffer.Create(usage, Marshal.SizeOf<T>() * count);
-            if (internalBuffer == null)
+            if (internalBuffer is null)
             {
                 throw new ArgumentException("Bufferの作成に失敗しました。");
             }
@@ -110,13 +110,13 @@ namespace Altseed2
         /// <returns></returns>
         public ref struct Container
         {
-            private Buffer<T> buffer;
+            private readonly Buffer<T> buffer;
 
             /// <summary>
             /// バッファのデータ
             /// </summary>
             /// <returns></returns>
-            public Span<T> Span { get; init; }
+            public Span<T> Span { get; private init; }
 
             internal Container(Buffer<T> buffer, Span<T> span)
             {
