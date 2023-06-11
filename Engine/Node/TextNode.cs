@@ -107,6 +107,7 @@ namespace Altseed2
         internal override void Registered()
         {
             base.Registered();
+            this.UpdateIsDrawnActuallyFromAncestors();
             Engine.RegisterDrawn(this);
             Engine.CullingSystem.Register(_RenderedText);
         }
@@ -116,13 +117,6 @@ namespace Altseed2
             base.Unregistered();
             Engine.UnregisterDrawn(this);
             Engine.CullingSystem.Unregister(_RenderedText);
-        }
-
-        /// <inheritdoc/>
-        public override void FlushQueue()
-        {
-            base.FlushQueue();
-            this.UpdateIsDrawnActuallyOfDescendants();
         }
 
         /// <inheritdoc/>

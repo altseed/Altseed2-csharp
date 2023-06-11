@@ -74,5 +74,12 @@ namespace Altseed2
             var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<ICullableDrawn>()?.IsDrawnActually ?? true;
             UpdateRecursive(node, ancestorsIsDrawnActually);
         }
+
+        internal static void UpdateIsDrawnActuallyFromAncestors<T>(this T node)
+            where T : Node, ICullableDrawn
+        {
+            var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<ICullableDrawn>()?.IsDrawnActually ?? true;
+            node.IsDrawnActually = ancestorsIsDrawnActually && node.IsDrawn;
+        }
     }
 }
