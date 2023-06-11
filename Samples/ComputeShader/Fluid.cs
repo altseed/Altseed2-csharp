@@ -1,4 +1,4 @@
-﻿using Altseed2;
+using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -592,7 +592,7 @@ cbuffer CB : register(b0)
 };
 
 RWStructuredBuffer<Particle> particles : register(u0);
-RWStructuredBuffer<Vertex> vertex : register(u1);
+RWStructuredBuffer<Vertex> vertex_ : register(u1);
 RWStructuredBuffer<int> index : register(u2);
 
 int DecodeFloatRGBA(float4 rgba) {
@@ -612,19 +612,22 @@ void main(uint3 dtid : SV_DispatchThreadID)
 {
     int c = DecodeFloatRGBA(lerp(Color, FixedColor, particles[dtid.x].IsFix));
     for (int i = 0; i < 4; i++)
-    { 
-        vertex[dtid.x * 4 + i].Color = c;
+    {
+        vertex_[dtid.x * 4 + i].Color = c;
     }
 
-    vertex[dtid.x * 4].Position = float3(particles[dtid.x].Current, 0.5) + float3(-1, -1, 0) * ParticleRadius.x * 3;
-    vertex[dtid.x * 4 + 1].Position = float3(particles[dtid.x].Current, 0.5) + float3(1, -1, 0) * ParticleRadius.x * 3;
-    vertex[dtid.x * 4 + 2].Position = float3(particles[dtid.x].Current, 0.5) + float3(1, 1, 0) * ParticleRadius.x * 3;
-    vertex[dtid.x * 4 + 3].Position = float3(particles[dtid.x].Current, 0.5) + float3(-1, 1, 0) * ParticleRadius.x * 3;
-    vertex[dtid.x * 4].UV1 = float2(0, 0);
-    vertex[dtid.x * 4 + 1].UV1 = float2(1, 0);
-    vertex[dtid.x * 4 + 2].UV1 = float2(1, 1);
-    vertex[dtid.x * 4 + 3].UV1 = float2(0, 1);
-    
+    float3 pos = float3(particles[dtid.x].Current, 0.5);
+
+    vertex_[dtid.x * 4].Position = pos + float3(-1, -1, 0) * ParticleRadius.x * 3;
+    vertex_[dtid.x * 4 + 1].Position = pos + float3(1, -1, 0) * ParticleRadius.x * 3;
+    vertex_[dtid.x * 4 + 2].Position = pos + float3(1, 1, 0) * ParticleRadius.x * 3;
+    vertex_[dtid.x * 4 + 3].Position = pos + float3(-1, 1, 0) * ParticleRadius.x * 3;
+
+    vertex_[dtid.x * 4].UV1 = float2(0, 0);
+    vertex_[dtid.x * 4 + 1].UV1 = float2(1, 0);
+    vertex_[dtid.x * 4 + 2].UV1 = float2(1, 1);
+    vertex_[dtid.x * 4 + 3].UV1 = float2(0, 1);
+
     index[dtid.x * 6] = dtid.x * 4;
     index[dtid.x * 6 + 1] = dtid.x * 4 + 1;
     index[dtid.x * 6 + 2] = dtid.x * 4 + 2;
