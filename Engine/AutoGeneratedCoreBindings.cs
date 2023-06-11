@@ -5143,14 +5143,6 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_CommandList_UploadBuffer(IntPtr selfPtr, IntPtr buffer);
-
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_CommandList_ReadbackBuffer(IntPtr selfPtr, IntPtr buffer);
-
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_CopyBuffer(IntPtr selfPtr, IntPtr src, IntPtr dst);
 
         [DllImport("Altseed2_Core")]
@@ -5333,16 +5325,6 @@ namespace Altseed2
         public void ResumeRenderPass()
         {
             cbg_CommandList_ResumeRenderPass(selfPtr);
-        }
-
-        internal void UploadBuffer(Buffer buffer)
-        {
-            cbg_CommandList_UploadBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero);
-        }
-
-        internal void ReadbackBuffer(Buffer buffer)
-        {
-            cbg_CommandList_ReadbackBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero);
         }
 
         internal void CopyBuffer(Buffer src, Buffer dst)
