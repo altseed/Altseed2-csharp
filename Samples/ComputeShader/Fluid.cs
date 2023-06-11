@@ -29,6 +29,8 @@ namespace Sample
         {
             public bool Step { get; set; } = false;
 
+            public int IterationCount { get; private init; }
+
             private const int ParticlesCount = 2048;
 
             private readonly Material material;
@@ -96,6 +98,8 @@ int2 GetGridPos(float2 pos, float2 gridSize)
 
             public ParticleNode()
             {
+                IterationCount = OperatingSystem.IsWindows() ? 1 : 4;
+
                 var density = CalcRestDensity(EffectiveRadius);
 
                 particles = Buffer<Particle>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, ParticlesCount);
@@ -668,8 +672,8 @@ float4 main(PS_INPUT input) : SV_TARGET
                     Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
                     Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
 
-                    // TODO: 2以上にすると死ぬ
-                    for (int l = 0; l < 1; l++)
+                    // TODO: Windowsでは2以上にすると死ぬ
+                    for (int l = 0; l < IterationCount; l++)
                     {
                         Engine.Graphics.CommandList.ComputePipelineState = buildGridPipeline;
                         Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
@@ -821,7 +825,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                     particlesNode.Step = !particlesNode.Step;
                 }
 
-                text.Text = $"FPS: {Engine.CurrentFPS}\nStep: {particlesNode.Step}";
+                text.Text = $"FPS: {Engine.CurrentFPS}\nIterationCount:{particlesNode.IterationCount}\nStep: {particlesNode.Step}";
 
                 Engine.Update();
             }
