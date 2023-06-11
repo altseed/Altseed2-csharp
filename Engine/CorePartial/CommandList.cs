@@ -8,26 +8,6 @@ namespace Altseed2
     public partial class CommandList
     {
         /// <summary>
-        /// GPUへデータをアップロードする
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="buffer"></param>
-        public void UploadBuffer<T>(Buffer<T> buffer) where T : struct
-        {
-            UploadBuffer(buffer.InternalBuffer);
-        }
-
-        /// <summary>
-        /// GPUからデータを読み込む
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="buffer"></param>
-        public void ReadbackBuffer<T>(Buffer<T> buffer) where T : struct
-        {
-            ReadbackBuffer(buffer.InternalBuffer);
-        }
-
-        /// <summary>
         /// GPUのデータをコピーする
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -75,6 +55,9 @@ namespace Altseed2
             SetComputeBuffer(computeBuffer.InternalBuffer, stride, unit, shaderStage);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Material Material
         {
             set
@@ -85,6 +68,12 @@ namespace Altseed2
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="material"></param>
+        /// <param name="constantBuffer"></param>
         public void SetMaterialWithConstantBuffer<T>(Material material, Buffer<T> constantBuffer) where T : struct
         {
             cbg_CommandList_SetMaterialWithConstantBuffer(
@@ -93,6 +82,12 @@ namespace Altseed2
                 constantBuffer != null ? constantBuffer.InternalBuffer.selfPtr : IntPtr.Zero);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="computePipelineState"></param>
+        /// <param name="constantBuffer"></param>
         public void SetComputePipelineStateWithConstantBuffer<T>(ComputePipelineState computePipelineState, Buffer<T> constantBuffer) where T : struct
         {
             cbg_CommandList_SetComputePipelineStateWithConstantBuffer(
