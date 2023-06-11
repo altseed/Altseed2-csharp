@@ -148,7 +148,14 @@ namespace Sample
         {
             var type = Type.GetType(TypeName);
             var mainMethod = type?.GetMethod("Main", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-            mainMethod?.Invoke(null, new[] { new string[] { } });
+            try
+            {
+                mainMethod?.Invoke(null, new[] { new string[] { } });
+            }
+            catch (TargetInvocationException e)
+            {
+                System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(e.InnerException).Throw();
+            }
         }
     }
 }
