@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -296,14 +296,14 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             using (var c = output.LockStrict())
             {
-                for (int i = 0; i < Count - 1; i++)
-                {
-                    Assert.True(c.Span[i].Key < c.Span[i + 1].Key);
-                }
-
                 for (int i = 0; i < Count; i++)
                 {
                     Console.WriteLine($"{i}: {c.Span[i].Key}");
+                }
+
+                for (int i = 0; i < Count - 1; i++)
+                {
+                    Assert.True(c.Span[i].Key < c.Span[i + 1].Key);
                 }
             }
 
