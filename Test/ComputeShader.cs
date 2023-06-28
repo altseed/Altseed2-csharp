@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -187,6 +187,76 @@ void main(uint3 dtid : SV_DispatchThreadID)
                     Assert.AreEqual(
                         write2Values.Span[i].value,
                         readValues.Span[i].value1 * readValues.Span[i].value2 * offset);
+                }
+            }
+
+            tc.End();
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void ComputeTiming()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            const string code = @"
+RWStructuredBuffer<int> myData : register(u0);
+
+[numthreads(1, 1, 1)]
+void main(uint3 dtid : SV_DispatchThreadID)
+{
+    myData[dtid.x] = 1;
+}
+";
+            var pipeline = ComputePipelineState.Create();
+            pipeline.Shader = Shader.CreateStrict("csBitonicSort", code, ShaderStage.Compute);
+
+            const int Count = 4;
+            var input = Buffer<int>.CreateStrict(BufferUsageType.CopySrc | BufferUsageType.MapWrite, Count);
+            var computeBuffer = Buffer<int>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.Compute, Count);
+            var output1 = Buffer<int>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, Count);
+            var output2 = Buffer<int>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, Count);
+
+            using (var c = input.LockStrict())
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    c.Span[i] = 0;
+                }
+            }
+
+            Engine.Graphics.CommandList.Begin();
+            Engine.Graphics.CommandList.CopyBuffer(input, computeBuffer);
+
+            Engine.Graphics.CommandList.BeginComputePass();
+
+            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
+            Engine.Graphics.CommandList.ComputePipelineState = pipeline;
+            Engine.Graphics.CommandList.Dispatch(computeBuffer.Count, 1, 1);
+
+            Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output1);
+
+            Engine.Graphics.CommandList.EndComputePass();
+
+            Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output2);
+
+            Engine.Graphics.CommandList.End();
+            Engine.Graphics.ExecuteCommandList();
+            Engine.Graphics.WaitFinish();
+
+            using (var c = output1.LockStrict())
+            {
+                for (int i = 0; i < Count - 1; i++)
+                {
+                    Assert.True(c.Span[i] == 1);
+                }
+            }
+
+            using (var c = output2.LockStrict())
+            {
+                for (int i = 0; i < Count - 1; i++)
+                {
+                    Assert.True(c.Span[i] == 1);
                 }
             }
 
