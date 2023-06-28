@@ -1,4 +1,4 @@
-﻿using Altseed2;
+using Altseed2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -421,7 +421,7 @@ float2 CalcPositionCorrectionCell(int2 gridPos, int i, float2 pos0)
 
     float h = EffectiveRadius.x;
     float r0 = Density.x;
-    float2 dp = float2(0.0);
+    float2 dp = float2(0.0f, 0.0f);
 
     float dt = Dt.x;
 
@@ -472,7 +472,7 @@ float2 CalcPositionCorrection(int id)
     int2 grid_pos1 = GetGridPos(pos + h, GridSize.xy);
 
     // 周囲のグリッドも含めて近傍探索，位置修正量を計算
-    float2 dpij = float2(0.0f);
+    float2 dpij = float2(0.0f, 0.0f);
     for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
         for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
             int2 n_grid_pos = int2(x, y);
