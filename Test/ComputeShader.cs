@@ -200,12 +200,17 @@ void main(uint3 dtid : SV_DispatchThreadID)
             tc.Init();
 
             const string code = @"
+cbuffer CB : register(b0)
+{
+    float4 Value;
+};
+
 RWStructuredBuffer<int> myData : register(u0);
 
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
-    myData[dtid.x] = 1;
+    myData[dtid.x] += Value.x;
 }
 ";
             var pipeline = ComputePipelineState.Create();
@@ -231,32 +236,30 @@ void main(uint3 dtid : SV_DispatchThreadID)
             Engine.Graphics.CommandList.BeginComputePass();
 
             Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
+            pipeline.SetVector4F("Value", new Vector4F(1, 0, 0, 0));
             Engine.Graphics.CommandList.ComputePipelineState = pipeline;
             Engine.Graphics.CommandList.Dispatch(computeBuffer.Count, 1, 1);
-
             Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output1);
 
-            Engine.Graphics.CommandList.EndComputePass();
-
+            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
+            pipeline.SetVector4F("Value", new Vector4F(2, 0, 0, 0));
+            Engine.Graphics.CommandList.ComputePipelineState = pipeline;
+            Engine.Graphics.CommandList.Dispatch(computeBuffer.Count, 1, 1);
             Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output2);
+
+            Engine.Graphics.CommandList.EndComputePass();
 
             Engine.Graphics.CommandList.End();
             Engine.Graphics.ExecuteCommandList();
             Engine.Graphics.WaitFinish();
 
-            using (var c = output1.LockStrict())
+            using (var c1 = output1.LockStrict())
+            using (var c2 = output2.LockStrict())
             {
                 for (int i = 0; i < Count - 1; i++)
                 {
-                    Assert.True(c.Span[i] == 1);
-                }
-            }
-
-            using (var c = output2.LockStrict())
-            {
-                for (int i = 0; i < Count - 1; i++)
-                {
-                    Assert.True(c.Span[i] == 1);
+                    Assert.AreEqual(1, c1.Span[i], $"output1[{i}]");
+                    Assert.AreEqual(3, c2.Span[i], $"output2[{i}]");
                 }
             }
 
@@ -344,12 +347,11 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             for (int i = 0; i < (int)MathF.Log(computeBuffer.Count, 2); i++)
             {
-                int inc = 1 << i;
-
+                var inc = 1 << i;
+                var dir = 2 << i;
                 for (int j = 0; j < i + 1; j++)
                 {
-                    bitonicSortPipeline.SetVector4F("Inc_Dir", new Vector4F(inc, 2 << i, 0, 0));
-                    
+                    bitonicSortPipeline.SetVector4F("Inc_Dir", new Vector4F(inc, dir, 0, 0));
                     Engine.Graphics.CommandList.ComputePipelineState = bitonicSortPipeline;
                     Engine.Graphics.CommandList.Dispatch(computeBuffer.Count / 2 / 64, 1, 1);
                     
@@ -373,7 +375,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
                 for (int i = 0; i < Count - 1; i++)
                 {
-                    Assert.True(c.Span[i].Key < c.Span[i + 1].Key);
+                    Assert.Less(c.Span[i].Key, c.Span[i + 1].Key);
                 }
             }
 
