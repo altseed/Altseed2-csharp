@@ -192,5 +192,117 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             tc.End();
         }
+
+        [StructLayout(LayoutKind.Sequential, Size = 32)]
+        public struct MyStruct
+        {
+            [MarshalAs(UnmanagedType.I4)]
+            public int Key;
+            [MarshalAs(UnmanagedType.I4)]
+            public int Index;
+        }
+        [Test, Apartment(ApartmentState.STA)]
+        public void BitonicSort()
+        {
+            var tc = new TestCore();
+            tc.Init();
+
+            const string csBitonicSort = @"
+cbuffer CB : register(b0)
+{
+    float4 Inc_Dir;
+};
+
+struct MyStruct
+{
+	int key;
+	int index;
+};
+
+bool compareMyStruct(MyStruct a, MyStruct b) { return a.key < b.key; }
+
+RWStructuredBuffer<MyStruct> myData : register(u0);
+
+[numthreads(64, 1, 1)]
+void main(uint3 dtid : SV_DispatchThreadID)
+{
+    int inc = (int)Inc_Dir.x;
+    int dir = (int)Inc_Dir.y;
+    int t = dtid.x; // thread index
+    int low = t & (inc - 1); // low order bits (below INC)
+    int i = (t << 1) - low; // insert 0 at position INC
+    bool reverse = ((dir & i) == 0);
+
+    // Load
+    MyStruct x0 = myData[i];
+    MyStruct x1 = myData[inc + i];
+
+    // Sort
+    MyStruct auxa = x0;
+    MyStruct auxb = x1;
+    if (compareMyStruct(x0, x1) ^ reverse) { x0 = auxb; x1 = auxa; }
+
+    // Store
+    myData[i] = x0;
+    myData[inc + i] = x1;
+}
+";
+            var bitonicSortPipeline = ComputePipelineState.Create();
+            bitonicSortPipeline.Shader = Shader.CreateStrict("csBitonicSort", csBitonicSort, ShaderStage.Compute);
+
+            const int Count = 2048;
+            var input = Buffer<MyStruct>.CreateStrict(BufferUsageType.CopySrc | BufferUsageType.MapWrite, Count);
+            var computeBuffer = Buffer<MyStruct>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.Compute, Count);
+            var output = Buffer<MyStruct>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, Count);
+
+            using (var c = input.LockStrict())
+            {
+                var rand = new Random();
+
+                for (int i = 0; i < Count; i++)
+                {
+                    c.Span[i] = new MyStruct { Key = rand.Next(), Index = i };
+                }
+            }
+
+            Engine.Graphics.CommandList.Begin();
+            Engine.Graphics.CommandList.CopyBuffer(input, computeBuffer);
+
+            Engine.Graphics.CommandList.BeginComputePass();
+
+            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
+
+            for (int i = 0; i < (int)MathF.Log(computeBuffer.Count, 2); i++)
+            {
+                int inc = 1 << i;
+
+                for (int j = 0; j < i + 1; j++)
+                {
+                    bitonicSortPipeline.SetVector4F("Inc_Dir", new Vector4F(inc, 2 << i, 0, 0));
+                    
+                    Engine.Graphics.CommandList.ComputePipelineState = bitonicSortPipeline;
+                    Engine.Graphics.CommandList.Dispatch(computeBuffer.Count / 2 / 64, 1, 1);
+                    
+                    inc /= 2;
+                }
+            }
+            Engine.Graphics.CommandList.EndComputePass();
+
+            Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output);
+
+            Engine.Graphics.CommandList.End();
+            Engine.Graphics.ExecuteCommandList();
+            Engine.Graphics.WaitFinish();
+
+            using (var c = output.LockStrict())
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    Console.WriteLine($"{i}: {c.Span[i].Key}");
+                }
+            }
+
+            tc.End();
+        }
     }
 }
