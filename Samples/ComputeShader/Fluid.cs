@@ -62,7 +62,7 @@ namespace Sample
                 {
                     for (int y = -n; y <= n; ++y)
                     {
-                        Vector2F rij = new Vector2F(x * l, y * l);
+                        var rij = new Vector2F(x * l, y * l);
                         var r = rij.Length;
                         if (r >= 0.0 && r <= h)
                         {
@@ -94,12 +94,18 @@ int2 GetGridPos(float2 pos, float2 gridSize)
     return pos / gridSize;
 }
 ";
-
             public ParticleNode()
             {
                 IterationCount = OperatingSystem.IsWindows() ? 1 : 4;
 
+                var gridNum = new Vector4F(60, 60, 0, 0);
+                var gridSize = new Vector4F(5, 5, 0, 0);
+
                 var density = CalcRestDensity(EffectiveRadius);
+                var eps = 0.1f;
+                var dt = 1.0f / 60;
+                var wpoly6 = 4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f));
+                var gwspiky = -30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f));
 
                 particles = Buffer<Particle>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, ParticlesCount);
                 gridTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute, ParticlesCount);
@@ -137,8 +143,8 @@ void main(uint3 dtid : SV_DispatchThreadID)
                 calcExternalPipeline.Shader = Shader.CreateStrict("csCalcExternalForces", csCalcExternalForces, ShaderStage.Compute);
                 calcExternalPipeline.SetVector4F("Force", new Vector4F(0, 0, 0, 0));
                 calcExternalPipeline.SetVector4F("Gravity", new Vector4F(0, 100, 0, 0));
-                calcExternalPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-                calcExternalPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                calcExternalPipeline.SetVector4F("GridNum", gridNum);
+                calcExternalPipeline.SetVector4F("GridSize", gridSize);
 
                 const string csBuildGrid = CommonCode + @"
 cbuffer CB : register(b0)
@@ -169,8 +175,8 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
                 buildGridPipeline = ComputePipelineState.Create();
                 buildGridPipeline.Shader = Shader.CreateStrict("csBuildGrid", csBuildGrid, ShaderStage.Compute);
-                buildGridPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-                buildGridPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                buildGridPipeline.SetVector4F("GridSize", gridSize);
+                buildGridPipeline.SetVector4F("GridNum", gridNum);
                 buildGridPipeline.SetVector4F("ParticleNum", new Vector4F(ParticlesCount, 0, 0, 0));
 
                 const string csBitonicSort = @"
@@ -232,14 +238,17 @@ cbuffer CB : register(b0)
 RWStructuredBuffer<int2> gridTable : register(u0);
 RWStructuredBuffer<int2> gridIndicesTable : register(u1);
 
+int getValidId(int id) {
+    int n = ParticleNum.x;
+    return id - n * floor(id / n);
+}
+
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
     int id = dtid.x;
-    int idPrev = (id == 0) ? (int)ParticleNum : id;
-    idPrev--;
-    int idNext = id + 1;
-    if (idNext == (int)ParticleNum) { idNext = 0; }
+    int idPrev = getValidId(id - 1);
+    int idNext = getValidId(id + 1);
 
     int cell = gridTable[id].x;
     int cellPrev = gridTable[idPrev].x;
@@ -283,21 +292,20 @@ float2 CalcDensityCellPB(int2 gridPos, int i, float2 pos0)
     int gridHash = GetHash(gridPos, GridNum.x);
     int startIndex = gridIndicesTable[gridHash].x;
 
-    float h = EffectiveRadius.x;
+    float h2 = EffectiveRadius.x * EffectiveRadius.x;
     float dens = 0.0f;
     if(startIndex != 0xffffffff){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         int endIndex = gridIndicesTable[gridHash].y;
         for(int j = startIndex; j < endIndex; ++j){
-            //if(j == i) continue;
+            // if(j == i) continue;
 
             float2 pos1 = particles[gridTable[j].y].Next;
 
-            float2 rij = pos0 - pos1;
-            float r = length(rij);
+            float r2 = dot(pos0 - pos1, pos0 - pos1);
 
-            if(r <= h){
-                float q = h * h - r * r;
+            if(r2 <= h2){
+                float q = h2 - r2;
                 dens += Wpoly6.x * q * q * q;
             }
         }
@@ -322,15 +330,15 @@ float CalcScalingFactorCell(int2 gridPos, int i, float2 pos0)
 
             float2 pos1 = particles[gridTable[j].y].Next;
 
-            float2 rij = pos0-pos1;
+            float2 rij = pos0 - pos1;
             float r = length(rij);
 
             if(r <= h && r > 0.0){
                 float q = h - r;
 
                 // Spikyカーネルで位置変動を計算
-                float2 dp = -(GWspiky.x * q * q * rij / r) / r0;
-                sd2 -= dp;
+                float2 dp = (GWspiky.x * q * q * rij / r) / r0;
+                sd2 += dp;
 
                 if(gridTable[j].y != i)
                     sd += dot(dp, dp);
@@ -347,31 +355,26 @@ void CalcScalingFactor(int id)
     float r0 = Density.x;
 
     // パーティクル周囲のグリッド
-    int2 grid_pos0 = GetGridPos(pos-h, GridSize.xy);
-    int2 grid_pos1 = GetGridPos(pos+h, GridSize.xy);
+    int2 grid_pos0 = GetGridPos(pos-float2(h, h), GridSize.xy);
+    int2 grid_pos1 = GetGridPos(pos+float2(h, h), GridSize.xy);
 
-    // 周囲のグリッドも含めて近傍探索，密度計算
+    
     float dens = 0.0f;
-    for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
-        for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
-            int2 n_grid_pos = int2(x, y);
-            dens += CalcDensityCellPB(n_grid_pos, id, pos);
-        }
-    }
-
-    // 密度拘束条件(式(1))
-    float C = dens/r0-1.0;
-
-    // 周囲のグリッドも含めて近傍探索，スケーリングファクタの分母項計算
     float sd = 0.0f;
     for(int y = grid_pos0.y; y <= grid_pos1.y; ++y){
         for(int x = grid_pos0.x; x <= grid_pos1.x; ++x){
             int2 n_grid_pos = int2(x, y);
+            // 周囲のグリッドも含めて近傍探索，密度計算
+            dens += CalcDensityCellPB(n_grid_pos, id, pos);
+            // 周囲のグリッドも含めて近傍探索，スケーリングファクタの分母項計算
             sd += CalcScalingFactorCell(n_grid_pos, id, pos);
         }
     }
 
-    // スケーリングファクタの計算(式(11))
+    // 密度拘束条件
+    float C = dens/r0-1.0;
+
+    // スケーリングファクタの計算
     particles[id].Pscl = -C/(sd+Eps.x);
 }
 
@@ -385,14 +388,14 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
                 calcScalingFactorPipeline = ComputePipelineState.Create();
                 calcScalingFactorPipeline.Shader = Shader.CreateStrict("csCalcScalingFactor", csCalcScalingFactor, ShaderStage.Compute);
-                calcScalingFactorPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-                calcScalingFactorPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("GridNum", gridNum);
+                calcScalingFactorPipeline.SetVector4F("GridSize", gridSize);
                 calcScalingFactorPipeline.SetVector4F("EffectiveRadius", new Vector4F(EffectiveRadius, 0, 0, 0));
                 calcScalingFactorPipeline.SetVector4F("Density", new Vector4F(density, 0, 0, 0));
-                calcScalingFactorPipeline.SetVector4F("Eps", new Vector4F(0.1f, 0, 0, 0));
-                calcScalingFactorPipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
-                calcScalingFactorPipeline.SetVector4F("Wpoly6", new Vector4F(4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f)), 0, 0, 0));
-                calcScalingFactorPipeline.SetVector4F("GWspiky", new Vector4F(-30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f)), 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Eps", new Vector4F(eps, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Dt", new Vector4F(dt, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("Wpoly6", new Vector4F(wpoly6, 0, 0, 0));
+                calcScalingFactorPipeline.SetVector4F("GWspiky", new Vector4F(gwspiky, 0, 0, 0));
 
                 const string csCalcCorrectPosition = CommonCode + @"
 cbuffer CB : register(b0)
@@ -491,14 +494,14 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
                 calcCorrectPositionPipeline = ComputePipelineState.Create();
                 calcCorrectPositionPipeline.Shader = Shader.CreateStrict("csCalcCorrectPosition", csCalcCorrectPosition, ShaderStage.Compute);
-                calcCorrectPositionPipeline.SetVector4F("GridNum", new Vector4F(60, 60, 0, 0));
-                calcCorrectPositionPipeline.SetVector4F("GridSize", new Vector4F(5, 5, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("GridNum", gridNum);
+                calcCorrectPositionPipeline.SetVector4F("GridSize", gridSize);
                 calcCorrectPositionPipeline.SetVector4F("EffectiveRadius", new Vector4F(EffectiveRadius, 0, 0, 0));
                 calcCorrectPositionPipeline.SetVector4F("Density", new Vector4F(density, 0, 0, 0));
-                calcCorrectPositionPipeline.SetVector4F("Eps", new Vector4F(0.1f, 0, 0, 0));
-                calcCorrectPositionPipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
-                calcCorrectPositionPipeline.SetVector4F("Wpoly6", new Vector4F(4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f)), 0, 0, 0));
-                calcCorrectPositionPipeline.SetVector4F("GWspiky", new Vector4F(-30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f)), 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Eps", new Vector4F(eps, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Dt", new Vector4F(dt, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("Wpoly6", new Vector4F(wpoly6, 0, 0, 0));
+                calcCorrectPositionPipeline.SetVector4F("GWspiky", new Vector4F(gwspiky, 0, 0, 0));
 
                 const string csIntegrate = CommonCode + @"
 cbuffer CB : register(b0)
@@ -518,7 +521,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
                 integratePipeline = ComputePipelineState.Create();
                 integratePipeline.Shader = Shader.CreateStrict("csIntegrate", csIntegrate, ShaderStage.Compute);
-                integratePipeline.SetVector4F("Dt", new Vector4F(1.0f / 60, 0, 0, 0));
+                integratePipeline.SetVector4F("Dt", new Vector4F(dt, 0, 0, 0));
 
                 const string csBuildVBIB = CommonCode + @"
 struct Vertex
