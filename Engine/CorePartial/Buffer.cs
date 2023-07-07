@@ -73,28 +73,32 @@ namespace Altseed2
         /// <summary>
         /// バッファのデータへアクセスする
         /// </summary>
-        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="Container"/></returns>
-        public Container Lock()
+        /// <returns>バッファのデータ<see cref="ReadOnlySpan{T}"/>を持つ<see cref="ReadContainer"/></returns>
+        public ReadContainer ReadLock()
         {
             unsafe
             {
                 var lockPtr = InternalBuffer.Lock();
-                if (lockPtr == IntPtr.Zero)
+
+                if (lockPtr == IntPtr.Zero
+                    || ((InternalBuffer.BufferUsage & BufferUsageType.MapRead) == 0
+                        && (InternalBuffer.BufferUsage & BufferUsageType.MapWrite) == 0)
+                )
                 {
-                    return new Container(null, null);
+                    return new ReadContainer(null, null);
                 }
-                return new Container(this, new Span<T>(lockPtr.ToPointer(), Count));
+                return new ReadContainer(this, new ReadOnlySpan<T>(lockPtr.ToPointer(), Count));
             }
         }
 
         /// <summary>
         /// バッファのデータへアクセスする。
         /// </summary>
-        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="Container"/></returns>
+        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="ReadContainer"/></returns>
         /// <exception cref="InvalidOperationException">バッファのロックに失敗</exception>
-        public Container LockStrict()
+        public ReadContainer ReadLockStrict()
         {
-            var container = Lock();
+            var container = ReadLock();
 
             if (container.Span == null)
             {
@@ -105,10 +109,76 @@ namespace Altseed2
         }
 
         /// <summary>
-        /// バッファへの書き込みを開始します
+        /// バッファのデータへアクセスする
+        /// </summary>
+        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="WriteContainer"/></returns>
+        public WriteContainer WriteLock()
+        {
+            unsafe
+            {
+                var lockPtr = InternalBuffer.Lock();
+
+                if (lockPtr == IntPtr.Zero || ((InternalBuffer.BufferUsage & BufferUsageType.MapWrite) == 0))
+                {
+                    return new WriteContainer(null, null);
+                }
+                return new WriteContainer(this, new Span<T>(lockPtr.ToPointer(), Count));
+            }
+        }
+
+        /// <summary>
+        /// バッファのデータへアクセスする。
+        /// </summary>
+        /// <returns>バッファのデータ<see cref="Span{T}"/>を持つ<see cref="WriteContainer"/></returns>
+        /// <exception cref="InvalidOperationException">バッファのロックに失敗</exception>
+        public WriteContainer WriteLockStrict()
+        {
+            var container = WriteLock();
+
+            if (container.Span == null)
+            {
+                throw new InvalidOperationException("バッファのロックに失敗しました。");
+            }
+
+            return container;
+        }
+
+        /// <summary>
+        /// バッファへ書き込みを行うための情報を保持する構造体。
         /// </summary>
         /// <returns></returns>
-        public ref struct Container
+        public ref struct ReadContainer
+        {
+            private readonly Buffer<T> buffer;
+
+            /// <summary>
+            /// バッファのデータ
+            /// </summary>
+            /// <returns></returns>
+            public ReadOnlySpan<T> Span { get; private init; }
+
+            /// <summary>
+            /// <see cref="Span{T}"/>がnullではない。
+            /// </summary>
+            public bool IsValid => Span != null;
+
+            internal ReadContainer(Buffer<T> buffer, ReadOnlySpan<T> span)
+            {
+                this.buffer = buffer;
+                Span = span;
+            }
+
+            /// <summary>
+            /// バッファのアンロックを行う
+            /// </summary>
+            public void Dispose() => buffer?.InternalBuffer.Unlock();
+        }
+
+        /// <summary>
+        /// バッファへ書き込みを行うための情報を保持する構造体。
+        /// </summary>
+        /// <returns></returns>
+        public ref struct WriteContainer
         {
             private readonly Buffer<T> buffer;
 
@@ -118,7 +188,12 @@ namespace Altseed2
             /// <returns></returns>
             public Span<T> Span { get; private init; }
 
-            internal Container(Buffer<T> buffer, Span<T> span)
+            /// <summary>
+            /// <see cref="Span{T}"/>がnullではない。
+            /// </summary>
+            public bool IsValid => Span != null;
+
+            internal WriteContainer(Buffer<T> buffer, Span<T> span)
             {
                 this.buffer = buffer;
                 Span = span;

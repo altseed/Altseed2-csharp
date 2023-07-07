@@ -7,6 +7,8 @@ namespace Altseed2
 {
     public partial class CommandList
     {
+        private const int TextureSlotMax = 8;
+
         /// <summary>
         /// GPUのデータをコピーする
         /// </summary>
@@ -51,6 +53,7 @@ namespace Altseed2
         /// <param name="shaderStage"></param>
         public void SetComputeBuffer<T>(Buffer<T> computeBuffer, int unit, ShaderStage shaderStage = ShaderStage.Compute) where T : struct
         {
+            if (unit >= TextureSlotMax) throw new ArgumentOutOfRangeException(nameof(unit), $"");
             int stride = Marshal.SizeOf<T>();
             SetComputeBuffer(computeBuffer.InternalBuffer, stride, unit, shaderStage);
         }

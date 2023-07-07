@@ -36,7 +36,7 @@ namespace Altseed2.Test
             var input = Buffer<InputData>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, dataSize);
             Assert.NotNull(input);
 
-            using (var data = input.LockStrict())
+            using (var data = input.WriteLockStrict())
             {
                 for (int i = 0; i < input.Count; i++)
                 {
@@ -122,7 +122,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
             var input = Buffer<InputData>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, dataSize);
             Assert.NotNull(input);
 
-            using (var data = input.LockStrict())
+            using (var data = input.WriteLockStrict())
             {
                 for (int i = 0; i < input.Count; i++)
                 {
@@ -155,15 +155,17 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             Engine.Graphics.CommandList.BeginComputePass();
 
+            Engine.Graphics.CommandList.ComputePipelineState = pip1;
             Engine.Graphics.CommandList.SetComputeBuffer(inputBuffer, 0);
             Engine.Graphics.CommandList.SetComputeBuffer(write1, 1);
-            Engine.Graphics.CommandList.ComputePipelineState = pip1;
             Engine.Graphics.CommandList.Dispatch(dataSize, 1, 1);
+            Engine.Graphics.CommandList.ResetComputeBuffers();
 
+            Engine.Graphics.CommandList.ComputePipelineState = pip2;
             Engine.Graphics.CommandList.SetComputeBuffer(inputBuffer, 0);
             Engine.Graphics.CommandList.SetComputeBuffer(write2, 1);
-            Engine.Graphics.CommandList.ComputePipelineState = pip2;
             Engine.Graphics.CommandList.Dispatch(dataSize, 1, 1);
+            Engine.Graphics.CommandList.ResetComputeBuffers();
 
             Engine.Graphics.CommandList.EndComputePass();
 
@@ -174,10 +176,9 @@ void main(uint3 dtid : SV_DispatchThreadID)
             Engine.Graphics.ExecuteCommandList();
             Engine.Graphics.WaitFinish();
 
-
-            using (var readValues = input.LockStrict())
-            using (var write1Values = write1Dst.LockStrict())
-            using (var write2Values = write2Dst.LockStrict())
+            using (var readValues = input.ReadLockStrict())
+            using (var write1Values = write1Dst.ReadLockStrict())
+            using (var write2Values = write2Dst.ReadLockStrict())
             {
                 for (int i = 0; i < readValues.Span.Length; i++)
                 {
@@ -216,13 +217,13 @@ void main(uint3 dtid : SV_DispatchThreadID)
             var pipeline = ComputePipelineState.Create();
             pipeline.Shader = Shader.CreateStrict("csBitonicSort", code, ShaderStage.Compute);
 
-            const int Count = 4;
+            const int Count = 1;
             var input = Buffer<int>.CreateStrict(BufferUsageType.CopySrc | BufferUsageType.MapWrite, Count);
             var computeBuffer = Buffer<int>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.Compute, Count);
             var output1 = Buffer<int>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, Count);
             var output2 = Buffer<int>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, Count);
 
-            using (var c = input.LockStrict())
+            using (var c = input.WriteLockStrict())
             {
                 for (int i = 0; i < Count; i++)
                 {
@@ -235,16 +236,20 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             Engine.Graphics.CommandList.BeginComputePass();
 
-            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
             pipeline.SetVector4F("Value", new Vector4F(1, 0, 0, 0));
             Engine.Graphics.CommandList.ComputePipelineState = pipeline;
+            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
             Engine.Graphics.CommandList.Dispatch(computeBuffer.Count, 1, 1);
+            Engine.Graphics.CommandList.ResetComputeBuffers();
+
             Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output1);
 
-            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
             pipeline.SetVector4F("Value", new Vector4F(2, 0, 0, 0));
             Engine.Graphics.CommandList.ComputePipelineState = pipeline;
+            Engine.Graphics.CommandList.SetComputeBuffer(computeBuffer, 0);
             Engine.Graphics.CommandList.Dispatch(computeBuffer.Count, 1, 1);
+            Engine.Graphics.CommandList.ResetComputeBuffers();
+
             Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output2);
 
             Engine.Graphics.CommandList.EndComputePass();
@@ -253,8 +258,8 @@ void main(uint3 dtid : SV_DispatchThreadID)
             Engine.Graphics.ExecuteCommandList();
             Engine.Graphics.WaitFinish();
 
-            using (var c1 = output1.LockStrict())
-            using (var c2 = output2.LockStrict())
+            using (var c1 = output1.ReadLockStrict())
+            using (var c2 = output2.ReadLockStrict())
             {
                 for (int i = 0; i < Count - 1; i++)
                 {
@@ -328,7 +333,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
             var computeBuffer = Buffer<MyStruct>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.Compute, Count);
             var output = Buffer<MyStruct>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, Count);
 
-            using (var c = input.LockStrict())
+            using (var c = input.WriteLockStrict())
             {
                 var rand = new Random();
 
@@ -358,6 +363,9 @@ void main(uint3 dtid : SV_DispatchThreadID)
                     inc /= 2;
                 }
             }
+
+            Engine.Graphics.CommandList.ResetComputeBuffers();
+
             Engine.Graphics.CommandList.EndComputePass();
 
             Engine.Graphics.CommandList.CopyBuffer(computeBuffer, output);
@@ -366,7 +374,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
             Engine.Graphics.ExecuteCommandList();
             Engine.Graphics.WaitFinish();
 
-            using (var c = output.LockStrict())
+            using (var c = output.ReadLockStrict())
             {
                 var prev = c.Span[0].Key;
                 for (int i = 0; i < Count; i++)

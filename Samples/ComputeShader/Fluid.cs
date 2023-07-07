@@ -624,7 +624,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             protected override void OnAdded()
             {
                 var particlesInput = Buffer<Particle>.CreateStrict(BufferUsageType.MapWrite | BufferUsageType.CopySrc, ParticlesCount);
-                using (var data = particlesInput.LockStrict())
+                using (var data = particlesInput.WriteLockStrict())
                 {
                     int ind = 0;
                     for (int y = 0; y < 300 / (ParticleRadius * 2); y++)
@@ -680,16 +680,18 @@ float4 main(PS_INPUT input) : SV_TARGET
                     commandList.ComputePipelineState = calcExternalPipeline;
                     commandList.SetComputeBuffer(particles, 0);
                     commandList.Dispatch(ParticlesCount, 1, 1);
+                    commandList.ResetComputeBuffers();
 
                     for (int l = 0; l < IterationCount; l++)
                     {
-                        // TODO: DirectX12ではこれを入れるとdispatchの完了を待つので正しく動く
+                        // TODO: ResourceBarrierの関係でDirectX12ではこれを入れるとdispatchの完了を待つので正しく動く
                         commandList.CopyBuffer(particles, particlesToBeCopied);
 
                         commandList.ComputePipelineState = buildGridPipeline;
                         commandList.SetComputeBuffer(particles, 0);
                         commandList.SetComputeBuffer(gridTable, 1);
                         commandList.Dispatch(gridTable.Count, 1, 1);
+                        commandList.ResetComputeBuffers();
 
                         commandList.SetComputeBuffer(gridTable, 0);
 
@@ -710,32 +712,38 @@ float4 main(PS_INPUT input) : SV_TARGET
                                 inc /= 2;
                             }
                         }
+                        commandList.ResetComputeBuffers();
 
                         commandList.ComputePipelineState = clearGridIndicesPipeline;
                         commandList.SetComputeBuffer(gridIndicesTable, 0);
                         commandList.Dispatch(gridIndicesTable.Count, 1, 1);
+                        commandList.ResetComputeBuffers();
 
                         commandList.ComputePipelineState = buildGridIndicesPipeline;
                         commandList.SetComputeBuffer(gridTable, 0);
                         commandList.SetComputeBuffer(gridIndicesTable, 1);
                         commandList.Dispatch(gridTable.Count, 1, 1);
+                        commandList.ResetComputeBuffers();
 
                         commandList.ComputePipelineState = calcScalingFactorPipeline;
                         commandList.SetComputeBuffer(particles, 0);
                         commandList.SetComputeBuffer(gridTable, 1);
                         commandList.SetComputeBuffer(gridIndicesTable, 2);
                         commandList.Dispatch(ParticlesCount, 1, 1);
+                        commandList.ResetComputeBuffers();
 
                         commandList.ComputePipelineState = calcCorrectPositionPipeline;
                         commandList.SetComputeBuffer(particles, 0);
                         commandList.SetComputeBuffer(gridTable, 1);
                         commandList.SetComputeBuffer(gridIndicesTable, 2);
                         commandList.Dispatch(ParticlesCount, 1, 1);
+                        commandList.ResetComputeBuffers();
                     }
 
                     commandList.ComputePipelineState = integratePipeline;
                     commandList.SetComputeBuffer(particles, 0);
                     commandList.Dispatch(ParticlesCount, 1, 1);
+                    commandList.ResetComputeBuffers();
                 }
 
                 commandList.ComputePipelineState = buildVBIB;
@@ -743,6 +751,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                 commandList.SetComputeBuffer(particleComputeVertex, 1);
                 commandList.SetComputeBuffer(particleComputeIndex, 2);
                 commandList.Dispatch(ParticlesCount, 1, 1);
+                commandList.ResetComputeBuffers();
 
                 commandList.EndComputePass();
 
@@ -768,7 +777,6 @@ float4 main(PS_INPUT input) : SV_TARGET
             Engine.Initialize("Fluids Sim", 640, 480);
             Engine.FramerateMode = FramerateMode.Variable;
             Engine.TargetFPS = 240;
-
 
             var renderTexture = RenderTexture.Create(new Vector2I(300, 300), TextureFormat.R8G8B8A8_UNORM);
 
