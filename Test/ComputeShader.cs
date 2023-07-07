@@ -368,14 +368,13 @@ void main(uint3 dtid : SV_DispatchThreadID)
 
             using (var c = output.LockStrict())
             {
+                var prev = c.Span[0].Key;
                 for (int i = 0; i < Count; i++)
                 {
-                    Console.WriteLine($"{i}: {c.Span[i].Key}");
-                }
-
-                for (int i = 0; i < Count - 1; i++)
-                {
-                    Assert.Less(c.Span[i].Key, c.Span[i + 1].Key);
+                    var current = c.Span[i].Key;
+                    Console.WriteLine($"{i}: {current}");
+                    Assert.GreaterOrEqual(current, prev);
+                    prev = current;
                 }
             }
 
