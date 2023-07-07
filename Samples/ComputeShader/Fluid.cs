@@ -26,7 +26,7 @@ namespace Sample
         {
             public bool Step { get; set; } = false;
 
-            public int IterationCount { get; private init; }
+            public int IterationCount { get; set; }
 
             private const float EffectiveRadius = 6;
             private const float ParticleRadius = 2;
@@ -96,8 +96,6 @@ int2 GetGridPos(float2 pos, float2 gridSize)
 ";
             public ParticleNode()
             {
-                IterationCount = 4;
-
                 var gridNum = new Vector4F(60, 60, 0, 0);
                 var gridSize = new Vector4F(5, 5, 0, 0);
 
@@ -782,6 +780,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             var particlesNode = new ParticleNode
             {
                 CameraGroup = 1,
+                IterationCount = 4,
                 Step = false,
             };
 
