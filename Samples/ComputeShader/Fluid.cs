@@ -120,6 +120,7 @@ cbuffer CB : register(b0)
 {
     float4 Force;
     float4 Gravity;
+    float4 Dt;
     float4 GridNum;
     float4 GridSize;
 };
@@ -130,8 +131,8 @@ RWStructuredBuffer<Particle> particles : register(u0);
 void main(uint3 dtid : SV_DispatchThreadID)
 {
     if (particles[dtid.x].IsFix) return;
-    particles[dtid.x].Velocity += (Gravity.xy + Force.xy) * (1.0 / 60);
-    particles[dtid.x].Next = particles[dtid.x].Current + particles[dtid.x].Velocity * (1.0 / 60);
+    particles[dtid.x].Velocity += (Gravity.xy + Force.xy) * Dt.x;
+    particles[dtid.x].Next = particles[dtid.x].Current + particles[dtid.x].Velocity * Dt.x;
     particles[dtid.x].Next.x = clamp(particles[dtid.x].Next.x, 8, GridNum.x * GridSize.x - 8);
     particles[dtid.x].Next.y = clamp(particles[dtid.x].Next.y, 8, GridNum.y * GridSize.y - 8);
 }
@@ -141,6 +142,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
                 calcExternalPipeline.Shader = Shader.CreateStrict("csCalcExternalForces", csCalcExternalForces, ShaderStage.Compute);
                 calcExternalPipeline.SetVector4F("Force", new Vector4F(0, 0, 0, 0));
                 calcExternalPipeline.SetVector4F("Gravity", new Vector4F(0, 100, 0, 0));
+                calcExternalPipeline.SetVector4F("Dt", new Vector4F(dt, 0, 0, 0));
                 calcExternalPipeline.SetVector4F("GridNum", gridNum);
                 calcExternalPipeline.SetVector4F("GridSize", gridSize);
 
@@ -238,7 +240,7 @@ RWStructuredBuffer<int2> gridIndicesTable : register(u1);
 
 int getValidId(int id) {
     int n = ParticleNum.x;
-    return id - n * floor(id / n);
+    return fmod(id + n, n);
 }
 
 [numthreads(1, 1, 1)]
@@ -512,7 +514,7 @@ RWStructuredBuffer<Particle> particles : register(u0);
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
-    particles[dtid.x].Velocity = (particles[dtid.x].Next - particles[dtid.x].Current) * (1.0 / Dt.x);
+    particles[dtid.x].Velocity = (particles[dtid.x].Next - particles[dtid.x].Current) / Dt.x;
     particles[dtid.x].Current = particles[dtid.x].Next;
 }
 ";
