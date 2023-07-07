@@ -674,7 +674,6 @@ float4 main(PS_INPUT input) : SV_TARGET
                     Engine.Graphics.CommandList.SetComputeBuffer(particles, 0);
                     Engine.Graphics.CommandList.Dispatch(ParticlesCount, 1, 1);
 
-                    // TODO: Windowsでは2以上にすると死ぬ
                     for (int l = 0; l < IterationCount; l++)
                     {
                         Engine.Graphics.CommandList.ComputePipelineState = buildGridPipeline;
