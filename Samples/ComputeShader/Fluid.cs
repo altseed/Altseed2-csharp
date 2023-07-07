@@ -96,7 +96,7 @@ int2 GetGridPos(float2 pos, float2 gridSize)
 ";
             public ParticleNode()
             {
-                IterationCount = OperatingSystem.IsWindows() ? 1 : 4;
+                IterationCount = 4;
 
                 var gridNum = new Vector4F(60, 60, 0, 0);
                 var gridSize = new Vector4F(5, 5, 0, 0);
