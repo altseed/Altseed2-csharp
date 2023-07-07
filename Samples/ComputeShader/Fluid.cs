@@ -28,6 +28,8 @@ namespace Sample
 
             public int IterationCount { get; set; } = 1;
 
+            public bool AssertionEnabled { get; private init; }
+
             private const float EffectiveRadius = 6;
             private const float ParticleRadius = 2;
             private const int ParticlesCount = 2048;
@@ -41,6 +43,10 @@ namespace Sample
             private readonly Buffer<Particle> particles;
             private readonly Buffer<Vector2I> gridTable;
             private readonly Buffer<Vector2I> gridIndicesTable;
+
+            private readonly Buffer<Particle> particlesForAssertion;
+            private readonly Buffer<Vector2I> gridTableForAssertion;
+            private readonly Buffer<Vector2I> gridIndicesTableForAssertion;
 
             private readonly ComputePipelineState calcExternalPipeline;
             private readonly ComputePipelineState buildGridPipeline;
@@ -84,6 +90,8 @@ struct Particle
     bool IsFix;
 };
 
+#define EMPTY_CELL 0x7fffffff
+
 int GetHash(int2 gridPos, int num)
 {
     return gridPos.x + gridPos.y * num;
@@ -101,9 +109,11 @@ int2 GetGridPos(float2 pos, float2 gridSize)
             private readonly float dt = 1.0f / 60;
             private readonly float wpoly6 = 4f / (MathF.PI * MathF.Pow(EffectiveRadius, 8f));
             private readonly float gwspiky = -30f / (MathF.PI * MathF.Pow(EffectiveRadius, 5f));
-            
-            public ParticleNode()
+
+            public ParticleNode(bool assertionEnabled)
             {
+                AssertionEnabled = assertionEnabled;
+
                 particles = Buffer<Particle>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopyDst, ParticlesCount);
                 gridTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, ParticlesCount);
                 gridIndicesTable = Buffer<Vector2I>.CreateStrict(BufferUsageType.Compute | BufferUsageType.CopySrc, gridNum.X * gridNum.Y);
@@ -113,6 +123,13 @@ int2 GetGridPos(float2 pos, float2 gridSize)
 
                 particleVertex = Buffer<Vertex>.CreateStrict(BufferUsageType.Vertex, ParticlesCount * 4);
                 particleIndex = Buffer<int>.CreateStrict(BufferUsageType.Index, ParticlesCount * 6);
+
+                if (assertionEnabled)
+                {
+                    particlesForAssertion = Buffer<Particle>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, ParticlesCount);
+                    gridTableForAssertion = Buffer<Vector2I>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, ParticlesCount);
+                    gridIndicesTableForAssertion = Buffer<Vector2I>.CreateStrict(BufferUsageType.CopyDst | BufferUsageType.MapRead, gridNum.X * gridNum.Y);
+                }
 
                 const string csCalcExternalForces = CommonCode + @"
 cbuffer CB : register(b0)
@@ -169,7 +186,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
     }
     else
     {
-        gridTable[dtid.x].x = 0xffffffff;
+        gridTable[dtid.x].x = EMPTY_CELL;
         gridTable[dtid.x].y = dtid.x;
     }
 }
@@ -218,13 +235,13 @@ void main(uint3 dtid : SV_DispatchThreadID)
                 bitonicSortPipeline = ComputePipelineState.Create();
                 bitonicSortPipeline.Shader = Shader.CreateStrict("csBitonicSort", csBitonicSort, ShaderStage.Compute);
 
-                const string csClearGridIndices = @"
+                const string csClearGridIndices = CommonCode + @"
 RWStructuredBuffer<int2> gridIndicesTable : register(u0);
 
 [numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
-    gridIndicesTable[dtid.x] = int2(0xffffffff, 0xffffffff);
+    gridIndicesTable[dtid.x] = int2(EMPTY_CELL, EMPTY_CELL);
 }
 ";
 
@@ -296,7 +313,7 @@ float2 CalcDensityCellPB(int2 gridPos, int i, float2 pos0)
 
     float h2 = EffectiveRadius.x * EffectiveRadius.x;
     float dens = 0.0f;
-    if(startIndex != 0xffffffff){ // セルが空でないかのチェック
+    if(startIndex != EMPTY_CELL){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         int endIndex = gridIndicesTable[gridHash].y;
         for(int j = startIndex; j < endIndex; ++j){
@@ -325,7 +342,7 @@ float CalcScalingFactorCell(int2 gridPos, int i, float2 pos0)
     float r0 = Density.x;
     float sd = 0.0f;
     float2 sd2 = float2(0.0f, 0.0f);
-    if(startIndex != 0xffffffff){ // セルが空でないかのチェック
+    if(startIndex != EMPTY_CELL){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         uint endIndex = gridIndicesTable[gridHash].y;
         for(uint j = startIndex; j < endIndex; ++j){
@@ -427,7 +444,7 @@ float2 CalcPositionCorrectionCell(int2 gridPos, int i, float2 pos0)
 
     float si = particles[i].Pscl;
 
-    if(startIndex != 0xffffffff){ // セルが空でないかのチェック
+    if(startIndex != EMPTY_CELL){ // セルが空でないかのチェック
         // セル内のパーティクルで反復
         uint endIndex = gridIndicesTable[gridHash].y;
         for(uint j = startIndex; j < endIndex; ++j){
@@ -677,6 +694,12 @@ float4 main(PS_INPUT input) : SV_TARGET
 
                     for (int l = 0; l < IterationCount; l++)
                     {
+                        if (AssertionEnabled)
+                        {
+                            // TODO: これを入れるとなぜか動く
+                            commandList.CopyBuffer(particles, particlesForAssertion);
+                        }
+
                         commandList.ComputePipelineState = buildGridPipeline;
                         commandList.SetComputeBuffer(particles, 0);
                         commandList.SetComputeBuffer(gridTable, 1);
@@ -702,6 +725,26 @@ float4 main(PS_INPUT input) : SV_TARGET
                             }
                         }
 
+                        if (AssertionEnabled)
+                        {
+                            // commandList.CopyBuffer(gridTable, gridTableForAssertion);
+
+                            //using var c = gridTableForAssertion.LockStrict();
+                            //var prev = c.Span[0];
+                            //for (int i = 1; i < c.Span.Length; i++)
+                            //{
+                            //    var current = c.Span[i];
+
+                            //    if (current.X == 0x7fffffff) break;
+
+                            //    if (prev.X > current.X)
+                            //    {
+                            //        throw new Exception($"The result of bitonic sort is invalid at index {i}. prev:{prev} current:{current}");
+                            //    }
+                            //    prev = current;
+                            //}
+                        }
+
                         commandList.ComputePipelineState = clearGridIndicesPipeline;
                         commandList.SetComputeBuffer(gridIndicesTable, 0);
                         commandList.Dispatch(gridIndicesTable.Count, 1, 1);
@@ -711,6 +754,31 @@ float4 main(PS_INPUT input) : SV_TARGET
                         commandList.SetComputeBuffer(gridIndicesTable, 1);
                         commandList.Dispatch(gridTable.Count, 1, 1);
 
+                        if (AssertionEnabled)
+                        {
+                            //commandList.CopyBuffer(gridIndicesTable, gridIndicesTableForAssertion);
+
+                            //using var cp = particlesForAssertion.LockStrict();
+                            //using var ci = gridIndicesTableForAssertion.LockStrict();
+                            //using var ct = gridTableForAssertion.LockStrict();
+
+                            //for (int i = 0; i < ci.Span.Length; i++)
+                            //{
+                            //    var current = ci.Span[i];
+                            //    if (current.X == 0x7fffffff) continue;
+
+                            //    for (var j = current.X; j < current.Y; j++)
+                            //    {
+                            //        var particle = cp.Span[ct.Span[j].Y];
+                            //        var cell = (particle.Next / new Vector2F(gridSize.X, gridSize.Y)).To2I();
+                            //        var hash = cell.X + cell.Y * gridNum.X;
+                            //        if (hash != i)
+                            //        {
+                            //            throw new Exception($"Assert hash '{hash}' is equal to the cell index '{i}'.");
+                            //        }
+                            //    }
+                            //}
+                        }
 
                         commandList.ComputePipelineState = calcScalingFactorPipeline;
                         commandList.SetComputeBuffer(particles, 0);
@@ -780,7 +848,7 @@ float4 main(PS_INPUT input) : SV_TARGET
             };
             Engine.AddNode(camera2);
 
-            var particlesNode = new ParticleNode
+            var particlesNode = new ParticleNode(true)
             {
                 CameraGroup = 1,
                 IterationCount = 4,
