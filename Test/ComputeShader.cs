@@ -296,7 +296,7 @@ bool compareMyStruct(MyStruct a, MyStruct b) { return a.key < b.key; }
 
 RWStructuredBuffer<MyStruct> myData : register(u0);
 
-[numthreads(64, 1, 1)]
+[numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
     int inc = (int)Inc_Dir.x;
@@ -353,7 +353,7 @@ void main(uint3 dtid : SV_DispatchThreadID)
                 {
                     bitonicSortPipeline.SetVector4F("Inc_Dir", new Vector4F(inc, dir, 0, 0));
                     Engine.Graphics.CommandList.ComputePipelineState = bitonicSortPipeline;
-                    Engine.Graphics.CommandList.Dispatch(computeBuffer.Count / 2 / 64, 1, 1);
+                    Engine.Graphics.CommandList.Dispatch(computeBuffer.Count / 2, 1, 1);
                     
                     inc /= 2;
                 }

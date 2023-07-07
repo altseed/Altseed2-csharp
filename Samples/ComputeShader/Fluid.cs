@@ -188,7 +188,7 @@ cbuffer CB : register(b0)
 
 RWStructuredBuffer<int2> gridTable : register(u0);
 
-[numthreads(64, 1, 1)]
+[numthreads(1, 1, 1)]
 void main(uint3 dtid : SV_DispatchThreadID)
 {
     int inc = (int)Inc.x;
@@ -697,7 +697,7 @@ float4 main(PS_INPUT input) : SV_TARGET
                             {
                                 bitonicSortPipeline.SetVector4F("Inc", new Vector4F(inc, 0, 0, 0));
                                 Engine.Graphics.CommandList.ComputePipelineState = bitonicSortPipeline;
-                                Engine.Graphics.CommandList.Dispatch(gridTable.Count / 2 / 64, 1, 1);
+                                Engine.Graphics.CommandList.Dispatch(gridTable.Count / 2, 1, 1);
                                 inc /= 2;
                             }
                         }
