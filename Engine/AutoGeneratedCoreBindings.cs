@@ -5143,14 +5143,6 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_CommandList_UploadBuffer(IntPtr selfPtr, IntPtr buffer);
-
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_CommandList_ReadbackBuffer(IntPtr selfPtr, IntPtr buffer);
-
-        [DllImport("Altseed2_Core")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_CopyBuffer(IntPtr selfPtr, IntPtr src, IntPtr dst);
 
         [DllImport("Altseed2_Core")]
@@ -5179,6 +5171,10 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetMaterialWithConstantBuffer(IntPtr selfPtr, IntPtr material, IntPtr constantBuffer);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private static extern void cbg_CommandList_BeginComputePass(IntPtr selfPtr);
 
         [DllImport("Altseed2_Core")]
@@ -5187,7 +5183,11 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_CommandList_SetComputeBuffer(IntPtr selfPtr, IntPtr buffer, int stride, int unit);
+        private static extern void cbg_CommandList_SetComputeBuffer(IntPtr selfPtr, IntPtr buffer, int stride, int unit, int shaderStage);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_CommandList_SetComputePipelineStateWithConstantBuffer(IntPtr selfPtr, IntPtr computePipelineState, IntPtr constantBuffer);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5327,16 +5327,6 @@ namespace Altseed2
             cbg_CommandList_ResumeRenderPass(selfPtr);
         }
 
-        internal void UploadBuffer(Buffer buffer)
-        {
-            cbg_CommandList_UploadBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero);
-        }
-
-        internal void ReadbackBuffer(Buffer buffer)
-        {
-            cbg_CommandList_ReadbackBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero);
-        }
-
         internal void CopyBuffer(Buffer src, Buffer dst)
         {
             cbg_CommandList_CopyBuffer(selfPtr, src != null ? src.selfPtr : IntPtr.Zero, dst != null ? dst.selfPtr : IntPtr.Zero);
@@ -5386,6 +5376,11 @@ namespace Altseed2
             cbg_CommandList_SetIndexBuffer(selfPtr, ib != null ? ib.selfPtr : IntPtr.Zero, stride, offset);
         }
 
+        internal void SetMaterialWithConstantBuffer(Material material, Buffer constantBuffer)
+        {
+            cbg_CommandList_SetMaterialWithConstantBuffer(selfPtr, material != null ? material.selfPtr : IntPtr.Zero, constantBuffer != null ? constantBuffer.selfPtr : IntPtr.Zero);
+        }
+
         public void BeginComputePass()
         {
             cbg_CommandList_BeginComputePass(selfPtr);
@@ -5396,9 +5391,14 @@ namespace Altseed2
             cbg_CommandList_EndComputePass(selfPtr);
         }
 
-        internal void SetComputeBuffer(Buffer buffer, int stride, int unit)
+        internal void SetComputeBuffer(Buffer buffer, int stride, int unit, ShaderStage shaderStage)
         {
-            cbg_CommandList_SetComputeBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero, stride, unit);
+            cbg_CommandList_SetComputeBuffer(selfPtr, buffer != null ? buffer.selfPtr : IntPtr.Zero, stride, unit, (int)shaderStage);
+        }
+
+        internal void SetComputePipelineStateWithConstantBuffer(ComputePipelineState computePipelineState, Buffer constantBuffer)
+        {
+            cbg_CommandList_SetComputePipelineStateWithConstantBuffer(selfPtr, computePipelineState != null ? computePipelineState.selfPtr : IntPtr.Zero, constantBuffer != null ? constantBuffer.selfPtr : IntPtr.Zero);
         }
 
         public void Dispatch(int x, int y, int z)
@@ -5512,11 +5512,19 @@ namespace Altseed2
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Graphics_ExecuteCommandList(IntPtr selfPtr);
+        private static extern void cbg_Graphics_ExecuteCommandList_(IntPtr selfPtr);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private static extern void cbg_Graphics_WaitFinish(IntPtr selfPtr);
+        private static extern void cbg_Graphics_ExecuteCommandList_CommandList(IntPtr selfPtr, IntPtr commandList);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Graphics_WaitFinish_(IntPtr selfPtr);
+
+        [DllImport("Altseed2_Core")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private static extern void cbg_Graphics_WaitFinish_CommandList(IntPtr selfPtr, IntPtr commandList);
 
         [DllImport("Altseed2_Core")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5611,12 +5619,22 @@ namespace Altseed2
 
         public void ExecuteCommandList()
         {
-            cbg_Graphics_ExecuteCommandList(selfPtr);
+            cbg_Graphics_ExecuteCommandList_(selfPtr);
+        }
+
+        public void ExecuteCommandList(CommandList commandList)
+        {
+            cbg_Graphics_ExecuteCommandList_CommandList(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
 
         public void WaitFinish()
         {
-            cbg_Graphics_WaitFinish(selfPtr);
+            cbg_Graphics_WaitFinish_(selfPtr);
+        }
+
+        public void WaitFinish(CommandList commandList)
+        {
+            cbg_Graphics_WaitFinish_CommandList(selfPtr, commandList != null ? commandList.selfPtr : IntPtr.Zero);
         }
 
         /// <summary>

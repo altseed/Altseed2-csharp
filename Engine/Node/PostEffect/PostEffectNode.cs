@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Altseed2
@@ -83,6 +83,30 @@ namespace Altseed2
             }
         }
         private int _ZOrder = 0;
+
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        [PartsTreeSystem.SerializeField]
+        public bool IsDrawn
+        {
+            get => _IsDrawn;
+            set
+            {
+                if (_IsDrawn == value) return;
+                _IsDrawn = value;
+                this.UpdateIsDrawnActuallyOfDescendants();
+            }
+        }
+        private bool _IsDrawn = true;
+
+        /// <summary>
+        /// 先祖の<see cref="IDrawn.IsDrawn"/>を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+        [PartsTreeSystem.SerializeField]
+        public bool IsDrawnActually => (this as IDrawn).IsDrawnActually;
+        [PartsTreeSystem.SerializeField]
+        bool IDrawn.IsDrawnActually { get; set; } = true;
 
         /// <summary>
         /// <see cref="PostEffectNode"/>の新しいインスタンスを生成します。

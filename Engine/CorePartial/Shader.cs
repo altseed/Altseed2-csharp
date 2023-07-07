@@ -59,6 +59,44 @@ namespace Altseed2
             return result.Message;
         }
 
+        /// <summary>
+        /// コードをコンパイルして<see cref="Shader"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="name">シェーダにつける名前</param>
+        /// <param name="code">シェーダのコード</param>
+        /// <param name="shaderStage">シェーダの種類</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>または<paramref name="code"/>がnull</exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <returns></returns>
+        public static Shader CreateStrict(string name, string code, ShaderStage shaderStage)
+        {
+            var result = Compile(name, code, shaderStage);
+            if (result.Value is Shader shader)
+            {
+                return shader;
+            }
+            throw new SystemException(result.Message);
+        }
+
+        /// <summary>
+        /// ファイルに書かれたコードをコンパイルして<see cref="Shader"/>の新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="name">シェーダにつける名前</param>
+        /// <param name="path">シェーダのコード</param>
+        /// <param name="shaderStage">シェーダの種類</param>
+        /// <exception cref="ArgumentNullException"><paramref name="name"/>または<paramref name="path"/>がnull</exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <returns></returns>
+        public static Shader CreateFromFileStrict(string name, string path, ShaderStage shaderStage)
+        {
+            var result = CompileFromFile(name, path, shaderStage);
+            if (result.Value is Shader shader)
+            {
+                return shader;
+            }
+            throw new SystemException(result.Message);
+        }
+
         partial void Deserialize_GetPtr(ref IntPtr ptr, SerializationInfo info)
         {
             Shader_Unsetter_Deserialize(info, out var code, out var name, out var stage);

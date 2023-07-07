@@ -20,6 +20,16 @@ namespace Altseed2
         /// 描画時の重ね順を取得または設定します。
         /// </summary>
         int ZOrder { get; set; }
+
+        /// <summary>
+        /// このノードを描画するかどうかを取得または設定します。
+        /// </summary>
+        bool IsDrawn { get; set; }
+
+        /// <summary>
+        /// 先祖の<see cref="IDrawn.IsDrawn" />を考慮して、このノードを描画するかどうかを取得します。
+        /// </summary>
+        bool IsDrawnActually { get; internal set; }
     }
 
     /// <summary>
@@ -30,16 +40,6 @@ namespace Altseed2
         internal Rendered Rendered { get; }
 
         internal int CullingId { get; }
-
-        /// <summary>
-        /// このノードを描画するかどうかを取得または設定します。
-        /// </summary>
-        bool IsDrawn { get; set; }
-
-        /// <summary>
-        /// 先祖の<see cref="IsDrawn" />を考慮して、このノードを描画するかどうかを取得します。
-        /// </summary>
-        bool IsDrawnActually { get; internal set; }
 
         /// <summary>
         /// コンテンツのサイズを取得します。
@@ -53,13 +53,13 @@ namespace Altseed2
         /// 自身と子孫ノードの IsDrawnActually プロパティを更新します。
         /// </summary>
         internal static void UpdateIsDrawnActuallyOfDescendants<T>(this T node)
-            where T : Node, ICullableDrawn
+            where T : Node, IDrawn
         {
             static void UpdateRecursive(Node n, bool ancestorsIsDawnActually)
             {
                 var isDrawnActually = ancestorsIsDawnActually;
 
-                if (n is ICullableDrawn dn)
+                if (n is IDrawn dn)
                 {
                     isDrawnActually = dn.IsDrawn && ancestorsIsDawnActually;
                     dn.IsDrawnActually = isDrawnActually;
@@ -71,14 +71,14 @@ namespace Altseed2
                 }
             }
 
-            var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<ICullableDrawn>()?.IsDrawnActually ?? true;
+            var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<IDrawn>()?.IsDrawnActually ?? true;
             UpdateRecursive(node, ancestorsIsDrawnActually);
         }
 
         internal static void UpdateIsDrawnActuallyFromAncestors<T>(this T node)
-            where T : Node, ICullableDrawn
+            where T : Node, IDrawn
         {
-            var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<ICullableDrawn>()?.IsDrawnActually ?? true;
+            var ancestorsIsDrawnActually = node.GetAncestorSpecificNode<IDrawn>()?.IsDrawnActually ?? true;
             node.IsDrawnActually = ancestorsIsDrawnActually && node.IsDrawn;
         }
     }
