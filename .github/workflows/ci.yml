@@ -60,7 +60,7 @@ jobs:
         with:
           dotnet-version: 5.0.x
       - name: Download Windows
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: test-windows
       - name: Test
@@ -222,17 +222,17 @@ jobs:
           git submodule update --init
           
       - name: Download Windows
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: test-windows
 
       - name: Download macOS
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: test-mac
 
       - name: Download Linux
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: test-linux
 
@@ -273,12 +273,12 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Download Altseed2
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: Altseed2-${{ github.sha }}
 
       - name: Download Altseed2-Tools-LICENSE
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: Altseed2-Tools-LICENSE
 
