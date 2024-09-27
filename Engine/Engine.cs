@@ -196,7 +196,9 @@ namespace Altseed2
             if (drawDefaultCameraGroup)
             {
                 // カメラが 1 つもない場合はデフォルトカメラを使用
+                _DrawnCollection.IsCollectionInForeach = true;
                 DrawCameraGroup(_DefaultCamera, _DrawnCollection.GetDrawns());
+                _DrawnCollection.IsCollectionInForeach = false;
             }
 
             if (drawCustomCameraGroup)
@@ -206,7 +208,9 @@ namespace Altseed2
                 {
                     foreach (var camera in _CameraNodes[i])
                     {
+                        _DrawnCollection.IsCollectionInForeach = true;
                         DrawCameraGroup(camera.RenderedCamera, _DrawnCollection[i]);
+                        _DrawnCollection.IsCollectionInForeach = false;
                     }
                 }
             }

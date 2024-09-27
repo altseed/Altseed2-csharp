@@ -5,6 +5,7 @@ namespace Altseed2
 {
     internal class DrawnCollection
     {
+        public bool IsCollectionInForeach = false;
         private SortedDictionary<int, HashSet<IDrawn>> _Drawns;
         private SortedDictionary<int, SortedDictionary<int, HashSet<IDrawn>>> _Sorted;
 
@@ -19,6 +20,7 @@ namespace Altseed2
         internal void Register(IDrawn node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
+            if (IsCollectionInForeach) throw new InvalidOperationException();
 
             {
                 if (!_Drawns.TryGetValue(node.ZOrder, out var set))
@@ -44,6 +46,7 @@ namespace Altseed2
         internal void Unregister(IDrawn node)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
+            if (IsCollectionInForeach) throw new InvalidOperationException();
 
             _Drawns[node.ZOrder].Remove(node);
 
@@ -60,6 +63,7 @@ namespace Altseed2
         internal void UpdateCameraGroup(IDrawn node, ulong old)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
+            if (IsCollectionInForeach) throw new InvalidOperationException();
 
             for (int i = 0; i < Engine.MaxCameraGroupCount; i++)
             {
@@ -87,6 +91,7 @@ namespace Altseed2
         internal void UpdateZOrder(IDrawn node, int old)
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
+            if (IsCollectionInForeach) throw new InvalidOperationException();
 
             {
                 _Drawns[old].Remove(node);
